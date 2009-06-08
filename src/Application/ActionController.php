@@ -97,7 +97,7 @@ abstract class PHPFrame_Application_ActionController
 	{
 		if (!isset(self::$_instances[$class_name]) 
 			|| !(self::$_instances[$class_name] instanceof PHPFrame_Application_ActionController)) {
-			self::$_instances[$class_name] = new self;
+			self::$_instances[$class_name] = new $class_name;
 		}
 		
 		return self::$_instances[$class_name];

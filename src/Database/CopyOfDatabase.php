@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id$
+ * @version		$Id: Database.php 28 2009-06-08 01:58:07Z luis.montero@e-noise.com $
  * @package		PHPFrame
  * @subpackage 	database
  * @copyright	Copyright (C) 2009 E-noise.com Limited. All rights reserved.

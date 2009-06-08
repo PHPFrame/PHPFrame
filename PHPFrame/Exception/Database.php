@@ -14,7 +14,8 @@
  * @subpackage 	exception
  * @since 		1.0
  */
-class PHPFrame_Exception_Database extends PHPFrame_Exception {
+class PHPFrame_Exception_Database extends PHPFrame_Exception 
+{
 	/**
 	 * MySQL error message
 	 * 
@@ -40,7 +41,8 @@ class PHPFrame_Exception_Database extends PHPFrame_Exception {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function __construct($message=null, $query="", $code=self::E_USER_ERROR) {
+	public function __construct($message=null, $query="", $code=self::E_USER_ERROR) 
+	{
 		$this->_mysql_error = mysql_error();
 		$this->_mysql_errno = mysql_errno();
 		

@@ -18,7 +18,8 @@
  * @subpackage 	exception
  * @since 		1.0
  */
-class PHPFrame_Exception_Error extends PHPFrame_Exception {
+class PHPFrame_Exception_Error extends PHPFrame_Exception 
+{
 	/**
 	 * The PHP Error Context
 	 *
@@ -44,7 +45,8 @@ class PHPFrame_Exception_Error extends PHPFrame_Exception {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function __construct($message, $code, $file, $line, $context=null) {
+	public function __construct($message, $code, $file, $line, $context=null) 
+	{
 		parent::__construct($message, $code);
 		
 		$this->file = $file;

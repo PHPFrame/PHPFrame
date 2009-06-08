@@ -14,7 +14,8 @@
  * @subpackage 	application
  * @since 		1.0
  */
-class PHPFrame_Application_Modules {
+class PHPFrame_Application_Modules 
+{
 	/**
 	 * Array containing the installed modules
 	 * 
@@ -28,7 +29,8 @@ class PHPFrame_Application_Modules {
 	 * @return	void
 	 * @since 	1.0
 	 */
-	function __construct() {
+	function __construct() 
+	{
 		$query = "SELECT m.*, mo.option AS `option` FROM #__modules AS m ";
 		$query .= " LEFT JOIN #__modules_options mo ON mo.moduleid = m.id ";
 		$query .= " ORDER BY m.ordering ASC";
@@ -42,7 +44,8 @@ class PHPFrame_Application_Modules {
 	 * @return	int
 	 * @since 	1.0
 	 */
-	function countModules($position) {
+	function countModules($position) 
+	{
 		$count = 0;
 		
 		foreach ($this->_array as $module) {
@@ -68,7 +71,8 @@ class PHPFrame_Application_Modules {
 	 * @return mixed
 	 * @since 	1.0
 	 */
-	function display($position, $class_suffix='') {
+	function display($position, $class_suffix='') 
+	{
 		foreach ($this->_array as $module) {
 			if ($module->position == $position 
 				&& $module->enabled == 1

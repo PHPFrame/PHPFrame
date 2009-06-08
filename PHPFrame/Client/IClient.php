@@ -14,7 +14,8 @@
  * @subpackage 	client
  * @since 		1.0		
  */
-interface PHPFrame_Client_IClient {
+interface PHPFrame_Client_IClient 
+{
 		
 	/**
 	 * Check if this is the correct helper for the client being used and returns instance if so

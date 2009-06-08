@@ -14,8 +14,10 @@
  * @subpackage 	utils
  * @since 		1.0
  */
-class PHPFrame_Utils_Rewrite {
-	public static function rewriteRequest() {
+class PHPFrame_Utils_Rewrite 
+{
+	public static function rewriteRequest() 
+	{
 		// Get path to script
 		$path = substr($_SERVER['SCRIPT_NAME'], 0, (strrpos($_SERVER['SCRIPT_NAME'], '/')+1));
 		
@@ -71,7 +73,8 @@ class PHPFrame_Utils_Rewrite {
 		}
 	}
 	
-	public static function rewriteURL($url, $xhtml=true) {
+	public static function rewriteURL($url, $xhtml=true) 
+	{
 		$uri = PHPFrame::getURI();
 		
 		if (!preg_match('/^http/i', $url)) {

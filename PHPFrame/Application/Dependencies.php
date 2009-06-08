@@ -14,7 +14,8 @@
  * @subpackage 	application
  * @since 		1.0
  */
-class PHPFrame_Application_Dependencies {
+class PHPFrame_Application_Dependencies 
+{
 	/**
 	 * XML object with depedency data from file
 	 * 
@@ -72,7 +73,8 @@ class PHPFrame_Application_Dependencies {
 	 * @return	mixed	Returns TRUE on success or throws an exception if dependencies are not met.
 	 * @since	1.0
 	 */
-	public static function check(PHPFrame_Registry_Session $session) {
+	public static function check(PHPFrame_Registry_Session $session) 
+	{
 		// If we already have a status flag we dont need to run check again
 		$status = $session->get('dependencies.status');
 		if (self::$_status === true || $status === true) {
@@ -129,7 +131,8 @@ class PHPFrame_Application_Dependencies {
 	 * @return	string
 	 * @since	1.0
 	 */
-	public static function getMySQLVersion() {
+	public static function getMySQLVersion() 
+	{
 		if (is_null(self::$_mysqlversion)) {
 			$db = PHPFrame::getDB();
 			$query = "SELECT version() AS ve";

@@ -14,7 +14,8 @@
  * @subpackage 	application
  * @since 		1.0
  */
-class PHPFrame_Application_Sysevents {
+class PHPFrame_Application_Sysevents 
+{
 	/**
 	 * Events summary
 	 * 
@@ -46,7 +47,8 @@ class PHPFrame_Application_Sysevents {
 	 * @return	void
 	 * @since 	1.0
 	 */
-	public function setSummary($msg, $type=null) {
+	public function setSummary($msg, $type=null) 
+	{
 		if (is_null($type)) $type = "error";
 		$this->_summary = array($type, $msg);
 	}
@@ -59,7 +61,8 @@ class PHPFrame_Application_Sysevents {
 	 * @return	void
 	 * @since 	1.0
 	 */
-	public function addEventLog($msg, $type=null) {
+	public function addEventLog($msg, $type=null) 
+	{
 		if (is_null($type)) $type = "error";
 		$this->_events_log[] = array($type, $msg);
 	}
@@ -72,7 +75,8 @@ class PHPFrame_Application_Sysevents {
 	 * @return array
 	 * @since 	1.0
 	 */
-	public function asArray() {
+	public function asArray() 
+	{
 		return array("summary" => $this->_summary, "events_log" => $this->_events_log);
 	}
 	
@@ -82,7 +86,8 @@ class PHPFrame_Application_Sysevents {
 	 * @return	string
 	 * @since 	1.0
 	 */
-	public function asString() {
+	public function asString() 
+	{
 		$str = "";
 		if (count($this->_summary) > 0) {
 			$str .= ucfirst($this->_summary[0]).": ".$this->_summary[1];
@@ -106,7 +111,8 @@ class PHPFrame_Application_Sysevents {
 	 * @return	void
 	 * @since 	1.0
 	 */
-	public function clear() {
+	public function clear() 
+	{
 		// Clear private vars
 		$this->_summary = array();
 		$this->_events_log = array();

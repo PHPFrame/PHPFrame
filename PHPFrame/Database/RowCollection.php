@@ -15,7 +15,8 @@
  * @since 		1.0
  * @see 		Iterator
  */
-class PHPFrame_Database_RowCollection implements Iterator {
+class PHPFrame_Database_RowCollection implements Iterator 
+{
 	/**
 	 * The SQL query that produced this collection
 	 * 
@@ -47,7 +48,8 @@ class PHPFrame_Database_RowCollection implements Iterator {
 	 * @param	string	$query	A SQL query
 	 * @return	void
 	 */
-	public function __construct($query) {
+	public function __construct($query) 
+	{
 		$this->_query = (string) $query;
 		
 		// Get table name from query string
@@ -62,7 +64,8 @@ class PHPFrame_Database_RowCollection implements Iterator {
 	 * 
 	 * @return	array
 	 */
-	public function getRows() {
+	public function getRows() 
+	{
 		return $this->_rows;
 	}
 	
@@ -71,7 +74,8 @@ class PHPFrame_Database_RowCollection implements Iterator {
 	 * 
 	 * @return	int
 	 */
-	public function countRows() {
+	public function countRows() 
+	{
 		return count($this->_rows);
 	}
 	
@@ -80,7 +84,8 @@ class PHPFrame_Database_RowCollection implements Iterator {
 	 * 
 	 * @return 	object of type PHPFrame_Database_Row
 	 */
-	public function current() {
+	public function current() 
+	{
 		return $this->_rows[$this->_pos];
 	}
 	
@@ -89,7 +94,8 @@ class PHPFrame_Database_RowCollection implements Iterator {
 	 * 
 	 * @return void
 	 */
-	public function next() {
+	public function next() 
+	{
 		$this->_pos++;
 	}
 	
@@ -98,7 +104,8 @@ class PHPFrame_Database_RowCollection implements Iterator {
 	 * 
 	 * @return	int
 	 */
-	public function key() {
+	public function key() 
+	{
 		return $this->_pos;
 	}
 	
@@ -107,7 +114,8 @@ class PHPFrame_Database_RowCollection implements Iterator {
 	 * 
 	 * @return	boolean
 	 */
-	public function valid() {
+	public function valid() 
+	{
 		return ($this->key() < $this->countRows());
 	}
 	
@@ -116,7 +124,8 @@ class PHPFrame_Database_RowCollection implements Iterator {
 	 * 
 	 * @return	void
 	 */
-	public function rewind() {
+	public function rewind() 
+	{
 		$this->_pos = 0;
 	}
 	
@@ -126,7 +135,8 @@ class PHPFrame_Database_RowCollection implements Iterator {
 	 * @param	string	$query
 	 * @return	void
 	 */
-	private function _fetchTableName($query) {
+	private function _fetchTableName($query) 
+	{
 		// Figure out table name from query
 		$pattern = '/FROM #__([a-zA-Z_]+)/';
 		preg_match($pattern, $query, $matches);
@@ -148,7 +158,8 @@ class PHPFrame_Database_RowCollection implements Iterator {
 	 * @return	void
 	 * @since	1.0
 	 */
-	private function _fetchRows($query) {
+	private function _fetchRows($query) 
+	{
 		// Run SQL query
 		$db = PHPFrame::getDB();
 		$db->setQuery($query);

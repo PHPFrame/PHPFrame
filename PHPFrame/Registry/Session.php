@@ -16,7 +16,8 @@
  * @subpackage 	registry
  * @since 		1.0
  */
-class PHPFrame_Registry_Session extends PHPFrame_Registry {
+class PHPFrame_Registry_Session extends PHPFrame_Registry 
+{
 	/**
 	 * Instance of itself in order to implement the singleton pattern
 	 * 
@@ -31,7 +32,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	void
 	 * @since	1.0
 	 */
-	protected function __construct() {
+	protected function __construct() 
+	{
 		// start php session
 		session_start();
 		
@@ -59,7 +61,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return 	PHPFrame_Registry
 	 * @since	1.0
 	 */
-	public static function getInstance() {
+	public static function getInstance() 
+	{
 		if (!isset(self::$_instance)) {
 			self::$_instance = new self;
 		}
@@ -76,7 +79,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	mixed
 	 * @since	1.0
 	 */
-	public function get($key, $default_value=null) {
+	public function get($key, $default_value=null) 
+	{
 		if (!isset($_SESSION[$key]) && !is_null($default_value)) {
 			$_SESSION[$key] = $default_value;
 		}
@@ -93,7 +97,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function set($key, $value) {
+	public function set($key, $value) 
+	{
 		$_SESSION[$key] = $value;
 	}
 	
@@ -104,7 +109,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	PHPFrame_Environment_IClient
 	 * @since	1.0
 	 */
-	public static function getClient() {
+	public static function getClient() 
+	{
 		return $_SESSION['client'];
 	}
 	
@@ -116,7 +122,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	string
 	 * @since	1.0
 	 */
-	public function getClientName() {
+	public function getClientName() 
+	{
 		return $_SESSION['client']->getName();
 	}
 	
@@ -128,7 +135,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function setUser(PHPFrame_User $user) {
+	public function setUser(PHPFrame_User $user) 
+	{
 		$_SESSION['user'] = $user;
 	}
 	
@@ -139,7 +147,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	PHPFrame_User
 	 * @since	1.0
 	 */
-	public function getUser() {
+	public function getUser() 
+	{
 		return $_SESSION['user'];
 	}
 	
@@ -150,7 +159,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	int
 	 * @since	1.0
 	 */
-	public function getUserId() {
+	public function getUserId() 
+	{
 		return (int) $_SESSION['user']->get('id');
 	}
 	
@@ -161,7 +171,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	int
 	 * @since	1.0
 	 */
-	public function getGroupId() {
+	public function getGroupId() 
+	{
 		return (int) $_SESSION['user']->get('groupid');
 	}
 	
@@ -172,7 +183,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	boolean	Returns TRUE if user is authenticated and FALSE otherwise.
 	 * @since	1.0
 	 */
-	public function isAuth() {
+	public function isAuth() 
+	{
 		return ($_SESSION['user']->get('id') > 0);
 	}
 	
@@ -183,7 +195,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	boolean
 	 * @since	1.0
 	 */
-	public function isAdmin() {
+	public function isAdmin() 
+	{
 		return ($_SESSION['user']->get('groupid') == 1);
 	}
 	
@@ -194,7 +207,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return 	PHPFrame_Application_Sysevents
 	 * @since	1.0
 	 */
-	public function getSysevents() {
+	public function getSysevents() 
+	{
 		return $_SESSION['sysevents'];
 	}
 	
@@ -210,7 +224,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	string
 	 * @since	1.0
 	 */
-	public function getToken($force_new=false) {
+	public function getToken($force_new=false) 
+	{
 		//create a token
 		if ($_SESSION['token'] === null || $force_new) {
 			$_SESSION['token'] = $this->_createToken(12);
@@ -226,7 +241,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function destroy() {
+	public function destroy() 
+	{
 		unset($_SESSION);
 		unset($_COOKIE);
 		self::$_instance = null;
@@ -240,7 +256,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	void
 	 * @since	1.0
 	 */
-	private function _detectClient() {
+	private function _detectClient() 
+	{
 		// Build array with available clients
 		//TODO: This should be read from directory
 		$available_clients = array("CLI", "Mobile", "XMLRPC", "Default");
@@ -270,7 +287,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry {
 	 * @return	string		$id 		Generated token.
 	 * @since	1.0
 	 */
-	private function _createToken($length = 32) {
+	private function _createToken($length = 32) 
+	{
 		static $chars = '0123456789abcdef';
 		$max = strlen( $chars ) - 1;
 		$token = '';

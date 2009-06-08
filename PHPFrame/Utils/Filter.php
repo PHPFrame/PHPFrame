@@ -19,7 +19,8 @@
  * @subpackage 	utils
  * @since 		1.0
  */
-class PHPFrame_Utils_Filter {
+class PHPFrame_Utils_Filter 
+{
 	/**
 	 * Validate data stored in variable
 	 * 
@@ -32,7 +33,8 @@ class PHPFrame_Utils_Filter {
 	 * @param	string	$type valid types are int, boolean, float, regexp, url, email, ip
 	 * @return	mixed	Returns the filtered data, or FALSE if the filter fails
 	 */
-	static function validate($variable, $type='default') {
+	static function validate($variable, $type='default') 
+	{
 		// Check that passed type is recognised
 		$allowed_types = array("default", "int", "boolean", "float", "regexp", "url", "email", "ip");
 		if (!in_array($type, $allowed_types)) {

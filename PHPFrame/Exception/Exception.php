@@ -37,7 +37,8 @@
  * @subpackage 	exception
  * @since 		1.0
  */
-class PHPFrame_Exception extends Exception {
+class PHPFrame_Exception extends Exception 
+{
 	// This are PHPs error code constants
 	const E_ERROR=1;
 	const E_WARNING=2;
@@ -61,7 +62,8 @@ class PHPFrame_Exception extends Exception {
 	
 	protected $_severity;
 
-	function __construct($message=null, $code=self::E_USER_ERROR, $verbose='') {
+	function __construct($message=null, $code=self::E_USER_ERROR, $verbose='') 
+	{
 		// Construct parent class to build Exception 
 		parent::__construct($message, $code);
 		
@@ -101,11 +103,13 @@ class PHPFrame_Exception extends Exception {
 		exit;
 	}
 	
-	public function getSeverity() {
+	public function getSeverity() 
+	{
 		return $this->_severity;
 	}
 	
-	function __toString($verbose=false) {
+	function __toString($verbose=false) 
+	{
 		if ($verbose) {
 			return parent::__toString();
 		}

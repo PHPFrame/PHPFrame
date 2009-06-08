@@ -14,7 +14,8 @@
  * @subpackage 	application
  * @since 		1.0
  */
-class PHPFrame_Application_Permissions {
+class PHPFrame_Application_Permissions 
+{
 	/**
 	 * Access level list loaded from database.
 	 * 
@@ -28,7 +29,8 @@ class PHPFrame_Application_Permissions {
 	 * @access	public
 	 * @since 	1.0
 	 */
-	public function __construct() {
+	public function __construct() 
+	{
 		// Load ACL from DB
 		$this->_acl = $this->_loadACL();
 	}
@@ -43,7 +45,8 @@ class PHPFrame_Application_Permissions {
 	 * @return	bool
 	 * @since	1.0
 	 */
-	public function authorise($component, $action, $groupid) {
+	public function authorise($component, $action, $groupid) 
+	{
 		foreach ($this->_acl as $acl) {
 			if (
 				$acl->groupid == $groupid 
@@ -64,7 +67,8 @@ class PHPFrame_Application_Permissions {
 	 * @return	array	An array ob database row objects
 	 * @since	1.0
 	 */
-	private function _loadACL() {
+	private function _loadACL() 
+	{
 		// Load access list from DB
 		$query = "SELECT * FROM #__acl_groups";
 		PHPFrame::getDB()->setQuery($query);

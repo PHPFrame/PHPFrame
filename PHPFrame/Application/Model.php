@@ -27,7 +27,8 @@
  * @see 		PHPFrame_Application_ActionController, PHPFrame_Application_View
  * @abstract 
  */
-abstract class PHPFrame_Application_Model {
+abstract class PHPFrame_Application_Model 
+{
 	/**
 	 * An array containing strings with internal error messages if any
 	 * 
@@ -42,7 +43,8 @@ abstract class PHPFrame_Application_Model {
 	 * 
 	 * @return mixed
 	 */
-	public function getLastError() {
+	public function getLastError() 
+	{
 		if (is_array($this->_error) && count($this->_error) > 0) {
 			return end($this->_error);
 		}

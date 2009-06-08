@@ -14,7 +14,8 @@
  * @subpackage 	application
  * @since 		1.0
  */
-class PHPFrame_Application_Pathway extends PHPFrame_Base_Singleton {
+class PHPFrame_Application_Pathway extends PHPFrame_Base_Singleton 
+{
 	/**
 	 * Array containing the pathway item objects
 	 * 
@@ -34,7 +35,8 @@ class PHPFrame_Application_Pathway extends PHPFrame_Base_Singleton {
 	 * @return 	void
 	 * @since	1.0
 	 */
-	function __construct() {
+	function __construct() 
+	{
 		$this->pathway = array();
 		
 		$item = new PHPFrame_Base_StdObject();
@@ -52,7 +54,8 @@ class PHPFrame_Application_Pathway extends PHPFrame_Base_Singleton {
 	 * @return 	void
 	 * @since	1.0
 	 */
-	function addItem($title, $url='') {
+	function addItem($title, $url='') 
+	{
 		$item = new PHPFrame_Base_StdObject();
 		$item->set('title', $title);
 		$item->set('url', $url);
@@ -67,7 +70,8 @@ class PHPFrame_Application_Pathway extends PHPFrame_Base_Singleton {
 	 * @return 	array
 	 * @since	1.0
 	 */
-	function setPathway($pathway) {
+	function setPathway($pathway) 
+	{
 		$oldPathway = $this->pathway;
 		$pathway = (array) $pathway;
         
@@ -83,7 +87,8 @@ class PHPFrame_Application_Pathway extends PHPFrame_Base_Singleton {
 	 * @return 	void
 	 * @since	1.0
 	 */
-	function display() {
+	function display() 
+	{
 		echo '<div class="pathway">';
 		for ($i=0; $i<count($this->pathway); $i++) {
 			if ($i>0) {
@@ -101,4 +106,3 @@ class PHPFrame_Application_Pathway extends PHPFrame_Base_Singleton {
 		echo '</div>';
 	}
 }
-?>

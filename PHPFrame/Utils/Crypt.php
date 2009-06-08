@@ -19,7 +19,8 @@
  * @subpackage 	utils
  * @since 		1.0
  */
-class PHPFrame_Utils_Crypt {
+class PHPFrame_Utils_Crypt 
+{
 	/**
 	 * Provides a secure hash based on a seed
 	 * 
@@ -28,7 +29,8 @@ class PHPFrame_Utils_Crypt {
 	 * @return	string
 	 * @since	1.0
 	 */
-	static function getHash($seed) {
+	static function getHash($seed) 
+	{
 		return md5(config::SECRET.$seed);
     }
 
@@ -41,7 +43,8 @@ class PHPFrame_Utils_Crypt {
      * @return	string		Hashed var name
      * @since	1.0
      */
-    static function getToken($forceNew = false) {
+    static function getToken($forceNew = false) 
+    {
     	$user = PHPFrame::getUser();
     	$session = PHPFrame::getSession();
     	$hash = PHPFrame_Utils_Crypt::getHash($user->id.$session->getToken( $forceNew ));
@@ -58,7 +61,8 @@ class PHPFrame_Utils_Crypt {
      * @return	bool	True if found and valid, false otherwise
      * @since	1.0
      */
-    static function checkToken() {
+    static function checkToken() 
+    {
     	$token = PHPFrame_Utils_Crypt::getToken();
     	if (!PHPFrame::getRequest()->get($token, '')) {
     		return false;
@@ -94,7 +98,11 @@ class PHPFrame_Utils_Crypt {
 	 * @return string  The encrypted password.
 	 * @since	1.0
 	 */
-	static function getCryptedPassword($plaintext, $salt = '', $encryption = 'md5-hex', $show_encrypt = false) {
+	static function getCryptedPassword($plaintext, 
+									   $salt = '', 
+									   $encryption = 'md5-hex', 
+									   $show_encrypt = false) 
+	{
 		// Get the salt to use.
 		$salt = PHPFrame_Utils_Crypt::getSalt($encryption, $salt, $plaintext);
 
@@ -188,7 +196,8 @@ class PHPFrame_Utils_Crypt {
 	 * @return string  The generated or extracted salt.
 	 * @since	1.0
 	 */
-	static function getSalt($encryption = 'md5-hex', $seed = '', $plaintext = '') {
+	static function getSalt($encryption = 'md5-hex', $seed = '', $plaintext = '') 
+	{
 		// Encrypt the password.
 		switch ($encryption) {
 			case 'crypt' :
@@ -267,7 +276,8 @@ class PHPFrame_Utils_Crypt {
 	 * @return	string			Random Password
 	 * @since	1.0
 	 */
-	static function genRandomPassword($length = 8) {
+	static function genRandomPassword($length = 8) 
+	{
 		$salt = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		$len = strlen($salt);
 		$makepass = '';
@@ -293,7 +303,8 @@ class PHPFrame_Utils_Crypt {
 	 * @return	string  $value converted to the 64 MD5 characters.
 	 * @since	1.0
 	 */
-	private function _toAPRMD5($value, $count) {
+	private function _toAPRMD5($value, $count) 
+	{
 		/* 64 characters that are valid for APRMD5 passwords. */
 		$APRMD5 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
@@ -314,7 +325,8 @@ class PHPFrame_Utils_Crypt {
 	 * @return	string  Binary data.
 	 * @since	1.0
 	 */
-	private function _bin($hex) {
+	private function _bin($hex) 
+	{
 		$bin = '';
 		$length = strlen($hex);
 		for ($i = 0; $i < $length; $i += 2) {

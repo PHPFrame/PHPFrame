@@ -14,7 +14,8 @@
  * @subpackage 	debug
  * @since 		1.0
  */
-class PHPFrame_Debug_Log {
+class PHPFrame_Debug_Log 
+{
 	/**
 	 * Write string to log file
 	 * 
@@ -23,7 +24,8 @@ class PHPFrame_Debug_Log {
 	 * @param	string	$str	The string to append to log file
 	 * @return	void
 	 */
-	public static function write($str) {
+	public static function write($str) 
+	{
 		// Add log info
 		$info = "\n";
 		$info .= "---";

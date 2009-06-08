@@ -17,7 +17,8 @@
  * @package		PHPFrame
  * @since 		1.0
  */
-class PHPFrame {
+class PHPFrame 
+{
 	/**
 	 * The PHPFrame version
 	 * 
@@ -31,7 +32,8 @@ class PHPFrame {
 	 * @return	string
 	 * @since 	1.0
 	 */
-	public static function getVersion() {
+	public static function getVersion() 
+	{
 		return self::VERSION;
 	}
 	
@@ -45,7 +47,8 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getFrontController() {
+	public static function getFrontController() 
+	{
 		return PHPFrame_Application_FrontController::getInstance();
 	}
 	
@@ -56,9 +59,10 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getActionController($component_name) {
+	public static function getActionController($component_name) 
+	{
 		$class_name = substr($component_name, 4)."Controller";
-		return PHPFrame_Base_Singleton::getInstance($class_name);
+		return PHPFrame_Application_ActionController::getInstance($class_name);
 	}
 	
 	/**
@@ -69,8 +73,11 @@ class PHPFrame {
 	 * @param	$args
 	 * @return	object
 	 * @since 	1.0
+	 * @todo	Have to add type checking using instanceof operator to guarantee that 
+	 * 			we return an object of type PHPFrame_Application_Model
 	 */
-	public static function getModel($component_name, $model_name, $args=array()) {
+	public static function getModel($component_name, $model_name, $args=array()) 
+	{
 		$class_name = substr($component_name, 4)."Model";
 		$class_name .= ucfirst($model_name);
 		
@@ -106,7 +113,8 @@ class PHPFrame {
 	 * Request Registry
 	 */
 	
-	public static function getRequest() {
+	public static function getRequest() 
+	{
 		return PHPFrame_Registry_Request::getInstance();
 	}
 	
@@ -116,7 +124,8 @@ class PHPFrame {
 	 * @return object
 	 * @since 	1.0
 	 */
-	public static function getResponse() {
+	public static function getResponse() 
+	{
 		return self::getRequest()->getResponse();
 	}
 	
@@ -130,7 +139,8 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getSession() {
+	public static function getSession() 
+	{
 		return PHPFrame_Registry_Session::getInstance();
 	}
 	
@@ -140,7 +150,8 @@ class PHPFrame {
 	 * @return 	object
 	 * @since 	1.0
 	 */
-	public static function getUser() {
+	public static function getUser() 
+	{
 		return self::getSession()->getUser();
 	}
 	
@@ -150,7 +161,8 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getSysevents() {
+	public static function getSysevents() 
+	{
 		return self::getSession()->getSysevents();
 	}
 	
@@ -158,7 +170,8 @@ class PHPFrame {
 	 * Application Registry
 	 */
 	
-	public static function getApplicationRegistry() {
+	public static function getApplicationRegistry() 
+	{
 		return PHPFrame_Registry_Application::getInstance();
 	}
 	
@@ -168,7 +181,8 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getPermissions() {
+	public static function getPermissions() 
+	{
 		return self::getApplicationRegistry()->getPermissions();
 	}
 	
@@ -178,7 +192,8 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getComponents() {
+	public static function getComponents() 
+	{
 		return self::getApplicationRegistry()->getComponents();
 	}
 	
@@ -188,25 +203,12 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getModules() {
+	public static function getModules() 
+	{
 		return self::getApplicationRegistry()->getModules();
 	}
 
 	
-
-	
-	/**
-	 * Get a table class.
-	 * 
-	 * @param	string	$component_name
-	 * @param	string	$table_name
-	 * @return	object
-	 * @since 	1.0
-	 */
-	public static function getTable($component_name, $table_name) {
-		$class_name = substr($component_name, 4)."Table".ucfirst($table_name);
-		return PHPFrame_Database_Table::getInstance($class_name);
-	}
 	
 	/**
 	 * Get database object
@@ -214,7 +216,8 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getDB() {
+	public static function getDB() 
+	{
 		return PHPFrame_Database::getInstance(config::DB_HOST, 
 											  config::DB_USER, 
 											  config::DB_PASS, 
@@ -228,7 +231,8 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getDocument($type) {
+	public static function getDocument($type) 
+	{
 		return PHPFrame_Base_Singleton::getInstance('PHPFrame_Document_'.strtoupper($type));
 	}
 	
@@ -238,7 +242,8 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getURI($uri='') {
+	public static function getURI($uri='') 
+	{
 		return new PHPFrame_Utils_URI($uri);
 	}
 	
@@ -248,7 +253,8 @@ class PHPFrame {
 	 * @return	object
 	 * @since 	1.0
 	 */
-	public static function getPathway() {
+	public static function getPathway() 
+	{
 		return PHPFrame_Base_Singleton::getInstance('PHPFrame_Application_Pathway');
 	}
 }

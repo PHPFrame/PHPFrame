@@ -14,6 +14,7 @@
  * @subpackage 	exception
  * @since 		1.0
  */
-class PHPFrame_Exception_Filesystem extends PHPFrame_Exception {
+class PHPFrame_Exception_Filesystem extends PHPFrame_Exception 
+{
 	
 }

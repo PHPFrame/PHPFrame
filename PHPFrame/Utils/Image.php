@@ -14,8 +14,14 @@
  * @subpackage 	utils
  * @since 		1.0
  */
-class PHPFrame_Utils_Image {
-	function resize_image($sourcefile, $destfile, $forcedwidth=85, $forcedheight=60, $imgcomp=0)  {
+class PHPFrame_Utils_Image 
+{
+	function resize_image($sourcefile, 
+						  $destfile, 
+						  $forcedwidth=85, 
+						  $forcedheight=60, 
+						  $imgcomp=0) 
+	{
 		// $imgcomp es la compresion que le damos. 0 best quality | 100 worst quality
 		$g_imgcomp = 100-$imgcomp;
 		$g_srcfile = $sourcefile;
@@ -50,7 +56,8 @@ class PHPFrame_Utils_Image {
 		return false;
 	}
 	
-	function img_create_from_file($g_srcfile, $src_type) {
+	function img_create_from_file($g_srcfile, $src_type) 
+	{
 		ini_set('memory_limit', '32M');
 		switch ($src_type) {
 			case 1: // for gif
@@ -65,7 +72,8 @@ class PHPFrame_Utils_Image {
 		}	
 	}
 	
-	function img_create($g_iw, $g_ih, $src_type) {
+	function img_create($g_iw, $g_ih, $src_type) 
+	{
 		switch ($src_type) {
 			case 1: // for gif
 				$a = imagecreate($g_iw,$g_ih);
@@ -76,7 +84,8 @@ class PHPFrame_Utils_Image {
 		}		
 	}
 	
-	function img_output($img_dst, $g_dstfile, $g_imgcomp, $src_type) {
+	function img_output($img_dst, $g_dstfile, $g_imgcomp, $src_type) 
+	{
 		switch ($src_type) {
 			case 1: // for gif
 				imagegif($img_dst, $g_dstfile); // for gif
@@ -92,7 +101,8 @@ class PHPFrame_Utils_Image {
 		}		
 	}
 	
-	function create_img_border($img_file, $type) {
+	function create_img_border($img_file, $type) 
+	{
      	$quality = 100;
      	$borderColor = 127;  // 255 = white
     

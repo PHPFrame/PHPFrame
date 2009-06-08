@@ -14,19 +14,23 @@
  * @subpackage 	registry
  * @since 		1.0
  */
-class PHPFrame_Registry_Response {
+class PHPFrame_Registry_Response 
+{
 	private $_header=null;
 	private $_body=null;
 	
-	function setHeader($str) {
+	function setHeader($str) 
+	{
 		$this->_header = $str;
 	}
 	
-	function setBody($str) {
+	function setBody($str) 
+	{
 		$this->_body = $str;
 	}
 	
-	function send() {
+	function send() 
+	{
 		echo $this->_body;
 		
 		if (config::DEBUG) {

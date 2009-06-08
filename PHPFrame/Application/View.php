@@ -28,7 +28,8 @@
  * @see			PHPFrame_Application_ActionController, PHPFrame_Application_Model 
  * @since 		1.0
  */
-abstract class PHPFrame_Application_View {
+abstract class PHPFrame_Application_View 
+{
 	/**
 	 * The view name
 	 * 
@@ -54,7 +55,8 @@ abstract class PHPFrame_Application_View {
 	 * @since	1.0
 	 * @return	void
 	 */
-	public function __construct($name, $layout) {
+	public function __construct($name, $layout) 
+	{
 		$this->_name = (string) $name;
 		$this->_layout = (string) $layout;
 	}
@@ -66,7 +68,8 @@ abstract class PHPFrame_Application_View {
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function addData($key, $value) {
+	public function addData($key, $value) 
+	{
 		$this->_data[$key] = $value;
 	}
 	
@@ -81,7 +84,8 @@ abstract class PHPFrame_Application_View {
      *
      * @since	1.0
      */
-    public function display() {
+    public function display() 
+    {
 		// If there is a layout specific method we trigger it before rendering
     	$layout_array = explode('_', $this->_layout);
     	$layout = '';
@@ -103,7 +107,8 @@ abstract class PHPFrame_Application_View {
      *
      * @since	1.0
      */
-    protected function _render() {
+    protected function _render() 
+    {
     	// Add view name and template name to data array
     	$this->_data['view'] = $this->_name;
     	$this->_data['layout'] = $this->_layout;

@@ -14,7 +14,8 @@
  * @subpackage 	mail
  * @since 		1.0
  */
-class PHPFrame_Mail_Mailer extends PHPMailer {
+class PHPFrame_Mail_Mailer extends PHPMailer 
+{
 	private $_messageid_sfx=null;
 	private $_error=array();
 	
@@ -26,7 +27,8 @@ class PHPFrame_Mail_Mailer extends PHPMailer {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function __construct() {
+	public function __construct() 
+	{
 		$this->Mailer = config::MAILER;
 		$this->Host = config::SMTP_HOST;
 		$this->Port = config::SMTP_PORT;
@@ -51,7 +53,8 @@ class PHPFrame_Mail_Mailer extends PHPMailer {
 	 * @param	string	$str
 	 * @return	void
 	 */
-	public function setMessageIdSuffix($str) {
+	public function setMessageIdSuffix($str) 
+	{
 		$this->_messageid_sfx = (string)$str;
 	}
 	
@@ -60,7 +63,8 @@ class PHPFrame_Mail_Mailer extends PHPMailer {
 	 * 
 	 * @return	string
 	 */
-	public function getMessageIdSuffix() {
+	public function getMessageIdSuffix() 
+	{
 		return $this->_messageid_sfx;
 	}
 	
@@ -72,7 +76,8 @@ class PHPFrame_Mail_Mailer extends PHPMailer {
 	 * @see 	src/lib/phpmailer/PHPMailer#CreateHeader()
 	 * @return	string
 	 */
-	public function CreateHeader() {
+	public function CreateHeader() 
+	{
 		$result = parent::CreateHeader();
 		
 		if (!is_null($this->_messageid_sfx)) {
@@ -84,4 +89,3 @@ class PHPFrame_Mail_Mailer extends PHPMailer {
 		return $result;
 	}
 }
-?>

@@ -14,7 +14,8 @@
  * @subpackage 	user
  * @since 		1.0
  */
-class PHPFrame_User {
+class PHPFrame_User 
+{
 	private $_row=null;
 	private $_error=array();
 	
@@ -24,19 +25,23 @@ class PHPFrame_User {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function __construct() {
+	public function __construct() 
+	{
 		$this->_row = new PHPFrame_Database_Row("#__users");
 	}
 	
-	public function __get($key) {
+	public function __get($key) 
+	{
 		return $this->get($key);
 	}
 	
-	public function get($key) {
+	public function get($key) 
+	{
 		return $this->_row->get($key);
 	}
 	
-	public function set($key, $value) {
+	public function set($key, $value) 
+	{
 		$this->_row->set($key, $value);
 	}
 	
@@ -51,7 +56,8 @@ class PHPFrame_User {
 	 * @return	mixed	The loaded row object of FALSE on failure.
 	 * @since 	1.0
 	 */
-	public function load($id, $exclude='password') {
+	public function load($id, $exclude='password') 
+	{
 		if (!$this->_row->load($id, $exclude)) {
 			return false;
 		}
@@ -60,7 +66,8 @@ class PHPFrame_User {
 		}
 	}
 	
-	public function bind($array, $exclude='', $foreign_keys=array()) {
+	public function bind($array, $exclude='', $foreign_keys=array()) 
+	{
 		$this->_row->bind($array, $exclude, $foreign_keys);
 	}
 	
@@ -73,7 +80,8 @@ class PHPFrame_User {
 	 * @return	bool	Returns TRUE on success or FALSE on failure.
 	 * @since 	1.0
 	 */
-	public function store() {
+	public function store() 
+	{
 		// Before we store new users we check whether email already exists in db
 		$id = $this->_row->get('id');
 		if (empty($id) && $this->_emailExists($this->_row->get('email'))) {
@@ -92,7 +100,8 @@ class PHPFrame_User {
 		return $this->_row->store();
 	}
 	
-	public function getLastError() {
+	public function getLastError() 
+	{
 		if (is_array($this->_error) && count($this->_error) > 0) {
 			return end($this->_error);
 		}
@@ -101,7 +110,8 @@ class PHPFrame_User {
 		}
 	}
 	
-	private function _emailExists($email) {
+	private function _emailExists($email) 
+	{
 		$query = "SELECT id FROM #__users ";
 		$query .= " WHERE email = '".$email."' ";
 		$query .= " AND (deleted = '0000-00-00 00:00:00' OR deleted IS NULL) ";

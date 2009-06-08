@@ -14,7 +14,8 @@
  * @subpackage 	user
  * @since 		1.0
  */
-class PHPFrame_User_OpenID {
+class PHPFrame_User_OpenID 
+{
 	# GetUserId(openid_url)
 	//select user_id from user_openids where openid_url = openid_url
 	

@@ -23,7 +23,8 @@
  * @subpackage 	utils
  * @since 		1.0
  */
-class PHPFrame_Utils_URI extends PHPFrame_Base_StdObject {
+class PHPFrame_Utils_URI extends PHPFrame_Base_StdObject 
+{
 	/**
 	 * The URI scheme
 	 * 
@@ -110,7 +111,8 @@ class PHPFrame_Utils_URI extends PHPFrame_Base_StdObject {
 	 * @return 	void
 	 * @since	1.0
 	 */
-	public function __construct($uri='') {
+	public function __construct($uri='') 
+	{
 		if (empty($uri)) {
 			$uri = $this->_getRequestURI();
 		}
@@ -125,7 +127,8 @@ class PHPFrame_Utils_URI extends PHPFrame_Base_StdObject {
 	 * @return 	string	The current request's URL
 	 * @since	1.0
 	 */
-	private function _getRequestURI() {
+	private function _getRequestURI() 
+	{
 		// Determine if the request was over SSL (HTTPS)
 		if (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) != 'off')) {
 			$scheme = 'https';
@@ -158,7 +161,8 @@ class PHPFrame_Utils_URI extends PHPFrame_Base_StdObject {
 	 * @return	void
 	 * @since	1.0
 	 */
-	private function _parseURI($uri) {
+	private function _parseURI($uri) 
+	{
 		// Parse URI using PHPs parse_url() method
 		$array = parse_url($uri);
 		
@@ -222,9 +226,11 @@ class PHPFrame_Utils_URI extends PHPFrame_Base_StdObject {
 	 * @return	string
 	 * @since	1.0
 	 */
-	public function getBase() {
+	public function getBase() 
+	{
 		$base = $this->_scheme."://".$this->_host;
-		if (($this->_scheme == "http" && $this->_port != 80) || ($this->_scheme == "https" && $this->_port != 443)) {
+		if (($this->_scheme == "http" && $this->_port != 80)
+			 || ($this->_scheme == "https" && $this->_port != 443)) {
 			$base .= ":".$this->_port;	
 		}
 		
@@ -246,7 +252,8 @@ class PHPFrame_Utils_URI extends PHPFrame_Base_StdObject {
 	 * @return 	string
 	 * @since	1.0
 	 */
-	public function __toString() {
+	public function __toString() 
+	{
 		$str = $this->getBase().$this->_filename.".".$this->_extension;
 		if (is_array($this->_query) && count($this->_query) > 0) {
 			$str .= "?";

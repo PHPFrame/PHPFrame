@@ -14,7 +14,8 @@
  * @subpackage 	application
  * @since 		1.0
  */
-class PHPFrame_Application_Components {
+class PHPFrame_Application_Components 
+{
 	/**
 	 * Array containing the installed components
 	 * 
@@ -28,7 +29,8 @@ class PHPFrame_Application_Components {
 	 * @return	void
 	 * @since	1.0
 	 */
-	function __construct() {
+	function __construct() 
+	{
 		$query = "SELECT * FROM #__components ";
 		$this->_array = PHPFrame::getDB()->setQuery($query)->loadObjectList();
 	}
@@ -41,7 +43,8 @@ class PHPFrame_Application_Components {
 	 * @param	string	$option The option string.
 	 * @return	object
 	 */
-	public function loadByOption($option) {
+	public function loadByOption($option) 
+	{
 		foreach ($this->_array as $component) {
 			if ($component->name == substr($option, 4)) {
 				return $component;
@@ -58,7 +61,8 @@ class PHPFrame_Application_Components {
 	 * @param string $name The component name to check (ie: dashboard, user, projects, ...)
 	 * @return bool
 	 */
-	public static function isEnabled($name) {
+	public static function isEnabled($name) 
+	{
 		foreach ($this->_array as $component) {
 			if ($component->name == substr($name, 4) && $component->enabled == 1) {
 				return true;

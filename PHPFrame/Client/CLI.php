@@ -14,7 +14,8 @@
  * @subpackage 	client
  * @since 		1.0			
  */
-class PHPFrame_Client_CLI implements PHPFrame_Client_IClient {
+class PHPFrame_Client_CLI implements PHPFrame_Client_IClient 
+{
 		
 	/**
 	 * Check if this is the correct helper for the client being used
@@ -23,7 +24,8 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient {
 	 * @access	public
 	 * @return	PHPFrame_Client_IClient|boolean	Object instance of this class if correct helper for client or false otherwise.
 	 */
-	public static function detect() {
+	public static function detect() 
+	{
 		
 		global $argv;
 		if (is_array($argv)) {
@@ -38,7 +40,8 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient {
 	 * @access	public
 	 * @return	array	Unified Request Array
 	 */
-	public function populateURA() {
+	public function populateURA() 
+	{
 
 		// Get arguments passed via command line and parse them as request vars
 		global $argv;
@@ -57,7 +60,8 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient {
 	 * @access	public
 	 * @return	string	Name to identify helper type
 	 */
-	public function getName() {
+	public function getName() 
+	{
 		return "cli";
 	}
 	
@@ -70,7 +74,8 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient {
 	 * 
 	 * @return	void
 	 */
-	public function preActionHook() {
+	public function preActionHook() 
+	{
 		// Automatically log in as system user
 		$user = new PHPFrame_User();
 		$user->set('id', 1);
@@ -93,7 +98,8 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient {
 	 * @param	array	$data	An array containing the data assigned to the view.
 	 * @return	void
 	 */
-	public function renderView($data) {
+	public function renderView($data) 
+	{
 		var_dump($data);
 	}
 	

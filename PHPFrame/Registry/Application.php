@@ -16,7 +16,8 @@
  * @subpackage 	registry
  * @since 		1.0
  */
-class PHPFrame_Registry_Application extends PHPFrame_Registry {
+class PHPFrame_Registry_Application extends PHPFrame_Registry 
+{
 	/**
 	 * Instance of itself in order to implement the singleton pattern
 	 * 
@@ -34,7 +35,8 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry {
 	 * @return	void
 	 * @since	1.0
 	 */
-	protected function __construct() {
+	protected function __construct() 
+	{
 		// Ensure that cache dir is writable
 		PHPFrame_Utils_Filesystem::ensureWritableDir(config::FILESYSTEM.DS."cache");
 		
@@ -63,7 +65,8 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry {
 	 * @return 	PHPFrame_Registry
 	 * @since	1.0
 	 */
-	public static function getInstance() {
+	public static function getInstance() 
+	{
 		if (!isset(self::$_instance)) {
 			self::$_instance = new self;
 		}
@@ -80,7 +83,8 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry {
 	 * @return	mixed
 	 * @since	1.0
 	 */
-	public function get($key, $default_value=null) {
+	public function get($key, $default_value=null) 
+	{
 		if (!isset($this->_array[$key]) && !is_null($default_value)) {
 			$this->_array[$key] = $default_value;
 		}
@@ -97,7 +101,8 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function set($key, $value) {
+	public function set($key, $value) 
+	{
 		if (array_key_exists($key, $this->_readonly)) {
 			throw new PHPFrame_Exception("Tried to set a read-only key (".$key.") in Application Registry.");
 		}
@@ -105,15 +110,18 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry {
 		$this->_array[$key] = $value;
 	}
 	
-	public function getPermissions() {
+	public function getPermissions() 
+	{
 		return $this->_array['permissions'];
 	}
 	
-	public function getComponents() {
+	public function getComponents() 
+	{
 		return $this->_array['components'];
 	}
 	
-	public function getModules() {
+	public function getModules() 
+	{
 		return $this->_array['modules'];
 	}
 }

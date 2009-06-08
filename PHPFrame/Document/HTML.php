@@ -14,7 +14,8 @@
  * @subpackage 	document
  * @since 		1.0
  */
-class PHPFrame_Document_HTML extends PHPFrame_Document {
+class PHPFrame_Document_HTML extends PHPFrame_Document 
+{
 	/**
 	 * Array of linked scripts
 	 *
@@ -86,7 +87,8 @@ class PHPFrame_Document_HTML extends PHPFrame_Document {
 	 * @access	public
 	 * @since	0.1 
 	 */
-	function __construct(){
+	function __construct() 
+	{
 		parent::__construct();
 		$this->_type = $this->_mime."; charset=".$this->_charset;
 	}
@@ -99,7 +101,8 @@ class PHPFrame_Document_HTML extends PHPFrame_Document {
 	 * @return	void
 	 * @since 1.0
 	 */
-	function addMetaTag($name, $content) {
+	function addMetaTag($name, $content) 
+	{
 		$this->_metaTags[] = '<meta name="'.$name.'" content="'.$content.'" />';
 	}
 	
@@ -113,7 +116,8 @@ class PHPFrame_Document_HTML extends PHPFrame_Document {
 	 * @return	void
 	 * @since	1.0
 	 */
-	function addScript($src, $type='text/javascript') {
+	function addScript($src, $type='text/javascript') 
+	{
 		// Make source absolute URL
 		$this->_makeAbsolute($src);
 		
@@ -134,7 +138,8 @@ class PHPFrame_Document_HTML extends PHPFrame_Document {
 	 * @return	void
 	 * @since 	1.0
 	 */
-	function addStyleSheet($href, $type='text/css') {
+	function addStyleSheet($href, $type='text/css') 
+	{
 		// Make source absolute URL
 		$this->_makeAbsolute($href);
 		
@@ -153,7 +158,8 @@ class PHPFrame_Document_HTML extends PHPFrame_Document {
 	 * @return	void
 	 * @since	1.0
 	 */
-	function printHead() {
+	function printHead() 
+	{
 		
 		// add meta tags
 		$this->_metaTags[] = '<meta name="generator" content="Extranet Office" />';
@@ -177,11 +183,11 @@ class PHPFrame_Document_HTML extends PHPFrame_Document {
 	 * @return	void
 	 * @since	1.0
 	 */
-	private function _makeAbsolute(&$path) {
+	private function _makeAbsolute(&$path) 
+	{
 		// Add the document base if a relative path
 		if (substr($path, 0, 4) != 'http') {
 			$path = $this->base.$path;
 		}
 	}
 }
-?>

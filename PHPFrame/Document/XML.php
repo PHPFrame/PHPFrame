@@ -15,7 +15,7 @@
  * @subpackage 	document
  * @since 		1.0
  */
-class PHPFrame_Document_XML extends PHPFrame_Document {
+class PHPFrame_Document_XML extends PHPFrame_Document 
+{
 
 }
-?>

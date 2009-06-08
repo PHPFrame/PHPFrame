@@ -14,7 +14,8 @@
  * @subpackage 	exception
  * @since 		1.0
  */
-class PHPFrame_Exception_Handler {
+class PHPFrame_Exception_Handler 
+{
 	/**
 	 * Initialise the error and exception handlers
 	 * 
@@ -25,7 +26,8 @@ class PHPFrame_Exception_Handler {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public static function init() {
+	public static function init() 
+	{
 		error_reporting(E_ALL & ~E_NOTICE);
 		//set_error_handler(array("PHPFrame_Exception_Handler", "handleError"));
 		set_exception_handler(array('PHPFrame_Exception_Handler', 'handleException'));
@@ -41,7 +43,8 @@ class PHPFrame_Exception_Handler {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public static function restore() {
+	public static function restore() 
+	{
 		restore_error_handler();
 		restore_exception_handler();
 	}
@@ -56,7 +59,8 @@ class PHPFrame_Exception_Handler {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public static function handleError($errno, $errstr, $errfile, $errline, $errcontext) {
+	public static function handleError($errno, $errstr, $errfile, $errline, $errcontext) 
+	{
 		// Throw error as custom exception
 		throw new PHPFrame_Exception_Error($errstr, $errno, $errfile, $errline, $errcontext);
 	}
@@ -72,7 +76,8 @@ class PHPFrame_Exception_Handler {
 	 * @since	1.0
 	 * @todo	This method needs to decide what to do with the uncaught exceptions. Right now it simply outputs some basic info.
 	 */
-	public static function handleException($exception) {
+	public static function handleException($exception) 
+	{
 		$str = 'Uncaught exception: '.$exception->getMessage()."\n";
 		$str .= 'File: '.$exception->getFile()."\n";
 		$str .= 'Line: '.$exception->getLine()."\n";

@@ -14,7 +14,8 @@
  * @subpackage 	html
  * @since 		1.0
  */
-class PHPFrame_HTML_Pagination {
+class PHPFrame_HTML_Pagination 
+{
 	/**
 	 * The list filter object for which to provide pagination
 	 * 
@@ -28,7 +29,8 @@ class PHPFrame_HTML_Pagination {
 	 * @param	object	$list_filter	Object of type PHPFrame_Database_CollectionFilter
 	 * @return	void
 	 */
-	public function __construct(PHPFrame_Database_CollectionFilter $list_filter) {
+	public function __construct(PHPFrame_Database_CollectionFilter $list_filter) 
+	{
 		$this->_list_filter = $list_filter;
 	}
 	
@@ -41,7 +43,8 @@ class PHPFrame_HTML_Pagination {
 	 * @access	public
 	 * @since	1.0
 	 */
-	public function getListFooter() {
+	public function getListFooter() 
+	{
 		if ($this->_list_filter->getPages() > 1) {
 			// Build limit select
 			$html = '<div>';
@@ -74,7 +77,8 @@ class PHPFrame_HTML_Pagination {
 	 * @access	public
 	 * @since	1.0
 	 */
-	public function getLimitSelect() {
+	public function getLimitSelect() 
+	{
 		$html .= '<form name="limitform" id="limitform" method="post">';
 		$html .= 'Display Num: ';
 		$html .= '<select name="limit" onchange="document.forms[\'limitform\'].submit();">';
@@ -103,7 +107,8 @@ class PHPFrame_HTML_Pagination {
 	 * @access	public
 	 * @since	1.0
 	 */
-	public function getPageNav() {
+	public function getPageNav() 
+	{
 		$href = 'index.php?component='.PHPFrame::getRequest()->getComponentName();
 		$href .= '&amp;action='.PHPFrame::getRequest()->getAction();
 		$href .= '&amp;limit='.$this->_list_filter->getLimit();
@@ -171,7 +176,8 @@ class PHPFrame_HTML_Pagination {
 	 * @access	public
 	 * @since	1.0
 	 */
-	public function getPageInfo() {
+	public function getPageInfo() 
+	{
 		$str = 'Page '.$this->_list_filter->getCurrentPage();
 		$str .= ' of '.$this->_list_filter->getPages();
 		return $str;

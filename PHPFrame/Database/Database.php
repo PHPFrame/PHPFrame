@@ -33,7 +33,8 @@
  * @subpackage 	database
  * @since 		1.0
  */
-class PHPFrame_Database {
+class PHPFrame_Database 
+{
 	/**
 	 * Instance of itself in order to implement the singleton pattern
 	 * 
@@ -75,7 +76,8 @@ class PHPFrame_Database {
 	 * @param 	string 	$db_name	The MySQL database name. It uses the value set in inc/config.php by default.
 	 * @since	1.0
 	 */
-	private function __construct($db_host, $db_user, $db_pass, $db_name) {
+	private function __construct($db_host, $db_user, $db_pass, $db_name) 
+	{
 		// Connect to database server
 		// We catch PHP errors (converted into exceptions) and rethrow them as database exceptions
 		try {
@@ -103,7 +105,11 @@ class PHPFrame_Database {
 	 * 
 	 * @return PHPFrame_Application_FrontController
 	 */
-	public static function getInstance($db_host=null, $db_user=null, $db_pass=null, $db_name=null) {
+	public static function getInstance($db_host=null, 
+									   $db_user=null, 
+									   $db_pass=null, 
+									   $db_name=null) 
+	{
 		if (!isset(self::$_instance)) {
 			if ($db_host==null || $db_user==null || $db_pass==null || $db_name==null) {
 				throw new PHPFrame_Exception("db_host, db_user, db_pass and db_name are required to initialise database object");
@@ -124,7 +130,8 @@ class PHPFrame_Database {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function setQuery($query) {
+	public function setQuery($query) 
+	{
 		$this->_query = str_replace('#__', config::DB_PREFIX, $query);
 		
 		return $this;
@@ -140,7 +147,8 @@ class PHPFrame_Database {
 	 * @return 	mixed	Returns a mysql result resource or int for INSERT queries or FALSE on failure.
 	 * @since	1.0
 	 */
-	public function query() {
+	public function query() 
+	{
 		// Run SQL query
 		//PHPFrame_Debug_Log::write($this->_query);
 		$this->_rs = @mysql_query($this->_query);
@@ -169,7 +177,8 @@ class PHPFrame_Database {
 	 * @return	mixed	Returns a string with the single result or FALSE on failure.
 	 * @since	1.0
 	 */
-	public function loadResult() {
+	public function loadResult() 
+	{
 		// Run SQL query
 		$this->_rs = $this->query($this->_query);
 		// Check query result is valid
@@ -195,7 +204,8 @@ class PHPFrame_Database {
 	 * @return 	mixed	Returns an array containing single column for each row or FALSE on failure.
 	 * @since	1.0
 	 */
-	public function loadResultArray() {
+	public function loadResultArray() 
+	{
 		// Run SQL query
 		$this->_rs = $this->query($this->_query);
 		// Check query result is valid
@@ -225,7 +235,8 @@ class PHPFrame_Database {
 	 * @return	mixed	Returns a row object or FALSE if query fails.
 	 * @since	1.0
 	 */
-	public function loadObject() {
+	public function loadObject() 
+	{
 		// Run SQL query
 		$this->_rs = $this->query($this->_query);
 		// Check query result is valid
@@ -264,7 +275,8 @@ class PHPFrame_Database {
 	 * @return	mixed	An array of row objects or FALSE if query fails.
 	 * @since	1.0
 	 */
-	public function loadObjectList() {
+	public function loadObjectList() 
+	{
 		// Run SQL query
 		$this->_rs = $this->query($this->_query);
 		// Check query result is valid
@@ -298,7 +310,8 @@ class PHPFrame_Database {
 	 * @return	mixed	Returns an associative array with the row data or FALSE on failure.
 	 * @since	1.0
 	 */
-	public function loadAssoc() {
+	public function loadAssoc() 
+	{
 		// Run SQL query
 		$this->_rs = $this->query($this->_query);
 		// Check query result is valid
@@ -323,7 +336,8 @@ class PHPFrame_Database {
 	 * @return	string	Returns the escaped string.
 	 * @since	1.0
 	 */
-	public function getEscaped($text, $extra = false) {
+	public function getEscaped($text, $extra = false) 
+	{
 		$result = mysql_real_escape_string($text, $this->_link);
 		if ($extra) {
 			$result = addcslashes( $result, '%_' );
@@ -342,7 +356,8 @@ class PHPFrame_Database {
 	 * @see		getAffectedRows()
 	 * @since	1.0
 	 */
-	public function getNumRows() {
+	public function getNumRows() 
+	{
 		$num_rows = mysql_num_rows($this->_rs);
 		// Check num_rows is valid
 		if ($num_rows === false) {
@@ -360,7 +375,8 @@ class PHPFrame_Database {
 	 * @see		getNumRows()
 	 * @since	1.0
 	 */
-	public function getAffectedRows() {
+	public function getAffectedRows() 
+	{
 		$affected_rows = mysql_affected_rows();
 		// Check affected rows is valid
 		if ($affected_rows == -1) {
@@ -369,7 +385,8 @@ class PHPFrame_Database {
 		return $affected_rows;
 	}
 	
-	public function countRows($table_name) {
+	public function countRows($table_name) 
+	{
 		$query = "SELECT COUNT(id) FROM `".$table_name."`";
 		$this->setQuery($query);
 		return $this->loadResult();
@@ -385,7 +402,8 @@ class PHPFrame_Database {
 	 * @return 	bool	Returns TRUE on success or FALSE on failure.
 	 * @since	1.0
 	 */
-	public function close() {
+	public function close() 
+	{
 		// Free resultset
 		//mysql_free_result();
 		// Closing connection

@@ -14,7 +14,8 @@
  * @subpackage 	document
  * @since 		1.0
  */
-class PHPFrame_Document extends PHPFrame_Base_Singleton {
+class PHPFrame_Document extends PHPFrame_Base_Singleton 
+{
 	/**
 	 * Document title
 	 *
@@ -110,10 +111,10 @@ class PHPFrame_Document extends PHPFrame_Base_Singleton {
 	 * @access	public
 	 * @since	1.0
 	 */
-	public function __construct() {
+	public function __construct() 
+	{
 		$uri = PHPFrame::getURI();
 		$this->base = $uri->getBase();
 		$this->uri = $uri->__toString();
 	}
 }
-?>

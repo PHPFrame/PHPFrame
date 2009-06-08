@@ -16,7 +16,8 @@
  * @subpackage 	debug
  * @since 		1.0
  */
-class PHPFrame_Debug_Profiler {
+class PHPFrame_Debug_Profiler 
+{
 	private static $_key_count=0;
 	/**
 	 * An array containing user defined execution milestones
@@ -40,7 +41,8 @@ class PHPFrame_Debug_Profiler {
 	 * @param	string	$name
 	 * @return	void
 	 */
-	public static function setMilestone($name) {
+	public static function setMilestone($name) 
+	{
 		self::$_milestones[self::$_key_count] = array($name, self::_microtime_float());
 		self::$_key_count++;
 	}
@@ -51,7 +53,8 @@ class PHPFrame_Debug_Profiler {
 	 * @return	mixed
 	 * @since	1.0
 	 */
-	public static function getReport($array=false) {
+	public static function getReport($array=false) 
+	{
 		if ($array) {
 			return self::_asArray();
 		}
@@ -60,7 +63,8 @@ class PHPFrame_Debug_Profiler {
 		}
 	}
 	
-	private static function _asArray() {
+	private static function _asArray() 
+	{
 		self::setMilestone('End');
 		
 		foreach (self::$_milestones as $key=>$value) {
@@ -81,7 +85,8 @@ class PHPFrame_Debug_Profiler {
 		return $report;
 	}
 	
-	private static function _asString() {
+	private static function _asString() 
+	{
 		self::setMilestone('End');
 		
 		$report = "Profiler\n";
@@ -114,7 +119,8 @@ class PHPFrame_Debug_Profiler {
 	 * @return	float
 	 * @since	1.0
 	 */
-	private static function _microtime_float() {
+	private static function _microtime_float() 
+	{
 	    list ($msec, $sec) = explode(' ', microtime());
 	    $microtime = ( (float)$msec + (float)$sec ) * 1000;
 	    return $microtime;

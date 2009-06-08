@@ -14,7 +14,8 @@
  * @subpackage 	client
  * @since 		1.0	
  */
-class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient {
+class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient 
+{
 		
 	/**
 	 * Check if this is the correct helper for the client being used
@@ -23,7 +24,8 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient {
 	 * @access	public
 	 * @return	PHPFrame_Client_IClient|boolean	Object instance of this class if correct helper for client or false otherwise.
 	 */
-	public static function detect() {
+	public static function detect() 
+	{
 		
 		global $HTTP_RAW_POST_DATA;
 			
@@ -54,7 +56,8 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient {
 	 * @access	public
 	 * @return	array	Unified Request Array
 	 */
-	public function populateURA() {
+	public function populateURA() 
+	{
 		
 		global $HTTP_RAW_POST_DATA;
 		
@@ -69,7 +72,8 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient {
 	 * @access	public
 	 * @return	string	Name to identify helper type
 	 */
-	public function getName() {
+	public function getName() 
+	{
 		return "xmlrpc";
 	}
 	
@@ -110,7 +114,8 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient {
      * @param string $xml A string containing the XML call.
      * @return array A nice asociative array with all the data.
      */
-    private function _parseXMLRPC($xml) {
+    private function _parseXMLRPC($xml) 
+    {
     	
     	$array = array();
     	
@@ -146,16 +151,19 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient {
     }
        
     /**
-     * This method is used by _parseXMLResponse() to loop recursively through XML nodes and collect data.
+     * This method is used by _parseXMLResponse() to loop recursively through XML nodes 
+     * and collect data.
      *
      * @access private
-     * @param object $domXPath The DOMXPath object used for parsing the XML. This object is created in _parseXMLResponse().
+     * @param object $domXPath	The DOMXPath object used for parsing the XML. This object 
+     * 							is created in _parseXMLResponse().
      * @param object $nodes
      * @param string $search_path
      * @param array $array
      * @return array
      */
-    private function _parseXMLRPCRecurse(&$domXPath, $nodes, $search_path="", &$array=array()) {
+    private function _parseXMLRPCRecurse(&$domXPath, $nodes, $search_path="", &$array=array()) 
+    {
         
     	foreach ($nodes as $node) {
  			

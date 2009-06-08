@@ -14,7 +14,8 @@
  * @subpackage 	client
  * @since 		1.0	
  */
-class PHPFrame_Client_Default implements PHPFrame_Client_IClient {
+class PHPFrame_Client_Default implements PHPFrame_Client_IClient 
+{
 		
 	/**
 	 * Check if this is the correct helper for the client being used
@@ -23,7 +24,8 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient {
 	 * @access	public
 	 * @return	PHPFrame_Client_IClient|boolean	Object instance of this class if correct helper for client or false otherwise.
 	 */
-	public static function detect() {
+	public static function detect() 
+	{
 		//TODO test checking for $_SERVER['HTTP_USER_AGENT']
 		
 		//this is our last hope to find a helper, just return instance
@@ -36,7 +38,8 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient {
 	 * @access	public
 	 * @return	array	Unified Request Array
 	 */
-	public function populateURA() {
+	public function populateURA() 
+	{
 	
 		$request = array();
 		
@@ -61,7 +64,8 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient {
 	 * @access	public
 	 * @return	string	Name to identify helper type
 	 */
-	public function getName() {
+	public function getName() 
+	{
 		return "default";
 	}
 	
@@ -74,7 +78,8 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient {
 	 * 
 	 * @return	void
 	 */
-	public function preActionHook() {
+	public function preActionHook() 
+	{
 		// add the jQuery + jQuery UI libraries to the HTML document
 		// that we will use in the response. jQuery lib need to be loaded before 
 		// we load the jQuery plugins in the component output.
@@ -95,7 +100,8 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient {
 	 * @param	array	$data	An array containing the data assigned to the view.
 	 * @return	void
 	 */
-	public function renderView($data) {
+	public function renderView($data) 
+	{
 		if (!empty($data['view'])) {
     		$tmpl_path = COMPONENT_PATH.DS."views".DS.$data['view'].DS."tmpl".DS.$this->getName();
     		
@@ -119,7 +125,8 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient {
 	 * @param	string	&$str	A string containing the component output.
 	 * @return	void
 	 */
-	public function renderTemplate(&$str) {
+	public function renderTemplate(&$str) 
+	{
 		// Make modules available to templates
 		$modules = PHPFrame::getModules();
 		

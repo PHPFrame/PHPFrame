@@ -14,7 +14,8 @@
  * @subpackage 	html
  * @since 		1.0
  */
-class PHPFrame_HTML_Text {
+class PHPFrame_HTML_Text 
+{
 	/**
 	 * Format a string for html output.
 	 * 
@@ -23,7 +24,8 @@ class PHPFrame_HTML_Text {
 	 * @param	bool	$javascript_safe
 	 * @return	string
 	 */
-	public static function _($str, $javascript_safe=false) {
+	public static function _($str, $javascript_safe=false) 
+	{
 		return $str;
 	}
 	
@@ -34,7 +36,8 @@ class PHPFrame_HTML_Text {
 	 * @return	string
 	 * @since 	1.0
 	 */
-	public static function bytes($str) {
+	public static function bytes($str) 
+	{
 	    $unim = array("B","KB","MB","GB","TB","PB");
 	    $c = 0;
 	    while ($str>=1024) {
@@ -52,7 +55,8 @@ class PHPFrame_HTML_Text {
 	 * @param 	boolean	$add_trailing_dots
 	 * @return	string
 	 */
-	public static function limit_chars($str, $max_chars, $add_trailing_dots=true) {
+	public static function limit_chars($str, $max_chars, $add_trailing_dots=true) 
+	{
 		if (strlen($str) > $max_chars) {
 			$str = substr($str, 0, $max_chars);
 			if ($add_trailing_dots === true) {
@@ -73,7 +77,8 @@ class PHPFrame_HTML_Text {
 	 * @param	bool	$add_trailing_dots
 	 * @return	string
 	 */
-	public static function limit_words($str, $max_chars, $add_trailing_dots=true) {
+	public static function limit_words($str, $max_chars, $add_trailing_dots=true) 
+	{
 		if (strlen($str) > $max_chars) {
 			$str = substr($str, 0, $max_chars);
 			$str = substr($str, 0, strrpos($str, " "));

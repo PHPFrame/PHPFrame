@@ -14,7 +14,8 @@
  * @subpackage 	utils
  * @since 		1.0
  */
-class PHPFrame_Utils_Filesystem {
+class PHPFrame_Utils_Filesystem 
+{
 	/**
 	 * Write string to file
 	 * 
@@ -24,7 +25,8 @@ class PHPFrame_Utils_Filesystem {
 	 * 								Default is FALSE
 	 * @return	void
 	 */
-	public static function write($fname, $content, $append=false) {
+	public static function write($fname, $content, $append=false) 
+	{
 		// Set access type depending on append flag
 		$mode = $append ? "a" : "w";
 		
@@ -50,7 +52,8 @@ class PHPFrame_Utils_Filesystem {
 	 * @param	string	$path	Path to directory to ensure that it is writable
 	 * @return	void
 	 */
-	public static function ensureWritableDir($path) {
+	public static function ensureWritableDir($path) 
+	{
 		$path = (string) $path;
 		
 		// If dir doesnt exist we try to create it
@@ -75,7 +78,12 @@ class PHPFrame_Utils_Filesystem {
 	 * @param	bool	$overwrite
 	 * @return 	mixed	An assoc array containing file_name, file_size and file_type or an assoc array containing error on failure.
 	 */
-	public static function uploadFile($fieldName, $dir, $accept="*", $max_upload_size=0, $overwrite=false) {
+	public static function uploadFile($fieldName, 
+									  $dir, 
+									  $accept="*", 
+									  $max_upload_size=0, 
+									  $overwrite=false) 
+	{
 		// Get file data from request
 		$file_tmp = $_FILES[$fieldName]['tmp_name']; // $file_tmp is where file went on webserver
 		$file_name = $_FILES[$fieldName]['name']; // $file_tmp_name is original file name

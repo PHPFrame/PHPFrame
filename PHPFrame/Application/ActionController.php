@@ -17,7 +17,7 @@
  * used as a template for creating controllers when developing components. See 
  * the built in components (dashboard, user, admin, ...) for examples.
  * 
- * Controllers processes requests and respond to events, typically user actions, 
+ * Controllers process requests and respond to events, typically user actions, 
  * and may invoke changes on data using the available models.
  * 
  * @package		PHPFrame
@@ -26,7 +26,14 @@
  * @see 		PHPFrame_Application_Model, PHPFrame_Application_View
  * @abstract 
  */
-abstract class PHPFrame_Application_ActionController extends PHPFrame_Base_Singleton {
+abstract class PHPFrame_Application_ActionController 
+{
+	/**
+	 * Instances of its concrete children
+	 * 
+	 * @var array of objects of type PHPFrame_Application_ActionController
+	 */
+	private static $_instances=array();
 	/**
 	 * Default controller action
 	 * 
@@ -60,7 +67,8 @@ abstract class PHPFrame_Application_ActionController extends PHPFrame_Base_Singl
 	 * @return 	void
 	 * @since	1.0
 	 */
-	protected function __construct($default_action) {
+	protected function __construct($default_action) 
+	{
 		$this->_default_action = (string) $default_action;
 		
 		// Get reference to System Events object
@@ -79,6 +87,23 @@ abstract class PHPFrame_Application_ActionController extends PHPFrame_Base_Singl
 	}
 	
 	/**
+	 * Get Instance
+	 * 
+	 * @param	$class_name	A string with the name of the concrete action controller.
+	 * @return PHPFrame_Application_ActionController
+	 * @since	1.0
+	 */
+	public static function getInstance($class_name) 
+	{
+		if (!isset(self::$_instances[$class_name]) 
+			|| !(self::$_instances[$class_name] instanceof PHPFrame_Application_ActionController)) {
+			self::$_instances[$class_name] = new self;
+		}
+		
+		return self::$_instances[$class_name];
+	}
+	
+	/**
 	 * Execute action
 	 * 
 	 * This method executes a given task (runs a named member method).
@@ -86,7 +111,8 @@ abstract class PHPFrame_Application_ActionController extends PHPFrame_Base_Singl
 	 * @return 	void
 	 * @since	1.0
 	 */
-	public function execute() {
+	public function execute() 
+	{
 		// Get action from the request
 		$request_action = PHPFrame::getRequest()->getAction();
 		//echo $request_action; exit;
@@ -138,7 +164,8 @@ abstract class PHPFrame_Application_ActionController extends PHPFrame_Base_Singl
 	 * @return	boolean
 	 * @since	1.0
 	 */
-	public function getSuccess() {
+	public function getSuccess() 
+	{
 		return $this->_success;
 	}
 	
@@ -150,7 +177,8 @@ abstract class PHPFrame_Application_ActionController extends PHPFrame_Base_Singl
 	 * @return 	void
 	 * @since	1.0
 	 */
-	protected function cancel() {
+	protected function cancel() 
+	{
 		$this->setRedirect( 'index.php' );
 	}
 	
@@ -163,7 +191,8 @@ abstract class PHPFrame_Application_ActionController extends PHPFrame_Base_Singl
 	 * @return 	void
 	 * @since	1.0
 	 */
-	protected function setRedirect($url) {
+	protected function setRedirect($url) 
+	{
 		$this->_redirect_url = PHPFrame_Utils_Rewrite::rewriteURL($url, false);
 	}
 	
@@ -174,7 +203,8 @@ abstract class PHPFrame_Application_ActionController extends PHPFrame_Base_Singl
 	 * @return 	void
 	 * @since	1.0
 	 */
-	protected function redirect() {
+	protected function redirect() 
+	{
 		if ($this->_redirect_url && PHPFrame::getSession()->getClientName() != "cli") {
 			header("Location: ".$this->_redirect_url);
 			exit;
@@ -190,7 +220,8 @@ abstract class PHPFrame_Application_ActionController extends PHPFrame_Base_Singl
 	 * @return	object
 	 * @since	1.0
 	 */
-	protected function getModel($name, $args=array()) {
+	protected function getModel($name, $args=array()) 
+	{
 		return PHPFrame::getModel(PHPFrame::getRequest()->getComponentName(), $name, $args);
 	}
 	
@@ -203,7 +234,8 @@ abstract class PHPFrame_Application_ActionController extends PHPFrame_Base_Singl
 	 * @return	object
 	 * @since	1.0
 	 */
-	protected function getView($name, $layout='') {
+	protected function getView($name, $layout='') 
+	{
 		$class_name = strtolower(substr(PHPFrame::getRequest()->getComponentName(), 4));
 		$class_name .= "View".ucfirst($name);
 		

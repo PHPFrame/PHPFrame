@@ -20,7 +20,8 @@
  * @subpackage 	registry
  * @since 		1.0
  */
-class PHPFrame_Registry_Request extends PHPFrame_Registry {
+class PHPFrame_Registry_Request extends PHPFrame_Registry 
+{
 	/**
 	 * Instance of itself in order to implement the singleton pattern
 	 * 
@@ -50,7 +51,8 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry {
 	 * @return	void
 	 * @since	1.0
 	 */
-	protected function __construct() {
+	protected function __construct() 
+	{
 		if (!isset(self::$_inputfilter)) {
 			self::$_inputfilter = new InputFilter();
 		}
@@ -74,7 +76,8 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry {
 	 * @return 	PHPFrame_Registry
 	 * @since	1.0
 	 */
-	public static function getInstance() {
+	public static function getInstance() 
+	{
 		if (!isset(self::$_instance)) {
 			self::$_instance = new self;
 		}
@@ -91,7 +94,8 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry {
 	 * @return	mixed
 	 * @since	1.0
 	 */
-	public function get($key, $default_value=null) {
+	public function get($key, $default_value=null) 
+	{
 		if (!isset($this->_array['request'][$key]) && !is_null($default_value)) {
 			$this->_array['request'][$key] = $default_value;
 		}
@@ -108,7 +112,8 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function set($key, $value) {
+	public function set($key, $value) 
+	{
 		$this->_array['request'][$key] = self::$_inputfilter->process($value);
 	}
 	
@@ -117,7 +122,8 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry {
 	 * 
 	 * @return	array
 	 */
-	public function getPost() {
+	public function getPost() 
+	{
 		return $this->_array['request'];
 	}
 	
@@ -127,7 +133,8 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry {
 	 * @access	public
 	 * @return	string
 	 */
-	public function getComponentName() {
+	public function getComponentName() 
+	{
 		// If component has not been set we return the default value
 		if (empty($this->_array['request']['component'])) {
 			$this->_array['request']['component'] = 'com_dashboard';
@@ -143,7 +150,8 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry {
 	 * @param	string	$value The value to set the variable to.
 	 * @return	void
 	 */
-	public function setComponentName($value) {
+	public function setComponentName($value) 
+	{
 		// Filter value before assigning to variable
 		$this->_array['request']['component'] = self::$_inputfilter->process($value);
 	}
@@ -155,7 +163,8 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry {
 	 * @access	public
 	 * @return	action
 	 */
-	public function getAction() {
+	public function getAction() 
+	{
 		return $this->_array['request']['action'];
 	}
 	
@@ -167,12 +176,14 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry {
 	 * @param	string	$value The value to set the variable to.
 	 * @return	void
 	 */
-	public function setAction($value) {
+	public function setAction($value) 
+	{
 		// Filter value before assigning to variable
 		$this->_array['request']['action'] = self::$_inputfilter->process($value);
 	}
 	
-	public function getResponse() {
+	public function getResponse() 
+	{
 		return $this->_response;
 	}
 	
@@ -184,7 +195,8 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function destroy() {
+	public function destroy() 
+	{
 		$this->_array = array();
 	}
 }

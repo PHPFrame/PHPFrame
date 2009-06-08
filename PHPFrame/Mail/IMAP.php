@@ -14,7 +14,8 @@
  * @subpackage 	mail
  * @since 		1.0
  */
-class PHPFrame_Mail_IMAP {
+class PHPFrame_Mail_IMAP 
+{
 	private $_stream=null;
 	private $_host=null;
 	private $_port=null;
@@ -29,7 +30,8 @@ class PHPFrame_Mail_IMAP {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function __construct($host, $port, $user, $password, $mailbox_name="INBOX") {
+	public function __construct($host, $port, $user, $password, $mailbox_name="INBOX") 
+	{
 		$this->_host = $host;
 		$this->_port = $port;
 		$this->_user = $user;
@@ -52,7 +54,8 @@ class PHPFrame_Mail_IMAP {
 	 * 
 	 * @return	array	An array of message objects.
 	 */
-	public function getMessages() {
+	public function getMessages() 
+	{
 	  	if (!$this->_stream) {
 	  		return false;
 	  	}
@@ -95,13 +98,15 @@ class PHPFrame_Mail_IMAP {
 	 *
 	 * @param int $uid Can contain a list of ids separated by commas
 	 */
-	function deleteMessage($uid) {
+	function deleteMessage($uid) 
+	{
 		if (!empty($uid)) {
 			imap_delete($this->_stream, $uid, FT_UID);
 		}
 	}
 	
-	function expunge() {
+	function expunge() 
+	{
 		@imap_expunge($this->_stream);
 	}
 	
@@ -110,12 +115,14 @@ class PHPFrame_Mail_IMAP {
 	 * 
 	 * @return	void
 	 */
-	public function close() {
+	public function close() 
+	{
 		// Close IMAP stream
 		imap_close($this->_stream);
 	}
 	
-	private function _createPartArray($structure, $prefix="") {
+	private function _createPartArray($structure, $prefix="") 
+	{
 	    if (sizeof($structure->parts) > 0) {
 	        foreach ($structure->parts as $count => $part) {
 	            $this->_addPartToArray($part, $prefix.($count+1), $part_array);
@@ -129,7 +136,8 @@ class PHPFrame_Mail_IMAP {
 	    return $part_array;
 	}
 	
-	private function _addPartToArray($obj, $partno, &$part_array) {
+	private function _addPartToArray($obj, $partno, &$part_array) 
+	{
 	    $part_array[] = array('part_number' => $partno, 'part_object' => $obj);
 	    // Check to see if the part is an attached email message, as in the RFC-822 type
 	    if ($obj->type == 2) {
@@ -163,4 +171,3 @@ class PHPFrame_Mail_IMAP {
 	    }
 	}
 }
-?>

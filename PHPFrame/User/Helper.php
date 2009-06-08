@@ -14,7 +14,8 @@
  * @subpackage 	user
  * @since 		1.0
  */
-class PHPFrame_User_Helper {
+class PHPFrame_User_Helper 
+{
 	/**
 	 * Format full name to standard
 	 *
@@ -22,7 +23,8 @@ class PHPFrame_User_Helper {
 	 * @param string $lastname
 	 * @return string full name in format: [Uppercase first initial]"." [Surname]  
 	 */
-	static function fullname_format($firstname, $lastname){
+	static function fullname_format($firstname, $lastname) 
+	{
 		
 		$str = strtoupper(substr($firstname,0,1)).". ".ucwords($lastname);
 				
@@ -35,7 +37,8 @@ class PHPFrame_User_Helper {
 	 * @param 	int		The ID to be translated
 	 * @return 	string	If no id is passed returns false, otherwise returns the username as a string
 	 */
-	static function id2name($id=0) {
+	static function id2name($id=0) 
+	{
 		if (!empty($id)) { // No user has been selected
 			$db = PHPFrame::getDB();
 			$query = "SELECT firstname, lastname FROM #__users WHERE id = '".$id."'";
@@ -58,7 +61,8 @@ class PHPFrame_User_Helper {
 	 * @param 	string	The username to be translated.
 	 * @return 	int		If no username is passed returns false, otherwise returns the user ID.
 	 */
-	static function username2id($username='') {
+	static function username2id($username='') 
+	{
 		if (!empty($username)) { // No user has been selected
 			$db = PHPFrame::getDB();
 			$query = "SELECT id FROM #__users WHERE username = '".$username."'";
@@ -76,7 +80,8 @@ class PHPFrame_User_Helper {
 	 * @param 	string	The email to be translated.
 	 * @return 	mixed	If no email is passed returns FALSE, otherwise returns the user ID.
 	 */
-	static function email2id($email='') {
+	static function email2id($email='') 
+	{
 		if (!empty($email)) { // No user has been selected
 			$db = PHPFrame::getDB();
 			$query = "SELECT id FROM #__users WHERE email = '".$email."'";
@@ -94,7 +99,8 @@ class PHPFrame_User_Helper {
 	 * @param $id The userid to be translated.
 	 * @return mixed A string with the email address or FALSE on fail.
 	 */
-	static function id2email($id) {
+	static function id2email($id) 
+	{
 		if (!empty($id)) { // No user has been selected
 			$db = PHPFrame::getDB();
 			$query = "SELECT email FROM #__users WHERE id = '".$id."'";
@@ -112,7 +118,8 @@ class PHPFrame_User_Helper {
 	 * @param	int	$id
 	 * @return string
 	 */
-	static function id2photo($id) {
+	static function id2photo($id) 
+	{
 		if (!empty($id)) { // No user has been selected
 			$db = PHPFrame::getDB();
 			$query = "SELECT photo FROM #__users WHERE id = '".$id."'";
@@ -133,7 +140,8 @@ class PHPFrame_User_Helper {
 	 * @param 	string	Attributes for the <select> tag
 	 * @return 	string	A string with the HTML select
 	 */
-	static function select($selected=0, $attribs='', $fieldname='userid', $projectid=0) {
+	static function select($selected=0, $attribs='', $fieldname='userid', $projectid=0) 
+	{
 		// assemble users to the array
 		$options = array();
 		$options[] = PHPFrame_HTML::_('select.option', '0', PHPFrame_HTML_Text::_( '-- Select a User --' ) );
@@ -176,7 +184,8 @@ class PHPFrame_User_Helper {
 	 * @param	int		$projectid	This parameter is optional. If passed users will be filtered to the project members.
 	 * @return	string	A string with the html code containing the checkboxes.
 	 */
-	static function assignees($selected=0, $attribs='', $fieldname='assignees[]', $projectid=0) {
+	static function assignees($selected=0, $attribs='', $fieldname='assignees[]', $projectid=0) 
+	{
 		$db = PHPFrame::getDB();
 		$query = "SELECT u.id, u.firstname, u.lastname ";
 		$query .= " FROM #__users AS u ";
@@ -226,7 +235,8 @@ class PHPFrame_User_Helper {
 	 * @param	array	$where		An array with conditions to include in SQL query.
 	 * @return	void
 	 */
-	static function autocompleteUsername($where=array()) {
+	static function autocompleteUsername($where=array()) 
+	{
 		$db = PHPFrame::getDB();
 		
 		$where[] = "(u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL)";
@@ -254,7 +264,8 @@ class PHPFrame_User_Helper {
 	 * @param 	string	Attributes for the <select> tag
 	 * @return 	string	A string with the HTML select
 	 */
-	static function selectGroup($selected=0, $attribs='', $fieldname='groupid') {
+	static function selectGroup($selected=0, $attribs='', $fieldname='groupid') 
+	{
 		// assemble users to the array
 		$options = array();
 		//$options[] = PHPFrame_HTML::_('select.option', '0', PHPFrame_HTML_Text::_( '-- Select a Group --' ) );

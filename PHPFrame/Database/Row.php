@@ -17,7 +17,8 @@
  * @subpackage 	database
  * @since 		1.0
  */
-class PHPFrame_Database_Row {
+class PHPFrame_Database_Row 
+{
 	/**
 	 * Primary key
 	 * 
@@ -49,7 +50,8 @@ class PHPFrame_Database_Row {
 	 * @param	string	$table_name
 	 * @return	void
 	 */
-	public function __construct($table_name) {
+	public function __construct($table_name) 
+	{
 		$this->_table_name = (string) $table_name;
 		
 		// Read table structure from application registry
@@ -67,7 +69,8 @@ class PHPFrame_Database_Row {
 	 * @param	$key
 	 * @return	string
 	 */
-	public function __get($key) {
+	public function __get($key) 
+	{
 		return $this->get($key);
 	}
 	
@@ -77,7 +80,8 @@ class PHPFrame_Database_Row {
 	 * @param	string	$key
 	 * @return	string
 	 */
-	public function get($key) {
+	public function get($key) 
+	{
 		if (array_key_exists($key, $this->_data)) {
 			return $this->_data[$key];
 		}
@@ -98,7 +102,8 @@ class PHPFrame_Database_Row {
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function set($key, $value) {
+	public function set($key, $value) 
+	{
 		if (!$this->hasColumn($key)) {
 			throw new PHPFrame_Exception("Tried to set column '".$key."' that doesn't exist in "
 										 .$this->_table_name, 
@@ -114,7 +119,8 @@ class PHPFrame_Database_Row {
 	 * @param	string	$column_name
 	 * @return	bool
 	 */
-	public function hasColumn($column_name) {
+	public function hasColumn($column_name) 
+	{
 		// Loop through table structure to find key
 		foreach ($this->_structure as $structure) {
 			if ($structure->Field == $column_name) return true;
@@ -130,7 +136,8 @@ class PHPFrame_Database_Row {
 	 * @param	string	$exclude 	A list of key names to exclude from binding process separated by commas.
 	 * @return	object of type PHPFrame_Database_Row
 	 */
-	public function load($id, $exclude='') {
+	public function load($id, $exclude='') 
+	{
 		$query = "SELECT * FROM `".$this->_table_name;
 		$query .= "` WHERE `".$this->_primary_key."` = '".$id."'";
 		
@@ -148,7 +155,8 @@ class PHPFrame_Database_Row {
 		}
 	}
 	
-	public function loadByQuery($query, $foreign_keys=array()) {
+	public function loadByQuery($query, $foreign_keys=array()) 
+	{
 		// Run SQL query
 		$rs = PHPFrame::getDB()->setQuery($query)->query();
 		
@@ -171,7 +179,8 @@ class PHPFrame_Database_Row {
 	 * @param	string	$exclude 	A list of key names to exclude from binding process separated by commas.
 	 * @return	object of type PHPFrame_Database_Row
 	 */
-	public function bind($array, $exclude='', $foreign_keys=array()) {
+	public function bind($array, $exclude='', $foreign_keys=array()) 
+	{
 		// Process exclude
 		if (!empty($exclude)) {
 			$exclude = explode(',', $exclude);
@@ -208,7 +217,8 @@ class PHPFrame_Database_Row {
 	 * 
 	 * @return object of type PHPFrame_Database_Row
 	 */
-	public function store() {
+	public function store() 
+	{
 		// Check types and required columns before saving
 		$this->_check();
 		
@@ -225,7 +235,8 @@ class PHPFrame_Database_Row {
 		return $this;
 	}
 	
-	public function delete($id) {
+	public function delete($id) 
+	{
 		$query = "DELETE FROM `".$this->_table_name."` ";
 		$query .= " WHERE `".$this->_primary_key."` = '".$id."'";
 		PHPFrame::getDB()->setQuery($query)->query();
@@ -238,7 +249,8 @@ class PHPFrame_Database_Row {
 	 * @return	void
 	 * @since 	1.0
 	 */
-	private function _readStructure() {
+	private function _readStructure() 
+	{
 		$table_structures = PHPFrame::getApplicationRegistry()->get('table_structures');
 		$table_primary_keys = PHPFrame::getApplicationRegistry()->get('table_primary_keys');
 		
@@ -277,7 +289,8 @@ class PHPFrame_Database_Row {
 	 * 
 	 * @return	bool
 	 */
-	private function _check() {
+	private function _check() 
+	{
 		// Loop through every column in the row
 		foreach ($this->_structure as $structure) {
 			
@@ -357,7 +370,8 @@ class PHPFrame_Database_Row {
 	 * 
 	 * @return	void
 	 */
-	private function _insert() {
+	private function _insert() 
+	{
 		// Build SQL insert query
 		$query = "INSERT INTO `".$this->_table_name."` ";
 		$query .= " (`".implode("`, `", array_keys($this->_data))."`) ";
@@ -379,7 +393,8 @@ class PHPFrame_Database_Row {
 	 * 
 	 * @return	void
 	 */
-	private function _update() {
+	private function _update() 
+	{
 		// Build SQL insert query
 		$query = "UPDATE `".$this->_table_name."` SET ";
 		$i=0;

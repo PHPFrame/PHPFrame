@@ -14,7 +14,8 @@
  * @subpackage 	registry
  * @since 		1.0
  */
-abstract class PHPFrame_Registry {
+abstract class PHPFrame_Registry 
+{
 	/**
 	 * Constructor
 	 * 

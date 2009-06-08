@@ -60,7 +60,8 @@
  * @see			PHPFrame_Database_RowCollection, PHPFrame_HTML_Pagination
  * @since 		1.0
  */
-class PHPFrame_Database_CollectionFilter {
+class PHPFrame_Database_CollectionFilter 
+{
 	/**
 	 * Column to use for ordering
 	 * 
@@ -109,7 +110,12 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return	void
 	 * @since 	1.0
 	 */
-	public function __construct($_orderby="", $_orderdir="ASC", $_limit=-1, $_limitstart=0, $_search="") {
+	public function __construct($_orderby="", 
+								$_orderdir="ASC", 
+								$_limit=-1, 
+								$_limitstart=0, 
+								$_search="") 
+	{
 		$this->_orderby = (string) $_orderby;
 		$this->_orderdir = (string) $_orderdir;
 		$this->_limit = (int) $_limit;
@@ -124,7 +130,8 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return	void
 	 * @since 	1.0
 	 */
-	public function setTotal($int) {
+	public function setTotal($int) 
+	{
 		$this->_total = (int) $int;
 	}
 	
@@ -134,7 +141,8 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return	string
 	 * @since 	1.0
 	 */
-	public function getSearchStr() {
+	public function getSearchStr() 
+	{
 		return $this->_search;
 	}
 	
@@ -144,7 +152,8 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return	string
 	 * @since 	1.0
 	 */
-	public function getOrderBy() {
+	public function getOrderBy() 
+	{
 		return $this->_orderby;
 	}
 	
@@ -154,7 +163,8 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return	string	Either ASC or DESC
 	 * @since 	1.0
 	 */
-	public function getOrderDir() {
+	public function getOrderDir() 
+	{
 		return $this->_orderdir;
 	}
 	
@@ -164,7 +174,8 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return	string
 	 * @since 	1.0
 	 */
-	public function getOrderByStmt() {
+	public function getOrderByStmt() 
+	{
 		$stmt = "";
 		
 		if (is_string($this->_orderby) && $this->_orderby != "") {
@@ -181,7 +192,8 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return	int
 	 * @since 	1.0
 	 */
-	public function getLimit() {
+	public function getLimit() 
+	{
 		return $this->_limit;
 	}
 	
@@ -191,7 +203,8 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return	int
 	 * @since 	1.0
 	 */
-	public function getLimitStart() {
+	public function getLimitStart() 
+	{
 		return $this->_limitstart;
 	}
 	
@@ -201,7 +214,8 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return	string
 	 * @since 	1.0
 	 */
-	public function getLimitStmt() {
+	public function getLimitStmt() 
+	{
 		$stmt = "";
 		
 		if ($this->_limit > 0) {
@@ -217,7 +231,8 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return int
 	 * @since 	1.0
 	 */
-	public function getPages() {
+	public function getPages() 
+	{
 		if ($this->_limit > 0 && !is_null($this->_total)) {
 			// Calculate number of pages
 			return (int) ceil($this->_total/$this->_limit);
@@ -233,7 +248,8 @@ class PHPFrame_Database_CollectionFilter {
 	 * @return int
 	 * @since 	1.0
 	 */
-	public function getCurrentPage() {
+	public function getCurrentPage() 
+	{
 		// Calculate current page
 		if ($this->_limit > 0) {
 			return (int) (ceil($this->_limitstart/$this->_limit)+1);

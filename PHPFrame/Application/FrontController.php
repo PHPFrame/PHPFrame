@@ -45,7 +45,8 @@
  * @since 		1.0
  * @see			PHPFrame
  */
-class PHPFrame_Application_FrontController {
+class PHPFrame_Application_FrontController 
+{
 	/**
 	 * Instance of itself in order to implement the singleton pattern
 	 * 
@@ -60,7 +61,8 @@ class PHPFrame_Application_FrontController {
 	 * @return 	void
 	 * @since	1.0
 	 */
-	private function __construct() {
+	private function __construct() 
+	{
 		// Set profiler milestone
 		PHPFrame_Debug_Profiler::setMilestone('Start');
 		
@@ -98,7 +100,8 @@ class PHPFrame_Application_FrontController {
 	 * 
 	 * @return PHPFrame_Application_FrontController
 	 */
-	public static function getInstance() {
+	public static function getInstance() 
+	{
 		if (!isset(self::$_instance)) {
 			self::$_instance = new self;
 		}
@@ -115,7 +118,8 @@ class PHPFrame_Application_FrontController {
 	 * @return	void
 	 * @since	1.0
 	 */
-	public function run() {
+	public function run() 
+	{
 		$component_name = PHPFrame::getRequest()->getComponentName();
 		
 		// set the component path
@@ -159,7 +163,8 @@ class PHPFrame_Application_FrontController {
 	 * @return	void
 	 * @since	1.0
 	 */
-	private function _loadLanguage() {
+	private function _loadLanguage() 
+	{
 		// load the application language file
 		$lang_file = _ABS_PATH.DS."src".DS."lang".DS.config::DEFAULT_LANG.".php";
 		if (file_exists($lang_file)) {

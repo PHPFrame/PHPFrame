@@ -41,8 +41,8 @@ abstract class PHPFrame_Database_DSN
     /**
      * Constructor
      * 
-     * @param string $db_driver A string identifying the database driver. Possible values
-     *                          are: mysql, pgsql, OCI, ODBC, ...
+     * @param string $db_driver A string identifying the database driver. Possible 
+     *                          values are: mysql, pgsql, OCI, ODBC, ...
      *                          
      * @since 1.0	
      */
@@ -55,23 +55,26 @@ abstract class PHPFrame_Database_DSN
      * Magic method used when DSN object is used as a string
      * 
      * @return string
+     * @since 1.0
      */
     public function __toString() 
     {
-        return $this->asString();
+        return $this->toString();
     }
     
     /**
      * Convert object to string
      * 
      * @return string
+     * @since 1.0
      */
-    abstract public function asString();
+    abstract public function toString();
     
     /**
      * Convert object to array
      * 
      * @return array
+     * @since 1.0
      */
-    abstract public function asArray();
+    abstract public function toArray();
 }

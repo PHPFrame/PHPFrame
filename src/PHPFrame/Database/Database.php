@@ -10,7 +10,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
+ * @version    SVN: $Id: Database.php 32 2009-06-09 04:47:23Z luis.montero@e-noise.com $
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
@@ -80,7 +80,7 @@ class PHPFrame_Database
      */
     public static function getInstance(PHPFrame_Database_DSN $dsn, $db_user=null, $db_pass=null) 
     {
-        $key = $dsn->asString();
+        $key = $dsn->toString();
         if (!is_null($db_user)) {
             $key .= ";user=".$db_user;
         }

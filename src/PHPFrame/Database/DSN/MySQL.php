@@ -29,10 +29,29 @@
  * @since      1.0
  */
 class PHPFrame_Database_DSN_MySQL extends PHPFrame_Database_DSN
-{   
+{
+    /**
+     * The MySQL server host name
+     * 
+     * @var string
+     */
     private $_db_host=null;
+    /**
+     * The MySQL database name
+     * 
+     * @var string
+     */
     private $_db_name=null;
     
+    /**
+     * Constructor
+     * 
+     * @param string $db_host The MySQL server host name
+     * @param string $db_name The MySQL database name
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct($db_host, $db_name) 
     {
         $this->_db_host = $db_host;
@@ -41,7 +60,13 @@ class PHPFrame_Database_DSN_MySQL extends PHPFrame_Database_DSN
         parent::__construct("mysql");
     }
     
-    public function asString()
+    /**
+     * Convert object to string
+     * 
+     * @return string
+     * @since 1.0
+     */
+    public function toString()
     {
         $str = $this->db_driver.":";
         $str .= "host=".$this->_db_host.";";
@@ -49,5 +74,19 @@ class PHPFrame_Database_DSN_MySQL extends PHPFrame_Database_DSN
         return $str;
     }
     
-    public function asArray() {}
+    /**
+     * Convert object to array
+     * 
+     * @return array
+     * @since 1.0
+     */
+    public function toArray() 
+    {
+        $array = array();
+        $array['db_driver'] = $this->db_driver;
+        $array['db_host'] = $this->_db_host;
+        $array['db_name'] = $this->_db_name;
+        
+        return $array;
+    }
 }

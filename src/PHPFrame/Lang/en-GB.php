@@ -1,10 +1,10 @@
 <?php
 /**
- * @version		$Id$
- * @package		PHPFrame
- * @subpackage 	lang
- * @copyright	Copyright (C) 2009 E-noise.com Limited. All rights reserved.
- * @license		BSD revised. See LICENSE.
+ * @version       SVN: $Id$
+ * @package       PHPFrame
+ * @subpackage    lang
+ * @copyright     2009 E-noise.com Limited
+ * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
 
 // utils > filesystem

@@ -1,1 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
+<xinc engine="Sunrise">
+	
+	<project name="PHPFrame-1.0">
+		
+		<property name="root_dir" value="${projectdir}/${project.name}" />
+		<property name="build_dir" value="${root_dir}/build" />
+		
+		<schedule interval="3600" />
+		
+		<modificationset>
+			<svn directory="${root_dir}" update="true" />
+		</modificationset>
+		
+		<builders>
+			<phingbuilder buildfile="${build_dir}/build.xml" target="build" />
+		</builders>
+		
+		<publishers>
+			<phpUnitTestResults file="${build_dir}/report/logfile.xml" />
+			
+			<onfailure>
+				<email to="phpframe-dev@googlegroups.com" 
+					   subject="${project.name} build ${build.number} failed" 
+					   message="Build of project failed" />
+			</onfailure>
+				
+			<onsuccess>
+				<phingPublisher buildfile="${build_dir}/publish.xml" target="build" />
+				<artifactspublisher file="${build_dir}/publish.xml" />
+				<deliverable file="${build_dir}/builds/${project.name}-${build.label}.tar.gz" 
+							 alias="${project.name}.tar.gz" />
+				<email to="phpframe-dev@googlegroups.com" 
+					   subject="${project.name} build ${build.number} success" 
+					   message="Build of project was successful" />
+			</onsuccess>
+				
+			<onrecovery>
+				<email to="phpframe-dev@googlegroups.com" 
+					   subject="${project.name} build ${build.number} was recovered" 
+					   message="The build passed after having failed before." />
+			</onrecovery>
+		</publishers>
+		
+		</project>
+
+</xinc>

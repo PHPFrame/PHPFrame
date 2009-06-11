@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<project name="PHPFrame-1.0" basedir="." default="build">
+	
+	<target name="prepare">
+		<mkdir dir="${project.basedir}/build/dist"/>
+	</target>
+	
+	<target name="build" depends="prepare">
+		<move 
+			file="${project.basedir}/${xinc.project.name}-${xinc.build.label}.tar.gz" 
+			todir="${project.basedir}/build/dist"/>
+	</target>
+	
+</project>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="PHPFrame-1.0" basedir="." default="build">
-
-	<fileset dir="./tests" id="testfiles">
-		<include name="com_admin/controllerTest.php"/>
-		<include name="com_login/controllerTest.php"/>
-		<include name="com_projects/controllerTest.php"/>
-		<include name="com_users/controllerTest.php"/>
+	
+	<fileset dir="../src" id="codefiles">
+		<include name="**" />
+	</fileset>
+	
+	<fileset dir="../tests" id="testfiles">
+		<include name="PHPFrameTest.php"/>
 	</fileset>
 
 	<property name="report.dir" value="${project.basedir}/report"/>
-  	
-	<target name="build" depends="php-documentor"/>
+	<property name="dist.dir" value="${project.basedir}/dist"/>
   
 	<!-- This target checks for PHP syntax errors in all source files
 	<target name="checkphp">
@@ -28,7 +28,7 @@
 		<exec 
 			command="phpcs --report=checkstyle --standard=PEAR src/PHPFrame" 
 			dir="${project.basedir}" 
-			output="${basedir}/phpcs.xml" />
+			output="${report.dir}/phpcs.xml" />
 	</target>
   
 	<!-- This target creates a PHAR archive grouping all PHPFrame files into a single .phar file 
@@ -38,8 +38,14 @@
 	  </exec> 
 	</target>
 	-->
-  
-	<!-- Run unit tests -->
+	
+	<!-- Prepare directories -->
+	<target name="prepare">
+		<mkdir dir="${report.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+	</target>
+	
+	<!-- Run PHPUnit tests -->
 	<target name="test">
 		<phpunit haltonfailure="true" printsummary="true">
 			<batchtest>
@@ -48,12 +54,31 @@
 			<formatter type="xml" todir="${report.dir}" outfile="logfile.xml"/>
 		</phpunit>
 	</target>
+	
+	<!-- Create archive for distribution -->
+	<target name="tar">
+		<tar 
+			destfile="${dist.dir}/${project.name}-${xinc.build.label}.tar.gz" 
+			compression="gzip">
+			<fileset refid="codefiles" />
+		</tar>
+	</target>
+	
+	<!-- Generate build report -->
+	<target name="generate-report">
+		<phpunit2report 
+			infile="${report.dir}/logfile.xml" 
+			styledir="resources/xsl" 
+			todir="report" 
+			format="noframes"/>
+	</target>
+	
+	<!-- Build project -->
+	<target name="build" depends="prepare, test, tar, generate-report" />
   
 	<!-- Generate documentation from Javadoc comments using phpdoc -->
 	<target name="php-documentor">
-		<exec executable="phpdoc" dir="${basedir}/src">
-	      <arg line="-ct type -ue on -t ${basedir}/docs -d ${basedir}/src -po PHPFrame -ti 'Pyrus PEAR2 Installer API Documentation'"/>
-	    </exec>
+	
 	</target>
 
 </project>

@@ -58,7 +58,7 @@
 	<!-- Create archive for distribution -->
 	<target name="tar">
 		<tar 
-			destfile="${dist.dir}/${project.name}-${xinc.build.label}.tar.gz" 
+			destfile="${dist.dir}/${xinc.project.name}-${xinc.build.label}.tar.gz" 
 			compression="gzip">
 			<fileset refid="codefiles" />
 		</tar>

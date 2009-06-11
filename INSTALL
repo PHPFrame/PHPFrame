@@ -1,0 +1,19 @@
+The easiest way to install PHPFrame is using the PEAR package manager.
+
+The PEAR package manager is bundled with PHP, so if you already have PHP 
+running you should also have PEAR. 
+
+
+Before you start please make sure that the "pear" command is in your PATH.
+
+To install using PEAR installer:
+
+$pear install pear.e-noise.com/PHPFrame
+
+To uninstall:
+
+$pear uninstall pear.e-noise.com/PHPFrame
+
+* Note that you will need write access to the directory where PEAR is installed.
+If you are installing or unininstalling for all users in a system you will need 
+administrative privileges.

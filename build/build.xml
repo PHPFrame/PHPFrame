@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="PHPFrame-1.0" basedir="." default="build">
+
+	<fileset dir="./tests" id="testfiles">
+		<include name="com_admin/controllerTest.php"/>
+		<include name="com_login/controllerTest.php"/>
+		<include name="com_projects/controllerTest.php"/>
+		<include name="com_users/controllerTest.php"/>
+	</fileset>
+
+	<property name="report.dir" value="${project.basedir}/report"/>
+  	
+	<target name="build" depends="php-documentor"/>
+  
+	<!-- This target checks for PHP syntax errors in all source files
+	<target name="checkphp">
+	  <apply executable="php" failonerror="true">
+	    <arg value="-l" />
+	    <fileset dir="${basedir}/src">
+	      <include name="**/*.php" />
+	    </fileset>
+	  </apply>
+	</target>
+	-->
+   
+	<!-- This target checks Coding Standards (CS) using PHP_CodeSniffer -->
+	<target name="phpcs">
+		<exec 
+			command="phpcs --report=checkstyle --standard=PEAR src/PHPFrame" 
+			dir="${project.basedir}" 
+			output="${basedir}/phpcs.xml" />
+	</target>
+  
+	<!-- This target creates a PHAR archive grouping all PHPFrame files into a single .phar file 
+	<target name="phar">
+	  <exec executable="php" dir="${basedir}" failonerror="on">
+	      <arg line="makepackage.php" />
+	  </exec> 
+	</target>
+	-->
+  
+	<!-- Run unit tests -->
+	<target name="test">
+		<phpunit haltonfailure="true" printsummary="true">
+			<batchtest>
+				<fileset refid="testfiles" />
+			</batchtest>
+			<formatter type="xml" todir="${report.dir}" outfile="logfile.xml"/>
+		</phpunit>
+	</target>
+  
+	<!-- Generate documentation from Javadoc comments using phpdoc -->
+	<target name="php-documentor">
+		<exec executable="phpdoc" dir="${basedir}/src">
+	      <arg line="-ct type -ue on -t ${basedir}/docs -d ${basedir}/src -po PHPFrame -ti 'Pyrus PEAR2 Installer API Documentation'"/>
+	    </exec>
+	</target>
+
+</project>

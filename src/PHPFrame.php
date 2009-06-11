@@ -124,7 +124,7 @@ class PHPFrame
         // If we have not been able to return a model object we throw an exception
         $exception_msg = $model_name." not supported. ";
         $exception_msg .= "Could not get instance of ".$class_name;
-        throw new Exception($exception_msg);
+        throw new PHPFrame_Exception($exception_msg);
     }
     
     /**

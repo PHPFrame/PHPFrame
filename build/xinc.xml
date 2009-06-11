@@ -3,13 +3,13 @@
 	
 	<project name="PHPFrame-1.0">
 		
-		<property name="root_dir" value="${projectdir}/${project.name}" />
-		<property name="build_dir" value="${root_dir}/build" />
+		<property name="dir" value="${projectdir}/${project.name}" />
+		<property name="build_dir" value="${dir}/build" />
 		
 		<schedule interval="60" />
 		
 		<modificationset>
-			<svn directory="${root_dir}" update="true" />
+			<svn directory="${dir}" update="true" />
 		</modificationset>
 		
 		<builders>

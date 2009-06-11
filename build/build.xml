@@ -70,11 +70,11 @@
 			infile="${report.dir}/logfile.xml" 
 			styledir="resources/xsl" 
 			todir="report" 
-			format="noframes"/>
+			format="noframes" />
 	</target>
 	
 	<!-- Build project -->
-	<target name="build" depends="prepare, test, tar, generate-report" />
+	<target name="build" depends="prepare,test,tar" />
   
 	<!-- Generate documentation from Javadoc comments using phpdoc -->
 	<target name="php-documentor">

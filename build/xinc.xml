@@ -6,7 +6,7 @@
 		<property name="root_dir" value="${projectdir}/${project.name}" />
 		<property name="build_dir" value="${root_dir}/build" />
 		
-		<schedule interval="3600" />
+		<schedule interval="60" />
 		
 		<modificationset>
 			<svn directory="${root_dir}" update="true" />

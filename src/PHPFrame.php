@@ -239,18 +239,40 @@ class PHPFrame
     /**
      * Get database object
      * 
+     * @param object $dsn     An object of type PHPFrame_Database_DSN used to get DB 
+     *                        connection. This parameter is optional. If omitted a 
+     *                        new DSN object will be created using the database 
+     *                        details provided by the config class. 
+     * @param string $db_user If we specify a DSN object we might also need to 
+     *                        provide a db user in order to connect to the database 
+     *                        server.
+     * @param string $db_pass When both a DSN object and a db user have been passed 
+     *                        we might also need to provide a password for the db 
+     *                        connection.
+     * 
      * @return PHPFrame_Database
      * @since  1.0
      */
-    public static function getDB(PHPFrame_Database_DSN $dsn=null, $db_user=null, $db_pass=null) 
-    {
+    public static function getDB(
+        PHPFrame_Database_DSN $dsn=null,
+        $db_user=null,
+        $db_pass=null
+    ) {
         // If no DSN is passed we use settings from config
         if (is_null($dsn)) {
             $dsn_concrete_class = "PHPFrame_Database_DSN_".config::DB_DRIVER;
             $dsn = new $dsn_concrete_class(config::DB_HOST, config::DB_NAME);
         }
         
-        return PHPFrame_Database::getInstance($dsn, config::DB_USER, config::DB_PASS);
+        if (is_null($db_user)) {
+            $db_user = config::DB_USER;
+        }
+        
+        if (is_null($db_pass)) {
+            $db_pass = config::DB_PASS;
+        }
+        
+        return PHPFrame_Database::getInstance($dsn, $db_user, $db_pass);
     }
     
     /**

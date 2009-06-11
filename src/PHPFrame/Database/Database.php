@@ -20,6 +20,9 @@
  * 
  * This class deals with the connection(s) to the database(s).
  * 
+ * It serves singleton objects for each connection (determined by the dsn and db 
+ * user credentials.
+ * 
  * @category   MVC_Framework
  * @package    PHPFrame
  * @subpackage Database
@@ -55,14 +58,19 @@ class PHPFrame_Database
      * 
      * The constructor connects to the MySQL server and selects the database.
      * 
-     * @param PHPFrame_Database_DSN $dsn A Database Source Name object.
+     * @param PHPFrame_Database_DSN $dsn     A Database Source Name object.
+     * @param string                $db_user The database user name if any.
+     * @param string                $db_pass The database password if any.
      * 
      * @return void
      * @access private
      * @since  1.0
      */
-    private function __construct(PHPFrame_Database_DSN $dsn, $db_user=null, $db_pass=null) 
-    {
+    private function __construct(
+        PHPFrame_Database_DSN $dsn, 
+        $db_user=null, 
+        $db_pass=null
+    ) {
         // Connect to database server
         try {
             $this->_pdo = new PDO($dsn, $db_user, $db_pass);
@@ -76,10 +84,17 @@ class PHPFrame_Database
     /**
      * Get Instance
      * 
+     * @param PHPFrame_Database_DSN $dsn     A Database Source Name object.
+     * @param string                $db_user The database user name if any.
+     * @param string                $db_pass The database password if any.
+     * 
      * @return PHPFrame_Database
      */
-    public static function getInstance(PHPFrame_Database_DSN $dsn, $db_user=null, $db_pass=null) 
-    {
+    public static function getInstance(
+        PHPFrame_Database_DSN $dsn, 
+        $db_user=null, 
+        $db_pass=null
+    ) {
         $key = $dsn->toString();
         if (!is_null($db_user)) {
             $key .= ";user=".$db_user;
@@ -130,9 +145,11 @@ class PHPFrame_Database
     /**
      * Run query and load single result
      * 
-     * @access    public
-     * @return    mixed    Returns a string with the single result or FALSE on failure.
-     * @since    1.0
+     * @param string $sql The SQL statement to run.
+     * 
+     * @access public
+     * @return mixed Returns a string with the single result or FALSE on failure.
+     * @since  1.0
      */
     public function loadResult($sql) 
     {
@@ -146,9 +163,12 @@ class PHPFrame_Database
     /**
      * Run query and load single value for each row
      * 
-     * @access    public
-     * @return     mixed    Returns an array containing single column for each row or FALSE on failure.
-     * @since    1.0
+     * @param string $sql The SQL statement to run.
+     * 
+     * @access public
+     * @return mixed Returns an array containing single column for each row
+     *               or FALSE on failure.
+     * @since  1.0
      */
     public function loadResultArray($sql) 
     {
@@ -170,9 +190,11 @@ class PHPFrame_Database
     /**
      * Run query and load single row as object
      * 
-     * @access    public
-     * @return    mixed    Returns a row object or FALSE if query fails.
-     * @since    1.0
+     * @param string $sql The SQL statement to run.
+     * 
+     * @access public
+     * @return mixed Returns a row object or FALSE if query fails.
+     * @since  1.0
      */
     public function loadObject($sql) 
     {
@@ -186,7 +208,7 @@ class PHPFrame_Database
     /**
      * Run query and load array of row objects
      *
-     * @param string $sql
+     * @param string $sql The SQL statement to run.
      * 
      * @access public
      * @return mixed An array of row objects or FALSE if query fails.
@@ -203,10 +225,13 @@ class PHPFrame_Database
     
     /**
      * Run query and load single row as associative array
+     * 
+     * @param string $sql The SQL statement to run.
      *
-     * @access    public
-     * @return    mixed    Returns an associative array with the row data or FALSE on failure.
-     * @since    1.0
+     * @access public
+     * @return mixed Returns an associative array with the row data 
+     *               or FALSE on failure.
+     * @since  1.0
      */
     public function loadAssoc($sql) 
     {
@@ -219,10 +244,11 @@ class PHPFrame_Database
     /**
      * Get db escaped string
      * 
-     * @access    public
-     * @param    string    The string to be escaped.
-     * @return    string    Returns the escaped string.
-     * @since    1.0
+     * @param string $text The string to be escaped.
+     * 
+     * @access public
+     * @return string Returns the escaped string.
+     * @since  1.0
      */
     public function getEscaped($text) 
     {
@@ -232,6 +258,15 @@ class PHPFrame_Database
         return $result;
     }
     
+    /**
+     * Count total rows in a database table
+     * 
+     * @param string $table_name The name of the table we want to query.
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
     public function countRows($table_name) 
     {
         $query = "SELECT COUNT(id) FROM `".$table_name."`";
@@ -241,6 +276,9 @@ class PHPFrame_Database
     /**
      * Close the current databasa connection
      * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function close() 
     {

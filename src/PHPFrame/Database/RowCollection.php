@@ -1,56 +1,87 @@
 <?php
 /**
- * @version       SVN: $Id$
- * @package       PHPFrame
- * @subpackage    database
- * @copyright     2009 E-noise.com Limited
- * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * PHPFrame/Database/Database.php
+ * 
+ * PHP version 5
+ * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Database
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @copyright  2009 E-noise.com Limited
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since      1.0
  */
 
 /**
  * Row Collection Class
  * 
- * @package        PHPFrame
- * @subpackage     database
- * @since         1.0
- * @see         Iterator
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Database
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see        Iterator
+ * @since      1.0
  */
-class PHPFrame_Database_RowCollection implements Iterator 
+class PHPFrame_Database_RowCollection implements Iterator
 {
+    /**
+     * A reference to the DB connection to use for fetching rows
+     * 
+     * @var PHPFrame_Database
+     */
+    private $_db=null;
     /**
      * The SQL query that produced this collection
      * 
-     * @var    string
+     * @var string
      */
     private $_query=null;
     /**
      * The name of the database table where this collection's rows are stored
      * 
-     * @var    string
+     * @var string
      */
     private $_table_name=null;
     /**
      * The rows that make up the collection
      * 
-     * @var unknown_type
+     * @var array
      */
-    private $_rows=null;
+    private $_rows=array();
     /**
      * A pointer used to iterate through the rows array
      * 
-     * @var    int
+     * @var int
      */
     private $_pos=0;
     
     /**
      * Constructor
      * 
-     * @param    string    $query    A SQL query
-     * @return    void
+     * @param string            $query The SQL query to load the collection of rows.
+     * @param PHPFrame_Database $db    Optionally use an alternative database 
+     *                                 to the default one provided by 
+     *                                 PHPFrame::getDB() as defined in config 
+     *                                 class.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public function __construct($query) 
+    public function __construct($query, PHPFrame_Database $db=null) 
     {
         $this->_query = (string) $query;
+        
+        if ($db instanceof PHPFrame_Database) {
+            $this->_db = $db;
+        } else {
+            $this->_db = PHPFrame::getDB();
+        }
         
         // Get table name from query string
         $this->_fetchTableName($query);
@@ -62,7 +93,9 @@ class PHPFrame_Database_RowCollection implements Iterator
     /**
      * Get rows in collection
      * 
-     * @return    array
+     * @access public
+     * @return array
+     * @since  1.0
      */
     public function getRows() 
     {
@@ -71,8 +104,10 @@ class PHPFrame_Database_RowCollection implements Iterator
     
     /**
      * Get total number of rows in collection
-     * 
-     * @return    int
+     *   
+     * @access public
+     * @return int
+     * @since  1.0
      */
     public function countRows() 
     {
@@ -82,7 +117,9 @@ class PHPFrame_Database_RowCollection implements Iterator
     /**
      * Implementation of Iterator::current()
      * 
-     * @return     object of type PHPFrame_Database_Row
+     * @access public
+     * @return PHPFrame_Database_Row
+     * @since  1.0
      */
     public function current() 
     {
@@ -92,7 +129,9 @@ class PHPFrame_Database_RowCollection implements Iterator
     /**
      * Implementation of Iterator::next()
      * 
+     * @access public
      * @return void
+     * @since  1.0
      */
     public function next() 
     {
@@ -101,8 +140,10 @@ class PHPFrame_Database_RowCollection implements Iterator
     
     /**
      * Implementation of Iterator::key()
-     * 
-     * @return    int
+     *   
+     * @access public
+     * @return int
+     * @since  1.0
      */
     public function key() 
     {
@@ -112,7 +153,9 @@ class PHPFrame_Database_RowCollection implements Iterator
     /**
      * Implementation of Iterator::valid()
      * 
-     * @return    boolean
+     * @access public
+     * @return bool
+     * @since  1.0
      */
     public function valid() 
     {
@@ -122,7 +165,9 @@ class PHPFrame_Database_RowCollection implements Iterator
     /**
      * Implementation of Iterator::rewind()
      * 
-     * @return    void
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function rewind() 
     {
@@ -132,40 +177,50 @@ class PHPFrame_Database_RowCollection implements Iterator
     /**
      * Fetch table name from SQL query string
      * 
-     * @param    string    $query
-     * @return    void
+     * @param string $query SQL query containing the FROM clause from where to 
+     *                      get the table name.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0 
      */
     private function _fetchTableName($query) 
     {
         // Figure out table name from query
-        $pattern = '/FROM #__([a-zA-Z_]+)/';
+        $pattern = '/FROM ([a-zA-Z_\#]+)/';
         preg_match($pattern, $query, $matches);
         
         if (!isset($matches[1])) {
-            throw new PHPFrame_Exception("Could not find collection table", 
-                                         PHPFrame_Exception::E_PHPFRAME_NOTICE,
-                                         "Regular expression failed to find table in query. 
-                                          Using pattern '".$pattern."' on subject: '".$query."'");
+            $exception_msg = "Could not find collection table";
+            $exception_code = PHPFrame_Exception::E_PHPFRAME_NOTICE;
+            $exception_verbose = "Regular expression failed to find table in query.";
+            $exception_verbose .= "Using pattern '".$pattern."'";
+            $exception_verbose .= " on subject: '".$query."'";
+            throw new PHPFrame_Exception($exception_msg, 
+                                         $exception_code, 
+                                         $exception_verbose);
         }
         
-        $this->_table_name = (string) "#__".$matches[1];
+        $this->_table_name = (string) $matches[1];
     }
     
     /**
      * Run query and load array of row objects
+     * 
+     * @param string $query The query string used to fetch the rows from the db.
      *
-     * @access    public
-     * @return    void
-     * @since    1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     private function _fetchRows($query) 
     {
         // Run SQL query
-        $stmt = PHPFrame::getDB()->query($query);
+        $stmt = $this->_db->query($query);
         
         // Fetch associative array
         while ($array = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $row = new PHPFrame_Database_Row($this->_table_name);
+            $row = new PHPFrame_Database_Row($this->_table_name, $this->_db);
             $this->_rows[] = $row->bind($array);
         }
     }

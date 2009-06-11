@@ -1,10 +1,18 @@
 <?php
 /**
- * @version       SVN: $Id$
- * @package       PHPFrame
- * @subpackage    database
- * @copyright     2009 E-noise.com Limited
- * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * PHPFrame/Database/Database.php
+ * 
+ * PHP version 5
+ * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Database
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @copyright  2009 E-noise.com Limited
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since      1.0
  */
 
 /**
@@ -20,8 +28,8 @@
  * 
  * Collection filter objects are normally instantiated using values coming 
  * from the request, so the natural place to instantiate them is in concrete "action 
- * controller" classes. Action controllers are responsible for brokering request data.
- * They use this data to create a list or collection filter that will be 
+ * controller" classes. Action controllers are responsible for brokering request 
+ * data. They use this data to create a list or collection filter that will be 
  * passed to a model method responsible for creating a "row collection".
  * 
  *  Example:
@@ -39,7 +47,11 @@
  *          $search = PHPFrame::getRequest()->get('search', '');
  *  
  *          // Create list filter needed for getUsers()
- *          $list_filter = new PHPFrame_Database_CollectionFilter($orderby, $orderdir, $limit, $limitstart, $search);
+ *          $list_filter = new PHPFrame_Database_CollectionFilter($orderby, 
+ *                                                                $orderdir, 
+ *                                                                $limit, 
+ *                                                                $limitstart, 
+ *                                                                $search);
  *          
  *          // Get users using model
  *          $users = $this->getModel('users')->getUsers($list_filter);
@@ -55,12 +67,16 @@
  *  }
  *  </code>
  * 
- * @package        PHPFrame
- * @subpackage     database
- * @see            PHPFrame_Database_RowCollection, PHPFrame_HTML_Pagination
- * @since         1.0
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Database
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see        PHPFrame_Database_RowCollection, PHPFrame_HTML_Pagination
+ * @since      1.0
  */
-class PHPFrame_Database_CollectionFilter 
+class PHPFrame_Database_CollectionFilter
 {
     /**
      * Column to use for ordering
@@ -102,20 +118,22 @@ class PHPFrame_Database_CollectionFilter
     /**
      * Constructor
      * 
-     * @param    string    $_orderby        Column to use for ordering.
-     * @param    string    $_orderdir        Order direction (either ASC or DESC).
-     * @param    int        $_limit            Number of rows per page.
-     * @param    int        $_limitstart    Row number to start current page.
-     * @param    string    $_search        Search string.
-     * @return    void
-     * @since     1.0
+     * @param string $_orderby    Column to use for ordering.
+     * @param string $_orderdir   Order direction (either ASC or DESC).
+     * @param int    $_limit      Number of rows per page.
+     * @param int    $_limitstart Row number to start current page.
+     * @param string $_search     Search string.
+     * 
+     * @return void
+     * @since  1.0
      */
-    public function __construct($_orderby="", 
-                                $_orderdir="ASC", 
-                                $_limit=-1, 
-                                $_limitstart=0, 
-                                $_search="") 
-    {
+    public function __construct(
+        $_orderby="", 
+        $_orderdir="ASC", 
+        $_limit=-1, 
+        $_limitstart=0, 
+        $_search=""
+    ) {
         $this->_orderby = (string) $_orderby;
         $this->_orderdir = (string) $_orderdir;
         $this->_limit = (int) $_limit;
@@ -126,9 +144,10 @@ class PHPFrame_Database_CollectionFilter
     /**
      * Set total number of records for the subset
      * 
-     * @param    int        Total number of records in all pages.
-     * @return    void
-     * @since     1.0
+     * @param int $int Total number of records in all pages.
+     * 
+     * @return void
+     * @since  1.0
      */
     public function setTotal($int) 
     {
@@ -138,8 +157,8 @@ class PHPFrame_Database_CollectionFilter
     /**
      * Get search string
      * 
-     * @return    string
-     * @since     1.0
+     * @return string
+     * @since  1.0
      */
     public function getSearchStr() 
     {
@@ -149,8 +168,8 @@ class PHPFrame_Database_CollectionFilter
     /**
      * Get order by column name
      * 
-     * @return    string
-     * @since     1.0
+     * @return string
+     * @since  1.0
      */
     public function getOrderBy() 
     {
@@ -160,8 +179,8 @@ class PHPFrame_Database_CollectionFilter
     /**
      * Get order direction
      * 
-     * @return    string    Either ASC or DESC
-     * @since     1.0
+     * @return string Either ASC or DESC
+     * @since  1.0
      */
     public function getOrderDir() 
     {
@@ -171,8 +190,8 @@ class PHPFrame_Database_CollectionFilter
     /**
      * Get ORDER BY SQL statement
      * 
-     * @return    string
-     * @since     1.0
+     * @return string
+     * @since  1.0
      */
     public function getOrderByStmt() 
     {
@@ -189,8 +208,8 @@ class PHPFrame_Database_CollectionFilter
     /**
      * Get limit
      * 
-     * @return    int
-     * @since     1.0
+     * @return int
+     * @since  1.0
      */
     public function getLimit() 
     {
@@ -200,8 +219,8 @@ class PHPFrame_Database_CollectionFilter
     /**
      * Get Limit start position
      * 
-     * @return    int
-     * @since     1.0
+     * @return int
+     * @since  1.0
      */
     public function getLimitStart() 
     {
@@ -211,8 +230,8 @@ class PHPFrame_Database_CollectionFilter
     /**
      * Get LIMIT SQL statement
      * 
-     * @return    string
-     * @since     1.0
+     * @return string
+     * @since  1.0
      */
     public function getLimitStmt() 
     {
@@ -229,15 +248,14 @@ class PHPFrame_Database_CollectionFilter
      * Get number of pages
      * 
      * @return int
-     * @since     1.0
+     * @since  1.0
      */
     public function getPages() 
     {
         if ($this->_limit > 0 && !is_null($this->_total)) {
             // Calculate number of pages
             return (int) ceil($this->_total/$this->_limit);
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -246,15 +264,14 @@ class PHPFrame_Database_CollectionFilter
      * Get current page number
      * 
      * @return int
-     * @since     1.0
+     * @since  1.0
      */
     public function getCurrentPage() 
     {
         // Calculate current page
         if ($this->_limit > 0) {
             return (int) (ceil($this->_limitstart/$this->_limit)+1);
-        }
-        else {
+        } else {
             return 0;
         }
     }

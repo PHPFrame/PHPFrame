@@ -1,24 +1,42 @@
 <?php
 /**
- * @version       SVN: $Id$
- * @package       PHPFrame
- * @subpackage    database
- * @copyright     2009 E-noise.com Limited
- * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * PHPFrame/Database/Database.php
+ * 
+ * PHP version 5
+ * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Database
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @copyright  2009 E-noise.com Limited
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since      1.0
  */
 
 /**
  * Row Class
  * 
- * Note that this class uses the Application Registry object to cache table structures 
- * and primary keys in order to avoid unnecessary trips to the database.
+ * Note that this class uses the Application Registry object to cache table 
+ * structures and primary keys in order to avoid unnecessary trips to the database.
  * 
- * @package        PHPFrame
- * @subpackage     database
- * @since         1.0
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Database
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since      1.0
  */
-class PHPFrame_Database_Row 
+class PHPFrame_Database_Row
 {
+    /**
+     * A reference to the DB connection to use for mapping the row
+     * 
+     * @var PHPFrame_Database
+     */
+    private $_db=null;
     /**
      * Primary key
      * 
@@ -47,12 +65,25 @@ class PHPFrame_Database_Row
     /**
      * Constructor
      * 
-     * @param    string    $table_name
-     * @return    void
+     * @param string            $table_name The table to map this row to in the db.
+     * @param PHPFrame_Database $db         Optionally use an alternative database 
+     *                                      to the default one provided by 
+     *                                      PHPFrame::getDB() as defined in config 
+     *                                      class.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public function __construct($table_name) 
+    public function __construct($table_name, PHPFrame_Database $db=null) 
     {
         $this->_table_name = (string) $table_name;
+        
+        if ($db instanceof PHPFrame_Database) {
+            $this->_db = $db;
+        } else {
+            $this->_db = PHPFrame::getDB();
+        }
         
         // Read table structure from application registry
         $this->_readStructure();
@@ -61,13 +92,17 @@ class PHPFrame_Database_Row
     /**
      * Magic getter
      * 
-     * This is called when we try to access a public property and tries to find the key in 
-     * the columns array.
+     * This is called when we try to access a public property and tries to 
+     * find the key in the columns array.
      * 
-     * This method also enforces that public properties are not mistakenly referenced.
+     * This method also enforces that public properties are not mistakenly 
+     * referenced.
      * 
-     * @param    $key
-     * @return    string
+     * @param string $key The key to retrieve a value from internal array.
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
      */
     public function __get($key) 
     {
@@ -77,20 +112,22 @@ class PHPFrame_Database_Row
     /**
      * Get a column value from this row
      * 
-     * @param    string    $key
-     * @return    string
+     * @param string $key The column we want to get the value for.
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
      */
     public function get($key) 
     {
         if (array_key_exists($key, $this->_data)) {
             return $this->_data[$key];
-        }
-        elseif (!$this->hasColumn($key)) {
-            throw new PHPFrame_Exception("Tried to get column '".$key."' that doesn't exist in "
+        } elseif (!$this->hasColumn($key)) {
+            throw new PHPFrame_Exception("Tried to get column '".$key
+                                         ."' that doesn't exist in "
                                          .$this->_table_name, 
                                          PHPFrame_Exception::E_PHPFRAME_WARNING);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -98,14 +135,18 @@ class PHPFrame_Database_Row
     /**
      * Set a column value in this row
      *  
-     * @param    string    $key
-     * @param    string    $value
-     * @return    void
+     * @param string $key   The column we want to set the value for.
+     * @param string $value The value to set the column to.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function set($key, $value) 
     {
         if (!$this->hasColumn($key)) {
-            throw new PHPFrame_Exception("Tried to set column '".$key."' that doesn't exist in "
+            throw new PHPFrame_Exception("Tried to set column '".$key
+                                         ."' that doesn't exist in "
                                          .$this->_table_name, 
                                          PHPFrame_Exception::E_PHPFRAME_WARNING);
         }
@@ -116,14 +157,19 @@ class PHPFrame_Database_Row
     /**
      * Check if row has a given column
      * 
-     * @param    string    $column_name
-     * @return    bool
+     * @param string $column_name The column name we want to check.
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
      */
     public function hasColumn($column_name) 
     {
         // Loop through table structure to find key
         foreach ($this->_structure as $structure) {
-            if ($structure->Field == $column_name) return true;
+            if ($structure->Field == $column_name) {
+                return true;
+            }
         }
         
         return false;
@@ -132,39 +178,52 @@ class PHPFrame_Database_Row
     /**
      * Load row data from database given a row id.
      * 
-     * @param    mixed    $id Normally an integer, but could be a string
-     * @param    string    $exclude     A list of key names to exclude from binding process separated by commas.
-     * @return    object of type PHPFrame_Database_Row
+     * @param mixed  $id      Normally an integer, but could be a string
+     * @param string $exclude A list of key names to exclude from binding process 
+     *                        separated by commas.
+     * 
+     * @access public
+     * @return PHPFrame_Database_Row
+     * @since  1.0
      */
     public function load($id, $exclude='') 
     {
         $query = "SELECT * FROM `".$this->_table_name;
         $query .= "` WHERE `".$this->_primary_key."` = '".$id."'";
         
-        $db = PHPFrame::getDB();
-        $array = $db->loadAssoc($query);
+        $array = $this->_db->loadAssoc($query);
         
         if (is_array($array) && count($array) > 0) {
             $this->bind($array, $exclude);
             
             return $this;    
-        }
-        else {
+        } else {
             return false;
         }
     }
     
+    /**
+     * Load row data from database using query
+     * 
+     * @param string $query        The SQL query used to load the data.
+     * @param array  $foreign_keys An array with foreign keys to be allowed to be 
+     *                             set as columns in this row.
+     * 
+     * @access public
+     * @return PHPFrame_Database_Row
+     * @since  1.0
+     */
     public function loadByQuery($query, $foreign_keys=array()) 
     {
         // Run SQL query
-        $stmt = PHPFrame::getDB()->query($query);
+        $stmt = $this->_db->query($query);
         
         $array = array();
         
         // Id result is valid we populate array
         if ($stmt->rowCount() == 1) {
             $array = $stmt->fetch(PDO::FETCH_ASSOC);
-            // Bind result array to row passing foreign keys aliases to allow as valid keys
+            // Bind result array to row passing foreign keys to allow them
             $this->bind($array, '', $foreign_keys);
         }
         
@@ -174,35 +233,45 @@ class PHPFrame_Database_Row
     /**
      * Bind array to row
      * 
-     * @param    array    $array    The array to bind to the object.
-     * @param    string    $exclude     A list of key names to exclude from binding process separated by commas.
-     * @return    object of type PHPFrame_Database_Row
+     * @param array  $array        The array to bind to the object.
+     * @param string $exclude      A list of key names to exclude from binding 
+     *                             process separated by commas.
+     * @param array  $foreign_keys An array with foreign keys to be allowed to be 
+     *                             set as columns in this row.
+     * 
+     * @access public
+     * @return PHPFrame_Database_Row
+     * @since  1.0
      */
     public function bind($array, $exclude='', $foreign_keys=array()) 
     {
         // Process exclude
         if (!empty($exclude)) {
             $exclude = explode(',', $exclude);
-        }
-        else {
+        } else {
             $exclude = array();
         }
         
         if (!is_array($array)) {
-            throw new PHPFrame_Exception_Database('Argument 1 ($array) has to be of type array.');
+            $exception_msg = 'Argument 1 ($array) has to be of type array.';
+            throw new PHPFrame_Exception_Database($exception_msg);
         }
         
         if (count($array) > 0) {
             // Rip values using known structure
             foreach ($this->_structure as $col) {
-                if (array_key_exists($col->Field, $array) && !in_array($col->Field, $exclude)) {
+                if (array_key_exists($col->Field, $array) 
+                    && !in_array($col->Field, $exclude)
+                ) {
                     $this->_data[$col->Field] = $array[$col->Field];
                 }
             }
             
             // Add foreign key values
             foreach ($foreign_keys as $foreign_key) {
-                if (array_key_exists($foreign_key, $array) && !in_array($foreign_key, $exclude)) {
+                if (array_key_exists($foreign_key, $array) 
+                    && !in_array($foreign_key, $exclude)
+                ) {
                     $this->_data[$foreign_key] = $array[$foreign_key];
                 }
             }
@@ -214,7 +283,9 @@ class PHPFrame_Database_Row
     /**
      * Store row in database
      * 
-     * @return object of type PHPFrame_Database_Row
+     * @access public
+     * @return PHPFrame_Database_Row
+     * @since  1.0
      */
     public function store() 
     {
@@ -226,40 +297,50 @@ class PHPFrame_Database_Row
         if (is_null($id)) {
             // Insert new record
             $this->_insert();
-        }
-        else {
+        } else {
             $this->_update();
         }
         
         return $this;
     }
     
+    /**
+     * Delete row from database
+     * 
+     * @param int|string $id Normally an integer value reprensting the row primary 
+     *                       key value. This could also be a string.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function delete($id) 
     {
         $query = "DELETE FROM `".$this->_table_name."` ";
         $query .= " WHERE `".$this->_primary_key."` = '".$id."'";
-        PHPFrame::getDB()->query($query);
+        $this->_db->query($query);
     }
     
     /**
      * Read row structure from database and store in app registry
      * 
-     * @access    private
-     * @return    void
-     * @since     1.0
+     * @access private
+     * @return void
+     * @since  1.0
      */
     private function _readStructure() 
     {
-        $table_structures = PHPFrame::getApplicationRegistry()->get('table_structures');
-        $table_primary_keys = PHPFrame::getApplicationRegistry()->get('table_primary_keys');
+        $app_registry = PHPFrame::getApplicationRegistry();
+        $table_structures = $app_registry->get('table_structures');
+        $table_primary_keys = $app_registry->get('table_primary_keys');
         
         // Load structure from db if not in application registry already
         if (!is_array($table_structures[$this->_table_name])) {
             $query = "SHOW COLUMNS FROM `".$this->_table_name."`";
-            $this->_structure = PHPFrame::getDB()->loadObjectList($query);
+            $this->_structure = $this->_db->loadObjectList($query);
             
             if ($this->_structure === false || !is_array($this->_structure)) {
-                throw new PHPFrame_Exception_Database(PHPFrame::getDB()->getLastError());
+                throw new PHPFrame_Exception_Database($this->_db->getLastError());
             }
             
             // Loop through structure array to find primary key
@@ -271,10 +352,10 @@ class PHPFrame_Database_Row
             
             $table_structures[$this->_table_name] = $this->_structure;
             $table_primary_keys[$this->_table_name] = $this->_primary_key;
-            PHPFrame::getApplicationRegistry()->set('table_structures', $table_structures);
-            PHPFrame::getApplicationRegistry()->set('table_primary_keys', $table_primary_keys);
-        }
-        else {
+            // Store data in app registry
+            $app_registry->set('table_structures', $table_structures);
+            $app_registry->set('table_primary_keys', $table_primary_keys);
+        } else {
             $this->_structure = $table_structures[$this->_table_name];
             $this->_primary_key = $table_primary_keys[$this->_table_name];
         }
@@ -283,9 +364,11 @@ class PHPFrame_Database_Row
     }
     
     /**
-     * This method checks the columns data types and required fields before saving to db.
+     * Check columns data types and required fields before saving to db.
      * 
-     * @return    bool
+     * @access private
+     * @return bool
+     * @since  1.0
      */
     private function _check() 
     {
@@ -299,7 +382,8 @@ class PHPFrame_Database_Row
                     $this->_data[$structure->Field] = $structure->Default;
                 }
                 
-                // If column is timestamp and default value is CURRENT_TIMESTAMP replace with current date
+                // If column is timestamp and default value is CURRENT_TIMESTAMP 
+                // replace with current date
                 if ($structure->Default == "CURRENT_TIMESTAMP") {
                     $this->_data[$structure->Field] = date("Y-m-d H:i:s");
                 }
@@ -307,7 +391,7 @@ class PHPFrame_Database_Row
                 // If column is auto_increment we set to null
                 if ($structure->Extra == 'auto_increment') {
                     $this->_data[$structure->Field] = null;
-                    continue; // jump to next iteration of the loop to avoid type checking
+                    continue; // jump to next iteration of the loop to avoid check
                 }
             }
             
@@ -325,48 +409,52 @@ class PHPFrame_Database_Row
             
             // Perform validation depending on data type
             switch ($type) {
-                case 'int' : 
-                    $pattern = '/^-?\d+$/';
-                    break;
+            case 'int' : 
+                $pattern = '/^-?\d+$/';
+                break;
                     
-                case 'float' :
-                case 'double' :
-                case 'decimal' :
-                    $pattern = '/^-?\d+\.?\d+$/';
-                    break;
+            case 'float' :
+            case 'double' :
+            case 'decimal' :
+                $pattern = '/^-?\d+\.?\d+$/';
+                break;
                     
-                case 'char' :
-                case 'varchar' :
-                    $pattern = '/^.{0,'.$length.'}$/';
-                    break;
+            case 'char' :
+            case 'varchar' :
+                $pattern = '/^.{0,'.$length.'}$/';
+                break;
                 
-                case 'text' :
-                case 'blob' :
-                case 'enum' :
-                case 'datetime' :
-                case 'date' :
-                case 'time' :
-                case 'year' :
-                case 'timestamp' :
-                case 'binary' :
-                case 'bool' :
-                default : 
-                    $pattern = '/^.*$/im';
-                    break;
+            case 'text' :
+            case 'blob' :
+            case 'enum' :
+            case 'datetime' :
+            case 'date' :
+            case 'time' :
+            case 'year' :
+            case 'timestamp' :
+            case 'binary' :
+            case 'bool' :
+            default : 
+                $pattern = '/^.*$/im';
+                break;
             }
             
             if (!preg_match($pattern, $this->_data[$structure->Field])) {
-                throw new PHPFrame_Exception("Wrong type for column '".$structure->Field."'. "
-                                             ."Expected '".$structure->Type."' and got '".$this->_data[$structure->Field]."'", 
-                                              PHPFrame_Exception::E_PHPFRAME_WARNING);
+                $exception_msg = "Wrong type for column '".$structure->Field."'. ";
+                $exception_msg .= "Expected '".$structure->Type."' and got '";
+                $exception_msg .= $this->_data[$structure->Field]."'";
+                $exception_code = PHPFrame_Exception::E_PHPFRAME_WARNING;
+                throw new PHPFrame_Exception($exception_msg, $exception_code);
             }
         }
     }
     
     /**
      * Insert new record into database
-     * 
-     * @return    void
+     *   
+     * @access private
+     * @return void
+     * @since  1.0
      */
     private function _insert() 
     {
@@ -376,10 +464,10 @@ class PHPFrame_Database_Row
         $query .= " VALUES ('".implode("', '", $this->_data)."')";
         //echo $query; exit;
         
-        $insert_id = PHPFrame::getDB()->query($query);
+        $insert_id = $this->_db->query($query);
         
         if ($insert_id === false) {
-            throw new PHPFrame_Exception(PHPFrame::getDB()->getLastError());
+            throw new PHPFrame_Exception($this->_db->getLastError());
         }
         
         $this->_data[$this->_primary_key] = $insert_id;
@@ -388,7 +476,9 @@ class PHPFrame_Database_Row
     /**
      * Update existing row in database
      * 
-     * @return    void
+     * @access private
+     * @return void
+     * @since  1.0
      */
     private function _update() 
     {
@@ -396,13 +486,16 @@ class PHPFrame_Database_Row
         $query = "UPDATE `".$this->_table_name."` SET ";
         $i=0;
         foreach ($this->_data as $key=>$value) {
-            if ($i>0) $query .= ", ";
+            if ($i>0) {
+                $query .= ", ";
+            }
             $query .= " `".$key."` = '".$value."' ";
             $i++;
         }
-        $query .= " WHERE `".$this->_primary_key."` = '".$this->_data[$this->_primary_key]."'";
+        $query .= " WHERE `".$this->_primary_key."` = '";
+        $query .= $this->_data[$this->_primary_key]."'";
         
-        if (PHPFrame::getDB()->query($query) === false) {
+        if ($this->_db->query($query) === false) {
             throw new PHPFrame_Exception("Error updating database row",
                                          PHPFrame_Exception::E_PHPFRAME_WARNING,
                                          "Query: ".$query);

@@ -1,10 +1,17 @@
 <?php
 /**
- * @version       SVN: $Id$
- * @package       PHPFrame
- * @subpackage    base
- * @copyright     2009 E-noise.com Limited
- * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * PHPFrame/Base/Singleton.php
+ * 
+ * PHP version 5
+ * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Base
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @copyright  2009 E-noise.com Limited
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
 /**
@@ -32,12 +39,17 @@
  * $mySingletonObject3 = singletonClass::getInstance('singletonClass');
  * </code>
  * 
- * @package        PHPFrame
- * @subpackage     base
- * @since         1.0
- * @abstract 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Base
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since      1.0
+ * @abstract
  */
-abstract class PHPFrame_Base_Singleton extends PHPFrame_Base_StdObject {
+abstract class PHPFrame_Base_Singleton extends PHPFrame_Base_StdObject
+{
     /**
      * Variable holding an array of "single" instances of this classes children.
      * 
@@ -106,4 +118,3 @@ abstract class PHPFrame_Base_Singleton extends PHPFrame_Base_StdObject {
         }
     } 
 }
-?>

@@ -1,20 +1,31 @@
 <?php
 /**
- * @version       SVN: $Id$
- * @package       PHPFrame
- * @subpackage    html
- * @copyright     2009 E-noise.com Limited
- * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * PHPFrame/HTML/Pagination.php
+ * 
+ * PHP version 5
+ * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage HTML
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @copyright  2009 E-noise.com Limited
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
 /**
  * Pagination Class
  * 
- * @package        PHPFrame
- * @subpackage     html
- * @since         1.0
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage HTML
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since      1.0
  */
-class PHPFrame_HTML_Pagination 
+class PHPFrame_HTML_Pagination
 {
     /**
      * The list filter object for which to provide pagination

@@ -1,20 +1,31 @@
 <?php
 /**
- * @version       SVN: $Id$
- * @package       PHPFrame
- * @subpackage    user
- * @copyright     2009 E-noise.com Limited
- * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * PHPFrame/User/OpenID.php
+ * 
+ * PHP version 5
+ * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage User
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @copyright  2009 E-noise.com Limited
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
 /**
- * userOpenID Class
+ * OpenID Class
  * 
- * @package        PHPFrame
- * @subpackage     user
- * @since         1.0
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage User
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since      1.0
  */
-class PHPFrame_User_OpenID 
+class PHPFrame_User_OpenID
 {
     # GetUserId(openid_url)
     //select user_id from user_openids where openid_url = openid_url

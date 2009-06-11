@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Database/Database.php
+ * PHPFrame/Database/CollectionFilter.php
  * 
  * PHP version 5
  * 

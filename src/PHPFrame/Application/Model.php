@@ -1,10 +1,17 @@
 <?php
 /**
- * @version       SVN: $Id$
- * @package       PHPFrame
- * @subpackage    application
- * @copyright     2009 E-noise.com Limited
- * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * PHPFrame/Application/Model.php
+ * 
+ * PHP version 5
+ * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Application
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @copyright  2009 E-noise.com Limited
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
 /**
@@ -21,13 +28,17 @@
  * abstract class. See the built in components (dashboard, user, admin, ...) 
  * for examples.
  * 
- * @package        PHPFrame
- * @subpackage     application
- * @since         1.0
- * @see         PHPFrame_Application_ActionController, PHPFrame_Application_View
- * @abstract 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Application
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see        PHPFrame_Application_ActionController, PHPFrame_Application_View
+ * @since      1.0
+ * @abstract
  */
-abstract class PHPFrame_Application_Model 
+abstract class PHPFrame_Application_Model
 {
     /**
      * An array containing strings with internal error messages if any

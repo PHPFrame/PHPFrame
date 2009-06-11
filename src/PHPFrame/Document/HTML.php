@@ -1,20 +1,31 @@
 <?php
 /**
- * @version       $Id$
- * @package       PHPFrame
- * @subpackage    document
- * @copyright     2009 E-noise.com Limited
- * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * PHPFrame/Document/HTML.php
+ * 
+ * PHP version 5
+ * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Document
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @copyright  2009 E-noise.com Limited
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
 /**
  * HTML Document Class
  * 
- * @package        PHPFrame
- * @subpackage     document
- * @since         1.0
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Document
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since      1.0
  */
-class PHPFrame_Document_HTML extends PHPFrame_Document 
+class PHPFrame_Document_HTML extends PHPFrame_Document
 {
     /**
      * Array of linked scripts

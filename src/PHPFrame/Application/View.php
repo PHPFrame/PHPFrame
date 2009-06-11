@@ -1,10 +1,17 @@
 <?php
 /**
- * @version       SVN: $Id$
- * @package       PHPFrame
- * @subpackage    application
- * @copyright     2009 E-noise.com Limited
- * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * PHPFrame/Application/View.php
+ * 
+ * PHP version 5
+ * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Application
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @copyright  2009 E-noise.com Limited
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
 /**
@@ -22,13 +29,17 @@
  * developing components. See the built in components (dashboard, user, admin, ...) 
  * for examples.
  * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Application
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see        PHPFrame_Application_ActionController, PHPFrame_Application_Model
+ * @since      1.0
  * @abstract
- * @package        PHPFrame
- * @subpackage     application
- * @see            PHPFrame_Application_ActionController, PHPFrame_Application_Model 
- * @since         1.0
  */
-abstract class PHPFrame_Application_View 
+abstract class PHPFrame_Application_View
 {
     /**
      * The view name

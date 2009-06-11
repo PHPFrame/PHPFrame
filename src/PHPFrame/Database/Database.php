@@ -62,8 +62,8 @@ class PHPFrame_Database
      * @param string                $db_user The database user name if any.
      * @param string                $db_pass The database password if any.
      * 
-     * @return void
      * @access private
+     * @return void
      * @since  1.0
      */
     private function __construct(

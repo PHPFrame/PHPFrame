@@ -1,22 +1,34 @@
 <?php
 /**
- * @version       SVN: $Id$
- * @package       PHPFrame
- * @subpackage    base
- * @copyright     2009 E-noise.com Limited
- * @license       http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * PHPFrame/Base/StdObject.php
+ * 
+ * PHP version 5
+ * 
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Base
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @copyright  2009 E-noise.com Limited
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
 /**
  * Standard Object Class
  * 
- * This class provides a standard object class with some useful generic methods. 
+ * This class provides a standard object with some useful generic methods.
  * 
- * @package        PHPFrame
- * @subpackage     base
- * @since         1.0
+ * @category   MVC_Framework
+ * @package    PHPFrame
+ * @subpackage Base
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since      1.0
  */
-class PHPFrame_Base_StdObject {
+class PHPFrame_Base_StdObject
+{
     /**
      * Get property
      * 
@@ -57,4 +69,3 @@ class PHPFrame_Base_StdObject {
         return serialize($this);
     }
 }
-?>

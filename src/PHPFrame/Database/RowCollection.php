@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Database/Database.php
+ * PHPFrame/Database/RowCollection.php
  * 
  * PHP version 5
  * 
@@ -177,11 +177,14 @@ class PHPFrame_Database_RowCollection implements Iterator
     /**
      * Fetch table name from SQL query string
      * 
+     * If unable to figure out the table name from the query string this method
+     * will throw a PHPFrame_Exception with an exception code of E_PHPFRAME_NOTICE.
+     * 
      * @param string $query SQL query containing the FROM clause from where to 
      *                      get the table name.
      * 
-     * @access public
-     * @return void
+     * @access private
+     * @return string
      * @since  1.0 
      */
     private function _fetchTableName($query) 
@@ -209,7 +212,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * 
      * @param string $query The query string used to fetch the rows from the db.
      *
-     * @access public
+     * @access private
      * @return void
      * @since  1.0
      */

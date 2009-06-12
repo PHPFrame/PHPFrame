@@ -44,7 +44,6 @@
 	<target name="prepare">
 		<mkdir dir="${report.dir}"/>
 		<mkdir dir="${tmp.dir}"/>
-		<mkdir dir="${doc.dir}"/>
 	</target>
 	
 	<!-- Run PHPUnit tests -->

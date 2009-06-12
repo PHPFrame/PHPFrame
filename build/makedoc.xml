@@ -5,6 +5,11 @@
 	<property name="report.dir" value="${build.dir}/report"/>
 	<property name="doc.dir" value="${build.dir}/doc"/>
 	
+	<!-- Prepare directories -->
+	<target name="prepare">
+		<mkdir dir="${doc.dir}"/>
+	</target>
+	
 	<!-- Generate documentation from Javadoc comments using phpdoc -->
 	<target name="php-documentor">
 		<exec 
@@ -21,6 +26,6 @@
 			output="${report.dir}/phpdoc.log" />
 	</target>
 	
-	<target name="build" depends="php-documentor" />
+	<target name="build" depends="prepare, php-documentor" />
 	
 </project>

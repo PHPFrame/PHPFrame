@@ -44,6 +44,7 @@
 	<target name="prepare">
 		<mkdir dir="${report.dir}"/>
 		<mkdir dir="${tmp.dir}"/>
+		<mkdir dir="${doc.dir}"/>
 	</target>
 	
 	<!-- Run PHPUnit tests -->
@@ -63,11 +64,6 @@
 			styledir="resources/xsl" 
 			todir="report" 
 			format="noframes" />
-	</target>
-	
-	<!-- Generate documentation from Javadoc comments using phpdoc -->
-	<target name="php-documentor">
-	
 	</target>
 	
 	<!-- Build project -->

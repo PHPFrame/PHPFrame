@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="PHPFrame-1.0" basedir="../" default="build">
 	
-	<fileset dir="../src" id="codefiles">
+	<fileset dir="${project.basedir}/src" id="codefiles">
 		<include name="**" />
 	</fileset>
 	
-	<fileset dir="../tests" id="testfiles">
+	<fileset dir="${project.basedir}/tests" id="testfiles">
 		<include name="PHPFrameTest.php"/>
 	</fileset>
 	

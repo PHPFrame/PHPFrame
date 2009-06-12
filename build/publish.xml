@@ -15,7 +15,7 @@
 	
 	<!-- Create archive for distribution -->
 	<target name="tar">
-		<copy todir="${tmp.dir}" overwrite="true">
+		<copy todir="${tmp.dir}/src" overwrite="true">
 			<fileset refid="codefiles" />
 		</copy>
 		

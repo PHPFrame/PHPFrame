@@ -43,6 +43,7 @@
 	<!-- Prepare directories -->
 	<target name="prepare">
 		<mkdir dir="${report.dir}"/>
+		<mkdir dir="${tmp.dir}"/>
 	</target>
 	
 	<!-- Run PHPUnit tests -->

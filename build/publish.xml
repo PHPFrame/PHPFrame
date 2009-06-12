@@ -33,6 +33,10 @@
 		</tar>
 	</target>
 	
-	<target name="build" depends="prepare, tar" />
+	<target name="cleanup">
+		<delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
+	</target>
+	
+	<target name="build" depends="prepare, tar, cleanup" />
 	
 </project>

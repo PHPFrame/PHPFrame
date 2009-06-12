@@ -36,11 +36,9 @@
 				<!-- Generate docs with phpdoc -->
 				<phingPublisher buildfile="${build_dir}/makedoc.xml" target="build" />
 				<artifactspublisher file="${build_dir}/makedoc.xml" />
-				<!-- 
-				<documentation file="${dir}/phpdoc" 
+				<documentation file="${build_dir}/doc" 
 				               alias="PHPDoc Documentation" 
-				               index="${dir}/phpdoc/index.html"/>
-				-->
+				               index="${build_dir}/doc/index.html"/>
 				
 				<email to="phpframe-dev@googlegroups.com" 
 					   subject="${project.name} build ${build.number} success" 

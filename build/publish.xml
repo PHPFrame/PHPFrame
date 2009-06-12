@@ -5,7 +5,7 @@
 	<property name="dist.dir" value="${build.dir}/dist"/>
 	<property name="tmp.dir" value="${build.dir}/tmp"/>
 	
-	<fileset dir="../src" id="codefiles">
+	<fileset dir="${project.basedir}/src" id="codefiles">
 		<include name="**" />
 	</fileset>
 	

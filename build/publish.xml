@@ -5,10 +5,6 @@
 	<property name="dist.dir" value="${build.dir}/dist"/>
 	<property name="tmp.dir" value="${build.dir}/tmp"/>
 	
-	<fileset dir="${project.basedir}/src" id="codefiles">
-		<include name="**" />
-	</fileset>
-	
 	<target name="prepare">
 		<mkdir dir="${dist.dir}"/>
 	</target>
@@ -16,7 +12,9 @@
 	<!-- Create archive for distribution -->
 	<target name="tar">
 		<copy todir="${tmp.dir}/src" overwrite="true">
-			<fileset refid="codefiles" />
+			<fileset dir="${project.basedir}/src">
+				<include name="**" />
+			</fileset>
 		</copy>
 		
 		<copy file="${build.dir}/package.xml" tofile="${tmp.dir}/package.xml" overwrite="true" />

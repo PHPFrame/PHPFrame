@@ -10,7 +10,7 @@
 		
 		<modificationset>
 			<svn directory="${dir}" update="true" />
-			<buildalways/>
+			<!-- <buildalways/> -->
 		</modificationset>
 		
 		<builders>

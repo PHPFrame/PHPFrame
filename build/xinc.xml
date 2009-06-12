@@ -28,7 +28,7 @@
 			<onsuccess>
 				<phingPublisher buildfile="${build_dir}/publish.xml" target="build" />
 				<artifactspublisher file="${build_dir}/publish.xml" />
-				<deliverable file="${build_dir}/builds/${project.name}-${build.label}.tar.gz" 
+				<deliverable file="${build_dir}/dist/${project.name}-${build.label}.tar.gz" 
 							 alias="${project.name}.tar.gz" />
 				<email to="phpframe-dev@googlegroups.com" 
 					   subject="${project.name} build ${build.number} success" 

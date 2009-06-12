@@ -1,14 +1,40 @@
 <?xml version="1.0"?>
-<project name="PHPFrame-1.0" basedir="." default="build">
+<project name="PHPFrame-1.0" basedir="../" default="build">
+	
+	<property name="build.dir" value="${project.basedir}/build"/>
+	<property name="dist.dir" value="${build.dir}/dist"/>
+	<property name="tmp.dir" value="${build.dir}/tmp"/>
+	
+	<fileset dir="../src" id="codefiles">
+		<include name="**" />
+	</fileset>
 	
 	<target name="prepare">
-		<mkdir dir="${project.basedir}/build/dist"/>
+		<mkdir dir="${dist.dir}"/>
 	</target>
 	
-	<target name="build" depends="prepare">
-		<move 
-			file="${project.basedir}/${xinc.project.name}-${xinc.build.label}.tar.gz" 
-			todir="${project.basedir}/build/dist"/>
+	<!-- Create archive for distribution -->
+	<target name="tar">
+		<copy todir="${tmp.dir}" overwrite="true">
+			<fileset refid="codefiles" />
+		</copy>
+		
+		<copy file="${build.dir}/package.xml" tofile="${tmp.dir}/package.xml" overwrite="true" />
+		<copy file="${project.basedir}/CREDITS" tofile="${tmp.dir}/CREDITS" overwrite="true" />
+		<copy file="${project.basedir}/FAQ" tofile="${tmp.dir}/FAQ" overwrite="true" />
+		<copy file="${project.basedir}/INSTALL" tofile="${tmp.dir}/INSTALL" overwrite="true" />
+		<copy file="${project.basedir}/LICENSE" tofile="${tmp.dir}/LICENSE" overwrite="true" />
+		<copy file="${project.basedir}/README" tofile="${tmp.dir}/README" overwrite="true" />
+		
+		<tar 
+			destfile="${dist.dir}/${xinc.project.name}-${xinc.build.label}.tar.gz" 
+			compression="gzip">
+			<fileset dir="${tmp.dir}">
+				<include name="**" />
+			</fileset>
+		</tar>
 	</target>
+	
+	<target name="build" depends="prepare, tar" />
 	
 </project>

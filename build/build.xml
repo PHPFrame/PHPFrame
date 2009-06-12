@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="PHPFrame-1.0" basedir="." default="build">
+<project name="PHPFrame-1.0" basedir="../" default="build">
 	
 	<fileset dir="../src" id="codefiles">
 		<include name="**" />
@@ -8,9 +8,10 @@
 	<fileset dir="../tests" id="testfiles">
 		<include name="PHPFrameTest.php"/>
 	</fileset>
-
-	<property name="report.dir" value="${project.basedir}/report"/>
-	<property name="dist.dir" value="${project.basedir}/dist"/>
+	
+	<property name="build.dir" value="${project.basedir}/build"/>
+	<property name="report.dir" value="${build.dir}/report"/>
+	<property name="tmp.dir" value="${build.dir}/tmp"/>
   
 	<!-- This target checks for PHP syntax errors in all source files
 	<target name="checkphp">
@@ -26,7 +27,7 @@
 	<!-- This target checks Coding Standards (CS) using PHP_CodeSniffer -->
 	<target name="phpcs">
 		<exec 
-			command="phpcs --report=checkstyle --standard=PEAR src/PHPFrame" 
+			command="phpcs --report=checkstyle --standard=PEAR src" 
 			dir="${project.basedir}" 
 			output="${report.dir}/phpcs.xml" />
 	</target>
@@ -42,7 +43,6 @@
 	<!-- Prepare directories -->
 	<target name="prepare">
 		<mkdir dir="${report.dir}"/>
-		<mkdir dir="${dist.dir}"/>
 	</target>
 	
 	<!-- Run PHPUnit tests -->
@@ -55,15 +55,6 @@
 		</phpunit>
 	</target>
 	
-	<!-- Create archive for distribution -->
-	<target name="tar">
-		<tar 
-			destfile="${dist.dir}/${xinc.project.name}-${xinc.build.label}.tar.gz" 
-			compression="gzip">
-			<fileset refid="codefiles" />
-		</tar>
-	</target>
-	
 	<!-- Generate build report -->
 	<target name="generate-report">
 		<phpunit2report 
@@ -73,12 +64,12 @@
 			format="noframes" />
 	</target>
 	
-	<!-- Build project -->
-	<target name="build" depends="prepare,test,tar" />
-  
 	<!-- Generate documentation from Javadoc comments using phpdoc -->
 	<target name="php-documentor">
 	
 	</target>
+	
+	<!-- Build project -->
+	<target name="build" depends="prepare,test" />
 
 </project>

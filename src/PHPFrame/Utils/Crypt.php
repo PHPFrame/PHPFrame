@@ -48,16 +48,17 @@ class PHPFrame_Utils_Crypt
     /**
      * Method to determine a hash for anti-spoofing variable names
      * 
-     * @access    public
-     * @param    $forceNew    Optional parameter. Default value is FALSE. 
-     *                         If set to TRUE it forces the session to generate a new token.
-     * @return    string        Hashed var name
-     * @since    1.0
+     * @param $forceNew Optional parameter. Default value is FALSE. 
+     *                  If set to TRUE it forces the session to generate a new token.
+     * 
+     * @access public
+     * @return string Hashed var name
+     * @since  1.0
      */
     static function getToken($forceNew = false) 
     {
-        $user = PHPFrame::getUser();
         $session = PHPFrame::Session();
+        $user = $session->getUser();
         $hash = PHPFrame_Utils_Crypt::getHash($user->id.$session->getToken( $forceNew ));
 
         return $hash;

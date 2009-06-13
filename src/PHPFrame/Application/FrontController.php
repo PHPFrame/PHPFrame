@@ -123,11 +123,11 @@ class PHPFrame_Application_FrontController
     /**
      * Run
      * 
-     * This method executes the request and stores the component's output buffer in $this->component_output.
-     * 
-     * @access    public
-     * @return    void
-     * @since    1.0
+     * @access public
+     * @return void
+     * @uses   PHPFrame, PHPFrame_Application_ActionController, PHPFrame_Environment_IClient
+     *         PHPFrame_Application_Response
+     * @since  1.0
      */
     public function run() 
     {
@@ -158,7 +158,7 @@ class PHPFrame_Application_FrontController
         PHPFrame_Debug_Profiler::setMilestone('Overall template rendered');
         
         // Build response and send it
-        $response = PHPFrame::getResponse();
+        $response = new PHPFrame_Application_Response();
         $response->setBody($output);
         
         // Set profiler milestone

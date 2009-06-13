@@ -54,7 +54,6 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
      * @var        array
      */
     private $_array=array();
-    private $_response=null;
     
     /**
      * Constructor
@@ -76,8 +75,6 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
         $this->_array['files'] = $_FILES;
         $this->_array['env'] = $_ENV;
         $this->_array['server'] = $_SERVER;
-        
-        $this->_response = new PHPFrame_Registry_Response();
     }
     
     /**

@@ -17,7 +17,8 @@
 /**
  * PHPFrame Class
  * 
- * This class provides a factory to create PHPFrame objects.
+ * This class provides a number of static methods that serve as a simplified
+ * interface or facade to the PHPFrame framework.
  * 
  * It also provides information about the installed PHPFrame version.
  * 
@@ -48,10 +49,6 @@ class PHPFrame
     {
         return self::VERSION;
     }
-    
-    /*
-     * Presentation layer
-     */
     
     /**
      * Get front controller object
@@ -140,21 +137,6 @@ class PHPFrame
     }
     
     /**
-     * Get response object
-     * 
-     * @return PHPFrame_Registry_Response
-     * @since  1.0
-     */
-    public static function getResponse() 
-    {
-        return self::Request()->getResponse();
-    }
-    
-    /*
-     * Session Registry
-     */
-    
-    /**
      * Get session object
      * 
      * @return PHPFrame_Registry_Session
@@ -166,32 +148,6 @@ class PHPFrame
     }
     
     /**
-     * Get user object in current session
-     * 
-     * @return PHPFrame_User
-     * @since  1.0
-     */
-    public static function getUser() 
-    {
-        return self::Session()->getUser();
-    }
-    
-    /**
-     * Get system events object from session
-     * 
-     * @return PHPFrame_Application_Sysevents
-     * @since  1.0
-     */
-    public static function getSysevents() 
-    {
-        return self::Session()->getSysevents();
-    }
-    
-    /*
-     * Application Registry
-     */
-    
-    /**
      * Get application registry
      * 
      * @return PHPFrame_Registry_Application
@@ -200,39 +156,6 @@ class PHPFrame
     public static function AppRegistry() 
     {
         return PHPFrame_Registry_Application::getInstance();
-    }
-    
-    /**
-     * Get permissions object
-     * 
-     * @return PHPFrame_Application_Permissions
-     * @since  1.0
-     */
-    public static function getPermissions() 
-    {
-        return self::AppRegistry()->getPermissions();
-    }
-    
-    /**
-     * Get information about components
-     * 
-     * @return PHPFrame_Application_Components
-     * @since  1.0
-     */
-    public static function getComponents() 
-    {
-        return self::AppRegistry()->getComponents();
-    }
-    
-    /**
-     * Get modules
-     * 
-     * @return PHPFrame_Application_Modules
-     * @since  1.0
-     */
-    public static function getModules() 
-    {
-        return self::AppRegistry()->getModules();
     }
     
     /**

@@ -138,7 +138,7 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
     public function renderTemplate(&$str) 
     {
         // Make modules available to templates
-        $modules = PHPFrame::getModules();
+        $modules = PHPFrame::AppRegistry()->getModules();
         
         // If tmpl flag is set to component in request it means that
         // we dont need to wrap the component output in the overall template

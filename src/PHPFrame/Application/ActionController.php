@@ -87,10 +87,10 @@ abstract class PHPFrame_Application_ActionController
         $this->default_action = (string) $default_action;
         
         // Get reference to System Events object
-        $this->sysevents = PHPFrame::getSysevents();
+        $this->sysevents = PHPFrame::Session()->getSysevents();
         
         $component_name = PHPFrame::Request()->getComponentName();
-        $components = PHPFrame::getComponents();
+        $components = PHPFrame::AppRegistry()->getComponents();
         $this->component_info = $components->loadByOption($component_name);
         
         // Add pathway item
@@ -150,7 +150,7 @@ abstract class PHPFrame_Application_ActionController
         // Check permissions before we execute
         $component = PHPFrame::Request()->getComponentName();
         $groupid = PHPFrame::Session()->getGroupId();
-        $permissions = PHPFrame::getPermissions();
+        $permissions = PHPFrame::AppRegistry()->getPermissions();
         if ($permissions->authorise($component, $action, $groupid) === true) {
             if (is_callable(array($this, $action))) {
                 // Start buffering

@@ -39,17 +39,17 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Constructor
      * 
-     * @access    protected
-     * @return    void
-     * @since    1.0
+     * @access protected
+     * @return void
+     * @since  1.0
      */
     protected function __construct() 
     {
         // start php session
         session_start();
         //$this->destroy(); exit;
-        // If new session we set the id
-        if (!$_SESSION['id'] || $_SESSION['id'] != session_id()) {
+        // If new session we initialise
+        if ($_SESSION['id'] != session_id()) {
             $_SESSION['id'] = session_id();
             
             $_SESSION['user'] = new PHPFrame_User();
@@ -68,9 +68,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      * Get Instance
      * 
      * @static
-     * @access    public
-     * @return     PHPFrame_Registry
-     * @since    1.0
+     * @access public
+     * @return PHPFrame_Registry
+     * @since  1.0
      */
     public static function getInstance() 
     {
@@ -84,11 +84,12 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Get a session variable
      * 
-     * @access    public
-     * @param    string    $key
-     * @param    mixed    $default_value
-     * @return    mixed
-     * @since    1.0
+     * @param string $key
+     * @param mixed  $default_value
+     * 
+     * @access public
+     * @return mixed
+     * @since  1.0
      */
     public function get($key, $default_value=null) 
     {
@@ -102,11 +103,12 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Set a session variable
      * 
-     * @access    public
-     * @param    string    $key
-     * @param    mixed    $value
-     * @return    void
-     * @since    1.0
+     * @param string $key
+     * @param mixed  $value
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function set($key, $value) 
     {
@@ -116,12 +118,12 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Get client object
      * 
-     * @access    public
-     * @return    PHPFrame_Environment_IClient
-     * @since    1.0
+     * @access public
+     * @return PHPFrame_Environment_IClient|null
+     * @since  1.0
      */
     public static function getClient() 
-    {
+    {   
         return $_SESSION['client'];
     }
     
@@ -129,9 +131,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**    
      * Get client object's name
      * 
-     * @access    public
-     * @return    string
-     * @since    1.0
+     * @access public
+     * @return string
+     * @since  1.0
      */
     public function getClientName() 
     {
@@ -141,10 +143,11 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Set session user
      * 
-     * @access    public
      * @param    object    $user    User object of type PHPFrame_User
-     * @return    void
-     * @since    1.0
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function setUser(PHPFrame_User $user) 
     {
@@ -154,9 +157,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Get session's user object
      * 
-     * @access    public
-     * @return    PHPFrame_User
-     * @since    1.0
+     * @access public
+     * @return PHPFrame_User
+     * @since  1.0
      */
     public function getUser() 
     {
@@ -166,9 +169,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Get session user id
      * 
-     * @access    public
-     * @return    int
-     * @since    1.0
+     * @access public
+     * @return int
+     * @since  1.0
      */
     public function getUserId() 
     {
@@ -178,9 +181,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Get session user groupid
      * 
-     * @access    public
-     * @return    int
-     * @since    1.0
+     * @access public
+     * @return int
+     * @since  1.0
      */
     public function getGroupId() 
     {
@@ -190,9 +193,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Is the current session authenticated?
      * 
-     * @access    public
-     * @return    boolean    Returns TRUE if user is authenticated and FALSE otherwise.
-     * @since    1.0
+     * @access public
+     * @return bool   Returns TRUE if user is authenticated and FALSE otherwise.
+     * @since  1.0
      */
     public function isAuth() 
     {
@@ -202,9 +205,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Is the current session an admin session?
      * 
-     * @access    public
-     * @return    boolean
-     * @since    1.0
+     * @access public
+     * @return bool
+     * @since  1.0
      */
     public function isAdmin() 
     {
@@ -214,9 +217,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Get system events object
      * 
-     * @access    public
-     * @return     PHPFrame_Application_Sysevents
-     * @since    1.0
+     * @access public
+     * @return PHPFrame_Application_Sysevents
+     * @since  1.0
      */
     public function getSysevents() 
     {
@@ -230,15 +233,16 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      * has been generated the system will check the post request to see if
      * it is present, if not it will invalidate the session.
      * 
-     * @access    public
-     * @param    boolean    $force_new    If true, force a new token to be created
-     * @return    string
-     * @since    1.0
+     * @param bool $force_new If true, force a new token to be created
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
      */
     public function getToken($force_new=false) 
     {
         //create a token
-        if ($_SESSION['token'] === null || $force_new) {
+        if (!isset($_SESSION['token']) || $force_new) {
             $_SESSION['token'] = $this->_createToken(12);
         }
 
@@ -248,9 +252,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Destroy session
      * 
-     * @access    public
-     * @return    void
-     * @since    1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function destroy() 
     {
@@ -263,9 +267,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Detect and set client object 
      * 
-     * @access    private
-     * @return    void
-     * @since    1.0
+     * @access private
+     * @return void
+     * @since  1.0
      */
     private function _detectClient() 
     {
@@ -286,6 +290,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
                 } 
             }
         }
+        
         //throw error if no helper is found
         throw new PHPFrame_Exception(_PHPFRAME_LANG_SESSION_ERROR_NO_CLIENT_DETECTED);
     }
@@ -293,10 +298,12 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Create a token-string
      * 
-     * @access    private
-     * @param    int            $length        Lenght of string.
-     * @return    string        $id         Generated token.
-     * @since    1.0
+     * 
+     * @param int $length Lenght of string.
+     * 
+     * @access private
+     * @return string  Generated token.
+     * @since  1.0
      */
     private function _createToken($length = 32) 
     {

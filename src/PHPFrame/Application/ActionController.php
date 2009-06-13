@@ -95,7 +95,8 @@ abstract class PHPFrame_Application_ActionController
         
         // Add pathway item
         $pathway_item_name = ucwords($this->component_info->name);
-        $pathway_item_url = 'index.php?component='.$this->component;
+        $pathway_item_url = "index.php?component=com_";
+        $pathway_item_url .= $this->component_info->name;
         PHPFrame::getPathway()->addItem($pathway_item_name, $pathway_item_url);
         
         // Append component name in ducument title
@@ -103,7 +104,7 @@ abstract class PHPFrame_Application_ActionController
         if (!empty($document->title)) {
             $document->title .= ' - ';
         }
-        $document->title .= ucwords($frontcontroller->component_info->name);
+        $document->title .= ucwords($this->component_info->name);
     }
     
     /**
@@ -118,7 +119,7 @@ abstract class PHPFrame_Application_ActionController
     public static function getInstance($class_name) 
     {
         $is_set = isset(self::$_instances[$class_name]);
-        $is_type = self::$_instances[$class_name] instanceof self;
+        $is_type = @(self::$_instances[$class_name] instanceof self);
         if (!$is_set || !$is_type) {
             self::$_instances[$class_name] = new $class_name;
         }

@@ -330,7 +330,7 @@ class PHPFrame_Database_Row
      */
     private function _readStructure() 
     {
-        $app_registry = PHPFrame::getApplicationRegistry();
+        $app_registry = PHPFrame::AppRegistry();
         $table_structures = $app_registry->get('table_structures');
         $table_primary_keys = $app_registry->get('table_primary_keys');
         
@@ -340,7 +340,9 @@ class PHPFrame_Database_Row
             $this->_structure = $this->_db->loadObjectList($query);
             
             if ($this->_structure === false || !is_array($this->_structure)) {
-                throw new PHPFrame_Exception_Database($this->_db->getLastError());
+                $exception_msg = "Couldn't read table structure for ";
+                $exception_msg .= $this->_table_name;
+                throw new PHPFrame_Exception_Database($exception_msg);
             }
             
             // Loop through structure array to find primary key
@@ -359,8 +361,6 @@ class PHPFrame_Database_Row
             $this->_structure = $table_structures[$this->_table_name];
             $this->_primary_key = $table_primary_keys[$this->_table_name];
         }
-        
-        
     }
     
     /**

@@ -112,6 +112,11 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
             $this->_array['request'][$key] = $default_value;
         }
         
+        // Return null if index is not defined
+        if (!isset($this->_array['request'][$key])) {
+            return null;
+        }
+        
         return $this->_array['request'][$key];
     }
     
@@ -176,8 +181,8 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
      * @return    action
      */
     public function getAction() 
-    {
-        return $this->_array['request']['action'];
+    {   
+        return $this->get('action');
     }
     
     /**

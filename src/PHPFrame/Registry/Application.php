@@ -94,8 +94,14 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
      */
     public function get($key, $default_value=null) 
     {
+        // Set default value if appropriate
         if (!isset($this->_array[$key]) && !is_null($default_value)) {
             $this->_array[$key] = $default_value;
+        }
+        
+        // Return null if index is not defined
+        if (!isset($this->_array[$key])) {
+            return null;
         }
         
         return $this->_array[$key];

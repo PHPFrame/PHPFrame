@@ -27,6 +27,11 @@
  */
 class PHPFrame_User
 {
+    /**
+     * Row object mapper
+     * 
+     * @var PHPFrame_Database_Row
+     */
     private $_row=null;
     private $_error=array();
     

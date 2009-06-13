@@ -74,15 +74,7 @@ class PHPFrame_Exception extends Exception
     protected $_severity;
 
     function __construct($message=null, $code=self::E_USER_ERROR, $verbose='') 
-    {
-        // Construct parent class to build Exception 
-        parent::__construct($message, $code);
-        
-        // Log the exception to file if needed
-        if ($code < config::LOG_LEVEL) {
-            //PHPFrame_Debug_Log::write($this->__toString(true));
-        }
-        
+    {   
         switch ($code) {
             case self::E_ERROR :
             case self::E_USER_ERROR :
@@ -108,6 +100,14 @@ class PHPFrame_Exception extends Exception
             case self::E_PHPFRAME_DEPRECATED :
                 $this->_severity = 'strict';
                 break;
+        }
+        
+         // Construct parent class to build Exception 
+        parent::__construct($message);
+        
+        // Log the exception to file if needed
+        if ($code < config::LOG_LEVEL) {
+            //PHPFrame_Debug_Log::write($this->__toString(true));
         }
         
         echo '<pre>'.$this->__toString();

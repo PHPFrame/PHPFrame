@@ -70,7 +70,7 @@ class PHPFrame
      * @param string $component_name The name of the concrete action controller
      *                               to get (ie: com_login).
      * 
-     * @return object
+     * @return PHPFrame_Application_ActionController
      * @since  1.0
      */
     public static function getActionController($component_name) 
@@ -88,7 +88,7 @@ class PHPFrame
      * @param array  $args           An array with arguments to be passed to the
      *                               model's constructor if needed.
      * 
-     * @return object
+     * @return PHPFrame_Application_Model
      * @since  1.0
      * @todo   Have to add type checking using instanceof operator to guarantee that 
      *         we return an object of type PHPFrame_Application_Model
@@ -197,7 +197,7 @@ class PHPFrame
      * @return PHPFrame_Registry_Application
      * @since  1.0
      */
-    public static function getApplicationRegistry() 
+    public static function AppRegistry() 
     {
         return PHPFrame_Registry_Application::getInstance();
     }
@@ -210,7 +210,7 @@ class PHPFrame
      */
     public static function getPermissions() 
     {
-        return self::getApplicationRegistry()->getPermissions();
+        return self::AppRegistry()->getPermissions();
     }
     
     /**
@@ -221,7 +221,7 @@ class PHPFrame
      */
     public static function getComponents() 
     {
-        return self::getApplicationRegistry()->getComponents();
+        return self::AppRegistry()->getComponents();
     }
     
     /**
@@ -232,7 +232,7 @@ class PHPFrame
      */
     public static function getModules() 
     {
-        return self::getApplicationRegistry()->getModules();
+        return self::AppRegistry()->getModules();
     }
     
     /**

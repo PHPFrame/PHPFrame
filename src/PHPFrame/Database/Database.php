@@ -46,6 +46,24 @@ class PHPFrame_Database
      */
     private $_key=null;
     /**
+     * DSN object used for the database connection
+     * 
+     * @var PHPFrame_Database_DSN
+     */
+    private $_dsn=null;
+    /**
+     * Database user if any
+     * 
+     * @var string
+     */
+    private $_db_user=null;
+    /**
+     * Database password if any
+     * 
+     * @var string
+     */
+    private $_db_pass=null;
+    /**
      * A PDO object that represents the connection to the database server.
      * 
      * @access private
@@ -71,14 +89,39 @@ class PHPFrame_Database
         $db_user=null, 
         $db_pass=null
     ) {
+        // Set internal properties
+        $this->_dsn = $dsn;
+        $this->_db_user = $db_user;
+        $this->_db_pass = $db_pass;
+        
         // Connect to database server
-        try {
-            $this->_pdo = new PDO($dsn, $db_user, $db_pass);
-        }
-        catch (PDOException $e) {
-            echo $e->getMessage();
-            throw new PHPFrame_Exception_Database('Could not connect to database.');
-        }  
+        $this->_connect();
+    }
+    
+    /**
+     * Magic method invoked when an instance is serialized.
+     * 
+     * @return array
+     * @since  1.0
+     */
+    public function __sleep()
+    {
+        // Disconnect from database server
+        $this->_pdo = null;
+        
+        return array_keys(get_object_vars($this));
+    }
+    
+    /**
+     * Magic method invoked when a new instance is unserialized
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function __wakeup()
+    {   
+        // Re-connect to database server
+        $this->_connect();
     }
     
     /**
@@ -98,9 +141,6 @@ class PHPFrame_Database
         $key = $dsn->toString();
         if (!is_null($db_user)) {
             $key .= ";user=".$db_user;
-        }
-        if (!is_null($db_pass)) {
-            $key .= ";pass=".$db_pass;
         }
         
         if (!isset(self::$_instances[$key])) {
@@ -284,5 +324,21 @@ class PHPFrame_Database
     {
         // unset PDO
         $this->_pdo = null;
+    }
+    
+    /**
+     * Create PDO object to represent db connection
+     * 
+     * @return void
+     * @since  1.0
+     */
+    private function _connect() {
+        try {
+            $this->_pdo = new PDO($this->_dsn, $this->_db_user, $this->_db_pass);
+        }
+        catch (PDOException $e) {
+            echo $e->getMessage();
+            throw new PHPFrame_Exception_Database('Could not connect to database.');
+        }  
     }
 }

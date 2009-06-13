@@ -1,12 +1,12 @@
 <?php
 /**
- * PHPFrame/Application/View.php
+ * PHPFrame/MVC/View.php
  * 
  * PHP version 5
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
- * @subpackage Application
+ * @subpackage MVC
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
@@ -31,15 +31,15 @@
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
- * @subpackage Application
+ * @subpackage MVC
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see        PHPFrame_Application_ActionController, PHPFrame_Application_Model
+ * @see        PHPFrame_MVC_ActionController, PHPFrame_MVC_Model
  * @since      1.0
  * @abstract
  */
-abstract class PHPFrame_Application_View
+abstract class PHPFrame_MVC_View
 {
     /**
      * The view name

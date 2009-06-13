@@ -20,33 +20,6 @@
  * This is the FrontController. Its main objective is to initialise the framework 
  * and decide which action controller should be run.
  * 
- * This class is still work in progress.
- * 
- * The class should be instantiated as:
- * 
- * <code>
- * $frontcontroller = PHPFrame::getFrontController();
- * </code>
- * 
- * Before we instantiate the FrontController we first need to set a few useful constants,
- * include the autoloader and the config file and then finally 
- * instantiate the FrontController and run it.
- * 
- * <code>
- * define("_EXEC", true);
- * define('_ABS_PATH', dirname(__FILE__) );
- * define( 'DS', DIRECTORY_SEPARATOR );
- * 
- * // include config
- * require_once _ABS_PATH.DS."inc".DS."config.php";
- * 
- * // Include autoloader
- * require_once _ABS_PATH.DS."inc".DS."autoload.php";
- * 
- * $frontcontroller = PHPFrame::getFrontController();
- * $frontcontroller->run();
- * </code>
- * 
  * @category   MVC_Framework
  * @package    PHPFrame
  * @subpackage Application
@@ -57,22 +30,15 @@
  * @since      1.0
  */
 class PHPFrame_Application_FrontController
-{
-    /**
-     * Instance of itself in order to implement the singleton pattern
-     * 
-     * @var object of type PHPFrame_Application_FrontController
-     */
-    private static $_instance=null;
-    
+{   
     /**
      * Constructor
      * 
-     * @access protected
+     * @access public
      * @return void
      * @since  1.0
      */
-    private function __construct() 
+    public function __construct() 
     {
         // Set profiler milestone
         PHPFrame_Debug_Profiler::setMilestone('Start');
@@ -107,26 +73,11 @@ class PHPFrame_Application_FrontController
     }
     
     /**
-     * Get Instance
-     * 
-     * @return PHPFrame_Application_FrontController
-     * @since  1.0
-     */
-    public static function getInstance() 
-    {
-        if (!isset(self::$_instance)) {
-            self::$_instance = new self;
-        }
-        
-        return self::$_instance;
-    }
-    
-    /**
      * Run
      * 
      * @access public
      * @return void
-     * @uses   PHPFrame, PHPFrame_Application_ActionController, PHPFrame_Environment_IClient
+     * @uses   PHPFrame, PHPFrame_MVC_ActionController, PHPFrame_Environment_IClient
      *         PHPFrame_Application_Response
      * @since  1.0
      */
@@ -140,7 +91,7 @@ class PHPFrame_Application_FrontController
         // Create the action controller
         $controller = PHPFrame::getActionController($component_name);
         // Check that action controller is of valid type and run it if it is
-        if ($controller instanceof PHPFrame_Application_ActionController) {
+        if ($controller instanceof PHPFrame_MVC_ActionController) {
             // Execute task
             $output = $controller->execute();
         }

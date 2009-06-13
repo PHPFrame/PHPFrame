@@ -51,7 +51,7 @@ class PHPFrame_User_Helper
     static function id2name($id=0) 
     {
         if (!empty($id)) { // No user has been selected
-            $db = PHPFrame::getDB();
+            $db = PHPFrame::DB();
             $query = "SELECT firstname, lastname FROM #__users WHERE id = '".$id."'";
             $row = $db->loadObject($query);
             if ($row === false) {
@@ -74,7 +74,7 @@ class PHPFrame_User_Helper
     static function username2id($username='') 
     {
         if (!empty($username)) { // No user has been selected
-            $db = PHPFrame::getDB();
+            $db = PHPFrame::DB();
             $query = "SELECT id FROM #__users WHERE username = '".$username."'";
             return $db->loadResult($query);
         }
@@ -92,7 +92,7 @@ class PHPFrame_User_Helper
     static function email2id($email='') 
     {
         if (!empty($email)) { // No user has been selected
-            $db = PHPFrame::getDB();
+            $db = PHPFrame::DB();
             $query = "SELECT id FROM #__users WHERE email = '".$email."'";
             return $db->loadResult($query);
         }
@@ -110,7 +110,7 @@ class PHPFrame_User_Helper
     static function id2email($id) 
     {
         if (!empty($id)) { // No user has been selected
-            $db = PHPFrame::getDB();
+            $db = PHPFrame::DB();
             $query = "SELECT email FROM #__users WHERE id = '".$id."'";
             return $db->loadResult($query);
         }
@@ -128,7 +128,7 @@ class PHPFrame_User_Helper
     static function id2photo($id) 
     {
         if (!empty($id)) { // No user has been selected
-            $db = PHPFrame::getDB();
+            $db = PHPFrame::DB();
             $query = "SELECT photo FROM #__users WHERE id = '".$id."'";
             $photo = $db->loadResult($query);
             if (empty($photo)) { $photo = 'default.png'; }
@@ -153,7 +153,7 @@ class PHPFrame_User_Helper
         $options[] = PHPFrame_HTML::_('select.option', '0', PHPFrame_HTML_Text::_( '-- Select a User --' ) );
         
         // get users from #__users
-        $db = PHPFrame::getDB();
+        $db = PHPFrame::DB();
         $query = "SELECT u.id, u.firstname, u.lastname ";
         $query .= " FROM #__users AS u ";
         if (!empty($projectid)) {
@@ -192,7 +192,7 @@ class PHPFrame_User_Helper
      */
     static function assignees($selected=0, $attribs='', $fieldname='assignees[]', $projectid=0) 
     {
-        $db = PHPFrame::getDB();
+        $db = PHPFrame::DB();
         $query = "SELECT u.id, u.firstname, u.lastname ";
         $query .= " FROM #__users AS u ";
         if (!empty($projectid)) {
@@ -243,7 +243,7 @@ class PHPFrame_User_Helper
      */
     static function autocompleteUsername($where=array()) 
     {
-        $db = PHPFrame::getDB();
+        $db = PHPFrame::DB();
         
         $where[] = "(u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL)";
         
@@ -277,7 +277,7 @@ class PHPFrame_User_Helper
         //$options[] = PHPFrame_HTML::_('select.option', '0', PHPFrame_HTML_Text::_( '-- Select a Group --' ) );
         
         // get users from #__users
-        $db = PHPFrame::getDB();
+        $db = PHPFrame::DB();
         $query = "SELECT id, name FROM #__groups ORDER BY id";
         //echo $query; exit;
         

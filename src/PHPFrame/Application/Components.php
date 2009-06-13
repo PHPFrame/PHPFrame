@@ -43,7 +43,7 @@ class PHPFrame_Application_Components
     function __construct() 
     {
         $query = "SELECT * FROM #__components ";
-        $this->_array = PHPFrame::getDB()->loadObjectList($query);
+        $this->_array = PHPFrame::DB()->loadObjectList($query);
     }
     
     /**

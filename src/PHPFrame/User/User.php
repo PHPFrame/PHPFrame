@@ -134,7 +134,7 @@ class PHPFrame_User
         //echo str_replace("#_", "eo", $query); exit;
         //TODO: FIx me!!
         
-        $id = PHPFrame::getDB()->loadResult($query);
+        $id = PHPFrame::DB()->loadResult($query);
         
         return ($id > 0);
     }

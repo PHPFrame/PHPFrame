@@ -45,20 +45,23 @@ class PHPFrame
      * @return string
      * @since  1.0
      */
-    public static function getVersion() 
+    public static function Version() 
     {
         return self::VERSION;
     }
     
     /**
-     * Get front controller object
+     * Fire up the app
      * 
-     * @return object
+     * This method instantiates the front controller and runs it.
+     * 
+     * @return void
      * @since  1.0
      */
-    public static function getFrontController() 
+    public static function Fire() 
     {
-        return PHPFrame_Application_FrontController::getInstance();
+        $frontcontroller = new PHPFrame_Application_FrontController();
+        $frontcontroller->run();
     }
     
     /**
@@ -67,13 +70,13 @@ class PHPFrame
      * @param string $component_name The name of the concrete action controller
      *                               to get (ie: com_login).
      * 
-     * @return PHPFrame_Application_ActionController
+     * @return PHPFrame_MVC_ActionController
      * @since  1.0
      */
     public static function getActionController($component_name) 
     {
         $class_name = substr($component_name, 4)."Controller";
-        return PHPFrame_Application_ActionController::getInstance($class_name);
+        return PHPFrame_MVC_ActionController::getInstance($class_name);
     }
     
     /**
@@ -85,10 +88,10 @@ class PHPFrame
      * @param array  $args           An array with arguments to be passed to the
      *                               model's constructor if needed.
      * 
-     * @return PHPFrame_Application_Model
+     * @return PHPFrame_MVC_Model
      * @since  1.0
      * @todo   Have to add type checking using instanceof operator to guarantee that 
-     *         we return an object of type PHPFrame_Application_Model
+     *         we return an object of type PHPFrame_MVC_Model
      */
     public static function getModel($component_name, $model_name, $args=array()) 
     {
@@ -175,7 +178,7 @@ class PHPFrame
      * @return PHPFrame_Database
      * @since  1.0
      */
-    public static function getDB(
+    public static function DB(
         PHPFrame_Database_DSN $dsn=null,
         $db_user=null,
         $db_pass=null

@@ -66,7 +66,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @param string            $query The SQL query to load the collection of rows.
      * @param PHPFrame_Database $db    Optionally use an alternative database 
      *                                 to the default one provided by 
-     *                                 PHPFrame::getDB() as defined in config 
+     *                                 PHPFrame::DB() as defined in config 
      *                                 class.
      * 
      * @access public
@@ -80,7 +80,7 @@ class PHPFrame_Database_RowCollection implements Iterator
         if ($db instanceof PHPFrame_Database) {
             $this->_db = $db;
         } else {
-            $this->_db = PHPFrame::getDB();
+            $this->_db = PHPFrame::DB();
         }
         
         // Get table name from query string

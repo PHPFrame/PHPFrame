@@ -82,6 +82,6 @@ class PHPFrame_Application_Permissions
     {
         // Load access list from DB
         $query = "SELECT * FROM #__acl_groups";
-        return PHPFrame::getDB()->loadObjectList($query);
+        return PHPFrame::DB()->loadObjectList($query);
     }
 }

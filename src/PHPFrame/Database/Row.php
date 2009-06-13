@@ -68,7 +68,7 @@ class PHPFrame_Database_Row
      * @param string            $table_name The table to map this row to in the db.
      * @param PHPFrame_Database $db         Optionally use an alternative database 
      *                                      to the default one provided by 
-     *                                      PHPFrame::getDB() as defined in config 
+     *                                      PHPFrame::DB() as defined in config 
      *                                      class.
      * 
      * @access public
@@ -82,7 +82,7 @@ class PHPFrame_Database_Row
         if ($db instanceof PHPFrame_Database) {
             $this->_db = $db;
         } else {
-            $this->_db = PHPFrame::getDB();
+            $this->_db = PHPFrame::DB();
         }
         
         // Read table structure from application registry

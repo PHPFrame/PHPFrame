@@ -45,7 +45,7 @@ class PHPFrame_Application_Modules
         $query = "SELECT m.*, mo.option AS `option` FROM #__modules AS m ";
         $query .= " LEFT JOIN #__modules_options mo ON mo.moduleid = m.id ";
         $query .= " ORDER BY m.ordering ASC";
-        $this->_array = PHPFrame::getDB()->loadObjectList($query);
+        $this->_array = PHPFrame::DB()->loadObjectList($query);
     }
     
     /**

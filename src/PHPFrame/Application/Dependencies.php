@@ -151,7 +151,7 @@ class PHPFrame_Application_Dependencies
     public static function getMySQLVersion() 
     {
         if (is_null(self::$_mysqlversion)) {
-            $db = PHPFrame::getDB();
+            $db = PHPFrame::DB();
             $query = "SELECT version() AS ve";
             return $db->loadResult($query);
         }

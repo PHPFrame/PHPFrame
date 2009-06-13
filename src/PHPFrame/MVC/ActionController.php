@@ -1,12 +1,12 @@
 <?php
 /**
- * PHPFrame/Application/ActionController.php
+ * PHPFrame/MVC/ActionController.php
  * 
  * PHP version 5
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
- * @subpackage Application
+ * @subpackage MVC
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
@@ -29,20 +29,20 @@
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
- * @subpackage Application
+ * @subpackage MVC
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see        PHPFrame_Application_Model, PHPFrame_Application_View
+ * @see        PHPFrame_MVC_Model, PHPFrame_MVC_View
  * @since      1.0
  * @abstract 
  */
-abstract class PHPFrame_Application_ActionController
+abstract class PHPFrame_MVC_ActionController
 {
     /**
      * Instances of its concrete children
      * 
-     * @var array of objects of type PHPFrame_Application_ActionController
+     * @var array of objects of type PHPFrame_MVC_ActionController
      */
     private static $_instances=array();
     /**
@@ -113,7 +113,7 @@ abstract class PHPFrame_Application_ActionController
      * @param string $class_name A string with the name of the concrete action 
      *                           controller.
      * 
-     * @return PHPFrame_Application_ActionController
+     * @return PHPFrame_MVC_ActionController
      * @since  1.0
      */
     public static function getInstance($class_name) 
@@ -209,7 +209,7 @@ abstract class PHPFrame_Application_ActionController
      * Set the redirection URL.
      *
      * @param string $url The URL we want to redirect to when we call 
-     *                    PHPFrame_Application_ActionController::redirect()
+     *                    PHPFrame_MVC_ActionController::redirect()
      * 
      * @return void
      * @since  1.0
@@ -279,7 +279,7 @@ abstract class PHPFrame_Application_ActionController
             throw new PHPFrame_Exception($e->getMessage());
         }
         
-        $reflection_abstract_view = new ReflectionClass("PHPFrame_Application_View");
+        $reflection_abstract_view = new ReflectionClass("PHPFrame_MVC_View");
         if ($reflection_obj->isSubclassOf($reflection_abstract_view)) {
             return new $class_name($layout);
         } else {

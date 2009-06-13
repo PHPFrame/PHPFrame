@@ -35,7 +35,7 @@
  *  Example:
  *  
  *  <code>
- *  class usersController extends PHPFrame_Application_ActionController {
+ *  class usersController extends PHPFrame_MVC_ActionController {
  *  // ...
  *  
  *      public function get_users() {

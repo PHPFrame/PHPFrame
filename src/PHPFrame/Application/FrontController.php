@@ -68,9 +68,9 @@ class PHPFrame_Application_FrontController
     /**
      * Constructor
      * 
-     * @access    protected
-     * @return     void
-     * @since    1.0
+     * @access protected
+     * @return void
+     * @since  1.0
      */
     private function __construct() 
     {
@@ -110,6 +110,7 @@ class PHPFrame_Application_FrontController
      * Get Instance
      * 
      * @return PHPFrame_Application_FrontController
+     * @since  1.0
      */
     public static function getInstance() 
     {
@@ -170,9 +171,9 @@ class PHPFrame_Application_FrontController
     /**
      * Load language files
      * 
-     * @access    private
-     * @return    void
-     * @since    1.0
+     * @access private
+     * @return void
+     * @since  1.0
      */
     private function _loadLanguage() 
     {

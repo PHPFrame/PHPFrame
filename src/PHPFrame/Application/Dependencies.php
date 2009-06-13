@@ -31,41 +31,41 @@ class PHPFrame_Application_Dependencies
      * XML object with depedency data from file
      * 
      * @static
-     * @access    private
-     * @var        object    SimpleXMLElement
+     * @access private
+     * @var    SimpleXMLElement
      */
     private static $_xml=null;
     /**
      * A string containing the installed MySQL version
      * 
      * @static
-     * @access    private
-     * @var        string
+     * @access private
+     * @var    string
      */
     private static $_mysqlversion=null;
     /**
      * A string containing the installed PHP version
      * 
      * @static
-     * @access    private
-     * @var        string
+     * @access private
+     * @var    string
      */
     private static $_phpversion=null;
     /**
      * A boolean indicating whether dependencies are met or not
      * 
      * @static
-     * @access    private
-     * @var        boolean
+     * @access private
+     * @var    bool
      */
     private static $_status=null;
     
     /**
      * Private constructor prevents instantiation. This class should always be used statically.
      * 
-     * @access    private
-     * @return    void
-     * @since    1.0
+     * @access private
+     * @return void
+     * @since  1.0
      */
     private function __construct() {}
     
@@ -77,12 +77,14 @@ class PHPFrame_Application_Dependencies
      * This method explicity requires a session object to work with. This is done on purpose in 
      * order to declare such dependency and promote loose coupling.
      * 
+     * @param PHPFrame_Registry_Session $session The session object where to store a status
+     *                                           flag to avoid running the dependency tests 
+     *                                           more than once in the same session.
+     *                                 
      * @static
-     * @access    public
-     * @param    object    $session    The session object where to store a status flag to avoid running 
-     *                                 the dependency tests more than once in the same session.
-     * @return    mixed    Returns TRUE on success or throws an exception if dependencies are not met.
-     * @since    1.0
+     * @access public
+     * @return mixed Returns TRUE on success or throws an exception if dependencies are not met.
+     * @since  1.0
      */
     public static function check(PHPFrame_Registry_Session $session) 
     {
@@ -109,13 +111,17 @@ class PHPFrame_Application_Dependencies
         
         // Check MySQL version
         if (version_compare(self::$_mysqlversion, self::$_xml->mysqlversion, '<')) {
-            $msg = 'MySQL version '.self::$_xml->mysqlversion.' is required. Currently installed version is '.self::$_mysqlversion.'.';
+            $msg = 'MySQL version '.self::$_xml->mysqlversion;
+            $msg .= ' is required. Currently installed version is ';
+            $msg .= self::$_mysqlversion.'.';
             throw new PHPFrame_Exception();
         }
         
         // Check PHP version
         if (version_compare(self::$_phpversion, self::$_xml->phpversion, '<')) {
-            $msg = 'PHP version '.self::$_xml->phpversion.' is required. Currently installed version is '.self::$_phpversion.'.';
+            $msg = 'PHP version '.self::$_xml->phpversion;
+            $msg .= ' is required. Currently installed version is ';
+            $msg .= self::$_phpversion.'.';
             throw new PHPFrame_Exception($msg);
         }
         
@@ -138,9 +144,9 @@ class PHPFrame_Application_Dependencies
      * Get the MySQL server version number
      * 
      * @static
-     * @access    public
-     * @return    string
-     * @since    1.0
+     * @access public
+     * @return string
+     * @since  1.0
      */
     public static function getMySQLVersion() 
     {

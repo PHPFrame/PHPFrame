@@ -37,8 +37,8 @@ class PHPFrame_Application_Modules
     /**
      * Constructor
      * 
-     * @return    void
-     * @since     1.0
+     * @return void
+     * @since  1.0
      */
     function __construct() 
     {
@@ -51,9 +51,10 @@ class PHPFrame_Application_Modules
     /**
      * Count the number of modules assigned to the given position in the current component option.
      * 
-     * @param    string $position
-     * @return    int
-     * @since     1.0
+     * @param string $position
+     * 
+     * @return int
+     * @since  1.0
      */
     function countModules($position) 
     {
@@ -77,13 +78,16 @@ class PHPFrame_Application_Modules
      * This method displays modules assigned to a named position depending on 
      * whether the are also assigned to the current component.
      * 
-     * @param    string    $position
-     * @param    string    $class_suffix
+     * @param string $position
+     * @param string $class_suffix
+     * 
      * @return mixed
-     * @since     1.0
+     * @since  1.0
      */
     function display($position, $class_suffix='') 
     {
+        $output = array();
+        
         foreach ($this->_array as $module) {
             if ($module->position == $position 
                 && $module->enabled == 1

@@ -14,16 +14,25 @@
 	<target name="php-documentor">
 		<exec 
 			command="phpdoc \
-	-d ${project.basedir} \
-	-t ${doc.dir} \
-	-ric README,INSTALL,FAQ,LICENSE,CREDITS \
-	-i tests/,build/ \
-	-s on \
-	-dn None \
-	-o HTML:Smarty:PHPFrame \
-	-ti 'PHPFrame API Documentation'" 
+					-d ${project.basedir} \
+					-t ${doc.dir} \
+					-ric README,INSTALL,FAQ,LICENSE,CREDITS \
+					-i tests/,build/ \
+					-s on \
+					-dn None \
+					-o HTML:Smarty:PHPFrame \
+					-ti 'PHPFrame API Documentation'" 
 			dir="${project.basedir}" 
 			output="${report.dir}/phpdoc.log" />
+	</target>
+	
+	<target name="sync">
+		<exec 
+			command="rsync -vru -e 'ssh -p 2222' --delete \
+					 /var/xinc/projects/PHPFrame-1.0/build/doc/ \
+					 phpframe@e-noise.com:~/public_html/doc/" 
+			dir="${project.basedir}" 
+			output="${report.dir}/rsync_doc.log" />
 	</target>
 	
 	<target name="build" depends="prepare, php-documentor" />

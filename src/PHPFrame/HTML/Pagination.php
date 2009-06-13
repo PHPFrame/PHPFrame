@@ -120,8 +120,8 @@ class PHPFrame_HTML_Pagination
      */
     public function getPageNav() 
     {
-        $href = 'index.php?component='.PHPFrame::getRequest()->getComponentName();
-        $href .= '&amp;action='.PHPFrame::getRequest()->getAction();
+        $href = 'index.php?component='.PHPFrame::Request()->getComponentName();
+        $href .= '&amp;action='.PHPFrame::Request()->getAction();
         $href .= '&amp;limit='.$this->_list_filter->getLimit();
         
         $html = '<ul>';

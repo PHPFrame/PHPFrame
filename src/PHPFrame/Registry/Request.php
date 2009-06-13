@@ -70,7 +70,7 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
         }
         
         // Populate request array using session's client
-        $this->_array = PHPFrame::getSession()->getClient()->populateURA();
+        $this->_array = PHPFrame::Session()->getClient()->populateURA();
         
         //add other globals
         $this->_array['files'] = $_FILES;

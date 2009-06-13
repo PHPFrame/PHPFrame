@@ -89,7 +89,7 @@ abstract class PHPFrame_Application_ActionController
         // Get reference to System Events object
         $this->sysevents = PHPFrame::getSysevents();
         
-        $component_name = PHPFrame::getRequest()->getComponentName();
+        $component_name = PHPFrame::Request()->getComponentName();
         $components = PHPFrame::getComponents();
         $this->component_info = $components->loadByOption($component_name);
         
@@ -138,7 +138,7 @@ abstract class PHPFrame_Application_ActionController
     public function execute() 
     {
         // Get action from the request
-        $request_action = PHPFrame::getRequest()->getAction();
+        $request_action = PHPFrame::Request()->getAction();
         //echo $request_action; exit;
         // If no specific action has been requested we use default action
         if (empty($request_action)) {
@@ -148,8 +148,8 @@ abstract class PHPFrame_Application_ActionController
         }
         
         // Check permissions before we execute
-        $component = PHPFrame::getRequest()->getComponentName();
-        $groupid = PHPFrame::getSession()->getGroupId();
+        $component = PHPFrame::Request()->getComponentName();
+        $groupid = PHPFrame::Session()->getGroupId();
         $permissions = PHPFrame::getPermissions();
         if ($permissions->authorise($component, $action, $groupid) === true) {
             if (is_callable(array($this, $action))) {
@@ -165,7 +165,7 @@ abstract class PHPFrame_Application_ActionController
                 throw new PHPFrame_Exception($exception_msg);
             }
         } else {
-            if (!PHPFrame::getSession()->isAuth()) {
+            if (!PHPFrame::Session()->isAuth()) {
                 $this->setRedirect('index.php?component=com_login');
             } else {
                 $this->sysevents->setSummary('Permission denied.');
@@ -229,7 +229,7 @@ abstract class PHPFrame_Application_ActionController
      */
     protected function redirect() 
     {
-        $client_name = PHPFrame::getSession()->getClientName();
+        $client_name = PHPFrame::Session()->getClientName();
         if ($this->redirect_url && $client_name != "cli") {
             header("Location: ".$this->redirect_url);
             exit;
@@ -250,7 +250,7 @@ abstract class PHPFrame_Application_ActionController
      */
     protected function getModel($name, $args=array()) 
     {
-        $component_name = PHPFrame::getRequest()->getComponentName();
+        $component_name = PHPFrame::Request()->getComponentName();
         return PHPFrame::getModel($component_name, $name, $args);
     }
     
@@ -268,7 +268,7 @@ abstract class PHPFrame_Application_ActionController
      */
     protected function getView($name, $layout='') 
     {
-        $component_name = PHPFrame::getRequest()->getComponentName();
+        $component_name = PHPFrame::Request()->getComponentName();
         $class_name = strtolower(substr($component_name, 4));
         $class_name .= "View".ucfirst($name);
         

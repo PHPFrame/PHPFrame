@@ -149,7 +149,7 @@ class PHPFrame_Utils_URI extends PHPFrame_Base_StdObject
         }
         
         // If client is command line we use hardcoded value from config
-        if (PHPFrame::getSession()->getClientName() == "cli") {
+        if (PHPFrame::Session()->getClientName() == "cli") {
             return config::BASE_URL;
         }
         

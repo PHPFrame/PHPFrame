@@ -62,7 +62,7 @@ class PHPFrame_Application_Modules
         foreach ($this->_array as $module) {
             if ($module->position == $position 
                 && $module->enabled == 1
-                && ($module->option == PHPFrame::getRequest()->getComponentName() || $module->option == "*")
+                && ($module->option == PHPFrame::Request()->getComponentName() || $module->option == "*")
                 ) {
                 $count++;
             }
@@ -87,7 +87,7 @@ class PHPFrame_Application_Modules
         foreach ($this->_array as $module) {
             if ($module->position == $position 
                 && $module->enabled == 1
-                && ($module->option == PHPFrame::getRequest()->getComponentName() || $module->option == "*")
+                && ($module->option == PHPFrame::Request()->getComponentName() || $module->option == "*")
                 ) {
                 $module_file_path = _ABS_PATH.DS."src".DS."modules".DS."mod_".$module->name.DS."mod_".$module->name.".php";
                 if (file_exists($module_file_path)) {

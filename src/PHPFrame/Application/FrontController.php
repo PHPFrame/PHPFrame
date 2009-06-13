@@ -87,7 +87,7 @@ class PHPFrame_Application_FrontController
         date_default_timezone_set(config::TIMEZONE);
         
         // Get/init session object
-        $session = PHPFrame::getSession();
+        $session = PHPFrame::Session();
         
         // Check dependencies
         PHPFrame_Application_Dependencies::check($session);
@@ -96,7 +96,7 @@ class PHPFrame_Application_FrontController
         PHPFrame_Utils_Rewrite::rewriteRequest();
         
         // Initialise request
-        $request = PHPFrame::getRequest();
+        $request = PHPFrame::Request();
         
         // Give the client a chance to do something before we move on to run
         $client = $session->getClient();
@@ -131,7 +131,7 @@ class PHPFrame_Application_FrontController
      */
     public function run() 
     {
-        $component_name = PHPFrame::getRequest()->getComponentName();
+        $component_name = PHPFrame::Request()->getComponentName();
         
         // set the component path
         define("COMPONENT_PATH", _ABS_PATH.DS."src".DS."components".DS.$component_name);
@@ -151,7 +151,7 @@ class PHPFrame_Application_FrontController
         PHPFrame_Debug_Profiler::setMilestone('Action controller executed');
         
         // Render output using client's template
-        $client = PHPFrame::getSession()->getClient();
+        $client = PHPFrame::Session()->getClient();
         $client->renderTemplate($output);
         
         // Set profiler milestone

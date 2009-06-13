@@ -143,7 +143,7 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
         // If tmpl flag is set to component in request it means that
         // we dont need to wrap the component output in the overall template
         // so we just prepend the sytem events and return
-        if (PHPFrame::getRequest()->get('tmpl') == 'component') {
+        if (PHPFrame::Request()->get('tmpl') == 'component') {
             $sys_events = $modules->display('sysevents', '_sysevents');
             $str = $sys_events.$str;
             return;
@@ -155,7 +155,7 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
         $pathway = PHPFrame::getPathway();
         
         // Set file name to load depending on session auth
-        $session = PHPFrame::getSession();
+        $session = PHPFrame::Session();
         if (!$session->isAuth()) {
             $template_filename = 'login.php';
         }

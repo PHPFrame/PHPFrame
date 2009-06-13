@@ -125,7 +125,7 @@ abstract class PHPFrame_Application_View
         $this->_data['layout'] = $this->_layout;
         
         // Delegate rendering to request's client object
-        $client = PHPFrame::getSession()->getClient();
+        $client = PHPFrame::Session()->getClient();
         $client->renderView($this->_data);
     }
 }

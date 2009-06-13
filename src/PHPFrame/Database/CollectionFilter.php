@@ -40,11 +40,11 @@
  *  
  *      public function get_users() {
  *          // Get request data
- *          $orderby = PHPFrame::getRequest()->get('orderby', 'u.lastname');
- *          $orderdir = PHPFrame::getRequest()->get('orderdir', 'ASC');
- *          $limit = PHPFrame::getRequest()->get('limit', 25);
- *          $limitstart = PHPFrame::getRequest()->get('limitstart', 0);
- *          $search = PHPFrame::getRequest()->get('search', '');
+ *          $orderby = PHPFrame::Request()->get('orderby', 'u.lastname');
+ *          $orderdir = PHPFrame::Request()->get('orderdir', 'ASC');
+ *          $limit = PHPFrame::Request()->get('limit', 25);
+ *          $limitstart = PHPFrame::Request()->get('limitstart', 0);
+ *          $search = PHPFrame::Request()->get('search', '');
  *  
  *          // Create list filter needed for getUsers()
  *          $list_filter = new PHPFrame_Database_CollectionFilter($orderby, 

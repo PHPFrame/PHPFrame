@@ -43,7 +43,7 @@ class PHPFrame_Debug_Log
         $info .= "\n";
         $info .= "[".date("Y-m-d H:i:s")."]";
         $info .= " [ip:".$_SERVER['REMOTE_ADDR']."]";
-        $info .= " [client: ".PHPFrame::getSession()->getClientName()."]";
+        $info .= " [client: ".PHPFrame::Session()->getClientName()."]";
         $info .= "\n";
         
         // Write log to filesystem using PHPFrame's utility class

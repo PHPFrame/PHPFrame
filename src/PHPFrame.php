@@ -134,7 +134,7 @@ class PHPFrame
      * @return PHPFrame_Registry_Request
      * @since  1.0
      */
-    public static function getRequest() 
+    public static function Request() 
     {
         return PHPFrame_Registry_Request::getInstance();
     }
@@ -147,7 +147,7 @@ class PHPFrame
      */
     public static function getResponse() 
     {
-        return self::getRequest()->getResponse();
+        return self::Request()->getResponse();
     }
     
     /*
@@ -160,7 +160,7 @@ class PHPFrame
      * @return PHPFrame_Registry_Session
      * @since  1.0
      */
-    public static function getSession() 
+    public static function Session() 
     {
         return PHPFrame_Registry_Session::getInstance();
     }
@@ -173,7 +173,7 @@ class PHPFrame
      */
     public static function getUser() 
     {
-        return self::getSession()->getUser();
+        return self::Session()->getUser();
     }
     
     /**
@@ -184,7 +184,7 @@ class PHPFrame
      */
     public static function getSysevents() 
     {
-        return self::getSession()->getSysevents();
+        return self::Session()->getSysevents();
     }
     
     /*

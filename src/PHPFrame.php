@@ -234,8 +234,6 @@ class PHPFrame
     {
         return self::getApplicationRegistry()->getModules();
     }
-
-    
     
     /**
      * Get database object

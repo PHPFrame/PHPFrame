@@ -29,7 +29,7 @@
 	<target name="sync">
 		<exec 
 			command="rsync -vru -e 'ssh -p 2222' --delete \
-					 ${doc.dir} \
+					 ${doc.dir}/ \
 					 phpframe@e-noise.com:~/public_html/doc/" 
 			dir="${project.basedir}" 
 			output="${report.dir}/rsync_doc.log" />

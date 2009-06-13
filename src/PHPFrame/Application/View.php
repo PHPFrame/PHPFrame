@@ -56,15 +56,18 @@ abstract class PHPFrame_Application_View
     /**
      * Data array for view
      * 
-     * @var    array
+     * @var array
      */
     protected $_data=array();
     
     /**
      * Constructor
      * 
-     * @since    1.0
-     * @return    void
+     * @param string $name   The view name
+     * @param string $layout Optional parameter to specify a specific layout.
+     * 
+     * @return void
+     * @since  1.0
      */
     public function __construct($name, $layout) 
     {
@@ -75,9 +78,11 @@ abstract class PHPFrame_Application_View
     /**
      * Add a variable to data array
      * 
-     * @param    string    $key
-     * @param    string    $value
-     * @return    void
+     * @param string $key   The name of the variable inside the view.
+     * @param mixed  $value The variable we want to add to the view.
+     * 
+     * @return void
+     * @since  1.0
      */
     public function addData($key, $value) 
     {
@@ -90,10 +95,12 @@ abstract class PHPFrame_Application_View
      * This method loads the template layer of the view.
      * 
      * This method  also trigger layout specific methods. 
-     * For example, if we are displaying layout "list" and there is a method called 
-     * displayMyviewList within the extended view class this method will be automatically invoked.
-     *
-     * @since    1.0
+     * For example, if we are displaying layout "list" and there is a method 
+     * called displayMyviewList within the extended view class this method 
+     * will be automatically invoked.
+     * 
+     * @return void
+     * @since  1.0
      */
     public function display() 
     {
@@ -115,8 +122,10 @@ abstract class PHPFrame_Application_View
     
     /**
      * This method renders the view using the request's client
-     *
-     * @since    1.0
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
      */
     protected function _render() 
     {

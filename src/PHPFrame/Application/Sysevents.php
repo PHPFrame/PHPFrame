@@ -30,7 +30,7 @@ class PHPFrame_Application_Sysevents
     /**
      * Events summary
      * 
-     * @var    array
+     * @var array
      */
     private $_summary=array();
     /**
@@ -38,25 +38,27 @@ class PHPFrame_Application_Sysevents
      * 
      * An array containig more info about what was reported to the system events.
      * 
-     * @var    array
+     * @var array
      */
     private $_events_log=array();
     
     /**
      * Constructor
      * 
-     * @return    void
-     * @since     1.0
+     * @return void
+     * @since  1.0
      */
     public function __construct() {}
     
     /**
      * Set system events summary
      * 
-     * @param    string    $msg
-     * @param    string    $type    Possible values "error", "warning", "notice", "success", "info". Default value is "error".
-     * @return    void
-     * @since     1.0
+     * @param string $msg  The summary message.
+     * @param string $type Possible values "error", "warning", "notice", "success", 
+     *                     "info". Default value is "error".
+     * 
+     * @return void
+     * @since  1.0
      */
     public function setSummary($msg, $type=null) 
     {
@@ -67,10 +69,12 @@ class PHPFrame_Application_Sysevents
     /**
      * Add event log
      * 
-     * @param    string    $msg    
-     * @param    string    $type    Possible values "error", "warning", "notice", "success", "info". Default value is "error".
-     * @return    void
-     * @since     1.0
+     * @param string $msg  The event log message.
+     * @param string $type Possible values "error", "warning", "notice", "success", 
+     *                     "info". Default value is "error".
+     * 
+     * @return void
+     * @since  1.0
      */
     public function addEventLog($msg, $type=null) 
     {
@@ -84,7 +88,7 @@ class PHPFrame_Application_Sysevents
      * This method is used to get the system events for output.
      * 
      * @return array
-     * @since     1.0
+     * @since  1.0
      */
     public function asArray() 
     {
@@ -94,8 +98,8 @@ class PHPFrame_Application_Sysevents
     /**
      * Get system events as string.
      * 
-     * @return    string
-     * @since     1.0
+     * @return string
+     * @since  1.0
      */
     public function asString() 
     {
@@ -119,8 +123,8 @@ class PHPFrame_Application_Sysevents
      * 
      * This should be done after displaying the messages to the user.
      * 
-     * @return    void
-     * @since     1.0
+     * @return void
+     * @since  1.0
      */
     public function clear() 
     {

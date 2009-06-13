@@ -35,6 +35,6 @@
 			output="${report.dir}/rsync_doc.log" />
 	</target>
 	
-	<target name="build" depends="prepare, php-documentor" />
+	<target name="build" depends="prepare, php-documentor, sync" />
 	
 </project>

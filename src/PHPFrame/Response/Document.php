@@ -25,7 +25,7 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Document extends PHPFrame_Base_Singleton
+class PHPFrame_Document
 {
     /**
      * Document title
@@ -124,7 +124,7 @@ class PHPFrame_Document extends PHPFrame_Base_Singleton
      */
     public function __construct() 
     {
-        $uri = PHPFrame::getURI();
+        $uri = new PHPFrame_Utils_URI();
         $this->base = $uri->getBase();
         $this->uri = $uri->__toString();
     }

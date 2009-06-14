@@ -93,12 +93,28 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
         // add the jQuery + jQuery UI libraries to the HTML document
         // that we will use in the response. jQuery lib need to be loaded before 
         // we load the jQuery plugins in the component output.
-        $document = PHPFrame::getDocument('html');
+        $document = new PHPFrame_Document_HTML();
         $document->addScript('lib/jquery/js/jquery-1.3.2.min.js');
         $document->addScript('lib/jquery/js/jquery-ui-1.7.custom.min.js');
         $document->addScript('lib/jquery/plugins/validate/jquery.validate.pack.js');
         $document->addScript('lib/jquery/plugins/form/jquery.form.pack.js');
         $document->addStyleSheet('lib/jquery/css/extranetoffice/jquery-ui-1.7.custom.css');
+        
+        $component_name = PHPFrame::Request()->getComponentName();
+        $components = PHPFrame::AppRegistry()->getComponents();
+        $component_info = $components->loadByOption($component_name);
+        
+        // Add pathway item
+        $pathway_item_name = ucwords($component_info->name);
+        $pathway_item_url = "index.php?component=com_";
+        $pathway_item_url .= $component_info->name;
+        PHPFrame::Request()->getPathway()->addItem($pathway_item_name, $pathway_item_url);
+        
+        // Set component name in document title
+        $document->title = ucwords($component_info->name);
+        
+        // Set document as response content
+        PHPFrame::Response()->setContent($document);
     }
     
     /**
@@ -152,7 +168,7 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
         // Instantiate document object to make available in template scope
         $document = PHPFrame::getDocument('html');
         // get pathway
-        $pathway = PHPFrame::getPathway();
+        $pathway = PHPFrame::Request()->getPathway();
         
         // Set file name to load depending on session auth
         $session = PHPFrame::Session();

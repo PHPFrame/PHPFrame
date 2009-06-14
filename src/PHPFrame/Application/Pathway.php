@@ -25,7 +25,7 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Application_Pathway extends PHPFrame_Base_Singleton
+class PHPFrame_Application_Pathway
 {
     /**
      * Array containing the pathway item objects

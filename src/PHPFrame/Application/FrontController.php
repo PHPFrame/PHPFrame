@@ -64,10 +64,6 @@ class PHPFrame_Application_FrontController
         // Initialise request
         $request = PHPFrame::Request();
         
-        // Give the client a chance to do something before we move on to run
-        $client = $session->getClient();
-        $client->preActionHook();
-        
         // Set profiler milestone
         PHPFrame_Debug_Profiler::setMilestone('Front controller constructed');
     }
@@ -88,12 +84,17 @@ class PHPFrame_Application_FrontController
         // set the component path
         define("COMPONENT_PATH", _ABS_PATH.DS."src".DS."components".DS.$component_name);
         
+        // Get instance of client from session
+        $client = PHPFrame::Session()->getClient();
+        
         // Create the action controller
         $controller = PHPFrame_MVC_ActionController::getInstance($component_name);
         // Check that action controller is of valid type and run it if it is
         if ($controller instanceof PHPFrame_MVC_ActionController) {
+            // Give the client a chance to do something before we move on to run
+            $client->preActionHook();
             // Execute task
-            $output = $controller->execute();
+            $controller->execute();
         }
         else {
             throw new PHPFrame_Exception("Controller not supported.");
@@ -103,20 +104,13 @@ class PHPFrame_Application_FrontController
         PHPFrame_Debug_Profiler::setMilestone('Action controller executed');
         
         // Render output using client's template
-        $client = PHPFrame::Session()->getClient();
-        $client->renderTemplate($output);
+        $client->renderTemplate();
         
         // Set profiler milestone
         PHPFrame_Debug_Profiler::setMilestone('Overall template rendered');
         
-        // Build response and send it
-        $response = new PHPFrame_Application_Response();
-        $response->setBody($output);
-        
-        // Set profiler milestone
-        PHPFrame_Debug_Profiler::setMilestone('Set response');
-        
-        $response->send();
+        // Send HTTP response
+        PHPFrame::Response()->send();
     }
     
     /**

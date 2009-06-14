@@ -65,70 +65,6 @@ class PHPFrame
     }
     
     /**
-     * Get component action controller object for given option
-     * 
-     * @param string $component_name The name of the concrete action controller
-     *                               to get (ie: com_login).
-     * 
-     * @return PHPFrame_MVC_ActionController
-     * @since  1.0
-     */
-    public static function getActionController($component_name) 
-    {
-        $class_name = substr($component_name, 4)."Controller";
-        return PHPFrame_MVC_ActionController::getInstance($class_name);
-    }
-    
-    /**
-     * Get model
-     * 
-     * @param string $component_name The name of the container component of the 
-     *                               model we want to get (ie: com_login).
-     * @param string $model_name     The name of the model to get.
-     * @param array  $args           An array with arguments to be passed to the
-     *                               model's constructor if needed.
-     * 
-     * @return PHPFrame_MVC_Model
-     * @since  1.0
-     * @todo   Have to add type checking using instanceof operator to guarantee that 
-     *         we return an object of type PHPFrame_MVC_Model
-     */
-    public static function getModel($component_name, $model_name, $args=array()) 
-    {
-        $class_name = substr($component_name, 4)."Model";
-        $class_name .= ucfirst($model_name);
-        
-        // make a reflection object
-        $reflectionObj = new ReflectionClass($class_name);
-        
-        // Check if class is instantiable
-        if ($reflectionObj->isInstantiable()) {
-            // Try to get the constructor
-            $constructor = $reflectionObj->getConstructor();
-            // Check to see if we have a valid constructor method
-            if ($constructor instanceof ReflectionMethod) {
-                // If constructor is public we create a new instance
-                if ($constructor->isPublic()) {
-                    return $reflectionObj->newInstanceArgs($args);
-                }
-            }
-            // No declared constructor, so we instantiate without args
-            return new $class_name;
-        } elseif ($reflectionObj->hasMethod('getInstance')) {
-            $get_instance = $reflectionObj->getMethod('getInstance');
-            if ($get_instance->isPublic() && $get_instance->isStatic()) {
-                $class_method_array = array($class_name, 'getInstance');
-                return call_user_func_array($class_method_array, $args);
-            }
-        }
-        
-        // If we have not been able to return a model object we throw an exception
-        $exception_msg = $model_name." not supported. ";
-        $exception_msg .= "Could not get instance of ".$class_name;
-        throw new PHPFrame_Exception($exception_msg);
-    }
-    
-    /**
      * Request Registry
      * 
      * @return PHPFrame_Registry_Request
@@ -137,6 +73,17 @@ class PHPFrame
     public static function Request() 
     {
         return PHPFrame_Registry_Request::getInstance();
+    }
+    
+    /**
+     * Get response object
+     * 
+     * @return PHPFrame_Application_Response
+     * @since  1.0
+     */
+    public static function Response()
+    {
+        return PHPFrame_Application_Response::getInstance();
     }
     
     /**
@@ -198,45 +145,5 @@ class PHPFrame
         }
         
         return PHPFrame_Database::getInstance($dsn, $db_user, $db_pass);
-    }
-    
-    /**
-     * Get document object
-     * 
-     * @param string $type The document type (html or xml)
-     * 
-     * @return PHPFrame_Document
-     * @since  1.0
-     */
-    public static function getDocument($type) 
-    {
-        $concrete_document = 'PHPFrame_Document_'.strtoupper($type);
-        return PHPFrame_Base_Singleton::getInstance($concrete_document);
-    }
-    
-    /**
-     * Get uri object
-     * 
-     * @param string $uri The URI used to construct the URI object. This parameter is
-     *                    optional. If left blank or not passed a value the URI 
-     *                    object will be instantiated using the current URI.
-     * 
-     * @return PHPFrame_Utils_URI
-     * @since  1.0
-     */
-    public static function getURI($uri='') 
-    {
-        return new PHPFrame_Utils_URI($uri);
-    }
-    
-    /**
-     * Get pathway object
-     * 
-     * @return PHPFrame_Application_Pathway
-     * @since  1.0
-     */
-    public static function getPathway() 
-    {
-        return PHPFrame_Base_Singleton::getInstance('PHPFrame_Application_Pathway');
     }
 }

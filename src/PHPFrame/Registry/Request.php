@@ -75,6 +75,9 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
         $this->_array['files'] = $_FILES;
         $this->_array['env'] = $_ENV;
         $this->_array['server'] = $_SERVER;
+        
+        // Get pathway object for this request
+        $this->_array['request']['pathway'] = new PHPFrame_Application_Pathway();
     }
     
     /**
@@ -196,9 +199,9 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
         $this->_array['request']['action'] = self::$_inputfilter->process($value);
     }
     
-    public function getResponse() 
+    public function getPathway()
     {
-        return $this->_response;
+        return $this->_array['request']['pathway'];
     }
     
     /**

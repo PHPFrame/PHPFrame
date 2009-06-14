@@ -88,23 +88,6 @@ abstract class PHPFrame_MVC_ActionController
         
         // Get reference to System Events object
         $this->sysevents = PHPFrame::Session()->getSysevents();
-        
-        $component_name = PHPFrame::Request()->getComponentName();
-        $components = PHPFrame::AppRegistry()->getComponents();
-        $this->component_info = $components->loadByOption($component_name);
-        
-        // Add pathway item
-        $pathway_item_name = ucwords($this->component_info->name);
-        $pathway_item_url = "index.php?component=com_";
-        $pathway_item_url .= $this->component_info->name;
-        PHPFrame::getPathway()->addItem($pathway_item_name, $pathway_item_url);
-        
-        // Append component name in ducument title
-        $document = PHPFrame::getDocument('html');
-        if (!empty($document->title)) {
-            $document->title .= ' - ';
-        }
-        $document->title .= ucwords($this->component_info->name);
     }
     
     /**
@@ -177,8 +160,8 @@ abstract class PHPFrame_MVC_ActionController
         // Redirect if set by the controller
         $this->redirect();
         
-        // Return action's output as string
-        return $action_output;
+        // Set action's output in response
+        PHPFrame::Response()->setBody($action_output);
     }
     
     /**

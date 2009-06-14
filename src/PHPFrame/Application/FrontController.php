@@ -89,7 +89,7 @@ class PHPFrame_Application_FrontController
         define("COMPONENT_PATH", _ABS_PATH.DS."src".DS."components".DS.$component_name);
         
         // Create the action controller
-        $controller = PHPFrame::getActionController($component_name);
+        $controller = PHPFrame_MVC_ActionController::getInstance($component_name);
         // Check that action controller is of valid type and run it if it is
         if ($controller instanceof PHPFrame_MVC_ActionController) {
             // Execute task

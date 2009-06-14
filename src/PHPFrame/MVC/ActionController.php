@@ -110,14 +110,16 @@ abstract class PHPFrame_MVC_ActionController
     /**
      * Get Instance
      * 
-     * @param string $class_name A string with the name of the concrete action 
-     *                           controller.
+     * @param string $component_name A string with the name of the concrete
+     *                               action controller.
      * 
      * @return PHPFrame_MVC_ActionController
      * @since  1.0
      */
-    public static function getInstance($class_name) 
+    public static function getInstance($component_name) 
     {
+        $class_name = substr($component_name, 4)."Controller";
+        
         $is_set = isset(self::$_instances[$class_name]);
         $is_type = @(self::$_instances[$class_name] instanceof self);
         if (!$is_set || !$is_type) {
@@ -251,7 +253,7 @@ abstract class PHPFrame_MVC_ActionController
     protected function getModel($name, $args=array()) 
     {
         $component_name = PHPFrame::Request()->getComponentName();
-        return PHPFrame::getModel($component_name, $name, $args);
+        return PHPFrame_MVC_Factory::getModel($component_name, $name, $args);
     }
     
     /**
@@ -268,23 +270,6 @@ abstract class PHPFrame_MVC_ActionController
      */
     protected function getView($name, $layout='') 
     {
-        $component_name = PHPFrame::Request()->getComponentName();
-        $class_name = strtolower(substr($component_name, 4));
-        $class_name .= "View".ucfirst($name);
-        
-        try {
-            $reflection_obj = new ReflectionClass($class_name);
-        }
-        catch (Exception $e) {
-            throw new PHPFrame_Exception($e->getMessage());
-        }
-        
-        $reflection_abstract_view = new ReflectionClass("PHPFrame_MVC_View");
-        if ($reflection_obj->isSubclassOf($reflection_abstract_view)) {
-            return new $class_name($layout);
-        } else {
-            $exception_msg = "View class '".$class_name."' not supported.";
-            throw new PHPFrame_Exception($exception_msg);
-        }
+        return PHPFrame_MVC_Factory::getView($name, $layout);
     }
 }

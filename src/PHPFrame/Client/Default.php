@@ -97,16 +97,14 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
         // add the jQuery + jQuery UI libraries to the HTML document
         // that we will use in the response. jQuery lib need to be loaded before 
         // we load the jQuery plugins in the component output.
-        $document = new PHPFrame_Document_Plaintext();
+        //$document = new PHPFrame_Document_Plaintext();
         
-        /*
         $document = new PHPFrame_Document_HTML();
         $document->addScript('lib/jquery/js/jquery-1.3.2.min.js');
         $document->addScript('lib/jquery/js/jquery-ui-1.7.custom.min.js');
         $document->addScript('lib/jquery/plugins/validate/jquery.validate.pack.js');
         $document->addScript('lib/jquery/plugins/form/jquery.form.pack.js');
         $document->addStyleSheet('lib/jquery/css/extranetoffice/jquery-ui-1.7.custom.css');
-        */
         
         // Set document as response content
         $response->setDocument($document);

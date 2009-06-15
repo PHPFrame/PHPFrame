@@ -55,6 +55,7 @@ class PHPFrame_Document_Plaintext extends PHPFrame_Document
      */
     public function renderView(PHPFrame_MVC_View $view)
     {
+        
         foreach ($view->getData() as $key=>$value) {
             if ($value instanceof PHPFrame_Database_RowCollection) {
                 $value = $this->renderRowCollection($value);

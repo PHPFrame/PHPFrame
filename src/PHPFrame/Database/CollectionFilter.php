@@ -193,7 +193,7 @@ class PHPFrame_Database_CollectionFilter
      * @return string
      * @since  1.0
      */
-    public function getOrderByStmt() 
+    public function getOrderBySQL() 
     {
         $stmt = "";
         
@@ -233,7 +233,7 @@ class PHPFrame_Database_CollectionFilter
      * @return string
      * @since  1.0
      */
-    public function getLimitStmt() 
+    public function getLimitSQL() 
     {
         $stmt = "";
         

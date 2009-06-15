@@ -73,8 +73,10 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @return void
      * @since  1.0
      */
-    public function __construct($query, PHPFrame_Database $db=null) 
-    {
+    public function __construct(
+        PHPFrame_Database_CollectionFilter $filter, 
+        PHPFrame_Database $db=null
+    ) {
         $this->_query = (string) $query;
         
         if ($db instanceof PHPFrame_Database) {

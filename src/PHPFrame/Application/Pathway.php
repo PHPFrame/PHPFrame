@@ -17,100 +17,77 @@
 /**
  * Pathway Class
  * 
+ * This class is used by objects of type PHPFrame_Document_HTML. They have an pathway
+ * instance used when rendering output in HTML format.
+ * 
  * @category   MVC_Framework
  * @package    PHPFrame
  * @subpackage Application
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see        PHPFrame_Document_HTML
  * @since      1.0
  */
 class PHPFrame_Application_Pathway
 {
     /**
-     * Array containing the pathway item objects
+     * Associative array containing the pathway items
      * 
      * @var array
      */
-    var $pathway=null;
-    /**
-     * Items counter
-     * 
-     * @var int
-     */
-    var $count;
+    private $_array=array();
     
     /**
      * Constructor
      * 
-     * @return     void
-     * @since    1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    function __construct() 
+    public function __construct() 
     {
-        $this->pathway = array();
-        
-        $item = new PHPFrame_Base_StdObject();
-        $item->set('title', 'Home');
-        $item->set('url', 'index.php');
-        
-        $this->pathway[] = $item;
+        $this->addItem("Home", "index.php");
     }
     
     /**
      * Add a pathway item
      * 
-     * @param    string    $title The pathway item title.
-     * @param     string    $url The pathway item URL.
-     * @return     void
-     * @since    1.0
-     */
-    function addItem($title, $url='') 
-    {
-        $item = new PHPFrame_Base_StdObject();
-        $item->set('title', $title);
-        $item->set('url', $url);
-        
-        $this->pathway[] = $item;
-    }
-    
-    /**
-     * Set the pathway array
+     * @param string $title The pathway item title.
+     * @param string $url   The pathway item URL.
      * 
-     * @param    array     $pathway An array of pathway item objects.
-     * @return     array
-     * @since    1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    function setPathway($pathway) 
+    public function addItem($title, $url='') 
     {
-        $oldPathway = $this->pathway;
-        $pathway = (array) $pathway;
+        $title = (string) $title;
+        $url   = (string) $url;
         
-        // Set the new pathway.
-        $this->_pathway = array_values($pathway);
-        
-        return array_values($oldPathway);
+        $this->pathway[] = array("title"=>$title, "url"=>$url);
     }
     
     /**
      * Echo pathway as HTML
      * 
-     * @return     void
-     * @since    1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    function display() 
+    public function display() 
     {
         echo '<div class="pathway">';
-        for ($i=0; $i<count($this->pathway); $i++) {
+        for ($i=0; $i<count($this->_array); $i++) {
             if ($i>0) {
                 echo ' &gt;&gt; ';
             }
             echo '<span class="pathway_item">';
-            if (!empty($this->pathway[$i]->url)) {
-                echo '<a href="'.$this->pathway[$i]->url.'">'.$this->pathway[$i]->title.'</a>';
+            if (!empty($this->_array[$i]['url'])) {
+                echo '<a href="'.$this->_array[$i]['url'].'">'.$this->_array[$i]['title'].'</a>';
             }
             else {
-                echo $this->pathway[$i]->title;
+                echo $this->_array[$i]['title'];
             }
             echo '</span>';
         }

@@ -31,8 +31,9 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
      * Check if this is the correct helper for the client being used
      * 
      * @static
-     * @access    public
-     * @return    PHPFrame_Client_IClient|boolean    Object instance of this class if correct helper for client or false otherwise.
+     * @access public
+     * @return PHPFrame_Client_IClient|boolean Object instance of this class if correct
+     *                                         helper for client or false otherwise.
      */
     public static function detect() 
     {
@@ -43,14 +44,24 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
     }
     
     /**    
+     * Get client name
+     * 
+     * @access public
+     * @return string Name to identify helper type
+     */
+    public function getName() 
+    {
+        return "default";
+    }
+    
+    /**    
      * Populate the Unified Request array
      * 
-     * @access    public
-     * @return    array    Unified Request Array
+     * @access public
+     * @return array  Unified Request Array
      */
-    public function populateURA() 
+    public function populateRequest() 
     {
-    
         $request = array();
         
         // Get an instance of PHP Input filter
@@ -68,27 +79,20 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
         return $request;
     }
     
-    /**    
-     * Get helper name
-     * 
-     * @access    public
-     * @return    string    Name to identify helper type
-     */
-    public function getName() 
-    {
-        return "default";
-    }
-    
     /**
-     * Pre action hook
+     * Prepare response
      * 
      * This method is invoked by the front controller before invoking the requested
      * action in the action controller. It gives the client an opportunity to do 
      * something before the component is executed.
      * 
-     * @return    void
+     * @param PHPFrame_Application_Response $response The response object to prepare.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public function preActionHook() 
+    public function prepareResponse(PHPFrame_Application_Response $response) 
     {
         // add the jQuery + jQuery UI libraries to the HTML document
         // that we will use in the response. jQuery lib need to be loaded before 
@@ -100,96 +104,7 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
         $document->addScript('lib/jquery/plugins/form/jquery.form.pack.js');
         $document->addStyleSheet('lib/jquery/css/extranetoffice/jquery-ui-1.7.custom.css');
         
-        $component_name = PHPFrame::Request()->getComponentName();
-        $components = PHPFrame::AppRegistry()->getComponents();
-        $component_info = $components->loadByOption($component_name);
-        
-        // Add pathway item
-        $pathway_item_name = ucwords($component_info->name);
-        $pathway_item_url = "index.php?component=com_";
-        $pathway_item_url .= $component_info->name;
-        PHPFrame::Request()->getPathway()->addItem($pathway_item_name, $pathway_item_url);
-        
-        // Set component name in document title
-        $document->title = ucwords($component_info->name);
-        
         // Set document as response content
-        PHPFrame::Response()->setContent($document);
-    }
-    
-    /**
-     * Render component view
-     * 
-     * This method is invoked by the views and renders the ouput data in the format specified
-     * by the client.
-     * 
-     * @param    array    $data    An array containing the data assigned to the view.
-     * @return    void
-     */
-    public function renderView($data) 
-    {
-        if (!empty($data['view'])) {
-            $tmpl_path = COMPONENT_PATH.DS."views".DS.$data['view'].DS."tmpl".DS.$this->getName();
-            
-            if (!empty($data['layout'])) {
-                $tmpl_path .= "_".$data['layout'];
-            }
-            $tmpl_path .= ".php";
-            
-            if (is_file($tmpl_path)) {
-                require_once $tmpl_path;
-            }
-            else {
-                throw new PHPFrame_Exception("Layout template file ".$tmpl_path." not found.");
-            }
-        }
-    }
-    
-    /**
-     * Render overall template
-     *
-     * @param    string    &$str    A string containing the component output.
-     * @return    void
-     */
-    public function renderTemplate(&$str) 
-    {
-        // Make modules available to templates
-        $modules = PHPFrame::AppRegistry()->getModules();
-        
-        // If tmpl flag is set to component in request it means that
-        // we dont need to wrap the component output in the overall template
-        // so we just prepend the sytem events and return
-        if (PHPFrame::Request()->get('tmpl') == 'component') {
-            $sys_events = $modules->display('sysevents', '_sysevents');
-            $str = $sys_events.$str;
-            return;
-        }
-        
-        // Instantiate document object to make available in template scope
-        $document = PHPFrame::getDocument('html');
-        // get pathway
-        $pathway = PHPFrame::Request()->getPathway();
-        
-        // Set file name to load depending on session auth
-        $session = PHPFrame::Session();
-        if (!$session->isAuth()) {
-            $template_filename = 'login.php';
-        }
-        else {
-            $template_filename = 'index.php';
-        }
-        
-        $template_path = _ABS_PATH.DS."public".DS."themes".DS.config::TEMPLATE;
-        
-        // Make copy of component output string to use in template
-        $component_output = $str;
-        
-        // Start buffering
-        ob_start();
-        require_once $template_path.DS.$template_filename;
-        // save buffer in string passed by reference
-        $str = ob_get_contents();
-        // clean output buffer
-        ob_end_clean();
+        $response->setDocument($document);
     }
 }

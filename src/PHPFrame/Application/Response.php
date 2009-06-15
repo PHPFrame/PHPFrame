@@ -10,7 +10,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
+ * @version    SVN: $Id: Response.php 71 2009-06-14 11:54:03Z luis.montero@e-noise.com $
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
@@ -24,9 +24,8 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
- * @abstract
  */
-abstract class PHPFrame_Application_Response
+class PHPFrame_Application_Response
 {
     /**
      * Instance of itself
@@ -47,11 +46,11 @@ abstract class PHPFrame_Application_Response
      */
     private $_header=array();
     /**
-     * The content
+     * The document object used by this response
      * 
-     * @var mixed
+     * @var PHPFrame_Document
      */
-    private $_content=null;
+    private $_document=null;
     
     /**
      * Constructor
@@ -78,21 +77,6 @@ abstract class PHPFrame_Application_Response
     }
     
     /**
-     * Set header line
-     * 
-     * @param string $key   The header key
-     * @param string $value The header value
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function setHeader($key, $value) 
-    {
-        $this->_header[$key] = $value;
-    }
-    
-    /**
      * Set response content.
      * 
      * @param PHPFrame_Document $document
@@ -101,26 +85,69 @@ abstract class PHPFrame_Application_Response
      * @return void
      * @since  1.0
      */
-    public function setContent(PHPFrame_Document $document) 
+    public function setDocument(PHPFrame_Document $document) 
     {
-        $this->_content = $document;
+        $this->_document = $document;
     }
     
     /**
      * Get response content
      * 
+     * @access public
      * @return PHPFrame_Document
+     * @since  1.0
      */
-    public function getContent()
+    public function getDocument()
     {
-        return $this->_content;
+        return $this->_document;
     }
     
+    /**
+     * Set header line
+     * 
+     * @param string $line The header line
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setHeader($line) 
+    {
+        $this->_header[] = $line;
+    }
+    
+    /**
+     * Set the document title held by this response.
+     * 
+     * @param string $str The title string
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function setTitle($str)
     {
-        $this->_content->setTitle($str);
+        $this->_document->setTitle($str);
     }
     
+    /**
+     * Render view and store in document's body
+     * 
+     * This method is invoked by the views and renders the ouput data in the
+     * document specific format.
+     * 
+     * @param PHPFrame_MVC_View $view The view object to process.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+     public function renderView(PHPFrame_MVC_View $view)
+     {
+         $this->_document->renderView($view);
+         $this->send();
+     }
+     
     /**
      * Send response back to client
      * 
@@ -130,11 +157,12 @@ abstract class PHPFrame_Application_Response
      */
     public function send() 
     {
-        foreach ($this->_header as $key=>$value) {
-            header($key.": ".$value);
+        //var_dump($this); exit;
+        foreach ($this->_header as $line) {
+            header($line);
         }
 		
-        echo $this->_content;
+        echo $this->_document;
         
         if (config::DEBUG) {
             echo '<pre>'.PHPFrame_Debug_Profiler::getReport().'</pre>';

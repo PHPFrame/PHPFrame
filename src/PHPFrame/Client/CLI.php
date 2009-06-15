@@ -31,12 +31,14 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
      * Check if this is the correct helper for the client being used
      * 
      * @static
-     * @access    public
-     * @return    PHPFrame_Client_IClient|boolean    Object instance of this class if correct helper for client or false otherwise.
+     * @access public
+     * @return PHPFrame_Client_IClient|boolean Object instance of this class 
+     *                                         if correct helper for client 
+     *                                         or false otherwise.
+     * @since  1.0
      */
     public static function detect() 
     {
-        
         global $argv;
         if (is_array($argv)) {
             return new self;
@@ -45,12 +47,25 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
     }
     
     /**    
+     * Get client name
+     * 
+     * @access public
+     * @return string Name to identify helper type
+     * @since  1.0
+     */
+    public function getName() 
+    {
+        return "cli";
+    }
+    
+    /**    
      * Populate the Unified Request array
      * 
-     * @access    public
-     * @return    array    Unified Request Array
+     * @access public
+     * @return array  Unified Request Array
+     * @since  1.0
      */
-    public function populateURA() 
+    public function populateRequest() 
     {
 
         // Get arguments passed via command line and parse them as request vars
@@ -64,27 +79,20 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
         return $request;
     }
     
-    /**    
-     * Get helper name
-     * 
-     * @access    public
-     * @return    string    Name to identify helper type
-     */
-    public function getName() 
-    {
-        return "cli";
-    }
-    
     /**
-     * Pre action hook
+     * Prepare response
      * 
      * This method is invoked by the front controller before invoking the requested
      * action in the action controller. It gives the client an opportunity to do 
      * something before the component is executed.
      * 
-     * @return    void
+     * @param PHPFrame_Application_Response $response The response object to prepare.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public function preActionHook() 
+    public function prepareResponse(PHPFrame_Application_Response $response) 
     {
         // Automatically log in as system user
         $user = new PHPFrame_User();
@@ -98,26 +106,4 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
         $session = PHPFrame::Session();
         $session->setUser($user);
     }
-    
-    /**
-     * Render component view
-     * 
-     * This method is invoked by the views and renders the ouput data in the format specified
-     * by the client.
-     * 
-     * @param    array    $data    An array containing the data assigned to the view.
-     * @return    void
-     */
-    public function renderView($data) 
-    {
-        var_dump($data);
-    }
-    
-    /**
-     * Render overall template
-     *
-     * @param    string    &$str    A string containing the component output.
-     * @return    void
-     */
-    public function renderTemplate(&$str) {}
 }

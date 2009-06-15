@@ -17,6 +17,16 @@
 /**
  * Client Interface
  * 
+ * Implementing Client classes represent the different "client" applications that
+ * will interact with our app.
+ * 
+ * PHPFrame 1.0 includes 4 implementations of this interface:
+ * 
+ * - CLI
+ * - Default
+ * - Mobile
+ * - XMLRPC
+ * 
  * @category   MVC_Framework
  * @package    PHPFrame
  * @subpackage Client
@@ -31,55 +41,45 @@ interface PHPFrame_Client_IClient
      * Check if this is the correct helper for the client being used and returns instance if so
      * 
      * @static
-     * @access    public
-     * @return    PHPFrame_Client_IClient|boolean
-     * @since    1.0
+     * @access public
+     * @return PHPFrame_Client_IClient|boolean
+     * @since  1.0
      */
     public static function detect();
     
     /**    
-     * Populate a Unified Request Array to return
+     * Get client name
      * 
-     * @access    public
-     * @return    array     Unified Request Array
-     */
-    public function populateURA();
-    
-    /**    
-     * Get helper name
-     * 
-     * @access    public
-     * @return    string     name to identify helper type
+     * @access public
+     * @return string Name to identify helper type
+     * @since  1.0
      */
     public function getName();
     
+    /**    
+     * Populate a Unified Request Array to return
+     * 
+     * @access public
+     * @return array  Unified Request Array
+     * @since  1.0
+     */
+    public function populateRequest();
+    
     /**
-     * Pre action hook
+     * Prepare response
      * 
      * This method is invoked by the front controller before invoking the requested
      * action in the action controller. It gives the client an opportunity to do 
      * something before the component is executed.
      * 
-     * @return    void
-     */
-    public function preActionHook();
-    
-    /**
-     * Render component view
+     * The implementing Client classes will need to make sure the set the response 
+     * content to the right document type. See PHPFrame_Client_Default for an example. 
      * 
-     * This method is invoked by the views and renders the ouput data in the format specified
-     * by the client.
+     * @param PHPFrame_Application_Response $response The response object to prepare.
      * 
-     * @param    array    $data    An array containing the data assigned to the view.
-     * @return    void
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public function renderView($data);
-    
-    /**
-     * Render overall template
-     *
-     * @param    string    &$str    A string containing the component output.
-     * @return    void
-     */
-    public function renderTemplate(&$str);
+    public function prepareResponse(PHPFrame_Application_Response $response);
 }

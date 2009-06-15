@@ -10,7 +10,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
+ * @version    SVN: $Id: HTML.php 37 2009-06-11 21:00:01Z luis.montero@e-noise.com $
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
@@ -27,6 +27,46 @@
  */
 class PHPFrame_Document_HTML extends PHPFrame_Document
 {
+    private $_dom=null;
+    /**
+     * Document title
+     *
+     * @var         string
+     * @access  public
+     */
+    protected $title = '';
+
+    /**
+     * Document description
+     *
+     * @var         string
+     * @access  public
+     */
+    protected $description = '';
+
+    /**
+     * Document URI
+     *
+     * @var         string
+     * @access  public
+     */
+    protected $uri = '';
+
+    /**
+     * Document base URL
+     *
+     * @var         string
+     * @access  public
+     */
+    protected $base = '';
+
+     /**
+     * Contains the document language setting
+     *
+     * @var         string
+     * @access  public
+     */
+    protected $language = 'en-gb';
     /**
      * Array of linked scripts
      *

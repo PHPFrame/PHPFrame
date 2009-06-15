@@ -69,15 +69,12 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
         }
         
         // Populate request array using session's client
-        $this->_array = PHPFrame::Session()->getClient()->populateURA();
+        $this->_array = PHPFrame::Session()->getClient()->populateRequest();
         
         //add other globals
         $this->_array['files'] = $_FILES;
         $this->_array['env'] = $_ENV;
         $this->_array['server'] = $_SERVER;
-        
-        // Get pathway object for this request
-        $this->_array['request']['pathway'] = new PHPFrame_Application_Pathway();
     }
     
     /**
@@ -197,11 +194,6 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
     {
         // Filter value before assigning to variable
         $this->_array['request']['action'] = self::$_inputfilter->process($value);
-    }
-    
-    public function getPathway()
-    {
-        return $this->_array['request']['pathway'];
     }
     
     /**

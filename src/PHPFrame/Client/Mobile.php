@@ -64,12 +64,23 @@ class PHPFrame_Client_Mobile implements PHPFrame_Client_IClient
     }
     
     /**    
+     * Get client name
+     * 
+     * @access    public
+     * @return    string    Name to identify helper type
+     */
+    public function getName() 
+    {
+        return "mobile";
+    }
+    
+    /**    
      * Populate the Unified Request array
      * 
      * @access    public
      * @return    array    Unified Request Array
      */
-    public function populateURA() 
+    public function populateRequest() 
     {
     
         $request = array();
@@ -89,44 +100,18 @@ class PHPFrame_Client_Mobile implements PHPFrame_Client_IClient
         return $request;
     }
     
-    /**    
-     * Get helper name
-     * 
-     * @access    public
-     * @return    string    Name to identify helper type
-     */
-    public function getName() 
-    {
-        return "mobile";
-    }
-    
     /**
-     * Pre action hook
+     * Prepare response
      * 
      * This method is invoked by the front controller before invoking the requested
      * action in the action controller. It gives the client an opportunity to do 
      * something before the component is executed.
      * 
-     * @return    void
-     */
-    public function preActionHook() {}
-    
-    /**
-     * Render component view
+     * @param PHPFrame_Application_Response $response The response object to prepare.
      * 
-     * This method is invoked by the views and renders the ouput data in the format specified
-     * by the client.
-     * 
-     * @param    array    $data    An array containing the data assigned to the view.
-     * @return    void
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public function renderView($data) {}
-    
-    /**
-     * Render overall template
-     *
-     * @param    string    &$str    A string containing the component output.
-     * @return    void
-     */
-    public function renderTemplate(&$str) {}
+    public function prepareResponse(PHPFrame_Application_Response $response) {}
 }

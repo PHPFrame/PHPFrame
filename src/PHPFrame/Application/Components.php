@@ -37,8 +37,8 @@ class PHPFrame_Application_Components
     /**
      * Construct
      * 
-     * @return    void
-     * @since    1.0
+     * @return void
+     * @since  1.0
      */
     function __construct() 
     {
@@ -51,8 +51,11 @@ class PHPFrame_Application_Components
      * 
      * it loads properties from database table and returns the row object.
      * 
-     * @param    string    $option The option string.
-     * @return    object
+     * @param  string $option The option string.
+     * 
+     * @access public
+     * @return object
+     * @since  1.0
      */
     public function loadByOption($option) 
     {
@@ -68,9 +71,11 @@ class PHPFrame_Application_Components
     /**
      * This methods tests whether the specified component is installed and enabled.
      *
+     * @param  string $name The component name to check (ie: dashboard, user, projects, ...)
+     * 
      * @access public
-     * @param string $name The component name to check (ie: dashboard, user, projects, ...)
      * @return bool
+     * @since  1.0
      */
     public static function isEnabled($name) 
     {

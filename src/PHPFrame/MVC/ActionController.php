@@ -138,13 +138,7 @@ abstract class PHPFrame_MVC_ActionController
         $permissions = PHPFrame::AppRegistry()->getPermissions();
         if ($permissions->authorise($component, $action, $groupid) === true) {
             if (is_callable(array($this, $action))) {
-                // Start buffering
-                ob_start();
                 $this->$action();
-                // save buffer in response object
-                $action_output = ob_get_contents();
-                // clean output buffer
-                ob_end_clean();
             } else {
                 $exception_msg = "Action ".$action."() not found in controller.";
                 throw new PHPFrame_Exception($exception_msg);
@@ -159,9 +153,6 @@ abstract class PHPFrame_MVC_ActionController
         
         // Redirect if set by the controller
         $this->redirect();
-        
-        // Set action's output in response
-        PHPFrame::Response()->setBody($action_output);
     }
     
     /**
@@ -251,7 +242,7 @@ abstract class PHPFrame_MVC_ActionController
      * @return object
      * @since  1.0
      */
-    protected function getView($name, $layout='') 
+    protected function getView($name, $layout=null)
     {
         return PHPFrame_MVC_Factory::getView($name, $layout);
     }

@@ -86,31 +86,19 @@ class PHPFrame_Application_FrontController
         
         // Get instance of client from session
         $client = PHPFrame::Session()->getClient();
+        // Prepare response using client
+        $client->prepareResponse(PHPFrame::Response());
         
         // Create the action controller
         $controller = PHPFrame_MVC_ActionController::getInstance($component_name);
         // Check that action controller is of valid type and run it if it is
         if ($controller instanceof PHPFrame_MVC_ActionController) {
-            // Give the client a chance to do something before we move on to run
-            $client->preActionHook();
             // Execute task
             $controller->execute();
         }
         else {
             throw new PHPFrame_Exception("Controller not supported.");
         }
-        
-        // Set profiler milestone
-        PHPFrame_Debug_Profiler::setMilestone('Action controller executed');
-        
-        // Render output using client's template
-        $client->renderTemplate();
-        
-        // Set profiler milestone
-        PHPFrame_Debug_Profiler::setMilestone('Overall template rendered');
-        
-        // Send HTTP response
-        PHPFrame::Response()->send();
     }
     
     /**

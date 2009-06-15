@@ -31,8 +31,11 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      * Check if this is the correct helper for the client being used
      * 
      * @static
-     * @access    public
-     * @return    PHPFrame_Client_IClient|boolean    Object instance of this class if correct helper for client or false otherwise.
+     * @access public
+     * @return PHPFrame_Client_IClient|boolean Object instance of this class if 
+     *                                         correct helper for client or FALSE 
+     *                                         otherwise.
+     * @since  1.0
      */
     public static function detect() 
     {
@@ -61,12 +64,25 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     }
     
     /**    
+     * Get client name
+     * 
+     * @access public
+     * @return string Name to identify helper type
+     * @since  1.0
+     */
+    public function getName() 
+    {
+        return "xmlrpc";
+    }
+    
+    /**    
      * Populate the Unified Request array
      * 
-     * @access    public
-     * @return    array    Unified Request Array
+     * @access public
+     * @return array  Unified Request Array
+     * @since  1.0
      */
-    public function populateURA() 
+    public function populateRequest() 
     {
         
         global $HTTP_RAW_POST_DATA;
@@ -76,46 +92,20 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         
     }
     
-    /**    
-     * Get helper name
-     * 
-     * @access    public
-     * @return    string    Name to identify helper type
-     */
-    public function getName() 
-    {
-        return "xmlrpc";
-    }
-    
     /**
-     * Pre action hook
+     * Prepare response
      * 
      * This method is invoked by the front controller before invoking the requested
      * action in the action controller. It gives the client an opportunity to do 
      * something before the component is executed.
      * 
-     * @return    void
-     */
-    public function preActionHook() {}
-    
-    /**
-     * Render component view
+     * @param PHPFrame_Application_Response $response The response object to prepare.
      * 
-     * This method is invoked by the views and renders the ouput data in the format specified
-     * by the client.
-     * 
-     * @param    array    $data    An array containing the data assigned to the view.
-     * @return    void
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public function renderView($data) {}
-    
-    /**
-     * Render overall template
-     *
-     * @param    string    &$str    A string containing the component output.
-     * @return    void
-     */
-    public function renderTemplate(&$str) {}
+    public function prepareResponse(PHPFrame_Application_Response $response) {}
     
     /**
      * This method is used to parse an XML remote procedure call

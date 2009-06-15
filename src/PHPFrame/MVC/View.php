@@ -59,6 +59,18 @@ abstract class PHPFrame_MVC_View
      * @var array
      */
     protected $_data=array();
+    /**
+     * A pathway object for this view
+     * 
+     * @var PHPFrame_Application_Pathway
+     */
+    protected $_pathway=null;
+    /**
+     * A reference to the document used to render this view
+     * 
+     * @var PHPFrame_Document
+     */
+    protected $_document=null;
     
     /**
      * Constructor
@@ -69,10 +81,27 @@ abstract class PHPFrame_MVC_View
      * @return void
      * @since  1.0
      */
-    public function __construct($name, $layout) 
+    public function __construct($name, $layout=null) 
     {
         $this->_name = (string) $name;
         $this->_layout = (string) $layout;
+        
+        // Acquire pathway object
+        $this->_pathway = new PHPFrame_Application_Pathway();
+        
+        // Get reference to the document used to render the view
+        // This document is stored in the response object
+        $this->_document = PHPFrame::Response()->getDocument();
+    }
+    
+    public function getName()
+    {
+        return $this->_name;
+    }
+    
+    public function getLayout()
+    {
+        return $this->_layout;
     }
     
     /**
@@ -87,6 +116,21 @@ abstract class PHPFrame_MVC_View
     public function addData($key, $value) 
     {
         $this->_data[$key] = $value;
+    }
+    
+    public function getData()
+    {
+        return $this->_data;
+    }
+    
+    /**
+     * Get the view's pathway object
+     * 
+     * @return PHPFrame_Application_Pathway
+     */
+    public function getPathway()
+    {
+        return $this->_pathway;
     }
     
     /**
@@ -116,25 +160,9 @@ abstract class PHPFrame_MVC_View
             $this->$tmpl_specific_method();
         }
         
-        // Render view depending on client
-        $this->_render();
-    }
-    
-    /**
-     * This method renders the view using the request's client
-     * 
-     * @access protected
-     * @return void
-     * @since  1.0
-     */
-    protected function _render() 
-    {
-        // Add view name and template name to data array
-        $this->_data['view'] = $this->_name;
-        $this->_data['layout'] = $this->_layout;
-        
-        // Delegate rendering to request's client object
-        $client = PHPFrame::Session()->getClient();
-        $client->renderView($this->_data);
+        // Delegate rendering to response object
+        // The response object will render the view object 
+        // depending on the document typ
+        PHPFrame::Response()->renderView($this);
     }
 }

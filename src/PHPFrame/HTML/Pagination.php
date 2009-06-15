@@ -45,6 +45,13 @@ class PHPFrame_HTML_Pagination
         $this->_list_filter = $list_filter;
     }
     
+    public function __toString()
+    {
+        $str = "";
+        
+        return $str;
+    }
+    
     /**
      * getListFooter()
      * 

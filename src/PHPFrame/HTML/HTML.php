@@ -561,7 +561,7 @@ class PHPFrame_HTML
      */
     public static function button($type='button', $label='', $onclick='') 
     {
-        ?><button type="<?php echo $type; ?>" onclick="<?php echo $onclick; ?>"><?php echo PHPFrame_HTML_Text::_( $label ); ?></button><?php
+        ?><button type="<?php echo $type; ?>" onclick="<?php echo $onclick; ?>"><?php echo PHPFrame_Base_String::html( $label ); ?></button><?php
     }
     
     /**
@@ -572,7 +572,7 @@ class PHPFrame_HTML
      */
     public static function buttonBack() 
     {
-        ?><button type="button" onclick="Javascript:window.history.back();"><?php echo PHPFrame_HTML_Text::_( _LANG_BACK ); ?></button>     <?php
+        ?><button type="button" onclick="Javascript:window.history.back();"><?php echo PHPFrame_Base_String::html( _LANG_BACK ); ?></button>     <?php
     }
     
     /**

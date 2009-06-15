@@ -150,7 +150,7 @@ class PHPFrame_User_Helper
     {
         // assemble users to the array
         $options = array();
-        $options[] = PHPFrame_HTML::_('select.option', '0', PHPFrame_HTML_Text::_( '-- Select a User --' ) );
+        $options[] = PHPFrame_HTML::_('select.option', '0', PHPFrame_Base_String::html( '-- Select a User --' ) );
         
         // get users from #__users
         $db = PHPFrame::DB();
@@ -274,7 +274,7 @@ class PHPFrame_User_Helper
     {
         // assemble users to the array
         $options = array();
-        //$options[] = PHPFrame_HTML::_('select.option', '0', PHPFrame_HTML_Text::_( '-- Select a Group --' ) );
+        //$options[] = PHPFrame_HTML::_('select.option', '0', PHPFrame_Base_String::html( '-- Select a Group --' ) );
         
         // get users from #__users
         $db = PHPFrame::DB();

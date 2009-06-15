@@ -162,6 +162,17 @@ abstract class PHPFrame_Document
     abstract public function renderView(PHPFrame_MVC_View $view);
     
     /**
+     * Method used to render Row Collections in this document
+     * 
+     * @param PHPFrame_Database_RowCollection
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    abstract public function renderRowCollection(PHPFrame_Database_RowCollection $collection);
+    
+    /**
      * Covert object to string
      * 
      * @access public

@@ -90,6 +90,25 @@ class PHPFrame_Database_RowCollection implements Iterator
         $this->_fetchRows($query);
     }
     
+    public function __toString()
+    {
+        $str = "";
+        
+        for ($i=0; $i<count($this->_rows); $i++) {
+            // Add table headings
+            if ($i == 0) {
+                foreach ($this->_rows[$i]->getKeys() as $key) {
+                    $str .= PHPFrame_Base_String::fixLength($key, 16)."\t";
+                }
+                $str .= "\n";
+            }
+            
+            $str .= $this->_rows[$i]->toString(false)."\n";
+        }
+        
+        return $str;
+    }
+    
     /**
      * Get rows in collection
      * 

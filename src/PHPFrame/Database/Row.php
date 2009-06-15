@@ -89,6 +89,11 @@ class PHPFrame_Database_Row
         $this->_readStructure();
     }
     
+    public function __toString()
+    {
+        return $this->toString();
+    }
+    
     /**
      * Magic getter
      * 
@@ -107,6 +112,31 @@ class PHPFrame_Database_Row
     public function __get($key) 
     {
         return $this->get($key);
+    }
+    
+    /**
+     * Convert object to string
+     * 
+     * @param bool $show_keys Boolean to indicate whether we want to show the
+     *                        column names. Default is TRUE.
+     *                        
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function toString($show_keys=true)
+    {
+        $str = "";
+        
+        foreach ($this->_data as $key=>$value) {
+            if ($show_keys) {
+                $str .= $key.": ".$value."\n";
+            } else {
+                $str .= PHPFrame_Base_String::fixLength($value, 16)."\t";
+            }
+        }
+        
+        return $str;
     }
     
     /**
@@ -152,6 +182,24 @@ class PHPFrame_Database_Row
         }
         
         $this->_data[$key] = $value;
+    }
+    
+    /**
+     * Get column keys
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getKeys()
+    {
+        $array = array();
+        
+        foreach ($this->_structure as $col) {
+            $array[] = $col->Field;
+        }
+        
+        return $array;
     }
     
     /**

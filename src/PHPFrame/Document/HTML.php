@@ -143,6 +143,20 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
     }
     
     /**
+     * Method used to render Row Collections in this document
+     * 
+     * @param PHPFrame_Database_RowCollection
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function renderRowCollection(PHPFrame_Database_RowCollection $collection)
+    {
+        throw new PHPFrame_Exception("Method not implemented");
+    }
+    
+    /**
      * Convert object to string
      * 
      * @access public

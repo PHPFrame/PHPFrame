@@ -8,11 +8,23 @@ Before you start please make sure that the "pear" command is in your PATH.
 
 To install using PEAR installer:
 
-$pear install pear.e-noise.com/PHPFrame
+First we need to tell the PEAR installer about the channel. Type the following 
+command at the terminal:
+
+	$ pear channel-discover pear.e-noise.com
+
+	This last command should show the following output:
+
+	Adding Channel "pear.e-noise.com" succeeded
+	Discovery of channel "pear.e-noise.com" succeeded
+	
+	Now we can tell the PEAR installer to install the PHPFrame package:
+
+	$ pear install pear.e-noise.com/PHPFrame
 
 To uninstall:
 
-$pear uninstall pear.e-noise.com/PHPFrame
+	$ pear uninstall pear.e-noise.com/PHPFrame
 
 * Note that you will need write access to the directory where PEAR is installed.
 If you are installing or unininstalling for all users in a system you will need 

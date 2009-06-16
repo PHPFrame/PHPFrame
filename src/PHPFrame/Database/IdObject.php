@@ -18,12 +18,15 @@
 /**
  * IdObject class
  * 
+ * This class encapsulates the selection of rows from the database.
+ * 
  * @category   MVC_Framework
  * @package    PHPFrame
  * @subpackage Database
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see        
  * @since      1.0
  */
 class PHPFrame_Database_IdObject
@@ -182,9 +185,18 @@ class PHPFrame_Database_IdObject
     {
         $sql = $this->_getSelectSQL();
         $sql .= "\n".$this->_getFromSQL();
-        $sql .= "\n".$this->_getJoinsSQL();
-        $sql .= "\n".$this->_getWhereSQL();
-        $sql .= "\n".$this->_getGroupBySQL();
+        
+        if ($this->_getJoinsSQL()) {
+            $sql .= "\n".$this->_getJoinsSQL();
+        }
+        
+        if ($this->_getWhereSQL()) {
+            $sql .= "\n".$this->_getWhereSQL();
+        }
+        
+        if ($this->_getGroupBySQL()) {
+            $sql .= "\n".$this->_getGroupBySQL();
+        }
         
         return $sql;
     }
@@ -198,6 +210,10 @@ class PHPFrame_Database_IdObject
      */
     private function _getSelectSQL()
     {
+        if (count($this->_fields) < 1) {
+            $exception_msg = "Can not build query. No fields have been selected.";
+            throw new PHPFrame_Exception_Database($exception_msg);
+        }
         
         $sql = "SELECT ";
         $sql .= implode(", ", $this->_fields);
@@ -214,7 +230,12 @@ class PHPFrame_Database_IdObject
      */
     private function _getFromSQL()
     {
-        $sql = " FROM ".$this->_from;
+        if (empty($this->_from)) {
+            $exception_msg = "Can not build query. No table to select from.";
+            throw new PHPFrame_Exception_Database($exception_msg);
+        }
+        
+        $sql = "FROM ".$this->_from;
         
         return $sql;
     }
@@ -229,7 +250,7 @@ class PHPFrame_Database_IdObject
      */
     private function _getJoinsSQL()
     {
-        $sql = " ";
+        $sql = "";
         $sql .= implode(" ", $this->_joins);
         
         return $sql;
@@ -244,15 +265,19 @@ class PHPFrame_Database_IdObject
      */
     private function _getWhereSQL()
     {
-        $sql = " WHERE ";
+        $sql = "";
         
-        for ($i=0; $i<count($this->_where); $i++) {
-            if ($i>0) {
-                $sql .= " AND ";
+        if (count($this->_where) > 0) {
+            $sql .= "WHERE ";
+            
+            for ($i=0; $i<count($this->_where); $i++) {
+                if ($i>0) {
+                    $sql .= " AND ";
+                }
+                $sql .= "(".$this->_where[$i][0];
+                $sql .= " ".$this->_where[$i][1];
+                $sql .= " ".$this->_where[$i][2].")";
             }
-            $sql .= $this->_where[$i][0];
-            $sql .= " ".$this->_where[$i][1];
-            $sql .= " ".$this->_where[$i][2];
         }
         
         return $sql;
@@ -267,7 +292,11 @@ class PHPFrame_Database_IdObject
      */
     private function _getGroupBySQL()
     {
-        $sql = " GROUP BY ".$this->_group_by;
+        $sql = "";
+        
+        if (!empty($this->_group_by)) {
+            $sql = "GROUP BY ".$this->_group_by;   
+        }
         
         return $sql;
     }

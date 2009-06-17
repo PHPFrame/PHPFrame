@@ -139,7 +139,8 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @return void
      * @since  1.0
      */
-    public function __construct($options=null, PHPFrame_Database $db=null) {
+    public function __construct($options=null, PHPFrame_Database $db=null)
+    {
         // Handle options
         
         // If no database object is passed we use default connection
@@ -204,7 +205,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @param string|array $fields a string or array of strings with field names
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Database_RowCollection
      * @since  1.0
      */
     public function select($fields)
@@ -220,7 +221,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @param string $table A string with the table name
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Database_RowCollection
      * @since  1.0
      */
     public function from($table)
@@ -236,7 +237,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @param sting $join A join statement
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Database_RowCollection
      * @since  1.0
      */
     public function join($join)
@@ -254,7 +255,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @param string $right
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Database_RowCollection
      * @since  1.0
      */
     public function where($left, $operator, $right)
@@ -270,7 +271,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @param string $column The column name to group by
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Database_RowCollection
      * @since  1.0
      */
     public function groupby($column)
@@ -287,7 +288,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @param string $direction The order direction (either ASC or DESC)
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Database_RowCollection
      * @since  1.0
      */
     public function orderby($column, $direction=null)
@@ -304,7 +305,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @param string $direction The order direction (either ASC or DESC)
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Database_RowCollection
      * @since  1.0
      */
     public function orderdir($direction)
@@ -321,7 +322,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @param int $limistart The entry number of the first record in the current page
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Database_RowCollection
      * @since  1.0
      */
     public function limit($limit, $limistart=null)
@@ -337,7 +338,7 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @param int $limistart The entry number of the first record in the current page
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Database_RowCollection
      * @since  1.0
      */
     public function limistart($limistart)
@@ -347,6 +348,16 @@ class PHPFrame_Database_RowCollection implements Iterator
         return $this;
     }
     
+    /**
+     * Set query parameters
+     * 
+     * @param string $key
+     * @param string $value
+     * 
+     * @access public
+     * @return PHPFrame_Database_RowCollection
+     * @since  1.0
+     */
     public function params($key, $value)
     {
         $this->_id_obj->params($key, $value);

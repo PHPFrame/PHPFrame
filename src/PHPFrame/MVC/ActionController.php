@@ -255,11 +255,18 @@ abstract class PHPFrame_MVC_ActionController
             
             // Get method parameters
             $params = $reflection_obj->getParameters();
+            
             // Loop through parameters and get data from request array
             $args = array();
             foreach ($params as $param) {
                 $name = $param->getName();
-                $default = $param->getDefaultValue();
+                $default = null;
+                
+                // Set default value if available
+                if ($param->isDefaultValueAvailable()) {
+                    $default = $param->getDefaultValue();
+                }
+                
                 $args[] = PHPFrame::Request()->get($name, $default);
             }
             
@@ -267,7 +274,8 @@ abstract class PHPFrame_MVC_ActionController
             $reflection_obj->invokeArgs($this, $args);
             
         } catch (Exception $e) {
-            $msg = "Action ".$action."() not supported by ".__CLASS__.".";
+            $msg = "Action ".$action."() not supported by ".__CLASS__.". ";
+            $msg .= $e->getMessage();
             throw new PHPFrame_Exception($msg);
         }
     }

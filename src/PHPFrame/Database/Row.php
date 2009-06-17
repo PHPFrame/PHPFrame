@@ -75,7 +75,7 @@ class PHPFrame_Database_Row
      * @return void
      * @since  1.0
      */
-    public function __construct($table_name, PHPFrame_Database $db=null) 
+    public function __construct($table_name, PHPFrame_Database $db=null)
     {
         $this->_table_name = (string) $table_name;
         
@@ -109,7 +109,7 @@ class PHPFrame_Database_Row
      * @return string
      * @since  1.0
      */
-    public function __get($key) 
+    public function __get($key)
     {
         return $this->get($key);
     }
@@ -148,7 +148,7 @@ class PHPFrame_Database_Row
      * @return string
      * @since  1.0
      */
-    public function get($key) 
+    public function get($key)
     {
         if (array_key_exists($key, $this->_data)) {
             return $this->_data[$key];
@@ -172,7 +172,7 @@ class PHPFrame_Database_Row
      * @return void
      * @since  1.0
      */
-    public function set($key, $value) 
+    public function set($key, $value)
     {
         if (!$this->hasColumn($key)) {
             throw new PHPFrame_Exception("Tried to set column '".$key
@@ -211,7 +211,7 @@ class PHPFrame_Database_Row
      * @return bool
      * @since  1.0
      */
-    public function hasColumn($column_name) 
+    public function hasColumn($column_name)
     {
         // Loop through table structure to find key
         foreach ($this->_structure as $structure) {
@@ -234,7 +234,7 @@ class PHPFrame_Database_Row
      * @return PHPFrame_Database_Row
      * @since  1.0
      */
-    public function load($id, $exclude='') 
+    public function load($id, $exclude='')
     {
         $query = "SELECT * FROM `".$this->_table_name;
         $query .= "` WHERE `".$this->_primary_key."` = '".$id."'";
@@ -261,7 +261,7 @@ class PHPFrame_Database_Row
      * @return PHPFrame_Database_Row
      * @since  1.0
      */
-    public function loadByQuery($query, $foreign_keys=array()) 
+    public function loadByQuery($query, $foreign_keys=array())
     {
         // Run SQL query
         $stmt = $this->_db->query($query);
@@ -291,7 +291,7 @@ class PHPFrame_Database_Row
      * @return PHPFrame_Database_Row
      * @since  1.0
      */
-    public function bind($array, $exclude='', $foreign_keys=array()) 
+    public function bind($array, $exclude='', $foreign_keys=array())
     {
         // Process exclude
         if (!empty($exclude)) {
@@ -335,7 +335,7 @@ class PHPFrame_Database_Row
      * @return PHPFrame_Database_Row
      * @since  1.0
      */
-    public function store() 
+    public function store()
     {
         // Check types and required columns before saving
         $this->_check();
@@ -362,7 +362,7 @@ class PHPFrame_Database_Row
      * @return void
      * @since  1.0
      */
-    public function delete($id) 
+    public function delete($id)
     {
         $query = "DELETE FROM `".$this->_table_name."` ";
         $query .= " WHERE `".$this->_primary_key."` = '".$id."'";
@@ -376,7 +376,7 @@ class PHPFrame_Database_Row
      * @return void
      * @since  1.0
      */
-    private function _readStructure() 
+    private function _readStructure()
     {
         $app_registry = PHPFrame::AppRegistry();
         $table_structures = $app_registry->get('table_structures');
@@ -418,7 +418,7 @@ class PHPFrame_Database_Row
      * @return bool
      * @since  1.0
      */
-    private function _check() 
+    private function _check()
     {
         // Loop through every column in the row
         foreach ($this->_structure as $structure) {
@@ -441,6 +441,13 @@ class PHPFrame_Database_Row
                     $this->_data[$structure->Field] = null;
                     continue; // jump to next iteration of the loop to avoid check
                 }
+            }
+            
+            // If value is still null (after setting default) and field allows null
+            // we simply skip the test
+            if (empty($this->_data[$structure->Field]) 
+                && $structure->Null == "YES") {
+                continue; // jump to next iteration of the loop to avoid check
             }
             
             // Get type and length from input type string
@@ -504,7 +511,7 @@ class PHPFrame_Database_Row
      * @return void
      * @since  1.0
      */
-    private function _insert() 
+    private function _insert()
     {
         // Build SQL insert query
         $query = "INSERT INTO `".$this->_table_name."` ";
@@ -528,7 +535,7 @@ class PHPFrame_Database_Row
      * @return void
      * @since  1.0
      */
-    private function _update() 
+    private function _update()
     {
         // Build SQL insert query
         $query = "UPDATE `".$this->_table_name."` SET ";

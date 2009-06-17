@@ -18,6 +18,54 @@
 /**
  * Row Collection Class
  * 
+ * Example 1:
+ * 
+ * <code>
+ * // Create RowCollection object
+ * $rows = new PHPFrame_Database_RowCollection(array("select"=>"email",
+ *                                                   "from"=>"#__users",
+ *                                                   "where"=>array("id", "=", "62")
+ *                                                   )
+ *                                             );
+ * // Load the selection
+ * $rows->load();
+ * // Print results
+ * foreach ($rows as $row) {
+ *     echo $row->email;
+ * }
+ * </code>
+ * 
+ * Example 2 (Using separate options array for clarity):
+ * 
+ * <code>
+ * // Create options array
+ * $options = array("select"=>"*", 
+ *                  "from"=>"#__users",
+ *                  "where"=>array("id", "=", "62"));
+ * 
+ * // Create RowCollection object
+ * $rows2 = new PHPFrame_Database_RowCollection($options);
+ * // Load the selection
+ * $rows2->load();
+ * // Print results
+ * foreach ($rows2 as $row) {
+ *     echo $row->firstname." ".$row->firstname." <".$row->email.">";
+ * }
+ * </code>
+ * 
+ * Example 3 (Using id object's fluent syntax):
+ * 
+ * <code>
+ * // Create RowCollection object
+ * $rows3 = new PHPFrame_Database_RowCollection();
+ * // Make a selection
+ * $rows3->select("*")->from("#__users")->where("id", "=", "62");
+ * // Load the selection
+ * $rows3->load();
+ * // Print results
+ * print_r($rows3);
+ * </code>
+ * 
  * @category   MVC_Framework
  * @package    PHPFrame
  * @subpackage Database

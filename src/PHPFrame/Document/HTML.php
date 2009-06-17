@@ -195,7 +195,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         $html .= '<form name="limitform" id="limitform" method="post">';
         $html .= 'Display Num: ';
         $html .= '<select name="limit" onchange="document.forms[\'limitform\'].submit();">';
-        for ($i=10; $i<=100; $i+=10) {
+        for ($i=25; $i<=100; $i+=25) {
             $html .= '<option value="'.$i.'"';
             if ($collection->getLimit() == $i) {
                 $html .= ' selected';

@@ -18,6 +18,17 @@
 /**
  * Row Collection Class
  * 
+ * This class is used to handle collections of rows from the database.
+ * 
+ * RowCollection objects are "iterable" for ease of use and also provide standard
+ * pagination.
+ * 
+ * It provides a mechanism to build a SQL query used to fetch the row data.
+ * This mechanism is delegated to the IdObject.
+ * 
+ * Note that prepared statements and parameter markers are allowed. Using parameter
+ * markers for input data is strongly encouraged for security.
+ * 
  * Example 1:
  * 
  * <code>
@@ -35,13 +46,16 @@
  * }
  * </code>
  * 
- * Example 2 (Using separate options array for clarity):
+ * Example 2 using separate options array for clarity:
+ * 
+ * Note the use of parameter marker.
  * 
  * <code>
  * // Create options array
  * $options = array("select"=>"*", 
  *                  "from"=>"#__users",
- *                  "where"=>array("id", "=", "62"));
+ *                  "where"=>array("id", "=", ":id")
+ *                  "params"=>array(":id", 62));
  * 
  * // Create RowCollection object
  * $rows2 = new PHPFrame_Database_RowCollection($options);
@@ -53,13 +67,16 @@
  * }
  * </code>
  * 
- * Example 3 (Using id object's fluent syntax):
+ * Example 3 using id object's fluent syntax and parameter markers:
  * 
  * <code>
  * // Create RowCollection object
  * $rows3 = new PHPFrame_Database_RowCollection();
  * // Make a selection
- * $rows3->select("*")->from("#__users")->where("id", "=", "62");
+ * $rows3->select("*")
+ *       ->from("#__users")
+ *       ->where("id", "=", ":id")
+ *       ->params(":id", 62);
  * // Load the selection
  * $rows3->load();
  * // Print results
@@ -72,7 +89,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see        Iterator
+ * @see        PHPFrame_Database_IdObject, PHPFrame_Database
  * @since      1.0
  */
 class PHPFrame_Database_RowCollection implements Iterator
@@ -537,11 +554,22 @@ class PHPFrame_Database_RowCollection implements Iterator
         }
     }
     
+    /**
+     * Fetch the total number of rows in the db table
+     * 
+     * This method ignores the 
+     * 
+     * @param string $id_object The id object used to generate the query.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     private function _fetchTotalNumRows(PHPFrame_Database_IdObject $id_object)
     {
         // Cast Id Object to string (this produces a SQL query)
         $id_obj_no_limit = clone $id_object;
-        $id_obj_no_limit->select("p.id");
+        $id_obj_no_limit->select($this->_id_obj->getTableName().".id");
         $sql = $id_obj_no_limit->getSQL(false);
         
         // Run SQL query

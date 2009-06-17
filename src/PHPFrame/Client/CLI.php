@@ -102,8 +102,11 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
         $user->set('firstname', 'System');
         $user->set('lastname', 'User');
         
-        // Store user detailt in session
+        // Store user in session
         $session = PHPFrame::Session();
         $session->setUser($user);
+        
+        // Set document as response content
+        $response->setDocument(new PHPFrame_Document_Plaintext());
     }
 }

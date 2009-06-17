@@ -124,7 +124,7 @@ abstract class PHPFrame_MVC_ActionController
     {
         // Get action from the request
         $request_action = PHPFrame::Request()->getAction();
-        //echo $request_action; exit;
+        
         // If no specific action has been requested we use default action
         if (empty($request_action)) {
             $action = $this->default_action;
@@ -137,12 +137,8 @@ abstract class PHPFrame_MVC_ActionController
         $groupid = PHPFrame::Session()->getGroupId();
         $permissions = PHPFrame::AppRegistry()->getPermissions();
         if ($permissions->authorise($component, $action, $groupid) === true) {
-            if (is_callable(array($this, $action))) {
-                $this->$action();
-            } else {
-                $exception_msg = "Action ".$action."() not found in controller.";
-                throw new PHPFrame_Exception($exception_msg);
-            }
+            // Invoke controller action
+            $this->_invokeAction($action);
         } else {
             if (!PHPFrame::Session()->isAuth()) {
                 $this->setRedirect('index.php?component=com_login');
@@ -245,5 +241,34 @@ abstract class PHPFrame_MVC_ActionController
     protected function getView($name, $layout=null)
     {
         return PHPFrame_MVC_Factory::getView($name, $layout);
+    }
+    
+    private function _invokeAction($action)
+    {
+        try {
+            // Get reflection object for action's method
+            $reflection_obj = new ReflectionMethod($this, $action);
+            if (!$reflection_obj->isPublic()) {
+                $msg = "Action ".$action."() not supported by ".__CLASS__.".";
+                throw new PHPFrame_Exception($msg);
+            }
+            
+            // Get method parameters
+            $params = $reflection_obj->getParameters();
+            // Loop through parameters and get data from request array
+            $args = array();
+            foreach ($params as $param) {
+                $name = $param->getName();
+                $default = $param->getDefaultValue();
+                $args[] = PHPFrame::Request()->get($name, $default);
+            }
+            
+            // Invoke action
+            $reflection_obj->invokeArgs($this, $args);
+            
+        } catch (Exception $e) {
+            $msg = "Action ".$action."() not supported by ".__CLASS__.".";
+            throw new PHPFrame_Exception($msg);
+        }
     }
 }

@@ -143,7 +143,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
     }
     
     /**
-     * Method used to render Row Collections in this document
+     * Method used to render Row Collections in HTML format
      * 
      * @param PHPFrame_Database_RowCollection
      * 
@@ -151,9 +151,114 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
      * @return string
      * @since  1.0
      */
-    public function renderRowCollection(PHPFrame_Database_RowCollection $collection)
+    public function renderRowCollection(
+        PHPFrame_Database_RowCollection $collection, 
+        $headings=null
+    ) {
+        // Build table to display row data
+        $html = "<table class=\"data_list\" width=\"100%\">\n";
+        
+        // Prepare heading array
+        if (!is_null($headings) && !is_array($headings)) {
+            $msg = "Wrong data type.";
+            $msg .= "Headings must be passed as an array.";
+            throw new PHPFrame_Exception($msg);
+        } elseif (is_null($headings)) {
+            // If no specified headings we get keys from collection
+            $headings = $collection->getKeys();
+        }
+        
+        // Print headings
+        $html .= "<thead>\n<tr>\n";
+        foreach ($headings as $heading) {
+            $html .= "<th>".$heading."</th>\n";
+        }
+        $html .= "</tr>\n</thead>\n";
+        
+        // Print tbody
+        $html .= "<tbody>\n";
+        foreach ($collection as $row) {
+            $html .= "<tr>\n";
+            foreach ($row->getKeys() as $key) {
+                $html .= "<td>".$row->$key."</td>\n";
+            }
+            $html .= "</tr>\n";
+        }
+        $html .= "</tbody>\n";
+        $html .= "</table>";
+        
+        return $html;
+    }
+    
+    public function renderPagination(PHPFrame_Database_RowCollection $collection)
     {
-        throw new PHPFrame_Exception("Method not implemented");
+        $html .= '<form name="limitform" id="limitform" method="post">';
+        $html .= 'Display Num: ';
+        $html .= '<select name="limit" onchange="document.forms[\'limitform\'].submit();">';
+        for ($i=10; $i<=100; $i+=10) {
+            $html .= '<option value="'.$i.'"';
+            if ($collection->getLimit() == $i) {
+                $html .= ' selected';
+            }
+            $html .= '>'.$i.'</option>';
+        }
+        $html .= '<option value="-1">-- All --</option>';
+        $html .= '</select>';
+        $html .= '</form>';
+        
+        
+        $href = 'index.php?component='.PHPFrame::Request()->getComponentName();
+        $href .= '&amp;action='.PHPFrame::Request()->getAction();
+        $href .= '&amp;limit='.$collection->getLimit();
+        //echo var_dump($collection); exit;
+        $html .= '<ul>';
+        // Start link
+        $html .= '<li>';
+        if ($collection->getCurrentPage() != 1) {
+            $html .= '<a href="'.$href.'&amp;limitstart=0">Start</a>';
+        } else {
+            $html .= 'Start';
+        }
+        $html .= '</li>';
+        // Prev link
+        $html .= '<li>';
+        if ($collection->getCurrentPage() != 1) {
+            $html .= '<a href="'.$href.'&amp;limitstart='.(($collection->getCurrentPage()-2) * $collection->getLimit()).'">Prev</a>';
+        } else {
+            $html .= 'Prev';
+        }
+        $html .= '</li>';
+        // Page numbers
+        for ($j=0; $j<$collection->getPages(); $j++) {
+            $html .= '<li>';
+            if ($collection->getCurrentPage() != ($j+1)) {
+                $html .= '<a href="'.$href.'&amp;limitstart='.($collection->getLimit() * $j).'">'.($j+1).'</a>';    
+            } else {
+                $html .= ($j+1);
+            }
+            $html .= '</li>';
+        }
+        // Next link
+        $html .= '<li>';
+        if ($collection->getCurrentPage() != $collection->getPages()) {
+            $html .= '<a href="'.$href.'&amp;limitstart='.($collection->getCurrentPage() * $collection->getLimit()).'">Next</a>';    
+        } else {
+            $html .= 'Next';
+        }
+        // End link
+        $html .= '<li>';
+        if ($collection->getCurrentPage() != $collection->getPages()) {
+            $html .= '<a href="'.$href.'&amp;limitstart='.(($collection->getPages()-1) * $collection->getLimit()).'">End</a>';    
+        } else {
+            $html .= 'End';
+        }
+        $html .= '</li>';
+        $html .= '</ul>';
+        
+        $html .= 'Page '.$collection->getCurrentPage();
+        $html .= ' of '.$collection->getPages();
+        
+        return $html;
     }
     
     /**

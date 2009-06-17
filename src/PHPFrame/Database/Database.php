@@ -183,6 +183,26 @@ class PHPFrame_Database
     }
     
     /**
+     * Prepares a statement for execution and returns a statement object
+     * 
+     * @param string $statement This must be a valid SQL statement for the target 
+     *                          database server.
+     * @param array  $options   This array holds one or more key=>value pairs to 
+     *                          set attribute values for the PDOStatement object 
+     *                          that this method returns.
+     * 
+     * @access public
+     * @return PDOStatement
+     * @since  1.0
+     */
+    public function prepare($statement, $options=array())
+    {
+        $statement = str_replace('#__', config::DB_PREFIX, $statement);
+        
+        return $this->_pdo->prepare($statement, $options);
+    }
+    
+    /**
      * Run query and load single result
      * 
      * @param string $sql The SQL statement to run.

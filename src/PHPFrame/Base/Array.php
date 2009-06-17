@@ -27,5 +27,16 @@
  */
 class PHPFrame_Base_Array
 {
-    // ...
+    /**
+     * Is associative array?
+     * 
+     * @static
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public static function isAssoc($array) {
+        return (is_array($array) 
+                && 0 !== count(array_diff_key($array, array_keys(array_keys($array)))));
+    }
 }

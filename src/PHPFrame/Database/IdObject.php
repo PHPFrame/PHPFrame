@@ -80,7 +80,7 @@ class PHPFrame_Database_IdObject
      */
     private $_limit=-1;
     /**
-     * Number of rows per page
+     * Row number from where the current page start
      * 
      * @var int
      */
@@ -94,6 +94,10 @@ class PHPFrame_Database_IdObject
     
     /**
      * Constructor
+     * 
+     * @param array $options An associative array with initialisation options.
+     *                       For a list of available options invoke 
+     *                       PHPFrame_Database_IdObject::getOptions().
      * 
      * @access public
      * @return void
@@ -131,6 +135,13 @@ class PHPFrame_Database_IdObject
         return $this->getSQL();
     }
     
+    /**
+     * Return an array with the list of available options in this object.
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
     public function getOptions()
     {
         $raw_keys = array_keys(get_object_vars($this));
@@ -410,16 +421,41 @@ class PHPFrame_Database_IdObject
         return $this->_from;
     }
     
+    /**
+     * Get query parameters
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
     public function getParams()
     {
         return $this->_params;
     }
     
+    /**
+     * Get limit
+     * 
+     * The total number of entries the subset will be limited to.
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
     public function getLimit()
     {
         return $this->_limit;
     }
     
+    /**
+     * Get limit start
+     * 
+     * The entry number of the first record in the current subset/page.
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
     public function getLimitstart()
     {
         return $this->_limitstart;

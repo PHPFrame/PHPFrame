@@ -414,16 +414,37 @@ class PHPFrame_Database_RowCollection implements Iterator
         return $this->_rows[0]->getKeys();
     }
     
+    /**
+     * Get number of records the current page/subset is limited to
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
     public function getLimit()
     {
         return $this->_id_obj->getLimit();
     }
     
+    /**
+     * Get row number from where the current page start
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
     public function getLimitstart()
     {
         return $this->_id_obj->getLimitstart();
     }
     
+    /**
+     * Get total number of records in db table ignoring the limit clause
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
     public function getTotal()
     {
         return $this->_total;
@@ -432,6 +453,7 @@ class PHPFrame_Database_RowCollection implements Iterator
     /**
      * Get number of pages
      * 
+     * @access public
      * @return int
      * @since  1.0
      */
@@ -448,6 +470,7 @@ class PHPFrame_Database_RowCollection implements Iterator
     /**
      * Get current page number
      * 
+     * @access public
      * @return int
      * @since  1.0
      */

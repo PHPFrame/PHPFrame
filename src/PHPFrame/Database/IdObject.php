@@ -350,9 +350,21 @@ class PHPFrame_Database_IdObject
         return $this;
     }
     
+    /**
+     * Set the value of a query parameter
+     * 
+     * @param string $key   The parameter marker
+     * @param string $value The paramter value
+     * 
+     * @access public
+     * @return PHPFrame_Database_IdObject
+     * @since  1.0
+     */
     public function params($key, $value)
     {
         $this->_params[$key] = $value;
+        
+        return $this;
     }
     
     /**

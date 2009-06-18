@@ -50,6 +50,12 @@ class PHPFrame_Database_Row
      */
     private $_structure=null;
     /**
+     * An IdObject used to map the row to the db
+     * 
+     * @var PHPFrame_Database_IdObject
+     */
+    private $_id_obj=null;
+    /**
      * The table name where the row object belongs
      * 
      * @var string
@@ -58,7 +64,7 @@ class PHPFrame_Database_Row
     /**
      * The row's data
      * 
-     * @var    array
+     * @var array
      */
     private $_data=array();
     
@@ -67,7 +73,7 @@ class PHPFrame_Database_Row
      * 
      * @param string            $table_name The table to map this row to in the db.
      * @param PHPFrame_Database $db         Optionally use an alternative database 
-     *                                      to the default one provided by 
+     *                                      	o the default one provided by 
      *                                      PHPFrame::DB() as defined in config 
      *                                      class.
      * 
@@ -87,8 +93,20 @@ class PHPFrame_Database_Row
         
         // Read table structure from application registry
         $this->_readStructure();
+        
+        // Acquire IdObject
+        $this->_id_obj = new PHPFrame_Database_IdObject();
+        // Initialise fiels selection and table name in IdObject
+        $this->_id_obj->select("*")->from($this->_table_name);
     }
     
+    /**
+     * Magic method invoked when trying to use an IdObject as a string.
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
         return $this->toString();
@@ -226,9 +244,14 @@ class PHPFrame_Database_Row
     /**
      * Load row data from database given a row id.
      * 
-     * @param mixed  $id      Normally an integer, but could be a string
-     * @param string $exclude A list of key names to exclude from binding process 
-     *                        separated by commas.
+     * @param int|string|PHPFrame_Database_IdObject $id      Normally an integer or string 
+     *                                                       with the primary key value of
+     *                                                       the row we want to load.
+     *                                                       Alternatively you can pass an
+     *                                                       IdObject.
+     * @param string                                $exclude A list of key names to exclude 
+     *                                                       from binding process separated 
+     *                                                       by commas.
      * 
      * @access public
      * @return PHPFrame_Database_Row
@@ -236,18 +259,29 @@ class PHPFrame_Database_Row
      */
     public function load($id, $exclude='')
     {
-        $query = "SELECT * FROM `".$this->_table_name;
-        $query .= "` WHERE `".$this->_primary_key."` = '".$id."'";
-        
-        $array = $this->_db->loadAssoc($query);
-        
-        if (is_array($array) && count($array) > 0) {
-            $this->bind($array, $exclude);
-            
-            return $this;    
+        if ($id instanceof PHPFrame_Database_IdObject) {
+            $this->_id_obj = $id;
         } else {
-            return false;
+            $this->_id_obj->where($this->_primary_key, "=", ":id");
+            $this->_id_obj->params(":id", $id);
         }
+        
+        // Cast IdObject to string to convert to SQL query
+        $sql = (string) $this->_id_obj;
+        
+        // Prepare SQL statement
+        $stmt = $this->_db->prepare($sql);
+        // Execute SQL statement
+        $stmt->execute($this->_id_obj->getParams());
+        
+        // Fetch result as assoc array
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+        // If result is array we bind it to the row
+        if (is_array($array) && count($array) > 0) {
+            $this->bind($array, $exclude);   
+        }
+        
+        return $this;
     }
     
     /**

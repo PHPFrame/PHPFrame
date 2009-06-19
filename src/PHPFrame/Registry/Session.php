@@ -258,10 +258,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     public function destroy() 
     {
-        unset($_SESSION);
-        unset($_COOKIE);
-        self::$_instance = null;
-        session_regenerate_id(true); // this destroys the session and generates a new session id
+        // this destroys the session and generates a new session id
+        session_regenerate_id(true);
     }
     
     /**

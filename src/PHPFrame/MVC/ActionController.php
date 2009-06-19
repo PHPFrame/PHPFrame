@@ -37,7 +37,7 @@
  * @since      1.0
  * @abstract 
  */
-abstract class PHPFrame_MVC_ActionController
+abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
 {
     /**
      * Instances of its concrete children

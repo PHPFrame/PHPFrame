@@ -20,8 +20,11 @@
  * 
  * This class deals with the connection(s) to the database(s).
  * 
- * It serves singleton objects for each connection (determined by the dsn and db 
- * user credentials.
+ * The database class serves singleton objects for each connection (determined by 
+ * the dsn and db user credentials.
+ * 
+ * This class also extends PHPFrame_Base_Subject allowing observer objects to 
+ * subscribe for updates.
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
@@ -29,9 +32,10 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see        PHPFrame_Base_Subject
  * @since      1.0
  */
-class PHPFrame_Database
+class PHPFrame_Database extends PHPFrame_Base_Subject
 {
     /**
      * An array holding instances of this class
@@ -165,7 +169,6 @@ class PHPFrame_Database
         $sql = str_replace('#__', config::DB_PREFIX, $sql);
         
         // Run SQL query
-        //PHPFrame_Debug_Log::write($this->_query);
         try {
             $stmt = $this->_pdo->query($sql);
         }
@@ -312,7 +315,6 @@ class PHPFrame_Database
      */
     public function getEscaped($text) 
     {
-        
         $result = $this->_pdo->quote($text);
         
         return $result;

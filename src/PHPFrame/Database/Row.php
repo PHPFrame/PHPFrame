@@ -18,6 +18,8 @@
 /**
  * Row Class
  * 
+ * The "row" class is an abstraction of a table row in a database.
+ * 
  * Note that this class uses the Application Registry object to cache table 
  * structures and primary keys in order to avoid unnecessary trips to the database.
  * 
@@ -71,18 +73,31 @@ class PHPFrame_Database_Row
     /**
      * Constructor
      * 
-     * @param string            $table_name The table to map this row to in the db.
-     * @param PHPFrame_Database $db         Optionally use an alternative database 
-     *                                      	o the default one provided by 
-     *                                      PHPFrame::DB() as defined in config 
-     *                                      class.
+     * The constructor takes only one required parameter ($table_name), that being
+     * the name of the database table the row will mapped to.
      * 
+     * Note that this can be overriden after instantiation when invoking 
+     * PHPFrame_Database_Row::load(), as it can take an IdObject instead of an 
+     * id as an argument.
+     * 
+     * @param string            $table_name  The table to map this row to in the db.
+     * @param PHPFrame_Database $db          Optionally use an alternative database 
+     *                                       to the default one provided by 
+     *                                       PHPFrame::DB() as defined in config 
+     *                                       class.
+     * @param string            $primary_key This parameter allows to set a different
+     *                                       primary key from the one automatically
+     *                                       read from the table structure in the db.
      * @access public
      * @return void
+     * @see    PHPFrame_Database_IdObject, PHPFrame_Database_RowCollection
      * @since  1.0
      */
-    public function __construct($table_name, PHPFrame_Database $db=null)
-    {
+    public function __construct(
+        $table_name,
+        PHPFrame_Database $db=null,
+        $primary_key=null
+    ) {
         $this->_table_name = (string) $table_name;
         
         if ($db instanceof PHPFrame_Database) {
@@ -93,6 +108,11 @@ class PHPFrame_Database_Row
         
         // Read table structure from application registry
         $this->_readStructure();
+        
+        // Override primary key detected from db with given value
+        if (!is_null($primary_key)) {
+            $this->_primary_key = (string) $primary_key;
+        }
         
         // Acquire IdObject
         $this->_id_obj = new PHPFrame_Database_IdObject();
@@ -261,6 +281,7 @@ class PHPFrame_Database_Row
     {
         if ($id instanceof PHPFrame_Database_IdObject) {
             $this->_id_obj = $id;
+            $this->_table_name = $id->getTableName();
         } else {
             $this->_id_obj->where($this->_primary_key, "=", ":id");
             $this->_id_obj->params(":id", $id);
@@ -279,34 +300,6 @@ class PHPFrame_Database_Row
         // If result is array we bind it to the row
         if (is_array($array) && count($array) > 0) {
             $this->bind($array, $exclude);   
-        }
-        
-        return $this;
-    }
-    
-    /**
-     * Load row data from database using query
-     * 
-     * @param string $query        The SQL query used to load the data.
-     * @param array  $foreign_keys An array with foreign keys to be allowed to be 
-     *                             set as columns in this row.
-     * 
-     * @access public
-     * @return PHPFrame_Database_Row
-     * @since  1.0
-     */
-    public function loadByQuery($query, $foreign_keys=array())
-    {
-        // Run SQL query
-        $stmt = $this->_db->query($query);
-        
-        $array = array();
-        
-        // Id result is valid we populate array
-        if ($stmt->rowCount() == 1) {
-            $array = $stmt->fetch(PDO::FETCH_ASSOC);
-            // Bind result array to row passing foreign keys to allow them
-            $this->bind($array, '', $foreign_keys);
         }
         
         return $this;
@@ -365,18 +358,22 @@ class PHPFrame_Database_Row
     /**
      * Store row in database
      * 
+     * @param bool $force_insert Optional flag to force an INSERT query instead of
+     *                           figuring out INSERT/UPDATE depending on the primary
+     *                           key being set or not.
+     * 
      * @access public
      * @return PHPFrame_Database_Row
      * @since  1.0
      */
-    public function store()
+    public function store($force_insert=false)
     {
         // Check types and required columns before saving
         $this->_check();
         
         // Do insert or update depending on whether primary key is set
         $id = $this->get($this->_primary_key);
-        if (is_null($id)) {
+        if (is_null($id) || $force_insert) {
             // Insert new record
             $this->_insert();
         } else {

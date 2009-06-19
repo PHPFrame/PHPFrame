@@ -20,6 +20,10 @@
  * 
  * This class encapsulates the selection of rows from the database.
  * 
+ * IdObjects are used by both "Row" and "RowCollection" objects in order to build
+ * SQL queries. Both of this "database facing" classes make use of the IdObject by
+ * means of object composition, providing added flexibility.
+ * 
  * @category   MVC_Framework
  * @package    PHPFrame
  * @subpackage Database
@@ -157,6 +161,34 @@ class PHPFrame_Database_IdObject
     /**
      * Set the fields array used in select statement
      * 
+     * This method takes either a string a single column name or an array of column
+     * names.
+     * 
+     * The "*" character is allowed and used to select "all" columns.
+     * 
+     * This method returns the IdObject object, making it possible to use "fluent syntax".
+     * 
+     * Example:
+     * 
+     * <code>
+     * // Select all columns from table "my_table"
+     * $id_object = new PHPFrame_Database_IdObject();
+     * $id_object->select("*")->from("my_table");
+     * // echo the SQL, this will automatically cast the IdObject to string
+     * echo $id_object;
+     * 
+     * 
+     * // The same as above but passing the "select" and "table" options to the constructor.
+     * $options = array("select"=>"*", "from"->"my_table");
+     * $id_object = new PHPFrame_Database_IdObject($options);
+     * // echo the SQL, this will automatically cast the IdObject to string
+     * echo $id_object;
+     * 
+     * // Now we create a new IdObject and select only some specified fields
+     * $id_object = new PHPFrame_Database_IdObject();
+     * $id_object->select(array("id", "name", "email"))->from("my_table");
+     * </code>
+     * 
      * @param string|array $fields a string or array of strings with field names
      * 
      * @access public
@@ -195,7 +227,7 @@ class PHPFrame_Database_IdObject
     public function from($table)
     {
         // Check if input contaings alias
-        preg_match("/([a-zA-Z_\#\.]+) (as) ([a-zA-Z_\.]+)/i", $table, $matches);
+        preg_match("/([a-zA-Z_\#\.]+) (as) ([a-zA-Z_]+)/i", $table, $matches);
         if (count($matches) == 4) {
             $table = array($matches[1], $matches[3]);
         }

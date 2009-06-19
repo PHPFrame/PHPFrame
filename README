@@ -1,3 +1,19 @@
-PHPFrame is an MVC framework written for PHP 5.3 or newer.
+PHPFrame is an MVC framework written for PHP 5.2.3 or newer.
+
+This project is still work in progress...
 
 
+Project resources
+-----------------
+
+Project home page: http://www.phpframe.org/
+
+Developers discussion group: http://groups.google.com/group/phpframe-dev
+
+Source: http://code.google.com/p/phpframe/source
+
+Source documentation: http://www.phpframe.org/doc/
+
+Tracker: http://code.google.com/p/phpframe/issues/list
+
+Commits list: http://groups.google.com/group/phpframe-commits

@@ -30,11 +30,14 @@ class PHPFrame_Utils_Filesystem
     /**
      * Write string to file
      * 
-     * @param    string    $fname        The full path to the file
-     * @param    string    $content    The content to store in the file
-     * @param     boolean    $append        Flag to indicate whether we want to append the content. 
-     *                                 Default is FALSE
-     * @return    void
+     * @param string $fname   The full path to the file
+     * @param string $content The content to store in the file
+     * @param bool   $append  Flag to indicate whether we want to append the content. 
+     *                        Default is FALSE
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function write($fname, $content, $append=false) 
     {
@@ -60,8 +63,11 @@ class PHPFrame_Utils_Filesystem
     /**
      * Ensure that directory is writable
      * 
-     * @param    string    $path    Path to directory to ensure that it is writable
-     * @return    void
+     * @param string $path Path to directory to ensure that it is writable
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function ensureWritableDir($path) 
     {
@@ -82,19 +88,24 @@ class PHPFrame_Utils_Filesystem
     /**
      * Upload file
      * 
-     * @param    string    $fieldName
-     * @param    string    $dir
-     * @param    string    $accept
-     * @param    int        $max_upload_size
-     * @param    bool    $overwrite
-     * @return     mixed    An assoc array containing file_name, file_size and file_type or an assoc array containing error on failure.
+     * @param  string $fieldName
+     * @param  string $dir
+     * @param  string $accept
+     * @param  int    $max_upload_size
+     * @param  bool   $overwrite
+     * 
+     * @access public
+     * @return mixed An assoc array containing file_name, file_size and file_type 
+     *               or an assoc array containing error on failure.
+     * @since  1.0
      */
-    public static function uploadFile($fieldName, 
-                                      $dir, 
-                                      $accept="*", 
-                                      $max_upload_size=0, 
-                                      $overwrite=false) 
-    {
+    public static function uploadFile(
+        $fieldName,
+        $dir,
+        $accept="*",
+        $max_upload_size=0,
+        $overwrite=false
+    ) {
         // Get file data from request
         $file_tmp = $_FILES[$fieldName]['tmp_name']; // $file_tmp is where file went on webserver
         $file_name = $_FILES[$fieldName]['name']; // $file_tmp_name is original file name

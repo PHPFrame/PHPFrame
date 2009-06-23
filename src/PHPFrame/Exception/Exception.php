@@ -107,11 +107,8 @@ class PHPFrame_Exception extends Exception
         
         // Log the exception to file if needed
         if ($code < config::LOG_LEVEL) {
-            //PHPFrame_Debug_Log::write($this->__toString(true));
+            //TODO FINISH ME!!!
         }
-        
-        echo '<pre>'.$this->__toString();
-        exit;
     }
     
     public function getSeverity() 

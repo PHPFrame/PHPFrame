@@ -277,7 +277,7 @@ class PHPFrame_Database_Row
      * @return PHPFrame_Database_Row
      * @since  1.0
      */
-    public function load($id, $exclude='')
+    public function load($id, $exclude='', $foreign_keys=array())
     {
         if ($id instanceof PHPFrame_Database_IdObject) {
             $this->_id_obj = $id;
@@ -299,7 +299,7 @@ class PHPFrame_Database_Row
         $array = $stmt->fetch(PDO::FETCH_ASSOC);
         // If result is array we bind it to the row
         if (is_array($array) && count($array) > 0) {
-            $this->bind($array, $exclude);   
+            $this->bind($array, $exclude, $foreign_keys);   
         }
         
         return $this;
@@ -414,7 +414,8 @@ class PHPFrame_Database_Row
         $table_primary_keys = $app_registry->get('table_primary_keys');
         
         // Load structure from db if not in application registry already
-        if (!is_array($table_structures[$this->_table_name])) {
+        if (!isset($table_structures[$this->_table_name]) 
+            || !is_array($table_structures[$this->_table_name])) {
             $query = "SHOW COLUMNS FROM `".$this->_table_name."`";
             $this->_structure = $this->_db->loadObjectList($query);
             

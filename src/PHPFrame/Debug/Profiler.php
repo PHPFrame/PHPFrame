@@ -27,6 +27,11 @@
  */
 class PHPFrame_Debug_Profiler
 {
+    /**
+     * Key count
+     * 
+     * @var int
+     */
     private static $_key_count=0;
     /**
      * An array containing user defined execution milestones
@@ -40,15 +45,20 @@ class PHPFrame_Debug_Profiler
      * 
      * The private constructor ensures this class is not instantiated and is alwas used statically.
      * 
+     * @access private
      * @return void
+     * @since  1.0
      */
     private function __construct() {}
     
     /**
      * Set milestone in the profiler
      * 
-     * @param    string    $name
-     * @return    void
+     * @param string $name The milestone name
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function setMilestone($name) 
     {
@@ -59,8 +69,9 @@ class PHPFrame_Debug_Profiler
     /**
      * Get Report
      * 
-     * @return    mixed
-     * @since    1.0
+     * @access public
+     * @return mixed
+     * @since  1.0
      */
     public static function getReport($array=false) 
     {

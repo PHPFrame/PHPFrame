@@ -190,8 +190,12 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         return $html;
     }
     
-    public function renderPagination(PHPFrame_Database_RowCollection $collection)
+    public function renderRowCollectionFilter(PHPFrame_Database_RowCollection $collection)
     {
+        $html = '<div class="row_collection_filter">';
+        
+        // Print form to select limit per page
+        $html .= '<div class="subset_limit">';
         $html .= '<form name="limitform" id="limitform" method="post">';
         $html .= 'Display Num: ';
         $html .= '<select name="limit" onchange="document.forms[\'limitform\'].submit();">';
@@ -205,12 +209,66 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         $html .= '<option value="-1">-- All --</option>';
         $html .= '</select>';
         $html .= '</form>';
+        $html .= '</div>';
         
+        // Print subset info
+        $html .= '<div class="subset_info">';
+        $html .= ($collection->getLimitstart()+1);
+        $html .= ' - '.($collection->getLimitstart() + $collection->countRows());
+        $html .= ' of '.$collection->getTotal();
+        $html .= '</div>';
         
+        // Print search box
+        $html .= '<script language="javascript" type="text/javascript">
+                    function submit_filter(reset) {
+                        var form = document.forms["listsearchform"];
+                        
+                        if (reset){
+                            form.search.value = "";
+                        }
+                        
+                        form.submit();
+                    }
+                  </script>';
+        
+        $html .= '<form action="index.php" id="listsearchform" name="listsearchform" method="post">';
+        $html .= '<input type="text" name="search" id="search" value="'.PHPFrame::Request()->get('search').'">';
+        $html .= '<button type="button" class="button" onclick="submit_filter(false);">Search</button>';
+        $html .= '<button type="button" class="button" onclick="submit_filter(true);">Reset</button>';
+        $html .= '<input type="hidden" name="component" value="com_projects" />';
+        $html .= '<input type="hidden" name="action" value="get_projects" />';
+        $html .= '</form>';
+        
+        $html .= '</div>';
+         
+        return $html;
+    }
+    
+    /**
+     * Render HTML pagination for collection oject
+     * 
+     * @param PHPFrame_Database_RowCollection $collection The collection object for
+     *                                                    which to create the pagination.
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function renderPagination(PHPFrame_Database_RowCollection $collection)
+    {
+        $html = '';
+        
+        if ($collection->getPages() <= 1) {
+            return $html;
+        }
+        
+        $html .= '<div class="pagination">';
+        
+        // Print list with prev, next and so on...
         $href = 'index.php?component='.PHPFrame::Request()->getComponentName();
         $href .= '&amp;action='.PHPFrame::Request()->getAction();
         $href .= '&amp;limit='.$collection->getLimit();
-        //echo var_dump($collection); exit;
+        
         $html .= '<ul>';
         // Start link
         $html .= '<li>';
@@ -255,8 +313,11 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         $html .= '</li>';
         $html .= '</ul>';
         
+        // Print page info
         $html .= 'Page '.$collection->getCurrentPage();
         $html .= ' of '.$collection->getPages();
+        
+        $html .= "</div>";
         
         return $html;
     }

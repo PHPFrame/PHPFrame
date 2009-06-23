@@ -485,7 +485,7 @@ class PHPFrame_Database_RowCollection implements Iterator
     }
     
     /**
-     * Get total number of rows in collection
+     * Get number of rows in collection subset/page
      *   
      * @access public
      * @return int
@@ -599,12 +599,10 @@ class PHPFrame_Database_RowCollection implements Iterator
      * @return void
      * @since  1.0
      */
-    private function _fetchTotalNumRows(PHPFrame_Database_IdObject $id_object)
+    private function _fetchTotalNumRows(PHPFrame_Database_IdObject $id_obj)
     {
-        // Cast Id Object to string (this produces a SQL query)
-        $id_obj_no_limit = clone $id_object;
-        $id_obj_no_limit->select($this->_id_obj->getTableName().".id");
-        $sql = $id_obj_no_limit->getSQL(false);
+        // Convert Id Object to SQL string without limits
+        $sql = $id_obj->getSQL(false);
         
         // Run SQL query
         $stmt = $this->_db->prepare($sql);

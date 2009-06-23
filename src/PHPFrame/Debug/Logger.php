@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Debug/Log.php
+ * PHPFrame/Debug/Logger.php
  * 
  * PHP version 5
  * 
@@ -15,7 +15,7 @@
  */
 
 /**
- * Log Class
+ * Logger Class
  * 
  * This class implements the "Observer" base class in order to subscribe to updates
  * from "observable" objects (objects of type PHPFrame_Base_Subject).
@@ -29,8 +29,37 @@
  * @see        PHPFrame_Base_Observer
  * @since      1.0
  */
-class PHPFrame_Debug_Log extends PHPFrame_Base_Observer
+class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
 {
+    /**
+     * Path to the log file in the file system
+     * 
+     * @var string
+     */
+    private static $_path=null;
+    
+    /**
+     * Constructor
+     * 
+     * @access private
+     * @return void
+     * @since  1.0
+     */
+    private function __construct()
+    {
+        // Attach logger to observable subjects
+        PHPFrame::DB()->attach($this);
+    }
+    
+    /**
+     * Handle observed objects updates
+     * 
+     * @param PHPFrame_Base_Subject $subject The subjuct issuing the update
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
+     */
     protected function doUpdate(PHPFrame_Base_Subject $subject)
     {
         
@@ -38,10 +67,12 @@ class PHPFrame_Debug_Log extends PHPFrame_Base_Observer
     /**
      * Write string to log file
      * 
+     * @param string $str The string to append to log file
+     * 
      * @static
-     * @access    public
-     * @param    string    $str    The string to append to log file
-     * @return    void
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function write($str) 
     {

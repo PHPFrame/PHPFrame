@@ -33,13 +33,13 @@ class PHPFrame_Exception_Handler
      * This method encapsulates set_error_handler() and set_exception_handler().
      * 
      * @static
-     * @access    public
-     * @return    void
-     * @since    1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function init() 
     {
-        error_reporting(E_ALL & ~E_NOTICE);
+        error_reporting(E_ALL &  ~E_STRICT);
         //set_error_handler(array("PHPFrame_Exception_Handler", "handleError"));
         set_exception_handler(array('PHPFrame_Exception_Handler', 'handleException'));
     }
@@ -50,9 +50,9 @@ class PHPFrame_Exception_Handler
      * This method encapsulates restore_error_handler() and restore_exception_handler().
      * 
      * @static
-     * @access    public
-     * @return    void
-     * @since    1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function restore() 
     {
@@ -65,10 +65,16 @@ class PHPFrame_Exception_Handler
      * 
      * Handles PHP errors and converts them to exceptions.
      * 
+     * @param int    $errno
+     * @param string $errstr
+     * @param string $errfile
+     * @param int    $errline
+     * @param string $errcontext
+     * 
      * @static
-     * @access    public
-     * @return    void
-     * @since    1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function handleError($errno, $errstr, $errfile, $errline, $errcontext) 
     {
@@ -82,17 +88,18 @@ class PHPFrame_Exception_Handler
      * Handles uncaught exceptions.
      * 
      * @static
-     * @access    public
-     * @return    void
-     * @since    1.0
-     * @todo    This method needs to decide what to do with the uncaught exceptions. Right now it simply outputs some basic info.
+     * @access public
+     * @return void
+     * @since  1.0
+     * @todo   This method needs to decide what to do with the uncaught exceptions. 
+     *         Right now it simply outputs some basic info.
      */
     public static function handleException($exception) 
     {
-        $str = 'Uncaught exception: '.$exception->getMessage()."\n";
+        $str = 'PHPFrame Uncaught exception: '.$exception->getMessage()."\n";
         $str .= 'File: '.$exception->getFile()."\n";
         $str .= 'Line: '.$exception->getLine()."\n";
-        //$str .= 'Severity: '.$exception->getSeverity()."\n";
+        $str .= 'Severity: '.$exception->getSeverity()."\n";
         $str .= 'Code: '.$exception->getCode()."\n";
         $str .= $exception->getTraceAsString();
             
@@ -101,6 +108,6 @@ class PHPFrame_Exception_Handler
         }
         
         // Log the error to file
-        PHPFrame_Debug_Log::write($str);
+        PHPFrame_Debug_Logger::write($str);
     }
 }

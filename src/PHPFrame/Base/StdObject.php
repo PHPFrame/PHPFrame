@@ -30,42 +30,14 @@
 class PHPFrame_Base_StdObject
 {
     /**
-     * Get property
-     * 
-     * @param    string    $property    The propery name to get
-     * @param    string    $value        Default value if not defined
-     * @return mixed
-     * @since    1.0
-     */
-    function get($property, $value=null) {
-        if (!$this->$property && $value) {
-            $this->$property = $value;
-        }
-        return $this->$property;
-    }
-    
-    /**
-     * Set property
-     * 
-     * Sets the named property to th given value and returns the new value stored in the property.
-     * 
-     * @param    string    $property     The name of the property to set.
-     * @param    mixed    $value         The new value for the property.
-     * @return    mixed
-     * @since    1.0
-     */
-    function set($property, $value) {
-        $this->$property = $value;
-        return $this->$property;
-    }
-    
-    /**
      * Generates a storable string representation of the object
      * 
-     * @return    string
-     * @since    1.0
+     * @access public
+     * @return string
+     * @since  1.0
      */
-    function toString() {
+    public function __toString()
+    {
         return serialize($this);
     }
 }

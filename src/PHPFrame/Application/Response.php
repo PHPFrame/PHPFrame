@@ -162,10 +162,11 @@ class PHPFrame_Application_Response
             header($line);
         }
 		
+        // Print response content (the documento object)
         echo $this->_document;
         
-        if (config::DEBUG) {
-            echo '<pre>'.PHPFrame_Debug_Profiler::getReport().'</pre>';
-        }
+        // Exit setting status to 0, 
+        // which indicates that program terminated successfully 
+        exit(0);
     }
 }

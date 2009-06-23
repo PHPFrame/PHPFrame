@@ -147,6 +147,13 @@ abstract class PHPFrame_Document
         return $this->_mime_type;
     }
     
+    public function render($object)
+    {
+        if ($a) {
+            
+        }   
+    }
+    
     /**
      * Render view and store in document's body
      * 

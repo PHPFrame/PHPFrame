@@ -84,8 +84,10 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Get a session variable
      * 
-     * @param string $key
-     * @param mixed  $default_value
+     * @param string $key           A string used to identify the session 
+     *                              variable we want to retrieve.
+     * @param mixed  $default_value An optional default value to assign if
+     *                              the given key is not set.
      * 
      * @access public
      * @return mixed
@@ -109,8 +111,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Set a session variable
      * 
-     * @param string $key
-     * @param mixed  $value
+     * @param string $key   A string used to identify the session variable we 
+     *                      want to set.
+     * @param mixed  $value The value we want to store in the specified key.
      * 
      * @access public
      * @return void
@@ -149,7 +152,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Set session user
      * 
-     * @param    object    $user    User object of type PHPFrame_User
+     * @param PHPFrame_User $user User object of type PHPFrame_User
      * 
      * @access public
      * @return void
@@ -200,7 +203,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      * Is the current session authenticated?
      * 
      * @access public
-     * @return bool   Returns TRUE if user is authenticated and FALSE otherwise.
+     * @return bool Returns TRUE if user is authenticated or FALSE otherwise.
      * @since  1.0
      */
     public function isAuth() 
@@ -212,7 +215,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      * Is the current session an admin session?
      * 
      * @access public
-     * @return bool
+     * @return bool Returns TRUE if current user is admin or FALSE otherwise.
      * @since  1.0
      */
     public function isAdmin() 

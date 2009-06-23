@@ -49,7 +49,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
         session_start();
         //$this->destroy(); exit;
         // If new session we initialise
-        if ($_SESSION['id'] != session_id()) {
+        if (!isset($_SESSION['id']) || $_SESSION['id'] != session_id()) {
             $_SESSION['id'] = session_id();
             
             $_SESSION['user'] = new PHPFrame_User();
@@ -93,8 +93,14 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     public function get($key, $default_value=null) 
     {
+        // Set default value if applicable
         if (!isset($_SESSION[$key]) && !is_null($default_value)) {
             $_SESSION[$key] = $default_value;
+        }
+        
+        // If key is not set in session super global we return null
+        if (!isset($_SESSION[$key])) {
+            return null;
         }
         
         return $_SESSION[$key];

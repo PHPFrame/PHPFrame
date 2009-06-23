@@ -526,7 +526,8 @@ class PHPFrame_Database_Row
                 break;
             }
             
-            if (!preg_match($pattern, $this->_data[$structure->Field])) {
+            if (isset($this->_data[$structure->Field]) 
+                && !preg_match($pattern, $this->_data[$structure->Field])) {
                 $exception_msg = "Wrong type for column '".$structure->Field."'. ";
                 $exception_msg .= "Expected '".$structure->Type."' and got '";
                 $exception_msg .= $this->_data[$structure->Field]."'";

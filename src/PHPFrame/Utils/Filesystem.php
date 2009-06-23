@@ -72,12 +72,19 @@ class PHPFrame_Utils_Filesystem
     public static function ensureWritableDir($path) 
     {
         $path = (string) $path;
+        $path_array = explode(DS, trim($path, DS));
+        $path_prefix = DS;
         
-        // If dir doesnt exist we try to create it
-        if (!is_dir($path)) {
-            if (!mkdir($path, 0771)) {
-                throw new PHPFrame_Exception_Filesystem("Could not create directory ".$path.".");
+        foreach ($path_array as $path_item) {
+            // If dir doesnt exist we try to create it
+            if (!is_dir($path_prefix.$path_item)) {
+                if (!mkdir($path_prefix.$path_item, 0771)) {
+                    $msg = "Could not create directory ".$path_prefix.$path_item.".";
+                    throw new PHPFrame_Exception_Filesystem($msg);
+                }
             }
+            
+            $path_prefix .= $path_item.DS;
         }
         
         if (!is_writable($path)) {

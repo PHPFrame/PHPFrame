@@ -199,6 +199,16 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         return $html;
     }
     
+    /**
+     * Render HTML filter for row collection
+     * 
+     * This method builds an HTML string with UI filtering elements to be used with
+     * row collection objects.
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function renderRowCollectionFilter(PHPFrame_Database_RowCollection $collection)
     {
         $html = '<div class="row_collection_filter">';
@@ -244,8 +254,8 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         $html .= '<input type="text" name="search" id="search" value="'.PHPFrame::Request()->get('search').'">';
         $html .= '<button type="button" class="button" onclick="submit_filter(false);">Search</button>';
         $html .= '<button type="button" class="button" onclick="submit_filter(true);">Reset</button>';
-        $html .= '<input type="hidden" name="component" value="com_projects" />';
-        $html .= '<input type="hidden" name="action" value="get_projects" />';
+        $html .= '<input type="hidden" name="component" value="'.PHPFrame::Request()->getComponentName().'" />';
+        $html .= '<input type="hidden" name="action" value="'.PHPFrame::Request()->getAction().'" />';
         $html .= '</form>';
         
         $html .= '</div>';

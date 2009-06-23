@@ -96,20 +96,27 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         $this->_body = (string) $str;
     }
     
+    public function getBody()
+    {
+        return $this->_body;
+    }
+    
     /**
      * Render view and store in document's body
      * 
      * This method is invoked by the views and renders the ouput data in the
      * document specific format.
      * 
-     * @param PHPFrame_MVC_View $view The view object to process.
+     * @param PHPFrame_MVC_View $view        The view object to process.
+     * @param bool              $apply_theme Boolean to insicate whether we want to apply 
+     *                                       the overall theme or not.
      * 
      * @access public
      * @return void
      * @since  1.0
      * @todo It is very important to check path used for require_once call for security.
      */
-    public function renderView(PHPFrame_MVC_View $view) 
+    public function renderView(PHPFrame_MVC_View $view, $apply_theme=true) 
     {
         $tmpl_path = COMPONENT_PATH.DS."views";
         $tmpl_path .= DS.$view->getName().DS."tmpl";
@@ -139,7 +146,9 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
             throw new PHPFrame_Exception("Layout template file ".$tmpl_path." not found.");
         }
         
-        $this->_applyTheme($view);
+        if ($apply_theme) {
+            $this->_applyTheme($view);
+        }
     }
     
     /**

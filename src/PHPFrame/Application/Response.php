@@ -144,26 +144,40 @@ class PHPFrame_Application_Response
      */
      public function renderView(PHPFrame_MVC_View $view)
      {
-         $this->_document->renderView($view);
-         $this->send();
+         $tmpl = PHPFrame::Request()->get("tmpl", "");
+         if ($tmpl == "component") {
+             $apply_theme = false;
+         } else {
+             $apply_theme = true;
+         }
+         
+         $this->_document->renderView($view, $apply_theme);
+         
+         $this->send($apply_theme);
      }
      
     /**
      * Send response back to client
      * 
+     * @param bool $apply_theme Boolean to insicate whether we want to apply the overall 
+     *                          theme or not.
+     *                                       
      * @access public
      * @return void
      * @since  1.0
      */
-    public function send() 
+    public function send($apply_theme=true) 
     {
-        //var_dump($this); exit;
         foreach ($this->_header as $line) {
             header($line);
         }
 		
-        // Print response content (the documento object)
-        echo $this->_document;
+        // Print response content (the document object)
+        if ($apply_theme) {
+            echo $this->_document;
+        } else {
+            echo $this->_document->getBody();    
+        }
         
         // Exit setting status to 0, 
         // which indicates that program terminated successfully 

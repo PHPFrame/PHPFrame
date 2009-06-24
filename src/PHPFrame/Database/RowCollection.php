@@ -369,18 +369,27 @@ class PHPFrame_Database_RowCollection implements Iterator
      * Load rows from database
      * 
      * @param PHPFrame_Database_IdObject $id_object
+     * @param string                     $exclude      A list of key names to 
+     *                                                 exclude from row binding
+     *                                                 process separated by commas.
+     * @param array                      $foreign_keys An array with foreign keys 
+     *                                                 to be allowed to be set as 
+     *                                                 columns in collection rows.
      * 
      * @access public
      * @return PHPFrame_Database_RowCollection
      * @since  1.0
      */
-    public function load(PHPFrame_Database_IdObject $id_object=null)
-    {
+    public function load(
+        PHPFrame_Database_IdObject $id_object=null,
+        $exclude='', 
+        $foreign_keys=array()
+    ) {
         if ($id_object instanceof PHPFrame_Database_IdObject) {
             $this->_id_obj = $id_object;
         }
         
-        $this->_fetchRows($this->_id_obj);
+        $this->_fetchRows($this->_id_obj, $exclude, $foreign_keys);
         $this->_fetchTotalNumRows($this->_id_obj);
         
         return $this;
@@ -559,14 +568,24 @@ class PHPFrame_Database_RowCollection implements Iterator
     /**
      * Load array of row objects using id object
      * 
-     * @param string $id_object The id object used to generate the query.
+     * @param PHPFrame_Database_IdObject $id_object    The id object used to generate
+     *                                                 the query.
+     * @param string                     $exclude      A list of key names to 
+     *                                                 exclude from row binding
+     *                                                 process separated by commas.
+     * @param array                      $foreign_keys An array with foreign keys 
+     *                                                 to be allowed to be set as 
+     *                                                 columns in collection rows.
      *
      * @access private
      * @return void
      * @since  1.0
      */
-    private function _fetchRows(PHPFrame_Database_IdObject $id_object) 
-    {
+    private function _fetchRows(
+        PHPFrame_Database_IdObject $id_object, 
+        $exclude='', 
+        $foreign_keys=array()
+    ) {
         // Cast Id Object to string (this produces a SQL query)
         $sql = (string) $id_object;
         
@@ -583,7 +602,7 @@ class PHPFrame_Database_RowCollection implements Iterator
             $table_name = $this->_id_obj->getTableName();
             while ($array = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $row = new PHPFrame_Database_Row($table_name, $this->_db);
-                $this->_rows[] = $row->bind($array);
+                $this->_rows[] = $row->bind($array, $exclude, $foreign_keys);
             }
         }
     }

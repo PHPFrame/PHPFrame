@@ -94,19 +94,23 @@ class PHPFrame_Utils_Rewrite
         
         // Parse URL string
         $url_array = parse_url($url);
-        parse_str($url_array['query'], $query_array);
+        $query_array = array();
+        if (isset($url_array['query'])) {
+            parse_str($url_array['query'], $query_array);
+        }
+        
         
         // If there are no query parameters we don't need to rewrite anything
         if (count($query_array) == 0) return $url;
         
         $rewritten_url = "";
         
-        if (!empty($query_array['component'])) {
+        if (isset($query_array['component']) && !empty($query_array['component'])) {
             $rewritten_url .= substr($query_array['component'], 4);
             unset($query_array['component']);
         }
         
-        if (!empty($query_array['action'])) {
+        if (isset($query_array['action']) && !empty($query_array['action'])) {
             $rewritten_url .= "/".$query_array['action'];
             unset($query_array['action']);
         }

@@ -27,6 +27,14 @@
  */
 class PHPFrame_Utils_Rewrite
 {
+    /**
+     * Rewrite the request
+     * 
+     * @static
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public static function rewriteRequest() 
     {
         // Get path to script
@@ -84,6 +92,18 @@ class PHPFrame_Utils_Rewrite
         }
     }
     
+    /**
+     * Rewrite URL
+     * 
+     * @param string $url   The URL to rewrite
+     * @param bool   $xhtml A boolean to indicate whether we want to use an XHTML
+     *                      compliant URL. Default value is TRUE.
+     * 
+     * @static
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public static function rewriteURL($url, $xhtml=true) 
     {
         $uri = new PHPFrame_Utils_URI();

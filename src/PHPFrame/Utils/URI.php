@@ -133,6 +133,56 @@ class PHPFrame_Utils_URI
         $this->_parseURI($uri);
     }
     
+    public function getScheme()
+    {
+        return $this->_scheme;
+    }
+    
+    public function getUser()
+    {
+        return $this->_user;
+    }
+    
+    public function getPass()
+    {
+        return $this->_pass;
+    }
+    
+    public function getHost()
+    {
+        return $this->_host;
+    }
+    
+    public function getPort()
+    {
+        return $this->_port;
+    }
+    
+    public function getDirname()
+    {
+        return $this->_dirname;
+    }
+    
+    public function getFilename()
+    {
+        return $this->_filename;
+    }
+    
+    public function getExtension()
+    {
+        return $this->_extension;
+    }
+    
+    public function getQuery()
+    {
+        return $this->_query;
+    }
+    
+    public function getFragment()
+    {
+        return $this->_fragment;
+    }
+    
     /**
      * Get base URL
      * 
@@ -207,7 +257,7 @@ class PHPFrame_Utils_URI
         }
         
         // If client is command line we use hardcoded value from config
-        if (PHPFrame::Session()->getClientName() == "cli") {
+        if (!$_SERVER['HTTP_HOST']) {
             return config::BASE_URL;
         }
         

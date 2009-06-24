@@ -32,7 +32,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Instance of itself in order to implement the singleton pattern
      * 
-     * @var object of type PHPFrame_Application_FrontController
+     * @var object of type PHPFrame_Registry_Session
      */
     private static $_instance=null;
     
@@ -45,21 +45,42 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     protected function __construct() 
     {
+        // Initialise cookie
+        $expire = 0;
+        $uri = new PHPFrame_Utils_URI();
+        $path = $uri->getDirname()."/";
+        $secure = false;
+        $httponly = true;
+        ini_set("session.cookie_lifetime", $expire);
+        ini_set("session.cookie_path", $path);
+        ini_set("session.cookie_secure", $secure);
+        ini_set("session.cookie_httponly", $httponly);
+        
+        // Set custom session name
+        session_name("PHPFrame");
+        
         // start php session
         session_start();
+        
         //$this->destroy(); exit;
+        
         // If new session we initialise
         if (!isset($_SESSION['id']) || $_SESSION['id'] != session_id()) {
+            // Store session id in session array
             $_SESSION['id'] = session_id();
             
+            // Acquire session user object
             $_SESSION['user'] = new PHPFrame_User();
             $_SESSION['user']->set("id", 0);
             $_SESSION['user']->set("groupid", 0);
             
+            // Acquire sysevents object
             $_SESSION['sysevents'] = new PHPFrame_Application_Sysevents();
             
+            // Generate session token
             $this->getToken(true);
             
+            // Detect client for this session
             $this->_detectClient();
         }
     }

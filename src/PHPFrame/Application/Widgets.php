@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Application/Modules.php
+ * PHPFrame/Application/Widgets.php
  * 
  * PHP version 5
  * 
@@ -15,7 +15,7 @@
  */
 
 /**
- * Modules Class
+ * Widgets Class
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
@@ -25,7 +25,7 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Application_Modules
+class PHPFrame_Application_Widgets
 {
     /**
      * Array containing the installed modules

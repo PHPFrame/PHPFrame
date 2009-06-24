@@ -34,7 +34,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
      */
     private static $_instance=null;
     private $_cache_file=null;
-    private $_readonly=array("permissions", "components", "modules");
+    private $_readonly=array("permissions", "components", "widgets");
     private $_array=array();
     
     /**
@@ -59,7 +59,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
             // Re-create data
             $this->_array['permissions'] = new PHPFrame_Application_Permissions();
             $this->_array['components'] = new PHPFrame_Application_Components();
-            $this->_array['modules'] = new PHPFrame_Application_Modules();
+            $this->_array['widgets'] = new PHPFrame_Application_Widgets();
             
             // Store data in cache file
             PHPFrame_Utils_Filesystem::write($this->_cache_file, serialize($this->_array));
@@ -135,8 +135,8 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
         return $this->_array['components'];
     }
     
-    public function getModules() 
+    public function getWidgets() 
     {
-        return $this->_array['modules'];
+        return $this->_array['widgets'];
     }
 }

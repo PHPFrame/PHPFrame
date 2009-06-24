@@ -148,6 +148,13 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         
         if ($apply_theme) {
             $this->_applyTheme($view);
+        } else {
+            // we dont need to wrap the component output in the overall template
+            // so we just prepend the sytem events and return
+            $widgets = PHPFrame::AppRegistry()->getWidgets();
+            $sys_events = $widgets->display('sysevents', '_sysevents');
+            $this->_body = $sys_events.$this->_body;
+            return;
         }
     }
     
@@ -577,16 +584,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
     private function _applyTheme(PHPFrame_MVC_View $view) 
     {
         // Make widgets available to templates
-        $modules = PHPFrame::AppRegistry()->getModules();
-        
-        // If tmpl flag is set to component in request it means that
-        // we dont need to wrap the component output in the overall template
-        // so we just prepend the sytem events and return
-        if (PHPFrame::Request()->get('tmpl') == 'component') {
-            $sys_events = $modules->display('sysevents', '_sysevents');
-            $this->_body = $sys_events.$this->_body;
-            return;
-        }
+        $widgets = PHPFrame::AppRegistry()->getWidgets();
         
         // Add theme stylesheets
         $this->addStyleSheet("themes/".config::THEME."/css/styles.css");

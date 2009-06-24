@@ -66,20 +66,22 @@ class PHPFrame_User
      * 
      * This method overrides the inherited load method.
      * 
-     * @access    public
-     * @param    int        $id         The row id.
-     * @param    string    $exclude     A list of key names to exclude from binding process separated by commas.
-     * @return    mixed    The loaded row object of FALSE on failure.
-     * @since     1.0
+     * @param int|PHPFrame_Database_IdObject $id      Normally an integer with the primary 
+     *                                                key value of the row we want to load.
+     *                                                Alternatively you can pass an IdObject.
+     * @param string                         $exclude A list of key names to exclude from 
+     *                                                binding process separated by commas.
+     * 
+     * @access public
+     * @return PHPFrame_User
+     * @since  1.0
      */
     public function load($id, $exclude='password') 
     {
-        if (!$this->_row->load($id, $exclude)) {
-            return false;
-        }
-        else {
-            return $this;    
-        }
+        // Delegate to row object
+        $this->_row->load($id, $exclude);
+        
+        return $this;
     }
     
     public function bind($array, $exclude='', $foreign_keys=array()) 

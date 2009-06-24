@@ -65,32 +65,11 @@ class PHPFrame_Application_Pathway
         $title = (string) $title;
         $url   = (string) $url;
         
-        $this->pathway[] = array("title"=>$title, "url"=>$url);
+        $this->_array[] = array("title"=>$title, "url"=>$url);
     }
     
-    /**
-     * Echo pathway as HTML
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function display() 
+    public function toArray()
     {
-        echo '<div class="pathway">';
-        for ($i=0; $i<count($this->_array); $i++) {
-            if ($i>0) {
-                echo ' &gt;&gt; ';
-            }
-            echo '<span class="pathway_item">';
-            if (!empty($this->_array[$i]['url'])) {
-                echo '<a href="'.$this->_array[$i]['url'].'">'.$this->_array[$i]['title'].'</a>';
-            }
-            else {
-                echo $this->_array[$i]['title'];
-            }
-            echo '</span>';
-        }
-        echo '</div>';
+        return $this->_array;
     }
 }

@@ -151,6 +151,28 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         }
     }
     
+    public function renderPathway(PHPFrame_Application_Pathway $pathway)
+    {
+        $array = $pathway->toArray();
+        
+        $html = '<div class="pathway">';
+        for ($i=0; $i<count($array); $i++) {
+            if ($i>0) {
+                $html .= ' &gt;&gt; ';
+            }
+            $html .= '<span class="pathway_item">';
+            if (!empty($array[$i]['url'])) {
+                $html .= '<a href="'.$array[$i]['url'].'">'.$array[$i]['title'].'</a>';
+            } else {
+                $html .= $array[$i]['title'];
+            }
+            $html .= '</span>';
+        }
+        $html .= '</div>';
+        
+        return $html;
+    }
+    
     /**
      * Method used to render Row Collections in HTML format
      * 

@@ -45,6 +45,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     protected function __construct() 
     {
+        // Set custom session name
+        ini_set("session.name", "PHPFrame");
+        
         // Initialise cookie
         $expire = 0;
         $uri = new PHPFrame_Utils_URI();
@@ -55,9 +58,6 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
         ini_set("session.cookie_path", $path);
         ini_set("session.cookie_secure", $secure);
         ini_set("session.cookie_httponly", $httponly);
-        
-        // Set custom session name
-        session_name("PHPFrame");
         
         // start php session
         session_start();

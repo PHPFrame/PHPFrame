@@ -404,7 +404,7 @@ class PHPFrame_HTML
      */
     public static function autocomplete($field_name, $attribs, $tokens, $matchContains=true) 
     {
-        $document = PHPFrame::getDocument('html');
+        $document = PHPFrame::Response()->getDocument();
         $document->addScript('lib/jquery/plugins/autocomplete/jquery.autocomplete.pack.js');
         $document->addStyleSheet('lib/jquery/plugins/autocomplete/jquery.autocomplete.css');
         

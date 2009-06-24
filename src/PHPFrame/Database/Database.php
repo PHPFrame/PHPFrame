@@ -173,7 +173,6 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
             $stmt = $this->_pdo->query($sql);
         }
         catch (PDOException $e) {
-            echo $e->getMessage();
             throw new PHPFrame_Exception_Database('Query failed', $sql);
         }
         

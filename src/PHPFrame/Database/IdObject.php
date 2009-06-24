@@ -250,9 +250,15 @@ class PHPFrame_Database_IdObject
      */
     public function join($join)
     {
+        $join = (string) trim($join);
         // Validate input type and set internal property
-        $pattern = "/^[a-zA-Z_ \#\.=]+$/";
-        $this->_join[] = PHPFrame_Utils_Filter::validateRegExp($join, $pattern);
+        $pattern = "/^([a-zA-Z]*[ ]{0,1}JOIN) ([a-zA-Z_\#]+) ([a-zA-Z]+) ON ([a-zA-Z]+\.[a-zA-Z_]+) (=) ([a-zA-Z]+\.[a-zA-Z_]+)/";
+        preg_match($pattern, $join, $matches);
+        
+        $this->_join[] = array("type"=>$matches[1],
+                               "table_name"=>$matches[2],
+                               "table_alias"=>$matches[3],
+                               "on"=>array($matches[4], $matches[5], $matches[6]));
         
         return $this;
     }
@@ -465,6 +471,17 @@ class PHPFrame_Database_IdObject
         return $this->_from;
     }
     
+    public function getJoinTables()
+    {
+        $join_tables = array();
+        
+        foreach ($this->_join as $join) {
+            $join_tables[] = $join["table_name"];
+        }
+        
+        return $join_tables;
+    }
+    
     /**
      * Get query parameters
      * 
@@ -559,7 +576,11 @@ class PHPFrame_Database_IdObject
     private function _getJoinsSQL()
     {
         $sql = "";
-        $sql .= implode(" ", $this->_join);
+        
+        foreach ($this->_join as $join) {
+            $sql .= " ".$join["type"]." ".$join["table_name"]." ".$join["table_alias"]." ON ";
+            $sql .= $join["on"][0]." ".$join["on"][1]." ".$join["on"][2];
+        }
         
         return $sql;
     }

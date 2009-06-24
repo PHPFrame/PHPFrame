@@ -35,6 +35,55 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      * @var object of type PHPFrame_Registry_Session
      */
     private static $_instance=null;
+    /**
+     * A string used to name the session
+     * 
+     * @var string
+     */
+    private $_session_name="PHPFrame";
+    /**
+     * Cookie lifetime
+     * 
+     * The time the cookie expires. This is a Unix timestamp so is in number of 
+     * seconds since the epoch.
+     * 
+     * @var int
+     */
+    private $_cookie_lifetime=0;
+    /**
+     * The path on the server in which the cookie will be available on. If set 
+     * to '/', the cookie will be available within the entire domain . If set 
+     * to '/foo/', the cookie will only be available within the /foo/ directory 
+     * and all sub-directories such as /foo/bar/ of domain .
+     * 
+     * @var string
+     */
+    private $_cookie_path="/";
+    /**
+     * The domain that the cookie is available. To make the cookie available on 
+     * all subdomains of example.com then you'd set it to '.example.com'. 
+     * The . is not required but makes it compatible with more browsers.
+     * 
+     * @var string
+     */
+    private $_cookie_domain=null;
+    /**
+     * Indicates that the cookie should only be transmitted over a secure HTTPS 
+     * connection from the client. When set to TRUE, the cookie will only be set 
+     * if a secure connection exists.
+     * 
+     * @var bool
+     */
+    private $_cookie_secure=false;
+    /**
+     * When TRUE the cookie will be made accessible only through the HTTP protocol. 
+     * This means that the cookie won't be accessible by scripting languages, such 
+     * as JavaScript. This setting can effectively help to reduce identity theft 
+     * through XSS attacks (although it is not supported by all browsers).
+     * 
+     * @var bool
+     */
+    private $_cookie_httponly=true;
     
     /**
      * Constructor
@@ -45,19 +94,19 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     protected function __construct() 
     {
+        // Get path and domain to use for cookie
+        $uri = new PHPFrame_Utils_URI();
+        $this->_cookie_path = $uri->getDirname()."/";
+        $this->_cookie_domain = $uri->getHost();
+        
         // Set custom session name
-        ini_set("session.name", "PHPFrame");
+        ini_set("session.name", $this->_session_name);
         
         // Initialise cookie
-        $expire = 0;
-        $uri = new PHPFrame_Utils_URI();
-        $path = $uri->getDirname()."/";
-        $secure = false;
-        $httponly = true;
-        ini_set("session.cookie_lifetime", $expire);
-        ini_set("session.cookie_path", $path);
-        ini_set("session.cookie_secure", $secure);
-        ini_set("session.cookie_httponly", $httponly);
+        ini_set("session.cookie_lifetime", $this->_cookie_lifetime);
+        ini_set("session.cookie_path", $this->_cookie_path);
+        ini_set("session.cookie_secure", $this->_cookie_secure);
+        ini_set("session.cookie_httponly", $this->_cookie_httponly);
         
         // start php session
         session_start();
@@ -292,6 +341,16 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     {
         // this destroys the session and generates a new session id
         session_regenerate_id(true);
+        
+        // Delete cookie. This has to be done using the same parameters 
+        // used when creating the cookie
+        setcookie($this->_session_name, 
+                  "", 
+                  time() - 3600, 
+                  $this->_cookie_path, 
+                  null, 
+                  $this->_cookie_secure, 
+                  $this->_cookie_httponly);
     }
     
     /**

@@ -87,13 +87,17 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
         // Read data from cache
         if (is_file($this->getFilePath())) {
             $serialized_array = file_get_contents($this->getFilePath());
-            $this->_array = unserialize($serialized_array);
+            $this->_data = unserialize($serialized_array);
         }
         else {
             // Re-create basic data
-            $this->_array['permissions'] = new PHPFrame_Application_Permissions();
-            $this->_array['components'] = new PHPFrame_Application_Components();
-            $this->_array['widgets'] = new PHPFrame_Application_Widgets();
+            $this->_data['permissions'] = new PHPFrame_Application_Permissions();
+            $this->_data['components'] = new PHPFrame_Application_Components();
+            $this->_data['widgets'] = new PHPFrame_Application_Widgets();
+            
+            // Mark application registry as dirty to make sure it gets written
+            // to file on shutdown
+            $this->markDirty();
         }
     }
     
@@ -150,19 +154,19 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     public function get($key, $default_value=null) 
     {
         // Set default value if appropriate
-        if (!isset($this->_array[$key]) && !is_null($default_value)) {
-            $this->_array[$key] = $default_value;
+        if (!isset($this->_data[$key]) && !is_null($default_value)) {
+            $this->_data[$key] = $default_value;
             
             // Mark data as dirty
             $this->markDirty();
         }
         
         // Return null if index is not defined
-        if (!isset($this->_array[$key])) {
+        if (!isset($this->_data[$key])) {
             return null;
         }
         
-        return $this->_array[$key];
+        return $this->_data[$key];
     }
     
     /**
@@ -183,7 +187,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
             throw new PHPFrame_Exception($msg);
         }
         
-        $this->_array[$key] = $value;
+        $this->_data[$key] = $value;
         
         // Mark data as dirty
         $this->markDirty();
@@ -210,7 +214,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
      */
     public function getPermissions() 
     {
-        return $this->_array['permissions'];
+        return $this->_data['permissions'];
     }
     
     /**
@@ -222,7 +226,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
      */
     public function getComponents() 
     {
-        return $this->_array['components'];
+        return $this->_data['components'];
     }
     
     /**
@@ -234,7 +238,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
      */
     public function getWidgets() 
     {
-        return $this->_array['widgets'];
+        return $this->_data['widgets'];
     }
     
     /**
@@ -274,7 +278,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
         PHPFrame_Utils_Filesystem::ensureWritableDir($this->_path);
         
         // Store data in cache file
-        $data = serialize($this->_array);
+        $data = serialize($this->_data);
         PHPFrame_Utils_Filesystem::write($this->getFilePath(), $data);
     }
 }

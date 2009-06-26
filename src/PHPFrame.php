@@ -15,6 +15,16 @@
  */
 
 /**
+ * Set convenience DS constant (directory separator depends on server operating system).
+ */
+define('DS', DIRECTORY_SEPARATOR);
+
+/**
+ * Register autoload function
+ */
+spl_autoload_register(array("PHPFrame", "__autoload"));
+
+/**
  * PHPFrame Class
  * 
  * This class provides a number of static methods that serve as a simplified
@@ -153,5 +163,35 @@ class PHPFrame
         }
         
         return PHPFrame_Database::getInstance($dsn, $db_user, $db_pass);
+    }
+    
+    /**
+     * Autoload magic method
+     * 
+     * This method is automatically called in case you are trying to use a class/interface which 
+     * hasn't been defined yet. By calling this function the scripting engine is given a last 
+     * chance to load the class before PHP fails with an error. 
+     * 
+     * @param string $class_name The class name to load.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public static function __autoload($class_name) {
+        // PHPFrame classes
+        if (strpos($class_name, 'PHPFrame') !== false) {
+            $array = explode('_', $class_name);
+            
+            if (sizeof($array) == 4) {
+                $file_path = "PHPFrame".DS.$array[1].DS.$array[2].DS.$array[3].".php";
+            } elseif (sizeof($array) == 3) {
+                $file_path = "PHPFrame".DS.$array[1].DS.$array[2].".php";
+            } elseif (sizeof($array) == 2) {
+                $file_path = "PHPFrame".DS.$array[1].DS.$array[1].".php";
+            }
+            
+            @include_once $file_path;
+        }
     }
 }

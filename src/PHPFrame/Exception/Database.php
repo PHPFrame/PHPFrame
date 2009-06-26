@@ -28,37 +28,57 @@
 class PHPFrame_Exception_Database extends PHPFrame_Exception
 {
     /**
-     * MySQL error message
+     * SQLSTATE error code (a five characters alphanumeric identifier defined 
+     * in the ANSI SQL standard)
      * 
-     * @access    private
-     * @var        string
+     * @var string
      */
-    private $_mysql_error=null;
+    private $_sqlstate=null;
     /**
-     * MySQL error number
+     * Driver specific error code.
      * 
-     * @access    private
-     * @var        int
+     * @var int
      */
-    private $_mysql_errno=null;
+    private $_driver_code=null;
+    /**
+     * Driver specific error message.
+     * 
+     * @var int
+     */
+    private $_driver_msg=null;
+    /**
+     * The SQL query that generated the exception (if any)
+     * 
+     * @var string
+     */
+    private $_query=null;
     
     /**
      * Constructor
      * 
-     * @access    public
-     * @param    string    $message    The error message.
-     * @param    int        $code        The error code.
-     * @param    string    $query
-     * @return    void
-     * @since    1.0
+     * @param string       $message   The error message.
+     * @param int          $code      The error code.
+     * @param PDOStatement $statement 
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public function __construct($message=null, $query="", $code=self::E_USER_ERROR) 
-    {
-        $this->_mysql_error = mysql_error();
-        $this->_mysql_errno = mysql_errno();
+    public function __construct(
+        $message=null, 
+        $code=PHPFrame_Exception::ERROR,
+        PDOStatement $stmt=null
+    ) {
+        if ($stmt instanceof PDOStatement) {
+             $error_info = $stmt->errorInfo();
+             $this->_sqlstate = $error_info[0];
+             $this->_driver_code = $error_info[1];
+             $this->_driver_msg = $error_info[2];
+        }
         
-        $verbose = "MySQL Error Number: ".$this->_mysql_errno."\n";
-        $verbose .= "MySQL Server said: ".$this->_mysql_error;
+        $verbose = "SQLSTATE: ". $this->_sqlstate;
+        $verbose .= "\nDriver code: ".$this->_driver_code;
+        $verbose .= "\nDriver message".$this->_driver_msg;
         
         parent::__construct($message, $code, $verbose);
     }

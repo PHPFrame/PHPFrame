@@ -44,65 +44,71 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
      */
     const FETCH_COLUMN=0;
     /**
+     * Return query() result as list of single primitive values
+     * 
+     * @var int
+     */
+    const FETCH_COLUMN_LIST=1;
+    /**
      * Return query() result as numerically indexed array
      * 
      * @var int
      */
-    const FETCH_ARRAY=1;
+    const FETCH_ARRAY=2;
     /**
      * Return query() result as a list of numerically indexed arrays
      * 
      * @var int
      */
-    const FETCH_ARRAY_LIST=2;
+    const FETCH_ARRAY_LIST=3;
     /**
      * Return query() result as associative array
      * 
      * @var int
      */
-    const FETCH_ASSOC=3;
+    const FETCH_ASSOC=4;
     /**
      * Return query() result as a list of associative arrays
      * 
      * @var int
      */
-    const FETCH_ASSOC_LIST=4;
+    const FETCH_ASSOC_LIST=5;
     /**
      * Return query() result as object
      * 
      * @var int
      */
-    const FETCH_OBJ=5;
+    const FETCH_OBJ=6;
     /**
      * Return query() result as a list of objects
      * 
      * @var int
      */
-    const FETCH_OBJ_LIST=6;
+    const FETCH_OBJ_LIST=7;
     /**
      * Return query() result as number of rows returned
      * 
      * @var int
      */
-    const FETCH_NUM_ROWS=7;
+    const FETCH_NUM_ROWS=8;
     /**
      * Return query() result as number of records affected
      * 
      * @var int
      */
-    const FETCH_AFFECTED_ROWS=8;
+    const FETCH_AFFECTED_ROWS=9;
     /**
      * Return query() result as last insert id
      * 
      * @var int
      */
-    const FETCH_LAST_INSERTID=9;
+    const FETCH_LAST_INSERTID=10;
     /**
      * Return PDOStatement object from query() method
      * 
      * @var int
      */
-    const FETCH_STMT=10;
+    const FETCH_STMT=11;
     
     /**
      * An array holding instances of this class
@@ -234,19 +240,46 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
     }
     
     /**
-     * Return the database structure
+     * Get the database structure
+     * 
+     * @param string $table_name Optional parameter to specify a given table.
+     *                           If omitted the whole db structure is returned.
      * 
      * @access public
      * @return array
      * @since  1.0
      */
-    public function getStructure()
+    public function getStructure($table_name=null)
     {
-        if (is_null($this->_structure)) {
+        // Replace table prefix with config value
+        $table_name = str_replace('#__', config::DB_PREFIX, $table_name);
+        
+        if (!is_array($this->_structure) || count($this->_structure) < 1) {
             $this->_fetchStructure();
         }
         
+        if (!is_null($table_name)) {
+            if (!isset($this->_structure[$table_name])) {
+                $msg = "Cound not get table structure";
+                throw new PHPFrame_Exception_Database($msg);
+            }
+            
+            return $this->_structure[$table_name];
+        }
+        
         return $this->_structure;
+    }
+    
+    /**
+     * Get the PDOStatement object
+     * 
+     * @access public
+     * @return PDOStatement
+     * @since  1.0
+     */
+    public function getStatement()
+    {
+        return $this->_stmt;
     }
     
     /**
@@ -268,29 +301,60 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
         // Run SQL query
         try {
             // Prepare statement
-            $stmt = $this->_pdo->prepare($sql);
+            $this->_stmt = $this->_pdo->prepare($sql);
             
             // Execute statement
-            $stmt->execute($params);
+            $this->_stmt->execute($params);
             
-            // Store reference to object in property
-            $this->_stmt = $stmt;
+            $error_info = $this->_stmt->errorInfo();
+            if (is_array($error_info) && count($error_info) > 1) {
+                $msg = "Error running query";
+                throw new PHPFrame_Exception_Database($msg, 
+                                                      PHPFrame_Exception::ERROR, 
+                                                      $this->_stmt);
+            }
             
             switch ($fetch_mode) {
+                case self::FETCH_COLUMN :
+                    return $this->_stmt->fetchColumn();
+                    
+                case self::FETCH_COLUMN_LIST :
+                    return $this->_stmt->fetchAll(PDO::FETCH_COLUMN);
+                    
+                case self::FETCH_ARRAY :
+                    return $this->_stmt->fetch(PDO::FETCH_NUM);
+                    
+                case self::FETCH_ARRAY_LIST :
+                    return $this->_stmt->fetchAll(PDO::FETCH_NUM);
+                    
+                case self::FETCH_ASSOC :
+                    return $this->_stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                case self::FETCH_ASSOC_LIST :
+                    return $this->_stmt->fetchAll(PDO::FETCH_ASSOC);
+                    
+                case self::FETCH_OBJ :
+                    return $this->_stmt->fetch(PDO::FETCH_OBJ);
+                    
+                case self::FETCH_OBJ_LIST :
+                    return $this->_stmt->fetchAll(PDO::FETCH_OBJ);
+                    
+                case self::FETCH_NUM_ROWS :
+                    return $this->_stmt->rowCount();
+                    
                 case self::FETCH_AFFECTED_ROWS :
-                    return $this->_pdo->exec($sql);
+                    //return $this->_pdo->exec($sql);
+                    
+                case self::FETCH_LAST_INSERTID :
+                    return $this->lastInsertId();
+                    
+                default :
+                    return $stmt;
             }
         }
         catch (PDOException $e) {
             throw new PHPFrame_Exception_Database('Query failed', $sql);
         }
-        
-        // If it is an INSERT query we return the insert id
-        if (preg_match("/^INSERT/i", $sql)) {
-            return $this->_pdo->lastInsertId();
-        }
-        
-        return $stmt;
     }
     
     /**
@@ -314,131 +378,145 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
     }
     
     /**
-     * Run query and load single result
+     * Get id from the last insert query
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public function lastInsertId()
+    {
+        return $this->_pdo->lastInsertId();
+    }
+    
+    /**
+     * Run query and fetch single result
      * 
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      * 
      * @access public
-     * @return mixed Returns a string with the single result or FALSE on failure.
+     * @return string Returns a string with the single result.
      * @since  1.0
      */
     public function fetchColumn($sql, $params=array()) 
     {
-        // Run SQL query
-        $stmt = $this->query($sql, $params);
-        
-        // Fetch row and return
-        return $stmt->fetchColumn();
+        // Delegate to main query method
+        return $this->query($sql, $params, self::FETCH_COLUMN);
     }
     
     /**
-     * Run query and load single value for each row
+     * Run query and fetch a list of single values per row
      * 
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      * 
      * @access public
-     * @return mixed Returns an array containing single column for each row
+     * @return array Returns an array with strings with the single result.
+     * @since  1.0
+     */
+    public function fetchColumnList($sql, $params=array()) 
+    {
+        // Delegate to main query method
+        return $this->query($sql, $params, self::FETCH_COLUMN_LIST);
+    }
+    
+    /**
+     * Run query and fetch single row as a numerically indexed array
+     * 
+     * @param string $sql    The SQL statement to run.
+     * @param array  $params An array with the query parameters if any
+     * 
+     * @access public
+     * @return array Returns an array containing single column for each row
      *               or FALSE on failure.
      * @since  1.0
      */
     public function fetchArray($sql, $params=array())
     {
-        // Run SQL query
-        $stmt = $this->query($sql);
-        
-        $rows = array();
-        
-        // Fetch associative array
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            if (is_array($row) && count($row) > 0) {
-                $rows[] = $row[0];    
-            }
-        }
-        
-        return $rows;
-    }
-    
-    public function fetchArrayList($sql, $params=array())
-    {
-        throw new Exception("FIX ME!!!");
+        // Delegate to main query method
+        return $this->query($sql, $params, self::FETCH_ARRAY);
     }
     
     /**
-     * Run query and load single row as associative array
+     * Run query and fetch a numerically indexed array containing numerically
+     * indexed arrays with the row data
+     * 
+     * @param string $sql    The SQL statement to run.
+     * @param array  $params An array with the query parameters if any
+     * 
+     * @return array A numerically indexed array containing numerically indexed
+     *               arrays with the row data
+     */
+    public function fetchArrayList($sql, $params=array())
+    {
+        // Delegate to main query method
+        return $this->query($sql, $params, self::FETCH_ARRAY_LIST);
+    }
+    
+    /**
+     * Run query and fetch single row as associative array
      * 
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      *
      * @access public
-     * @return mixed Returns an associative array with the row data 
-     *               or FALSE on failure.
+     * @return array An associative array with the row data
      * @since  1.0
      */
     public function fetchAssoc($sql, $params=array()) 
     {
-        // Run SQL query
-        $stmt = $this->query($sql);
-        
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        // Delegate to main query method
+        return $this->query($sql, $params, self::FETCH_ASSOC);
     }
     
     /**
-     * Run query and load single row as associative array
+     * Run query and fetch rows as associative arrays
      * 
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      *
      * @access public
-     * @return mixed Returns an associative array with the row data 
-     *               or FALSE on failure.
+     * @return array A numerically indexed array containing associative arrays
+     *               with the row data
      * @since  1.0
      */
     public function fetchAssocList($sql, $params=array()) 
     {
-        // Run SQL query
-        $stmt = $this->query($sql);
-        
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Delegate to main query method
+        return $this->query($sql, $params, self::FETCH_ASSOC_LIST);
     }
     
     /**
-     * Run query and load single row as object
+     * Run query and fetch single row as object
      * 
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      * 
      * @access public
-     * @return mixed Returns a row object or FALSE if query fails.
+     * @return stdClass
      * @since  1.0
      */
     public function fetchObject($sql, $params=array()) 
     {
-        // Run SQL query
-        $stmt = $this->query($sql);
-        
-        // Fetch row as object
-        return $stmt->fetch(PDO::FETCH_OBJ);
+        // Delegate to main query method
+        return $this->query($sql, $params, self::FETCH_OBJ);
     }
     
     /**
-     * Run query and load array of row objects
+     * Run query and fetch array of row objects
      *
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      * 
      * @access public
-     * @return mixed An array of row objects or FALSE if query fails.
+     * @return array An array containing objects of type stdClass
      * @since  1.0
      */
     public function fetchObjectList($sql, $params=array()) 
     {
-        // Run SQL query
-        $stmt = $this->query($sql);
-        
-        // Fetch all rows as objects
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        // Delegate to main query method
+        return $this->query($sql, $params, self::FETCH_OBJ_LIST);
     }
     
     /**
@@ -505,7 +583,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
      * Fetch table structures from database
      * 
      * @access private
-     * @return array
+     * @return void
      * @since  1.0
      */
     private function _fetchStructure()
@@ -518,34 +596,19 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
         if (!isset($structure) || !is_array($structure)) {
             // Get list of all tables in database
             $sql = "show tables";
-            $this->query($sql);
+            $tables = $this->fetchColumnList($sql);
             
             // Loop through every table and read structure
-            
-            // Store structure in array uning table name as key
-            
-            // Return assoc array containing structure
-                
-            $sql = "SHOW COLUMNS FROM `".$table_name."`";
-            
-            $stmt = $this->_db->prepare($sql);
-            $stmt->execute();
-            $array = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            $error_info = $stmt->errorInfo();
-            if (is_array($error_info) && count($error_info) > 1) {
-                $exception_msg = "Couldn't read table structure for ";
-                $exception_msg .= $table_name;
-                throw new PHPFrame_Exception_Database($exception_msg, $error_info[2]);
+            foreach ($tables as $table_name) {
+                // Store structure in array uning table name as key
+                $sql = "SHOW COLUMNS FROM `".$table_name."`";
+                $structure[$table_name] = $this->fetchAssocList($sql);
             }
             
-            // Add table structure to structures array
-            $table_structures[$table_name] = $array;
-            
             // Store data in app registry
-            $app_registry->set('database.table_structures', $table_structures);
+            $app_registry->set('database.structure', $structure);
         }
         
-        return $table_structures[$table_name];
+        $this->_structure = $structure;
     }
 }

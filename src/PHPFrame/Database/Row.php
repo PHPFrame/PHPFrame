@@ -170,13 +170,12 @@ class PHPFrame_Database_Row
     {
         $array = array();
         
-        foreach ($this->_fields as $field) {
-            $alias = $field->getAlias();
-            if (!empty($alias)) {
-                $array[$alias] = $field->getValue();
-            } else {
-                $array[$field->getField()] = $field->getValue();
+        foreach ($this->_fields as $key=>$value) {
+            if ($value instanceof PHPFrame_Database_Field) {
+                $value = $value->getValue();
             }
+            
+            $array[$key] = $value;
         }
         
         return $array;
@@ -185,18 +184,22 @@ class PHPFrame_Database_Row
     /**
      * Get a column value from this row
      * 
-     * @param string $key The column we want to get the value for.
+     * @param string $field_name The column we want to get the value for.
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function get($key)
+    public function get($field_name)
     {
-        foreach ($this->_fields as $field) {
-            if ($field->getField() == $key) {
-                return $field->getValue();
+        $field_names = array_keys($this->_fields);
+        
+        if (in_array($field_name, $field_names)) {
+            if ($this->_fields[$field_name] instanceof PHPFrame_Database_Field) {
+                return $this->_fields[$field_name]->getValue();
             }
+            
+            return $this->_fields[$field_name];
         }
         
         throw new PHPFrame_Exception("Tried to get column '".$key
@@ -239,7 +242,12 @@ class PHPFrame_Database_Row
         $array = array();
         
         foreach ($this->_fields as $field) {
-            $array[] = $field->getField();
+            if ($field instanceof PHPFrame_Database_Field) {
+                $array[] = $field->getField();
+            } else {
+                $array[] = $field;
+            }
+            
         }
         
         return $array;
@@ -347,13 +355,9 @@ class PHPFrame_Database_Row
         // Cast IdObject to string to convert to SQL query
         $sql = (string) $this->_id_obj;
         
-        // Prepare SQL statement
-        $stmt = $this->_db->prepare($sql);
-        // Execute SQL statement
-        $stmt->execute($this->_id_obj->getParams());
+        // Fetch data as assoc array
+        $array = $this->_db->fetchAssoc($sql, $this->_id_obj->getParams());
         
-        // Fetch result as assoc array
-        $array = $stmt->fetch(PDO::FETCH_ASSOC);
         // If result is array we bind it to the row
         if (is_array($array) && count($array) > 0) {
             $this->bind($array, $exclude);   
@@ -383,18 +387,19 @@ class PHPFrame_Database_Row
         }
         
         if (!is_array($array)) {
-            $exception_msg = 'Argument 1 ($array) has to be of type array.';
-            throw new PHPFrame_Exception_Database($exception_msg);
+            $msg = 'Argument 1 ($array) has to be of type array.';
+            throw new PHPFrame_Exception_Database($msg);
         }
         
         if (count($array) > 0) {
             // Rip values using known structure
-            foreach ($this->_fields as $field) {
-                $field_name = $field->getField();
-                if (array_key_exists($field_name, $array) 
-                    && !in_array($field_name, $exclude)
+            foreach ($array as $key=>$value) {
+                if (array_key_exists($key, $this->_fields)
+                    && !in_array($key, $exclude)
                 ) {
-                    $field->setValue($array[$field_name]);
+                    $this->_fields[$key]->setValue($value);
+                } else {
+                    $this->_fields[$key] = $value;
                 }
             }
         }
@@ -458,62 +463,14 @@ class PHPFrame_Database_Row
         $table_name = $this->_id_obj->getTableName();
         
         // Fetch the structure of the table that contains this row
-        $table_structure = $this->_fetchTableStructure($table_name);
+        $table_structure = $this->_db->getStructure($table_name);
         
         // Loop through structure array to build field objects
         $field_names = $this->_id_obj->getSelectFields();
         foreach ($table_structure as $field_array) {
-            $field_array["Alias"] = true;
-            $this->_fields[] = new PHPFrame_Database_Field($field_array);
+            //$field_array["Alias"] = true;
+            $this->_fields[$field_array["Field"]] = new PHPFrame_Database_Field($field_array);
         }
-        
-        // Add foreign fields from joined tables
-        $join_tables = $this->_id_obj->getJoinTables();
-        if (is_array($join_tables) && count($join_tables) > 0) {
-            foreach ($join_tables as $join_table) {
-                // Fetch the structure of the table
-                $table_structure = $this->_fetchTableStructure($join_table["table_name"]);
-                
-                // Loop through structure array to build field objects
-                foreach ($table_structure as $field_array) {
-                    $field_array["Field"] = $join_table["table_alias"].".".$field_array["Field"];
-                    $field_array["Alias"] = true;
-                    $field_array["Foreign"] = true;
-                    $this->_fields[] = new PHPFrame_Database_Field($field_array);
-                }
-            }
-        }
-    }
-    
-    private function _fetchTableStructure($table_name)
-    {
-        $app_registry = PHPFrame::AppRegistry();
-        $table_structures = $app_registry->get('table_structures');
-        
-        // Load structure from db if not in application registry already
-        if (!isset($table_structures[$table_name]) 
-            || !is_array($table_structures[$table_name])) {
-            $sql = "SHOW COLUMNS FROM `".$table_name."`";
-            
-            $stmt = $this->_db->prepare($sql);
-            $stmt->execute();
-            $array = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            $error_info = $stmt->errorInfo();
-            if (is_array($error_info) && count($error_info) > 1) {
-                $exception_msg = "Couldn't read table structure for ";
-                $exception_msg .= $table_name;
-                throw new PHPFrame_Exception_Database($exception_msg, $error_info[2]);
-            }
-            
-            // Add table structure to structures array
-            $table_structures[$table_name] = $array;
-            
-            // Store data in app registry
-            $app_registry->set('table_structures', $table_structures);
-        }
-        
-        return $table_structures[$table_name];
     }
     
     /**

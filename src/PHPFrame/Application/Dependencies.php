@@ -36,14 +36,6 @@ class PHPFrame_Application_Dependencies
      */
     private static $_xml=null;
     /**
-     * A string containing the installed MySQL version
-     * 
-     * @static
-     * @access private
-     * @var    string
-     */
-    private static $_mysqlversion=null;
-    /**
      * A string containing the installed PHP version
      * 
      * @static
@@ -99,22 +91,9 @@ class PHPFrame_Application_Dependencies
             self::$_xml = simplexml_load_file(_ABS_PATH.DS."src".DS."dependencies.xml");
         }
         
-        // Get MySQL version if not loaded yet
-        if (is_null(self::$_mysqlversion)) {
-            self::$_mysqlversion = self::getMySQLVersion();
-        }
-        
         // Get PHP version if not loaded yet
         if (is_null(self::$_phpversion)) {
             self::$_phpversion = phpversion();
-        }
-        
-        // Check MySQL version
-        if (version_compare(self::$_mysqlversion, self::$_xml->mysqlversion, '<')) {
-            $msg = 'MySQL version '.self::$_xml->mysqlversion;
-            $msg .= ' is required. Currently installed version is ';
-            $msg .= self::$_mysqlversion.'.';
-            throw new PHPFrame_Exception();
         }
         
         // Check PHP version
@@ -138,25 +117,5 @@ class PHPFrame_Application_Dependencies
         // This will prevent running the check twice within the same process or session
         $session->set('dependencies.status', true);
         return self::$_status = true;
-    }
-    
-    /**
-     * Get the MySQL server version number
-     * 
-     * @static
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public static function getMySQLVersion() 
-    {
-        if (is_null(self::$_mysqlversion)) {
-            $db = PHPFrame::DB();
-            $query = "SELECT version() AS ve";
-            return $db->loadResult($query);
-        }
-        else {
-            return self::$_mysqlversion;
-        }
     }
 }

@@ -37,8 +37,6 @@ class PHPFrame_Database_Field
     private $_default=null;
     private $_extra=null;
     private $_value=null;
-    private $_foreign=false;
-    private $_alias=null;
     
     public function __construct($options=array())
     {
@@ -75,11 +73,6 @@ class PHPFrame_Database_Field
     public function getField()
     {
         return $this->_field;
-    }
-    
-    public function getAlias()
-    {
-        return $this->_alias;
     }
     
     public function isPrimaryKey()
@@ -220,15 +213,5 @@ class PHPFrame_Database_Field
     private function _setExtra($str)
     {
         $this->_extra = $str;
-    }
-    
-    private function _setForeign($bool)
-    {
-        $this->_foreign = $bool;
-    }
-    
-    private function _setAlias($str)
-    {
-        $this->_alias = $str;
     }
 }

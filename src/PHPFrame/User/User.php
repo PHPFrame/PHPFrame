@@ -84,9 +84,9 @@ class PHPFrame_User
         return $this;
     }
     
-    public function bind($array, $exclude='', $foreign_keys=array()) 
+    public function bind($array, $exclude='') 
     {
-        $this->_row->bind($array, $exclude, $foreign_keys);
+        $this->_row->bind($array, $exclude);
     }
     
     /**
@@ -130,13 +130,13 @@ class PHPFrame_User
     
     private function _emailExists($email) 
     {
-        $query = "SELECT id FROM #__users ";
-        $query .= " WHERE email = '".$email."' ";
-        $query .= " AND (deleted = '0000-00-00 00:00:00' OR deleted IS NULL) ";
+        $sql = "SELECT id FROM #__users ";
+        $sql .= " WHERE email = ':email' ";
+        $sql .= " AND (deleted = '0000-00-00 00:00:00' OR deleted IS NULL) ";
         //echo str_replace("#_", "eo", $query); exit;
         //TODO: FIx me!!
         
-        $id = PHPFrame::DB()->loadResult($query);
+        $id = PHPFrame::DB()->fetchColumn($sql, array(":email"=>$email));
         
         return ($id > 0);
     }

@@ -99,7 +99,6 @@ class PHPFrame_Exception_Handler
         $str = 'PHPFrame Uncaught exception: '.$exception->getMessage()."\n";
         $str .= 'File: '.$exception->getFile()."\n";
         $str .= 'Line: '.$exception->getLine()."\n";
-        $str .= 'Severity: '.$exception->getSeverity()."\n";
         $str .= 'Code: '.$exception->getCode()."\n";
         $str .= $exception->getTraceAsString();
             

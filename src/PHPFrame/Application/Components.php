@@ -60,7 +60,7 @@ class PHPFrame_Application_Components
     public function loadByOption($option) 
     {
         foreach ($this->_array as $component) {
-            if ($component->name == substr($option, 4)) {
+            if ($component['name'] == substr($option, 4)) {
                 return $component;
             }
         }
@@ -80,7 +80,7 @@ class PHPFrame_Application_Components
     public static function isEnabled($name) 
     {
         foreach ($this->_array as $component) {
-            if ($component->name == substr($name, 4) && $component->enabled == 1) {
+            if ($component['name'] == substr($name, 4) && $component['enabled'] == 1) {
                 return true;
             }
         }

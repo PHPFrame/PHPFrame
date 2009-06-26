@@ -32,11 +32,14 @@ class PHPFrame_User_Helper
      *
      * @param string $firstname
      * @param string $lastname
-     * @return string full name in format: [Uppercase first initial]"." [Surname]  
+     * 
+     * @static
+     * @access public
+     * @return string full name in format: [Uppercase first initial]"." [Surname]
+     * @since  1.0
      */
-    static function fullname_format($firstname, $lastname) 
+    public static function fullname_format($firstname, $lastname) 
     {
-        
         $str = strtoupper(substr($firstname,0,1)).". ".ucwords($lastname);
                 
         return $str;
@@ -45,22 +48,26 @@ class PHPFrame_User_Helper
     /**
      * Translate userid to username
      * 
-     * @param     int        The ID to be translated
-     * @return     string    If no id is passed returns false, otherwise returns the username as a string
+     * @param int $id The ID to be translated
+     * 
+     * @static
+     * @access public
+     * @return string If no id is passed returns false, otherwise returns the username 
+     *                as a string
+     * @since  1.0
      */
-    static function id2name($id=0) 
+    public static function id2name($id=0) 
     {
         if (!empty($id)) { // No user has been selected
             $db = PHPFrame::DB();
-            $query = "SELECT firstname, lastname FROM #__users WHERE id = '".$id."'";
-            $row = $db->loadObject($query);
+            $sql = "SELECT firstname, lastname FROM #__users WHERE id = :id";
+            $row = $db->loadObject($sql, array(":id"=>$id));
             if ($row === false) {
                 return false;
             }
             
             return PHPFrame_User_Helper::fullname_format($row->firstname, $row->lastname);
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -68,17 +75,21 @@ class PHPFrame_User_Helper
     /**
      * Translate username to userid
      * 
-     * @param     string    The username to be translated.
-     * @return     int        If no username is passed returns false, otherwise returns the user ID.
+     * @param string $username The username to be translated.
+     * 
+     * @static
+     * @access public
+     * @return int    If no username is passed returns false, otherwise returns 
+     *                the user ID.
+     * @since  1.0
      */
-    static function username2id($username='') 
+    public static function username2id($username='') 
     {
         if (!empty($username)) { // No user has been selected
             $db = PHPFrame::DB();
-            $query = "SELECT id FROM #__users WHERE username = '".$username."'";
-            return $db->loadResult($query);
-        }
-        else {
+            $sql = "SELECT id FROM #__users WHERE username = :username";
+            return $db->fetchColumn($sql, array(":username"=>$username));
+        } else {
             return false;
         }
     }
@@ -86,17 +97,21 @@ class PHPFrame_User_Helper
     /**
      * Translate email to userid
      * 
-     * @param     string    The email to be translated.
-     * @return     mixed    If no email is passed returns FALSE, otherwise returns the user ID.
+     * @param string $email The email to be translated.
+     * 
+     * @static
+     * @access public
+     * @return mixed  If no email is passed returns FALSE, otherwise returns 
+     *                the user ID.
+     * @since  1.0
      */
-    static function email2id($email='') 
+    public static function email2id($email='') 
     {
         if (!empty($email)) { // No user has been selected
             $db = PHPFrame::DB();
-            $query = "SELECT id FROM #__users WHERE email = '".$email."'";
-            return $db->loadResult($query);
-        }
-        else {
+            $sql = "SELECT id FROM #__users WHERE email = :email";
+            return $db->fetchColumn($sql, array(":email"=>$email));
+        } else {
             return false;
         }
     }
@@ -104,34 +119,45 @@ class PHPFrame_User_Helper
     /**
      * Translate id to email
      * 
-     * @param $id The userid to be translated.
+     * @param int $id The userid to be translated.
+     * 
+     * @static
+     * @access public
      * @return mixed A string with the email address or FALSE on fail.
+     * @since  1.0
      */
-    static function id2email($id) 
+    public static function id2email($id) 
     {
         if (!empty($id)) { // No user has been selected
             $db = PHPFrame::DB();
-            $query = "SELECT email FROM #__users WHERE id = '".$id."'";
-            return $db->loadResult($query);
-        }
-        else {
+            $sql = "SELECT email FROM #__users WHERE id = :id";
+            return $db->fetchColumn($sql, array(":id"=>$id));
+        } else {
             return false;
         }
     }
     
     /**
-     * @todo    This method needs to be rewritten when we add custom user fields
+     * Get user photo for given userid
      * 
-     * @param    int    $id
+     * @param int $id
+     * 
+     * @static
+     * @access public
      * @return string
+     * @since  1.0
      */
-    static function id2photo($id) 
+    public static function id2photo($id) 
     {
         if (!empty($id)) { // No user has been selected
             $db = PHPFrame::DB();
-            $query = "SELECT photo FROM #__users WHERE id = '".$id."'";
-            $photo = $db->loadResult($query);
-            if (empty($photo)) { $photo = 'default.png'; }
+            $sql = "SELECT photo FROM #__users WHERE id = :id";
+            $photo = $db->fetchColumn($sql, array(":id"=>$id));
+            
+            if (empty($photo)) { 
+                $photo = 'default.png';
+            }
+            
             return $photo;
         }
         else {
@@ -142,11 +168,16 @@ class PHPFrame_User_Helper
     /**
      * Function to build HTML select of users
      * 
-     * @param    int        The selected value if any
-     * @param     string    Attributes for the <select> tag
-     * @return     string    A string with the HTML select
+     * @param int    $selected  The selected value if any
+     * @param string $attribs   Attributes for the <select> tag
+     * @param string $fieldname The field name to use for the select tag
+     * 
+     * @static
+     * @access public
+     * @return string A string with the HTML select
+     * @since  1.0
      */
-    static function select($selected=0, $attribs='', $fieldname='userid', $projectid=0) 
+    public static function select($selected=0, $attribs='', $fieldname='userid') 
     {
         // assemble users to the array
         $options = array();
@@ -154,59 +185,58 @@ class PHPFrame_User_Helper
         
         // get users from #__users
         $db = PHPFrame::DB();
-        $query = "SELECT u.id, u.firstname, u.lastname ";
-        $query .= " FROM #__users AS u ";
-        if (!empty($projectid)) {
-            $query .= " LEFT JOIN #__users_roles ur ON ur.userid = u.id ";
-            $query .= " WHERE ur.projectid = ".$projectid;
-        }
-        else {
-            $query .= " WHERE 0=0";
-        }
-        $query .= " AND (u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL)";
-        $query .= " ORDER BY u.lastname";
-        //echo $query; exit;
         
-        if (!$rows = $db->loadObjectList($query)) {
+        $sql = "SELECT u.id, u.firstname, u.lastname ";
+        $sql .= " FROM #__users AS u ";
+        $sql .= " AND (u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL)";
+        $sql .= " ORDER BY u.lastname";
+        
+        $rows = $db->fetchObjectList($sql);
+        
+        if (!is_array($rows) || count($rows) < 1) {
           return false;
-        }
-        
-        if (is_array($rows) && count($rows) > 0) {
+        } else {
             foreach ($rows as $row) {
                 $options[] = PHPFrame_HTML::_('select.option', $row->id, PHPFrame_User_Helper::fullname_format($row->firstname, $row->lastname));
             }
         }
         
         $output = PHPFrame_HTML::_('select.genericlist', $options, $fieldname, $attribs, $selected);
+        
         return $output;        
     }
     
     /**
      * Build checkboxes with users to pick assignees.
      * 
-     * @param    mixed    $selected    Either a single userid or an array of ids.
-     * @param    string    $attribs    A string with attributes to be printed in the input tags.
-     * @param    string    $fieldname    String tu use for the input tags name attribute.
-     * @param    int        $projectid    This parameter is optional. If passed users will be filtered to the project members.
-     * @return    string    A string with the html code containing the checkboxes.
+     * @param mixed  $selected  Either a single userid or an array of ids.
+     * @param string $attribs   A string with attributes to be printed in the input tags.
+     * @param string $fieldname String tu use for the input tags name attribute.
+     * @param int    $projectid This parameter is optional. If passed users will be 
+     *                          filtered to the project members.
+     * 
+     * @static
+     * @access public
+     * @return string A string with the html code containing the checkboxes.
+     * @since  1.0
      */
-    static function assignees($selected=0, $attribs='', $fieldname='assignees[]', $projectid=0) 
+    public static function assignees($selected=0, $attribs='', $fieldname='assignees[]', $projectid=0) 
     {
         $db = PHPFrame::DB();
-        $query = "SELECT u.id, u.firstname, u.lastname ";
-        $query .= " FROM #__users AS u ";
+        
+        $sql = "SELECT u.id, u.firstname, u.lastname ";
+        $sql .= " FROM #__users AS u ";
         if (!empty($projectid)) {
-            $query .= " LEFT JOIN #__users_roles ur ON ur.userid = u.id ";
-            $query .= " WHERE ur.projectid = ".$projectid;
+            $sql .= " LEFT JOIN #__users_roles ur ON ur.userid = u.id ";
+            $sql .= " WHERE ur.projectid = :projectid";
         }
         else {
-            $query .= " WHERE 0=0";
+            $sql .= " WHERE 0=0";
         }
-        $query .= " AND (u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL)";
-        $query .= " ORDER BY u.lastname";
-        //echo $query; exit;
+        $sql .= " AND (u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL)";
+        $sql .= " ORDER BY u.lastname";
         
-        if (!$rows = $db->loadObjectList($query)) {
+        if (!$rows = $db->fetchObjectList($sql, array(":projectid"=>$projectid))) {
           return false;
         }
         
@@ -238,20 +268,26 @@ class PHPFrame_User_Helper
     /**
      * Build and display an input tag with username autocompleter
      * 
-     * @param    array    $where        An array with conditions to include in SQL query.
-     * @return    void
+     * @param array $where An array with conditions to include in SQL query.
+     * 
+     * @static
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    static function autocompleteUsername($where=array()) 
+    public static function autocompleteUsername($where=array()) 
     {
         $db = PHPFrame::DB();
         
         $where[] = "(u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL)";
         
-        $query = "SELECT id, username, firstname, lastname FROM #__users ";
-        $query .= ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
-        $query .= " ORDER BY username";
+        $sql = "SELECT id, username, firstname, lastname FROM #__users ";
+        $sql .= ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
+        $sql .= " ORDER BY username";
         
-        if (!$rows = $db->loadObjectList($query)) {
+        $rows = $db->fetchObjectList($sql);
+        
+        if (!is_array($rows)) {
           return false;
         }
         
@@ -266,11 +302,16 @@ class PHPFrame_User_Helper
     /**
      * Function to build HTML select of groups
      * 
-     * @param    int        The selected value if any
-     * @param     string    Attributes for the <select> tag
-     * @return     string    A string with the HTML select
+     * @param int    $selected  The selected value if any
+     * @param string $attribs   Attributes for the <select> tag
+     * @param string $fieldname The name to use for the select tag
+     * 
+     * @static
+     * @access public
+     * @return string A string with the HTML select
+     * @since  1.0
      */
-    static function selectGroup($selected=0, $attribs='', $fieldname='groupid') 
+    public static function selectGroup($selected=0, $attribs='', $fieldname='groupid') 
     {
         // assemble users to the array
         $options = array();
@@ -278,20 +319,19 @@ class PHPFrame_User_Helper
         
         // get users from #__users
         $db = PHPFrame::DB();
-        $query = "SELECT id, name FROM #__groups ORDER BY id";
-        //echo $query; exit;
+        $sql = "SELECT id, name FROM #__groups ORDER BY id";
+        $rows = $db->fetchObjectList($sql);
         
-        if (!$rows = $db->loadObjectList($query)) {
+        if (!is_array($rows) || count($rows) < 1) {
           return false;
-        }
-        
-        if (is_array($rows) && count($rows) > 0) {
+        } else {
             foreach ($rows as $row) {
                 $options[] = PHPFrame_HTML::_('select.option', $row->id, ucwords($row->name));
             }
         }
         
         $output = PHPFrame_HTML::_('select.genericlist', $options, $fieldname, $attribs, $selected);
+        
         return $output;        
     }
 }

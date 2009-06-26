@@ -61,11 +61,10 @@ class PHPFrame_Application_Permissions
     public function authorise($component, $action, $groupid) 
     {
         foreach ($this->_acl as $acl) {
-            if (
-                $acl['groupid'] == $groupid 
+            if ($acl['groupid'] == $groupid 
                 && $acl['component'] == $component 
                 && ($acl['action'] == $action || $acl['action'] == '*')
-               ) {
+            ) {
                 return true;
             }
         }

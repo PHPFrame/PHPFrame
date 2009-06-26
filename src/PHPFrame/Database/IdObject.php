@@ -212,10 +212,15 @@ class PHPFrame_Database_IdObject
             $pattern = "/^([a-zA-Z_\#]+)\.([a-zA-Z_\*]+)( AS ([a-zA-Z_]+))?$/";
             preg_match($pattern, $field, $matches);
             
-            if (is_array($matches) && count($matches) > 2) {
+            if (is_array($matches) && count($matches) == 5) {
                 $processed_fields[] = array("table_name"=>$matches[1], 
                                             "field_name"=>$matches[2], 
                                             "field_alias"=>$matches[4]);
+                
+            } elseif (is_array($matches) && count($matches) == 3) {
+                $processed_fields[] = array("table_name"=>$matches[1], 
+                                            "field_name"=>$matches[2], 
+                                            "field_alias"=>null);
             } else {
                 $processed_fields[] = array("table_name"=>null, 
                                             "field_name"=>$field, 
@@ -270,7 +275,7 @@ class PHPFrame_Database_IdObject
     {
         $join = (string) trim($join);
         // Validate input type and set internal property
-        $pattern = "/^([a-zA-Z]*[ ]{0,1}JOIN) ([a-zA-Z_\#]+) ([a-zA-Z]+) ON ([a-zA-Z]+\.[a-zA-Z_]+) (=) ([a-zA-Z]+\.[a-zA-Z_]+)/";
+        $pattern = "/^([a-zA-Z]*[ ]{0,1}JOIN) ([a-zA-Z_\#]+) ([a-zA-Z_]+) ON ([a-zA-Z]+\.[a-zA-Z_]+) (=) ([a-zA-Z]+\.[a-zA-Z_]+)/";
         preg_match($pattern, $join, $matches);
         
         $this->_join[] = array("type"=>$matches[1],

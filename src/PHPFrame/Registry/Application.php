@@ -115,8 +115,24 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     public function __destruct()
     {
         if ($this->isDirty()) {
-            $this->_writeToFile();
+            try {
+                // Write data to file
+                $this->_writeToFile();
+            } catch (Exception $e) {
+                trigger_error($e->getMessage());
+                exit;
+            }
         }
+    }
+    
+    public function __sleep()
+    {
+        $this->_dirty = null;
+    }
+    
+    public function __wakeup()
+    {
+        $this->_dirty = false;
     }
     
     /**

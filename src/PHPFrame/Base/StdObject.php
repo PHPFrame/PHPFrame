@@ -29,7 +29,7 @@
  */
 class PHPFrame_Base_StdObject
 {   
-    protected function throwException($msg, $code=PHPFrame_Exception::E_PHPFRAME_ERROR)
+    protected function throwException($msg, $code=PHPFrame_Exception::ERROR)
     {
         try {
             throw new PHPFrame_Exception($msg=null, $code);

@@ -180,7 +180,7 @@ class PHPFrame_Database_Field
             $exception_msg = "Wrong type for column '".$structure->Field."'. ";
             $exception_msg .= "Expected '".$structure->Type."' and got '";
             $exception_msg .= $this->_data[$structure->Field]."'";
-            $exception_code = PHPFrame_Exception::E_PHPFRAME_WARNING;
+            $exception_code = PHPFrame_Exception::WARNING;
             throw new PHPFrame_Exception($exception_msg, $exception_code);
         }
     }

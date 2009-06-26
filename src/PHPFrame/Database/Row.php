@@ -205,7 +205,7 @@ class PHPFrame_Database_Row
         throw new PHPFrame_Exception("Tried to get column '".$key
                                      ."' that doesn't exist in "
                                      .$this->_id_obj->getTableName(), 
-                                      PHPFrame_Exception::E_PHPFRAME_WARNING);
+                                      PHPFrame_Exception::WARNING);
     }
     
     public function getPrimaryKey()
@@ -269,7 +269,7 @@ class PHPFrame_Database_Row
             throw new PHPFrame_Exception("Tried to set column '".$key
                                          ."' that doesn't exist in "
                                          .$this->_id_obj->getTableName(), 
-                                          PHPFrame_Exception::E_PHPFRAME_WARNING);
+                                          PHPFrame_Exception::WARNING);
         }
         
         foreach ($this->_fields as $field) {
@@ -317,7 +317,9 @@ class PHPFrame_Database_Row
     {
         // Loop through table structure to find key
         foreach ($this->_fields as $field) {
-            if ($field->getField() == $column_name) {
+            if ($field instanceof PHPFrame_Database_Field
+                && $field->getField() == $column_name
+            ) {
                 return true;
             }
         }
@@ -545,7 +547,7 @@ class PHPFrame_Database_Row
         
         if ($this->_db->query($query) === false) {
             throw new PHPFrame_Exception("Error updating database row",
-                                         PHPFrame_Exception::E_PHPFRAME_WARNING,
+                                         PHPFrame_Exception::WARNING,
                                          "Query: ".$query);
         }
         

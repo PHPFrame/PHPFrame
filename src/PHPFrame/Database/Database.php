@@ -194,8 +194,11 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
      */
     public function __sleep()
     {
-        // Disconnect from database server
+        // Disconnect from database server by unsetting PDO object
         $this->_pdo = null;
+        
+        // Remove reference to PDOStatement object 
+        $this->_stmt = null;
         
         return array_keys(get_object_vars($this));
     }
@@ -544,8 +547,8 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
      */
     public function countRows($table_name) 
     {
-        $query = "SELECT COUNT(id) FROM `".$table_name."`";
-        return $this->loadResult($query);
+        $sql = "SELECT COUNT(id) FROM `".$table_name."`";
+        return $this->fetchColumn($sql);
     }
     
     /**

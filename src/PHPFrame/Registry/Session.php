@@ -17,8 +17,6 @@
 /**
  * Session Class
  * 
- * The Session class is responsible for detecting the client (default, mobile, cli or xmlrpc)
- * 
  * @category   MVC_Framework
  * @package    PHPFrame
  * @subpackage Registry
@@ -203,7 +201,13 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     public static function getClient() 
     {   
-        return $_SESSION['client'];
+        if (isset($_SESSION['client']) 
+            && $_SESSION['client'] instanceof PHPFrame_Client_IClient
+        ) {
+            return $_SESSION['client'];
+        }
+        
+        return null;
     }
     
 
@@ -216,7 +220,13 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     public function getClientName() 
     {
-        return $_SESSION['client']->getName();
+        if (isset($_SESSION['client']) 
+            && $_SESSION['client'] instanceof PHPFrame_Client_IClient
+        ) {
+            return $_SESSION['client']->getName();
+        }
+        
+        return null;
     }
     
     /**
@@ -237,12 +247,18 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      * Get session's user object
      * 
      * @access public
-     * @return PHPFrame_User
+     * @return PHPFrame_User|null
      * @since  1.0
      */
     public function getUser() 
     {
-        return $_SESSION['user'];
+        if (isset($_SESSION['user']) 
+            && $_SESSION['user'] instanceof PHPFrame_User
+        ) {
+            return $_SESSION['user'];
+        }
+        
+        return null;
     }
     
     /**
@@ -254,7 +270,13 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     public function getUserId() 
     {
-        return (int) $_SESSION['user']->get('id');
+        if (isset($_SESSION['user']) 
+            && $_SESSION['user'] instanceof PHPFrame_User
+        ) {
+            return (int) $_SESSION['user']->get('id');
+        }
+        
+        return 0;
     }
     
     /**
@@ -266,7 +288,13 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     public function getGroupId() 
     {
-        return (int) $_SESSION['user']->get('groupid');
+        if (isset($_SESSION['user']) 
+            && $_SESSION['user'] instanceof PHPFrame_User
+        ) {
+            return (int) $_SESSION['user']->get('groupid');
+        }
+            
+        return 0;
     }
     
     /**
@@ -278,7 +306,14 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     public function isAuth() 
     {
-        return ($_SESSION['user']->get('id') > 0);
+        if (isset($_SESSION['user']) 
+            && $_SESSION['user'] instanceof PHPFrame_User
+            && $_SESSION['user']->get('id') > 0
+        ) {
+            return true;
+        }
+        
+        return false;
     }
     
     /**
@@ -290,7 +325,11 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     public function isAdmin() 
     {
-        return ($_SESSION['user']->get('groupid') == 1);
+        if ($this->isAuth()) {
+            return ($_SESSION['user']->get('groupid') == 1);
+        }
+        
+        return false;
     }
     
     /**
@@ -302,7 +341,13 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      */
     public function getSysevents() 
     {
-        return $_SESSION['sysevents'];
+        if (isset($_SESSION['sysevents']) 
+            && $_SESSION['sysevents'] instanceof PHPFrame_Application_Sysevents
+        ) {
+            return $_SESSION['sysevents'];
+        }
+        
+        return null;
     }
     
     /**
@@ -397,6 +442,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     private function _createToken($length = 32) 
     {
         static $chars = '0123456789abcdef';
+        
         $max = strlen( $chars ) - 1;
         $token = '';
         $name = session_name();

@@ -38,7 +38,7 @@ class PHPFrame_Application_FrontController
      * @return void
      * @since  1.0
      */
-    public function __construct() 
+    public function __construct()
     {
         // Set profiler milestone
         PHPFrame_Debug_Profiler::setMilestone('Start');

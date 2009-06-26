@@ -28,16 +28,14 @@
  * @since      1.0
  */
 class PHPFrame_Base_StdObject
-{
-    /**
-     * Generates a storable string representation of the object
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function __toString()
+{   
+    protected function throwException($msg, $code=PHPFrame_Exception::E_PHPFRAME_ERROR)
     {
-        return serialize($this);
+        try {
+            throw new PHPFrame_Exception($msg=null, $code);
+        } catch (PHPFrame_Exception $e) {
+            var_dump($e); exit;
+            throw $e;
+        }
     }
 }

@@ -33,51 +33,105 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
      * @var object of type PHPFrame_Application_FrontController
      */
     private static $_instance=null;
+    /**
+     * Path to the cache directory in filesystem
+     * 
+     * @var string
+     */
+    private $_path=null;
+    /**
+     * Path to the cache file name in filesystem
+     * 
+     * @var string
+     */
     private $_cache_file=null;
+    /**
+     * Array containing keys that should be treated as readonly as far as client
+     * code is concerned
+     * 
+     * @var array
+     */
     private $_readonly=array("permissions", "components", "widgets");
-    private $_array=array();
+    /**
+     * An array to store application registry data set on runtime
+     * 
+     * @var array
+     */
+    private $_data=array();
+    /**
+     * A boolean to indicate whether the data has changed since it was last written to file
+     * 
+     * @var bool
+     */
+    private $_dirty=false;
     
     /**
      * Constructor
      * 
-     * @access    protected
-     * @return    void
-     * @since    1.0
+     * The constructor is declared "protected" to make sure that this class can only
+     * be instantiated using the static method getInstance(), serving up always the same
+     * instance that the class stores statically.
+     * 
+     * Yes, you have guessed right, this class is a "singleton".
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
      */
-    protected function __construct() 
+    protected function __construct($path) 
     {
-        // Ensure that cache dir is writable
-        PHPFrame_Utils_Filesystem::ensureWritableDir(config::FILESYSTEM.DS."cache");
+        // Set path to cache file
+        $this->_path = $path;
+        $this->_cache_file = "application.registry";
         
-        $this->_cache_file = config::FILESYSTEM.DS."cache".DS."application.registry";
         // Read data from cache
-        if (is_file($this->_cache_file)) {
-            $serialized_array = file_get_contents($this->_cache_file);
+        if (is_file($this->getFilePath())) {
+            $serialized_array = file_get_contents($this->getFilePath());
             $this->_array = unserialize($serialized_array);
         }
         else {
-            // Re-create data
+            // Re-create basic data
             $this->_array['permissions'] = new PHPFrame_Application_Permissions();
             $this->_array['components'] = new PHPFrame_Application_Components();
             $this->_array['widgets'] = new PHPFrame_Application_Widgets();
-            
-            // Store data in cache file
-            PHPFrame_Utils_Filesystem::write($this->_cache_file, serialize($this->_array));
+        }
+    }
+    
+    /**
+     * Destructor
+     * 
+     * The destructor method will be called as soon as all references to a particular 
+     * object are removed or when the object is explicitly destroyed or in any order 
+     * in shutdown sequence.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function __destruct()
+    {
+        if ($this->isDirty()) {
+            $this->_writeToFile();
         }
     }
     
     /**
      * Get Instance
      * 
+     * @param string $path Path to cache directory. It only needs to be passed the first
+     *                     time the method is callled.
+     * 
      * @static
-     * @access    public
-     * @return     PHPFrame_Registry
-     * @since    1.0
+     * @access public
+     * @return PHPFrame_Registry
+     * @since  1.0
      */
-    public static function getInstance() 
+    public static function getInstance($path='') 
     {
+        $path = (string) $path;
+        
         if (!isset(self::$_instance)) {
-            self::$_instance = new self;
+            self::$_instance = new self($path);
         }
         
         return self::$_instance;
@@ -86,17 +140,21 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     /**
      * Get an application registry variable
      * 
-     * @access    public
-     * @param    string    $key
-     * @param    mixed    $default_value
-     * @return    mixed
-     * @since    1.0
+     * @param string $key
+     * @param mixed  $default_value
+     * 
+     * @access public
+     * @return mixed
+     * @since  1.0
      */
     public function get($key, $default_value=null) 
     {
         // Set default value if appropriate
         if (!isset($this->_array[$key]) && !is_null($default_value)) {
             $this->_array[$key] = $default_value;
+            
+            // Mark data as dirty
+            $this->markDirty();
         }
         
         // Return null if index is not defined
@@ -108,35 +166,115 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     }
     
     /**
-     * Set a application registry variable
+     * Set an application registry variable
      * 
-     * @access    public
-     * @param    string    $key
-     * @param    mixed    $value
-     * @return    void
-     * @since    1.0
+     * @param string $key
+     * @param mixed  $value
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function set($key, $value) 
     {
         if (array_key_exists($key, $this->_readonly)) {
-            throw new PHPFrame_Exception("Tried to set a read-only key (".$key.") in Application Registry.");
+            $msg = "Tried to set a read-only key (";
+            $msg .= $key.") in Application Registry.";
+            throw new PHPFrame_Exception($msg);
         }
         
         $this->_array[$key] = $value;
+        
+        // Mark data as dirty
+        $this->markDirty();
     }
     
+    /**
+     * Get full path to cache file
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getFilePath()
+    {
+        return $this->_path.DS.$this->_cache_file;
+    }
+    
+    /**
+     * Get Permissions object
+     * 
+     * @access public
+     * @return PHPFrame_Application_Permissions
+     * @since  1.0
+     */
     public function getPermissions() 
     {
         return $this->_array['permissions'];
     }
     
+    /**
+     * Get Comonents object
+     * 
+     * @access public
+     * @return PHPFrame_Application_Components
+     * @since  1.0
+     */
     public function getComponents() 
     {
         return $this->_array['components'];
     }
     
+    /**
+     * Get Widgets object
+     * 
+     * @access public
+     * @return PHPFrame_Application_Widgets
+     * @since  1.0
+     */
     public function getWidgets() 
     {
         return $this->_array['widgets'];
+    }
+    
+    /**
+     * Mark the application data as dirty (it needs writting to file)
+     * 
+     * @access private
+     * @return void
+     * @since  1.0
+     */
+    public function markDirty()
+    {
+        $this->_dirty = true;
+    }
+    
+    /**
+     * Is the application registry data dirty?
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function isDirty()
+    {
+        return $this->_dirty;
+    }
+    
+    /**
+     * Write application registry to file
+     * 
+     * @access private
+     * @return void
+     * @since  1.0
+     */
+    private function _writeToFile()
+    {
+        // Ensure that cache dir is writable
+        PHPFrame_Utils_Filesystem::ensureWritableDir($this->_path);
+        
+        // Store data in cache file
+        $data = serialize($this->_array);
+        PHPFrame_Utils_Filesystem::write($this->getFilePath(), $data);
     }
 }

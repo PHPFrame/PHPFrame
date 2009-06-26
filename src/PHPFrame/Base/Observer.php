@@ -53,5 +53,5 @@ abstract class PHPFrame_Base_Observer implements SplObserver
 	 * @return void
 	 * @since  1.0
 	 */
-	abstract protected function doUpdate(PHPFrame_Base_Subject $subject);
+	abstract protected function doUpdate(SplSubject $subject);
 }

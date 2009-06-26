@@ -35,8 +35,7 @@ class PHPFrame_Utils_Filter
     /**
      * An array with the different types of filters
      * 
-     * @staticvar
-     * @var array
+     * @staticvar array
      */
     private static $_types=array("default", 
                                  "int", 

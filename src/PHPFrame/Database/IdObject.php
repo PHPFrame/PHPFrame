@@ -205,7 +205,25 @@ class PHPFrame_Database_IdObject
             $fields = array($fields);
         }
         
-        $this->_select = $fields;
+        $processed_fields = array();
+        
+        foreach ($fields as $field) {
+            // Parse table.field format if needed
+            $pattern = "/^([a-zA-Z_\#]+)\.([a-zA-Z_\*]+)( AS ([a-zA-Z_]+))?$/";
+            preg_match($pattern, $field, $matches);
+            
+            if (is_array($matches) && count($matches) > 2) {
+                $processed_fields[] = array("table_name"=>$matches[1], 
+                                            "field_name"=>$matches[2], 
+                                            "field_alias"=>$matches[4]);
+            } else {
+                $processed_fields[] = array("table_name"=>null, 
+                                            "field_name"=>$field, 
+                                            "field_alias"=>null);
+            }
+        }
+        
+        $this->_select = $processed_fields;
         
         return $this;
     }
@@ -450,9 +468,25 @@ class PHPFrame_Database_IdObject
      * @return array
      * @since  1.0
      */
-    public function getFields()
+    public function getSelectFields()
     {
-        return $this->_select;
+        $array = array();
+        
+        foreach ($this->_select as $field) {
+            // If the field specifies a table name we check to see whether 
+            // it is an alias and replace it with table name
+            if (!empty($field["table_name"])) {
+                $table_name = $this->_tableAliasToName($field["table_name"]);
+                $table_name = (empty($table_name)) ? $field["table_name"] : $table_name;
+                $array[] = $table_name.".".$field["field_name"];
+                
+            // If no table name is specified we assume main "from" table
+            } else {
+                $array[] = $field["field_name"];
+            }
+        }
+        
+        return $array;
     }
     
     /**
@@ -473,13 +507,7 @@ class PHPFrame_Database_IdObject
     
     public function getJoinTables()
     {
-        $join_tables = array();
-        
-        foreach ($this->_join as $join) {
-            $join_tables[] = $join["table_name"];
-        }
-        
-        return $join_tables;
+        return $this->_join;
     }
     
     /**
@@ -537,7 +565,20 @@ class PHPFrame_Database_IdObject
         }
         
         $sql = "SELECT ";
-        $sql .= implode(", ", $this->_select);
+        
+        for ($i=0; $i<count($this->_select); $i++) {
+            if ($i>0) $sql .= ", ";
+            
+            if (!empty($this->_select[$i]["table_name"])) {
+                $sql .= $this->_select[$i]["table_name"].".";
+            }
+            
+            $sql .= $this->_select[$i]["field_name"];
+            
+            if (!empty($this->_select[$i]["field_alias"])) {
+                $sql .= " AS ".$this->_select[$i]["field_alias"];
+            }
+        }
         
         return $sql;
     }
@@ -665,5 +706,20 @@ class PHPFrame_Database_IdObject
         }
         
         return $sql;
+    }
+    
+    private function _tableAliasToName($alias)
+    {
+        if (isset($this->_from[1]) && $this->_from[1] == $alias) {
+            return $this->_from[0];
+        }
+        
+        foreach ($this->_join as $join) {
+            if ($join["table_alias"] == $alias) {
+                return $join["table_name"];
+            }
+        }
+        
+        return null;
     }
 }

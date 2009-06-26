@@ -100,12 +100,20 @@ class PHPFrame
     /**
      * Get application registry
      * 
+     * @param sring $path The path to the cache directory where to store the app
+     *                    registry. If not passed it uses a directory called
+     *                    "cache" within the directory specified in config::FILESYSTEM
+     * 
      * @return PHPFrame_Registry_Application
      * @since  1.0
      */
-    public static function AppRegistry() 
+    public static function AppRegistry($path='') 
     {
-        return PHPFrame_Registry_Application::getInstance();
+        if (empty($path)) {
+            $path = config::FILESYSTEM.DS."cache";
+        }
+        
+        return PHPFrame_Registry_Application::getInstance($path);
     }
     
     /**

@@ -160,6 +160,29 @@ class PHPFrame_Database_Row
     }
     
     /**
+     * Return Row object as associative array
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function toArray()
+    {
+        $array = array();
+        
+        foreach ($this->_fields as $field) {
+            $alias = $field->getAlias();
+            if (!empty($alias)) {
+                $array[$alias] = $field->getValue();
+            } else {
+                $array[$field->getField()] = $field->getValue();
+            }
+        }
+        
+        return $array;
+    }
+    
+    /**
      * Get a column value from this row
      * 
      * @param string $key The column we want to get the value for.
@@ -182,31 +205,6 @@ class PHPFrame_Database_Row
                                       PHPFrame_Exception::E_PHPFRAME_WARNING);
     }
     
-    public function setPrimaryKey($field_name)
-    {
-        foreach ($this->_fields as $field) {
-            // Reset other fields that might have been set as primary keys
-            if ($field->isPrimaryKey()) {
-                $field->setPrimaryKey("");
-            }
-            
-            // Set the field as primary key
-            if ($field->getField() == $field_name) {
-                $field->setPrimaryKey("PRI");
-            }
-        }
-    }
-    
-    public function setPrimaryKeyValue($value)
-    {
-        foreach ($this->_fields as $field) {
-            // Reset other fields that might have been set as primary keys
-            if ($field->isPrimaryKey()) {
-                $field->setValue($value);
-            }
-        }
-    }
-    
     public function getPrimaryKey()
     {
         foreach ($this->_fields as $field) {
@@ -227,6 +225,24 @@ class PHPFrame_Database_Row
         }
         
         return null;
+    }
+    
+    /**
+     * Get column keys
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getFields()
+    {
+        $array = array();
+        
+        foreach ($this->_fields as $field) {
+            $array[] = $field->getField();
+        }
+        
+        return $array;
     }
     
     /**
@@ -255,22 +271,29 @@ class PHPFrame_Database_Row
         }
     }
     
-    /**
-     * Get column keys
-     * 
-     * @access public
-     * @return array
-     * @since  1.0
-     */
-    public function getKeys()
+    public function setPrimaryKey($field_name)
     {
-        $array = array();
-        
-        foreach ($this->_structure as $col) {
-            $array[] = $col->Field;
+        foreach ($this->_fields as $field) {
+            // Reset other fields that might have been set as primary keys
+            if ($field->isPrimaryKey()) {
+                $field->setPrimaryKey("");
+            }
+            
+            // Set the field as primary key
+            if ($field->getField() == $field_name) {
+                $field->setPrimaryKey("PRI");
+            }
         }
-        
-        return $array;
+    }
+    
+    public function setPrimaryKeyValue($value)
+    {
+        foreach ($this->_fields as $field) {
+            // Reset other fields that might have been set as primary keys
+            if ($field->isPrimaryKey()) {
+                $field->setValue($value);
+            }
+        }
     }
     
     /**
@@ -314,6 +337,8 @@ class PHPFrame_Database_Row
     {
         if ($id instanceof PHPFrame_Database_IdObject) {
             $this->_id_obj = $id;
+            // Re-read table structure taking into account join tables
+            $this->_fetchFields();
         } else {
             $this->_id_obj->where($this->getPrimaryKey(), "=", ":id");
             $this->_id_obj->params(":id", $id);
@@ -427,13 +452,18 @@ class PHPFrame_Database_Row
      */
     private function _fetchFields()
     {
+        // Reset the fields array before we fetch fields
+        $this->_fields = array();
+        
         $table_name = $this->_id_obj->getTableName();
         
         // Fetch the structure of the table that contains this row
         $table_structure = $this->_fetchTableStructure($table_name);
         
         // Loop through structure array to build field objects
+        $field_names = $this->_id_obj->getSelectFields();
         foreach ($table_structure as $field_array) {
+            $field_array["Alias"] = true;
             $this->_fields[] = new PHPFrame_Database_Field($field_array);
         }
         
@@ -442,11 +472,13 @@ class PHPFrame_Database_Row
         if (is_array($join_tables) && count($join_tables) > 0) {
             foreach ($join_tables as $join_table) {
                 // Fetch the structure of the table
-                $table_structure = $this->_fetchTableStructure($join_table);
+                $table_structure = $this->_fetchTableStructure($join_table["table_name"]);
                 
                 // Loop through structure array to build field objects
                 foreach ($table_structure as $field_array) {
-                    array_push($field_array, true);
+                    $field_array["Field"] = $join_table["table_alias"].".".$field_array["Field"];
+                    $field_array["Alias"] = true;
+                    $field_array["Foreign"] = true;
                     $this->_fields[] = new PHPFrame_Database_Field($field_array);
                 }
             }

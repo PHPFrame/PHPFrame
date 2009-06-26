@@ -42,8 +42,8 @@ class PHPFrame_Application_Components
      */
     function __construct() 
     {
-        $query = "SELECT * FROM #__components ";
-        $this->_array = PHPFrame::DB()->loadObjectList($query);
+        $sql = "SELECT * FROM #__components ";
+        $this->_array = PHPFrame::DB()->fetchAssocList($sql);
     }
     
     /**

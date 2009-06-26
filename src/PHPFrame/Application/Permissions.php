@@ -37,8 +37,9 @@ class PHPFrame_Application_Permissions
     /**
      * Constructor
      * 
-     * @access    public
-     * @since     1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function __construct() 
     {
@@ -49,12 +50,13 @@ class PHPFrame_Application_Permissions
     /**
      * Authorise action in a component for a given user group
      * 
-     * @access    public
-     * @param    string    $component
-     * @param    string    $action
-     * @param    int        $groupid
-     * @return    bool
-     * @since    1.0
+     * @param string $component The component we want to authorise
+     * @param string $action    The action we want to authorise
+     * @param int    $groupid   The groupid of the user we want to authorise
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
      */
     public function authorise($component, $action, $groupid) 
     {
@@ -74,14 +76,16 @@ class PHPFrame_Application_Permissions
     /**
      * Load access levels from database
      * 
-     * @access    private
-     * @return    array    An array ob database row objects
-     * @since    1.0
+     * @access private
+     * @return array   An array ob database row objects
+     * @since  1.0
      */
     private function _loadACL() 
     {
         // Load access list from DB
-        $query = "SELECT * FROM #__acl_groups";
-        return PHPFrame::DB()->loadObjectList($query);
+        $sql = "SELECT * FROM #__acl_groups";
+        $array = PHPFrame::DB()->fetchAssocList($sql);
+        
+        return $array;
     }
 }

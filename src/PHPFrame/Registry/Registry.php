@@ -26,7 +26,7 @@
  * @since      1.0
  * @abstract
  */
-abstract class PHPFrame_Registry
+abstract class PHPFrame_Registry extends PHPFrame_Base_StdObject
 {
     /**
      * Constructor

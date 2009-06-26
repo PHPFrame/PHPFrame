@@ -30,14 +30,7 @@
  * @since      1.0
  */
 class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
-{
-    /**
-     * Path to the log file in the file system
-     * 
-     * @var string
-     */
-    private static $_path=null;
-    
+{   
     /**
      * Constructor
      * 
@@ -47,23 +40,28 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
      */
     private function __construct()
     {
-        // Attach logger to observable subjects
-        PHPFrame::DB()->attach($this);
+        // Check path is valid
+        // ...
     }
     
     /**
      * Handle observed objects updates
      * 
-     * @param PHPFrame_Base_Subject $subject The subjuct issuing the update
+     * @param SplSubject $subject The subjuct issuing the update
      * 
      * @access protected
      * @return void
      * @since  1.0
      */
-    protected function doUpdate(PHPFrame_Base_Subject $subject)
+    protected function doUpdate(SplSubject $subject)
     {
-        
+        if ($subject instanceof PHPFrame_Database) {
+            
+        } else {
+            
+        }
     }
+    
     /**
      * Write string to log file
      * 

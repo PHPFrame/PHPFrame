@@ -50,81 +50,71 @@
  */
 class PHPFrame_Exception extends Exception
 {
-    // This are PHPs error code constants
-    const E_ERROR=1;
-    const E_WARNING=2;
-    const E_PARSE=4;
-    const E_NOTICE=8;
-    const E_CORE_ERROR=16;
-    const E_CORE_WARNING=32;
-    const E_COMPILE_ERROR=64;
-    const E_COMPILE_WARNING=128;
-    const E_USER_ERROR=256;
-    const E_USER_WARNING=512;
-    const E_USER_NOTICE=1024;
-    const E_STRICT=2048;
-    const E_RECOVERABLE_ERROR=4096;
-    const E_DEPRECATED=8192;
-    const E_USER_DEPRECATED=16384;
-    const E_PHPFRAME_ERROR=32768;
-    const E_PHPFRAME_WARNING=65536;
-    const E_PHPFRAME_NOTICE=131072;
-    const E_PHPFRAME_DEPRECATED=262144;
+    // PHPFrame exception codes
+    const ERROR=1;
+    const WARNING=2;
+    const NOTICE=3;
+    const STRICT=4;
     
-    protected $_severity;
-
-    function __construct($message=null, $code=self::E_USER_ERROR, $verbose='') 
-    {   
-        switch ($code) {
-            case self::E_ERROR :
-            case self::E_USER_ERROR :
-            case self::E_PHPFRAME_ERROR :
-                $this->_severity = 'error';
-                break;
-                
-            case self::E_WARNING :
-            case self::E_USER_WARNING :
-            case self::E_PHPFRAME_WARNING :
-                $this->_severity = 'warning';
-                break;
-                
-            case self::E_NOTICE :
-            case self::E_USER_NOTICE :
-            case self::E_PHPFRAME_NOTICE :
-                $this->_severity = 'notice';
-                break;
-                
-            case self::E_STRICT :
-            case self::E_DEPRECATED :
-            case self::E_USER_DEPRECATED :
-            case self::E_PHPFRAME_DEPRECATED :
-                $this->_severity = 'strict';
-                break;
-        }
+    /**
+     * A string containing more information about the exception
+     * 
+     * @var string
+     */
+    protected $_verbose=null;
+    
+    /**
+     * Constructor
+     * 
+     * @param string $message The exception message
+     * @param int    $code    The exception code. See class constants
+     * @param string $verbose A string with more info about the exception
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function __construct($message=null, $code=self::ERROR, $verbose='') 
+    {
+        $this->_verbose = $verbose;
         
          // Construct parent class to build Exception 
-        parent::__construct($message);
+        parent::__construct($message, $code);
         
         // Log the exception to file if needed
         if ($code < config::LOG_LEVEL) {
-            //TODO FINISH ME!!!
+            // Cast exception object to string
+            $exception = (string) $this;
+            // Write log
+            PHPFrame_Debug_Logger::write($exception);
         }
     }
     
-    public function getSeverity() 
+    /**
+     * Magig method invoked when object is used as string
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function __toString() 
     {
-        return $this->_severity;
+        $str = parent::__toString();
+        $str .= "\n\nVerbose:\n";
+        $str .= $this->_verbose;
+        
+        return $str;
     }
     
-    function __toString($verbose=false) 
+    /**
+     * Get verbose
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getVerbose() 
     {
-        if ($verbose) {
-            return parent::__toString();
-        }
-        else {
-            //return 'hello world';
-            return parent::__toString();
-            //return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
-        }
+        return $this->_verbose;
     }
 }

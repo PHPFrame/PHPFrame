@@ -1,0 +1,24 @@
+<refentry id="{@id}">
+	<refnamediv>
+		<refname>User Guide for PHPFrame</refname>
+		<refpurpose>To demonstrate the various features available in PHPFrame 1.0</refpurpose>
+	</refnamediv>
+	
+	<refsynopsisdiv>
+		<author>
+			Luis Montero [e-noise.com]
+			<authorblurb>
+			{@link mailto:luis.montero@e-noise.com Luis Montero}
+			</authorblurb>
+		</author>
+	</refsynopsisdiv>
+	
+	{@toc}
+	
+	<refsect1 id="{@id intro}">
+		<title>User Guide</title>
+		<para>
+		This will be the User Guide for PHPFrame 1.0. 
+		</para>
+	</refsect1>
+</refentry>

@@ -34,7 +34,7 @@
 	</target>
 	
 	<target name="cleanup">
-		<!-- <delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" /> -->
+		<delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
 	</target>
 	
 	<target name="build" depends="prepare, tar, cleanup" />

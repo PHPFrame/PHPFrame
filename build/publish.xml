@@ -36,6 +36,6 @@
 		</tar>
 	</target>
 	
-	<target name="build" depends="prepare, tar, cleanup" />
+	<target name="build" depends="prepare, tar" />
 	
 </project>

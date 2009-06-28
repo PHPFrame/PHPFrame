@@ -22,7 +22,6 @@
 					-s on \
 					-dn None \
 					-o HTML:Smarty:PHPFrame \
-					-pp on \
 					-ti 'PHPFrame API Documentation'" 
 			dir="${project.basedir}" 
 			output="${report.dir}/phpdoc.log" />

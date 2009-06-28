@@ -33,33 +33,59 @@
 			The easiest way to install PHPFrame is using the PEAR package manager.
 			The PEAR package manager is bundled with PHP, so if you already have PHP 
 			running you should also have PEAR. 
+			</para>
 			
+			<para>
 			Before you start please make sure that the "pear" command is in your PATH.
-
-			To install using PEAR installer:
+			</para>
 			
+			<para>
+			To install using PEAR installer:
+			</para>
+			
+			<para>
 			First we need to tell the PEAR installer about the channel. Type the following 
 			command at the terminal:
+			</para>
 			
-				$ pear channel-discover pear.e-noise.com
-			
-				This last command should show the following output:
-			
+			<screen>
+				<prompt>bash$</prompt> 
+				<command>
+					pear channel-discover pear.e-noise.com
+				</command>
 				Adding Channel "pear.e-noise.com" succeeded
 				Discovery of channel "pear.e-noise.com" succeeded
-				
-				Now we can tell the PEAR installer to install the PHPFrame package:
+			</screen>
 			
-				$ pear install pear.e-noise.com/PHPFrame
+			<para>	
+			Now we can tell the PEAR installer to install the PHPFrame package:
+			</para>
 			
+			<screen>
+				<prompt>bash$</prompt> 
+				<command>
+					pear install pear.e-noise.com/PHPFrame
+				</command>
+				...
+			</screen>
+			
+			<para>
 			To uninstall:
+			</para>
 			
-				$ pear uninstall pear.e-noise.com/PHPFrame
+			<screen>
+				<prompt>bash$</prompt> 
+				<command>
+					pear uninstall pear.e-noise.com/PHPFrame
+				</command>
+				...
+			</screen>
 			
+			<note>
 			* Note that you will need write access to the directory where PEAR is installed.
 			If you are installing or unininstalling for all users in a system you will need 
 			administrative privileges.
-			</para>
+			</note>
 			
 		</refsect2>
 		

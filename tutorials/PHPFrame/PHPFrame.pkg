@@ -26,46 +26,35 @@
 	
 	<refsect1 id="{@id intro}">
 		<title>Getting Started</title>
+		
 		<para>
-		This will be the User Guide for PHPFrame 1.0. 
+			This will be the User Guide for PHPFrame 1.0. 
 		</para>
 		
 		<refsect2>
 			<title>Downloading / Installing PHPFrame</title>
-			
 		</refsect2>
 		
 		<refsect2>
 			<title>Adding the library to you project</title>
-			
 		</refsect2>
 		
 		<refsect2>
 			<title>Starting a new project with PHPFrame scaffold</title>
-			
 		</refsect2>
 		
 	</refsect1>
 	
 	<refsect1 id="{@id api}">
 		<title>PHPFrame API Reference</title>
-		<para>
-		This will be the User Guide for PHPFrame 1.0. 
-		</para>
 	</refsect1>
 	
 	<refsect1 id="{@id support}">
 		<title>Support</title>
-		<para>
-		This will be the User Guide for PHPFrame 1.0. 
-		</para>
 	</refsect1>
 	
 	<refsect1 id="{@id about}">
 		<title>About PHPFrame</title>
-		<para>
-		This will be the User Guide for PHPFrame 1.0. 
-		</para>
 	</refsect1>
 	
 </refentry>

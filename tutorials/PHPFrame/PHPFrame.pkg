@@ -16,9 +16,31 @@
 	{@toc}
 	
 	<refsect1 id="{@id intro}">
-		<title>User Guide</title>
+		<title>Getting Started</title>
 		<para>
 		This will be the User Guide for PHPFrame 1.0. 
 		</para>
 	</refsect1>
+	
+	<refsect1 id="{@id api}">
+		<title>PHPFrame API Reference</title>
+		<para>
+		This will be the User Guide for PHPFrame 1.0. 
+		</para>
+	</refsect1>
+	
+	<refsect1 id="{@id support}">
+		<title>Support</title>
+		<para>
+		This will be the User Guide for PHPFrame 1.0. 
+		</para>
+	</refsect1>
+	
+	<refsect1 id="{@id about}">
+		<title>About PHPFrame</title>
+		<para>
+		This will be the User Guide for PHPFrame 1.0. 
+		</para>
+	</refsect1>
+	
 </refentry>

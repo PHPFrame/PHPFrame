@@ -67,9 +67,10 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         parent::__construct('text/html');
         
         // Acquire DOM object of HTML type
-        $this->_dom = DOMImplementation::createDocument(null, 
-                                                        $this->_qualified_name, 
-                                                        $this->getDocType()); 
+        $imp = new DOMImplementation;
+        $this->_dom = $imp->createDocument(null, 
+                                           $this->_qualified_name, 
+                                           $this->getDocType()); 
         
         // Get root node
         $html_node = $this->_dom->getElementsByTagName("html")->item(0);
@@ -406,7 +407,8 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
              // Create doc type object
             $publicId = "-//W3C//DTD HTML 4.01//EN";
             $systemId = "http://www.w3.org/TR/html4/strict.dtd";
-            $this->_doctype = DOMImplementation::createDocumentType($this->_qualified_name, 
+            $imp = new DOMImplementation;
+            $this->_doctype = $imp->createDocumentType($this->_qualified_name, 
                                                                     $publicId, 
                                                                     $systemId);
         }

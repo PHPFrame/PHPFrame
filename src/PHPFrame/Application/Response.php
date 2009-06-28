@@ -179,6 +179,12 @@ class PHPFrame_Application_Response
             echo $this->_document->getBody();    
         }
         
+        if (config::DEBUG == 1) {
+            echo "<pre>";
+            echo PHPFrame_Debug_Profiler::getReport();
+            echo "</pre>";
+        }
+        
         // Exit setting status to 0, 
         // which indicates that program terminated successfully 
         exit(0);

@@ -2,19 +2,24 @@
 	<refnamediv>
 		<refname>PHPFrame Documentation</refname>
 		<refpurpose>
-			This manual consists primarily of API documentation but also iludes examples, 
+			This manual consists primarily of API documentation but also includes examples, 
 			tutorials, an overview of how the library works, installation and frequently 
 			questions.
 		</refpurpose>
 	</refnamediv>
 	
 	<refsynopsisdiv>
+		<title>Author</title>
 		<author>
 			Luis Montero [e-noise.com]
 			<authorblurb>
 			{@link mailto:luis.montero@e-noise.com Luis Montero}
 			</authorblurb>
 		</author>
+		
+		<para>
+		Copyright &copy; 2009 E-noise.com Limited. All rights reserved.</p>
+		</para>
 	</refsynopsisdiv>
 	
 	{@toc}

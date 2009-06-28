@@ -17,7 +17,7 @@
 					-d ${project.basedir} \
 					-t ${doc.dir}/api \
 					-ric README,INSTALL,FAQ,LICENSE,CREDITS \
-					-i tests/,build/ \
+					-i build/,examples/,tests/ \
 					-s on \
 					-dn None \
 					-o HTML:Smarty:PHPFrame \
@@ -33,7 +33,7 @@
 					-d ${project.basedir} \
 					-t ${doc.dir}/full \
 					-ric README,INSTALL,FAQ,LICENSE,CREDITS \
-					-i tests/,build/ \
+					-i build/,examples/,tests/ \
 					-s on \
 					-dn None \
 					-o HTML:Smarty:PHPFrame \

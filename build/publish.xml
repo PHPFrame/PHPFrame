@@ -22,7 +22,6 @@
 		
 		<copy file="${build.dir}/package.xml" tofile="${tmp.dir}/package.xml" overwrite="true" />
 		<copy file="${project.basedir}/CREDITS" tofile="${tmp.dir}/CREDITS" overwrite="true" />
-		<copy file="${project.basedir}/INSTALL" tofile="${tmp.dir}/INSTALL" overwrite="true" />
 		<copy file="${project.basedir}/LICENSE" tofile="${tmp.dir}/LICENSE" overwrite="true" />
 		<copy file="${project.basedir}/README" tofile="${tmp.dir}/README" overwrite="true" />
 		

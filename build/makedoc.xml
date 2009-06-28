@@ -17,7 +17,7 @@
 			command="phpdoc \
 					-d ${project.basedir} \
 					-t ${doc.dir} \
-					-ric README,INSTALL,LICENSE,CREDITS \
+					-ric README,LICENSE,CREDITS \
 					-i build/,examples/,tests/ \
 					-s on \
 					-dn None \

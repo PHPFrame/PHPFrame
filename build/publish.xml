@@ -7,6 +7,9 @@
 	
 	<target name="prepare">
 		<mkdir dir="${dist.dir}"/>
+		
+		<delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
+		<mkdir dir="${tmp.dir}"/>
 	</target>
 	
 	<!-- Create archive for distribution -->
@@ -31,10 +34,6 @@
 				<include name="**" />
 			</fileset>
 		</tar>
-	</target>
-	
-	<target name="cleanup">
-		<delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
 	</target>
 	
 	<target name="build" depends="prepare, tar, cleanup" />

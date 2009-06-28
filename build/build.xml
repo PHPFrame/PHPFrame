@@ -11,7 +11,6 @@
 	
 	<property name="build.dir" value="${project.basedir}/build"/>
 	<property name="report.dir" value="${build.dir}/report"/>
-	<property name="tmp.dir" value="${build.dir}/tmp"/>
   
 	<!-- This target checks for PHP syntax errors in all source files
 	<target name="checkphp">
@@ -43,7 +42,6 @@
 	<!-- Prepare directories -->
 	<target name="prepare">
 		<mkdir dir="${report.dir}"/>
-		<mkdir dir="${tmp.dir}"/>
 	</target>
 	
 	<!-- Run PHPUnit tests -->

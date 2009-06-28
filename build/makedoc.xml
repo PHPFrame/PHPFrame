@@ -16,29 +16,13 @@
 		<exec 
 			command="phpdoc \
 					-d ${project.basedir} \
-					-t ${doc.dir}/api \
-					-ric README,INSTALL,FAQ,LICENSE,CREDITS \
+					-t ${doc.dir} \
+					-ric README,INSTALL,LICENSE,CREDITS \
 					-i build/,examples/,tests/ \
 					-s on \
 					-dn None \
 					-o HTML:Smarty:PHPFrame \
-					-ti 'PHPFrame API Documentation'" 
-			dir="${project.basedir}" 
-			output="${report.dir}/phpdoc.log" />
-	</target>
-	
-	<!-- Generate FULL documentation. This includes @private elements -->
-	<target name="fulldoc">
-		<exec 
-			command="phpdoc \
-					-d ${project.basedir} \
-					-t ${doc.dir}/full \
-					-ric README,INSTALL,FAQ,LICENSE,CREDITS \
-					-i build/,examples/,tests/ \
-					-s on \
-					-dn None \
-					-o HTML:Smarty:PHPFrame \
-					-ti 'PHPFrame API Documentation' \
+					-ti 'PHPFrame API Documentation'
 					-pp on" 
 			dir="${project.basedir}" 
 			output="${report.dir}/phpdoc.log" />
@@ -53,6 +37,6 @@
 			output="${report.dir}/rsync_doc.log" />
 	</target>
 	
-	<target name="build" depends="prepare, apidoc, fulldoc, sync" />
+	<target name="build" depends="prepare, apidoc, sync" />
 	
 </project>

@@ -109,13 +109,13 @@ div#wrapper div#topmenu ul li a
 div#wrapper div#left
 {
 	border-right: 1px solid #CCCCCC;
-	width: 250px;
+	width: 260px;
 	float: left;
 }
 
 div#wrapper div#main_col
 {
-	width:690px;
+	width:700px;
 	float:right;
 	padding: 20px 0 20px 5px;
 }
@@ -249,7 +249,7 @@ span.smalllinenumber
 .ref-purpose { font-style: italic; color: #666666 }
 .ref-synopsis {  }
 h2.title { margin: 1em 0em 0em 0em; padding: .25em; background-color: #F20530; color:#FFFFFF; }
-h3.title { bold; margin: 1em 0em 0em 0em; padding: .25em; color:#F20530; }
+h3.title { margin: 1em 0em 0em 0em; padding: .25em; color:#F20530; }
 .cmd-synopsis { margin: 1em 0em }
 .cmd-title { font-weight: bold }
 .toc { margin-left: 2em; padding-left: 0em }

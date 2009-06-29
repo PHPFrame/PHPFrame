@@ -376,8 +376,6 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     /**
      * Destroy session
      * 
-     * @todo Have to delete session cookie when we destroy session
-     * 
      * @access public
      * @return void
      * @since  1.0

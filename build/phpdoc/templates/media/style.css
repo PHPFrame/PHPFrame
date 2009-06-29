@@ -248,7 +248,8 @@ span.smalllinenumber
 .ref-title {  }
 .ref-purpose { font-style: italic; color: #666666 }
 .ref-synopsis {  }
-.title { font-weight: bold; margin: 1em 0em 0em 0em; padding: .25em; background-color: #F20530; color:#FFFFFF;  }
+h2.title { margin: 1em 0em 0em 0em; padding: .25em; background-color: #F20530; color:#FFFFFF; }
+h3.title { bold; margin: 1em 0em 0em 0em; padding: .25em; color:#F20530; }
 .cmd-synopsis { margin: 1em 0em }
 .cmd-title { font-weight: bold }
 .toc { margin-left: 2em; padding-left: 0em }

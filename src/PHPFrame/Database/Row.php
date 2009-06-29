@@ -23,6 +23,14 @@
  * Note that this class uses the Application Registry object to cache table 
  * structures and primary keys in order to avoid unnecessary trips to the database.
  * 
+ * @todo This class needs to be refactored so that "fields" are all objects that
+ *       inherit from a common super class. At the moment we deal with both "field" 
+ *       objects and string values. This is causing the appearance of parallel 
+ *       conditional statements. Mainly: if ($field instanceof PHPFrame_Database_Field).
+ *       
+ *       Special attention should also be paid to the handling of "foreign" fields
+ *       as the result of queries with JOIN clauses.
+ * 
  * @category   MVC_Framework
  * @package    PHPFrame
  * @subpackage Database
@@ -211,7 +219,8 @@ class PHPFrame_Database_Row
     public function getPrimaryKey()
     {
         foreach ($this->_fields as $field) {
-            if ($field->isPrimaryKey()) {
+            if ($field instanceof PHPFrame_Database_Field
+                && $field->isPrimaryKey()) {
                 return $field->getField();
             }
         }
@@ -222,7 +231,8 @@ class PHPFrame_Database_Row
     public function getPrimaryKeyValue()
     {
         foreach ($this->_fields as $field) {
-            if ($field->isPrimaryKey()) {
+            if ($field instanceof PHPFrame_Database_Field
+                && $field->isPrimaryKey()) {
                 return $field->getValue();
             }
         }
@@ -256,25 +266,29 @@ class PHPFrame_Database_Row
     /**
      * Set a column value in this row
      *  
-     * @param string $key   The column we want to set the value for.
-     * @param string $value The value to set the column to.
+     * @param string $property The column we want to set the value for.
+     * @param string $value    The value to set the column to.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function set($key, $value)
+    public function set($property, $value)
     {
-        if (!$this->hasField($key)) {
-            throw new PHPFrame_Exception("Tried to set column '".$key
+        if (!$this->hasField($property)) {
+            throw new PHPFrame_Exception("Tried to set column '".$property
                                          ."' that doesn't exist in "
                                          .$this->_id_obj->getTableName(), 
                                           PHPFrame_Exception::WARNING);
         }
         
-        foreach ($this->_fields as $field) {
-            if ($field->getField() == $key) {
-                $field->setValue($value);
+        foreach ($this->_fields as $key=>$field) {
+            if ($key == $property) {
+                if ($field instanceof PHPFrame_Database_Field) {
+                    $field->setValue($value);
+                } else {
+                    $this->_fields[$key] = $value;
+                }
             }
         }
     }
@@ -283,13 +297,15 @@ class PHPFrame_Database_Row
     {
         foreach ($this->_fields as $field) {
             // Reset other fields that might have been set as primary keys
-            if ($field->isPrimaryKey()) {
-                $field->setPrimaryKey("");
-            }
-            
-            // Set the field as primary key
-            if ($field->getField() == $field_name) {
-                $field->setPrimaryKey("PRI");
+            if ($field instanceof PHPFrame_Database_Field) {
+                if ($field->isPrimaryKey()) {
+                    $field->setPrimaryKey("");
+                }
+                
+                // Set the field as primary key
+                if ($field->getField() == $field_name) {
+                    $field->setPrimaryKey("PRI");
+                }
             }
         }
     }
@@ -297,8 +313,8 @@ class PHPFrame_Database_Row
     public function setPrimaryKeyValue($value)
     {
         foreach ($this->_fields as $field) {
-            // Reset other fields that might have been set as primary keys
-            if ($field->isPrimaryKey()) {
+            if ($field instanceof PHPFrame_Database_Field 
+                && $field->isPrimaryKey()) {
                 $field->setValue($value);
             }
         }
@@ -396,12 +412,14 @@ class PHPFrame_Database_Row
         if (count($array) > 0) {
             // Rip values using known structure
             foreach ($array as $key=>$value) {
-                if (array_key_exists($key, $this->_fields)
-                    && !in_array($key, $exclude)
-                ) {
-                    $this->_fields[$key]->setValue($value);
-                } else {
-                    $this->_fields[$key] = $value;
+                if (!in_array($key, $exclude)) {
+                    if (isset($this->_fields[$key]) 
+                        && $this->_fields[$key] instanceof PHPFrame_Database_Field
+                    ) {
+                        $this->_fields[$key]->setValue($value);
+                    } else {
+                        $this->_fields[$key] = $value;
+                    }
                 }
             }
         }
@@ -423,6 +441,7 @@ class PHPFrame_Database_Row
         
         // Do insert or update depending on whether primary key is set
         $id = $this->getPrimaryKeyValue();
+        
         if (is_null($id) || empty($id)) {
             // Insert new record
             $this->_insert();
@@ -445,9 +464,10 @@ class PHPFrame_Database_Row
      */
     public function delete($id)
     {
-        $query = "DELETE FROM `".$this->_id_obj->getTableName()."` ";
-        $query .= " WHERE `".$this->getPrimaryKey()."` = '".$id."'";
-        $this->_db->query($query);
+        $sql = "DELETE FROM `".$this->_id_obj->getTableName()."` ";
+        $sql .= " WHERE `".$this->getPrimaryKey()."` = :id";
+        
+        $this->_db->query($sql, array(":id"=>$id));
     }
     
     /**
@@ -470,7 +490,6 @@ class PHPFrame_Database_Row
         // Loop through structure array to build field objects
         $field_names = $this->_id_obj->getSelectFields();
         foreach ($table_structure as $field_array) {
-            //$field_array["Alias"] = true;
             $this->_fields[$field_array["Field"]] = new PHPFrame_Database_Field($field_array);
         }
     }
@@ -478,20 +497,20 @@ class PHPFrame_Database_Row
     /**
      * Check columns data types and required fields before saving to db.
      * 
+     * This method throws an exception if validation fails
+     * 
      * @access private
-     * @return bool
+     * @return void
      * @since  1.0
      */
     private function _check()
     {
         // Delegate field validation to field objects
         foreach ($this->_fields as $field) {
-            //if (!$field->isValid()) {
-                //return false;
-            //}
+            if ($field instanceof PHPFrame_Database_Field) {
+                $field->isValid();
+            }
         }
-        
-        return true;
     }
     
     /**
@@ -504,21 +523,22 @@ class PHPFrame_Database_Row
     private function _insert()
     {
         // Build SQL insert query
-        $query = "INSERT INTO `".$this->_id_obj->getTableName()."` ";
+        $sql = "INSERT INTO `".$this->_id_obj->getTableName()."` ";
+        $params = array();
         
         foreach ($this->_fields as $field) {
-            $columns[] = $field->getField();
-            $values[] = $field->getValue();
+            // Only take into account fields of type PHPFrame_Database_Field
+            // because these are the "real" columns in the db table
+            if ($field instanceof PHPFrame_Database_Field) {
+                $columns[] = $field->getField();
+                $params[":".$field->getField()] = $field->getValue();   
+            }
         }
         
-        $query .= " (`".implode("`, `", $columns)."`) ";
-        $query .= " VALUES ('".implode("', '", $values)."')";
+        $sql .= " (`".implode("`, `", $columns)."`) ";
+        $sql .= " VALUES (:".implode(", :", $columns).")";
         
-        $insert_id = $this->_db->query($query);
-        
-        if ($insert_id === false) {
-            throw new PHPFrame_Exception($this->_db->getLastError());
-        }
+        $insert_id = $this->_db->query($sql, $params, PHPFrame_Database::FETCH_LAST_INSERTID);
         
         $this->setPrimaryKeyValue($insert_id);
     }
@@ -533,23 +553,30 @@ class PHPFrame_Database_Row
     private function _update()
     {
         // Build SQL insert query
-        $query = "UPDATE `".$this->_id_obj->getTableName()."` SET ";
+        $sql = "UPDATE `".$this->_id_obj->getTableName()."` SET ";
+        $params = array();
+        
         $i=0;
         foreach ($this->_fields as $field) {
-            if ($i>0) {
-                $query .= ", ";
+            // Only take into account fields of type PHPFrame_Database_Field
+            // because these are the "real" columns in the db table
+            if ($field instanceof PHPFrame_Database_Field 
+                && !$field->isPrimaryKey()) {
+                if ($i>0) {
+                    $sql .= ", ";
+                }
+                
+                $sql .= " `".$field->getField()."` = :".$field->getField();
+                $params[":".$field->getField()] = $field->getValue();
+                
+                $i++;
             }
-            $query .= " `".$field->getField()."` = '".$field->getValue()."' ";
-            $i++;
-        }
-        $query .= " WHERE `".$this->getPrimaryKey()."` = '";
-        $query .= $this->getPrimaryKeyValue()."'";
-        
-        if ($this->_db->query($query) === false) {
-            throw new PHPFrame_Exception("Error updating database row",
-                                         PHPFrame_Exception::WARNING,
-                                         "Query: ".$query);
         }
         
+        $sql .= " WHERE `".$this->getPrimaryKey()."` = '";
+        $sql .= $this->getPrimaryKeyValue()."'";
+        
+        // Run the update query
+        $this->_db->query($sql, $params);
     }
 }

@@ -104,35 +104,35 @@ class PHPFrame_Database_Field
      */
     public function isValid()
     {
-        // If assigned value is empty
-        if (empty($this->_data[$structure->Field])) {
+        // If column is empty and auto_increment we set to null and return
+        if (empty($this->_value) && $this->_extra == 'auto_increment') {
+            $this->_value = null;
+            return true;
+        }
+            
+        // If no assigned value
+        if (is_null($this->_value)) {
             // Set default value if any
-            if (!is_null($structure->Default)) {
-                $this->_data[$structure->Field] = $structure->Default;
+            if (!is_null($this->_default)) {
+                $this->_value = $this->_default;
+                return true;
             }
             
             // If column is timestamp and default value is CURRENT_TIMESTAMP 
             // replace with current date
-            if ($structure->Default == "CURRENT_TIMESTAMP") {
-                $this->_data[$structure->Field] = date("Y-m-d H:i:s");
-            }
-            
-            // If column is auto_increment we set to null
-            if ($structure->Extra == 'auto_increment') {
-                $this->_data[$structure->Field] = null;
-                continue; // jump to next iteration of the loop to avoid check
+            if ($this->_default == "CURRENT_TIMESTAMP") {
+                $this->_value = date("Y-m-d H:i:s");
             }
         }
         
         // If value is still null (after setting default) and field allows null
         // we simply skip the test
-        if (empty($this->_data[$structure->Field]) 
-            && $structure->Null == "YES") {
-            continue; // jump to next iteration of the loop to avoid check
+        if (is_null($this->_value) && $this->_null == "YES") {
+            return true;
         }
         
         // Get type and length from input type string
-        preg_match('/([a-zA-Z]+)(\((.+)\))?/i', $structure->Type, $matches);
+        preg_match('/([a-zA-Z]+)(\((.+)\))?/i', $this->_type, $matches);
         
         $type = strtolower($matches[1]); // make string lower case
         if (isset($matches[3])) {
@@ -145,41 +145,40 @@ class PHPFrame_Database_Field
         
         // Perform validation depending on data type
         switch ($type) {
-        case 'int' : 
-            $pattern = '/^-?\d+$/';
-            break;
+            case 'int' : 
+                $pattern = '/^-?\d+$/';
+                break;
+                    
+            case 'float' :
+            case 'double' :
+            case 'decimal' :
+                $pattern = '/^-?\d+\.?\d+$/';
+                break;
+                    
+            case 'char' :
+            case 'varchar' :
+                $pattern = '/^.{0,'.$length.'}$/';
+                break;
                 
-        case 'float' :
-        case 'double' :
-        case 'decimal' :
-            $pattern = '/^-?\d+\.?\d+$/';
-            break;
-                
-        case 'char' :
-        case 'varchar' :
-            $pattern = '/^.{0,'.$length.'}$/';
-            break;
-            
-        case 'text' :
-        case 'blob' :
-        case 'enum' :
-        case 'datetime' :
-        case 'date' :
-        case 'time' :
-        case 'year' :
-        case 'timestamp' :
-        case 'binary' :
-        case 'bool' :
-        default : 
-            $pattern = '/^.*$/im';
-            break;
+            case 'text' :
+            case 'blob' :
+            case 'enum' :
+            case 'datetime' :
+            case 'date' :
+            case 'time' :
+            case 'year' :
+            case 'timestamp' :
+            case 'binary' :
+            case 'bool' :
+            default : 
+                $pattern = '/^.*$/im';
+                break;
         }
         
-        if (isset($this->_data[$structure->Field]) 
-            && !preg_match($pattern, $this->_data[$structure->Field])) {
-            $exception_msg = "Wrong type for column '".$structure->Field."'. ";
-            $exception_msg .= "Expected '".$structure->Type."' and got '";
-            $exception_msg .= $this->_data[$structure->Field]."'";
+        if (isset($this->_value) && !preg_match($pattern, $this->_value)) {
+            $exception_msg = "Wrong type for column '".$this->getField()."'. ";
+            $exception_msg .= "Expected '".$this->_type."' and got '";
+            $exception_msg .= $this->getValue()."'";
             $exception_code = PHPFrame_Exception::WARNING;
             throw new PHPFrame_Exception($exception_msg, $exception_code);
         }

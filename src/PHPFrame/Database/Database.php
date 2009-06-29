@@ -352,11 +352,13 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
                     return $this->lastInsertId();
                     
                 default :
-                    return $stmt;
+                    return $this->_stmt;
             }
         }
         catch (PDOException $e) {
-            throw new PHPFrame_Exception_Database('Query failed', $sql);
+            throw new PHPFrame_Exception_Database('Query failed', 
+                                                  PHPFrame_Exception::ERROR, 
+                                                  $this->_stmt);
         }
     }
     

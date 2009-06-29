@@ -61,7 +61,7 @@ class PHPFrame_User_Helper
         if (!empty($id)) { // No user has been selected
             $db = PHPFrame::DB();
             $sql = "SELECT firstname, lastname FROM #__users WHERE id = :id";
-            $row = $db->loadObject($sql, array(":id"=>$id));
+            $row = $db->fetchObject($sql, array(":id"=>$id));
             if ($row === false) {
                 return false;
             }

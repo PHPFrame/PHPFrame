@@ -46,12 +46,6 @@ class PHPFrame_Exception_Database extends PHPFrame_Exception
      * @var int
      */
     private $_driver_msg=null;
-    /**
-     * The SQL query that generated the exception (if any)
-     * 
-     * @var string
-     */
-    private $_query=null;
     
     /**
      * Constructor

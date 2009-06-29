@@ -1,206 +1,88 @@
-.php {
-	padding: 1em;
-}
-.php-src { font-family: 'Courier New', Courier, monospace; font-weight: normal; }
+/*
+Colour scheme
+
+#F20530 red
+#6387A6 blue
+#7DA626 green
+#56595E grey
+#6990B1 light blue
+*/
 
 body
 {
-  color:              #333333;
-  background-color:   #ffffff;
-  font-family:        tahoma, verdana, arial, sans-serif;
-  font-size:          10pt;
-  margin:             0;
-  padding:            0;
+	font-family: sans-serif;
+	font-size: 14px;
+	color: #56595E;
 }
 
 a
 {
-  color:              #000099;
-  background-color:   transparent;
-  text-decoration:    none;
+	text-decoration: none;
+	color: #7DA626;
 }
 
-a:hover
+div#header
 {
-  text-decoration:    underline;
+	border-bottom: 1px solid #CCCCCC;
 }
 
-a.menu
+div#wrapper
 {
-  color:              #ffffff;
-  background-color:   transparent;
+	text-align: left;
+	width: 960px;
 }
 
-td
+div#wrapper div#topmenu
 {
-  font-size:          10pt;
+	
 }
 
-td.header_top
+div#wrapper div#topmenu ul
 {
-  color:              #ffffff;
-  background-color:   #9999cc;
-  font-size:          16pt;
-  font-weight:        bold;
-  text-align:         right;
-  padding:            10px;
+	margin: 0;
+	padding: 7px 0;
 }
 
-td.header_line
+div#wrapper div#topmenu ul li
 {
-  color:              #ffffff;
-  background-color:   #333366;
+	display: inline;
+	padding: 7px 10px;
+	background-color: #6990B1;
 }
-
-td.header_menu
+div#wrapper div#topmenu ul li:hover
 {
-  color:              #ffffff;
-  background-color:   #666699;
-  font-size:          8pt;
-  text-align:         right;
-  padding:            2px;
-  padding-right:      5px;
+	background-color: #F20530;
 }
 
-table.main
+div#wrapper div#topmenu ul li a
 {
-  
+	font-style: bold;
+	color: #FFFFFF;
 }
 
-table.main td.main_col
+div#wrapper div#left
 {
-  padding:            10px;
+	border-right: 1px solid #CCCCCC;
+	width: 270px;
+	float: left;
 }
 
-td.menu
+div#wrapper div#main_col
 {
-  padding:            10px;
-  background-color:   #f0f0f0;
-  border-right:       1px dashed;
-  width:              300px;
-  border-color:       #666666;
+	width:640px;
+	float:right;
+	padding: 20px;
 }
 
-td.code_border
+div#wrapper div#footer
 {
-  color:              #000000;
-  background-color:   #c0c0c0;
+	border-top: 1px solid #CCCCCC;
+	padding: 10px 0;
+	color: #999999;
+	font-size: 0.8em;
 }
 
-td.code
+div.clear
 {
-  color:              #000000;
-  background-color:   #f0f0f0;
+	clear: both;
 }
-
-td.type
-{
-  font-style:         italic;
-}
-
-div.credit
-{
-  font-size:          8pt;
-  text-align:         center;
-}
-
-div.package
-{
-  padding-left:       5px;
-}
-
-div.tags
-{
-  padding-left:       15px;
-}
-
-div.function
-{
-  padding-left:       15px;
-}
-
-div.top
-{
-  font-size:          8pt;
-}
-
-div.warning
-{
-  color:              #ff0000;
-  background-color:   transparent;
-}
-
-div.description
-{
-  padding-left:       15px;
-}
-
-hr
-{
-  height:             1px;
-  border-style:       solid;
-  border-color:       #c0c0c0;
-  margin-top:         10px;
-  margin-bottom:      10px;
-}
-
-span.smalllinenumber
-{
-  font-size:          8pt;
-}
-
-ul {
-	margin-left:		0px;
-	padding-left:		8px;
-}
-/* Syntax highlighting */
-
-.src-code { background-color: #f5f5f5; border: 1px solid #ccc9a4; padding: 0 0 0 1em; margin : 0px;
-            font-family: 'Courier New', Courier, monospace; font-weight: normal; }
-.src-line {  font-family: 'Courier New', Courier, monospace; font-weight: normal; }
-
-.src-comm { color: green; }
-.src-id {  }
-.src-inc { color: #0000FF; }
-.src-key { color: #0000FF; }
-.src-num { color: #CC0000; }
-.src-str { color: #66cccc; }
-.src-sym { font-weight: bold; }
-.src-var { }
-
-.src-php { font-weight: bold; }
-
-.src-doc { color: #009999 }
-.src-doc-close-template { color: #0000FF }
-.src-doc-coretag { color: #0099FF; font-weight: bold }
-.src-doc-inlinetag { color: #0099FF }
-.src-doc-internal { color: #6699cc }
-.src-doc-tag { color: #0080CC }
-.src-doc-template { color: #0000FF }
-.src-doc-type { font-style: italic }
-.src-doc-var { font-style: italic }
-
-.tute-tag { color: #009999 }
-.tute-attribute-name { color: #0000FF }
-.tute-attribute-value { color: #0099FF }
-.tute-entity { font-weight: bold; }
-.tute-comment { font-style: italic }
-.tute-inline-tag { color: #636311; font-weight: bold }
-
-/* tutorial */
-
-.authors {  }
-.author { font-style: italic; font-weight: bold }
-.author-blurb { margin: .5em 0em .5em 2em; font-size: 85%; font-weight: normal; font-style: normal }
-.example { border: 1px dashed #999999; background-color: #EEEEEE; padding: .5em; }
-.listing { border: 1px dashed #999999; background-color: #EEEEEE; padding: .5em; white-space: nowrap; }
-.release-info { font-size: 85%; font-style: italic; margin: 1em 0em }
-.ref-title-box {  }
-.ref-title {  }
-.ref-purpose { font-style: italic; color: #666666 }
-.ref-synopsis {  }
-.title { font-weight: bold; margin: 1em 0em 0em 0em; padding: .25em; border: 2px solid #999999; background-color: #9999CC  }
-.cmd-synopsis { margin: 1em 0em }
-.cmd-title { font-weight: bold }
-.toc { margin-left: 2em; padding-left: 0em }
-

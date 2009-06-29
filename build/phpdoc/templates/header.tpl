@@ -5,23 +5,35 @@
 </head>
 <body>
 
-<div id="wrapper">
+<div id="header">
+	<h1><a href="index.html">PHPFrame.org</a></h1>
+</div><!-- close #header -->
 
-	<div id="header">
-		<h1>PHPFrame Documentation</h1>
-		
-		{assign var="packagehaselements" value=false}
-        {foreach from=$packageindex item=thispackage}
-            {if in_array($package, $thispackage)}
-                {assign var="packagehaselements" value=true}
-            {/if}
-        {/foreach}
-        {if $packagehaselements}
-  		  [ <a href="{$subdir}classtrees_{$package}.html" class="menu">class tree: {$package}</a> ]
-		  [ <a href="{$subdir}elementindex_{$package}.html" class="menu">index: {$package}</a> ]
-		{/if}
-  	    [ <a href="{$subdir}elementindex.html" class="menu">all elements</a> ]
-	</div><!-- close #header -->
+<center>
+	
+<div id="wrapper">
+	<div id="topmenu">
+		<ul>
+			<li>
+				<a href="index.html">Home</a>
+			</li>
+			<li>
+				<a href="http://code.google.com/p/phpframe/downloads/list">Download</a>
+			</li>
+			<li>
+				<a href="http://www.phpframe.org/doc">Documentation</a>
+			</li>
+			<li>
+				<a href="#">Tutorials and Examples</a>
+			</li>
+			<li>
+				<a href="http://code.google.com/p/phpframe/issues/list">Bug tracker</a>
+			</li>
+			<li>
+				<a href="http://groups.google.com/group/phpframe-dev">Discussion</a>
+			</li>
+		</ul>
+	</div><!-- close #topmenu -->
 	
 	<div id="left">
 		{if count($ric) >= 1}
@@ -94,6 +106,20 @@
 	</div><!-- close #left -->
 	
 	<div id="main_col">
+		{assign var="packagehaselements" value=false}
+        {foreach from=$packageindex item=thispackage}
+            {if in_array($package, $thispackage)}
+                {assign var="packagehaselements" value=true}
+            {/if}
+        {/foreach}
+        {if $packagehaselements}
+  		  [ <a href="{$subdir}classtrees_{$package}.html" class="menu">class tree: {$package}</a> ]
+		  [ <a href="{$subdir}elementindex_{$package}.html" class="menu">index: {$package}</a> ]
+		{/if}
+  	    [ <a href="{$subdir}elementindex.html" class="menu">all elements</a> ]
+  	    
+  	    <hr />
+	
 		{if !$hasel}{assign var="hasel" value=false}{/if}
 		
 		{if $hasel}

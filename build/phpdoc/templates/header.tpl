@@ -15,7 +15,7 @@
 	<div id="topmenu">
 		<ul>
 			<li>
-				<a href="index.html">Home</a>
+				<a href="http://www.phpframe.org">Home</a>
 			</li>
 			<li>
 				<a href="http://code.google.com/p/phpframe/downloads/list">Download</a>

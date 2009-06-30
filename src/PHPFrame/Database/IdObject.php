@@ -274,14 +274,26 @@ class PHPFrame_Database_IdObject
     public function join($join)
     {
         $join = (string) trim($join);
-        // Validate input type and set internal property
-        $pattern = "/^([a-zA-Z]*[ ]{0,1}JOIN) ([a-zA-Z_\#]+) ([a-zA-Z_]+) ON ([a-zA-Z]+\.[a-zA-Z_]+) (=) ([a-zA-Z]+\.[a-zA-Z_]+)/";
-        preg_match($pattern, $join, $matches);
+        $join_array = explode(" ON ", $join);
         
-        $this->_join[] = array("type"=>$matches[1],
-                               "table_name"=>$matches[2],
-                               "table_alias"=>$matches[3],
-                               "on"=>array($matches[4], $matches[5], $matches[6]));
+        $array = array();
+        
+        $array["table_alias"] = substr($join_array[0], (strrpos($join_array[0], " ")+1));
+        $join_type_and_table = substr($join_array[0], 0, strrpos($join_array[0], " "));
+        
+        // Validate input type and set internal property
+        $pattern = "/^([a-zA-Z]*[ ]{0,1}JOIN) ([a-zA-Z_ \#\.\(\)]+)/";
+        preg_match($pattern, $join_type_and_table, $matches);
+        
+        $array["type"] = $matches[1];
+        $array["table_name"] = $matches[2];
+        
+        $pattern = "/([a-zA-Z]+\.[a-zA-Z_]+) (=) ([a-zA-Z]+\.[a-zA-Z_]+)/";
+        preg_match($pattern, $join_array[1], $matches);
+        
+        $array["on"] = array($matches[1], $matches[2], $matches[3]);
+        
+        $this->_join[] = $array;
         
         return $this;
     }

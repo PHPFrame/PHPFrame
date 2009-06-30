@@ -131,6 +131,20 @@ class PHPFrame_Application_Response
     }
     
     /**
+     * Append string to the document title
+     * 
+     * @param string $str The string to append.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function appendTitle($str)
+    {
+        $this->_document->appendTitle($str);
+    }
+    
+    /**
      * Render view and store in document's body
      * 
      * This method is invoked by the views and renders the ouput data in the

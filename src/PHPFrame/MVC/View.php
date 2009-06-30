@@ -134,6 +134,16 @@ abstract class PHPFrame_MVC_View
     }
     
     /**
+     * Get the view's pathway object
+     * 
+     * @return PHPFrame_Application_Pathway
+     */
+    public function getDocument()
+    {
+        return $this->_document;
+    }
+    
+    /**
      * Display the view
      * 
      * This method loads the template layer of the view.

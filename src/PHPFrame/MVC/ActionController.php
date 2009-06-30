@@ -78,9 +78,10 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * 
      * @param string $default_action A string with the default action for a 
      *                               concrete action controller.
-     *                                       
-     * @return   void
-     * @since    1.0
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
      */
     protected function __construct($default_action) 
     {
@@ -96,6 +97,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * @param string $component_name A string with the name of the concrete
      *                               action controller.
      * 
+     * @access public
      * @return PHPFrame_MVC_ActionController
      * @since  1.0
      */
@@ -117,6 +119,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * 
      * This method executes a given task (runs a named member method).
      *
+     * @access public
      * @return void
      * @since  1.0
      */
@@ -158,6 +161,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
     /**
      * Get controller's success flag
      * 
+     * @access public
      * @return boolean
      * @since  1.0
      */
@@ -170,7 +174,8 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * Cancel
      * 
      * Cancel and set redirect to index.
-     *
+     * 
+     * @access protected
      * @return void
      * @since  1.0
      */
@@ -187,6 +192,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * @param string $url The URL we want to redirect to when we call 
      *                    PHPFrame_MVC_ActionController::redirect()
      * 
+     * @access protected
      * @return void
      * @since  1.0
      */
@@ -200,6 +206,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * 
      * Redirect browser to redirect URL.
      * 
+     * @access protected
      * @return void
      * @since  1.0
      */
@@ -221,6 +228,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * @param array  $args An array containing arguments to be passed to the Model's 
      *                     constructor.
      * 
+     * @access protected
      * @return object
      * @since  1.0
      */
@@ -239,6 +247,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * @param string $layout A specific layout to use for the view. This argument is 
      *                       optional.
      * 
+     * @access protected
      * @return object
      * @since  1.0
      */
@@ -247,6 +256,17 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         return PHPFrame_MVC_Factory::getView($name, $layout);
     }
     
+    /**
+     * Invoke action in concrete controller
+     * 
+     * This method thows an exception if the action is not supported by the controller.
+     * 
+     * @param string $action The action to inkoe in the concrete action controller
+     * 
+     * @access private
+     * @return void
+     * @since  1.0
+     */
     private function _invokeAction($action)
     {
         try {

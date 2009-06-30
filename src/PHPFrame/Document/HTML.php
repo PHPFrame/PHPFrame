@@ -169,7 +169,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
                 $html .= ' &gt;&gt; ';
             }
             $html .= '<span class="pathway_item">';
-            if (!empty($array[$i]['url'])) {
+            if (!empty($array[$i]['url']) && $i < (count($array))-1) {
                 $html .= '<a href="'.$array[$i]['url'].'">'.$array[$i]['title'].'</a>';
             } else {
                 $html .= $array[$i]['title'];

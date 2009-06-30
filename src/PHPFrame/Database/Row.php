@@ -560,8 +560,10 @@ class PHPFrame_Database_Row
         foreach ($this->_fields as $field) {
             // Only take into account fields of type PHPFrame_Database_Field
             // because these are the "real" columns in the db table
+            // If field is null we ignore the field in the UPDATE statement
             if ($field instanceof PHPFrame_Database_Field 
-                && !$field->isPrimaryKey()) {
+                && !$field->isPrimaryKey()
+                && !is_null($field->getValue())) {
                 if ($i>0) {
                     $sql .= ", ";
                 }

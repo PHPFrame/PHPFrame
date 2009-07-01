@@ -87,6 +87,9 @@ class PHPFrame_Database_Field
     
     public function setValue($value)
     {
+        // Handle NULL values
+        $value = ereg_replace("'NULL'", "NULL", $value);
+        
         $this->_value = $value;
     }
     

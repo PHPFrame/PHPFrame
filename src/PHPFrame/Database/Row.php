@@ -542,12 +542,18 @@ class PHPFrame_Database_Row
             // because these are the "real" columns in the db table
             if ($field instanceof PHPFrame_Database_Field) {
                 $columns[] = $field->getField();
-                $params[":".$field->getField()] = $field->getValue();   
+                
+                if ($field->getValue() == "NULL") {
+                    $values[] = $field->getValue();
+                } else {
+                    $values[] = ":".$field->getField();
+                    $params[":".$field->getField()] = $field->getValue();
+                }
             }
         }
         
         $sql .= " (`".implode("`, `", $columns)."`) ";
-        $sql .= " VALUES (:".implode(", :", $columns).")";
+        $sql .= " VALUES (".implode(", ", $values).")";
         
         $insert_id = $this->_db->query($sql, $params, PHPFrame_Database::FETCH_LAST_INSERTID);
         
@@ -579,8 +585,13 @@ class PHPFrame_Database_Row
                     $sql .= ", ";
                 }
                 
-                $sql .= " `".$field->getField()."` = :".$field->getField();
-                $params[":".$field->getField()] = $field->getValue();
+                if ($field->getValue() == "NULL") {
+                    $values[] = $field->getValue();
+                    $sql .= " `".$field->getField()."` = ".$field->getValue();
+                } else {
+                    $sql .= " `".$field->getField()."` = :".$field->getField();
+                    $params[":".$field->getField()] = $field->getValue();
+                }
                 
                 $i++;
             }

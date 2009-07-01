@@ -595,7 +595,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
     {
         // First we check whether the data is already cached in the app registry
         $app_registry = PHPFrame::AppRegistry();
-        $structure = $app_registry->get('database.structure');
+        $structure = $app_registry->get('database.structure.'.$this->_key);
         
         // Load structure from db if not in application registry already
         if (!isset($structure) || !is_array($structure)) {
@@ -611,7 +611,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
             }
             
             // Store data in app registry
-            $app_registry->set('database.structure', $structure);
+            $app_registry->set('database.structure'.$this->_key, $structure);
         }
         
         $this->_structure = $structure;

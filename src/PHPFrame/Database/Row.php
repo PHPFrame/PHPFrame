@@ -210,7 +210,7 @@ class PHPFrame_Database_Row
             return $this->_fields[$field_name];
         }
         
-        throw new PHPFrame_Exception("Tried to get column '".$key
+        throw new PHPFrame_Exception("Tried to get column '".$field_name
                                      ."' that doesn't exist in "
                                      .$this->_id_obj->getTableName(), 
                                       PHPFrame_Exception::WARNING);

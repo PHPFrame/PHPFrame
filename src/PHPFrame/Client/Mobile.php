@@ -41,7 +41,9 @@ class PHPFrame_Client_Mobile implements PHPFrame_Client_IClient
             return new self;
         }
         
-        if (preg_match("/wap\.|\.wap/i",$_SERVER["HTTP_ACCEPT"])) { 
+        if (isset($_SERVER["HTTP_ACCEPT"]) 
+            && preg_match("/wap\.|\.wap/i",$_SERVER["HTTP_ACCEPT"])
+        ) { 
             return new self;
         }
         

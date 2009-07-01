@@ -430,11 +430,22 @@ class PHPFrame_Database_Row
     /**
      * Store row in database
      * 
+     * @todo Have to find a way to make row objects handle the decision of 
+     *       whether they should update or insert depending. Maybe a way would
+     *       be to track whether the object's data originated from a db query 
+     *       (load method) and/or checking whether an entry already exists with
+     *       the selected primary key value.
+     * 
+     * @param bool $force_insert A flag to indicate whether we want to force an
+     *                           INSERT query instead of UPDATE. This has been 
+     *                           added as temporary solution to storing rows that 
+     *                           do not have a numeric "auto_incremet" primary key.
+     * 
      * @access public
      * @return PHPFrame_Database_Row
      * @since  1.0
      */
-    public function store()
+    public function store($force_insert=false)
     {
         // Check types and required columns before saving
         $this->_check();
@@ -442,7 +453,7 @@ class PHPFrame_Database_Row
         // Do insert or update depending on whether primary key is set
         $id = $this->getPrimaryKeyValue();
         
-        if (is_null($id) || empty($id)) {
+        if ($force_insert || is_null($id) || empty($id)) {
             // Insert new record
             $this->_insert();
         } else {

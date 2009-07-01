@@ -353,27 +353,29 @@ class PHPFrame_HTML
         
         // Format selected value using format parameter
         $formatted_date = '';
-        $formatted_date_array = explode('-', $selected);
-        $format_array = explode('/', $format);
-        foreach ($format_array as $format_item) {
-            switch ($format_item) {
-                case 'yy' :
-                    $key = 0;
-                    break;
-                case 'mm' :
-                    $key = 1;
-                    break;
-                case 'dd' :
-                    $key = 2;
-                    break;
+        if ($selected) {
+            $formatted_date_array = explode('-', $selected);
+            $format_array = explode('/', $format);
+            foreach ($format_array as $format_item) {
+                switch ($format_item) {
+                    case 'yy' :
+                        $key = 0;
+                        break;
+                    case 'mm' :
+                        $key = 1;
+                        break;
+                    case 'dd' :
+                        $key = 2;
+                        break;
+                }
+                if (!empty($formatted_date)) {
+                    $formatted_date .= '/';
+                } 
+                $formatted_date .= $formatted_date_array[$key];
             }
-            if (!empty($formatted_date)) {
-                $formatted_date .= '/';
-            } 
-            $formatted_date .= $formatted_date_array[$key];
         }
             
-        //invoking datepicker via jquery
+        //invoke datepicker via jquery
         ?>
         <script type="text/javascript">
         $(function(){
@@ -626,7 +628,12 @@ class PHPFrame_HTML
     {
         
         $array = explode('.', $str);
-        $function_name = $array[0].ucfirst($array[1]);
+        if (isset($array[1])) {
+            $function_name = $array[0].ucfirst($array[1]);
+        } else {
+            $function_name = $array[0];
+        }
+        
         
         if (is_callable( array( 'PHPFrame_HTML', $function_name) )) {
             $args = func_get_args();

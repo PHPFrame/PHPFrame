@@ -417,6 +417,11 @@ class PHPFrame_Database_RowCollection implements Iterator
         return $this->_rows[0]->getKeys();
     }
     
+    public function getSQL()
+    {
+        return (string) $this->_id_obj;
+    }
+    
     /**
      * Get number of records the current page/subset is limited to
      * 

@@ -193,6 +193,30 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     }
     
     /**
+     * Get session id
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getId()
+    {
+        return $_SESSION['id'];
+    }
+    
+    /**
+     * Get session name
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getName()
+    {
+        return $this->_session_name;
+    }
+    
+    /**
      * Get client object
      * 
      * @access public

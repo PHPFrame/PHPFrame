@@ -42,20 +42,33 @@ class PHPFrame_Database_DSN_MySQL extends PHPFrame_Database_DSN
      * @var string
      */
     private $_db_name=null;
+    /**
+     * Unix socket
+     * 
+     * @var string
+     */
+    private $_unix_socket=null;
     
     /**
      * Constructor
      * 
-     * @param string $db_host The MySQL server host name
-     * @param string $db_name The MySQL database name
+     * @param string $db_host     The MySQL server host name
+     * @param string $db_name     The MySQL database name
+     * @param string $unix_socket Path to unix socket
      * 
      * @return void
      * @since  1.0
      */
-    public function __construct($db_host, $db_name) 
+    public function __construct($db_host, $db_name, $unix_socket=null) 
     {
         $this->_db_host = $db_host;
         $this->_db_name = $db_name;
+        
+        if (!is_null($unix_socket)) {
+            $this->_unix_socket = (string) $unix_socket;
+        } else {
+            $this->_unix_socket = ini_get('mysql.default_socket');
+        }
         
         parent::__construct("mysql");
     }
@@ -71,6 +84,11 @@ class PHPFrame_Database_DSN_MySQL extends PHPFrame_Database_DSN
         $str = $this->db_driver.":";
         $str .= "host=".$this->_db_host.";";
         $str .= "dbname=".$this->_db_name;
+        
+        if (!is_null($this->_unix_socket)) {
+            $str .= ";unix_socket=".$this->_unix_socket;
+        }
+        
         return $str;
     }
     

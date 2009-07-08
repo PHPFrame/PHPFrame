@@ -10,7 +10,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id: Database.php 32 2009-06-09 04:47:23Z luis.montero@e-noise.com $
+ * @version    SVN: $Id$
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
@@ -20,7 +20,7 @@
  * 
  * This class deals with the connection(s) to the database(s).
  * 
- * The database class serves singleton objects for each connection (determined by 
+ * The database class serves singleton objects for each connection, determined by 
  * the dsn and db user credentials.
  * 
  * This class also extends PHPFrame_Base_Subject allowing observer objects to 
@@ -579,8 +579,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
             $this->_pdo = new PDO($this->_dsn, $this->_db_user, $this->_db_pass);
         }
         catch (PDOException $e) {
-            //echo $e->getMessage();
-            throw new PHPFrame_Exception_Database('Could not connect to database.');
+            throw new PHPFrame_Exception_Database($e->getMessage());
         }  
     }
     

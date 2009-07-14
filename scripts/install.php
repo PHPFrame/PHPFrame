@@ -22,4 +22,53 @@ class scripts_install_postinstall
         echo "I'm the post-install script and should set up the phpframe 
 	  		 commmand line utility as a PHPFrame app (i need a config file!! a db and so on!)";
     }
+    
+    /**
+     * Initialise
+     * 
+     * @param PEAR_Config         $config               The current configuration used for 
+     *                                                  installation.
+     * @param PEAR_PackageFile_v2 $self                 The package.xml contents as abstracted 
+     *                                                  by this object.
+     * @param string|null         $lastInstalledVersion The last version of this package 
+     *                                                  that was installed. This is a very 
+     *                                                  important parameter, as it is the 
+     *                                                  only way to determine whether a 
+     *                                                  package is being installed from 
+     *                                                  scratch, or upgraded from a previous 
+     *                                                  version. Using this parameter, it is 
+     *                                                  possible to determine what incremental 
+     *                                                  changes, if any, need to be performed.
+     * 
+     * @access public
+     * @return bool Returns TRUE on success or FALSE on failure
+     * @since 1.0
+     */
+    public function init(PEAR_Config $config , PEAR_PackageFile_v2 $self , $lastInstalledVersion=null)
+    {
+        
+    }
+    
+    /**
+     * Run
+     * 
+     * @param array  $infoArray    if $paramGroupId is _undoOnError, then $infoArray will 
+     *                             contain a list of successfully completed parameter group 
+     *                             sections. This can be used to restore any system changes 
+     *                             made by the installation script. Otherwise, $infoArray 
+     *                             contains the results of the user input from the most 
+     *                             recent <paramgroup> section.
+     * @param string $paramGroupId This variable either contains _undoOnError or the contents 
+     *                             of the most recent <paramgroup>'s <id> tag. Note that 
+     *                             paramgroup id cannot begin with an underscore (_), and 
+     *                             so _undoOnError can only be triggered by the PEAR installer.
+     * 
+     * @access public
+     * @return void
+     * @since 1.0
+     */
+    public function run($infoArray, $paramGroupId)
+    {
+        
+    }
 }

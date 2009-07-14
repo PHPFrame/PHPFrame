@@ -117,7 +117,12 @@ No notes for now...
       <tasks:id>dbDriver</tasks:id>
       <tasks:param>
    	   <tasks:name>MySQL</tasks:name>
-       <tasks:prompt>Database driver for phpframe command line tool (MySQL)</tasks:prompt>
+       <tasks:prompt>MySQL</tasks:prompt>
+       <tasks:type>string</tasks:type>
+      </tasks:param>
+      <tasks:param>
+   	   <tasks:name>SQLite</tasks:name>
+       <tasks:prompt>SQLite</tasks:prompt>
        <tasks:type>string</tasks:type>
       </tasks:param>
      </tasks:paramgroup>

@@ -32,7 +32,7 @@
 		</copy>
 		
 		<!-- copy source files -->
-		<copy todir="${tmp.dir}/src" overwrite="true">
+		<copy todir="${tmp.dir}" overwrite="true">
 			<fileset dir="${project.basedir}/src">
 				<include name="**" />
 			</fileset>

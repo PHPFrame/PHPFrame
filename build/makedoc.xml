@@ -4,6 +4,7 @@
 	<property name="build.dir" value="${project.basedir}/build"/>
 	<property name="report.dir" value="${build.dir}/report"/>
 	<property name="doc.dir" value="${build.dir}/doc"/>
+	<property name="tmp.dir" value="${build.dir}/tmp"/>
 	
 	<!-- Prepare directories -->
 	<target name="prepare">
@@ -15,7 +16,7 @@
 	<target name="apidoc">
 		<exec 
 			command="phpdoc \
-					-d ${project.basedir} \
+					-d ${tmp.dir} \
 					-t ${doc.dir} \
 					-ric README,LICENSE,CREDITS \
 					-i build/,examples/,tests/ \

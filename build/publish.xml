@@ -18,7 +18,7 @@
 	<!-- copy files to tmp dir for publishing -->
 	<target name="copy">
 		<!-- copy data files -->
-		<copy todir="${tmp.dir}/data" overwrite="true">
+		<copy todir="${tmp.dir}" overwrite="true">
 			<fileset dir="${project.basedir}/data">
 				<include name="**" />
 			</fileset>

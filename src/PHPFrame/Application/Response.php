@@ -156,7 +156,7 @@ class PHPFrame_Application_Response
      * @return void
      * @since  1.0
      */
-     public function renderView(PHPFrame_MVC_View $view)
+     public function render(PHPFrame_MVC_View $view)
      {
          $tmpl = PHPFrame::Request()->get("tmpl", "");
          if ($tmpl == "component") {
@@ -165,7 +165,7 @@ class PHPFrame_Application_Response
              $apply_theme = true;
          }
          
-         $this->_document->renderView($view, $apply_theme);
+         $this->_document->render($view, $apply_theme);
          
          $this->send($apply_theme);
      }

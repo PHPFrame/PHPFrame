@@ -173,6 +173,6 @@ abstract class PHPFrame_MVC_View
         // Delegate rendering to response object
         // The response object will render the view object 
         // depending on the document typ
-        PHPFrame::Response()->renderView($this);
+        PHPFrame::Response()->render($this);
     }
 }

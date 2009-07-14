@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xinc>
 	
-	<project name="PHPFrame-1.0">
+	<project name="PHPFrame">
 		
 		<property name="dir" value="${projectdir}/${project.name}" />
 		<property name="build_dir" value="${dir}/build" />
@@ -30,8 +30,8 @@
 				<!-- Make deliverable source code -->
 				<phingPublisher buildfile="${build_dir}/publish.xml" target="build" />
 				<artifactspublisher file="${build_dir}/publish.xml" />
-				<deliverable file="${build_dir}/dist/${project.name}-${build.label}.tar.gz" 
-							 alias="${project.name}.tar.gz" />
+				<deliverable file="${build_dir}/dist/${project.name}-${build.label}.tgz" 
+							 alias="${project.name}.tgz" />
 				
 				<!-- Generate docs with phpdoc -->
 				<phingPublisher buildfile="${build_dir}/makedoc.xml" target="build" />

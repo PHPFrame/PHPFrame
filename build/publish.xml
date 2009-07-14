@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
-<project name="PHPFrame-1.0" basedir="../" default="build">
+<project name="PHPFrame" basedir="../" default="build">
 	
 	<property name="build.dir" value="${project.basedir}/build"/>
 	<property name="dist.dir" value="${build.dir}/dist"/>
 	<property name="tmp.dir" value="${build.dir}/tmp"/>
+	<property name="report.dir" value="${build.dir}/report"/>
+	
+	<property name="version" value="1.0.1" />
 	
 	<target name="prepare">
 		<mkdir dir="${dist.dir}"/>
@@ -12,28 +15,66 @@
 		<mkdir dir="${tmp.dir}"/>
 	</target>
 	
-	<!-- Create archive for distribution -->
-	<target name="tar">
+	<!-- copy files to tmp dir for publishing -->
+	<target name="copy">
+		<!-- copy data files -->
+		<copy todir="${tmp.dir}/data" overwrite="true">
+			<fileset dir="${project.basedir}/data">
+				<include name="**" />
+			</fileset>
+		</copy>
+		
+		<!-- copy script files -->
+		<copy todir="${tmp.dir}/scripts" overwrite="true">
+			<fileset dir="${project.basedir}/scripts">
+				<include name="**" />
+			</fileset>
+		</copy>
+		
+		<!-- copy source files -->
 		<copy todir="${tmp.dir}/src" overwrite="true">
 			<fileset dir="${project.basedir}/src">
 				<include name="**" />
 			</fileset>
 		</copy>
 		
-		<copy file="${build.dir}/package.xml" tofile="${tmp.dir}/package.xml" overwrite="true" />
+		<!-- copy package.xml to use as template -->
+		<copy todir="${tmp.dir}" overwrite="true">
+			<!-- Replace tokens -->
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="PROJECT_NAME" value="${xinc.project.name}" />
+					<token key="VERSION" value="${version}" />
+				</replacetokens>
+			</filterchain>
+			
+			<fileset dir="${build.dir}">
+				<include name="package.xml" />
+			</fileset>
+		</copy>
+		
+		<!-- copy info files -->
 		<copy file="${project.basedir}/CREDITS" tofile="${tmp.dir}/CREDITS" overwrite="true" />
 		<copy file="${project.basedir}/LICENSE" tofile="${tmp.dir}/LICENSE" overwrite="true" />
 		<copy file="${project.basedir}/README" tofile="${tmp.dir}/README" overwrite="true" />
 		
-		<tar 
-			destfile="${dist.dir}/${xinc.project.name}-${xinc.build.label}.tar.gz" 
-			compression="gzip">
-			<fileset dir="${tmp.dir}">
-				<include name="**" />
-			</fileset>
-		</tar>
 	</target>
 	
-	<target name="build" depends="prepare, tar" />
+	<!-- Create archive for distribution -->
+	<target name="tar">
+		<!-- create tar using pear package command -->
+		<exec 
+			command="pear package" 
+			dir="${tmp.dir}" 
+			output="${report.dir}/pear_package.log" />
+		
+		<!-- Move created package to dist directory -->
+		<move file="${tmp.dir}/${xinc.project.name}-${version}.tgz" 
+			  tofile="${dist.dir}/${xinc.project.name}-${xinc.build.label}.tgz" 
+			  overwrite="true"/>
+			  
+	</target>
+	
+	<target name="build" depends="prepare, copy, tar" />
 	
 </project>

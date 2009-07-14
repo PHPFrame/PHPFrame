@@ -1,132 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.8.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
- <name>PHPFrame</name>
- <channel>pear.e-noise.com</channel>
- <summary>PHPFrame is an object oriented MVC framework</summary>
- <description>phpFrame is a minimal and object oriented PHP framework for quickly developing powerful, flexible, robust and extendible web apps.</description>
- <lead>
-  <name>Luis Montero</name>
-  <user>luis.montero</user>
-  <email>luis.montero@e-noise.com</email>
-  <active>yes</active>
- </lead>
- <date>2009-06-07</date>
- <time>18:09:27</time>
- <version>
-  <release>1.0.0alpha1</release>
-  <api>1.0.0alpha1</api>
- </version>
- <stability>
-  <release>alpha</release>
-  <api>alpha</api>
- </stability>
- <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
- <notes>
-This is the first attempt to package the PHPFrame library as a PEAR package.
- </notes>
- <contents>
-  <dir name="/"> 
-  <dir name="src" baseinstalldir="/">
-   <file md5sum="5560ec4a97f8e83624d6e271573896a3" name="PHPFrame/LICENSE" role="data" />
-   <file md5sum="46950560fae699aa7df0b13b9d9e308c" name="PHPFrame/PHPFrame.php" role="php" />
-   <file md5sum="1d26ff222c9952dc126ca69833ddbfae" name="PHPFrame/Application/ActionController.php" role="php" />
-   <file md5sum="ef756d4b07237558d07661bf4115d16c" name="PHPFrame/Application/Components.php" role="php" />
-   <file md5sum="48be30315a0eb69a5985a22ec85dd21b" name="PHPFrame/Application/Dependencies.php" role="php" />
-   <file md5sum="2f919c22543e2b0f2b0e1ea1a37ce99f" name="PHPFrame/Application/FrontController.php" role="php" />
-   <file md5sum="80d07720e07d7aeb87c68560286f4ef6" name="PHPFrame/Application/Model.php" role="php" />
-   <file md5sum="6281259e4a45c494fc0ef9a49d922df6" name="PHPFrame/Application/Modules.php" role="php" />
-   <file md5sum="687c2eceaf19f63233b1489da3c8c536" name="PHPFrame/Application/Pathway.php" role="php" />
-   <file md5sum="ca7062353849c708cee0867ac063f3ce" name="PHPFrame/Application/Permissions.php" role="php" />
-   <file md5sum="9a5dedcb908edb1231412f4f56e3e269" name="PHPFrame/Application/Sysevents.php" role="php" />
-   <file md5sum="727e316152bd14fa5fcd6d07a00be6cb" name="PHPFrame/Application/View.php" role="php" />
-   <file md5sum="ec82dcadf0a16717bcf0fc653531a71d" name="PHPFrame/Base/Singleton.php" role="php" />
-   <file md5sum="f8fce59681d30a09e6cb83477cae6964" name="PHPFrame/Base/StdObject.php" role="php" />
-   <file md5sum="5f513757d949c6c352ee376c2aa9808a" name="PHPFrame/Client/CLI.php" role="php" />
-   <file md5sum="7fe48972aef772f439b2504f17f44ef1" name="PHPFrame/Client/Default.php" role="php" />
-   <file md5sum="65a4d450aa0215b205e140b8c14fac97" name="PHPFrame/Client/IClient.php" role="php" />
-   <file md5sum="949f44dedb1dc85086ad7491801f3030" name="PHPFrame/Client/Mobile.php" role="php" />
-   <file md5sum="45c4871cef528a71cd1e69eb46f77c4f" name="PHPFrame/Client/XMLRPC.php" role="php" />
-   <file md5sum="925fe1424225d98f37fcaaf8d97965ec" name="PHPFrame/Database/CollectionFilter.php" role="php" />
-   <file md5sum="5a3bc7bb935a1ccb628b232da1b25a67" name="PHPFrame/Database/Database.php" role="php" />
-   <file md5sum="e4e68fdf6943450540df3777f9894357" name="PHPFrame/Database/Row.php" role="php" />
-   <file md5sum="dcf0b027a3493c216496a58abe6f5ad2" name="PHPFrame/Database/RowCollection.php" role="php" />
-   <file md5sum="32047b183ae1d1bf3d496ff1a6203fb6" name="PHPFrame/Debug/Log.php" role="php" />
-   <file md5sum="560db7e497794b57c55511cffc235fc4" name="PHPFrame/Debug/Profiler.php" role="php" />
-   <file md5sum="2a2b27b1baae84666e0b68b5a237ce5e" name="PHPFrame/Document/Document.php" role="php" />
-   <file md5sum="73b1af4f2141a7548820af0f4368db1b" name="PHPFrame/Document/HTML.php" role="php" />
-   <file md5sum="e40ef5265dd4213fdcbfeb0735e1b8b0" name="PHPFrame/Document/IDocument.php" role="php" />
-   <file md5sum="e40ef5265dd4213fdcbfeb0735e1b8b0" name="PHPFrame/Document/Plaintext.php" role="php" />
-   <file md5sum="ee59b7645a62556133280842b0eb41d5" name="PHPFrame/Document/XML.php" role="php" />
-   <file md5sum="048547bfd82c1738f77d75ac465d2ee2" name="PHPFrame/Exception/Database.php" role="php" />
-   <file md5sum="529d856a84bfd1208015a91e6faec9c4" name="PHPFrame/Exception/Error.php" role="php" />
-   <file md5sum="b9ec2804f2c187348f811cedfbfa7105" name="PHPFrame/Exception/Exception.php" role="php" />
-   <file md5sum="defed35851fe8ba7314af43b32d62bfe" name="PHPFrame/Exception/Filesystem.php" role="php" />
-   <file md5sum="e627facb801894827a688eeabaf3d567" name="PHPFrame/Exception/Handler.php" role="php" />
-   <file md5sum="fb7d2c160d0e97b58ef1c1b8d72f212e" name="PHPFrame/Exception/IMAP.php" role="php" />
-   <file md5sum="dbd024768aeca0a7e4e549d939b19bcf" name="PHPFrame/HTML/HTML.php" role="php" />
-   <file md5sum="d45eddef6117303b1977099ce6a48052" name="PHPFrame/HTML/Pagination.php" role="php" />
-   <file md5sum="2287d0853ee105d1fb4ca2faef81fea4" name="PHPFrame/HTML/Text.php" role="php" />
-   <file md5sum="2dd695f7494a5841c914b47f940bb3d5" name="PHPFrame/Lang/en-GB.php" role="php" />
-   <file md5sum="f1110111412b074cb55bf43c902f92a4" name="PHPFrame/Mail/IMAP.php" role="php" />
-   <file md5sum="4334c2c526b661f0e2e2f8745e5b30f8" name="PHPFrame/Mail/Mailer.php" role="php" />
-   <file md5sum="cfaf2d1fc91be679a42e502d75b31753" name="PHPFrame/Registry/Application.php" role="php" />
-   <file md5sum="e126e9485b81e7926a61e76a1675e410" name="PHPFrame/Registry/Registry.php" role="php" />
-   <file md5sum="1e47916b3945979a6b32a149ad0c49e8" name="PHPFrame/Registry/Request.php" role="php" />
-   <file md5sum="d5091351a751770d3a73a4a6a4cc210c" name="PHPFrame/Registry/Response.php" role="php" />
-   <file md5sum="0627cb6abe76815f9c0c46eb18b6549d" name="PHPFrame/Registry/Session.php" role="php" />
-   <file md5sum="f36c1eb5f837c2f35409eeda97642056" name="PHPFrame/User/Helper.php" role="php" />
-   <file md5sum="bb61608fe498e547dc56d141cb073f12" name="PHPFrame/User/OpenID.php" role="php" />
-   <file md5sum="648d2892a13137a0326b8723f6c0d9d7" name="PHPFrame/User/User.php" role="php" />
-   <file md5sum="45e195b9f062ee0d8f66a17cc2eb236b" name="PHPFrame/Utils/Crypt.php" role="php" />
-   <file md5sum="688f7d5c9545c8bf6204ca21043a77e1" name="PHPFrame/Utils/Filesystem.php" role="php" />
-   <file md5sum="6494d43e8bee557d87a052a1a7ad7197" name="PHPFrame/Utils/Filter.php" role="php" />
-   <file md5sum="185e139405b1e2323feb82556aeb0770" name="PHPFrame/Utils/Image.php" role="php" />
-   <file md5sum="f5fea01f0359f67c9ed6ce7bbb510196" name="PHPFrame/Utils/Rewrite.php" role="php" />
-   <file md5sum="095f268d02498e97c6c0d44b6e01990c" name="PHPFrame/Utils/URI.php" role="php" />
-  </dir>
-  </dir>
- </contents>
- <dependencies>
-  <required>
-   <php>
-    <min>5</min>
-   </php>
-   <pearinstaller>
-    <min>1.4.0</min>
-   </pearinstaller>
-  </required>
- </dependencies>
- <phprelease />
- <changelog>
-  <release>
-   <version>
-    <release>1.0.0alpha1</release>
-    <api>1.0.0alpha1</api>
-   </version>
-   <stability>
-    <release>alpha</release>
-    <api>alpha</api>
-   </stability>
-   <date>2009-06-07</date>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
-   <notes>
-This is the first attempt to package the PHPFrame library as a PEAR package.
-   </notes>
-  </release>
-  <release>
-   <version>
-    <release>1.0.0</release>
-    <api>1.0.0</api>
-   </version>
-   <stability>
-    <release>alpha</release>
-    <api>alpha</api>
-   </stability>
-   <date>2009-06-07</date>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
-   <notes>
-This is the first attempt to package the PHPFrame library as a PEAR package.
-   </notes>
-  </release>
- </changelog>
+<package packagerversion="1.8.1" 
+		 version="2.0" 
+		 xmlns="http://pear.php.net/dtd/package-2.0" 
+		 xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" 
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		 xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
+	
+	<name>##PROJECT_NAME##</name>
+	<channel>pear.e-noise.com</channel>
+	<summary>PHPFrame is an object oriented MVC framework</summary>
+	<description>
+PHPFrame is a minimal and object oriented PHP framework for quickly developing powerful, 
+flexible, robust and extendible web apps.
+	</description>
+	<lead>
+		<name>Luis Montero</name>
+		<user>luis.montero</user>
+		<email>luis.montero@e-noise.com</email>
+		<active>yes</active>
+	</lead>
+	<date>2009-07-14</date>
+	<time>04:51:56</time>
+	<version>
+		<release>##VERSION##</release>
+		<api>##VERSION##</api>
+	</version>
+	<stability>
+		<release>beta</release>
+		<api>beta</api>
+	</stability>
+	<license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+	<notes>
+First packaged version
+	</notes>
+	
+	<contents>
+		<dir name="/">
+  
+			<dir name="data">
+				<file baseinstalldir="/" name="InputFlags.xml" role="data" />
+			</dir>
+			
+			<dir name="scripts">
+				<file baseinstalldir="/" name="PEAR_CLI_Packager.php" role="script">
+					<tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config"/>
+					<tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+					<tasks:replace from="@package_version@" to="version" type="package-info" />
+				</file>
+			</dir>
+			
+			<dir name="src">
+				<dir name="PEAR_CLI_Packager">
+					<file baseinstalldir="/" name="InputFlags.php" role="php">
+						<tasks:replace from="@package_version@" to="version" type="package-info" />
+					</file>
+				</dir>
+			</dir>
+	
+  		</dir>
+	</contents>
+ 	
+ 	<dependencies>
+		<required>
+			<php>
+				<min>5</min>
+			</php>
+			<pearinstaller>
+				<min>1.4.0</min>
+			</pearinstaller>
+			<package>
+				<name>PEAR_PackageFileManager2</name>
+				<channel>pear.php.net</channel>
+				<min>1.0.0</min>
+			</package>
+			<extension>
+				<name>reflection</name>
+			</extension>
+			<extension>
+				<name>spl</name>
+			</extension>
+		</required>
+	</dependencies>
+ 
+	<phprelease>
+		<filelist>
+			<install as="pear-pckg" name="scripts/PEAR_CLI_Packager.php" />
+			<install as="InputFlags.xml" name="data/InputFlags.xml" />
+			<install as="PEAR_CLI_Packager/InputFlags.php" name="src/PEAR_CLI_Packager/InputFlags.php" />
+		</filelist>
+	</phprelease>
+
+	<changelog>
+		<release>
+			<version>
+				<release>##VERSION##</release>
+				<api>##VERSION##</api>
+			</version>
+			<stability>
+				<release>beta</release>
+				<api>beta</api>
+			</stability>
+			<date>2009-07-14</date>
+   			<license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+			<notes>
+First packaged version
+			</notes>
+		</release>
+	</changelog>
+	
 </package>

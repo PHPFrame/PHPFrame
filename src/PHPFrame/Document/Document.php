@@ -53,7 +53,7 @@ abstract class PHPFrame_Document
      *
      * @var string
      */
-    protected $charset='utf-8';
+    protected $charset='UTF-8';
     /**
      * The document title
      * 

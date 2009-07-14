@@ -17,10 +17,12 @@
 
 class PHPFrame_install_postinstall
 {
-    public function __construct()
-    {
-        // ..
-    }
+    /**
+     * Constructor
+     * 
+     * @return void
+     */
+    public function __construct() {}
     
     /**
      * Initialise
@@ -41,13 +43,16 @@ class PHPFrame_install_postinstall
      * 
      * @access public
      * @return bool Returns TRUE on success or FALSE on failure
-     * @since 1.0
+     * @since  1.0
      */
     public function init(PEAR_Config $config , PEAR_PackageFile_v2 $self , $lastInstalledVersion=null)
     {
-        //var_dump($config);
-        //var_dump($self);
-        //var_dump($lastInstalledVersion);
+        // Include PHPFrame framework
+        require_once "PHPFrame.php";
+        
+        if (!class_exists('PHPFrame')) {
+            die("Missing PHPFrame. Please check your PEAR installation.\n");
+        }
         
         return true;
     }
@@ -68,18 +73,14 @@ class PHPFrame_install_postinstall
      * 
      * @access public
      * @return void
-     * @since 1.0
+     * @since  1.0
      */
     public function run($infoArray, $paramGroupId)
     {
-        //var_dump($infoArray);
-        //var_dump($paramGroupId);
-        
         if (is_array($infoArray)) {
-            require_once "PHPFrame/Config/Config.php";
             $config = new PHPFrame_Config();
             $config->bind($infoArray);
-            var_dump($config);
+            var_dump($config->toXML());
         }
     }
 }

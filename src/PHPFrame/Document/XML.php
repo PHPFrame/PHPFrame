@@ -60,12 +60,7 @@ class PHPFrame_Document_XML extends PHPFrame_Document
         parent::__construct($mime, $charset);
         
         // Acquire DOM object of HTML type
-        $imp = new DOMImplementation;
-        $this->dom = $imp->createDocument(
-            null,
-            $this->qualified_name,
-            $this->getDocType()
-        ); 
+        $this->dom = new DOMDocument("1.0", $this->charset); 
     }
     
     /**
@@ -203,8 +198,7 @@ class PHPFrame_Document_XML extends PHPFrame_Document
      */
     public function toString()
     {
-        $str = "FIX ME!!!: ".get_class($this)."::toString().";
         
-        return $str;
+        return $this->dom->saveXML();
     }
 }

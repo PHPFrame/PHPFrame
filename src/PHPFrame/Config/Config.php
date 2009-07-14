@@ -88,7 +88,9 @@ class PHPFrame_Config
     
     public function toXML()
     {
-        $xml = new DOMDocument();
+        $xml = new PHPFrame_Document_XML();
+		var_dump($xml->toString());
+		exit;
         
         $config_node = $xml->createElement("config");
         $xml->adoptNode($config_node);

@@ -46,7 +46,11 @@ class scripts_PHPFrame_install_postinstall
      */
     public function init(PEAR_Config $config , PEAR_PackageFile_v2 $self , $lastInstalledVersion=null)
     {
+        echo "\n--"; var_dump($config); echo "\n";
+        echo "\n--"; var_dump($self); echo "\n";
+        echo "\n--"; var_dump($lastInstalledVersion); echo "\n";
         
+        return true;
     }
     
     /**
@@ -69,6 +73,7 @@ class scripts_PHPFrame_install_postinstall
      */
     public function run($infoArray, $paramGroupId)
     {
-        
+        echo "\n--"; var_dump($infoArray); echo "\n";
+        echo "\n--"; var_dump($paramGroupId); echo "\n";
     }
 }

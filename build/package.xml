@@ -117,7 +117,7 @@ No notes for now...
     <min>1.4.0</min>
    </pearinstaller>
    <package>
-   	<name>PEAR_Config</name>
+   	<name>Config</name>
    	<channel>pear.php.net</channel>
    </package>
    <package>

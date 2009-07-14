@@ -61,9 +61,11 @@ class PHPFrame_Document_XML extends PHPFrame_Document
         
         // Acquire DOM object of HTML type
         $imp = new DOMImplementation;
-        $this->dom = $imp->createDocument(null, 
-                                           $this->qualified_name, 
-                                           $this->getDocType()); 
+        $this->dom = $imp->createDocument(
+            null,
+            $this->qualified_name,
+            $this->getDocType()
+        ); 
     }
     
     /**
@@ -155,5 +157,54 @@ class PHPFrame_Document_XML extends PHPFrame_Document
     {
         $text_node = $this->dom->createTextNode($str);
         $node->appendChild($text_node);
+    }
+    
+    /**
+     * Render view and store in document's body
+     * 
+     * This method is invoked by the views and renders the ouput data in the
+     * document specific format.
+     * 
+     * @param PHPFrame_MVC_View $view The view object to process.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function render(PHPFrame_MVC_View $view)
+    {
+        $str = "FIX ME!!!: ".get_class($this)."::render().";
+        
+        return $str;
+    }
+    
+    /**
+     * Method used to render Row Collections in this document
+     * 
+     * @param PHPFrame_Database_RowCollection
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function renderRowCollection(PHPFrame_Database_RowCollection $collection)
+    {
+        $str = "FIX ME!!!: ".get_class($this)."::renderRowCollection().";
+        
+        return $str;
+    }
+    
+    /**
+     * Covert object to string
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function toString()
+    {
+        $str = "FIX ME!!!: ".get_class($this)."::toString().";
+        
+        return $str;
     }
 }

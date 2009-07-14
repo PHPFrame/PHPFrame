@@ -35,12 +35,6 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
      */
     protected $qualified_name="html";
     /**
-     * The document body
-     * 
-     * @var string
-     */
-    private $_body=null;
-    /**
      * Pathway object
      * 
      * @var PHPFrame_Application_Pathway
@@ -55,10 +49,10 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
      * @uses   DOMImplementation, PHPFrame_Utils_URI, PHPFrame_Application_Pathway
      * @since  1.0 
      */
-    public function __construct() 
+    public function __construct($mime="text/html", $charset=null) 
     {
         // Call parent's constructor to set mime type
-        parent::__construct('text/html');
+        parent::__construct($mime, $charset);
         
         // Acquire DOM object of HTML type
         $imp = new DOMImplementation;
@@ -88,12 +82,12 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
     
     public function setBody($str)
     {
-        $this->_body = (string) $str;
+        $this->body = (string) $str;
     }
     
     public function getBody()
     {
-        return $this->_body;
+        return $this->body;
     }
     
     /**
@@ -111,7 +105,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
      * @since  1.0
      * @todo It is very important to check path used for require_once call for security.
      */
-    public function renderView(PHPFrame_MVC_View $view, $apply_theme=true) 
+    public function render(PHPFrame_MVC_View $view, $apply_theme=true) 
     {
         $tmpl_path = COMPONENT_PATH.DS."views";
         $tmpl_path .= DS.$view->getName().DS."tmpl";
@@ -134,7 +128,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
             // Include template file
             require_once $tmpl_path;
             // save buffer in body property
-            $this->_body = ob_get_contents();
+            $this->body = ob_get_contents();
             // clean output buffer
             ob_end_clean();
         } else {
@@ -148,7 +142,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
             // so we just prepend the sytem events and return
             $widgets = PHPFrame::AppRegistry()->getWidgets();
             $sys_events = $widgets->display('sysevents', '_sysevents');
-            $this->_body = $sys_events.$this->_body;
+            $this->body = $sys_events.$this->body;
             return;
         }
     }
@@ -382,7 +376,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
         $html = $this->dom->saveHTML();
         
         // Add body
-        $html = str_replace("{content}", $this->_body, $html);
+        $html = str_replace("{content}", $this->body, $html);
         
         return $html;
     }
@@ -516,7 +510,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
         // make pathway available in local scope
         $pathway = $view->getPathway();
         
-        $component_output = $this->_body;
+        $component_output = $this->body;
         
         // Set file name to load depending on session auth
         $session = PHPFrame::Session();
@@ -533,7 +527,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
         ob_start();
         require_once $template_path.DS.$template_filename;
         // save buffer in body
-        $this->_body = ob_get_contents();
+        $this->body = ob_get_contents();
         // clean output buffer
         ob_end_clean();
     }

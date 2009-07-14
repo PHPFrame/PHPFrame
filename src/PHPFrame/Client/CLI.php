@@ -107,6 +107,6 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
         $session->setUser($user);
         
         // Set document as response content
-        $response->setDocument(new PHPFrame_Document_Plaintext());
+        $response->setDocument(new PHPFrame_Document_Plain());
     }
 }

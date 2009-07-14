@@ -25,9 +25,15 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Document_Plaintext extends PHPFrame_Document
+class PHPFrame_Document_Plain extends PHPFrame_Document
 {
-    private $_text="";
+    /**
+     * The qualified name of the document type to create. 
+     * 
+     * @var string
+     */
+    protected $qualified_name="plain";
+    
     /**
      * Constructor
      * 
@@ -35,33 +41,10 @@ class PHPFrame_Document_Plaintext extends PHPFrame_Document
      * @return void
      * @since  1.0 
      */
-    public function __construct() 
+    public function __construct($mime="text/plain", $charset=null) 
     {
         // Call parent's constructor to set mime type
-        parent::__construct('text/plain');
-    }
-    
-    /**
-     * Render view and store in document's body
-     * 
-     * This method is invoked by the views and renders the ouput data in the
-     * document specific format.
-     * 
-     * @param PHPFrame_MVC_View $view The view object to process.
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function renderView(PHPFrame_MVC_View $view)
-    {
-        
-        foreach ($view->getData() as $key=>$value) {
-            if ($value instanceof PHPFrame_Database_RowCollection) {
-                $value = $this->renderRowCollection($value);
-            }
-            $this->_text .= $key.": \n".$value."\n";
-        }
+        parent::__construct($mime, $charset);
     }
     
     /**
@@ -91,8 +74,8 @@ class PHPFrame_Document_Plaintext extends PHPFrame_Document
      */
     public function toString()
     {
-        $str = $this->_title."\n\n";
-        $str .= $this->_text;
+        $str = $this->title."\n\n";
+        $str .= $this->body;
         
         return $str;
     }

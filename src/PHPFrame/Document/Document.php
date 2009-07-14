@@ -37,11 +37,17 @@
 abstract class PHPFrame_Document
 {
     /**
-     * The document title
+     * The qualified name of the document type to create. 
      * 
      * @var string
      */
-    protected $title=null;
+    protected $qualified_name=null;
+    /**
+     * Document mime type
+     *
+     * @var string
+     */
+    protected $mime_type=null;
     /**
      * Contains the character encoding string
      *
@@ -49,11 +55,17 @@ abstract class PHPFrame_Document
      */
     protected $charset='utf-8';
     /**
-     * Document mime type
-     *
+     * The document title
+     * 
      * @var string
      */
-    protected $mime_type=null;
+    protected $title=null;
+    /**
+     * The document body
+     * 
+     * @var string
+     */
+    protected $body=null;
     
     /**
      * Constructor
@@ -147,13 +159,6 @@ abstract class PHPFrame_Document
         return $this->mime_type;
     }
     
-    public function render($object)
-    {
-        if ($a) {
-            
-        }   
-    }
-    
     /**
      * Render view and store in document's body
      * 
@@ -166,7 +171,20 @@ abstract class PHPFrame_Document
      * @return void
      * @since  1.0
      */
-    abstract public function renderView(PHPFrame_MVC_View $view);
+    public function render(PHPFrame_MVC_View $view)
+    {
+        $str = "";
+        
+        foreach ($view->getData() as $key=>$value) {
+            if ($value instanceof PHPFrame_Database_RowCollection) {
+                $str .= $this->renderRowCollection($value);
+            } else {
+                $str .= (string) $value;
+            }
+        }
+        
+        $this->body = $str;
+    }
     
     /**
      * Method used to render Row Collections in this document

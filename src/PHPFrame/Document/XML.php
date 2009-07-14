@@ -27,5 +27,133 @@
  */
 class PHPFrame_Document_XML extends PHPFrame_Document
 {
-
+    /**
+     * The qualified name of the document type to create. 
+     * 
+     * @var string
+     */
+    protected $qualified_name="xml";
+    /**
+     * DOM Document Type object
+     * 
+     * @var DOMDocumentType
+     */
+    protected $doctype=null;
+    /**
+     * DOM Document object
+     * 
+     * @var DOMDocument
+     */
+    protected $dom=null;
+    
+	/**
+     * Constructor
+     * 
+     * @access public
+     * @return void
+     * @uses   DOMImplementation
+     * @since  1.0 
+     */
+    public function __construct($mime="text/xml", $charset=null) 
+    {
+        // Call parent's constructor to set mime type
+        parent::__construct($mime, $charset);
+        
+        // Acquire DOM object of HTML type
+        $imp = new DOMImplementation;
+        $this->dom = $imp->createDocument(null, 
+                                           $this->qualified_name, 
+                                           $this->getDocType()); 
+    }
+    
+    /**
+     * Get DOM Document Type object
+     * 
+     * @access public
+     * @return DOMDocumentType
+     * @since  1.0
+     */
+    public function getDocType()
+    {
+        // Create new doc type object if we don't have one yet
+        if (!($this->doctype instanceof DOMDocumentType)) {
+             // Create doc type object
+            $imp = new DOMImplementation;
+            $this->doctype = $imp->createDocumentType($this->qualified_name);
+        }
+        
+        return $this->doctype;
+    }
+    
+    /**
+     * Add node/tag
+     * 
+     * @param DOMNode $parent  The parent object to which we want to add the new node.
+     * @param string  $name    The name of the new node or tag
+     * @param array   $attrs   An assoc array containing attributes key/value pairs.
+     * @param string  $content Text content of the node if any
+     * 
+     * @access public
+     * @return DOMNode Returns a reference to the newly created node
+     * @since  1.0
+     */
+    public function addNode($parent, $name, $attrs=array(), $content=null)
+    {
+        $new_node = $this->dom->createElement($name);
+        $parent->appendChild($new_node);
+        
+        // Add attributes if any
+        if (is_array($attrs) && count($attrs) > 0) {
+            foreach ($attrs as $key=>$value) {
+                $this->addNodeAttr($new_node, $key, $value);
+            }
+        }
+        
+        // Add text content if any
+        if (!is_null($content)) {
+            $this->addNodeContent($new_node, $content);
+        }
+        
+        return $new_node;
+    }
+    
+    /**
+     * Add an attribute to a given node
+     * 
+     * @param DOMNode $node       The node we want to add the attributes to.
+     * @param string  $attr_name  The attribute name
+     * @param string  $attr_value The value for the attribute if any.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function addNodeAttr($node, $attr_name, $attr_value)
+    {
+        // Create attribute
+        $attr = $this->dom->createAttribute($attr_name);
+        
+        // Add attribute value
+        $value = $this->dom->createTextNode($attr_value);
+        $attr->appendChild($value);
+        
+        // Append attribute to node
+        $node->appendChild($attr);
+    }
+    
+    /**
+     * Add content to given node
+     * 
+     * @param DOMNode $node The node where to add the content text.
+     * @param string  $str  The text to add to the node
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function addNodeContent($node, $str)
+    {
+        $text_node = $this->dom->createTextNode($str);
+        $node->appendChild($text_node);
+    }
 }

@@ -1,4 +1,4 @@
-#!/usr/bin/env php
+#!/usr/local/zend/bin/php
 <?php
 /**
  * scripts/post-install.php
@@ -72,7 +72,7 @@ class PHPFrame_install_postinstall
      */
     public function run($infoArray, $paramGroupId)
     {
-        var_dump($infoArray);
+        //var_dump($infoArray);
         //var_dump($paramGroupId);
         
         if (is_array($infoArray)) {

@@ -26,32 +26,26 @@
  * @see        PHPFrame_Document
  * @since      1.0
  */
-class PHPFrame_Document_HTML extends PHPFrame_Document
+class PHPFrame_Document_HTML extends PHPFrame_Document_XML
 {
     /**
      * The qualified name of the document type to create. 
      * 
      * @var string
      */
-    private $_qualified_name="html";
-    /**
-     * DOM Document Type object
-     * 
-     * @var DOMDocumentType
-     */
-    private $_doctype=null;
-    /**
-     * DOM Document object
-     * 
-     * @var DOMDocument
-     */
-    private $_dom=null;
+    protected $qualified_name="html";
     /**
      * The document body
      * 
      * @var string
      */
     private $_body=null;
+    /**
+     * Pathway object
+     * 
+     * @var PHPFrame_Application_Pathway
+     */
+    private $_pathway=null;
     
     /**
      * Constructor
@@ -68,25 +62,25 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         
         // Acquire DOM object of HTML type
         $imp = new DOMImplementation;
-        $this->_dom = $imp->createDocument(null, 
-                                           $this->_qualified_name, 
+        $this->dom = $imp->createDocument(null, 
+                                           $this->qualified_name, 
                                            $this->getDocType()); 
         
         // Get root node
-        $html_node = $this->_dom->getElementsByTagName("html")->item(0);
+        $html_node = $this->dom->getElementsByTagName("html")->item(0);
         
         // Add head
-        $head_node = $this->_addNode($html_node, "head");
+        $head_node = $this->addNode($html_node, "head");
         // Add body
-        $this->_addNode($html_node, "body", null, "{content}");
+        $this->addNode($html_node, "body", null, "{content}");
         
         // Add meta tags
         $this->addMetaTag("generator", "PHPFrame");
-        $this->addMetaTag(null, $this->_mime_type."; charset=".$this->_charset, "Content-Type");
+        $this->addMetaTag(null, $this->mime_type."; charset=".$this->charset, "Content-Type");
         
         // Add base url
         $uri = new PHPFrame_Utils_URI();
-        $this->_addNode($head_node, "base", array("href"=>$uri->getBase()));
+        $this->addNode($head_node, "base", array("href"=>$uri->getBase()));
         
         // Acquire a pathway object used by this document
         $this->_pathway = new PHPFrame_Application_Pathway();
@@ -381,11 +375,11 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
     public function toString()
     {
         // Add title tag in head node 
-        $head_node = $this->_dom->getElementsByTagName("head")->item(0);
-        $this->_addNode($head_node, "title", null, $this->getTitle());
+        $head_node = $this->dom->getElementsByTagName("head")->item(0);
+        $this->addNode($head_node, "title", null, $this->getTitle());
         
         // Render DOM Document as HTML string
-        $html = $this->_dom->saveHTML();
+        $html = $this->dom->saveHTML();
         
         // Add body
         $html = str_replace("{content}", $this->_body, $html);
@@ -403,17 +397,17 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
     public function getDocType()
     {
         // Create new doc type object if we don't have one yet
-        if (!($this->_doctype instanceof DOMDocumentType)) {
+        if (!($this->doctype instanceof DOMDocumentType)) {
              // Create doc type object
             $publicId = "-//W3C//DTD HTML 4.01//EN";
             $systemId = "http://www.w3.org/TR/html4/strict.dtd";
             $imp = new DOMImplementation;
-            $this->_doctype = $imp->createDocumentType($this->_qualified_name, 
+            $this->doctype = $imp->createDocumentType($this->qualified_name, 
                                                                     $publicId, 
                                                                     $systemId);
         }
         
-        return $this->_doctype;
+        return $this->doctype;
     }
     
     /**
@@ -437,21 +431,21 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
     function addMetaTag($name, $content, $http_equiv=null) 
     {
         // Get head node
-        $head_node = $this->_dom->getElementsByTagName("head")->item(0);
+        $head_node = $this->dom->getElementsByTagName("head")->item(0);
         
         // Creare meta tag node
-        $meta_node = $this->_addNode($head_node, "meta");
+        $meta_node = $this->addNode($head_node, "meta");
         
         // Add name attribute if any
         if (!is_null($name)) {
-            $this->_addNodeAttr($meta_node, "name", $name);
+            $this->addNodeAttr($meta_node, "name", $name);
         }
         // Add http_equiv attribute if any
         if (!is_null($http_equiv)) {
-            $this->_addNodeAttr($meta_node, "http_equiv", $http_equiv);
+            $this->addNodeAttr($meta_node, "http_equiv", $http_equiv);
         }
         // Add content attribute
-        $this->_addNodeAttr($meta_node, "content", $content);
+        $this->addNodeAttr($meta_node, "content", $content);
     }
     
     /**
@@ -473,10 +467,10 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         $this->_makeAbsolute($src);
         
         // Get head node
-        $head_node = $this->_dom->getElementsByTagName("head")->item(0);
+        $head_node = $this->dom->getElementsByTagName("head")->item(0);
         
         // Create script tag node
-        $this->_addNode($head_node, "script", array("type"=>$type, "src"=>$src));
+        $this->addNode($head_node, "script", array("type"=>$type, "src"=>$src));
     }
     
     /**
@@ -495,83 +489,11 @@ class PHPFrame_Document_HTML extends PHPFrame_Document
         $this->_makeAbsolute($href);
         
         // Get head node
-        $head_node = $this->_dom->getElementsByTagName("head")->item(0);
+        $head_node = $this->dom->getElementsByTagName("head")->item(0);
         
         // Create script tag node
         $attrs = array("rel"=>"stylesheet", "href"=>$href, "type"=>$type);
-        $this->_addNode($head_node, "link", $attrs);
-    }
-    
-    /**
-     * Add node/tag
-     * 
-     * @param DOMNode $parent  The parent object to which we want to add the new node.
-     * @param string  $name    The name of the new node or tag
-     * @param array   $attrs   An assoc array containing attributes key/value pairs.
-     * @param string  $content Text content of the node if any
-     * 
-     * @access private
-     * @return DOMNode Returns a reference to the newly created node
-     * @since  1.0
-     */
-    private function _addNode($parent, $name, $attrs=array(), $content=null)
-    {
-        $new_node = $this->_dom->createElement($name);
-        $parent->appendChild($new_node);
-        
-        // Add attributes if any
-        if (is_array($attrs) && count($attrs) > 0) {
-            foreach ($attrs as $key=>$value) {
-                $this->_addNodeAttr($new_node, $key, $value);
-            }
-        }
-        
-        // Add text content if any
-        if (!is_null($content)) {
-            $this->_addNodeContent($new_node, $content);
-        }
-        
-        return $new_node;
-    }
-    
-    /**
-     * Add an attribute to a given node
-     * 
-     * @param DOMNode $node       The node we want to add the attributes to.
-     * @param string  $attr_name  The attribute name
-     * @param string  $attr_value The value for the attribute if any.
-     * 
-     * @access private
-     * @return void
-     * @since  1.0
-     */
-    private function _addNodeAttr($node, $attr_name, $attr_value)
-    {
-        // Create attribute
-        $attr = $this->_dom->createAttribute($attr_name);
-        
-        // Add attribute value
-        $value = $this->_dom->createTextNode($attr_value);
-        $attr->appendChild($value);
-        
-        // Append attribute to node
-        $node->appendChild($attr);
-    }
-    
-    /**
-     * Add content to given node
-     * 
-     * @param DOMNode $node The node where to add the content text.
-     * @param string  $str  The text to add to the node
-     * 
-     * @access private
-     * @return void
-     * @since  1.0
-     */
-    private function _addNodeContent($node, $str)
-    {
-        $text_node = $this->_dom->createTextNode($str);
-        $node->appendChild($text_node);
+        $this->addNode($head_node, "link", $attrs);
     }
     
     /**

@@ -41,7 +41,7 @@ class PHPFrame_Config
             return null;
         }
         
-        return $this->_data[$key];
+        return $this->_data[$key]["value"];
     }
     
     public function set($key, $value)
@@ -50,7 +50,7 @@ class PHPFrame_Config
             return null;
         }
         
-        $this->_data[$key] = $value;
+        $this->_data[$key]["value"] = $value;
     }
     
     public function bind($array)
@@ -61,10 +61,8 @@ class PHPFrame_Config
             trigger_error($msg);
         }
         
-        $keys = $this->getKeys();
-        
         foreach ($array as $key=>$value) {
-            if (in_array($key, $keys)) {
+            if (array_key_exists($key, $this->_data)) {
                 $this->set($key, $value);
             }
         }
@@ -91,6 +89,9 @@ class PHPFrame_Config
     public function toXML()
     {
         $xml = new DOMDocument();
+        
+        $config_node = $xml->createElement("config");
+        $xml->adoptNode($config_node);
         
         return $xml->saveXML();
     }

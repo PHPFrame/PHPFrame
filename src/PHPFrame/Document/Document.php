@@ -41,19 +41,19 @@ abstract class PHPFrame_Document
      * 
      * @var string
      */
-    protected $_title=null;
+    protected $title=null;
     /**
      * Contains the character encoding string
      *
      * @var string
      */
-    protected $_charset='utf-8';
+    protected $charset='utf-8';
     /**
      * Document mime type
      *
      * @var string
      */
-    protected $_mime_type=null;
+    protected $mime_type=null;
     
     /**
      * Constructor
@@ -64,10 +64,10 @@ abstract class PHPFrame_Document
      */
     public function __construct($mime, $charset=null) 
     {
-        $this->_mime_type = (string) $mime;
+        $this->mime_type = (string) $mime;
         
         if (!is_null($charset)) {
-            $this->_charset = (string) $charset;
+            $this->charset = (string) $charset;
         }
     }
     
@@ -94,7 +94,7 @@ abstract class PHPFrame_Document
      */
     public function setTitle($str)
     {
-        $this->_title = (string) $str;
+        $this->title = (string) $str;
     }
     
     /**
@@ -108,7 +108,7 @@ abstract class PHPFrame_Document
      */
     public function appendTitle($str)
     {
-        $this->_title .= $str;
+        $this->title .= $str;
     }
     
     /**
@@ -120,7 +120,7 @@ abstract class PHPFrame_Document
      */
     public function getTitle()
     {
-        return $this->_title;
+        return $this->title;
     }
     
     /**
@@ -132,7 +132,7 @@ abstract class PHPFrame_Document
      */
     public function getCharset()
     {
-        return $this->_charset;
+        return $this->charset;
     }
     
     /**
@@ -144,7 +144,7 @@ abstract class PHPFrame_Document
      */
     public function getMimeType()
     {
-        return $this->_mime_type;
+        return $this->mime_type;
     }
     
     public function render($object)

@@ -6,7 +6,7 @@
 	<property name="tmp.dir" value="${build.dir}/tmp"/>
 	<property name="report.dir" value="${build.dir}/report"/>
 	
-	<property name="version" value="1.0.1" />
+	<property name="version" value="0.0.1" />
 	
 	<target name="prepare">
 		<mkdir dir="${dist.dir}"/>

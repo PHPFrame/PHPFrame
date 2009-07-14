@@ -20,6 +20,7 @@
  */
 $abs_path = PEAR_Config::singleton()->get('install_dir');
 $abs_path .= DIRECTORY_SEPARATOR."PHPFrame";
+echo $abs_path; exit;
 
 define('_ABS_PATH', $abs_path);
 

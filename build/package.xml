@@ -181,7 +181,7 @@ No notes for now...
  </dependencies>
  <phprelease>
   <filelist>
-   <install as="phpframe" name="PHPFrame/PHPFrame_CLI_Tool.php" />
+   <install as="phpframe" name="PHPFrame_CLI_Tool.php" />
   </filelist>
  </phprelease>
  <changelog>

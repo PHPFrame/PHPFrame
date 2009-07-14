@@ -18,14 +18,18 @@
 /**
  * Set constant containing absolute path to application
  */
-$abs_path = PEAR_Config::singleton()->get('install_dir');
-$abs_path .= DIRECTORY_SEPARATOR."PHPFrame";
-echo $abs_path; exit;
-
-define('_ABS_PATH', $abs_path);
+//echo $abs_path; exit;
+define('_ABS_PATH', dirname(__FILE__));
 
 // Include PHPFrame main file
-require_once "PHPFrame.php";
+include_once PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR.'PEAR.php';
+include_once PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR.'PHPFrame.php';
+
+if (!class_exists('PHPFrame')) {
+    die("Missing PHPFrame. Please check your PEAR installation.\n");
+}
+
+PEAR::setErrorHandling(PEAR_ERROR_DIE);
 
 // Include autoloader
 //require_once _ABS_PATH.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."autoload.php";

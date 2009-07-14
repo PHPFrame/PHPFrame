@@ -19,8 +19,7 @@ class PHPFrame_install_postinstall
 {
     public function __construct()
     {
-        echo "I'm the post-install script and should set up the phpframe 
-	  		 commmand line utility as a PHPFrame app (i need a config file!! a db and so on!)";
+        // ..
     }
     
     /**
@@ -46,9 +45,9 @@ class PHPFrame_install_postinstall
      */
     public function init(PEAR_Config $config , PEAR_PackageFile_v2 $self , $lastInstalledVersion=null)
     {
-        //echo "\n--"; var_dump($config); echo "\n";
-        //echo "\n--"; var_dump($self); echo "\n";
-        //echo "\n--"; var_dump($lastInstalledVersion); echo "\n";
+        //var_dump($config);
+        //var_dump($self);
+        //var_dump($lastInstalledVersion);
         
         return true;
     }
@@ -73,7 +72,12 @@ class PHPFrame_install_postinstall
      */
     public function run($infoArray, $paramGroupId)
     {
-        //echo "\n--"; var_dump($infoArray); echo "\n";
-        //echo "\n--"; var_dump($paramGroupId); echo "\n";
+        var_dump($infoArray);
+        //var_dump($paramGroupId);
+        
+        if (isset($infoArray["dbDriver"])) {
+            $config = new PHPFrame_Config();
+            var_dump($config);
+        }
     }
 }

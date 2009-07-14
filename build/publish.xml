@@ -25,7 +25,7 @@
 		</copy>
 		
 		<!-- copy script files -->
-		<copy todir="${tmp.dir}/scripts" overwrite="true">
+		<copy todir="${tmp.dir}" overwrite="true">
 			<fileset dir="${project.basedir}/scripts">
 				<include name="**" />
 			</fileset>

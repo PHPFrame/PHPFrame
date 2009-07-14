@@ -15,7 +15,7 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
-class Path_To_Script_postinstall
+class scripts_install_postinstall
 {
     public function __construct()
     {

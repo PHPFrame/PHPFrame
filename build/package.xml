@@ -97,6 +97,9 @@ No notes for now...
    <file baseinstalldir="/" name="PHPFrame/Utils/Image.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Rewrite.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/URI.php" role="php" />
+   
+   <file baseinstalldir="/" name="PHPFrame/Config.php" role="php" />
+   
    <file baseinstalldir="/" name="CREDITS" role="data" />
    <file baseinstalldir="/" name="LICENSE" role="data" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />

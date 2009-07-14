@@ -114,10 +114,10 @@ No notes for now...
     <tasks:replace from="@package_version@" to="version" type="package-info" />
     <tasks:postinstallscript>
      <tasks:paramgroup>
-      <tasks:id>first</tasks:id>
+      <tasks:id>Database settings</tasks:id>
       <tasks:param>
-   	   <tasks:name>test</tasks:name>
-       <tasks:prompt>Testing Thingy</tasks:prompt>
+   	   <tasks:name>dbDriver</tasks:name>
+       <tasks:prompt>Database driver for phpframe command line tool</tasks:prompt>
        <tasks:type>string</tasks:type>
       </tasks:param>
      </tasks:paramgroup>

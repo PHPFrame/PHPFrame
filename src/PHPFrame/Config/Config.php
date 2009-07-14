@@ -89,13 +89,18 @@ class PHPFrame_Config
     public function toXML()
     {
         $xml = new PHPFrame_Document_XML();
-		var_dump($xml->toString());
-		exit;
+        $config_node = $xml->addNode(null, "config");
         
-        $config_node = $xml->createElement("config");
-        $xml->adoptNode($config_node);
+        foreach ($this->toArray() as $value) {
+            $data_node = $xml->addNode($config_node, "data", array());
+
+            $xml->addNode($data_node, "name", array(), $value["name"]);
+            $xml->addNode($data_node, "def_value", array(), $value["def_value"]);
+            $xml->addNode($data_node, "description", array(), $value["description"]);
+            $xml->addNode($data_node, "value", array(), $value["value"]);
+        }
         
-        return $xml->saveXML();
+        return $xml->toString();
     }
     
     private function _fetchData()

@@ -85,7 +85,7 @@ class PHPFrame_Document_XML extends PHPFrame_Document
     /**
      * Add node/tag
      * 
-     * @param DOMNode $parent  The parent object to which we want to add the new node.
+     * @param DOMNode|null $parent  The parent object to which we want to add the new node.
      * @param string  $name    The name of the new node or tag
      * @param array   $attrs   An assoc array containing attributes key/value pairs.
      * @param string  $content Text content of the node if any
@@ -94,11 +94,16 @@ class PHPFrame_Document_XML extends PHPFrame_Document
      * @return DOMNode Returns a reference to the newly created node
      * @since  1.0
      */
-    public function addNode($parent, $name, $attrs=array(), $content=null)
+    public function addNode($parent=null, $name, $attrs=array(), $content=null)
     {
         $new_node = $this->dom->createElement($name);
-        $parent->appendChild($new_node);
         
+        if ($parent instanceof DOMNode) {
+            $parent->appendChild($new_node);
+        } else {
+            $this->dom->appendChild($new_node);
+        }
+
         // Add attributes if any
         if (is_array($attrs) && count($attrs) > 0) {
             foreach ($attrs as $key=>$value) {
@@ -110,6 +115,8 @@ class PHPFrame_Document_XML extends PHPFrame_Document
         if (!is_null($content)) {
             $this->addNodeContent($new_node, $content);
         }
+        
+        
         
         return $new_node;
     }
@@ -125,7 +132,7 @@ class PHPFrame_Document_XML extends PHPFrame_Document
      * @return void
      * @since  1.0
      */
-    public function addNodeAttr($node, $attr_name, $attr_value)
+    public function addNodeAttr(DOMNode $node, $attr_name, $attr_value)
     {
         // Create attribute
         $attr = $this->dom->createAttribute($attr_name);
@@ -148,7 +155,7 @@ class PHPFrame_Document_XML extends PHPFrame_Document
      * @return void
      * @since  1.0
      */
-    public function addNodeContent($node, $str)
+    public function addNodeContent(DOMNode $node, $str)
     {
         $text_node = $this->dom->createTextNode($str);
         $node->appendChild($text_node);
@@ -198,7 +205,6 @@ class PHPFrame_Document_XML extends PHPFrame_Document
      */
     public function toString()
     {
-        
         return $this->dom->saveXML();
     }
 }

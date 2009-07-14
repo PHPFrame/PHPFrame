@@ -98,10 +98,11 @@ No notes for now...
    <file baseinstalldir="/" name="PHPFrame/Utils/Image.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Rewrite.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/URI.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    
+   <file baseinstalldir="/" name="data/config.xml" role="data" />
    <file baseinstalldir="/" name="CREDITS" role="data" />
    <file baseinstalldir="/" name="LICENSE" role="data" />
-   <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    <file baseinstalldir="/" name="README" role="data" />
    
    <file baseinstalldir="/" name="PHPFrame_CLI_Tool.php" role="script">

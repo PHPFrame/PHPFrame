@@ -116,27 +116,39 @@ No notes for now...
      <tasks:paramgroup>
       <tasks:id>db</tasks:id>
       <tasks:param>
-   	   <tasks:name>driver</tasks:name>
+   	   <tasks:name>dbDriver</tasks:name>
        <tasks:prompt>Database user for phpframe command line tool</tasks:prompt>
        <tasks:type>string</tasks:type>
        <tasks:default>MySQL</tasks:default>
       </tasks:param>
       <tasks:param>
-   	   <tasks:name>user</tasks:name>
-       <tasks:prompt>Database user for phpframe command line tool (phpframe-cli)</tasks:prompt>
+   	   <tasks:name>dbUser</tasks:name>
+       <tasks:prompt>Database user for phpframe command line tool</tasks:prompt>
        <tasks:type>string</tasks:type>
        <tasks:default>phpframe-cli</tasks:default>
       </tasks:param>
       <tasks:param>
-   	   <tasks:name>password</tasks:name>
+   	   <tasks:name>dbPassword</tasks:name>
        <tasks:prompt>Database password for phpframe command line tool</tasks:prompt>
        <tasks:type>string</tasks:type>
       </tasks:param>
       <tasks:param>
-   	   <tasks:name>name</tasks:name>
-       <tasks:prompt>Database name for phpframe command line tool (phpframe-cli)</tasks:prompt>
+   	   <tasks:name>dbName</tasks:name>
+       <tasks:prompt>Database name for phpframe command line tool</tasks:prompt>
        <tasks:type>string</tasks:type>
        <tasks:default>phpframe-cli</tasks:default>
+      </tasks:param>
+      <tasks:param>
+   	   <tasks:name>dbRoot</tasks:name>
+       <tasks:prompt>Database server root user (only needed if creating a new user for phpframe command line tool).</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default>root</tasks:default>
+      </tasks:param>
+      <tasks:param>
+   	   <tasks:name>dbRootPass</tasks:name>
+       <tasks:prompt>Database server root password (only needed if creating a new user for phpframe command line tool).</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default></tasks:default>
       </tasks:param>
      </tasks:paramgroup>
     </tasks:postinstallscript>

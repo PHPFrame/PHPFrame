@@ -102,7 +102,7 @@ No notes for now...
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    <file baseinstalldir="/" name="README" role="data" />
    
-   <file baseinstalldir="/" name="PHPFrame/PHPFrame_CLI_Tool.php" role="script">
+   <file baseinstalldir="/" name="PHPFrame_CLI_Tool.php" role="script">
     <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@package_version@" to="version" type="package-info" />

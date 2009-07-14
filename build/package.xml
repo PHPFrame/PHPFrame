@@ -119,6 +119,7 @@ No notes for now...
    <package>
    	<name>Config</name>
    	<channel>pear.php.net</channel>
+   	<min>1.10.11</min>
    </package>
    <package>
 	<name>PHPUnit</name>

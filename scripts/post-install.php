@@ -14,6 +14,12 @@
  * @version    SVN: $Id$
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
- 
-echo "I'm the post-install script and should set up the phpframe 
-	  commmand line utility as a PHPFrame app (i need a config file!! a db and so on!)";
+
+class Path_To_Script_postinstall
+{
+    public function __construct()
+    {
+        echo "I'm the post-install script and should set up the phpframe 
+	  		 commmand line utility as a PHPFrame app (i need a config file!! a db and so on!)";
+    }
+}

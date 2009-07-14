@@ -114,41 +114,24 @@ No notes for now...
     <tasks:replace from="@package_version@" to="version" type="package-info" />
     <tasks:postinstallscript>
      <tasks:paramgroup>
-      <tasks:id>dbDriver</tasks:id>
+      <tasks:id>db</tasks:id>
       <tasks:param>
-   	   <tasks:name>MySQL</tasks:name>
-       <tasks:prompt>MySQL</tasks:prompt>
+   	   <tasks:name>driver</tasks:name>
+       <tasks:prompt>Database user for phpframe command line tool (MySQL|SQLite)</tasks:prompt>
        <tasks:type>string</tasks:type>
       </tasks:param>
       <tasks:param>
-   	   <tasks:name>SQLite</tasks:name>
-       <tasks:prompt>SQLite</tasks:prompt>
-       <tasks:type>string</tasks:type>
-      </tasks:param>
-     </tasks:paramgroup>
-     
-     <tasks:paramgroup>
-      <tasks:id>dbUser</tasks:id>
-      <tasks:param>
-   	   <tasks:name>dbUser</tasks:name>
+   	   <tasks:name>user</tasks:name>
        <tasks:prompt>Database user for phpframe command line tool (phpframe-cli)</tasks:prompt>
        <tasks:type>string</tasks:type>
       </tasks:param>
-     </tasks:paramgroup>
-     
-     <tasks:paramgroup>
-      <tasks:id>dbPassword</tasks:id>
       <tasks:param>
-   	   <tasks:name>dbPassword</tasks:name>
+   	   <tasks:name>password</tasks:name>
        <tasks:prompt>Database password for phpframe command line tool</tasks:prompt>
        <tasks:type>string</tasks:type>
       </tasks:param>
-     </tasks:paramgroup>
-     
-     <tasks:paramgroup>
-      <tasks:id>dbName</tasks:id>
       <tasks:param>
-   	   <tasks:name>dbName</tasks:name>
+   	   <tasks:name>name</tasks:name>
        <tasks:prompt>Database name for phpframe command line tool (phpframe-cli)</tasks:prompt>
        <tasks:type>string</tasks:type>
       </tasks:param>

@@ -76,6 +76,7 @@ class PHPFrame_install_postinstall
         //var_dump($paramGroupId);
         
         if (isset($infoArray["dbDriver"])) {
+            require_once "PHPFrame/Config/Config.php";
             $config = new PHPFrame_Config();
             var_dump($config);
         }

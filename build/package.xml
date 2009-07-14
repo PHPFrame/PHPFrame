@@ -117,13 +117,15 @@ No notes for now...
       <tasks:id>db</tasks:id>
       <tasks:param>
    	   <tasks:name>driver</tasks:name>
-       <tasks:prompt>Database user for phpframe command line tool (MySQL|SQLite)</tasks:prompt>
+       <tasks:prompt>Database user for phpframe command line tool</tasks:prompt>
        <tasks:type>string</tasks:type>
+       <tasks:default>MySQL</tasks:default>
       </tasks:param>
       <tasks:param>
    	   <tasks:name>user</tasks:name>
        <tasks:prompt>Database user for phpframe command line tool (phpframe-cli)</tasks:prompt>
        <tasks:type>string</tasks:type>
+       <tasks:default>phpframe-cli</tasks:default>
       </tasks:param>
       <tasks:param>
    	   <tasks:name>password</tasks:name>
@@ -134,6 +136,7 @@ No notes for now...
    	   <tasks:name>name</tasks:name>
        <tasks:prompt>Database name for phpframe command line tool (phpframe-cli)</tasks:prompt>
        <tasks:type>string</tasks:type>
+       <tasks:default>phpframe-cli</tasks:default>
       </tasks:param>
      </tasks:paramgroup>
     </tasks:postinstallscript>

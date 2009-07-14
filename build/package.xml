@@ -69,7 +69,7 @@ No notes for now...
    <file baseinstalldir="/" name="PHPFrame/Debug/Profiler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/Document.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/HTML.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Document/Plaintext.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document/Plain.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/XML.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/Database.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/Error.php" role="php" />

@@ -1,120 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.8.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-    http://pear.php.net/dtd/tasks-1.0.xsd
-    http://pear.php.net/dtd/package-2.0
-    http://pear.php.net/dtd/package-2.0.xsd">
-	<name>PHPFrame</name>
-	<channel>pear.e-noise.com</channel>
-	<summary>PHPFrame is an object oriented PHP framework</summary>
-	<description>
-PHPFrame is a minimal and object oriented PHP framework for quickly developing powerful, 
-flexible, robust and extendible web apps.
-	</description>
-	<lead>
-		<name>Luis Montero</name>
-		<user>luis.montero</user>
-		<email>luis.montero@e-noise.com</email>
-		<active>yes</active>
-	</lead>
-	<date>2009-07-14</date>
-	<time>11:57:33</time>
-	<version>
-		<release>0.0.1</release>
-		<api>0.0.1</api>
-	</version>
-	<stability>
-		<release>beta</release>
-		<api>beta</api>
-	</stability>
-	<license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
-	<notes>
+<package packagerversion="1.8.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
+ <name>PHPFrame</name>
+ <channel>pear.e-noise.com</channel>
+ <summary>PHPFrame is an object oriented PHP framework</summary>
+ <description>PHPFrame is a minimal and object oriented PHP framework for quickly developing powerful, 
+flexible, robust and extendible web apps.</description>
+ <lead>
+  <name>Luis Montero</name>
+  <user>luis.montero</user>
+  <email>luis.montero@e-noise.com</email>
+  <active>yes</active>
+ </lead>
+ <date>2009-07-14</date>
+ <time>12:21:11</time>
+ <version>
+  <release>0.0.1</release>
+  <api>0.0.1</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+ <notes>
 No notes for now...
-	</notes>
-	
-	<contents>
-		<dir baseinstalldir="/" name="/">
-			<dir name="scripts">
-				<file baseinstalldir="/" name="phpframe.php" role="script">
-					<tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config"/>
-					<tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
-					<tasks:replace from="@package_version@" to="version" type="package-info" />
-				</file>
-			</dir>
-			
-			<file baseinstalldir="/" md5sum="d4636486bd6a30f62d1764ad02a9eaf6" name="src/PHPFrame.php" role="php" />
-			<file baseinstalldir="/" md5sum="04b7019451adb36969551cd562b768c5" name="src/PHPFrame/Application/Components.php" role="php" />
-			<file baseinstalldir="/" md5sum="9ad5fab619e06627c1f0549237ea705a" name="src/PHPFrame/Application/Dependencies.php" role="php" />
-			<file baseinstalldir="/" md5sum="3ee22529ca74aaf24bb5fbf38f37168c" name="src/PHPFrame/Application/FrontController.php" role="php" />
-			<file baseinstalldir="/" md5sum="a9be25c03b0ab0dee84b4e97e81b24a3" name="src/PHPFrame/Application/Pathway.php" role="php" />
-			<file baseinstalldir="/" md5sum="3b77aff1728a4afa964f84d7852d3428" name="src/PHPFrame/Application/Permissions.php" role="php" />
-			<file baseinstalldir="/" md5sum="265a5ff249786db5953bb25f8a6687eb" name="src/PHPFrame/Application/Response.php" role="php" />
-			<file baseinstalldir="/" md5sum="bcf9b3b1de08503e2710499df3c4e0b9" name="src/PHPFrame/Application/Sysevents.php" role="php" />
-			<file baseinstalldir="/" md5sum="b6b254c08b1e9ba8d7361f7ab8057190" name="src/PHPFrame/Application/Widgets.php" role="php" />
-			<file baseinstalldir="/" md5sum="e4d0f857ce1cd6228fb28a514f4a5734" name="src/PHPFrame/Base/Array.php" role="php" />
-			<file baseinstalldir="/" md5sum="2aef3854f4767b020984c783a0b8e2aa" name="src/PHPFrame/Base/Date.php" role="php" />
-			<file baseinstalldir="/" md5sum="d4c39213a8e8d7113205744ad9f36382" name="src/PHPFrame/Base/Number.php" role="php" />
-			<file baseinstalldir="/" md5sum="87221709efec32c14846a13398b3ebea" name="src/PHPFrame/Base/Observer.php" role="php" />
-			<file baseinstalldir="/" md5sum="2b023a7b34f1a9802300cb7fe467f9b7" name="src/PHPFrame/Base/Singleton.php" role="php" />
-			<file baseinstalldir="/" md5sum="cc69b1a08b85a8cc7954e0d224cf16ee" name="src/PHPFrame/Base/StdObject.php" role="php" />
-			<file baseinstalldir="/" md5sum="5891b02b7e8e34c3657fc27d47c43af4" name="src/PHPFrame/Base/String.php" role="php" />
-			<file baseinstalldir="/" md5sum="2fd702b1ed5f671ec6496eb090acdc08" name="src/PHPFrame/Base/Subject.php" role="php" />
-			<file baseinstalldir="/" md5sum="f487b09ccd6ea8c4c91b967d6c8285de" name="src/PHPFrame/Client/CLI.php" role="php" />
-			<file baseinstalldir="/" md5sum="fc79d796fb018f68db2e65f7ee4e3282" name="src/PHPFrame/Client/Default.php" role="php" />
-			<file baseinstalldir="/" md5sum="0b3989af9e7ddbcda9a12fa188d6d221" name="src/PHPFrame/Client/IClient.php" role="php" />
-			<file baseinstalldir="/" md5sum="71c84dcfd0b36e9de51447ff44214b4f" name="src/PHPFrame/Client/Mobile.php" role="php" />
-			<file baseinstalldir="/" md5sum="531215bd97aad51b0c0d6f33b78760b2" name="src/PHPFrame/Client/XMLRPC.php" role="php" />
-			<file baseinstalldir="/" md5sum="ae17ca80549e5ac3f810dfef12bb0788" name="src/PHPFrame/Database/Database.php" role="php" />
-			<file baseinstalldir="/" md5sum="6d799a8b98c6339f689d4f281333226c" name="src/PHPFrame/Database/DSN.php" role="php" />
-			<file baseinstalldir="/" md5sum="d8103d00f1c7697f9d6fc0f6d02bc4d8" name="src/PHPFrame/Database/Field.php" role="php" />
-			<file baseinstalldir="/" md5sum="7c4e422ce386d4011be530865956cd4a" name="src/PHPFrame/Database/IdObject.php" role="php" />
-			<file baseinstalldir="/" md5sum="961de1bafcaf3c84294b2429ff85acaf" name="src/PHPFrame/Database/Row.php" role="php" />
-			<file baseinstalldir="/" md5sum="cbae3873ee6aeec388ad9fcb2b013e7b" name="src/PHPFrame/Database/RowCollection.php" role="php" />
-			<file baseinstalldir="/" md5sum="116e092df27acbdbf96f70edeb06dc31" name="src/PHPFrame/Database/DSN/DBLIB.php" role="php" />
-			<file baseinstalldir="/" md5sum="b95daa27bee0067a947cb46af5f01661" name="src/PHPFrame/Database/DSN/Firebird.php" role="php" />
-			<file baseinstalldir="/" md5sum="0606d39b7d9f26e9a7afe4f710c9ada7" name="src/PHPFrame/Database/DSN/IBM.php" role="php" />
-			<file baseinstalldir="/" md5sum="512d32dc42c9b22f55a91952cb324067" name="src/PHPFrame/Database/DSN/Informix.php" role="php" />
-			<file baseinstalldir="/" md5sum="66c34bba17b7e4e9656e95c418d10182" name="src/PHPFrame/Database/DSN/MySQL.php" role="php" />
-			<file baseinstalldir="/" md5sum="d7736b21086f60d65de704945a0106c9" name="src/PHPFrame/Database/DSN/ODBC.php" role="php" />
-			<file baseinstalldir="/" md5sum="46e8414a5c207f9c3c7598410cc23a30" name="src/PHPFrame/Database/DSN/Oracle.php" role="php" />
-			<file baseinstalldir="/" md5sum="951f2f224fb7ee1e6f97157b9d85c60c" name="src/PHPFrame/Database/DSN/PgSQL.php" role="php" />
-			<file baseinstalldir="/" md5sum="e8ac5540d37c1c4a96d562d03ab582e2" name="src/PHPFrame/Database/DSN/SQLite.php" role="php" />
-			<file baseinstalldir="/" md5sum="dd9f5d03aded2ebd9298128cf33f58c1" name="src/PHPFrame/Debug/Informer.php" role="php" />
-			<file baseinstalldir="/" md5sum="a8f28db01956e48b228f01d0f7381e9e" name="src/PHPFrame/Debug/Logger.php" role="php" />
-			<file baseinstalldir="/" md5sum="c25cbf4170a7e04682bb133d4b6774d6" name="src/PHPFrame/Debug/Profiler.php" role="php" />
-			<file baseinstalldir="/" md5sum="e917199b7d4a96b953c863951a31a296" name="src/PHPFrame/Document/Document.php" role="php" />
-			<file baseinstalldir="/" md5sum="77cfb32b887c328c3058469260e3f107" name="src/PHPFrame/Document/HTML.php" role="php" />
-			<file baseinstalldir="/" md5sum="55b087fde04cee96c9473c4d2e141ec1" name="src/PHPFrame/Document/Plaintext.php" role="php" />
-			<file baseinstalldir="/" md5sum="5274f44d80825360be056280afa03286" name="src/PHPFrame/Document/XML.php" role="php" />
-			<file baseinstalldir="/" md5sum="bf329071cac28e56f4127c80ee21172d" name="src/PHPFrame/Exception/Database.php" role="php" />
-			<file baseinstalldir="/" md5sum="b9e93b094d2cbe4f9ded7de1b013560e" name="src/PHPFrame/Exception/Error.php" role="php" />
-			<file baseinstalldir="/" md5sum="99940c2b7f66a4d5de4a62399fcdd4a5" name="src/PHPFrame/Exception/Exception.php" role="php" />
-			<file baseinstalldir="/" md5sum="c9e9cf8edbea66b49523d9f4361d6046" name="src/PHPFrame/Exception/Filesystem.php" role="php" />
-			<file baseinstalldir="/" md5sum="42e57f32e2d4d479c385d5408a5d5a8c" name="src/PHPFrame/Exception/Handler.php" role="php" />
-			<file baseinstalldir="/" md5sum="807e7ca90bedffa096069c45a796887e" name="src/PHPFrame/Exception/IMAP.php" role="php" />
-			<file baseinstalldir="/" md5sum="6ac4ff295a3ec86becc747ca29f6172f" name="src/PHPFrame/HTML/HTML.php" role="php" />
-			<file baseinstalldir="/" md5sum="11635c9ce608365b6ba1119386582073" name="src/PHPFrame/Lang/en-GB.php" role="php" />
-			<file baseinstalldir="/" md5sum="abbca118bc20bc4edd2fa724d1eaf3d6" name="src/PHPFrame/Mail/IMAP.php" role="php" />
-			<file baseinstalldir="/" md5sum="0e7157c608c6f98a4773a1359e3cb037" name="src/PHPFrame/Mail/Mailer.php" role="php" />
-			<file baseinstalldir="/" md5sum="82ac0c0d8e06a1e0c1d723ab5716622a" name="src/PHPFrame/MVC/ActionController.php" role="php" />
-			<file baseinstalldir="/" md5sum="787b194f67247f7f40af884b4736bd36" name="src/PHPFrame/MVC/Factory.php" role="php" />
-			<file baseinstalldir="/" md5sum="31376a5da23f3908192e73be5df50b7d" name="src/PHPFrame/MVC/Model.php" role="php" />
-			<file baseinstalldir="/" md5sum="153ae6355469c7dee4833eadbdec004b" name="src/PHPFrame/MVC/View.php" role="php" />
-			<file baseinstalldir="/" md5sum="2dfac617558411b003ad7046c0d405f6" name="src/PHPFrame/Registry/Application.php" role="php" />
-			<file baseinstalldir="/" md5sum="a4a4223795e1b7c7d465139a101f53aa" name="src/PHPFrame/Registry/Registry.php" role="php" />
-			<file baseinstalldir="/" md5sum="6319fdad08ee5ac0bac9c18c62030dd5" name="src/PHPFrame/Registry/Request.php" role="php" />
-			<file baseinstalldir="/" md5sum="854f420fda0006569986b10db6cfe1b0" name="src/PHPFrame/Registry/Session.php" role="php" />
-			<file baseinstalldir="/" md5sum="da3ad0fac1d9abb19f763d060b26a0e6" name="src/PHPFrame/User/Helper.php" role="php" />
-			<file baseinstalldir="/" md5sum="b530f67a68e6f33693cbc94163e273c2" name="src/PHPFrame/User/OpenID.php" role="php" />
-			<file baseinstalldir="/" md5sum="cf50a316e37a1539192b352842f0dcfc" name="src/PHPFrame/User/User.php" role="php" />
-			<file baseinstalldir="/" md5sum="b41fc72fb420ad4f0f7ed80503a5c08e" name="src/PHPFrame/Utils/Crypt.php" role="php" />
-			<file baseinstalldir="/" md5sum="b1a3d6b27be1e1f5beec04e8a6d31b2b" name="src/PHPFrame/Utils/Filesystem.php" role="php" />
-			<file baseinstalldir="/" md5sum="118176423c3af234a5a35c41f5d941df" name="src/PHPFrame/Utils/Filter.php" role="php" />
-			<file baseinstalldir="/" md5sum="0daa01f1b409e36a90f7bb7fd47fabe5" name="src/PHPFrame/Utils/Image.php" role="php" />
-			<file baseinstalldir="/" md5sum="1732f167937d94cf5574737a24f6e63d" name="src/PHPFrame/Utils/Rewrite.php" role="php" />
-			<file baseinstalldir="/" md5sum="911599c709743d8082e6daaa2e0f5904" name="src/PHPFrame/Utils/URI.php" role="php" />
-			<file baseinstalldir="/" md5sum="9f3dc9e88dcc34fcd1859d9c0d35deab" name="CREDITS" role="data" />
-			<file baseinstalldir="/" md5sum="1891014c245288bec32a799e46e7c6cc" name="LICENSE" role="data" />
-			<file baseinstalldir="/" md5sum="0ab56ae544d7d315842f3c79990a092d" name="README" role="data" />
+ </notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <file baseinstalldir="/" md5sum="04b7019451adb36969551cd562b768c5" name="PHPFrame/Application/Components.php" role="php" />
+   <file baseinstalldir="/" md5sum="9ad5fab619e06627c1f0549237ea705a" name="PHPFrame/Application/Dependencies.php" role="php" />
+   <file baseinstalldir="/" md5sum="3ee22529ca74aaf24bb5fbf38f37168c" name="PHPFrame/Application/FrontController.php" role="php" />
+   <file baseinstalldir="/" md5sum="a9be25c03b0ab0dee84b4e97e81b24a3" name="PHPFrame/Application/Pathway.php" role="php" />
+   <file baseinstalldir="/" md5sum="3b77aff1728a4afa964f84d7852d3428" name="PHPFrame/Application/Permissions.php" role="php" />
+   <file baseinstalldir="/" md5sum="265a5ff249786db5953bb25f8a6687eb" name="PHPFrame/Application/Response.php" role="php" />
+   <file baseinstalldir="/" md5sum="bcf9b3b1de08503e2710499df3c4e0b9" name="PHPFrame/Application/Sysevents.php" role="php" />
+   <file baseinstalldir="/" md5sum="b6b254c08b1e9ba8d7361f7ab8057190" name="PHPFrame/Application/Widgets.php" role="php" />
+   <file baseinstalldir="/" md5sum="e4d0f857ce1cd6228fb28a514f4a5734" name="PHPFrame/Base/Array.php" role="php" />
+   <file baseinstalldir="/" md5sum="2aef3854f4767b020984c783a0b8e2aa" name="PHPFrame/Base/Date.php" role="php" />
+   <file baseinstalldir="/" md5sum="d4c39213a8e8d7113205744ad9f36382" name="PHPFrame/Base/Number.php" role="php" />
+   <file baseinstalldir="/" md5sum="87221709efec32c14846a13398b3ebea" name="PHPFrame/Base/Observer.php" role="php" />
+   <file baseinstalldir="/" md5sum="2b023a7b34f1a9802300cb7fe467f9b7" name="PHPFrame/Base/Singleton.php" role="php" />
+   <file baseinstalldir="/" md5sum="cc69b1a08b85a8cc7954e0d224cf16ee" name="PHPFrame/Base/StdObject.php" role="php" />
+   <file baseinstalldir="/" md5sum="5891b02b7e8e34c3657fc27d47c43af4" name="PHPFrame/Base/String.php" role="php" />
+   <file baseinstalldir="/" md5sum="2fd702b1ed5f671ec6496eb090acdc08" name="PHPFrame/Base/Subject.php" role="php" />
+   <file baseinstalldir="/" md5sum="f487b09ccd6ea8c4c91b967d6c8285de" name="PHPFrame/Client/CLI.php" role="php" />
+   <file baseinstalldir="/" md5sum="fc79d796fb018f68db2e65f7ee4e3282" name="PHPFrame/Client/Default.php" role="php" />
+   <file baseinstalldir="/" md5sum="0b3989af9e7ddbcda9a12fa188d6d221" name="PHPFrame/Client/IClient.php" role="php" />
+   <file baseinstalldir="/" md5sum="71c84dcfd0b36e9de51447ff44214b4f" name="PHPFrame/Client/Mobile.php" role="php" />
+   <file baseinstalldir="/" md5sum="531215bd97aad51b0c0d6f33b78760b2" name="PHPFrame/Client/XMLRPC.php" role="php" />
+   <file baseinstalldir="/" md5sum="ae17ca80549e5ac3f810dfef12bb0788" name="PHPFrame/Database/Database.php" role="php" />
+   <file baseinstalldir="/" md5sum="6d799a8b98c6339f689d4f281333226c" name="PHPFrame/Database/DSN.php" role="php" />
+   <file baseinstalldir="/" md5sum="d8103d00f1c7697f9d6fc0f6d02bc4d8" name="PHPFrame/Database/Field.php" role="php" />
+   <file baseinstalldir="/" md5sum="7c4e422ce386d4011be530865956cd4a" name="PHPFrame/Database/IdObject.php" role="php" />
+   <file baseinstalldir="/" md5sum="961de1bafcaf3c84294b2429ff85acaf" name="PHPFrame/Database/Row.php" role="php" />
+   <file baseinstalldir="/" md5sum="cbae3873ee6aeec388ad9fcb2b013e7b" name="PHPFrame/Database/RowCollection.php" role="php" />
+   <file baseinstalldir="/" md5sum="116e092df27acbdbf96f70edeb06dc31" name="PHPFrame/Database/DSN/DBLIB.php" role="php" />
+   <file baseinstalldir="/" md5sum="b95daa27bee0067a947cb46af5f01661" name="PHPFrame/Database/DSN/Firebird.php" role="php" />
+   <file baseinstalldir="/" md5sum="0606d39b7d9f26e9a7afe4f710c9ada7" name="PHPFrame/Database/DSN/IBM.php" role="php" />
+   <file baseinstalldir="/" md5sum="512d32dc42c9b22f55a91952cb324067" name="PHPFrame/Database/DSN/Informix.php" role="php" />
+   <file baseinstalldir="/" md5sum="66c34bba17b7e4e9656e95c418d10182" name="PHPFrame/Database/DSN/MySQL.php" role="php" />
+   <file baseinstalldir="/" md5sum="d7736b21086f60d65de704945a0106c9" name="PHPFrame/Database/DSN/ODBC.php" role="php" />
+   <file baseinstalldir="/" md5sum="46e8414a5c207f9c3c7598410cc23a30" name="PHPFrame/Database/DSN/Oracle.php" role="php" />
+   <file baseinstalldir="/" md5sum="951f2f224fb7ee1e6f97157b9d85c60c" name="PHPFrame/Database/DSN/PgSQL.php" role="php" />
+   <file baseinstalldir="/" md5sum="e8ac5540d37c1c4a96d562d03ab582e2" name="PHPFrame/Database/DSN/SQLite.php" role="php" />
+   <file baseinstalldir="/" md5sum="dd9f5d03aded2ebd9298128cf33f58c1" name="PHPFrame/Debug/Informer.php" role="php" />
+   <file baseinstalldir="/" md5sum="a8f28db01956e48b228f01d0f7381e9e" name="PHPFrame/Debug/Logger.php" role="php" />
+   <file baseinstalldir="/" md5sum="c25cbf4170a7e04682bb133d4b6774d6" name="PHPFrame/Debug/Profiler.php" role="php" />
+   <file baseinstalldir="/" md5sum="e917199b7d4a96b953c863951a31a296" name="PHPFrame/Document/Document.php" role="php" />
+   <file baseinstalldir="/" md5sum="77cfb32b887c328c3058469260e3f107" name="PHPFrame/Document/HTML.php" role="php" />
+   <file baseinstalldir="/" md5sum="55b087fde04cee96c9473c4d2e141ec1" name="PHPFrame/Document/Plaintext.php" role="php" />
+   <file baseinstalldir="/" md5sum="5274f44d80825360be056280afa03286" name="PHPFrame/Document/XML.php" role="php" />
+   <file baseinstalldir="/" md5sum="bf329071cac28e56f4127c80ee21172d" name="PHPFrame/Exception/Database.php" role="php" />
+   <file baseinstalldir="/" md5sum="b9e93b094d2cbe4f9ded7de1b013560e" name="PHPFrame/Exception/Error.php" role="php" />
+   <file baseinstalldir="/" md5sum="99940c2b7f66a4d5de4a62399fcdd4a5" name="PHPFrame/Exception/Exception.php" role="php" />
+   <file baseinstalldir="/" md5sum="c9e9cf8edbea66b49523d9f4361d6046" name="PHPFrame/Exception/Filesystem.php" role="php" />
+   <file baseinstalldir="/" md5sum="42e57f32e2d4d479c385d5408a5d5a8c" name="PHPFrame/Exception/Handler.php" role="php" />
+   <file baseinstalldir="/" md5sum="807e7ca90bedffa096069c45a796887e" name="PHPFrame/Exception/IMAP.php" role="php" />
+   <file baseinstalldir="/" md5sum="6ac4ff295a3ec86becc747ca29f6172f" name="PHPFrame/HTML/HTML.php" role="php" />
+   <file baseinstalldir="/" md5sum="11635c9ce608365b6ba1119386582073" name="PHPFrame/Lang/en-GB.php" role="php" />
+   <file baseinstalldir="/" md5sum="abbca118bc20bc4edd2fa724d1eaf3d6" name="PHPFrame/Mail/IMAP.php" role="php" />
+   <file baseinstalldir="/" md5sum="0e7157c608c6f98a4773a1359e3cb037" name="PHPFrame/Mail/Mailer.php" role="php" />
+   <file baseinstalldir="/" md5sum="82ac0c0d8e06a1e0c1d723ab5716622a" name="PHPFrame/MVC/ActionController.php" role="php" />
+   <file baseinstalldir="/" md5sum="787b194f67247f7f40af884b4736bd36" name="PHPFrame/MVC/Factory.php" role="php" />
+   <file baseinstalldir="/" md5sum="31376a5da23f3908192e73be5df50b7d" name="PHPFrame/MVC/Model.php" role="php" />
+   <file baseinstalldir="/" md5sum="153ae6355469c7dee4833eadbdec004b" name="PHPFrame/MVC/View.php" role="php" />
+   <file baseinstalldir="/" md5sum="2dfac617558411b003ad7046c0d405f6" name="PHPFrame/Registry/Application.php" role="php" />
+   <file baseinstalldir="/" md5sum="a4a4223795e1b7c7d465139a101f53aa" name="PHPFrame/Registry/Registry.php" role="php" />
+   <file baseinstalldir="/" md5sum="6319fdad08ee5ac0bac9c18c62030dd5" name="PHPFrame/Registry/Request.php" role="php" />
+   <file baseinstalldir="/" md5sum="854f420fda0006569986b10db6cfe1b0" name="PHPFrame/Registry/Session.php" role="php" />
+   <file baseinstalldir="/" md5sum="da3ad0fac1d9abb19f763d060b26a0e6" name="PHPFrame/User/Helper.php" role="php" />
+   <file baseinstalldir="/" md5sum="b530f67a68e6f33693cbc94163e273c2" name="PHPFrame/User/OpenID.php" role="php" />
+   <file baseinstalldir="/" md5sum="cf50a316e37a1539192b352842f0dcfc" name="PHPFrame/User/User.php" role="php" />
+   <file baseinstalldir="/" md5sum="b41fc72fb420ad4f0f7ed80503a5c08e" name="PHPFrame/Utils/Crypt.php" role="php" />
+   <file baseinstalldir="/" md5sum="b1a3d6b27be1e1f5beec04e8a6d31b2b" name="PHPFrame/Utils/Filesystem.php" role="php" />
+   <file baseinstalldir="/" md5sum="118176423c3af234a5a35c41f5d941df" name="PHPFrame/Utils/Filter.php" role="php" />
+   <file baseinstalldir="/" md5sum="0daa01f1b409e36a90f7bb7fd47fabe5" name="PHPFrame/Utils/Image.php" role="php" />
+   <file baseinstalldir="/" md5sum="1732f167937d94cf5574737a24f6e63d" name="PHPFrame/Utils/Rewrite.php" role="php" />
+   <file baseinstalldir="/" md5sum="911599c709743d8082e6daaa2e0f5904" name="PHPFrame/Utils/URI.php" role="php" />
+   <file baseinstalldir="" md5sum="b7695f5614b71e31391d88e4050b11d4" name="scripts/phpframe.php" role="script">
+    <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
+    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="/" md5sum="9f3dc9e88dcc34fcd1859d9c0d35deab" name="CREDITS" role="data" />
+   <file baseinstalldir="/" md5sum="1891014c245288bec32a799e46e7c6cc" name="LICENSE" role="data" />
+   <file baseinstalldir="/" md5sum="d4636486bd6a30f62d1764ad02a9eaf6" name="PHPFrame.php" role="php" />
+   <file baseinstalldir="/" md5sum="0ab56ae544d7d315842f3c79990a092d" name="README" role="data" />
   </dir>
  </contents>
  <dependencies>
@@ -127,7 +118,11 @@ No notes for now...
    </pearinstaller>
   </required>
  </dependencies>
- <phprelease />
+ <phprelease>
+  <filelist>
+   <install as="phpframe.php" name="scripts/phpframe.php" />
+  </filelist>
+ </phprelease>
  <changelog>
   <release>
    <version>

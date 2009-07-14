@@ -117,7 +117,22 @@ No notes for now...
       <tasks:id>Database settings</tasks:id>
       <tasks:param>
    	   <tasks:name>dbDriver</tasks:name>
-       <tasks:prompt>Database driver for phpframe command line tool</tasks:prompt>
+       <tasks:prompt>Database driver for phpframe command line tool (MySQL)</tasks:prompt>
+       <tasks:type>string</tasks:type>
+      </tasks:param>
+      <tasks:param>
+   	   <tasks:name>dbUser</tasks:name>
+       <tasks:prompt>Database user for phpframe command line tool (phpframe-cli)</tasks:prompt>
+       <tasks:type>string</tasks:type>
+      </tasks:param>
+      <tasks:param>
+   	   <tasks:name>dbPassword</tasks:name>
+       <tasks:prompt>Database password for phpframe command line tool</tasks:prompt>
+       <tasks:type>string</tasks:type>
+      </tasks:param>
+      <tasks:param>
+   	   <tasks:name>dbName</tasks:name>
+       <tasks:prompt>Database name for phpframe command line tool (phpframe-cli)</tasks:prompt>
        <tasks:type>string</tasks:type>
       </tasks:param>
      </tasks:paramgroup>

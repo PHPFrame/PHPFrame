@@ -1,4 +1,4 @@
-#!/usr/local/zend/bin/php
+#!/usr/bin/env php
 <?php
 /**
  * scripts/phpframe.php

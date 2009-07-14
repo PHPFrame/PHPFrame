@@ -120,7 +120,7 @@ No notes for now...
  </dependencies>
  <phprelease>
   <filelist>
-   <install as="phpframe.php" name="scripts/phpframe.php" />
+   <install as="phpframe" name="scripts/phpframe.php" />
   </filelist>
  </phprelease>
  <changelog>

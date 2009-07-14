@@ -104,14 +104,8 @@ No notes for now...
    <file baseinstalldir="/" name="CREDITS" role="data" />
    <file baseinstalldir="/" name="LICENSE" role="data" />
    <file baseinstalldir="/" name="README" role="data" />
-   
-   <file baseinstalldir="/" name="PHPFrame_CLI_Tool.php" role="script">
-    <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
-    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
-    <tasks:replace from="@package_version@" to="version" type="package-info" />
-  </file>
   
-  <file baseinstalldir="" name="PHPFrame_install.php" role="php">
+  <file baseinstalldir="" name="PHPFrame_CLI_Tool.php" role="php">
     <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@package_version@" to="version" type="package-info" />

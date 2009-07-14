@@ -111,7 +111,7 @@ No notes for now...
  <dependencies>
   <required>
    <php>
-    <min>5</min>
+    <min>5.2.3</min>
    </php>
    <pearinstaller>
     <min>1.4.0</min>
@@ -127,6 +127,10 @@ No notes for now...
 	<min>2.3.3</min>
    </package>
    <extension>
+    <name>xdebug</name>
+    <min>2.0.5</min>
+   </extension>
+   <extension>
 	<name>reflection</name>
    </extension>
    <extension>
@@ -134,6 +138,21 @@ No notes for now...
    </extension>
    <extension>
 	<name>pdo</name>
+   </extension>
+   <extension>
+    <name>pdo_mysql</name>
+   </extension>
+   <extension>
+    <name>json</name>
+   </extension>
+   <extension>
+    <name>gd</name>
+   </extension>
+   <extension>
+    <name>filter</name>
+   </extension>
+   <extension>
+    <name>imap</name>
    </extension>
   </required>
  </dependencies>

@@ -4,9 +4,16 @@ class PHPFrame_Config
     private $_path=null;
     private $_data=array();
     
-    public function __construct($path)
+    public function __construct($path=null)
     {
-        $this->_path = (string) $path;
+		if (!is_null($path)) {
+			$this->_path = (string) $path;
+		} else {
+			$data_dir = PEAR_Config::singleton()->get('data_dir');
+			$this->_path = $data_dir;
+			$this->_path .= DIRECTORY_SEPARATOR."PHPFrame";
+			$this->_path .= DIRECTORY_SEPARATOR."config.xml";
+		}
         
         // Fetch data from file
         $this->_fetchData();
@@ -47,6 +54,6 @@ class PHPFrame_Config
     {
         $xml = simplexml_load_file($this->_path);
         
-        var_dump($xml);
+        //var_dump($xml);
     }
 }

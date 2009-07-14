@@ -114,12 +114,16 @@ No notes for now...
     <tasks:replace from="@package_version@" to="version" type="package-info" />
     <tasks:postinstallscript>
      <tasks:paramgroup>
-      <tasks:id>Database settings</tasks:id>
+      <tasks:id>dbDriver</tasks:id>
       <tasks:param>
-   	   <tasks:name>dbDriver</tasks:name>
+   	   <tasks:name>MySQL</tasks:name>
        <tasks:prompt>Database driver for phpframe command line tool (MySQL)</tasks:prompt>
        <tasks:type>string</tasks:type>
       </tasks:param>
+     </tasks:paramgroup>
+     
+     <tasks:paramgroup>
+      <tasks:id>dbUser</tasks:id>
       <tasks:param>
    	   <tasks:name>dbUser</tasks:name>
        <tasks:prompt>Database user for phpframe command line tool (phpframe-cli)</tasks:prompt>

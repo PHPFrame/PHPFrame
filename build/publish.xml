@@ -6,13 +6,24 @@
 	<property name="tmp.dir" value="${build.dir}/tmp"/>
 	<property name="report.dir" value="${build.dir}/report"/>
 	
-	<property name="version" value="0.0.1" />
+	<property name="api.version" value="0.0.1" />
+	<property name="api.stability" value="alpha" />
+	
+	<property name="release.version" value="0.0.1" />
+	<property name="release.stability" value="alpha" />
 	
 	<target name="prepare">
 		<mkdir dir="${dist.dir}"/>
 		
 		<delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
 		<mkdir dir="${tmp.dir}"/>
+		
+		<php function="date" returnProperty="date">
+		  <param value="Y-m-d"/>
+		</php>
+		<php function="date" returnProperty="time">
+		  <param value="h:i:s"/>
+		</php>
 	</target>
 	
 	<!-- copy files to tmp dir for publishing -->
@@ -44,7 +55,14 @@
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="PROJECT_NAME" value="${xinc.project.name}" />
-					<token key="VERSION" value="${version}" />
+					
+					<token key="RELEASE_VERSION" value="${release.version}" />
+					<token key="RELEASE_STABILITY" value="${release.stability}" />
+					<token key="API_VERSION" value="${api.version}" />
+					<token key="API_STABILITY" value="${api.stability}" />
+					
+					<token key="DATE" value="${date}" />
+					<token key="TIME" value="${time}" />
 				</replacetokens>
 			</filterchain>
 			

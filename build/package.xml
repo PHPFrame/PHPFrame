@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package packagerversion="1.8.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
- <name>PHPFrame</name>
+ <name>##PROJECT_NAME##</name>
  <channel>pear.e-noise.com</channel>
  <summary>PHPFrame is an object oriented PHP framework</summary>
  <description>PHPFrame is a minimal and object oriented PHP framework for quickly developing powerful, 
@@ -11,15 +11,15 @@ flexible, robust and extendible web apps.</description>
   <email>luis.montero@e-noise.com</email>
   <active>yes</active>
  </lead>
- <date>2009-07-14</date>
- <time>12:21:11</time>
+ <date>##DATE##</date>
+ <time>##TIME##</time>
  <version>
-  <release>0.0.1</release>
-  <api>0.0.1</api>
+  <release>##RELEASE_VERSION##</release>
+  <api>##API_VERSION##</api>
  </version>
  <stability>
-  <release>beta</release>
-  <api>beta</api>
+  <release>##RELEASE_STABILITY##</release>
+  <api>##API_STABILITY##</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
  <notes>
@@ -220,14 +220,14 @@ No notes for now...
  <changelog>
   <release>
    <version>
-    <release>0.0.1</release>
-    <api>0.0.1</api>
+    <release>##RELEASE_VERSION##</release>
+    <api>##API_VERSION##</api>
    </version>
    <stability>
-    <release>beta</release>
-    <api>beta</api>
+    <release>##RELEASE_STABILITY##</release>
+    <api>##API_STABILITY##</api>
    </stability>
-   <date>2009-07-14</date>
+   <date>##DATE##</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
    <notes>
 No notes for now...

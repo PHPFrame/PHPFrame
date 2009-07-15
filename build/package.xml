@@ -181,10 +181,12 @@ No notes for now...
 	<channel>pear.phing.info</channel>
 	<min>2.3.3</min>
    </package>
+   <!-- 
    <extension>
     <name>xdebug</name>
     <min>2.0.4</min>
    </extension>
+   -->
    <extension>
 	<name>reflection</name>
    </extension>

@@ -79,8 +79,12 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         $info .= "---";
         $info .= "\n";
         $info .= "[".date("Y-m-d H:i:s")."]";
-        $info .= " [ip:".$_SERVER['REMOTE_ADDR']."]";
-        //$info .= " [client: ".PHPFrame::Session()->getClientName()."]";
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $info .= " [ip:".$_SERVER['REMOTE_ADDR']."]";
+        } else {
+            $info .= " [cli]";
+        }
+        
         $info .= "\n";
         
         // Write log to filesystem using PHPFrame's utility class

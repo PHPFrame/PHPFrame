@@ -109,7 +109,8 @@ class PHPFrame
             $config_file = PHPFRAME_CONFIG_DIR;
         } else {
             require_once "PEAR/Config.php";
-			$config_file = PEAR_Config::singleton()->get('data_dir');
+			$data_dir = PEAR_Config::singleton()->get('data_dir');
+			$config_file = $data_dir.DS."PHPFrame";
         }
         
         $config_file .= DS."config.xml";

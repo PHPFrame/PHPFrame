@@ -84,7 +84,7 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         $info .= "\n";
         
         // Write log to filesystem using PHPFrame's utility class
-        if (defined('PHPFRAME_VAR_DIR')) {
+        if (defined("PHPFRAME_VAR_DIR")) {
             $log_file = PHPFRAME_VAR_DIR;
         } else {
             require_once "PEAR/Config.php";

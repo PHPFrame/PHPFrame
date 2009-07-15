@@ -69,6 +69,14 @@
 				...
 			</screen>
 			
+			<screen>
+				<prompt>bash$</prompt> 
+				<command>
+					pear run-scripts pear.e-noise.com/PHPFrame
+				</command>
+				...
+			</screen>
+			
 			<para>
 			To uninstall:
 			</para>
@@ -77,6 +85,14 @@
 				<prompt>bash$</prompt> 
 				<command>
 					pear uninstall pear.e-noise.com/PHPFrame
+				</command>
+				...
+			</screen>
+			
+			<screen>
+				<prompt>bash$</prompt> 
+				<command>
+					pear clear-cache
 				</command>
 				...
 			</screen>

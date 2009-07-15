@@ -105,7 +105,14 @@ class PHPFrame
     
     public function Config()
     {
-        $config_file = PHPFRAME_CONFIG_DIR.DS."config.xml";
+        if (defined("PHPFRAME_CONFIG_DIR")) {
+            $config_file = PHPFRAME_CONFIG_DIR;
+        } else {
+            require_once "PEAR/Config.php";
+			$config_file = PEAR_Config::singleton()->get('data_dir');
+        }
+        
+        $config_file .= DS."config.xml";
         
         return PHPFrame_Config::instance($config_file);
     }
@@ -271,17 +278,19 @@ class PHPFrame
      */
     private static function _loadLanguage()
     {
-        // load the application language file
-        $lang_file = PHPFRAME_INSTALL_DIR.DS."src".DS."lang".DS;
-        $lang_file .= PHPFrame::Config()->get("DEFAULT_LANG").".php";
-        
-        if (file_exists($lang_file)) {
-            require_once $lang_file;
-        } else {
-            throw new PHPFrame_Exception('Could not find language file ('.$lang_file.')');
+        // load the application language file if any
+        if (defined("PHPFRAME_INSTALL_DIR.DS")) {
+            $lang_file = PHPFRAME_INSTALL_DIR.DS."src".DS."lang".DS;
+            $lang_file .= PHPFrame::Config()->get("DEFAULT_LANG").".php";
+            
+            if (file_exists($lang_file)) {
+                require_once $lang_file;
+            } else {
+                throw new PHPFrame_Exception('Could not find language file ('.$lang_file.')');
+            }
         }
         
-        // Include the PHPFrame lib language file
+        // Include the PHPFrame framework's language file
         $lang_file = "PHPFrame".DS."Lang".DS.PHPFrame::Config()->get("DEFAULT_LANG").".php";
         if (!(require_once $lang_file)) {
             throw new PHPFrame_Exception('Could not find language file ('.$lang_file.')');

@@ -127,7 +127,13 @@
       <tasks:id>db</tasks:id>
       <tasks:param>
    	   <tasks:name>DB_DRIVER</tasks:name>
-       <tasks:prompt>Database driver for phpframe command line tool (MySQL|SQLite)</tasks:prompt>
+       <tasks:prompt>Database driver for phpframe command line tool (MySQL, SQLite, ...)</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default>MySQL</tasks:default>
+      </tasks:param>
+      <tasks:param>
+   	   <tasks:name>DB_HOST</tasks:name>
+       <tasks:prompt>Database host for phpframe command line tool (normally "localhost")</tasks:prompt>
        <tasks:type>string</tasks:type>
        <tasks:default>MySQL</tasks:default>
       </tasks:param>
@@ -150,13 +156,13 @@
       </tasks:param>
       <tasks:param>
    	   <tasks:name>DB_ROOT</tasks:name>
-       <tasks:prompt>Database server root user (only needed if creating a new user for phpframe command line tool).</tasks:prompt>
+       <tasks:prompt>Database server root user (only needed if you want the installer to create the user for you).</tasks:prompt>
        <tasks:type>string</tasks:type>
        <tasks:default>root</tasks:default>
       </tasks:param>
       <tasks:param>
    	   <tasks:name>DB_ROOT_PASS</tasks:name>
-       <tasks:prompt>Database server root password (only needed if creating a new user for phpframe command line tool).</tasks:prompt>
+       <tasks:prompt>Database server root password (only needed if you want the installer to create the user for you).</tasks:prompt>
        <tasks:type>string</tasks:type>
        <tasks:default></tasks:default>
       </tasks:param>

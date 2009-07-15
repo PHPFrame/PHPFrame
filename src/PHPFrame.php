@@ -17,7 +17,7 @@
 /**
  * Set convenience DS constant (directory separator depends on server operating system).
  */
-define('DS', DIRECTORY_SEPARATOR);
+define("DS", DIRECTORY_SEPARATOR);
 
 /**
  * Register autoload function
@@ -120,7 +120,7 @@ class PHPFrame
     public static function AppRegistry($path='') 
     {
         if (empty($path)) {
-            $path = config::FILESYSTEM.DS."cache";
+            $path = PHPFRAME_VAR_DIR.DS."cache";
         }
         
         return PHPFrame_Registry_Application::getInstance($path);
@@ -194,4 +194,16 @@ class PHPFrame
             @include_once $file_path;
         }
     }
+    
+    public static function boot()
+    {
+        // Initialise phpFame's error and exception handlers.
+        PHPFrame_Exception_Handler::init();
+        
+        // Initialise AppRegistry
+        self::AppRegistry();
+    }
 }
+
+// Boot up the PHPFrame!!!
+PHPFrame::boot();

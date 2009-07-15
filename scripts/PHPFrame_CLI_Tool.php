@@ -20,14 +20,7 @@
  */
 class PHPFrame_CLI_Tool_postinstall
 {
-    /**
-     * Path to PHPFrame_CLI_Tool installation
-     * 
-     * @var string
-     */
-    private $_install_path=null;
-    
-    /**
+	/**
      * Constructor
      * 
      * @return void

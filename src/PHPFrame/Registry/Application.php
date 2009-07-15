@@ -91,6 +91,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
         }
         else {
             // Re-create basic data
+            $this->_data['config'] = new PHPFrame_Config();
             $this->_data['permissions'] = new PHPFrame_Application_Permissions();
             $this->_data['components'] = new PHPFrame_Application_Components();
             $this->_data['widgets'] = new PHPFrame_Application_Widgets();

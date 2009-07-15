@@ -43,9 +43,6 @@ class PHPFrame_Application_FrontController
         // Set profiler milestone
         PHPFrame_Debug_Profiler::setMilestone('Start');
         
-        // Initialise phpFame's error and exception handlers.
-        PHPFrame_Exception_Handler::init();
-        
         // Load language files
         $this->_loadLanguage();
         

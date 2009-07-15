@@ -87,7 +87,7 @@
 			output="${report.dir}/pear_package.log" />
 		
 		<!-- Move created package to dist directory -->
-		<move file="${tmp.dir}/${xinc.project.name}-${version}.tgz" 
+		<move file="${tmp.dir}/${xinc.project.name}-${release.version}.tgz" 
 			  tofile="${dist.dir}/${xinc.project.name}-${xinc.build.label}.tgz" 
 			  overwrite="true"/>
 			  

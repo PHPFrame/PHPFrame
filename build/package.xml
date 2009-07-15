@@ -28,7 +28,6 @@ No notes for now...
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" name="PHPFrame/Application/Components.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Application/Dependencies.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/FrontController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Pathway.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Permissions.php" role="php" />

@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/PHPFrame.php
+ * PHPFrame.php
  * 
  * PHP version 5
  * 
@@ -47,7 +47,25 @@ class PHPFrame
      * 
      * @var string
      */
-    const VERSION='1.0 Alpha';
+    const API_VERSION="1.0";
+    /**
+     * The PHPFrame version
+     * 
+     * @var string
+     */
+    const API_STABILITY="alpha";
+    /**
+     * The PHPFrame version
+     * 
+     * @var string
+     */
+    const RELEASE_VERSION="0.1.3";
+    /**
+     * The PHPFrame version
+     * 
+     * @var string
+     */
+    const RELEASE_STABILITY="alpha";
     /**
      * Run level
      * 
@@ -58,19 +76,26 @@ class PHPFrame
     /**
      * Constructor
      * 
+     * We declare an empty private constructor to ensure this class is not 
+     * instantiated. All methods in this class are declared static.
+     * 
+     * @access private
      * @return void
+     * @since  1.0
      */
     private function __construct() {}
     
     /**
      * Autoload magic method
      * 
-     * This method is automatically called in case you are trying to use a class/interface which 
-     * hasn't been defined yet. By calling this function the scripting engine is given a last 
-     * chance to load the class before PHP fails with an error. 
+     * This method is automatically called in case you are trying to use a 
+     * class/interface which hasn't been defined yet. By calling this function 
+     * the scripting engine is given a last chance to load the class before 
+     * PHP fails with an error. 
      * 
      * @param string $class_name The class name to load.
      * 
+     * @static
      * @access public
      * @return void
      * @since  1.0
@@ -95,25 +120,43 @@ class PHPFrame
     /**
      * Get PHPFrame version
      * 
+     * @static
+     * @access public
      * @return string
      * @since  1.0
      */
     public static function Version() 
     {
-        return self::VERSION;
+        $str = "PHPFrame\n";
+        $str .= "\nRelease version: ";
+        $str .= self::RELEASE_VERSION." ".self::RELEASE_STABILITY;
+        $str .= "\nAPI version: ";
+        $str .= self::API_VERSION." ".self::API_STABILITY;
+        
+        return $str;
     }
     
-    public function Config()
+    /**
+     * Get global configuration object
+     * 
+     * @static
+     * @access public
+     * @return PHPFrame_Config
+     * @since  1.0
+     */
+    public static function Config()
     {
+        // If we are in a scaffold app we use the app's config
         if (defined("PHPFRAME_CONFIG_DIR")) {
-            $config_file = PHPFRAME_CONFIG_DIR;
+            $config_dir = PHPFRAME_CONFIG_DIR;
+        // Otherwise we use the system wide default config
         } else {
             require_once "PEAR/Config.php";
 			$data_dir = PEAR_Config::singleton()->get('data_dir');
-			$config_file = $data_dir.DS."PHPFrame";
+			$config_dir = $data_dir.DS."PHPFrame";
         }
         
-        $config_file .= DS."config.xml";
+        $config_file = $config_dir.DS."config.xml";
         
         return PHPFrame_Config::instance($config_file);
     }
@@ -125,6 +168,8 @@ class PHPFrame
      *                    registry. If not passed it uses a directory called
      *                    "cache" within the directory specified in PHPFRAME_VAR_DIR
      * 
+     * @static
+     * @access public
      * @return PHPFrame_Registry_Application
      * @since  1.0
      */
@@ -140,6 +185,8 @@ class PHPFrame
     /**
      * Get session object
      * 
+     * @static
+     * @access public
      * @return PHPFrame_Registry_Session
      * @since  1.0
      */
@@ -151,6 +198,8 @@ class PHPFrame
     /**
      * Request Registry
      * 
+     * @static
+     * @access public
      * @return PHPFrame_Registry_Request
      * @since  1.0
      */
@@ -162,6 +211,8 @@ class PHPFrame
     /**
      * Get response object
      * 
+     * @static
+     * @access public
      * @return PHPFrame_Application_Response
      * @since  1.0
      */
@@ -186,6 +237,8 @@ class PHPFrame
      *                                   a password for the db connection.
      * @param PHPFrame_Config $config    A config object to use instead of the previous.
      * 
+     * @static
+     * @access public
      * @return PHPFrame_Database
      * @since  1.0
      */
@@ -221,11 +274,16 @@ class PHPFrame
         return PHPFrame_Database::getInstance($dsn, $db_user, $db_pass);
     }
     
+    /**
+     * Boot up the PHPFrame framework
+     * 
+     * @static
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public static function Boot()
     {
-        // Set run level to 1 to indicate that PHPFrame is booting...
-        self::$_run_level = 1;
-        
         // Load language files
         self::_loadLanguage();
         
@@ -238,6 +296,20 @@ class PHPFrame
         // Set timezone
         date_default_timezone_set(self::Config()->get("TIMEZONE"));
         
+        // Set run level to 1, framework is ready to go!!!
+        self::$_run_level = 1;
+    }
+    
+    /**
+     * Mount persistance layer, init app registry and session objects
+     * 
+     * @static
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public static function Mount()
+    {
         // Initialise Database
         self::DB();
         
@@ -247,7 +319,8 @@ class PHPFrame
         // Get/init session object
         self::Session();
         
-        // Set run level to 2, framework is ready to go!!!
+        // Set run level to 2 to indicate that 
+        // persistance layer is mounted...
         self::$_run_level = 2;
     }
     
@@ -256,16 +329,32 @@ class PHPFrame
      * 
      * This method instantiates the front controller and runs it.
      * 
+     * @static
+     * @access public
      * @return void
      * @since  1.0
      */
     public static function Fire() 
     {
+        // If persistance has not been mounted yet we do so before we
+        // run the front controller
+        if (self::$_run_level < 2) {
+            self::Mount();
+        }
+        
         $frontcontroller = new PHPFrame_Application_FrontController();
         $frontcontroller->run();
     }
     
-    public function getRunLevel()
+    /**
+     * Get current run level
+     * 
+     * @static
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public static function getRunLevel()
     {
         return self::$_run_level;
     }
@@ -273,6 +362,7 @@ class PHPFrame
     /**
      * Load language files
      * 
+     * @static
      * @access private
      * @return void
      * @since  1.0
@@ -287,14 +377,18 @@ class PHPFrame
             if (file_exists($lang_file)) {
                 require_once $lang_file;
             } else {
-                throw new PHPFrame_Exception('Could not find language file ('.$lang_file.')');
+                $msg = 'Could not find language file ('.$lang_file.')';
+                throw new PHPFrame_Exception($msg);
             }
         }
         
         // Include the PHPFrame framework's language file
-        $lang_file = "PHPFrame".DS."Lang".DS.PHPFrame::Config()->get("DEFAULT_LANG").".php";
+        $lang_file = "PHPFrame".DS."Lang";
+        $lang_file .= DS.PHPFrame::Config()->get("DEFAULT_LANG").".php";
+        
         if (!(require_once $lang_file)) {
-            throw new PHPFrame_Exception('Could not find language file ('.$lang_file.')');
+            $msg = 'Could not find language file ('.$lang_file.')';
+            throw new PHPFrame_Exception($msg);
         }
     }
 }

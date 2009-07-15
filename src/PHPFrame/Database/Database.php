@@ -377,7 +377,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
      */
     public function prepare($statement, $options=array())
     {
-        $statement = str_replace('#__', config::DB_PREFIX, $statement);
+        $statement = str_replace('#__', PHPFrame::Config()->get("DB_PREFIX"), $statement);
         
         return $this->_pdo->prepare($statement, $options);
     }

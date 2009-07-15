@@ -193,7 +193,7 @@ class PHPFrame_Application_Response
             echo $this->_document->getBody();    
         }
         
-        if (config::DEBUG == 1) {
+        if (PHPFrame::Config()->get("DEBUG") == 1) {
             echo "<pre>";
             echo PHPFrame_Debug_Profiler::getReport();
             echo "</pre>";

@@ -42,7 +42,7 @@ class PHPFrame_Utils_Crypt
      */
     static function getHash($seed) 
     {
-        return md5(config::SECRET.$seed);
+        return md5(PHPFrame::Config()->get("SECRET").$seed);
     }
 
     /**

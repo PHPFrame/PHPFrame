@@ -115,7 +115,7 @@ class PHPFrame
      * 
      * @param sring $path The path to the cache directory where to store the app
      *                    registry. If not passed it uses a directory called
-     *                    "cache" within the directory specified in config::FILESYSTEM
+     *                    "cache" within the directory specified in PHPFRAME_VAR_DIR
      * 
      * @return PHPFrame_Registry_Application
      * @since  1.0

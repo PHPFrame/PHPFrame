@@ -40,18 +40,18 @@ class PHPFrame_Mail_Mailer extends PHPMailer
      */
     public function __construct() 
     {
-        $this->Mailer = config::MAILER;
-        $this->Host = config::SMTP_HOST;
-        $this->Port = config::SMTP_PORT;
-        $this->SMTPAuth = config::SMTP_AUTH;
-        $this->Username = config::SMTP_USER;
-        $this->Password = config::SMTP_PASSWORD;
-        $this->From = config::FROMADDRESS;
-        $this->FromName = config::FROMNAME;
+        $this->Mailer = PHPFrame::Config()->get("MAILER");
+        $this->Host = PHPFrame::Config()->get("SMTP_HOST");
+        $this->Port = PHPFrame::Config()->get("SMTP_PORT");
+        $this->SMTPAuth = PHPFrame::Config()->get("SMTP_AUTH");
+        $this->Username = PHPFrame::Config()->get("SMTP_USER");
+        $this->Password = PHPFrame::Config()->get("SMTP_PASSWORD");
+        $this->From = PHPFrame::Config()->get("FROMADDRESS");
+        $this->FromName = PHPFrame::Config()->get("FROMNAME");
         
         // Sets the hostname to use in Message-Id and Received headers and as default HELO string. 
         // If empty, the value returned by SERVER_NAME is used or 'localhost.localdomain'.
-        $this->Hostname = config::SMTP_HOST;
+        $this->Hostname = PHPFrame::Config()->get("SMTP_HOST");
     }
     
     /**

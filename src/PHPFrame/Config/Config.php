@@ -10,6 +10,7 @@ class PHPFrame_Config
 		if (!is_null($path)) {
 			$this->_path = (string) $path;
 		} else {
+		    require_once "PEAR/PEAR_Config.php";
 			$data_dir = PEAR_Config::singleton()->get('data_dir');
 			$this->_path = $data_dir;
 			$this->_path .= DIRECTORY_SEPARATOR."PHPFrame";

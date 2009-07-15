@@ -6,10 +6,10 @@
 	<property name="tmp.dir" value="${build.dir}/tmp"/>
 	<property name="report.dir" value="${build.dir}/report"/>
 	
-	<property name="api.version" value="0.0.1" />
+	<property name="api.version" value="0.0.2" />
 	<property name="api.stability" value="alpha" />
 	
-	<property name="release.version" value="0.0.1" />
+	<property name="release.version" value="0.0.2" />
 	<property name="release.stability" value="alpha" />
 	
 	<target name="prepare">

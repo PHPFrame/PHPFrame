@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.8.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
+<package 
+	packagerversion="1.8.1" 
+	version="2.0" 
+	xmlns="http://pear.php.net/dtd/package-2.0" 
+	xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     
+	     http://pear.php.net/dtd/tasks-1.0.xsd     
+	     http://pear.php.net/dtd/package-2.0     
+	     http://pear.php.net/dtd/package-2.0.xsd">
+	     
  <name>##PROJECT_NAME##</name>
- <channel>pear.e-noise.com</channel>
- <summary>PHPFrame is an object oriented PHP framework</summary>
- <description>PHPFrame is a minimal and object oriented PHP framework for quickly developing powerful, 
-flexible, robust and extendible web apps.</description>
+ <channel>###CHANNEL#</channel>
+ <summary>##SUMMARY##</summary>
+ <description>##DESCRIPTION##</description>
  <lead>
-  <name>Luis Montero</name>
-  <user>luis.montero</user>
-  <email>luis.montero@e-noise.com</email>
-  <active>yes</active>
+  <name>##LEAD_NAME##</name>
+  <user>##LEAD_USER##</user>
+  <email>##LEAD_EMAIL##</email>
+  <active>##LEAD_ACTIVE##</active>
  </lead>
  <date>##DATE##</date>
  <time>##TIME##</time>
@@ -21,10 +30,8 @@ flexible, robust and extendible web apps.</description>
   <release>##RELEASE_STABILITY##</release>
   <api>##API_STABILITY##</api>
  </stability>
- <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
- <notes>
-No notes for now...
- </notes>
+ <license uri="##LICENSE_URI##">##LICENSE##</license>
+ <notes>##NOTES##</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" name="PHPFrame/Application/Components.php" role="php" />
@@ -171,22 +178,6 @@ No notes for now...
    	<channel>pear.php.net</channel>
    	<min>1.10.11</min>
    </package>
-   <package>
-	<name>PHPUnit</name>
-	<channel>pear.phpunit.de</channel>
-	<min>3.3.16</min>
-   </package>
-   <package>
-    <name>phing</name>
-	<channel>pear.phing.info</channel>
-	<min>2.3.3</min>
-   </package>
-   <!-- 
-   <extension>
-    <name>xdebug</name>
-    <min>2.0.4</min>
-   </extension>
-   -->
    <extension>
 	<name>reflection</name>
    </extension>
@@ -212,6 +203,22 @@ No notes for now...
     <name>imap</name>
    </extension>
   </required>
+  <optional>
+   <package>
+	<name>PHPUnit</name>
+	<channel>pear.phpunit.de</channel>
+	<min>3.3.16</min>
+   </package>
+   <package>
+    <name>phing</name>
+	<channel>pear.phing.info</channel>
+	<min>2.3.3</min>
+   </package>
+   <extension>
+    <name>xdebug</name>
+    <min>2.0.4</min>
+   </extension>
+  </optional>
  </dependencies>
  <phprelease>
   <filelist>
@@ -229,10 +236,8 @@ No notes for now...
     <api>##API_STABILITY##</api>
    </stability>
    <date>##DATE##</date>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
-   <notes>
-No notes for now...
-   </notes>
+   <license uri="##LICENSE_URI##">##LICENSE##</license>
+   <notes>##NOTES##</notes>
   </release>
  </changelog>
 </package>

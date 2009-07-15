@@ -116,7 +116,7 @@ class PHPFrame_Config
     
     private function _fetchData()
     {
-        $xml = simplexml_load_file($this->_path);
+        $xml = @simplexml_load_file($this->_path);
         
         if (!$xml instanceof SimpleXMLElement) {
             $msg = get_class($this).": ";

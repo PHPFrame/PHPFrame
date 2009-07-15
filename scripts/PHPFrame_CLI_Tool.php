@@ -11,7 +11,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
+ * @version    SVN: $Id: PHPFrame_CLI_Tool.php 220 2009-07-14 23:49:41Z luis.montero@e-noise.com $
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
@@ -65,8 +65,7 @@ class PHPFrame_CLI_Tool_postinstall
         }
         
         $this->_install_path = PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR;
-        $this->_install_path .= "PHPFrame".DIRECTORY_SEPARATOR;
-        $this->_install_path .= "PHPFrame_CLI_Tool".DIRECTORY_SEPARATOR;
+        $this->_install_path .= "PHPFrame_CLI_Tool";
         
         return true;
     }
@@ -102,7 +101,7 @@ class PHPFrame_CLI_Tool_postinstall
     {
         $source = "http://phpframe.googlecode.com/svn/PHPFrame_Scaffold/trunk/";
         
-        $cmd = "svn export ".$source." ".$this->_install_path;
+        $cmd = "svn export ".$source." ".$this->_install_path.DIRECTORY_SEPARATOR;
         
         exec($cmd, $output, $return_var); 
     }

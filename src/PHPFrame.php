@@ -279,7 +279,7 @@ class PHPFrame
     private static function _loadLanguage()
     {
         // load the application language file if any
-        if (defined("PHPFRAME_INSTALL_DIR.DS")) {
+        if (defined("PHPFRAME_INSTALL_DIR")) {
             $lang_file = PHPFRAME_INSTALL_DIR.DS."src".DS."lang".DS;
             $lang_file .= PHPFrame::Config()->get("DEFAULT_LANG").".php";
             

@@ -5,9 +5,11 @@ class PHPFrame_Utils_Exec
     private $_output=null;
     private $_return_var=null;
     
-    public function __construct()
+    public function __construct($cmd, $autorun=true)
     {
-        
+        if ($autorun) {
+            $this->run($cmd);
+        }
     }
     
     public function run($cmd)

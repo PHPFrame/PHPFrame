@@ -1,4 +1,4 @@
-#!/usr/bin/env php
+#!/usr/local/zend/bin/php
 <?php
 /**
  * scripts/post-install.php
@@ -11,7 +11,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id: PHPFrame_CLI_Tool.php 220 2009-07-14 23:49:41Z luis.montero@e-noise.com $
+ * @version    SVN: $Id: PHPFrame_CLI_Tool.php 227 2009-07-15 02:15:45Z luis.montero@e-noise.com $
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
@@ -60,6 +60,8 @@ class PHPFrame_CLI_Tool_postinstall
         $this->_install_path = PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR;
         $this->_install_path .= "PHPFrame_CLI_Tool";
         
+		PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_path);
+		
         return true;
     }
     
@@ -83,11 +85,17 @@ class PHPFrame_CLI_Tool_postinstall
      */
     public function run($infoArray, $paramGroupId)
     {
-        // Fetch scaffold source
-        $this->_fetchSource();
-        
-        // Create config file
-        $this->_createConfig($infoArray);
+		// Only process if info array contains data
+		if (is_array($infoArray) && count($infoArray) > 0) {
+			// Fetch scaffold source
+	        $this->_fetchSource();
+			exit;
+			
+	        // Create config file
+	        $this->_createConfig($infoArray);
+		} else {
+			echo "\nInstallation skipped...\n\n";
+		}
     }
     
     private function _fetchSource()
@@ -96,7 +104,12 @@ class PHPFrame_CLI_Tool_postinstall
         
         $cmd = "svn export ".$source." ".$this->_install_path.DIRECTORY_SEPARATOR;
         
-        exec($cmd, $output, $return_var); 
+		echo "\nFetching PHPFrame_Scaffold source from repo...\n\n";
+		echo "\nUsing command ".$cmd."...\n\n";
+		
+		$exec = PHPFrame_Utils_Exec::run($cmd);
+		
+		var_dump($exec);
     }
     
     private function _createConfig($array)

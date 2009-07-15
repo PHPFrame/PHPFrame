@@ -39,7 +39,8 @@ class PHPFrame_Exception_Handler
      */
     public static function init() 
     {
-        error_reporting(E_ALL | E_NOTICE | E_STRICT);
+        //error_reporting(E_ALL | E_NOTICE | E_STRICT);
+        error_reporting(E_ALL | E_NOTICE);
         //set_error_handler(array("PHPFrame_Exception_Handler", "handleError"));
         set_exception_handler(array('PHPFrame_Exception_Handler', 'handleException'));
     }
@@ -101,8 +102,10 @@ class PHPFrame_Exception_Handler
         $str .= 'Line: '.$exception->getLine()."\n";
         $str .= 'Code: '.$exception->getCode()."\n";
         $str .= $exception->getTraceAsString();
-            
-        if (config::DEBUG == 1) {
+        
+        
+        $debug = PHPFrame::Config()->get("DEBUG");
+        if ($debug == 1) {
             echo '<pre>'.$str.'</pre>';
         }
         

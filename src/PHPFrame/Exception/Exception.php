@@ -82,12 +82,12 @@ class PHPFrame_Exception extends Exception
         parent::__construct($message, $code);
         
         // Log the exception to file if needed
-        if ($code < config::LOG_LEVEL) {
+        //if ($code < config::LOG_LEVEL) {
             // Cast exception object to string
             $exception = (string) $this;
             // Write log
             PHPFrame_Debug_Logger::write($exception);
-        }
+        //}
     }
     
     /**

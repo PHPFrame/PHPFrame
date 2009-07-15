@@ -90,15 +90,15 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
             $this->_data = unserialize($serialized_array);
         }
         else {
-            // Re-create basic data
-            $this->_data['config'] = new PHPFrame_Config();
-            $this->_data['permissions'] = new PHPFrame_Application_Permissions();
-            $this->_data['components'] = new PHPFrame_Application_Components();
-            $this->_data['widgets'] = new PHPFrame_Application_Widgets();
+            // Rebuild app registry
+            $permissions = new PHPFrame_Application_Permissions();
+            $components = new PHPFrame_Application_Components();
+            $widgets = new PHPFrame_Application_Widgets();
             
-            // Mark application registry as dirty to make sure it gets written
-            // to file on shutdown
-            $this->markDirty();
+            // Store objects in App Regsitry
+            $this->set("permissions", $permissions);
+            $this->set("components", $components);
+            $this->set("widgets", $widgets);
         }
     }
     

@@ -94,7 +94,7 @@ class PHPFrame_Application_Widgets
                 && $module['enabled'] == 1
                 && ($module['option'] == PHPFrame::Request()->getComponentName() || $module['option'] == "*")
                 ) {
-                $module_file_path = _ABS_PATH.DS."src".DS."modules".DS."mod_".$module['name'].DS."mod_".$module['name'].".php";
+                $module_file_path = PHPFRAME_INSTALL_DIR.DS."src".DS."modules".DS."mod_".$module['name'].DS."mod_".$module['name'].".php";
                 if (file_exists($module_file_path)) {
                     // Start buffering
                     ob_start();

@@ -521,7 +521,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
             $template_filename = 'index.php';
         }
         
-        $template_path = _ABS_PATH.DS."public".DS."themes".DS.config::THEME;
+        $template_path = PHPFRAME_INSTALL_DIR.DS."public".DS."themes".DS.config::THEME;
         
         // Start buffering
         ob_start();

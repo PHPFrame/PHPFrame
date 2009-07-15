@@ -1,21 +1,13 @@
 <?php
 class PHPFrame_Config
 {
+    private static $_instances=array();
     private $_path=null;
     private $_data=array();
     
-    public function __construct($path=null)
+    private function __construct($path)
     {
-        // Set path to xml file
-		if (!is_null($path)) {
-			$this->_path = (string) $path;
-		} else {
-		    require_once "PEAR/PEAR_Config.php";
-			$data_dir = PEAR_Config::singleton()->get('data_dir');
-			$this->_path = $data_dir;
-			$this->_path .= DIRECTORY_SEPARATOR."PHPFrame";
-			$this->_path .= DIRECTORY_SEPARATOR."config.xml";
-		}
+        $this->_path = (string) $path;
         
         // Fetch data from file
         $this->_fetchData();
@@ -34,6 +26,24 @@ class PHPFrame_Config
     public function __set($key, $value)
     {
         return $this->set($key, $value);
+    }
+    
+    public static function instance($path=null)
+    {
+        // Use default empty distro versionas template
+		if (is_null($path)) {
+		    require_once "PEAR/Config.php";
+			$data_dir = PEAR_Config::singleton()->get('data_dir');
+			$path = $data_dir;
+			$path .= DIRECTORY_SEPARATOR."PHPFrame";
+			$path .= DIRECTORY_SEPARATOR."config.xml";
+		}
+		
+        if (!isset(self::$_instances[$path])) {
+            self::$_instances[$path] = new self($path);
+        }
+        
+        return self::$_instances[$path];
     }
     
     public function get($key)

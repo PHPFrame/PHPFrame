@@ -84,6 +84,7 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         $info .= "\n";
         
         // Write log to filesystem using PHPFrame's utility class
-        PHPFrame_Utils_Filesystem::write(config::LOG_FILE, $info.$str, true);
+        $log_file = PHPFRAME_VAR_DIR.DS."log";
+        PHPFrame_Utils_Filesystem::write($log_file, $info.$str, true);
     }
 }

@@ -48,122 +48,19 @@ class PHPFrame
      * @var string
      */
     const VERSION='1.0 Alpha';
-    
     /**
-     * Get PHPFrame version
+     * Run level
      * 
-     * @return string
-     * @since  1.0
+     * @var int
      */
-    public static function Version() 
-    {
-        return self::VERSION;
-    }
+    private static $_run_level=0;
     
     /**
-     * Fire up the app
-     * 
-     * This method instantiates the front controller and runs it.
+     * Constructor
      * 
      * @return void
-     * @since  1.0
      */
-    public static function Fire() 
-    {
-        $frontcontroller = new PHPFrame_Application_FrontController();
-        $frontcontroller->run();
-    }
-    
-    /**
-     * Request Registry
-     * 
-     * @return PHPFrame_Registry_Request
-     * @since  1.0
-     */
-    public static function Request() 
-    {
-        return PHPFrame_Registry_Request::getInstance();
-    }
-    
-    /**
-     * Get response object
-     * 
-     * @return PHPFrame_Application_Response
-     * @since  1.0
-     */
-    public static function Response()
-    {
-        return PHPFrame_Application_Response::getInstance();
-    }
-    
-    /**
-     * Get session object
-     * 
-     * @return PHPFrame_Registry_Session
-     * @since  1.0
-     */
-    public static function Session() 
-    {
-        return PHPFrame_Registry_Session::getInstance();
-    }
-    
-    /**
-     * Get application registry
-     * 
-     * @param sring $path The path to the cache directory where to store the app
-     *                    registry. If not passed it uses a directory called
-     *                    "cache" within the directory specified in config::FILESYSTEM
-     * 
-     * @return PHPFrame_Registry_Application
-     * @since  1.0
-     */
-    public static function AppRegistry($path='') 
-    {
-        if (empty($path)) {
-            $path = PHPFRAME_VAR_DIR.DS."cache";
-        }
-        
-        return PHPFrame_Registry_Application::getInstance($path);
-    }
-    
-    /**
-     * Get database object
-     * 
-     * @param object $dsn     An object of type PHPFrame_Database_DSN used to get DB 
-     *                        connection. This parameter is optional. If omitted a 
-     *                        new DSN object will be created using the database 
-     *                        details provided by the config class. 
-     * @param string $db_user If we specify a DSN object we might also need to 
-     *                        provide a db user in order to connect to the database 
-     *                        server.
-     * @param string $db_pass When both a DSN object and a db user have been passed 
-     *                        we might also need to provide a password for the db 
-     *                        connection.
-     * 
-     * @return PHPFrame_Database
-     * @since  1.0
-     */
-    public static function DB(
-        PHPFrame_Database_DSN $dsn=null,
-        $db_user=null,
-        $db_pass=null
-    ) {
-        // If no DSN is passed we use settings from config
-        if (is_null($dsn)) {
-            $dsn_concrete_class = "PHPFrame_Database_DSN_".config::DB_DRIVER;
-            $dsn = new $dsn_concrete_class(config::DB_HOST, config::DB_NAME);
-        }
-        
-        if (is_null($db_user)) {
-            $db_user = config::DB_USER;
-        }
-        
-        if (is_null($db_pass)) {
-            $db_pass = config::DB_PASS;
-        }
-        
-        return PHPFrame_Database::getInstance($dsn, $db_user, $db_pass);
-    }
+    private function __construct() {}
     
     /**
      * Autoload magic method
@@ -195,15 +92,202 @@ class PHPFrame
         }
     }
     
-    public static function boot()
+    /**
+     * Get PHPFrame version
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public static function Version() 
     {
+        return self::VERSION;
+    }
+    
+    public function Config()
+    {
+        $config_file = PHPFRAME_CONFIG_DIR.DS."config.xml";
+        
+        return PHPFrame_Config::instance($config_file);
+    }
+    
+    /**
+     * Get application registry
+     * 
+     * @param sring $path The path to the cache directory where to store the app
+     *                    registry. If not passed it uses a directory called
+     *                    "cache" within the directory specified in config::FILESYSTEM
+     * 
+     * @return PHPFrame_Registry_Application
+     * @since  1.0
+     */
+    public static function AppRegistry($path='') 
+    {
+        if (empty($path)) {
+            $path = PHPFRAME_VAR_DIR.DS."cache";
+        }
+        
+        return PHPFrame_Registry_Application::getInstance($path);
+    }
+    
+    /**
+     * Get session object
+     * 
+     * @return PHPFrame_Registry_Session
+     * @since  1.0
+     */
+    public static function Session() 
+    {
+        return PHPFrame_Registry_Session::getInstance();
+    }
+    
+    /**
+     * Request Registry
+     * 
+     * @return PHPFrame_Registry_Request
+     * @since  1.0
+     */
+    public static function Request() 
+    {
+        return PHPFrame_Registry_Request::getInstance();
+    }
+    
+    /**
+     * Get response object
+     * 
+     * @return PHPFrame_Application_Response
+     * @since  1.0
+     */
+    public static function Response()
+    {
+        return PHPFrame_Application_Response::getInstance();
+    }
+    
+    /**
+     * Get database object
+     * 
+     * @param PHPFrame_Database_DSN $dsn An object of type PHPFrame_Database_DSN 
+     *        		                     used to get DB connection. This parameter 
+     *        							 is optional. If omitted a new DSN object 
+     *        							 will be created using the database
+     *        							 details provided by the config class. 
+     * @param string $db_user            If we specify a DSN object we might also 
+     *                                   need to provide a db user in order to 
+     *                                   connect to the database server.
+     * @param string $db_pass            When both a DSN object and a db user have 
+     *                                   been passed we might also need to provide 
+     *                                   a password for the db connection.
+     * @param PHPFrame_Config $config    A config object to use instead of the previous.
+     * 
+     * @return PHPFrame_Database
+     * @since  1.0
+     */
+    public static function DB(
+        PHPFrame_Database_DSN $dsn=null,
+        $db_user=null,
+        $db_pass=null
+    ) {
+        // Set DSN using details from config object
+        if (!$dsn instanceof PHPFrame_Database_DSN) {
+            $dsn_concrete_class = "PHPFrame_Database_DSN_";
+            $dsn_concrete_class .= PHPFrame::Config()->get("DB_DRIVER");
+            
+            $dsn = new $dsn_concrete_class(
+                PHPFrame::Config()->get("DB_HOST"), 
+                PHPFrame::Config()->get("DB_NAME")
+            );
+        }
+        
+        if (is_null($db_user)) {
+            $db_user = PHPFrame::Config()->get("DB_USER");
+        }
+        
+        if (is_null($db_pass)) {
+            $db_pass = PHPFrame::Config()->get("DB_PASS");
+        }
+        
+        if (!$dsn instanceof PHPFrame_Database_DSN) {
+            $msg = "Could not acquire DSN object to instantiate DB object.";
+            throw new PHPFrame_Exception($msg);
+        }
+        
+        return PHPFrame_Database::getInstance($dsn, $db_user, $db_pass);
+    }
+    
+    public static function Boot()
+    {
+        // Set run level to 1 to indicate that PHPFrame is booting...
+        self::$_run_level = 1;
+        
+        // Load language files
+        self::_loadLanguage();
+        
         // Initialise phpFame's error and exception handlers.
         PHPFrame_Exception_Handler::init();
         
+        // Initialise app config
+        self::Config();
+        
+        // Set timezone
+        date_default_timezone_set(self::Config()->get("TIMEZONE"));
+        
+        // Initialise Database
+        self::DB();
+        
         // Initialise AppRegistry
         self::AppRegistry();
+        
+        // Get/init session object
+        self::Session();
+        
+        // Set run level to 2, framework is ready to go!!!
+        self::$_run_level = 2;
+    }
+    
+    /**
+     * Fire up the app
+     * 
+     * This method instantiates the front controller and runs it.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public static function Fire() 
+    {
+        $frontcontroller = new PHPFrame_Application_FrontController();
+        $frontcontroller->run();
+    }
+    
+    public function getRunLevel()
+    {
+        return self::$_run_level;
+    }
+    
+    /**
+     * Load language files
+     * 
+     * @access private
+     * @return void
+     * @since  1.0
+     */
+    private static function _loadLanguage()
+    {
+        // load the application language file
+        $lang_file = PHPFRAME_INSTALL_DIR.DS."src".DS."lang".DS;
+        $lang_file .= PHPFrame::Config()->get("DEFAULT_LANG").".php";
+        
+        if (file_exists($lang_file)) {
+            require_once $lang_file;
+        } else {
+            throw new PHPFrame_Exception('Could not find language file ('.$lang_file.')');
+        }
+        
+        // Include the PHPFrame lib language file
+        $lang_file = "PHPFrame".DS."Lang".DS.PHPFrame::Config()->get("DEFAULT_LANG").".php";
+        if (!(require_once $lang_file)) {
+            throw new PHPFrame_Exception('Could not find language file ('.$lang_file.')');
+        }
     }
 }
 
 // Boot up the PHPFrame!!!
-PHPFrame::boot();
+PHPFrame::Boot();

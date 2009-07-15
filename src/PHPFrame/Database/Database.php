@@ -255,7 +255,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
     public function getStructure($table_name=null)
     {
         // Replace table prefix with config value
-        $table_name = str_replace('#__', config::DB_PREFIX, $table_name);
+        $table_name = str_replace('#__', PHPFrame::Config()->get("DB_PREFIX"), $table_name);
         
         if (!is_array($this->_structure) || count($this->_structure) < 1) {
             $this->_fetchStructure();
@@ -299,7 +299,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
     public function query($sql, $params=array(), $fetch_mode=self::FETCH_STMT) 
     {
         // Replace table prefix with config value
-        $sql = str_replace('#__', config::DB_PREFIX, $sql);
+        $sql = str_replace('#__', PHPFrame::Config()->get("DB_PREFIX"), $sql);
         
         // Run SQL query
         try {

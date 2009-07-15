@@ -1,4 +1,4 @@
-#!/usr/local/zend/bin/php
+#!/usr/bin/env php
 <?php
 /**
  * scripts/post-install.php
@@ -11,7 +11,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id: PHPFrame_CLI_Tool.php 227 2009-07-15 02:15:45Z luis.montero@e-noise.com $
+ * @version    SVN: $Id: PHPFrame_CLI_Tool.php 251 2009-07-15 21:53:49Z luis.montero@e-noise.com $
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
@@ -48,19 +48,34 @@ class PHPFrame_CLI_Tool_postinstall
      * @return bool Returns TRUE on success or FALSE on failure
      * @since  1.0
      */
-    public function init(PEAR_Config $config , PEAR_PackageFile_v2 $self , $lastInstalledVersion=null)
+    public function init(PEAR_Config $config, PEAR_PackageFile_v2 $self, $lastInstalledVersion=null)
     {
         // Include PHPFrame framework
         require_once "PHPFrame.php";
         
         if (!class_exists('PHPFrame')) {
-            die("Missing PHPFrame. Please check your PEAR installation.\n");
+			$this->_output("Missing PHPFrame. Please check your PEAR installation.");
+			return false;
         }
         
         $this->_install_path = PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR;
         $this->_install_path .= "PHPFrame_CLI_Tool";
+
+		$msg = "\nPHPFrame CLI Tool installation";
+		$msg .= "\n------------------------------\n\n";
+		$msg .= "\nTo install please fill in all fields in order to install ";
+		$msg .= "or type 'abort' to skip installation.\n\n";
+		$msg .= "\nInstallation directory: ".$this->_install_path."\n\n";
         
-		PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_path);
+		echo $msg;
+		
+		// Ensure writable installation directory
+		try {
+			PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_path);
+		} catch (Exception $e) {
+			$this->_output("Installation directory not writable...");
+			$this->_output("Installation failed...");
+		}
 		
         return true;
     }
@@ -86,30 +101,75 @@ class PHPFrame_CLI_Tool_postinstall
     public function run($infoArray, $paramGroupId)
     {
 		// Only process if info array contains data
-		if (is_array($infoArray) && count($infoArray) > 0) {
-			// Fetch scaffold source
-	        $this->_fetchSource();
-			exit;
-			
-	        // Create config file
-	        $this->_createConfig($infoArray);
-		} else {
-			echo "\nInstallation skipped...\n\n";
+		if (!is_array($infoArray) || count($infoArray) < 1) {
+			$this->_output("Installation skipped...");
+			return false;
 		}
+		
+		// Create db and dbuser if requested
+		var_dump($infoArray); exit;
+		if ($infoArray) {
+			
+		}
+		
+		// Check DSN database
+		
+		// Populate DB
+		
+		
+		// Fetch scaffold source
+        if (!$this->_fetchSource()) {
+			$this->_output("Error getting PHPFrame_Scaffold source...");
+			$this->_output("Installation failed...");
+			return false;
+		}
+		
+		// Create config file
+        if (!$this->_createConfig($infoArray)) {
+			$this->_output("Error creating config file...");
+			$this->_output("Installation failed...");
+			return false;
+		}
+		
+		// If we got here installation succeded
+		$this->_output("PHPFrame CLI Tool successfully installed...");
+		return true;
     }
     
+	private function _createDB()
+	{
+		
+	}
+
+	private function _checkDSN($driver, $host)
+	{
+		
+	}
+	
+	private function _populateDB()
+	{
+		
+	}
+	
     private function _fetchSource()
     {
         $source = "http://phpframe.googlecode.com/svn/PHPFrame_Scaffold/trunk/";
+        $cmd = "svn export --force ".$source." ".$this->_install_path.DIRECTORY_SEPARATOR;
         
-        $cmd = "svn export ".$source." ".$this->_install_path.DIRECTORY_SEPARATOR;
-        
-		echo "\nFetching PHPFrame_Scaffold source from repo...\n\n";
-		echo "\nUsing command ".$cmd."...\n\n";
+		$this->_output("Fetching PHPFrame_Scaffold source from repository...");
+		$this->_output("Using command \"".$cmd."\"...");
 		
 		$exec = PHPFrame_Utils_Exec::run($cmd);
 		
-		var_dump($exec);
+		$this->_output($exec->getOutput());
+		
+		if ($exec->getReturnVar() > 0) {
+			$this->_output("Failed to checkout source from repository...");
+			
+			return false;
+		}
+		
+		return true;
     }
     
     private function _createConfig($array)
@@ -117,11 +177,13 @@ class PHPFrame_CLI_Tool_postinstall
         if (!is_array($array)) {
             $msg = get_class($this)."::_createConfig()";
             $msg .= " expected an array as only argument.";
-            trigger_error($msg);
+            $this->_output($msg);
         }
+
+		$this->_output("Creating configuration file...");
         
         // Instanciate new config object
-        $config = new PHPFrame_Config();
+        $config = PHPFrame_Config::instance();
         
         // Bind to array
         $config->bind($array);
@@ -131,5 +193,26 @@ class PHPFrame_CLI_Tool_postinstall
         $config_file .= "etc".DIRECTORY_SEPARATOR;
         $config_file .= "config.xml";
         PHPFrame_Utils_Filesystem::write($config_file, $config->toXML());
+
+		return true;
     }
+
+	private function _output($msg, $trigger_error=false)
+	{
+		// Convert messages in array format to string
+		if (is_array($msg)) {
+			$msg = implode("\n", $msg);
+		}
+		
+		// Echo message to user
+		echo "\n".$msg."\n\n";
+		
+		// Log message to file
+		PHPFrame_Debug_Logger::write($msg);
+		
+		// Trigger PHP error is flag passed
+		if ($trigger_error) {
+			trigger_error($msg);
+		}
+	}
 }

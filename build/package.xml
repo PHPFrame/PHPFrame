@@ -135,7 +135,7 @@
    	   <tasks:name>DB_HOST</tasks:name>
        <tasks:prompt>Database host for phpframe command line tool (normally "localhost")</tasks:prompt>
        <tasks:type>string</tasks:type>
-       <tasks:default>MySQL</tasks:default>
+       <tasks:default>localhost</tasks:default>
       </tasks:param>
       <tasks:param>
    	   <tasks:name>DB_USER</tasks:name>

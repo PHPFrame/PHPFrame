@@ -74,28 +74,29 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
      */
     public static function write($str) 
     {
-        // Add log info
-        $info = "\n";
-        $info .= "---";
-        $info .= "\n";
+        // Add log separator
+        $info = "\n\n---\n";
+		
+		// Add date and time
         $info .= "[".date("Y-m-d H:i:s")."]";
+		
+		// Add IP address if available
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $info .= " [ip:".$_SERVER['REMOTE_ADDR']."]";
         } else {
             $info .= " [cli]";
         }
         
-        $info .= "\n";
-        
         // Write log to filesystem using PHPFrame's utility class
         if (defined("PHPFRAME_VAR_DIR")) {
-            $log_file = PHPFRAME_VAR_DIR;
+            $log_dir = PHPFRAME_VAR_DIR;
         } else {
             require_once "PEAR/Config.php";
-			$log_file = PEAR_Config::singleton()->get('data_dir');
+			$log_dir = PEAR_Config::singleton()->get('data_dir');
+			$log_dir .= DS."PHPFrame";
         }
         
-        $log_file .= DS."log";
+        $log_file = $log_dir.DS."log";
         
         PHPFrame_Utils_Filesystem::write($log_file, $info.$str, true);
     }

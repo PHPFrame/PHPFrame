@@ -5,18 +5,13 @@ class PHPFrame_Utils_Exec
     private $_output=null;
     private $_return_var=null;
     
-    public function __construct($cmd, $autorun=true)
+    public function __construct($cmd)
     {
-        if ($autorun) {
-            $this->run($cmd);
-        }
-    }
-    
-    public function run($cmd)
-    {
-        $this->_cmd = (string) $cmd;
+		$this->_cmd = (string) $cmd;
         
         exec($this->_cmd, $this->_output, $this->_return_var);
+
+		return $this;
     }
     
     public function getCmd()

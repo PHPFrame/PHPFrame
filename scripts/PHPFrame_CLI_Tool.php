@@ -1,4 +1,4 @@
-#!/usr/bin/env php
+#!/usr/local/zend/bin/php
 <?php
 /**
  * scripts/post-install.php
@@ -11,7 +11,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id: PHPFrame_CLI_Tool.php 251 2009-07-15 21:53:49Z luis.montero@e-noise.com $
+ * @version    SVN: $Id: PHPFrame_CLI_Tool.php 253 2009-07-15 23:18:32Z luis.montero@e-noise.com $
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
@@ -106,10 +106,20 @@ class PHPFrame_CLI_Tool_postinstall
 			return false;
 		}
 		
+		// Check input array for db details
+		if (!$this->_checkDBInput($infoArray)) {
+			$this->_output("Not enough info to set up database...");
+			$this->_output("Installation failed...");
+			return false;
+		}
+		
 		// Create db and dbuser if requested
-		var_dump($infoArray); exit;
-		if ($infoArray) {
+		if (isset($infoArray["DB_ROOT"]) && isset($infoArray["DB_ROOT_PASS"])) {
+			$concrete_dsn_class = "PHPFrame_Database_DSN_".$infoArray["DB_DRIVER"];
+			$dsn = new $concrete_dsn_class($infoArray["DB_HOST"], $infoArray["DB_NAME"]);
 			
+			$db = PHPFrame::DB($dsn, $infoArray["DB_USER"], $infoArray["DB_PASS"]);
+			var_dump($db); exit;
 		}
 		
 		// Check DSN database
@@ -214,5 +224,18 @@ class PHPFrame_CLI_Tool_postinstall
 		if ($trigger_error) {
 			trigger_error($msg);
 		}
+	}
+	
+	private function _checkDBInput($array)
+	{
+		$keys = array("DB_DRIVER", "DB_HOST", "DB_USER", "DB_PASS", "DB_NAME");
+		
+		foreach ($keys as $key) {
+			if (!isset($array[$key])) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }

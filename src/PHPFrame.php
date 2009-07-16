@@ -59,7 +59,7 @@ class PHPFrame
      * 
      * @var string
      */
-    const RELEASE_VERSION="0.1.3";
+    const RELEASE_VERSION="0.0.3";
     /**
      * The PHPFrame version
      * 

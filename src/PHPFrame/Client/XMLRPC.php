@@ -123,8 +123,10 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         $domDocument->loadXML($xml);
         $domXPath = new DOMXPath($domDocument);
         
-        $methodName = $domXPath->query("//methodCall/methodName")->item(0)->nodeValue;
-        
+        $query = "//methodCall/methodName";
+        $query_result = $domXPath->query($query);
+        $methodName = $query_result->item(0)->nodeValue;
+        echo $methodName."\n";
         //look for 'component.action' format 
         preg_match('/^([a-zA-Z]+)(\.([a-zA-Z_]+))?$/', $methodName, $matches);
         
@@ -136,17 +138,23 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
             if (count($matches) > 2) {
                 $array['request']['action'] = $matches[3];    
             }
-        } 
-        
-        //if a <struct> element exists and has child nodes
-        if ($domXPath->query("//methodCall/params/param/value/struct")->item(0)->hasChildNodes()) {
-            
-            $query = "//methodCall/params/param/value/struct/member";
-            $members = $domXPath->query($query);
-
-            $array['request'] = $this->_parseXMLRPCRecurse($domXPath, $members);
-            
         }
+        
+        $query = "//methodCall/params/param/value/struct/member";
+        $query_result = $domXPath->query($query);
+		echo "node length ".$query_result->length;  
+        //if a <struct> element exists and has child nodes
+        if (
+        	$query_result instanceof DOMNodeList 
+        	&& $query_result->length!=0 
+        	&& $query_result->item(0)->hasChildNodes()
+        ) {
+            $members = $query_result;
+//            foreach ($members as $member)
+//           		var_dump($member);
+           	$this->_parseXMLRPCRecurse($domXPath, $members, $array['request']);
+        }
+        var_dump($array);
         return $array;
     }
        
@@ -162,39 +170,69 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      * @param array $array
      * @return array
      */
-    private function _parseXMLRPCRecurse(&$domXPath, $nodes, $search_path="", &$array=array()) 
-    {
-        
-        foreach ($nodes as $node) {
-             
-ob_start();
-var_dump($nodes->item(2)->childNodes->item(2)->firstChild->nodeName);
-$output = ob_get_contents();
-ob_end_clean();
-file_put_contents("/var/www/extranetoffice/test/xmlrpc/globals.html",$output);
-exit;        
-
-            if ($node->childNodes->item(2)->hasChildNodes()) {
-                //recurse    
-            }
-            else {
-                $array[$node->childNodes->item(0)->textContent] = $node->childNodes->item(2)->textContent;
-            }
-            
-            /*if ($node->childNodes->length > 1) {
-                $query = "params/param";
-                $children = $domXPath->query($query, $node);
-                $this->_parseXMLResponseRecurse($domXPath, $children, $query, $array[$node->getAttribute("key")]);
-                      
-                $query = "struct/member";
-                $children = $domXPath->query($query, $node);
-                $this->_parseXMLResponseRecurse($domXPath, $children, $query, $array[$node->getAttribute("key")]);
-            }
-            else {
-                       $array[$node->getAttribute("key")] = $node->nodeValue;
-            }*/
+ 	private function _parseXMLRPCRecurse($domXPath, $nodes, &$array=array()) {
+ 		if (!($nodes instanceof DOMNodeList))
+ 			throw new PHPFrame_Exception("Invalid parameter type, nodes must be of type DOMNodeList!");
+    	foreach ($nodes as $node) {
+    		$query = 'name';
+    		$key = $domXPath->query($query, $node)->item(0)->nodeValue;
+    		$query = 'value/struct/member';
+    		$value = $domXPath->query($query, $node);
+    		if ($value->length!=0) {
+    			$array[$key] = $this->_parseXMLRPCRecurse($domXPath, $value);
+    		}
+    		else {
+    			$query = 'value';
+    			$value = $domXPath->query($query, $node)->item(0)->firstChild;
+    			if ($value->nodeName=='int')
+    				$leafValue = (int)$value->nodeValue;
+    			else if ($value->nodeName=='string')
+    				$leafValue = (string)$value->nodeValue;
+    			else if ($value->nodeName=='double')
+    				$leafValue = (float) $value->nodeValue;
+    			else if ($value->nodeName=='boolean')
+    				$leafValue = (boolean) $value->nodeValue;
+    			
+    			$array[$key] = $leafValue;
+    		}
         }
         
         return $array;
+    }
+    
+    /**
+     * This method is used to return the scalar value of a DOMNode. 
+     * The node must be one of the scalar values as specified by the 
+     * xml rpc (i4, int, boolean, string, double, dateTime.iso8601, base64).
+     * 
+     * @param $node DOMNode containing value to return
+     * @return various int for i4, int or dateTime.iso8601 (unix timestamp) nodes, 
+     * boolean for boolean, string for string or base64 and float for double
+     */
+    private function _nodeScalarValue($node) {
+    	if (!($node instanceof DOMNode))
+    		throw new PHPFrame_Exception("Invalid parameter, node must be of type DOMNode!");
+    	$nodeName = $node->nodeName;
+    	$time_reg = '/(^[0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2})([0-9]{2})([0-9]{2}$)/';
+    	switch ($nodeName){
+    		case 'i4':
+    		case 'int':
+    			$value = (int)$node->nodeValue;
+    			break;
+    		case 'boolean':
+    			$value = (boolean)$node->nodeValue;
+    			break;
+    		case 'string':
+    		case 'base64':
+    			$value = (string)$node->nodeValue;
+    			break;
+    		case 'double':
+    			$value = (float)$node->nodeValue;
+    			break;
+    		case 'dateTime.iso8601':
+    			$matches = array();
+    			preg_match($time_reg, $node->nodeValue, $matches);
+    			break;
+    	}
     }
 }

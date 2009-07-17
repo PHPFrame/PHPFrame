@@ -41,7 +41,7 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     {
         
         global $HTTP_RAW_POST_DATA;
-            
+        
         //check existance of $_HTTP_RAW_POST_DATA array
         if (count($HTTP_RAW_POST_DATA) > 0) {
             //check for a valid XML structure
@@ -58,6 +58,9 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
                 {
                     return new self;
                 }
+            }
+            else{
+            	throw new PHPFrame_Exception("Given xml is invalid!");
             }
         }
         return false;
@@ -126,7 +129,6 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         $query = "//methodCall/methodName";
         $query_result = $domXPath->query($query);
         $methodName = $query_result->item(0)->nodeValue;
-        echo $methodName."\n";
         //look for 'component.action' format 
         preg_match('/^([a-zA-Z]+)(\.([a-zA-Z_]+))?$/', $methodName, $matches);
         
@@ -140,64 +142,67 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
             }
         }
         
-        $query = "//methodCall/params/param/value/struct/member";
+        $query = '//methodCall/params/param/value';
         $query_result = $domXPath->query($query);
-		echo "node length ".$query_result->length;  
-        //if a <struct> element exists and has child nodes
+        //look at the first struct element members to identify parameter values
         if (
         	$query_result instanceof DOMNodeList 
         	&& $query_result->length!=0 
         	&& $query_result->item(0)->hasChildNodes()
         ) {
-            $members = $query_result;
-//            foreach ($members as $member)
-//           		var_dump($member);
-           	$this->_parseXMLRPCRecurse($domXPath, $members, $array['request']);
+        	$paramValue = $this->_parseXMLRPCRecurse($domXPath, $query_result->item(0));
+        	if (is_array($paramValue)){
+	            foreach($paramValue as $key=>$value){
+	            	$array['request'][$key] = $value;
+	            }
+        	}
         }
         var_dump($array);
         return $array;
     }
        
     /**
-     * This method is used by _parseXMLResponse() to loop recursively through XML nodes 
-     * and collect data.
+     * Parses an xml-rpc value node and returns the correct data type.
      *
      * @access private
      * @param object $domXPath    The DOMXPath object used for parsing the XML. This object 
      *                             is created in _parseXMLResponse().
-     * @param object $nodes
-     * @param string $search_path
-     * @param array $array
-     * @return array
+     * @param DOMNode $node The value DOMNode to parse
+     * @return various if the given node is a scalar value, the scalar value is returned, 
+     * if the node is a struct, an associative array with key value pairs is returned, 
+     * if the node is an array 
      */
- 	private function _parseXMLRPCRecurse($domXPath, $nodes, &$array=array()) {
- 		if (!($nodes instanceof DOMNodeList))
- 			throw new PHPFrame_Exception("Invalid parameter type, nodes must be of type DOMNodeList!");
-    	foreach ($nodes as $node) {
-    		$query = 'name';
-    		$key = $domXPath->query($query, $node)->item(0)->nodeValue;
-    		$query = 'value/struct/member';
-    		$value = $domXPath->query($query, $node);
-    		if ($value->length!=0) {
-    			$array[$key] = $this->_parseXMLRPCRecurse($domXPath, $value);
-    		}
-    		else {
+ 	private function _parseXMLRPCRecurse($domXPath, $node) {
+ 		if (!(($node instanceof DOMNode) && $node->nodeName=='value')){
+ 			throw new PHPFrame_Exception("Invalid parameter type, nodes must be of type DOMNode and must be a value node!");
+ 		}
+    	//check if current value is a struct, array or scalar type
+    	if ($node->firstChild->nodeName=='struct'){
+    		$newStruct = array();
+    		$query = 'struct/member';
+    		$members = $domXPath->query($query, $node);
+    		foreach ($members as $member){
+    			$query = 'name';
+    			$key = $domXPath->query($query, $member)->item(0)->nodeValue;
     			$query = 'value';
-    			$value = $domXPath->query($query, $node)->item(0)->firstChild;
-    			if ($value->nodeName=='int')
-    				$leafValue = (int)$value->nodeValue;
-    			else if ($value->nodeName=='string')
-    				$leafValue = (string)$value->nodeValue;
-    			else if ($value->nodeName=='double')
-    				$leafValue = (float) $value->nodeValue;
-    			else if ($value->nodeName=='boolean')
-    				$leafValue = (boolean) $value->nodeValue;
-    			
-    			$array[$key] = $leafValue;
+    			$value = $this->_parseXMLRPCRecurse($domXPath, $domXPath->query($query, $member)->item(0));
+    			$newStruct[$key] = $value;
     		}
-        }
-        
-        return $array;
+    		return $newStruct;
+    	}
+    	else if ($node->firstChild->nodeName=='array'){
+    		$newArray = array();
+    		$query = 'array/data/value';
+    		$values = $domXPath->query($query, $node);
+    		foreach ($values as $value){
+    			$newArray[] = $this->_parseXMLRPCRecurse($domXPath, $value);
+    		}
+    		return $newArray;
+    	}
+    	else{//value node must a scalar type
+    		$leafValue = $node->firstChild;
+    		return $this->_nodeScalarValue($leafValue);
+    	}
     }
     
     /**
@@ -209,11 +214,12 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      * @return various int for i4, int or dateTime.iso8601 (unix timestamp) nodes, 
      * boolean for boolean, string for string or base64 and float for double
      */
-    private function _nodeScalarValue($node) {
+    private function _nodeScalarValue($node)
+    {
     	if (!($node instanceof DOMNode))
     		throw new PHPFrame_Exception("Invalid parameter, node must be of type DOMNode!");
     	$nodeName = $node->nodeName;
-    	$time_reg = '/(^[0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2})([0-9]{2})([0-9]{2}$)/';
+    	$time_reg = '/(^[0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2}$)/';
     	switch ($nodeName){
     		case 'i4':
     		case 'int':
@@ -231,8 +237,14 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     			break;
     		case 'dateTime.iso8601':
     			$matches = array();
-    			preg_match($time_reg, $node->nodeValue, $matches);
+    			$isValidTime = preg_match($time_reg, $node->nodeValue, $matches);
+    			if ($isValidTime!=1){
+    				throw new PHPFrame_Exception('Invalid dateTime format found for value '.$node->nodeValue.'!');
+    			}
+    			else
+    				$value = mktime($matches[4], $matches[5], $matches[6], $matches[2], $matches[3], $matches[1]);
     			break;
     	}
+    	return $value;
     }
 }

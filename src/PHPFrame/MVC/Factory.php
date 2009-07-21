@@ -71,6 +71,7 @@ class PHPFrame_MVC_Factory
             }
             // No declared constructor, so we instantiate without args
             return new $class_name;
+        // If class is not instantiable we look for a method called "getInstance"
         } elseif ($reflectionObj->hasMethod('getInstance')) {
             $get_instance = $reflectionObj->getMethod('getInstance');
             if ($get_instance->isPublic() && $get_instance->isStatic()) {

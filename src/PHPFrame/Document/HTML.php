@@ -107,7 +107,10 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
      */
     public function render(PHPFrame_MVC_View $view, $apply_theme=true) 
     {
-        $tmpl_path = COMPONENT_PATH.DS."views";
+        $component_path = PHPFRAME_INSTALL_DIR.DS."src";
+        $component_path .= DS."components".DS.PHPFrame::Request()->getComponentName();
+        
+        $tmpl_path = $component_path.DS."views";
         $tmpl_path .= DS.$view->getName().DS."tmpl";
         
         // Add client specific template to path

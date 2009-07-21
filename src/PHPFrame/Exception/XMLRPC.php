@@ -67,7 +67,7 @@ class PHPFrame_Exception_XMLRPC extends PHPFrame_Exception
 				         <struct>
 				            <member>
 				               <name>faultCode</name>
-				               <value><int>'.$_faultCode.'</int></value>
+				               <value><int>'.$this->_faultCode.'</int></value>
 				               </member>
 				            <member>
 				               <name>faultString</name>

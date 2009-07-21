@@ -109,4 +109,11 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
         // Set document as response content
         $response->setDocument(new PHPFrame_Document_Plain());
     }
+    
+    public function redirect($url)
+    {
+        //...
+        echo "FIX ME!!!: ".get_class($this)."::redirect() needs to be implemented.";
+        exit;
+    }
 }

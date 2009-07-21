@@ -82,4 +82,6 @@ interface PHPFrame_Client_IClient
      * @since  1.0
      */
     public function prepareResponse(PHPFrame_Application_Response $response);
+    
+    public function redirect($url);
 }

@@ -108,4 +108,12 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
         // Set document as response content
         $response->setDocument($document);
     }
+    
+    public function redirect($url)
+    {
+        $url = (string) trim($url);
+        
+        header("Location: ".$url);
+        exit;
+    }
 }

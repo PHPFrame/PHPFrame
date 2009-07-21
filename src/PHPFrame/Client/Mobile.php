@@ -115,5 +115,16 @@ class PHPFrame_Client_Mobile implements PHPFrame_Client_IClient
      * @return void
      * @since  1.0
      */
-    public function prepareResponse(PHPFrame_Application_Response $response) {}
+    public function prepareResponse(PHPFrame_Application_Response $response)
+    {
+        //...
+    }
+    
+    public function redirect($url)
+    {
+        $url = (string) trim($url);
+        
+        header("Location: ".$url);
+        exit;
+    }
 }

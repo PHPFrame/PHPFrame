@@ -27,6 +27,7 @@
  */
 class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
 {
+	
     /**
      * Check if this is the correct helper for the client being used
      * 
@@ -110,6 +111,8 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      */
     public function prepareResponse(PHPFrame_Application_Response $response) {}
     
+    public function redirect($url) {}
+    
     /**
      * This method is used to parse an XML remote procedure call
      *
@@ -119,7 +122,6 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      */
     private function _parseXMLRPC($xml) 
     {
-        
         $array = array();
         
         $domDocument = new DOMDocument;
@@ -150,11 +152,27 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         	&& $query_result->length!=0 
         	&& $query_result->item(0)->hasChildNodes()
         ) {
-        	$paramValue = $this->_parseXMLRPCRecurse($domXPath, $query_result->item(0));
-        	if (is_array($paramValue)){
-	            foreach($paramValue as $key=>$value){
-	            	$array['request'][$key] = $value;
-	            }
+        	$parameters = array();
+        	foreach($query_result as $parameter){
+        		$parameters[] = $this->_parseXMLRPCRecurse($domXPath, $parameter);
+        	}
+        	try{
+        	//check if component action request is valid:
+        	$paramMap = $this->_getComponentActionParameterMapping($array['request']['component'], $array['request']['action'], $parameters);
+        	} catch (PHPFrame_Exception_XMLRPC $e){
+        		echo "Exception thrown: ".$e->getMessage();
+        	}
+        	exit;
+            foreach($paramMap as $key=>$value){
+            	$array['request'][$key] = $value;
+            }
+        }
+        else{
+        	try{
+        		//check if component action request is valid:
+        		$paramMap = $this->_getComponentActionParameterMapping($array['request']['component'], $array['request']['action'], array());
+        	} catch (PHPFrame_Exception_XMLRPC $e){
+        		echo "Exception thrown: ".$e->getMessage();
         	}
         }
         var_dump($array);
@@ -204,6 +222,120 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     		return $this->_nodeScalarValue($leafValue);
     	}
     }
+    
+    /**
+     * Returns an associative array mapping the given parameters for a 
+     * component action, first checking if the call is valid.
+     * This method first checks if the component is valid, then 
+     * continues to check if the action name is valid and finally, 
+     * whether the parameters are valid. If all the checks pass, an 
+     * associative array mapping the real controller action parameters names 
+     * to the user specified parameters.
+     * 
+     * @param string $component The name of the component
+     * @param string $action The name of the action to check on the component
+     * @param array $params The indexed array of parameters required for the 
+     * component action
+     * @return mixed either an array containing paramter mapping or void 
+     * with thrown PHPFrame_Exception_XMLRPC if component, action or parameters are invalid
+     */
+    private function _getComponentActionParameterMapping($component, $action, $params)
+    {
+    	$component = substr($component, 4);
+    	$reflectionClass = $this->_getComponentClass($component);
+    	if (!$reflectionClass){
+    		throw new PHPFrame_Exception_XMLRPC('No such component exists: '.$component, PHPFrame_Exception_XMLRPC::INVALID_COMPONENT);
+    		return;
+    	}
+    	echo 'component exists ';
+    	if (!$reflectionClass->hasMethod($action)){
+    		throw new PHPFrame_Exception_XMLRPC('No such action: '.$action.' exists in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_ACTION);
+    		return;
+    	}
+    	echo 'action exists ';
+    	$actionMethod = $reflectionClass->getMethod($action);
+    	if (!$actionMethod->isPublic()){
+    		throw new PHPFrame_Exception_XMLRPC('Component action: '.$action.' is inaccessible in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_ACTION);
+    		return;
+    	}
+    	$reflectionParameters = $actionMethod->getParameters();
+    	$numParams = count($reflectionParameters);
+    	$minReqParams = $actionMethod->getNumberOfRequiredParameters();
+    	if (count($params) > $numParams) {
+    		throw new PHPFrame_Exception_XMLRPC('Too many or too few parameters have been specified for action: '.$action.' in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_NUMBER_PARAMETERS);
+    		return;
+    	}
+    	elseif (count($params) < $minReqParams) {
+    		throw new PHPFrame_Exception_XMLRPC('Too few parameters specified for action: '.$action.' in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_NUMBER_PARAMETERS);
+    	}
+    	$paramMap = array();
+    	$paramIndex = 0;
+    	foreach ($reflectionParameters as $reflectionParam){
+    		if ($paramIndex<count($params)){
+	    		$class = $reflectionParam->getClass();
+	    		$paramPosition = $reflectionParam->getPosition();
+	    		if ($reflectionParam->isArray() && !is_array($params[$paramPosition])){
+	    			throw new PHPFrame_Exception_XMLRPC('Parameter type mis-match for parameter '.$paramPosition.', expected an array, got primitive type', PHPFrame_Exception_XMLRPC::INVALID_PARAMETER_TYPE);
+	    			return;
+	    		}
+	    		else if (!empty($class) && !is_array($params[$paramPosition])){
+	    			throw new PHPFrame_Exception_XMLRPC('Parameter type mis-match for parameter '.$paramPosition.', expected a struct, got primitive type', PHPFrame_Exception_XMLRPC::INVALID_PARAMETER_TYPE);
+	    			return;
+	    		}
+	    		else if (!$reflectionParam->isArray() && empty($class) && is_array($params[$paramPosition])){
+	    			throw new PHPFrame_Exception_XMLRPC('Parameter type mis-match for parameter '.$paramPosition.', expected a primitive, got a struct/array', PHPFrame_Exception_XMLRPC::INVALID_PARAMETER_TYPE);
+	    			return;
+	    		}
+	    		else{
+	    			$paramMap[$reflectionParam->getName()] = $params[$paramPosition];
+	    		}
+	    		$paramIndex++;
+    		}
+    		else
+    			break;
+    	}
+    	return $paramMap;
+    }
+    
+    /**
+     * Gets the specified component controller class if it exists. 
+     * This returns the ReflectionClass object if there is an instantiable controller 
+     * class for the specified component.
+     * 
+     * @param $component
+     * @return mixed ReflectionClass if a component with this name exists, 
+     * FALSE otherwise
+     */
+    private function _getComponentClass($component)
+    {
+    	$class_name = $component."Controller";
+    	// make a reflection object
+    	try{
+        $reflectionObj = new ReflectionClass($class_name);
+    	} catch (Exception $e){
+    		return FALSE;
+    	}
+    	// Check if class is instantiable
+        if ($reflectionObj->isInstantiable()) {
+            // Try to get the constructor
+            $constructor = $reflectionObj->getConstructor();
+            // Check to see if we have a valid constructor method
+            if ($constructor instanceof ReflectionMethod) {
+                // If constructor is public we create a new instance
+                if ($constructor->isPublic()) {
+                    return $reflectionObj;
+                }
+            }
+        }
+        //check if the class has a static getInstance method
+        if ($reflectionObj->hasMethod('getInstance')) {
+            $get_instance = $reflectionObj->getMethod('getInstance');
+            if ($get_instance->isPublic() && $get_instance->isStatic()) {
+            	return $reflectionObj;
+            }
+        }
+    }    
+    
     
     /**
      * This method is used to return the scalar value of a DOMNode. 

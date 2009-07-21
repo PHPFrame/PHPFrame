@@ -40,7 +40,6 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      */
     public static function detect() 
     {
-        
         global $HTTP_RAW_POST_DATA;
         
         //check existance of $_HTTP_RAW_POST_DATA array
@@ -109,7 +108,10 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      * @return void
      * @since  1.0
      */
-    public function prepareResponse(PHPFrame_Application_Response $response) {}
+    public function prepareResponse(PHPFrame_Application_Response $response)
+    {
+    	$response->setDocument(new PHPFrame_Document_RPC());    	
+    }
     
     public function redirect($url) {}
     
@@ -176,6 +178,7 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         		exit;
         	}
         }
+
         return $array;
     }
        
@@ -341,7 +344,7 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      * xml rpc (i4, int, boolean, string, double, dateTime.iso8601, base64).
      * 
      * @param $node DOMNode containing value to return
-     * @return various int for i4, int or dateTime.iso8601 (unix timestamp) nodes, 
+     * @return mixed int for i4, int or dateTime.iso8601 (unix timestamp) nodes, 
      * boolean for boolean, string for string or base64 and float for double
      */
     private function _nodeScalarValue($node)

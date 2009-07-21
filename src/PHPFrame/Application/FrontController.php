@@ -64,15 +64,13 @@ class PHPFrame_Application_FrontController
      */
     public function run() 
     {
-        $component_name = PHPFrame::Request()->getComponentName();
-        
-        // set the component path
-        define("COMPONENT_PATH", PHPFRAME_INSTALL_DIR.DS."src".DS."components".DS.$component_name);
-        
         // Get instance of client from session
         $client = PHPFrame::Session()->getClient();
         // Prepare response using client
         $client->prepareResponse(PHPFrame::Response());
+        
+        // Get requested component name
+        $component_name = PHPFrame::Request()->getComponentName();
         
         // Create the action controller
         $controller = PHPFrame_MVC_ActionController::getInstance($component_name);

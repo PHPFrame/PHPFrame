@@ -549,7 +549,7 @@ class PHPFrame_HTML
      */
     public static function formToken() 
     {
-        ?><input type="hidden" name="<?php echo PHPFrame_Utils_Crypt::getToken(); ?>" value="1" /><?php
+        ?><input type="hidden" name="<?php echo PHPFrame::Session()->getToken(); ?>" value="1" /><?php
     }
     
     /**

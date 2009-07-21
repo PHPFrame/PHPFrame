@@ -44,54 +44,6 @@ class PHPFrame_Utils_Crypt
     {
         return md5(PHPFrame::Config()->get("SECRET").$seed);
     }
-
-    /**
-     * Method to determine a hash for anti-spoofing variable names
-     * 
-     * @param $forceNew Optional parameter. Default value is FALSE. 
-     *                  If set to TRUE it forces the session to generate a new token.
-     * 
-     * @access public
-     * @return string Hashed var name
-     * @since  1.0
-     */
-    static function getToken($forceNew = false) 
-    {
-        $session = PHPFrame::Session();
-        $user = $session->getUser();
-        $hash = PHPFrame_Utils_Crypt::getHash($user->id.$session->getToken( $forceNew ));
-
-        return $hash;
-    }
-    
-    /**
-     * Checks for a form token in the request
-     *
-     * Use in conjuction with PHPFrame_HTML::_( 'form.token' )
-     * 
-     * @access    public
-     * @return    bool    True if found and valid, false otherwise
-     * @since    1.0
-     */
-    static function checkToken() 
-    {
-        $token = PHPFrame_Utils_Crypt::getToken();
-        if (!PHPFrame::Request()->get($token, '')) {
-            return false;
-            /*
-            $session = PHPFrame::Session();
-            if ($session->isNew()) {
-                //Redirect to login screen
-            }
-            else {
-                return false;
-            }
-            */
-        }
-        else {
-            return true;
-        }
-    }
     
     /**
      * Formats a password using the current encryption.
@@ -110,11 +62,12 @@ class PHPFrame_Utils_Crypt
      * @return string  The encrypted password.
      * @since    1.0
      */
-    static function getCryptedPassword($plaintext, 
-                                       $salt = '', 
-                                       $encryption = 'md5-hex', 
-                                       $show_encrypt = false) 
-    {
+    static function getCryptedPassword(
+        $plaintext, 
+        $salt = '', 
+        $encryption = 'md5-hex', 
+        $show_encrypt = false
+    ) {
         // Get the salt to use.
         $salt = PHPFrame_Utils_Crypt::getSalt($encryption, $salt, $plaintext);
 
@@ -208,7 +161,7 @@ class PHPFrame_Utils_Crypt
      * @return string  The generated or extracted salt.
      * @since    1.0
      */
-    static function getSalt($encryption = 'md5-hex', $seed = '', $plaintext = '') 
+    static function getSalt($encryption='md5-hex', $seed='', $plaintext='') 
     {
         // Encrypt the password.
         switch ($encryption) {
@@ -288,7 +241,7 @@ class PHPFrame_Utils_Crypt
      * @return    string            Random Password
      * @since    1.0
      */
-    static function genRandomPassword($length = 8) 
+    static function genRandomPassword($length=8) 
     {
         $salt = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         $len = strlen($salt);

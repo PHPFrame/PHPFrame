@@ -398,6 +398,24 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     }
     
     /**
+     * Checks for a form token in the request
+     * 
+     * @access public
+     * @return bool TRUE if found and valid, FALSE otherwise
+     * @since  1.0
+     */
+    public function checkToken() 
+    {
+        $request_token = PHPFrame::Request()->get($this->getToken(), '');
+        
+        if ($request_token == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
      * Destroy session
      * 
      * @access public

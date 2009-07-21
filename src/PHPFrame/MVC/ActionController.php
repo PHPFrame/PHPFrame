@@ -212,10 +212,15 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      */
     protected function redirect() 
     {
-        $client_name = PHPFrame::Session()->getClientName();
-        if ($this->redirect_url && $client_name != "cli") {
-            header("Location: ".$this->redirect_url);
-            exit;
+        // Get client object from session
+        $client = PHPFrame::Session()->getClient();
+        
+        // Delegate redirection to client object if it is of the right type
+        if ($client instanceof PHPFrame_Client_IClient) {
+            $client->redirect($this->redirect_url);
+        } else {
+            $msg = "Action controller could not redirect using client object";
+            throw new PHPFrame_Exception($msg);
         }
     }
     

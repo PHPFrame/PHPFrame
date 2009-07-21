@@ -160,9 +160,9 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         	//check if component action request is valid:
         	$paramMap = $this->_getComponentActionParameterMapping($array['request']['component'], $array['request']['action'], $parameters);
         	} catch (PHPFrame_Exception_XMLRPC $e){
-        		echo "Exception thrown: ".$e->getMessage();
+        		echo $e->getXMLRPCFault();
+        		exit;
         	}
-        	exit;
             foreach($paramMap as $key=>$value){
             	$array['request'][$key] = $value;
             }
@@ -172,10 +172,10 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         		//check if component action request is valid:
         		$paramMap = $this->_getComponentActionParameterMapping($array['request']['component'], $array['request']['action'], array());
         	} catch (PHPFrame_Exception_XMLRPC $e){
-        		echo "Exception thrown: ".$e->getMessage();
+        		echo $e->getXMLRPCFault();
+        		exit;
         	}
         }
-        var_dump($array);
         return $array;
     }
        
@@ -247,12 +247,10 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     		throw new PHPFrame_Exception_XMLRPC('No such component exists: '.$component, PHPFrame_Exception_XMLRPC::INVALID_COMPONENT);
     		return;
     	}
-    	echo 'component exists ';
     	if (!$reflectionClass->hasMethod($action)){
     		throw new PHPFrame_Exception_XMLRPC('No such action: '.$action.' exists in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_ACTION);
     		return;
     	}
-    	echo 'action exists ';
     	$actionMethod = $reflectionClass->getMethod($action);
     	if (!$actionMethod->isPublic()){
     		throw new PHPFrame_Exception_XMLRPC('Component action: '.$action.' is inaccessible in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_ACTION);

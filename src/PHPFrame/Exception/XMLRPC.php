@@ -60,7 +60,8 @@ class PHPFrame_Exception_XMLRPC extends PHPFrame_Exception
      */
     public function getXMLRPCFault()
     {
-    	$fault = '<methodResponse>
+    	$fault = '<?xml version="1.0" encoding="UTF-8"?>
+    			<methodResponse>
 				   <fault>
 				      <value>
 				         <struct>

@@ -257,8 +257,8 @@ class PHPFrame_Utils_URI
         }
         
         // If client is command line we use hardcoded value from config
-        if (!$_SERVER['HTTP_HOST']) {
-            return config::BASE_URL;
+        if (!isset($_SERVER['HTTP_HOST'])) {
+            return PHPFrame::Config()->get("BASE_URL");
         }
         
         $uri = $scheme.'://'.$_SERVER['HTTP_HOST'];

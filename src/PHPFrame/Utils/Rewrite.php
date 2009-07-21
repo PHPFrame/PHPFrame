@@ -37,6 +37,11 @@ class PHPFrame_Utils_Rewrite
      */
     public static function rewriteRequest() 
     {
+        // If there is no request uri (ie: we are on the command line) we do not rewrite
+        if (!isset($_SERVER['REQUEST_URI'])) {
+            return;
+        }
+        
         // Get path to script
         $path = substr($_SERVER['SCRIPT_NAME'], 0, (strrpos($_SERVER['SCRIPT_NAME'], '/')+1));
         

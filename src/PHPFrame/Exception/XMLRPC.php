@@ -77,5 +77,6 @@ class PHPFrame_Exception_XMLRPC extends PHPFrame_Exception
 				         </value>
 				      </fault>
 				   </methodResponse>';
+    	return $fault;
     }
 }

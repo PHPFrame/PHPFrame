@@ -260,7 +260,7 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     	$numParams = count($reflectionParameters);
     	$minReqParams = $actionMethod->getNumberOfRequiredParameters();
     	if (count($params) > $numParams) {
-    		throw new PHPFrame_Exception_XMLRPC('Too many or too few parameters have been specified for action: '.$action.' in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_NUMBER_PARAMETERS);
+    		throw new PHPFrame_Exception_XMLRPC('Too many parameters have been specified for action: '.$action.' in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_NUMBER_PARAMETERS);
     		return;
     	}
     	elseif (count($params) < $minReqParams) {

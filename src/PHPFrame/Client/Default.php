@@ -113,7 +113,9 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
     {
         $url = (string) trim($url);
         
-        header("Location: ".$url);
-        exit;
+        if ($url) {
+            header("Location: ".$url);
+            exit;
+        }
     }
 }

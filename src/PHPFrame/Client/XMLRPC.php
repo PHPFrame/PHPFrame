@@ -86,12 +86,11 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      */
     public function populateRequest() 
     {
-        
         global $HTTP_RAW_POST_DATA;
         
         $params = $this->_parseXMLRPC($HTTP_RAW_POST_DATA);
-        return $params;
         
+        return $params;
     }
     
     /**
@@ -109,6 +108,16 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      */
     public function prepareResponse(PHPFrame_Application_Response $response)
     {
+        global $HTTP_RAW_POST_DATA;
+        
+        // Before we proceed to prepare the response we authenticate
+        try {
+            $this->_authenticate($HTTP_RAW_POST_DATA);
+        } catch (PHPFrame_Exception_XMLRPC $e) {
+            echo $e->getXMLRPCFault();
+        	exit;
+        }
+        
     	$response->setDocument(new PHPFrame_Document_RPC());    	
     }
     
@@ -401,5 +410,53 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     			$value = "";
     	}
     	return $value;
+    }
+    
+    private function _authenticate($xml_payload)
+    {
+        if (isset($_SERVER["HTTP_X_USERNAME"])) {
+            $x_user = $_SERVER["HTTP_X_USERNAME"];
+        }
+        if (isset($_SERVER["HTTP_X_SIGNATURE"])) {
+            $x_signature = $_SERVER["HTTP_X_SIGNATURE"];
+        }
+        
+        // Get API user's key
+        try {
+            $sql = "SELECT `key` FROM #__api_clients WHERE user = '".$x_user."'";
+            $params = array(":user"=>$x_user);
+            $api_key = PHPFrame::DB()->fetchColumn($sql, $params);
+            
+            $test_signature = md5(md5($xml_payload.$api_key).$api_key);
+            
+            if ($x_signature === $test_signature) {
+                // Login the user as group API
+                $user = new PHPFrame_User();
+                $user->set('id', 2);
+                $user->set('groupid', 5);
+                $user->set('username', "api");
+                $user->set('firstname', 'API');
+                $user->set('lastname', 'User');
+                
+                // Store user in session
+                $session = PHPFrame::Session();
+                $session->setUser($user);
+                
+                // Automatically set session token in request so that forms will be allowed
+                PHPFrame::Request()->set($session->getToken(), 1);
+                
+                return;
+                
+            } else {
+                $msg = "XMLRPC API authentication failed. ";
+                $msg .= "API key not valid.";
+                throw new PHPFrame_Exception($msg);
+            }
+            
+        } catch (Exception $e) {
+            $msg = "XMLRPC API authentication failed";
+            $code = PHPFrame_Exception_XMLRPC::INVALID_API_KEY_OR_USER;
+            throw new PHPFrame_Exception_XMLRPC($msg, $code);
+        }
     }
 }

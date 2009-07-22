@@ -149,9 +149,6 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         $component = PHPFrame::Request()->getComponentName();
         $groupid = PHPFrame::Session()->getGroupId();
         $permissions = PHPFrame::AppRegistry()->getPermissions();
-        //if ($action != "get_login_form" && $action != "login") {
-            //var_dump($_SESSION['user']->toArray()); exit;
-        //}
         
         if ($permissions->authorise($component, $action, $groupid) === true) {
             // Invoke controller action
@@ -301,7 +298,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
                 $msg = "Action ".$action."() not supported by ".__CLASS__.".";
                 throw new PHPFrame_Exception($msg);
             }
-            
+           
             // Get method parameters
             $params = $reflection_obj->getParameters();
             

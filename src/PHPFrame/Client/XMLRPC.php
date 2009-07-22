@@ -113,7 +113,28 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     	$response->setDocument(new PHPFrame_Document_RPC());    	
     }
     
-    public function redirect($url) {}
+    public function redirect($url)
+    {
+        // Reset the request
+        PHPFrame::Request()->destroy();
+        
+        // Get query params from redirection url
+        $url = parse_url($url);
+        
+        if (isset($url["query"])) {
+            parse_str($url["query"], $params);
+            
+            // Loop through URL params and set values in request
+            foreach ($params as $key=>$value) {
+                $_REQUEST[$key] = $value;
+                $_GET[$key] = $value;
+                PHPFrame::Request()->set($key, $value);
+            }
+        }
+        
+        // Retrigger the app
+        PHPFrame::Fire();
+    }
     
     /**
      * This method is used to parse an XML remote procedure call

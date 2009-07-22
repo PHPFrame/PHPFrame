@@ -208,7 +208,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      */
     protected function setRedirect($url) 
     {
-        $this->redirect_url = PHPFrame_Utils_Rewrite::rewriteURL($url, false);
+        $this->redirect_url = $url;
     }
     
     /**
@@ -227,7 +227,14 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         
         // Delegate redirection to client object if it is of the right type
         if ($client instanceof PHPFrame_Client_IClient) {
-            $client->redirect($this->redirect_url);
+            $redirect_url = $this->redirect_url;
+            
+            if (isset(self::$_instances[get_class($this)])) {
+                unset(self::$_instances[get_class($this)]);
+            }
+            
+            $client->redirect($redirect_url);
+            
         } else {
             $msg = "Action controller could not redirect using client object";
             throw new PHPFrame_Exception($msg);

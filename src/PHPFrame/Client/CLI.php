@@ -40,9 +40,11 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
     public static function detect() 
     {
         global $argv;
+        
         if (is_array($argv)) {
             return new self;
         }
+        
         return false;
     }
     
@@ -67,15 +69,16 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
      */
     public function populateRequest() 
     {
-
         // Get arguments passed via command line and parse them as request vars
         global $argv;
+        
         $request = array();
         for ($i=1; $i<count($argv); $i++) {
             if (preg_match('/^(.*)=(.*)$/', $argv[$i], $matches)) {
                 $request['request'][$matches[1]] = $matches[2];
             }
         }
+        
         return $request;
     }
     
@@ -106,14 +109,33 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
         $session = PHPFrame::Session();
         $session->setUser($user);
         
+        // Automatically set session token in request so that forms will be allowed
+        PHPFrame::Request()->set($session->getToken(), 1);
+        
         // Set document as response content
         $response->setDocument(new PHPFrame_Document_Plain());
     }
     
     public function redirect($url)
     {
-        //...
-        echo "FIX ME!!!: ".get_class($this)."::redirect() needs to be implemented.";
-        exit;
+        // Reset the request
+        PHPFrame::Request()->destroy();
+        
+        // Get query params from redirection url
+        $url = parse_url($url);
+        
+        if (isset($url["query"])) {
+            parse_str($url["query"], $params);
+            
+            // Loop through URL params and set values in request
+            foreach ($params as $key=>$value) {
+                $_REQUEST[$key] = $value;
+                $_GET[$key] = $value;
+                PHPFrame::Request()->set($key, $value);
+            }
+        }
+        
+        // Retrigger the app
+        PHPFrame::Fire();
     }
 }

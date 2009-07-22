@@ -114,6 +114,7 @@ class PHPFrame_Client_Default implements PHPFrame_Client_IClient
         $url = (string) trim($url);
         
         if ($url) {
+            $url = PHPFrame_Utils_Rewrite::rewriteURL($url);
             header("Location: ".$url);
             exit;
         }

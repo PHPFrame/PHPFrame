@@ -229,7 +229,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         }
         
         // Delegate redirection to client object if it is of the right type
-        if (!empty($redirect_url)) {
+        if (!empty($this->redirect_url)) {
             $redirect_url = $this->redirect_url;
             
             if (isset(self::$_instances[get_class($this)])) {

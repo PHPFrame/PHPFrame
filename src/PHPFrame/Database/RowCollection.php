@@ -181,10 +181,10 @@ class PHPFrame_Database_RowCollection implements Iterator
         for ($i=0; $i<count($this->_rows); $i++) {
             // Add table headings
             if ($i == 0) {
-                $fields = $this->_id_obj->getFields();
+                $fields = $this->_id_obj->getSelectFields();
                 // If using "*" we get all fields in table from row object
                 if (is_array($fields) && $fields[0] == "*") {
-                    $fields = $this->_rows[$i]->getKeys();
+                    $fields = $this->getKeys();
                 }
                 
                 foreach ($fields as $key) {
@@ -414,7 +414,7 @@ class PHPFrame_Database_RowCollection implements Iterator
             return null;
         }
         
-        return $this->_rows[0]->getKeys();
+        return $this->_rows[0]->getFields();
     }
     
     public function getSQL()

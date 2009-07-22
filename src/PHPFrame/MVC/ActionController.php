@@ -226,7 +226,10 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         $client = PHPFrame::Session()->getClient();
         
         // Delegate redirection to client object if it is of the right type
-        if ($client instanceof PHPFrame_Client_IClient) {
+        if (
+            $client instanceof PHPFrame_Client_IClient
+            && !empty($redirect_url)
+        ) {
             $redirect_url = $this->redirect_url;
             
             if (isset(self::$_instances[get_class($this)])) {

@@ -34,7 +34,9 @@ class PHPFrame_Exception_XMLRPC extends PHPFrame_Exception
 	const INVALID_ACTION = 2;
 	const INVALID_NUMBER_PARAMETERS = 3;
 	const INVALID_PARAMETER_TYPE = 4;
-/**
+	const INVALID_API_KEY_OR_USER = 5;
+	
+	/**
      * Constructor
      * 
      * @param string       $message   The error message.
@@ -77,6 +79,7 @@ class PHPFrame_Exception_XMLRPC extends PHPFrame_Exception
 				         </value>
 				      </fault>
 				   </methodResponse>';
+    	
     	return $fault;
     }
 }

@@ -176,11 +176,15 @@ abstract class PHPFrame_Document
         $str = "";
         
         foreach ($view->getData() as $key=>$value) {
+            $str .= $key.": ";
+            
             if ($value instanceof PHPFrame_Database_RowCollection) {
                 $str .= $this->renderRowCollection($value);
             } else {
                 $str .= (string) $value;
             }
+            
+            $str .= "\n\n";
         }
         
         $this->body = $str;

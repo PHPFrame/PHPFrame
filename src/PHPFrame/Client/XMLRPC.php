@@ -41,7 +41,6 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     public static function detect() 
     {
         global $HTTP_RAW_POST_DATA;
-        
         //check existance of $_HTTP_RAW_POST_DATA array
         if (count($HTTP_RAW_POST_DATA) > 0) {
             //check for a valid XML structure
@@ -398,6 +397,8 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     			else
     				$value = mktime($matches[4], $matches[5], $matches[6], $matches[2], $matches[3], $matches[1]);
     			break;
+    		default:
+    			$value = "";
     	}
     	return $value;
     }

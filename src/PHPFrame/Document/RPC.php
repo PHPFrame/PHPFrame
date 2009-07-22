@@ -62,43 +62,36 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     public function render(PHPFrame_MVC_View $view, $apply_theme=null) 
     {
-//    	//adding test data
-//    	PHPFrame::Session()->getSysevents()->setSummary('Fake Error');
-//    	
-//    	$sys_events = PHPFrame::Session()->getSysevents();
-//PHPFrame_Debug_Logger::write('REACHED RPC->Render');
-//		if (
-//			is_array($sys_events) 
-//			&& !empty($sys_events)
-//		){
-//			PHPFrame_Debug_Logger::write('sys_events in RPC->Render');
-//			$error = false;
-//			foreach($sys_events as $event)
-//			{
-//				if ($event[0] == 'error')
-//				{
-//					$error = true;
-//					PHPFrame_Debug_Logger::write($event[1]);
-//					break;
-//				}
-//			}
-//			if ($error) 
-//			{
-//				PHPFrame_Debug_Logger::write('ERROR PAYLOAD');
-//				$this->_makeFaultPayload(5,$event[1]);
-//				unset($event);
-//				
-//			}
-//			else
-//			{
-//				$view->addData('messages',$sys_events[0]);
-//			}
-//		}
-//		else
-//		{
-//			PHPFrame_Debug_Logger::write('no sys_events in RPC->Render');
+    	//adding test data
+    	PHPFrame::Session()->getSysevents()->setSummary('FAKE INFO','info');
+    	
+    	$event_summaries = PHPFrame::Session()->getSysevents()->asArray();
+		if (!empty($event_summaries['summary']))
+		{
+			$error = false;
+			foreach($event_summaries as $summary)
+			{
+				if ($summary[0] == 'error')
+				{
+					$error = true;
+					break;
+				}
+			}
+			if ($error) 
+			{
+				$this->_makeFaultPayload(5,$summary[1]);
+			}
+			else
+			{
+				$view->addData('messages',$event_summaries);
+				$this->_makeParamPayload($view->getData());
+			}
+			unset($summary);
+		}
+		else
+		{
 			$this->_makeParamPayload($view->getData());
-//		}
+		}
     }
     
 	/**
@@ -118,11 +111,8 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
     	$parent_node = $this->dom->getElementsByTagName("methodResponse")->item(0);
 		$parent_node = $this->addNode($parent_node,'fault');
 		$parent_node = $this->addNode($parent_node,'value');
-		$parent_node = $this->addNode($parent_node,'struct');
-		$this->addNode($parent_node,'member');
-		$this->addNode($parent_node->lastChild,'faultCode', null, $fault_code);
-		$this->addNode($parent_node,'member');
-		$this->addNode($parent_node->lastChild,'faultString', null, $fault_string);
+		$fault_array = array('faultCode'=>$fault_code,'faultString'=>$fault_string);
+		$parent_node = $this->_addStruct($parent_node,$fault_array);
     }
     
 	/**
@@ -181,12 +171,20 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
 	    	}
 	    	else
 	    	{ 
-				if ($arent_node->nodeName == 'value') 
+				if ($parent_node->nodeName == 'value') 
 				{
 					$parent_node = $this->_addType($parent_node, $node_value);	
 				}
 				$this->addNodeContent($parent_node,$node_value);
 	    	}
+    	}
+    	else
+    	{
+    		if ($node_name == 'value') 
+			{
+				$parent_node = $this->addNode($parent_node, 'value');
+				$this->addNodeContent($parent_node,'NULL');	
+			}
     	}
     }
        
@@ -295,6 +293,6 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
     public function toString()
     {
         $response = $this->dom->saveXML();
-        return str_replace('<param/>','<param><value>void</value></param>',$response);
+        return $response;
     }
 }

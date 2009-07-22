@@ -60,10 +60,9 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * @since  1.0
      * @todo It is very important to check path used for require_once call for security.
      */
-    public function render(PHPFrame_MVC_View $view) 
+    public function render(PHPFrame_MVC_View $view, $apply_theme=null) 
     {
-    	PHPFrame_Debug_Logger::write('RENDERING');
-           $this->_makeParamPayload($view->getData());
+		$this->_makeParamPayload($view->getData());
     }
     
 	/**
@@ -81,12 +80,9 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
     private function _makeFaultPayload($faultCode, $faultString)
     {
     	$parentNode = $this->dom->getElementsByTagName("methodResponse")->item(0);
-		$this->addNode($parentNode,'fault');
-		$parentNode = $parentNode->lastChild;
-		$this->addNode($parentNode,'value');
-		$parentNode = $parentNode->lastChild;
-		$this->addNode($parentNode,'struct');
-		$parentNode = $parentNode->lastChild;
+		$parentNode = $this->addNode($parentNode,'fault');
+		$parentNode = $this->addNode($parentNode,'value');
+		$parentNode = $this->addNode($parentNode,'struct');
 		$this->addNode($parentNode,'member');
 		$this->addNode($parentNode->lastChild,'faultCode', null, $faultCode);
 		$this->addNode($parentNode,'member');
@@ -96,9 +92,9 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
 	/**
      * Make Param Payload
      * 
-     * This method is used to build an XML-RPC Param Responsewith given parameter Value
+     * This method is used to build an XML-RPC Param Response from an array
      * 
-     * @param $paramValue The parameter value as an associative array.
+     * @param mixed $paramValue The parameter value as a scalar value or array.
      * 
      * @access private
      * @since  1.0
@@ -106,33 +102,30 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     private function _makeParamPayload($paramValue)
     {
-		$parentNode = $this->dom->getElementsByTagName("methodResponse")->item(0);
-		$this->addNode($parentNode,'params');
-		$parentNode = $parentNode->lastChild;
-		$this->addNode($parentNode,'param');
-		$parentNode = $parentNode->lastChild;
-		$this->addNode($parentNode,'value');
-		$parentNode = $parentNode->lastChild;
-		$this->_makeNode($parentNode, $paramValue);
+ 		$parentNode = $this->dom->getElementsByTagName("methodResponse")->item(0);
+		$parentNode = $this->addNode($parentNode,'params');
+		$parentNode = $this->addNode($parentNode,'param');
+		$this->_buildNode($parentNode,'value',$paramValue);
     }
     
-    /**
-     * Make Node
+	/**
+     * Build Node
      * 
-     * This method is used to build DOMNodes given the node Name and Value
+     * This method builds a DOMNode Tree|Leaf from the node Parent, Name and Value
      * 
-     * @param $nodeName The name to be given to the node.
-     * @param $nodeValue The textValue to be given to the node.
+     * @param DOMNode $parentNode The name to be given to the node.
+     * @param string $nodeName The name to be given to the node.
+     * @param mixed $nodeValue The node value (string|int|double|array).
      * 
      * @access private
      * @since  1.0
-     * @return string DOMNode with given name and value.
      */
-    private function _makeNode($parentNode, $nodeValue)
+    private function _buildNode($parentNode, $nodeName, $nodeValue)
     {
-    	//TODO: Check for NULL and types other than basic scalar / assoc_array & toString()?
     	if (!empty($nodeValue))
     	{
+    		$parentNode = $this->addNode($parentNode, $nodeName);
+    		
 	    	if (is_array($nodeValue))
 	    	{ 
 	    		if ($this->_isAssoc($nodeValue)){
@@ -144,18 +137,18 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
 	    	}
 	    	else
 	    	{ 
-				$this->_addType($parentNode, $nodeValue);
+				$parentNode = $this->_addType($parentNode, $nodeValue);
 				$this->addNodeContent($parentNode,$nodeValue);
 	    	}
     	}
     }
-    
+       
 	/**
      * Is Assoc
      * 
      * This method is used to check if an array is an associative array
      * 
-     * @param $testArray The array to be tested.
+     * @param array $testArray The array to be tested.
      * 
      * @access private
      * @since  1.0
@@ -163,7 +156,7 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
 	private function _isAssoc($testArray)
 	{
-		$indexed = true;
+		$assoc = false;
 		if (empty($testArray)) return true;
 		$indexes = array_keys($testArray);
 		$counter = 0;
@@ -171,12 +164,12 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
 		{
 			if ($counter !== $index)
 			{
-				$indexed = false;
+				$assoc = true;
 			}
 			$counter++;
 		}
 		unset($index);
-		return !$indexed;
+		return $assoc;
 	}
     
 	/**
@@ -184,13 +177,13 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * 
      * This method is used to wrap node values in tags denoting their type
      * 
-     * @param $nodeValue The value to be checked and wrapped if applicable.
+     * @param mixed $nodeValue The value to be checked and wrapped if applicable.
      * 
      * @access private
      * @since  1.0
-     * @return string nodeValue wrapped in nodeType tags (if applicable).
+     * @return DOMNode The original node, or firstChild if type added.
      */
-    private function _addType(&$parentNode, $nodeValue)
+    private function _addType($parentNode, $nodeValue)
     {
     	$type = 'string';
     	if (is_int($nodeValue)) $type = 'int';
@@ -199,9 +192,10 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
     	if (is_double($nodeValue)) $type = 'double';
     	if($type!='string')
     	{	
-    		$this->addNode($parentNode, $type);
-    		$parentNode = $parentNode->getElementsByTagName($type);
+    		$parentNode = $this->addNode($parentNode, $type);
     	}
+    	
+    	return $parentNode;
     }
     
 	/**
@@ -209,23 +203,20 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * 
      * This method is used to build an XML-RPC <struct> structure from an assoc_array
      * 
-     * @param $assocArray The associative array.
+     * @param array $assocArray The associative array.
      * 
      * @access private
      * @since  1.0
-     * @return string An XML-RPC <struct> structure
      */
     private function _addStruct($parentNode, $assocArray)
     {
-    	$this->addNode($parentNode,'struct');
-		$parentNode = $parentNode->lastChild;
+    	$parentNode = $this->addNode($parentNode,'struct');
+    	
     	foreach($assocArray as $key => $value)
     	{
-			$this->addNode($parentNode,'member');
-			$localParent = $parentNode->lastChild;
+			$localParent = $this->addNode($parentNode,'member');
 			$this->addNode($localParent, 'name', null, $key);
-			$this->addNode($localParent, 'value');
-			$this->_makeNode($localParent->lastChild, $value);
+			$this->_buildNode($localParent, 'value', $value);
     	}
     }
     
@@ -234,21 +225,18 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * 
      * This method is used to build an XML-RPC <array> structure from an indexed array
      * 
-     * @param $indexArray The array.
+     * @param array $indexArray The array.
      * 
      * @access private
      * @since  1.0
-     * @return string An XML-RPC <array> structure
      */
     private function _addArray($parentNode, $indexArray)
     {
-    	$this->addNode($parentNode,'array');
-    	$this->addNode($parentNode->firstChild,'data');
-		$parentNode = $parentNode->firstChild->firstChild;
+    	$parentNode = $this->addNode($parentNode,'array');
+    	$parentNode = $this->addNode($parentNode,'data');
     	foreach($indexArray as $value)
     	{
-    		$this->addNode($parentNode,'value');
-    		$this->_makenode($parentNode->lastChild, $value);
+    		$this->_buildNode($parentNode, 'value', $value);
     	}
     }
     
@@ -262,6 +250,6 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
     public function toString()
     {
         $response = $this->dom->saveXML();
-        return $response;
+        return str_replace('<param/>','<param><value></value></param>',$response);
     }
 }

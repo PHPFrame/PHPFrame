@@ -62,7 +62,43 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     public function render(PHPFrame_MVC_View $view, $apply_theme=null) 
     {
-		$this->_makeParamPayload($view->getData());
+//    	//adding test data
+//    	PHPFrame::Session()->getSysevents()->setSummary('Fake Error');
+//    	
+//    	$sys_events = PHPFrame::Session()->getSysevents();
+//PHPFrame_Debug_Logger::write('REACHED RPC->Render');
+//		if (
+//			is_array($sys_events) 
+//			&& !empty($sys_events)
+//		){
+//			PHPFrame_Debug_Logger::write('sys_events in RPC->Render');
+//			$error = false;
+//			foreach($sys_events as $event)
+//			{
+//				if ($event[0] == 'error')
+//				{
+//					$error = true;
+//					PHPFrame_Debug_Logger::write($event[1]);
+//					break;
+//				}
+//			}
+//			if ($error) 
+//			{
+//				PHPFrame_Debug_Logger::write('ERROR PAYLOAD');
+//				$this->_makeFaultPayload(5,$event[1]);
+//				unset($event);
+//				
+//			}
+//			else
+//			{
+//				$view->addData('messages',$sys_events[0]);
+//			}
+//		}
+//		else
+//		{
+//			PHPFrame_Debug_Logger::write('no sys_events in RPC->Render');
+			$this->_makeParamPayload($view->getData());
+//		}
     }
     
 	/**
@@ -70,23 +106,23 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * 
      * This method is used to build an XML-RPC Falult Response with given faultCode and description
      * 
-     * @param $faultCode The fault code.
-     * @param $faultString The fault description.
+     * @param int $fault_code The fault code.
+     * @param string $fault_string The fault description.
      * 
      * @access private
      * @since  1.0
      * @return string An XML-RPC methodResponse structure with Fault node.
      */
-    private function _makeFaultPayload($faultCode, $faultString)
+    private function _makeFaultPayload($fault_code, $fault_string)
     {
-    	$parentNode = $this->dom->getElementsByTagName("methodResponse")->item(0);
-		$parentNode = $this->addNode($parentNode,'fault');
-		$parentNode = $this->addNode($parentNode,'value');
-		$parentNode = $this->addNode($parentNode,'struct');
-		$this->addNode($parentNode,'member');
-		$this->addNode($parentNode->lastChild,'faultCode', null, $faultCode);
-		$this->addNode($parentNode,'member');
-		$this->addNode($parentNode->lastChild,'faultString', null, $faultString);
+    	$parent_node = $this->dom->getElementsByTagName("methodResponse")->item(0);
+		$parent_node = $this->addNode($parent_node,'fault');
+		$parent_node = $this->addNode($parent_node,'value');
+		$parent_node = $this->addNode($parent_node,'struct');
+		$this->addNode($parent_node,'member');
+		$this->addNode($parent_node->lastChild,'faultCode', null, $fault_code);
+		$this->addNode($parent_node,'member');
+		$this->addNode($parent_node->lastChild,'faultString', null, $fault_string);
     }
     
 	/**
@@ -94,18 +130,18 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * 
      * This method is used to build an XML-RPC Param Response from an array
      * 
-     * @param mixed $paramValue The parameter value as a scalar value or array.
+     * @param mixed $param_value The parameter value as a scalar value or array.
      * 
      * @access private
      * @since  1.0
      * @return string An XML-RPC methodResponse structure with Param node.
      */
-    private function _makeParamPayload($paramValue)
+    private function _makeParamPayload($param_value)
     {
- 		$parentNode = $this->dom->getElementsByTagName("methodResponse")->item(0);
-		$parentNode = $this->addNode($parentNode,'params');
-		$parentNode = $this->addNode($parentNode,'param');
-		$this->_buildNode($parentNode,'value',$paramValue);
+ 		$parent_node = $this->dom->getElementsByTagName("methodResponse")->item(0);
+		$parent_node = $this->addNode($parent_node,'params');
+		$parent_node = $this->addNode($parent_node,'param');
+		$this->_buildNode($parent_node,'value',$param_value);
     }
     
 	/**
@@ -120,25 +156,36 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * @access private
      * @since  1.0
      */
-    private function _buildNode($parentNode, $nodeName, $nodeValue)
+    private function _buildNode($parent_node, $node_name, $node_value)
     {
-    	if (!empty($nodeValue))
+    	if (!empty($node_value))
     	{
-    		$parentNode = $this->addNode($parentNode, $nodeName);
+    		$parent_node = $this->addNode($parent_node, $node_name);
     		
-	    	if (is_array($nodeValue))
+    		if (
+    			$node_value instanceof PHPFrame_User 
+    			|| $node_value instanceof PHPFrame_Database_RowCollection
+    			|| $node_value instanceof PHPFrame_Database_Row 
+    		){
+    			$node_value = $node_value->toArray();
+    		}
+    		
+	    	if (is_array($node_value))
 	    	{ 
-	    		if ($this->_isAssoc($nodeValue)){
-					$this->_addStruct($parentNode, $nodeValue);
+	    		if ($this->_isAssoc($node_value)){
+					$this->_addStruct($parent_node, $node_value);
 	    		}
 				else{
-					$this->_addArray($parentNode, $nodeValue);;
+					$this->_addArray($parent_node, $node_value);;
 				}
 	    	}
 	    	else
 	    	{ 
-				$parentNode = $this->_addType($parentNode, $nodeValue);
-				$this->addNodeContent($parentNode,$nodeValue);
+				if ($arent_node->nodeName == 'value') 
+				{
+					$parent_node = $this->_addType($parent_node, $node_value);	
+				}
+				$this->addNodeContent($parent_node,$node_value);
 	    	}
     	}
     }
@@ -154,11 +201,11 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * @since  1.0
      * @return boolean True if array is associative or empty.
      */
-	private function _isAssoc($testArray)
+	private function _isAssoc($test_array)
 	{
 		$assoc = false;
-		if (empty($testArray)) return true;
-		$indexes = array_keys($testArray);
+		if (empty($test_array)) return true;
+		$indexes = array_keys($test_array);
 		$counter = 0;
 		foreach($indexes as $index)
 		{
@@ -183,19 +230,17 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * @since  1.0
      * @return DOMNode The original node, or firstChild if type added.
      */
-    private function _addType($parentNode, $nodeValue)
+    private function _addType($parent_node, $node_value)
     {
     	$type = 'string';
-    	if (is_int($nodeValue)) $type = 'int';
-    	if (is_bool($nodeValue)) $type = 'boolean';
-    	if (is_float($nodeValue)) $type = 'double';
-    	if (is_double($nodeValue)) $type = 'double';
-    	if($type!='string')
-    	{	
-    		$parentNode = $this->addNode($parentNode, $type);
-    	}
+    	if (is_int($node_value)) $type = 'int';
+    	if (is_bool($node_value)) $type = 'boolean';
+    	if (is_float($node_value)) $type = 'double';
+    	if (is_double($node_value)) $type = 'double';
     	
-    	return $parentNode;
+    	$parent_node = $this->addNode($parent_node, $type);
+    	
+    	return $parent_node;
     }
     
 	/**
@@ -208,15 +253,15 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * @access private
      * @since  1.0
      */
-    private function _addStruct($parentNode, $assocArray)
+    private function _addStruct($parent_node, $assoc_array)
     {
-    	$parentNode = $this->addNode($parentNode,'struct');
+    	$parent_node = $this->addNode($parent_node,'struct');
     	
-    	foreach($assocArray as $key => $value)
+    	foreach($assoc_array as $key => $value)
     	{
-			$localParent = $this->addNode($parentNode,'member');
-			$this->addNode($localParent, 'name', null, $key);
-			$this->_buildNode($localParent, 'value', $value);
+			$local_parent = $this->addNode($parent_node,'member');
+			$this->addNode($local_parent, 'name', null, $key);
+			$this->_buildNode($local_parent, 'value', $value);
     	}
     }
     
@@ -230,13 +275,13 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * @access private
      * @since  1.0
      */
-    private function _addArray($parentNode, $indexArray)
+    private function _addArray($parent_node, $index_array)
     {
-    	$parentNode = $this->addNode($parentNode,'array');
-    	$parentNode = $this->addNode($parentNode,'data');
-    	foreach($indexArray as $value)
+    	$parent_node = $this->addNode($parent_node,'array');
+    	$parent_node = $this->addNode($parent_node,'data');
+    	foreach($index_array as $value)
     	{
-    		$this->_buildNode($parentNode, 'value', $value);
+    		$this->_buildNode($parent_node, 'value', $value);
     	}
     }
     
@@ -250,6 +295,6 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
     public function toString()
     {
         $response = $this->dom->saveXML();
-        return str_replace('<param/>','<param><value></value></param>',$response);
+        return str_replace('<param/>','<param><value>void</value></param>',$response);
     }
 }

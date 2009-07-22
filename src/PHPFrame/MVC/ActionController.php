@@ -222,11 +222,14 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         // Get client object from session
         $client = PHPFrame::Session()->getClient();
         
+        // Check that we got the right type
+        if (!$client instanceof PHPFrame_Client_IClient) {
+            $msg = "Action controller could not redirect using client object";
+            throw new PHPFrame_Exception($msg);
+        }
+        
         // Delegate redirection to client object if it is of the right type
-        if (
-            $client instanceof PHPFrame_Client_IClient
-            && !empty($redirect_url)
-        ) {
+        if (!empty($redirect_url)) {
             $redirect_url = $this->redirect_url;
             
             if (isset(self::$_instances[get_class($this)])) {
@@ -234,10 +237,6 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
             }
             
             $client->redirect($redirect_url);
-            
-        } else {
-            $msg = "Action controller could not redirect using client object";
-            throw new PHPFrame_Exception($msg);
         }
     }
     

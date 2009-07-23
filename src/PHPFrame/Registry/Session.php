@@ -250,8 +250,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 	 */
 	public static function getClient()
 	{
-		if (isset($_SESSION['client'])
-		&& $_SESSION['client'] instanceof PHPFrame_Client_IClient
+		if (
+		    isset($_SESSION['client'])
+		    && $_SESSION['client'] instanceof PHPFrame_Client_IClient
 		) {
 			return $_SESSION['client'];
 		}
@@ -269,8 +270,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 	 */
 	public function getClientName()
 	{
-		if (isset($_SESSION['client'])
-		&& $_SESSION['client'] instanceof PHPFrame_Client_IClient
+		if (
+		    isset($_SESSION['client'])
+		    && $_SESSION['client'] instanceof PHPFrame_Client_IClient
 		) {
 			return $_SESSION['client']->getName();
 		}
@@ -301,8 +303,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 	 */
 	public function getUser()
 	{
-		if (isset($_SESSION['user'])
-		&& $_SESSION['user'] instanceof PHPFrame_User
+		if (
+		    isset($_SESSION['user'])
+		    && $_SESSION['user'] instanceof PHPFrame_User
 		) {
 			return $_SESSION['user'];
 		}
@@ -319,8 +322,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 	 */
 	public function getUserId()
 	{
-		if (isset($_SESSION['user'])
-		&& $_SESSION['user'] instanceof PHPFrame_User
+		if (
+		    isset($_SESSION['user'])
+		    && $_SESSION['user'] instanceof PHPFrame_User
 		) {
 			return (int) $_SESSION['user']->get('id');
 		}
@@ -337,8 +341,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 	 */
 	public function getGroupId()
 	{
-		if (isset($_SESSION['user'])
-		&& $_SESSION['user'] instanceof PHPFrame_User
+		if (
+		    isset($_SESSION['user'])
+		    && $_SESSION['user'] instanceof PHPFrame_User
 		) {
 			return (int) $_SESSION['user']->get('groupid');
 		}
@@ -355,9 +360,10 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 	 */
 	public function isAuth()
 	{
-		if (isset($_SESSION['user'])
-		&& $_SESSION['user'] instanceof PHPFrame_User
-		&& $_SESSION['user']->get('id') > 0
+		if (
+		    isset($_SESSION['user'])
+		    && $_SESSION['user'] instanceof PHPFrame_User
+		    && $_SESSION['user']->get('id') > 0
 		) {
 			return true;
 		}
@@ -390,8 +396,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 	 */
 	public function getSysevents()
 	{
-		if (isset($_SESSION['sysevents'])
-		&& $_SESSION['sysevents'] instanceof PHPFrame_Application_Sysevents
+		if (
+		    isset($_SESSION['sysevents'])
+		    && $_SESSION['sysevents'] instanceof PHPFrame_Application_Sysevents
 		) {
 			return $_SESSION['sysevents'];
 		}
@@ -454,13 +461,15 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 
 		// Delete cookie. This has to be done using the same parameters
 		// used when creating the cookie
-		setcookie($this->_session_name,
-                  "", 
-		time() - 3600,
-		$this->_cookie_path,
-		null,
-		$this->_cookie_secure,
-		$this->_cookie_httponly);
+		setcookie(
+		    $this->_session_name,
+            "", 
+    		time() - 3600,
+    		$this->_cookie_path,
+    		null,
+    		$this->_cookie_secure,
+    		$this->_cookie_httponly
+    	);
 	}
 
 	/**
@@ -478,7 +487,6 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 
 		//loop through files
 		foreach ($available_clients as $client) {
-			PHPFrame_Debug_Logger::write("Detecting $client...");
 			//build class names
 			$className = 'PHPFrame_Client_'.$client;
 			if (is_callable(array($className, 'detect'))) {
@@ -514,7 +522,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 		$name = session_name();
 
 		for($i=0; $i<$length; ++$i) {
-			$token .= $chars[ (rand( 0, $max )) ];
+			$token .= $chars[ (rand(0, $max)) ];
 		}
 
 		return md5($token.$name);

@@ -11,7 +11,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id: PHPFrame_CLI_Tool.php 254 2009-07-16 00:42:13Z luis.montero@e-noise.com $
+ * @version    SVN: $Id: PHPFrame_CLI_Tool.php 288 2009-07-23 01:31:09Z luis.montero@e-noise.com $
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
@@ -109,31 +109,37 @@ class PHPFrame_CLI_Tool_postinstall
 		// Check input array for db details
 		if (!$this->_checkDBInput($infoArray)) {
 			$this->_output("Not enough info to set up database...");
-			$this->_output("Installation failed...");
+			$this->_output("Installation failed...", true);
 			return false;
 		}
 		
 		// Create db and dbuser if requested
 		if (isset($infoArray["DB_ROOT"]) && isset($infoArray["DB_ROOT_PASS"])) {
-			$concrete_dsn_class = "PHPFrame_Database_DSN_".$infoArray["DB_DRIVER"];
-			$dsn = new $concrete_dsn_class($infoArray["DB_HOST"], "mysql");
+			$create_db_status = $this->_createDB(
+				$infoArray["DB_DRIVER"], 
+				$infoArray["DB_HOST"], 
+				$infoArray["DB_ROOT"], 
+				$infoArray["DB_ROOT_PASS"], 
+				$infoArray["DB_USER"], 
+				$infoArray["DB_PASS"], 
+				$infoArray["DB_NAME"]
+			);
 			
-			$db = PHPFrame::DB($dsn, $infoArray["DB_ROOT"], $infoArray["DB_ROOT_PASS"]);
-			
-			$sql_array[] = "CREATE USER '".$infoArray["DB_USER"]."'@'localhost' IDENTIFIED BY '".$infoArray["DB_PASS"]."'";
-			$sql_array[] = "GRANT USAGE ON * . * TO '".$infoArray["DB_USER"]."'@'localhost' IDENTIFIED BY '".$infoArray["DB_PASS"]."'";
-			$sql_array[] = "CREATE DATABASE `".$infoArray["DB_NAME"]."` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci";
-			$sql_array[] = "GRANT ALL PRIVILEGES ON `".$infoArray["DB_NAME"]."` . * TO '".$infoArray["DB_NAME"]."'@'localhost'";
-			
-			foreach ($sql_array as $sql) {
-				$db->query($sql);
+			if (!$create_db_status) {
+				$this->_output("Error creating database...");
+				$this->_output("Installation failed...");
+				return false;
 			}
 		}
 		
 		// Check DSN database
 		
 		// Populate DB
-		
+		if (!$this->_populateDB($infoArray["DB_USER"], $infoArray["DB_PASS"], $infoArray["DB_NAME"])) {
+			$this->_output("Error populating database...");
+			$this->_output("Installation failed...");
+			return false;
+		}
 		
 		// Fetch scaffold source
         if (!$this->_fetchSource()) {
@@ -154,9 +160,32 @@ class PHPFrame_CLI_Tool_postinstall
 		return true;
     }
     
-	private function _createDB()
+	private function _createDB($db_driver, $db_host, $db_root, $db_root_pass, $db_user, $db_pass, $db_name)
 	{
-		
+		try {
+			$concrete_dsn_class = "PHPFrame_Database_DSN_".$db_driver;
+			$dsn = new $concrete_dsn_class($db_host, "mysql");
+
+			$db = PHPFrame::DB($dsn, $db_root, $db_root_pass);
+
+			$sql_array[] = "CREATE USER '".$db_user."'@'localhost' IDENTIFIED BY '".$db_pass."'";
+			$sql_array[] = "GRANT USAGE ON * . * TO '".$db_user."'@'localhost' IDENTIFIED BY '".$db_pass."'";
+			$sql_array[] = "CREATE DATABASE `".$db_name."` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci";
+			$sql_array[] = "GRANT ALL PRIVILEGES ON `".$db_name."` . * TO '".$db_user."'@'localhost'";
+			
+			$this->_output("Creating database...");
+			
+			foreach ($sql_array as $sql) {
+				$this->_output("Running query: \"".$sql."\"...");
+				$db->query($sql);
+			}
+			
+			return true;
+			
+		} catch (Exception $e) {
+			$this->_output($e->getMessage());
+			return false;
+		}
 	}
 
 	private function _checkDSN($driver, $host)
@@ -164,9 +193,31 @@ class PHPFrame_CLI_Tool_postinstall
 		
 	}
 	
-	private function _populateDB()
+	private function _populateDB($db_user, $db_pass, $db_name)
 	{
-		
+		try {
+			$sql_file = PEAR_INSTALL_DIR.DS."data".DS."PHPFrame".DS."CLI_Tool.sql";
+	        $cmd = "mysql -u ".$db_user." -p".$db_pass." ".$db_name." < ".$sql_file;
+
+			$this->_output("Populating database...");
+			$this->_output("Using command \"".$cmd."\"...");
+
+			$exec = PHPFrame_Utils_Exec::run($cmd);
+
+			$this->_output($exec->getOutput());
+
+			if ($exec->getReturnVar() > 0) {
+				$this->_output("Failed to populate database...");
+
+				return false;
+			}
+
+			return true;
+			
+		} catch (Exception $e) {
+			$this->_output($e->getMessage());
+			return false;
+		}
 	}
 	
     private function _fetchSource()

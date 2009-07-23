@@ -156,6 +156,7 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         $array = array();
         
         $domDocument = new DOMDocument;
+        $domDocument->preserveWhiteSpace = false;
         $domDocument->loadXML($xml);
         $domXPath = new DOMXPath($domDocument);
         

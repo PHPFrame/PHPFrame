@@ -132,6 +132,30 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
     }
     
     /**
+     * Get request headers
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getHeaders()
+    {
+        $headers = array();
+        
+        if (isset($this->_array['server']) && is_array($this->_array['server'])) {
+            foreach ($this->_array['server'] as $k => $v) {
+                if (substr($k, 0, 5) == "HTTP_") {
+                    $k = str_replace('_', ' ', substr($k, 5));
+                    $k = str_replace(' ', '-', ucwords(strtolower($k)));
+                    $headers[$k] = $v;
+                }
+            }
+        }
+        
+        return $headers;
+    }
+    
+    /**
      * Get request/post array from URA
      * 
      * @return    array

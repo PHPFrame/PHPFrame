@@ -62,36 +62,28 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     public function render(PHPFrame_MVC_View $view, $apply_theme=null) 
     {
-    	//adding test data
-    	PHPFrame::Session()->getSysevents()->setSummary('FAKE INFO','info');
+    	$events = PHPFrame::Session()->getSysevents()->asArray();
     	
-    	$event_summaries = PHPFrame::Session()->getSysevents()->asArray();
-		if (!empty($event_summaries['summary']))
-		{
-			$error = false;
-			foreach($event_summaries as $summary)
-			{
-				if ($summary[0] == 'error')
-				{
-					$error = true;
-					break;
-				}
-			}
-			if ($error) 
-			{
-				$this->_makeFaultPayload(5,$summary[1]);
-			}
-			else
-			{
-				$view->addData('messages',$event_summaries);
-				$this->_makeParamPayload($view->getData());
-			}
-			unset($summary);
-		}
-		else
-		{
-			$this->_makeParamPayload($view->getData());
-		}
+    	if (
+    		is_array($events)
+    		&& isset($events['summary'])
+    		&& count($events['summary'])>1
+    	){
+    		$summary = $events['summary'];
+    		if ($summary[0] == 'error')
+    		{
+    			$this->_makeFaultPayload(5,$summary[1]);
+    		}
+    		else
+    		{
+    			$view->addData('sysevents',$summary);
+				$this->_makeParamPayload($view->getData());	
+    		}
+    	}
+    	else
+    	{
+    		$this->_makeParamPayload($view->getData());
+    	} 
     }
     
 	/**

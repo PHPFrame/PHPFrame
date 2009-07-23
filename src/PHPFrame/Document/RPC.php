@@ -276,15 +276,92 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
     }
     
     /**
+     * Indent
+     * 
+     * This method is used to turn inline XML into human-readable text
+     * 
+     * @param string $response The XML as string.
+     * 
+     * @return string $response Human readable XML.
+     * 
+     * @access private
+     * @since  1.0
+     */
+    private function _indent($response)
+    {
+	    $return_array = explode('>',$response);
+		$depth = -1;
+		for($i = 0; $i < count($return_array) - 1; $i++)
+		{
+			if(
+				strpos($return_array[$i],"\n")!==false
+			){
+				$return_array[$i] = trim($return_array[$i]);
+			}
+					
+			$end_tag = strpos($return_array[$i], "</");
+			if($end_tag!==false)
+			{
+				if ($end_tag != 0)
+				{
+					$return_array[$i] = $this->_padding($depth) . $return_array[$i];
+					$depth--; 
+					$return_array[$i] = str_replace("</","\r\n".$this->_padding($depth)."</",$return_array[$i]);
+				}
+				else
+				{
+					$depth--;
+					$return_array[$i] = $this->_padding($depth) . $return_array[$i];
+				}
+				$depth--;
+			}
+			else
+			{
+				$return_array[$i] = $this->_padding($depth) . $return_array[$i];
+			}
+			
+			$return_array[$i] = $return_array[$i] . ">\r\n";
+			$depth++;
+		}
+		$response = implode($return_array);
+		return $response;
+    }
+    
+    /**
      * Convert object to string
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function toString()
+    public function toString($human_readable=false)
     {
         $response = $this->dom->saveXML();
-        return $response;
+		if($human_readable)
+		{
+			$response = $this->_indent($response);
+		}
+    	return $response;
+    }
+    
+    /**
+     * Padding
+     * 
+     * This generates padding with specified depth
+     * 
+     * @param int $depth
+     * 
+     * @access private
+     * @return string
+     * @since  1.0
+     */
+    private function _padding($depth)
+    {
+    	$padding = '';
+    	for ($tabs = 0; $tabs < $depth; $tabs++)
+    	{
+    		$padding .= '  ';
+    	}
+    	return $padding;	
     }
 }

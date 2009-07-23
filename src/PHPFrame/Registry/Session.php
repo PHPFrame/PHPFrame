@@ -109,8 +109,6 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
         // start php session
         session_start();
         
-        //$this->destroy(); exit;
-        
         // If new session we initialise
         if (!isset($_SESSION['id']) || $_SESSION['id'] != session_id()) {
             // Store session id in session array
@@ -129,6 +127,26 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
             
             // Detect client for this session
             $this->_detectClient();
+        
+        } elseif (
+            in_array("HTTP_X_API_USERNAME", $_SERVER)
+            && in_array("HTTP_X_API_SIGNATURE", $_SERVER)
+            && !($_SESSION['client'] instanceof PHPFrame_Client_XMLRPC)
+        ) {
+            // If we are dealing with an api request that already has an existing session
+            // but the client object is not set to XMLRPC we instantiate a new client object
+            // replace it in the session, store the old one in another var and flag the session
+            // as having had its client object overriden
+            $_SESSION['overriden_client'] = $_SESSION['client'];
+            $_SESSION['client'] = new PHPFrame_Client_XMLRPC();
+        
+        } elseif (
+            !in_array("HTTP_X_API_USERNAME", $_SERVER)
+            && !in_array("HTTP_X_API_SIGNATURE", $_SERVER)
+            && $_SESSION['overriden_client'] instanceof PHPFrame_Client_IClient
+        ) {
+            $_SESSION['client'] = $_SESSION['overriden_client'];
+            unset($_SESSION['overriden_client']);
         }
     }
     

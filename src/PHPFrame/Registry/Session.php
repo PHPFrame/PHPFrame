@@ -96,46 +96,60 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 		$uri = new PHPFrame_Utils_URI();
 		$this->_cookie_path = $uri->getDirname()."/";
 		$this->_cookie_domain = $uri->getHost();
+		
 		// Set custom session name
 		ini_set("session.name", $this->_session_name);
+		
 		// Initialise cookie
 		ini_set("session.cookie_lifetime", $this->_cookie_lifetime);
 		ini_set("session.cookie_path", $this->_cookie_path);
 		ini_set("session.cookie_secure", $this->_cookie_secure);
 		ini_set("session.cookie_httponly", $this->_cookie_httponly);
+		
 		// start php session
 		session_start();
+		
 		// If new session we initialise
 		if (!isset($_SESSION['id']) || $_SESSION['id'] != session_id()) {
 			// Store session id in session array
 			$_SESSION['id'] = session_id();
+			
 			// Acquire session user object
 			$_SESSION['user'] = new PHPFrame_User();
 			$_SESSION['user']->set("id", 0);
 			$_SESSION['user']->set("groupid", 0);
+			
 			// Acquire sysevents object
 			$_SESSION['sysevents'] = new PHPFrame_Application_Sysevents();
+			
 			// Generate session token
 			$this->getToken(true);
+			
 			// Detect client for this session
 			$this->_detectClient();
+			
 		} elseif (
-		isset($_SERVER["HTTP_X_API_USERNAME"])
-		&& isset($_SERVER["HTTP_X_API_SIGNATURE"])
-		&& !($_SESSION['client'] instanceof PHPFrame_Client_XMLRPC)
+    		isset($_SERVER["HTTP_X_API_USERNAME"])
+    		&& isset($_SERVER["HTTP_X_API_SIGNATURE"])
+    		&& !($_SESSION['client'] instanceof PHPFrame_Client_XMLRPC)
 		) {
 			// If we are dealing with an api request that already has an existing session
 			// but the client object is not set to XMLRPC we instantiate a new client object
-			// replace it in the session, store the old one in another var and flag the session
-			// as having had its client object overriden
+			// replace it in the session, store the old one in another var as well as the 
+			// user object so that we can put them back in place when the next non-api
+			// request is received
 			$_SESSION['overriden_client'] = $_SESSION['client'];
 			$_SESSION['overriden_user'] = $_SESSION['user'];
 			$_SESSION['client'] = new PHPFrame_Client_XMLRPC();
+			
 		} elseif (
-		!isset($_SERVER["HTTP_X_API_USERNAME"])
-		&& !isset($_SERVER["HTTP_X_API_SIGNATURE"])
-		&& isset($_SESSION['overriden_client']) && $_SESSION['overriden_client'] instanceof PHPFrame_Client_IClient
+    		!isset($_SERVER["HTTP_X_API_USERNAME"])
+    		&& !isset($_SERVER["HTTP_X_API_SIGNATURE"])
+    		&& isset($_SESSION['overriden_client']) 
+    		&& $_SESSION['overriden_client'] instanceof PHPFrame_Client_IClient
 		) {
+		    // If we already have a session with an xmlrpc client object but no api
+		    // headers are included in request we then revert the client and user objects
 			$_SESSION['client'] = $_SESSION['overriden_client'];
 			$_SESSION['user'] = $_SESSION['overriden_user'];
 			unset($_SESSION['overriden_client']);

@@ -414,22 +414,22 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     
     private function _authenticate($xml_payload)
     {
-        if (isset($_SERVER["HTTP_X_USERNAME"])) {
-            $x_user = $_SERVER["HTTP_X_USERNAME"];
+        if (isset($_SERVER["HTTP_X_API_USERNAME"])) {
+            $x_api_user = $_SERVER["HTTP_X_API_USERNAME"];
         }
-        if (isset($_SERVER["HTTP_X_SIGNATURE"])) {
-            $x_signature = $_SERVER["HTTP_X_SIGNATURE"];
+        if (isset($_SERVER["HTTP_X_API_SIGNATURE"])) {
+            $x_api_signature = $_SERVER["HTTP_X_API_SIGNATURE"];
         }
         
         // Get API user's key
         try {
-            $sql = "SELECT `key` FROM #__api_clients WHERE user = '".$x_user."'";
-            $params = array(":user"=>$x_user);
+            $sql = "SELECT `key` FROM #__api_clients WHERE user = '".$x_api_user."'";
+            $params = array(":user"=>$x_api_user);
             $api_key = PHPFrame::DB()->fetchColumn($sql, $params);
             
             $test_signature = md5(md5($xml_payload.$api_key).$api_key);
             
-            if ($x_signature === $test_signature) {
+            if ($x_api_signature === $test_signature) {
                 // Login the user as group API
                 $user = new PHPFrame_User();
                 $user->set('id', 2);

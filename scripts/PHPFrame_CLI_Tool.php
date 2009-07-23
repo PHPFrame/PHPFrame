@@ -1,4 +1,4 @@
-#!/usr/local/zend/bin/php
+#!/usr/bin/env php
 <?php
 /**
  * scripts/post-install.php
@@ -11,7 +11,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id: PHPFrame_CLI_Tool.php 253 2009-07-15 23:18:32Z luis.montero@e-noise.com $
+ * @version    SVN: $Id: PHPFrame_CLI_Tool.php 254 2009-07-16 00:42:13Z luis.montero@e-noise.com $
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
@@ -116,10 +116,18 @@ class PHPFrame_CLI_Tool_postinstall
 		// Create db and dbuser if requested
 		if (isset($infoArray["DB_ROOT"]) && isset($infoArray["DB_ROOT_PASS"])) {
 			$concrete_dsn_class = "PHPFrame_Database_DSN_".$infoArray["DB_DRIVER"];
-			$dsn = new $concrete_dsn_class($infoArray["DB_HOST"], $infoArray["DB_NAME"]);
+			$dsn = new $concrete_dsn_class($infoArray["DB_HOST"], "mysql");
 			
-			$db = PHPFrame::DB($dsn, $infoArray["DB_USER"], $infoArray["DB_PASS"]);
-			var_dump($db); exit;
+			$db = PHPFrame::DB($dsn, $infoArray["DB_ROOT"], $infoArray["DB_ROOT_PASS"]);
+			
+			$sql_array[] = "CREATE USER '".$infoArray["DB_USER"]."'@'localhost' IDENTIFIED BY '".$infoArray["DB_PASS"]."'";
+			$sql_array[] = "GRANT USAGE ON * . * TO '".$infoArray["DB_USER"]."'@'localhost' IDENTIFIED BY '".$infoArray["DB_PASS"]."'";
+			$sql_array[] = "CREATE DATABASE `".$infoArray["DB_NAME"]."` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci";
+			$sql_array[] = "GRANT ALL PRIVILEGES ON `".$infoArray["DB_NAME"]."` . * TO '".$infoArray["DB_NAME"]."'@'localhost'";
+			
+			foreach ($sql_array as $sql) {
+				$db->query($sql);
+			}
 		}
 		
 		// Check DSN database

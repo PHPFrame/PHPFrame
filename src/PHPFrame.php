@@ -115,9 +115,10 @@ class PHPFrame
             }
             
             // require the file if it exists
-            if (is_file($file_path)) {
-                @include $file_path;
-            }
+            // We do not test to see if the file exists because it is a relative path that
+            // depends on the include path. Testing is_file() for the relative path alone 
+            // returns false
+            @include $file_path;
         }
     }
     

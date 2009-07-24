@@ -113,7 +113,7 @@ class PHPFrame
                 $file_path = "PHPFrame".DS.$array[1].DS.$array[1].".php";
             }
             
-            @include_once $file_path;
+            @include $file_path;
         }
     }
     

@@ -84,6 +84,7 @@
    <file baseinstalldir="/" name="PHPFrame/Exception/Filesystem.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/Handler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/IMAP.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Exception/XMLRPC.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTML/HTML.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Lang/en-GB.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />

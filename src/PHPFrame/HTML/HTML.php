@@ -136,69 +136,74 @@ class PHPFrame_HTML
         ?>
         
         <script type="text/javascript">
-        $(document).ready(function() {
+		<!--
+		$(document).ready(function() {
 
-            // Dynamically add an HTML element at the end of the body to show the dialog
-            $("body").append('<div style="position: absolute" id="dialog_<?php echo $uid; ?>" title="<?php echo $label; ?>"></div>');
-            // Add the loading div inside the newly created dialog box
-            $("#dialog_<?php echo $uid; ?>").html('<div class="loading"></div>');
-            
-            // Add dialog beaviour to new dialog box
-            $("#dialog_<?php echo $uid; ?>").dialog({
-                autoOpen: false,
-                bgiframe: false,
-                width: <?php echo $width; ?>,
-                height: <?php echo $height; ?>,
-                modal: true,
-                resizable: false,
-                buttons: {
-                    <?php if ($form) : ?>
-                    "Save" : function() {
-                        var form = $(this).find("form");
-                        // Submit form and close the dialog if form is valid
-                        if (form.valid()) {
-                            <?php if (!empty($ajax_container)) : ?>
-                            var ajax_container = $("<?php echo $ajax_container; ?>");
-                            // Add the loading div inside the ajax container
-                            ajax_container.html('<div class="loading"></div>');
-                            // bind form using 'ajaxForm'
-                            form.ajaxForm({ target: ajax_container });
-                            <?php endif; ?>
-                            form.submit();
-                            $(this).dialog('close');
-                            $(this).empty();
-                        }
-                        else {
-                            return false;
-                        }
-                    },
-                    <?php endif; ?>
-                    "Close" : function() {
-                        $(this).dialog('close');
-                        $(this).empty();
-                    }
-                }
-                    
-            });
+		    // Dynamically add an HTML element at the end of the body to show the dialog
+			var dia_id = 'dialog_<?php echo $uid; ?>';
+			var dia_div = '<div style="position: absolute" id="'+dia_id+'"></div>';
+			$("body").append(dia_div);
 
-            <?php if (!empty($ajax_container)) : ?>
-            // Bind AJAX events to loading div to show/hide animation
-            $(".loading").bind("ajaxSend", function() {
-                $(this).show();
-            })
-            .bind("ajaxComplete", function() {
-                   $(this).hide();
-            });
-            <?php endif; ?>
+		    // Add the loading div inside the newly created dialog box
+		    $("#dialog_<?php echo $uid; ?>").html('<div class="loading"></div>');
+   
+		    // Add dialog beaviour to new dialog box
+		    $("#dialog_<?php echo $uid; ?>").dialog({
+		        autoOpen: false,
+		        bgiframe: false,
+		        width: <?php echo $width; ?>,
+		        height: <?php echo $height; ?>,
+		        modal: true,
+		        resizable: false,
+		        buttons: {
+		            <?php if ($form) : ?>
+		            "Save" : function() {
+		                var form = $(this).find("form");
+		                // Submit form and close the dialog if form is valid
+		                if (form.valid()) {
+		                    <?php if (!empty($ajax_container)) : ?>
+		                    var ajax_container = $("<?php echo $ajax_container; ?>");
+		                    // Add the loading div inside the ajax container
+		                    ajax_container.html('<div class="loading"></div>');
+		                    // bind form using 'ajaxForm'
+		                    form.ajaxForm({ target: ajax_container });
+		                    <?php endif; ?>
+		                    form.submit();
+		                    $(this).dialog('close');
+		                    $(this).empty();
+		                }
+		                else {
+		                    return false;
+		                }
+		            },
+		            <?php endif; ?>
+		            "Close" : function() {
+		                $(this).dialog('close');
+		                $(this).empty();
+		            }
+		        }
+           
+		    });
 
-            // Set up the onclick trigger for the dialog box
-            $('#dialog_trigger_<?php echo $uid; ?>').click(function(e) {
-                e.preventDefault();
-                $("#dialog_<?php echo $uid; ?>").css({ "position" : "relative" });
-                $("#dialog_<?php echo $uid; ?>").load("<?php echo $target; ?>&tmpl=component");
-                $("#dialog_<?php echo $uid; ?>").dialog('open');
-            });
-        });
+		    <?php if (!empty($ajax_container)) : ?>
+		    // Bind AJAX events to loading div to show/hide animation
+		    $(".loading").bind("ajaxSend", function() {
+		        $(this).show();
+		    })
+		    .bind("ajaxComplete", function() {
+		           $(this).hide();
+		    });
+		    <?php endif; ?>
+
+		    // Set up the onclick trigger for the dialog box
+		    $('#dialog_trigger_<?php echo $uid; ?>').click(function(e) {
+		        e.preventDefault();
+		        $("#dialog_<?php echo $uid; ?>").css({ "position" : "relative" });
+		        $("#dialog_<?php echo $uid; ?>").load("<?php echo $target; ?>&tmpl=component");
+		        $("#dialog_<?php echo $uid; ?>").dialog('open');
+		    });
+		});
+		//-->
         </script>
         
         <a id="dialog_trigger_<?php echo $uid; ?>" href="<?php echo $target; ?>"><?php echo $label; ?></a>

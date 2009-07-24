@@ -72,7 +72,7 @@ class PHPFrame_Exception_Database extends PHPFrame_Exception
         
         $verbose = "SQLSTATE: ". $this->_sqlstate;
         $verbose .= "\nDriver code: ".$this->_driver_code;
-        $verbose .= "\nDriver message".$this->_driver_msg;
+        $verbose .= "\nDriver message: ".$this->_driver_msg;
         
         parent::__construct($message, $code, $verbose);
     }

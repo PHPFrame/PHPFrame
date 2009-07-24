@@ -104,6 +104,7 @@ class PHPFrame
         // PHPFrame classes
         if (strpos($class_name, 'PHPFrame') !== false) {
             $array = explode('_', $class_name);
+            $file_path = "";
             
             if (sizeof($array) == 4) {
                 $file_path = "PHPFrame".DS.$array[1].DS.$array[2].DS.$array[3].".php";
@@ -113,7 +114,10 @@ class PHPFrame
                 $file_path = "PHPFrame".DS.$array[1].DS.$array[1].".php";
             }
             
-            @include $file_path;
+            // require the file if it exists
+            if (is_file($file_path)) {
+                @include $file_path;
+            }
         }
     }
     

@@ -129,7 +129,7 @@ class PHPFrame_Utils_URI
         if (empty($uri)) {
             $uri = $this->_getRequestURI();
         }
-        
+            
         $this->_parseURI($uri);
     }
     
@@ -284,6 +284,13 @@ class PHPFrame_Utils_URI
      */
     private function _parseURI($uri) 
     {
+        $uri = (string) trim($uri);
+        
+        // If URI is empty there's nothing to parse so we return
+        if (empty($uri)) {
+            return;
+        }
+        
         // Parse URI using PHPs parse_url() method
         $array = parse_url($uri);
         

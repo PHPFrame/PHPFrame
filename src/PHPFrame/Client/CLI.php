@@ -73,9 +73,26 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
         global $argv;
         
         $request = array();
+        $keys = array();
+        
         for ($i=1; $i<count($argv); $i++) {
-            if (preg_match('/^(.*)=(.*)$/', $argv[$i], $matches)) {
-                $request['request'][$matches[1]] = $matches[2];
+            // If two hyphens passed we take as full flag
+            if (preg_match('/^\-\-[a-zA-Z]+/', $argv[$i], $matches)) {
+                $keys[] = substr($argv[$i], 2);
+            // If we get only one hyphen we try to replace short names
+            } elseif (preg_match('/^\-[a-zA-Z]+/', $argv[$i], $matches)) {
+                $key = substr($argv[$i], 1);
+                
+                if ($key == "c") {
+                    $key = "controller";
+                } elseif ($key == "a") {
+                    $key = "action";
+                }
+                
+                $keys[] = $key;
+            // Else we add the value to the last key
+            } else {
+                $request['request'][end($keys)] = $argv[$i];
             }
         }
         

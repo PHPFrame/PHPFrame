@@ -27,18 +27,30 @@
  */
 class PHPFrame_User
 {
+    private $_id=null;
+    private $_groupid=null;
+    private $_username=null;
+    private $_password=null;
+    private $_email=null;
+    private $_firstname=null;
+    private $_lastname=null;
+    private $_photo=null;
+    private $_notifications=null;
+    private $_show_email=null;
+    private $_block=null;
+    private $_created=null;
+    private $_last_visit=null;
+    private $_activation=null;
+    private $_params=null;
+    private $_ts=null;
+    private $_deleted=null;
+    
     /**
-     * Row object mapper
-     * 
-     * @var PHPFrame_Database_Row
+     * User mapper object
+     *
+     * @var PHPFrame_User_Mapper
      */
-    private $_row=null;
-    /**
-     * Error array
-     * 
-     * @var array
-     */
-    private $_error=array();
+    private $_mapper=null;
     
     /**
      * Constructor
@@ -47,9 +59,8 @@ class PHPFrame_User
      * @return void
      * @since  1.0
      */
-    public function __construct() 
-    {
-        $this->_row = new PHPFrame_Database_Row("#__users");
+    public function __construct() {
+        $this->_mapper = new PHPFrame_User_Mapper();
     }
     
     /**
@@ -90,7 +101,9 @@ class PHPFrame_User
      */
     public function toString($show_keys=true)
     {
-        return $this->_row->toString($show_keys);
+        $str = "";
+        
+        return $str;
     }
     
     /**
@@ -102,7 +115,9 @@ class PHPFrame_User
      */
     public function toArray()
     {
-        return $this->_row->toArray();
+        $array = array();
+        
+        return $array;
     }
     
     
@@ -118,7 +133,11 @@ class PHPFrame_User
      */
     public function get($key) 
     {
-        return $this->_row->get($key);
+        if (!isset($this->$key)) {
+            return null;
+        }
+        
+        return $this->$key;
     }
     
     /**
@@ -133,7 +152,9 @@ class PHPFrame_User
      */
     public function set($key, $value) 
     {
-        $this->_row->set($key, $value);
+        if (property_exists($this, $key)) {
+            $this->$key = $value;
+        }
     }
     
     /**
@@ -199,24 +220,7 @@ class PHPFrame_User
         }
         
         // Invoke row store() method to store row in db
-        return $this->_row->store();
-    }
-    
-    /**
-     * Get last error
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function getLastError() 
-    {
-        if (is_array($this->_error) && count($this->_error) > 0) {
-            return end($this->_error);
-        }
-        else {
-            return false;
-        }
+        return $this->_mapper->store($this);
     }
     
     /**

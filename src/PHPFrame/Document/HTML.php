@@ -128,13 +128,34 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
         if ($apply_theme) {
             $this->_applyTheme($view);
         } else {
-            // we dont need to wrap the component output in the overall template
+            // we dont need to wrap the controller output in the overall template
             // so we just prepend the sytem events and return
-            $widgets = PHPFrame::AppRegistry()->getWidgets();
-            $sys_events = $widgets->display('sysevents', '_sysevents');
+            $sys_events = $this->renderPartial('sysevents');
             $this->body = $sys_events.$this->body;
             return;
         }
+    }
+    
+    public function renderPartial($name)
+    {
+        if (!is_file($name)) {
+            $name .= ".php";
+            if (!is_file($name)) {
+                $msg = "Could not render partial";
+                throw new PHPFrame_Exception($msg);
+            }
+        }
+        
+        // Start buffering
+        ob_start();
+        // Include partial file
+        require_once $name;
+        // save buffer in body property
+        $partial = ob_get_contents();
+        // clean output buffer
+        ob_end_clean();
+        
+        return $partial;
     }
     
     public function renderPathway(PHPFrame_Application_Pathway $pathway)
@@ -491,9 +512,6 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
      */
     private function _applyTheme(PHPFrame_MVC_View $view) 
     {
-        // Make widgets available to templates
-        $widgets = PHPFrame::AppRegistry()->getWidgets();
-        
         // Add theme stylesheets
         $this->addStyleSheet("themes/".PHPFrame::Config()->get("THEME")."/css/styles.css");
         

@@ -51,7 +51,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
      * 
      * @var array
      */
-    private $_readonly=array("permissions", "components", "widgets");
+    private $_readonly=array("permissions", "plugins");
     /**
      * An array to store application registry data set on runtime
      * 
@@ -93,12 +93,10 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
             // Rebuild app registry
             $permissions = new PHPFrame_Application_Permissions();
             $plugins = new PHPFrame_Application_Plugins();
-            $widgets = new PHPFrame_Application_Widgets();
             
             // Store objects in App Regsitry
             $this->set("permissions", $permissions);
             $this->set("plugins", $plugins);
-            $this->set("widgets", $widgets);
         }
     }
     
@@ -244,18 +242,6 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     public function getPlugins() 
     {
         return $this->_data['plugins'];
-    }
-    
-    /**
-     * Get Widgets object
-     * 
-     * @access public
-     * @return PHPFrame_Application_Widgets
-     * @since  1.0
-     */
-    public function getWidgets() 
-    {
-        return $this->_data['widgets'];
     }
     
     /**

@@ -92,12 +92,12 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
         else {
             // Rebuild app registry
             $permissions = new PHPFrame_Application_Permissions();
-            $components = new PHPFrame_Application_Components();
+            $plugins = new PHPFrame_Application_Plugins();
             $widgets = new PHPFrame_Application_Widgets();
             
             // Store objects in App Regsitry
             $this->set("permissions", $permissions);
-            $this->set("components", $components);
+            $this->set("plugins", $plugins);
             $this->set("widgets", $widgets);
         }
     }
@@ -235,15 +235,15 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     }
     
     /**
-     * Get Comonents object
+     * Get Plugins object
      * 
      * @access public
-     * @return PHPFrame_Application_Components
+     * @return PHPFrame_Application_Plugins
      * @since  1.0
      */
-    public function getComponents() 
+    public function getPlugins() 
     {
-        return $this->_data['components'];
+        return $this->_data['plugins'];
     }
     
     /**

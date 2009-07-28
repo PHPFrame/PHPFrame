@@ -1,10 +1,37 @@
 <?php
 class PHPFrame_Config
 {
+	/**
+	 * Array holding instances of this class
+	 * 
+	 * @var array
+	 */
     private static $_instances=array();
+	/**
+	 * Full path to XML file with data
+	 * 
+	 * @var string
+	 */
     private $_path=null;
+	/**
+	 * Array holding config data
+	 * 
+	 * @var array
+	 */
     private $_data=array();
     
+	/**
+	 * Constructor
+	 * 
+	 * Private constructor ensures singleton pattern. Use the instance() method to get an instance
+	 * of this class.
+	 *
+	 * @param string $path Full path to XML file with data
+	 *
+	 * @access private
+	 * @return void
+	 * @since  1.0
+	 */
     private function __construct($path)
     {
         $this->_path = (string) $path;
@@ -118,23 +145,43 @@ class PHPFrame_Config
     {
         $xml = @simplexml_load_file($this->_path);
         
-        if (!$xml instanceof SimpleXMLElement) {
+        if (
+			!$xml instanceof SimpleXMLElement
+			|| !$xml->data instanceof SimpleXMLElement
+		) {
             $msg = get_class($this).": ";
             $msg .= "Could not load config from xml file.";
             trigger_error($msg);
         }
-        
+		
+		$key = 0;
         foreach ($xml->data as $data) {
-            $array["name"] = trim((string) $data->name);
-            $array["def_value"] = trim((string) $data->def_value);
-            $array["description"] = trim((string) $data->description);
-			$array["value"] = trim((string) $data->value);
-
-			if ($array["value"] == "" && $array["def_value"] != "") {
+			
+			if (!$data instanceof SimpleXMLElement) {
+				continue;
+			}
+			
+			$array = array();
+			foreach ($data as $key=>$value) {
+				$array[$key] = (string) $value;
+			}
+			
+			if (
+				isset($array["value"]) 
+				&& $array["value"] == "" 
+				&& isset($array["def_value"]) 
+				&& $array["def_value"] != ""
+			) {
 				$array["value"] = $array["def_value"];
 			}
             
-            $this->_data[$array["name"]] = $array;
+			if (isset($array["name"])) {
+				$key = $array["name"];
+			}
+			
+            $this->_data[$key] = $array;
+
+			$key++;
         }
     }
 }

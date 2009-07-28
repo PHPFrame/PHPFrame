@@ -69,17 +69,16 @@ class PHPFrame_Application_FrontController
         // Prepare response using client
         $client->prepareResponse(PHPFrame::Response());
         
-        // Get requested component name
-        $component_name = PHPFrame::Request()->getComponentName();
+        // Get requested controller name
+        $controller_name = PHPFrame::Request()->getControllerName();
         
         // Create the action controller
-        $controller = PHPFrame_MVC_ActionController::getInstance($component_name);
+        $controller = PHPFrame_MVC_ActionController::getInstance($controller_name);
         // Check that action controller is of valid type and run it if it is
         if ($controller instanceof PHPFrame_MVC_ActionController) {
             // Execute task
             $controller->execute();
-        }
-        else {
+        } else {
             throw new PHPFrame_Exception("Controller not supported.");
         }
     }

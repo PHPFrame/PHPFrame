@@ -17,17 +17,11 @@
 /**
  * View Class
  * 
- * This class is used to implement the MVC (Model/View/Controller) architecture 
- * in the components.
+ * This class is used to implement the MVC (Model/View/Controller) pattern.
  * 
- * Views are used to render the output of a component into a form suitable for 
+ * Views are used to render the output of a controller into a form suitable for 
  * interaction, typically a user interface element. Multiple views can exist for 
- * a single component for different purposes.
- * 
- * This class should be extended when creating component views as it is an 
- * abstract class. This class is used as a template for creating views when 
- * developing components. See the built in components (dashboard, user, admin, ...) 
- * for examples.
+ * a single controller for different purposes.
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
@@ -37,9 +31,8 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @see        PHPFrame_MVC_ActionController, PHPFrame_MVC_Model
  * @since      1.0
- * @abstract
  */
-abstract class PHPFrame_MVC_View
+class PHPFrame_MVC_View
 {
     /**
      * The view name
@@ -47,12 +40,6 @@ abstract class PHPFrame_MVC_View
      * @var string
      */
     protected $_name=null;
-    /**
-     * The layout to load. Typical values: "list", "detail", "form", ...
-     * 
-     * @var string
-     */
-    protected $_layout=null;
     /**
      * Data array for view
      * 
@@ -76,15 +63,14 @@ abstract class PHPFrame_MVC_View
      * Constructor
      * 
      * @param string $name   The view name
-     * @param string $layout Optional parameter to specify a specific layout.
      * 
+     * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($name, $layout=null) 
+    public function __construct($name) 
     {
-        $this->_name = (string) $name;
-        $this->_layout = (string) $layout;
+        $this->_name = (string) trim($name);
         
         // Acquire pathway object
         $this->_pathway = new PHPFrame_Application_Pathway();
@@ -94,14 +80,16 @@ abstract class PHPFrame_MVC_View
         $this->_document = PHPFrame::Response()->getDocument();
     }
     
+    /**
+     * Get view name
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function getName()
     {
         return $this->_name;
-    }
-    
-    public function getLayout()
-    {
-        return $this->_layout;
     }
     
     /**
@@ -110,6 +98,7 @@ abstract class PHPFrame_MVC_View
      * @param string $key   The name of the variable inside the view.
      * @param mixed  $value The variable we want to add to the view.
      * 
+     * @access public
      * @return void
      * @since  1.0
      */
@@ -118,6 +107,13 @@ abstract class PHPFrame_MVC_View
         $this->_data[$key] = $value;
     }
     
+    /**
+     * Get view data
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
     public function getData()
     {
         return $this->_data;
@@ -126,7 +122,9 @@ abstract class PHPFrame_MVC_View
     /**
      * Get the view's pathway object
      * 
+     * @access public
      * @return PHPFrame_Application_Pathway
+     * @since  1.0
      */
     public function getPathway()
     {
@@ -136,7 +134,9 @@ abstract class PHPFrame_MVC_View
     /**
      * Get the view's pathway object
      * 
+     * @access public
      * @return PHPFrame_Application_Pathway
+     * @since  1.0
      */
     public function getDocument()
     {
@@ -148,28 +148,12 @@ abstract class PHPFrame_MVC_View
      * 
      * This method loads the template layer of the view.
      * 
-     * This method  also trigger layout specific methods. 
-     * For example, if we are displaying layout "list" and there is a method 
-     * called displayMyviewList within the extended view class this method 
-     * will be automatically invoked.
-     * 
+     * @access public
      * @return void
      * @since  1.0
      */
     public function display() 
     {
-        // If there is a layout specific method we trigger it before rendering
-        $layout_array = explode('_', $this->_layout);
-        $layout = '';
-        for ($i=0; $i<count($layout_array); $i++) {
-            $layout .= ucfirst($layout_array[$i]);
-        }
-        $tmpl_specific_method = "display".ucfirst($this->_name).ucfirst($layout);
-        if (method_exists($this, $tmpl_specific_method)) {
-            // Invoke layout specific display method
-            $this->$tmpl_specific_method();
-        }
-        
         // Delegate rendering to response object
         // The response object will render the view object 
         // depending on the document typ

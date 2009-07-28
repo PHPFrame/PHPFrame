@@ -92,6 +92,11 @@ class PHPFrame_Utils_Filesystem
         }
     }
     
+    public static function isEmptyDir($dir)
+    {
+        return (($files = @scandir($dir)) && count($files) <= 2);
+    } 
+    
     /**
      * Upload file
      * 

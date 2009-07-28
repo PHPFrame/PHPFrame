@@ -62,19 +62,19 @@ class PHPFrame_Utils_Rewrite
             //preg_match('/^([a-zA-Z]+)\/?([a-zA-Z_]+)?\/?.*$/', $params, $matches);
             
             // Get component name using regex
-            preg_match('/^([a-zA-Z]+)/', $params, $component_matches);
+            preg_match('/^([a-zA-Z]+)/', $params, $controller_matches);
             
             // Get action name using regex
             preg_match('/^[a-zA-Z]+\/([a-zA-Z_]+)/', $params, $action_matches);
             
-            if (isset($component_matches[1]) && !empty($component_matches[1])) {
-                $component = "com_".$component_matches[1];
+            if (isset($controller_matches[1]) && !empty($controller_matches[1])) {
+                $controller = $controller_matches[1];
                 if (isset($action_matches[1])) {
                     $action = $action_matches[1];
                 }
 
                 // Prepend component and action to query string
-                $rewritten_query_string = "component=".$component;
+                $rewritten_query_string = "controller=".$controller;
                 if (!empty($action)) $rewritten_query_string .= "&action=".$action;
                 if (!empty($_SERVER['QUERY_STRING'])) {
                     $rewritten_query_string .= "&".$_SERVER['QUERY_STRING'];
@@ -85,9 +85,9 @@ class PHPFrame_Utils_Rewrite
                 $_SERVER['REQUEST_URI'] = $path."index.php?".$_SERVER['QUERY_STRING'];
                 
                 // Set vars in _REQUEST array
-                if (!empty($component)) {
-                    $_REQUEST['component'] = $component;
-                    $_GET['component'] = $component;
+                if (!empty($controller)) {
+                    $_REQUEST['controller'] = $controller;
+                    $_GET['controller'] = $controller;
                 }
                 if (!empty($action)) {
                     $_REQUEST['action'] = $action;
@@ -130,9 +130,9 @@ class PHPFrame_Utils_Rewrite
         
         $rewritten_url = "";
         
-        if (isset($query_array['component']) && !empty($query_array['component'])) {
-            $rewritten_url .= substr($query_array['component'], 4);
-            unset($query_array['component']);
+        if (isset($query_array['controller']) && !empty($query_array['controller'])) {
+            $rewritten_url .= $query_array['controller'];
+            unset($query_array['controller']);
         }
         
         if (isset($query_array['action']) && !empty($query_array['action'])) {

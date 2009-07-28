@@ -61,10 +61,10 @@ class PHPFrame_Application_Widgets
     {
         $count = 0;
         
-        foreach ($this->_array as $module) {
-            if ($module['position'] == $position 
-                && $module['enabled'] == 1
-                && ($module['option'] == PHPFrame::Request()->getComponentName() || $module['option'] == "*")
+        foreach ($this->_array as $widget) {
+            if ($widget['position'] == $position 
+                && $widget['enabled'] == 1
+                && ($widget['option'] == PHPFrame::Request()->getControllerName() || $widget['option'] == "*")
                 ) {
                 $count++;
             }
@@ -89,23 +89,23 @@ class PHPFrame_Application_Widgets
     {
         $output = array();
         
-        foreach ($this->_array as $module) {
-            if ($module['position'] == $position 
-                && $module['enabled'] == 1
-                && ($module['option'] == PHPFrame::Request()->getComponentName() || $module['option'] == "*")
+        foreach ($this->_array as $widget) {
+            if ($widget['position'] == $position 
+                && $widget['enabled'] == 1
+                && ($widget['option'] == PHPFrame::Request()->getControllerName() || $widget['option'] == "*")
                 ) {
-                $module_file_path = PHPFRAME_INSTALL_DIR.DS."src".DS."modules".DS."mod_".$module['name'].DS."mod_".$module['name'].".php";
-                if (file_exists($module_file_path)) {
+                $widget_file_path = PHPFRAME_INSTALL_DIR.DS."src".DS."views".DS."partials".DS.$widget['name'].".php";
+                if (file_exists($widget_file_path)) {
                     // Start buffering
                     ob_start();
-                    require_once $module_file_path;
+                    require_once $widget_file_path;
                     // save buffer
                     $output[] = ob_get_contents();
                     // clean output buffer
                     ob_end_clean();
                 }
                 else {
-                    throw new PHPFrame_Exception('Module file '.$module_file_path.' not found.');
+                    throw new PHPFrame_Exception('Widget file '.$widget_file_path.' not found.');
                 }
             }
         }

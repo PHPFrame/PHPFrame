@@ -30,7 +30,7 @@ class PHPFrame_Config
     
     public static function instance($path=null)
     {
-        // Use default empty distro versionas template
+        // Use default empty distro version of template
 		if (is_null($path)) {
 		    require_once "PEAR/Config.php";
 			$data_dir = PEAR_Config::singleton()->get('data_dir');

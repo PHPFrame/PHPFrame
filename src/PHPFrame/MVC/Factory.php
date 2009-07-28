@@ -39,8 +39,6 @@ class PHPFrame_MVC_Factory
     /**
      * Get model
      * 
-     * @param string $component_name The name of the container component of the 
-     *                               model we want to get (ie: com_login).
      * @param string $model_name     The name of the model to get.
      * @param array  $args           An array with arguments to be passed to the
      *                               model's constructor if needed.
@@ -50,10 +48,11 @@ class PHPFrame_MVC_Factory
      * @todo   Have to add type checking using instanceof operator to guarantee that 
      *         we return an object of type PHPFrame_MVC_Model
      */
-    public static function getModel($component_name, $model_name, $args=array()) 
+    public static function getModel($model_name, $args=array()) 
     {
-        $class_name = substr($component_name, 4)."Model";
-        $class_name .= ucfirst($model_name);
+        $model_name = (string) trim($model_name);
+        
+        $class_name = ucfirst($model_name)."Model";
         
         // make a reflection object
         $reflectionObj = new ReflectionClass($class_name);
@@ -92,31 +91,14 @@ class PHPFrame_MVC_Factory
      * Get a named view within the component.
      *
      * @param string $name   The name of the view to create.
-     * @param string $layout A specific layout to use for the view. This argument is 
-     *                       optional.
      * 
      * @return PHPFrame_MVC_View
      * @since  1.0
      */
-    public static function getView($name, $layout='') 
+    public static function getView($name) 
     {
-        $component_name = PHPFrame::Request()->getComponentName();
-        $class_name = strtolower(substr($component_name, 4));
-        $class_name .= "View".ucfirst($name);
+        $view = new PHPFrame_MVC_View($name);
         
-        try {
-            $reflection_obj = new ReflectionClass($class_name);
-        }
-        catch (Exception $e) {
-            throw new PHPFrame_Exception($e->getMessage());
-        }
-        
-        $reflection_abstract_view = new ReflectionClass("PHPFrame_MVC_View");
-        if ($reflection_obj->isSubclassOf($reflection_abstract_view)) {
-            return new $class_name($layout);
-        } else {
-            $exception_msg = "View class '".$class_name."' not supported.";
-            throw new PHPFrame_Exception($exception_msg);
-        }
+        return $view;
     }
 }

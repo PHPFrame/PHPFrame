@@ -59,7 +59,7 @@ class PHPFrame
      * 
      * @var string
      */
-    const RELEASE_VERSION="0.0.3";
+    const RELEASE_VERSION="0.0.4";
     /**
      * The PHPFrame version
      * 
@@ -72,6 +72,12 @@ class PHPFrame
      * @var int
      */
     private static $_run_level=0;
+    /**
+     * Array containing libraries config as array
+     *  
+     * @var array
+     */
+    private static $_lib_config=null;
     
     /**
      * Constructor
@@ -99,12 +105,15 @@ class PHPFrame
      * @access public
      * @return void
      * @since  1.0
+     * @todo   This method needs to be refactored into three different ones.
+     * 		   One to load the PHPFrame lib, then the custom libs and finally the mvc classes.
      */
     public static function __autoload($class_name) {
+        $file_path = "";
+        
         // PHPFrame classes
         if (strpos($class_name, 'PHPFrame') !== false) {
             $array = explode('_', $class_name);
-            $file_path = "";
             
             if (sizeof($array) == 4) {
                 $file_path = "PHPFrame".DS.$array[1].DS.$array[2].DS.$array[3].".php";
@@ -118,6 +127,58 @@ class PHPFrame
             // We do not test to see if the file exists because it is a relative path that
             // depends on the include path. Testing is_file() for the relative path alone 
             // returns false
+            @include $file_path;
+            return;
+        }
+        
+        // Load libraries
+        if (is_null(self::$_lib_config)) {
+            self::$_lib_config = self::_fetchLibXML();
+        }
+        
+        if (!is_array(self::$_lib_config)) {
+            $msg = "Could not load libraries configuration as array";
+            throw new PHPFrame_Exception($msg);
+        }
+        
+        foreach (self::$_lib_config as $lib) {
+            if ($lib["name"] == $class_name) {
+                $file_path = PHPFRAME_INSTALL_DIR.DS."lib".DS.$lib["value"];
+                
+                // require the file if it exists
+                if (is_file($file_path)) {
+                    @include $file_path;
+                    return;
+                }
+            }
+        }
+        
+        // Load MVC classes
+        $super_classes = array("Controller", "Model", "View", "Helper");
+        foreach ($super_classes as $super_class) {
+            if (preg_match('/'.$super_class.'$/', $class_name)) {
+                break;
+            }
+        }
+        
+        // Set base path for objects of given superclass
+        $file_path .= PHPFRAME_INSTALL_DIR.DS."src".DS.strtolower($super_class)."s".DS;
+        
+        // Remove superclass name from class name
+        $class_name = str_replace($super_class, "", $class_name);
+        
+        // Build dir path by breaking camel case class name
+        $matches = array();
+        preg_match_all('/[A-Z]{1}[a-z]+/', ucfirst($class_name), $matches);
+        if (isset($matches[0]) && is_array($matches[0])) {
+            $file_path .= strtolower(implode(DS, $matches[0]));
+        }
+        
+        // Append file extension
+        $file_path .= ".php";
+        
+        // require the file if it exists
+        if (is_file($file_path)) {
             @include $file_path;
         }
     }
@@ -395,6 +456,29 @@ class PHPFrame
             $msg = 'Could not find language file ('.$lang_file.')';
             throw new PHPFrame_Exception($msg);
         }
+    }
+    
+    /**
+     * Fetch lib config from xml file
+     * 
+     * @access private
+     * @return array
+     * @since  1.0
+     */
+    private static function _fetchLibXML()
+    {
+        $lib_xml = PHPFRAME_CONFIG_DIR.DS."lib.xml";
+        
+        if (!is_file($lib_xml)) {
+            $msg = "Could not find libraries configuration file";
+            throw new PHPFrame_Exception($msg);
+        }
+        
+        // Instanciate new config object
+        $lib_config = PHPFrame_Config::instance($lib_xml);
+        
+        // Return config as array
+        return $lib_config->toArray();
     }
 }
 

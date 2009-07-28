@@ -95,7 +95,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         
         // Set component path
         $this->component_path = PHPFRAME_INSTALL_DIR.DS."src";
-        $this->component_path .= DS."components".DS.PHPFrame::Request()->getComponentName();
+        $this->component_path .= DS."components".DS.PHPFrame::Request()->getControllerName();
         
         // Get reference to System Events object
         $this->sysevents = PHPFrame::Session()->getSysevents();
@@ -104,16 +104,16 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
     /**
      * Get Instance
      * 
-     * @param string $component_name A string with the name of the concrete
+     * @param string $controller_name A string with the name of the concrete
      *                               action controller.
      * 
      * @access public
      * @return PHPFrame_MVC_ActionController
      * @since  1.0
      */
-    public static function getInstance($component_name) 
+    public static function getInstance($controller_name) 
     {
-        $class_name = substr($component_name, 4)."Controller";
+        $class_name = ucfirst($controller_name)."Controller";
         
         $is_set = isset(self::$_instances[$class_name]);
         $is_type = @(self::$_instances[$class_name] instanceof self);
@@ -146,16 +146,16 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         }
         
         // Check permissions before we execute
-        $component = PHPFrame::Request()->getComponentName();
+        $controller = PHPFrame::Request()->getControllerName();
         $groupid = PHPFrame::Session()->getGroupId();
         $permissions = PHPFrame::AppRegistry()->getPermissions();
         
-        if ($permissions->authorise($component, $action, $groupid) === true) {
+        if ($permissions->authorise($controller, $action, $groupid) === true) {
             // Invoke controller action
             $this->_invokeAction($action);
         } else {
             if (!PHPFrame::Session()->isAuth()) {
-                $this->setRedirect('index.php?component=com_login');
+                $this->setRedirect('index.php?controller=login');
             } else {
                 $this->sysevents->setSummary('Permission denied.');
             }
@@ -255,8 +255,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      */
     protected function getModel($name, $args=array()) 
     {
-        $component_name = PHPFrame::Request()->getComponentName();
-        return PHPFrame_MVC_Factory::getModel($component_name, $name, $args);
+        return PHPFrame_MVC_Factory::getModel($name, $args);
     }
     
     /**
@@ -265,16 +264,14 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * Get a named view within the component.
      *
      * @param string $name   The name of the view to create.
-     * @param string $layout A specific layout to use for the view. This argument is 
-     *                       optional.
      * 
      * @access protected
      * @return object
      * @since  1.0
      */
-    protected function getView($name, $layout=null)
+    protected function getView($name)
     {
-        return PHPFrame_MVC_Factory::getView($name, $layout);
+        return PHPFrame_MVC_Factory::getView($name);
     }
     
     /**

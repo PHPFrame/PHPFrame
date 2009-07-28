@@ -143,7 +143,7 @@ class PHPFrame_CLI_Tool_postinstall
 		
 		// Fetch scaffold source
         if (!$this->_fetchSource()) {
-			$this->_output("Error getting PHPFrame_Scaffold source...");
+			$this->_output("Error getting PHPFrame_AppTemplate source...");
 			$this->_output("Installation failed...");
 			return false;
 		}
@@ -222,10 +222,10 @@ class PHPFrame_CLI_Tool_postinstall
 	
     private function _fetchSource()
     {
-        $source = "http://phpframe.googlecode.com/svn/PHPFrame_Scaffold/trunk/";
+        $source = "http://phpframe.googlecode.com/svn/PHPFrame_AppTemplate/trunk/";
         $cmd = "svn export --force ".$source." ".$this->_install_path.DIRECTORY_SEPARATOR;
         
-		$this->_output("Fetching PHPFrame_Scaffold source from repository...");
+		$this->_output("Fetching PHPFrame_AppTemplate source from repository...");
 		$this->_output("Using command \"".$cmd."\"...");
 		
 		$exec = PHPFrame_Utils_Exec::run($cmd);

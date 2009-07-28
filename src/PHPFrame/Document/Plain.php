@@ -47,6 +47,14 @@ class PHPFrame_Document_Plain extends PHPFrame_Document
         parent::__construct($mime, $charset);
     }
     
+    public function render(PHPFrame_MVC_View $view)
+    {
+        parent::render($view);
+        
+        $sysevents = PHPFrame::Session()->getSysevents();
+        $this->body = $sysevents->asString()."\n\n".$this->body;
+    }
+    
     /**
      * Method used to render Row Collections in this document
      * 

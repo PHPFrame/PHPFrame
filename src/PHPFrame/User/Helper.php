@@ -181,7 +181,7 @@ class PHPFrame_User_Helper
     {
         // assemble users to the array
         $options = array();
-        $options[] = PHPFrame_HTML::_('select.option', '0', PHPFrame_Base_String::html( '-- Select a User --' ) );
+        $options[] = PHPFrame_UI_HTML::_('select.option', '0', PHPFrame_Base_String::html( '-- Select a User --' ) );
         
         // get users from #__users
         $db = PHPFrame::DB();
@@ -197,11 +197,11 @@ class PHPFrame_User_Helper
           return false;
         } else {
             foreach ($rows as $row) {
-                $options[] = PHPFrame_HTML::_('select.option', $row->id, PHPFrame_User_Helper::fullname_format($row->firstname, $row->lastname));
+                $options[] = PHPFrame_UI_HTML::_('select.option', $row->id, PHPFrame_User_Helper::fullname_format($row->firstname, $row->lastname));
             }
         }
         
-        $output = PHPFrame_HTML::_('select.genericlist', $options, $fieldname, $attribs, $selected);
+        $output = PHPFrame_UI_HTML::_('select.genericlist', $options, $fieldname, $attribs, $selected);
         
         return $output;        
     }
@@ -296,7 +296,7 @@ class PHPFrame_User_Helper
             $tokens[] = array('id' => $row->id, 'name' => $row->firstname." ".$row->lastname." (".$row->username.")");
         }
         
-        PHPFrame_HTML::autocomplete('userids', 'cols="60" rows="2"', $tokens);
+        PHPFrame_UI_HTML::autocomplete('userids', 'cols="60" rows="2"', $tokens);
     }
     
     /**
@@ -315,7 +315,7 @@ class PHPFrame_User_Helper
     {
         // assemble users to the array
         $options = array();
-        //$options[] = PHPFrame_HTML::_('select.option', '0', PHPFrame_Base_String::html( '-- Select a Group --' ) );
+        //$options[] = PHPFrame_UI_HTML::_('select.option', '0', PHPFrame_Base_String::html( '-- Select a Group --' ) );
         
         // get users from #__users
         $db = PHPFrame::DB();
@@ -326,11 +326,11 @@ class PHPFrame_User_Helper
           return false;
         } else {
             foreach ($rows as $row) {
-                $options[] = PHPFrame_HTML::_('select.option', $row->id, ucwords($row->name));
+                $options[] = PHPFrame_UI_HTML::_('select.option', $row->id, ucwords($row->name));
             }
         }
         
-        $output = PHPFrame_HTML::_('select.genericlist', $options, $fieldname, $attribs, $selected);
+        $output = PHPFrame_UI_HTML::_('select.genericlist', $options, $fieldname, $attribs, $selected);
         
         return $output;        
     }

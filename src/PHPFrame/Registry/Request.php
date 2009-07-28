@@ -37,30 +37,28 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
     /**
      * Instance of itself in order to implement the singleton pattern
      * 
-     * @var object of type PHPFrame_Application_FrontController
+     * @var PHPFrame_Registry_Request
      */
     private static $_instance=null;
     /**
      * Instance of PHPInputFilter
      * 
-     * @access    private
-     * @var        object
+     * @var object
      */
     private static $_inputfilter=null;
     /**
      * A unification array of filtered global arrays
      * 
-     * @access    private
-     * @var        array
+     * @var array
      */
     private $_array=array();
     
     /**
      * Constructor
      * 
-     * @access    protected
-     * @return    void
-     * @since    1.0
+     * @access protected
+     * @return void
+     * @since  1.0
      */
     protected function __construct() 
     {
@@ -81,9 +79,9 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
      * Get Instance
      * 
      * @static
-     * @access    public
-     * @return     PHPFrame_Registry
-     * @since    1.0
+     * @access public
+     * @return PHPFrame_Registry
+     * @since  1.0
      */
     public static function getInstance() 
     {
@@ -97,11 +95,12 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
     /**
      * Get a request variable
      * 
-     * @access    public
-     * @param    string    $key
-     * @param    mixed    $default_value
-     * @return    mixed
-     * @since    1.0
+     * @param string $key
+     * @param mixed  $default_value
+     * 
+     * @access public
+     * @return mixed
+     * @since  1.0
      */
     public function get($key, $default_value=null) 
     {
@@ -120,11 +119,12 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
     /**
      * Set a request variable
      * 
-     * @access    public
-     * @param    string    $key
-     * @param    mixed    $value
-     * @return    void
-     * @since    1.0
+     * @param string $key
+     * @param mixed  $value
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function set($key, $value) 
     {
@@ -158,7 +158,9 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
     /**
      * Get request/post array from URA
      * 
-     * @return    array
+     * @access public
+     * @return array
+     * @since  1.0
      */
     public function getPost() 
     {
@@ -166,40 +168,42 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
     }
     
     /**
-     * Get component name
+     * Get controller name
      * 
-     * @access    public
-     * @return    string
+     * @access public
+     * @return string
+     * @since  1.0
      */
-    public function getComponentName() 
+    public function getControllerName() 
     {
-        // If component has not been set we return the default value
-        if (empty($this->_array['request']['component'])) {
-            $this->_array['request']['component'] = 'com_dashboard';
+        // If controller has not been set we return the default value
+        if (empty($this->_array['request']['controller'])) {
+            $this->_array['request']['controller'] = PHPFrame::Config()->get("DEFAULT_CONTROLLER");
         }
         
-        return $this->_array['request']['component'];
+        return $this->_array['request']['controller'];
     }
     
     /**
-     * Set component name
+     * Set controller name
      * 
-     * @access    public
-     * @param    string    $value The value to set the variable to.
-     * @return    void
+     * @param string $value The value to set the variable to.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public function setComponentName($value) 
+    public function setControllerName($value) 
     {
-        // Filter value before assigning to variable
-        $this->_array['request']['component'] = self::$_inputfilter->process($value);
+        $this->set('controller', $value);
     }
     
     /**
-     * Get $_action
+     * Get action name
      * 
-     * @static
-     * @access    public
-     * @return    action
+     * @access public
+     * @return string
+     * @since  1.0
      */
     public function getAction() 
     {   
@@ -209,10 +213,11 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
     /**
      * Set $_action.
      * 
-     * @static
-     * @access    public
-     * @param    string    $value The value to set the variable to.
-     * @return    void
+     * @param string $value The value to set the variable to.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function setAction($value) 
     {
@@ -223,10 +228,9 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
     /**
      * Destroy the request data
      * 
-     * @static
-     * @access    public
-     * @return    void
-     * @since    1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function destroy() 
     {

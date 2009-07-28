@@ -28,6 +28,12 @@
 class PHPFrame_Application_Permissions
 {
     /**
+     * Path to xml file with acl
+     * 
+     * @var string
+     */
+    private $_path=null;
+    /**
      * Access level list loaded from database.
      * 
      * @var array
@@ -43,8 +49,10 @@ class PHPFrame_Application_Permissions
      */
     public function __construct() 
     {
-        // Load ACL from DB
-        $this->_acl = $this->_loadACL();
+        $this->_path = PHPFRAME_CONFIG_DIR.DS."acl.xml";
+        
+        // Load ACL from file
+        $this->_loadACL();
     }
     
     /**
@@ -58,11 +66,21 @@ class PHPFrame_Application_Permissions
      * @return bool
      * @since  1.0
      */
-    public function authorise($component, $action, $groupid) 
+    public function authorise($controller, $action, $groupid) 
     {
+        // Bypass auth for admin users
+        if ($groupid == 1) {
+            return true;
+        }
+        
+        $ignore_acl = PHPFrame::Config()->get("IGNORE_ACL");
+        if ($ignore_acl == 1) {
+            return true;
+        }
+        
         foreach ($this->_acl as $acl) {
             if ($acl['groupid'] == $groupid 
-                && $acl['component'] == $component 
+                && $acl['controller'] == $controller 
                 && ($acl['action'] == $action || $acl['action'] == '*')
             ) {
                 return true;
@@ -73,18 +91,26 @@ class PHPFrame_Application_Permissions
     }
     
     /**
-     * Load access levels from database
+     * Load access levels from file
      * 
      * @access private
-     * @return array   An array ob database row objects
+     * @return array   An array with config data
      * @since  1.0
      */
     private function _loadACL() 
     {
-        // Load access list from DB
-        $sql = "SELECT * FROM #__acl_groups";
-        $array = PHPFrame::DB()->fetchAssocList($sql);
+        // Read ACL from file
+        $xml = @simplexml_load_file($this->_path);
         
-        return $array;
+        if ($xml instanceof SimpleXMLElement) {
+            foreach ($xml->data as $data) {
+                $array["groupid"] = trim((string) $data->groupid);
+                $array["controller"] = trim((string) $data->controller);
+                $array["action"] = trim((string) $data->action);
+    			$array["value"] = trim((string) $data->value);
+                
+                $this->_acl[] = $array;
+            }
+        }
     }
 }

@@ -107,21 +107,8 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
      */
     public function render(PHPFrame_MVC_View $view, $apply_theme=true) 
     {
-        $component_path = PHPFRAME_INSTALL_DIR.DS."src";
-        $component_path .= DS."components".DS.PHPFrame::Request()->getComponentName();
-        
-        $tmpl_path = $component_path.DS."views";
-        $tmpl_path .= DS.$view->getName().DS."tmpl";
-        
-        // Add client specific template to path
-        $tmpl_path .= DS.PHPFrame::Session()->getClientName();
-        
-        $layout = $view->getLayout();
-        if ($layout) {
-            $tmpl_path .= "_".$layout;
-        }
-        
-        $tmpl_path .= ".php";
+        $tmpl_path = PHPFRAME_INSTALL_DIR.DS."src";
+        $tmpl_path .= DS."views".DS.$view->getName().".php";
         
         if (is_file($tmpl_path)) {
             // Start buffering
@@ -275,7 +262,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
         $html .= '<input type="text" name="search" id="search" value="'.PHPFrame::Request()->get('search').'">';
         $html .= '<button type="button" class="button" onclick="submit_filter(false);">Search</button>';
         $html .= '<button type="button" class="button" onclick="submit_filter(true);">Reset</button>';
-        $html .= '<input type="hidden" name="component" value="'.PHPFrame::Request()->getComponentName().'" />';
+        $html .= '<input type="hidden" name="component" value="'.PHPFrame::Request()->getControllerName().'" />';
         $html .= '<input type="hidden" name="action" value="'.PHPFrame::Request()->getAction().'" />';
         $html .= '</form>';
         
@@ -305,7 +292,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
         $html .= '<div class="pagination">';
         
         // Print list with prev, next and so on...
-        $href = 'index.php?component='.PHPFrame::Request()->getComponentName();
+        $href = 'index.php?controller='.PHPFrame::Request()->getControllerName();
         $href .= '&amp;action='.PHPFrame::Request()->getAction();
         $href .= '&amp;limit='.$collection->getLimit();
         

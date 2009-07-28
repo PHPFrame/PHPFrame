@@ -65,26 +65,31 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
     /**
      * Write string to log file
      * 
-     * @param string $str The string to append to log file
+     * @param string|array $msg The string to append to log file
      * 
      * @static
      * @access public
      * @return void
      * @since  1.0
      */
-    public static function write($str) 
+    public static function write($msg) 
     {
+        // Implode msg to string if array given
+        if (is_array($msg)) {
+            $msg = implode("\n", $msg);
+        }
+        
         // Add log separator
         $info = "\n\n---\n";
 		
 		// Add date and time
-        $info .= "[".date("Y-m-d H:i:s")."]";
+        $info .= "[".date("Y-m-d H:i:s")."] ";
 		
 		// Add IP address if available
         if (isset($_SERVER['REMOTE_ADDR'])) {
-            $info .= " [ip:".$_SERVER['REMOTE_ADDR']."]";
+            $info .= "[ip:".$_SERVER['REMOTE_ADDR']."] ";
         } else {
-            $info .= " [cli]";
+            $info .= "[cli] ";
         }
         
         // Write log to filesystem using PHPFrame's utility class
@@ -98,6 +103,6 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         
         $log_file = $log_dir.DS."log";
         
-        PHPFrame_Utils_Filesystem::write($log_file, $info.$str, true);
+        PHPFrame_Utils_Filesystem::write($log_file, $info.$msg, true);
     }
 }

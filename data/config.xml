@@ -67,7 +67,7 @@ Possible values:
 	
 	<data>
 		<name>DEFAULT_CONTROLLER</name>
-		<def_value>com_dashboard</def_value>
+		<def_value>index</def_value>
 		<description>Default controller to use when none is specified</description>
 		<value></value>
 	</data>

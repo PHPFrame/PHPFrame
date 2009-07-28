@@ -2,9 +2,9 @@
 <config>
 
 	<data>
-		<name>SITENAME</name>
+		<name>APPNAME</name>
 		<def_value></def_value>
-		<description>The site name</description>
+		<description>The app name</description>
 		<value></value>
 	</data>
 	<data>
@@ -65,6 +65,18 @@ Possible values:
 		<value></value>
 	</data>
 	
+	<data>
+		<name>DEFAULT_CONTROLLER</name>
+		<def_value>com_dashboard</def_value>
+		<description>Default controller to use when none is specified</description>
+		<value></value>
+	</data>
+	<data>
+		<name>IGNORE_ACL</name>
+		<def_value></def_value>
+		<description>Whether or not we want to enforce the access level list as defined in etc/acl.xml</description>
+		<value>1</value>
+	</data>
 	
 	<data>
 		<name>DB_DRIVER</name>
@@ -112,12 +124,6 @@ Relative path to folder to allow uploads.
 Used for uploading images that will need to be accessible in html pages, 
 so it has to be within the web server root.
 		</description>
-		<value></value>
-	</data>
-	<data>
-		<name>FILESYSTEM</name>
-		<def_value></def_value>
-		<description>Path to folder outside the web server root where to store files securely.</description>
 		<value></value>
 	</data>
 	<data>

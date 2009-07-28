@@ -85,7 +85,6 @@
    <file baseinstalldir="/" name="PHPFrame/Exception/Handler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/XMLRPC.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/HTML/HTML.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Lang/en-GB.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />
@@ -97,6 +96,12 @@
    <file baseinstalldir="/" name="PHPFrame/Registry/Registry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Request.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Session.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/SCM/GIT.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/SCM/SCM.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/SCM/SVN.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/UI/CLI.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/UI/HTML.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/UI/IUI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/Helper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/OpenID.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/User.php" role="php" />

@@ -34,10 +34,10 @@
  <notes>##NOTES##</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
-   <file baseinstalldir="/" name="PHPFrame/Application/Components.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/FrontController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Pathway.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Permissions.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Application/Plugins.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Response.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Sysevents.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Widgets.php" role="php" />

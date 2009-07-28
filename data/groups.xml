@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<data>
+		<id>1</id>
+		<name>admin</name>
+	</data>
+	<data>
+		<id>2</id>
+		<name>staff</name>
+	</data>
+
+</config>

@@ -79,16 +79,37 @@ class PHPFrame_Config
             return null;
         }
         
-        return $this->_data[$key]["value"];
+        if (
+            isset($this->_data[$key]["name"])
+            && isset($this->_data[$key]["value"])
+        ) {
+            return $this->_data[$key]["value"];
+        }
+        
+        return $this->_data[$key];
     }
     
+    /**
+     * Set config param
+     *
+     * This method returns the current instance allowing for fluent syntax
+     *
+     * @param string $key
+     * @param array  $value
+     *
+     * @access public
+     * @return PHPFrame_Config
+     * @since  1.0
+     */
     public function set($key, $value)
     {
         if (!isset($this->_data[$key])) {
             return null;
         }
         
-        $this->_data[$key]["value"] = $value;
+        $this->_data[$key] = $value;
+        
+        return $this; 
     }
     
     public function bind($array)
@@ -112,9 +133,29 @@ class PHPFrame_Config
         return array_keys($this->toArray());
     }
     
+    /**
+     * Store config object in filesystem as XML
+     *
+     * @param string $path Full path to XML file with data
+     *
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function store($path=null)
+    {
+        if (!is_null($path)) {
+            $this->_path = (string) trim($path);
+        }
+        
+        // Store object as XML in filesystem
+        // This will throw an exception on failure
+        PHPFrame_Utils_Filesystem::write($this->_path, $this->toXML());
+    }
+    
     public function toString()
     {
-        $str = "";
+        $str = "FIX ME!!! (".get_class($this)."::toString())";
         
         return $str;
     }
@@ -129,13 +170,14 @@ class PHPFrame_Config
         $xml = new PHPFrame_Document_XML();
         $config_node = $xml->addNode(null, "config");
         
-        foreach ($this->toArray() as $value) {
+        foreach ($this->toArray() as $row) {
             $data_node = $xml->addNode($config_node, "data", array());
-
-            $xml->addNode($data_node, "name", array(), $value["name"]);
-            $xml->addNode($data_node, "def_value", array(), $value["def_value"]);
-            $xml->addNode($data_node, "description", array(), $value["description"]);
-            $xml->addNode($data_node, "value", array(), $value["value"]);
+			
+			if (is_array($row)) {
+				foreach ($row as $key=>$value) {
+                    $xml->addNode($data_node, $key, array(), $value);
+				}
+			}
         }
         
         return $xml->toString();
@@ -154,9 +196,7 @@ class PHPFrame_Config
             trigger_error($msg);
         }
 		
-		$key = 0;
         foreach ($xml->data as $data) {
-			
 			if (!$data instanceof SimpleXMLElement) {
 				continue;
 			}
@@ -176,12 +216,10 @@ class PHPFrame_Config
 			}
             
 			if (isset($array["name"])) {
-				$key = $array["name"];
+				$this->_data[$array["name"]] = $array;
+			} else {
+			    $this->_data[] = $array;
 			}
-			
-            $this->_data[$key] = $array;
-
-			$key++;
         }
     }
 }

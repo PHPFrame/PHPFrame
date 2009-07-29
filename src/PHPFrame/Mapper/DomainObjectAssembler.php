@@ -27,16 +27,20 @@
  */
 class PHPFrame_Mapper_DomainObjectAssembler
 {
+    private $_factory=null;
+    
     /**
      * Constructor
+     * 
+     * @param PHPFrame_Mapper_PersistenceFactory $factory
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct()
+    public function __construct(PHPFrame_Mapper_PersistenceFactory $factory)
     {
-        
+        $this->_factory = $factory;
     }
     
     /**

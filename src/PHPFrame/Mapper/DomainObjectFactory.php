@@ -27,7 +27,16 @@
  */
 class PHPFrame_Mapper_DomainObjectFactory
 {
-    public function createObject()
+    /**
+     * Create domain object
+     * 
+     * @param array $array
+     * 
+     * @access public
+     * @return PHPFrame_Mapper_DomainObject
+     * @since  1.0
+     */
+    public function createObject(array $array)
     {
         
     }

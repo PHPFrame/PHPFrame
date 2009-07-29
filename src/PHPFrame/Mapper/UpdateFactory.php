@@ -27,5 +27,17 @@
  */
 class PHPFrame_Mapper_UpdateFactory
 {
-    
+    /**
+     * New update
+     * 
+     * @param PHPFrame_Mapper_IdObject $id_obj
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function newUpdate(PHPFrame_Mapper_IdObject $id_obj)
+    {
+        
+    }
 }

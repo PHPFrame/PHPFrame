@@ -27,5 +27,51 @@
  */
 class PHPFrame_Mapper_PersistenceFactory
 {
+    /**
+     * Get DomainObjectFactory
+     * 
+     * @access public
+     * @return PHPFrame_Mapper_DomainObjectFactory
+     * @since  1.0
+     */
+    public function getDomainObjectFactory()
+    {
+        
+    }
     
+    /**
+     * Get Collection
+     * 
+     * @access public
+     * @return PHPFrame_Mapper_Collection
+     * @since  1.0
+     */
+    public function getCollection()
+    {
+        
+    }
+    
+    /**
+     * Get SelectionFactory
+     * 
+     * @access public
+     * @return PHPFrame_Mapper_SelectionFactory
+     * @since  1.0
+     */
+    public function getSelectionFactory()
+    {
+        
+    }
+    
+    /**
+     * Get UpdateFactory
+     * 
+     * @access public
+     * @return PHPFrame_Mapper_UpdateFactory
+     * @since  1.0
+     */
+    public function getUpdateFactory()
+    {
+        
+    }
 }

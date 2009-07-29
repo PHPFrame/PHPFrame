@@ -27,5 +27,17 @@
  */
 class PHPFrame_Mapper_SelectionFactory
 {
-    
+    /**
+     * New selection
+     * 
+     * @param PHPFrame_Mapper_IdObject $id_obj
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function newSelection(PHPFrame_Mapper_IdObject $id_obj)
+    {
+        
+    }
 }

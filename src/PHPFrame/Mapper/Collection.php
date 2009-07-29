@@ -27,5 +27,10 @@
  */
 class PHPFrame_Mapper_Collection
 {
-    
+    public function __construct(
+        array $array=null, 
+        PHPFrame_Mapper_DomainObjectFactory $obj_factory
+    ) {
+        
+    }
 }

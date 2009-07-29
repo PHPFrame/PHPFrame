@@ -90,6 +90,7 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/IdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SelectionFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/UpdateFactory.php" role="php" />

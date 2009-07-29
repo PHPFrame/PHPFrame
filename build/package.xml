@@ -114,10 +114,12 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/URI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    
+   <file baseinstalldir="/" name="acl.xml" role="data" />
    <file baseinstalldir="/" name="CLI_Tool.sql" role="data" />
    <file baseinstalldir="/" name="config.xml" role="data" />
    <file baseinstalldir="/" name="DummyController.php" role="data" />
    <file baseinstalldir="/" name="groups.xml" role="data" />
+   <file baseinstalldir="/" name="lib.xml" role="data" />
    <file baseinstalldir="/" name="plugins.xml" role="data" />
    <file baseinstalldir="/" name="sources.xml" role="data" />
    <file baseinstalldir="/" name="CREDITS" role="data" />

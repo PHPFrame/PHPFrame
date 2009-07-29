@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<data>
+		<name>InputFilter</name>
+		<def_value></def_value>
+		<description>Path to InputFilter library</description>
+		<value>phpinputfilter/inputfilter.php</value>
+	</data>
+	
+	<data>
+		<name>PHPMailer</name>
+		<def_value></def_value>
+		<description>Path to PHPMailer library</description>
+		<value>phpmailer/phpmailer.php</value>
+	</data>
+	
+	<data>
+		<name>vCard</name>
+		<def_value></def_value>
+		<description>Path to PHPMailer library</description>
+		<value>bitfolge/vcard.php</value>
+	</data>
+	
+</config>

@@ -145,8 +145,9 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
         if (!is_file($path)) {
             $path .= ".php";
             if (!is_file($path)) {
-                $msg = "Could not load partial ".$path;
-                throw new PHPFrame_Exception($msg);
+                //$msg = "Could not load partial ".$path;
+                //throw new PHPFrame_Exception($msg);
+                return "";
             }
         }
         
@@ -525,8 +526,8 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
         $component_output = $this->body;
         
         // Set file name to load depending on session auth
-        $session = PHPFrame::Session();
-        if (!$session->isAuth()) {
+        $controller = PHPFrame::Request()->getControllerName();
+        if ($controller == "login") {
             $template_filename = 'login.php';
         }
         else {

@@ -48,7 +48,7 @@
  * @since      1.0
  * @abstract
  */
-abstract class PHPFrame_Base_Singleton extends PHPFrame_Base_StdObject
+abstract class PHPFrame_Base_Singleton extends PHPFrame_Base_Object
 {
     /**
      * Variable holding an array of "single" instances of this classes children.

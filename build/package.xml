@@ -40,12 +40,11 @@
    <file baseinstalldir="/" name="PHPFrame/Application/Plugins.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Response.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Sysevents.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Base/Array.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Base/Date.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Base/ArrayHelper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Number.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Base/Object.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Observer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Singleton.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Base/StdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/String.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Subject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/CLI.php" role="php" />

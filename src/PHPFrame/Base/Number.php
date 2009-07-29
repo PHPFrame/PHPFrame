@@ -30,20 +30,20 @@ class PHPFrame_Base_Number
     /**
      * Format bytes to human readable.
      * 
-     * @param string $str The string we want to format.
+     * @param int $int The int we want to format.
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public static function bytes($str) 
+    public static function bytes($int) 
     {
         $unim = array("B","KB","MB","GB","TB","PB");
         $c = 0;
-        while ($str>=1024) {
+        while ($int>=1024) {
             $c++;
-            $str = $str/1024;
+            $int = $int/1024;
         }
-        return number_format($str,($c ? 2 : 0),",",".")." ".$unim[$c];
+        return number_format($int,($c ? 2 : 0),",",".")." ".$unim[$c];
     }
 }

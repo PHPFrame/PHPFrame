@@ -25,7 +25,7 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Base_Array
+class PHPFrame_Base_ArrayHelper
 {
     /**
      * Is associative array?
@@ -35,8 +35,43 @@ class PHPFrame_Base_Array
      * @return bool
      * @since  1.0
      */
-    public static function isAssoc($array) {
+    public static function isAssoc(array $array) {
         return (is_array($array) 
                 && 0 !== count(array_diff_key($array, array_keys(array_keys($array)))));
+    }
+    
+    /**
+     * Convert array to string
+     * 
+     * @param array $array
+     * 
+     * @return string
+     */
+    public static function toString(array $array)
+    {
+        $str = "";
+        
+        if (!self::isAssoc($array)) {
+            $str = implode(", ", $array);
+        }
+        
+        foreach ($array as $key=>$value) {
+            $str .= $key." => ".$value;
+        }
+        
+        return $str;
+    }
+    
+    /**
+     * Convert array to XML
+     * 
+     * @param array $array
+     * 
+     * @return string
+     */
+    public static function toXML(array $array)
+    {
+        //...
+        throw new PHPFrame_Exception("FIX ME!!!!!!");
     }
 }

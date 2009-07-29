@@ -111,28 +111,33 @@ class PHPFrame_UI_HTML
     }
     
     /**
-     * Build and display a jQuery UI dialog box with content loaded via AJAX.
+     * Build a jQuery UI dialog box with content loaded via AJAX.
      * 
-     * @param    string    $label    A string to print inside de link tag.
-     * @param    string    $target The target URL to load via AJAX.
-     * @param    int        $width    The dialog box width
-     * @param    int        $height    The dialog box height
-     * @param    bool    $form    A boolean to indicate whether the dialog contains a form in order to include
-     *                             submit buton.
-     * @param    string    $ajax_container    A jQuery selector string to select the HTML element where to load 
-     *                                     the AJAX response. This parameter is optional, if omitted the browser 
-     *                                     window will be redirected to the link's href instead of using an AJAX request.
-     * @return    void
+     * @param string $label          A string to print inside de link tag.
+     * @param string $target         The target URL to load via AJAX.
+     * @param int    $width          The dialog box width
+     * @param int    $height         The dialog box height
+     * @param bool   $form           A boolean to indicate whether the dialog contains a form 
+     *                               in order to include submit buton.
+     * @param string $ajax_container A jQuery selector string to select the HTML element where 
+     *                               to load the AJAX response. This parameter is optional, if 
+     *                               omitted the browser window will be redirected to the link's 
+     *                               href instead of using an AJAX request.
+     * @return    string
      * @since     1.0
      */
-    public static function dialog($label, 
-                                  $target, 
-                                  $width=600, 
-                                  $height=560, 
-                                  $form=false, 
-                                  $ajax_container='') 
-    {
+    public static function dialog(
+        $label, 
+        $target, 
+        $width=600, 
+        $height=560, 
+        $form=false, 
+        $ajax_container=''
+    ) {
         $uid = uniqid();
+        
+        // Start buffering
+        ob_start();
         ?>
         
         <script type="text/javascript">
@@ -204,6 +209,13 @@ class PHPFrame_UI_HTML
         <a id="dialog_trigger_<?php echo $uid; ?>" href="<?php echo $target; ?>"><?php echo $label; ?></a>
         
         <?php
+        
+        // Save buffer
+        $str = ob_get_contents();
+        // Clear buffer
+        ob_end_clean();
+        
+        return $str;
     }
     
     /**

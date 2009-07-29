@@ -86,6 +86,13 @@
    <file baseinstalldir="/" name="PHPFrame/Lang/en-GB.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/Collection.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectAssembler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/SelectionFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/UpdateFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/Factory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/Model.php" role="php" />

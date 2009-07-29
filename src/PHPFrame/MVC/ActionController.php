@@ -52,12 +52,6 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      */
     protected $default_action=null;
     /**
-     * Absolute path to component directory in filesystem
-     * 
-     * @var string
-     */
-    protected $component_path=null;
-    /**
      * A string containing a url to be redirected to. Leave empty for no redirection.
      *
      * @var string
@@ -91,11 +85,8 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      */
     protected function __construct($default_action) 
     {
+        // Set default action property
         $this->default_action = (string) $default_action;
-        
-        // Set component path
-        $this->component_path = PHPFRAME_INSTALL_DIR.DS."src";
-        $this->component_path .= DS."components".DS.PHPFrame::Request()->getControllerName();
         
         // Get reference to System Events object
         $this->sysevents = PHPFrame::Session()->getSysevents();

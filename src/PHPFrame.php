@@ -154,7 +154,7 @@ class PHPFrame
         }
         
         // Load MVC classes
-        $super_classes = array("Controller", "Model", "View", "Helper");
+        $super_classes = array("Controller", "Model", "View", "Helper", "Lang");
         foreach ($super_classes as $super_class) {
             if (preg_match('/'.$super_class.'$/', $class_name)) {
                 break;
@@ -162,7 +162,14 @@ class PHPFrame
         }
         
         // Set base path for objects of given superclass
-        $file_path .= PHPFRAME_INSTALL_DIR.DS."src".DS.strtolower($super_class)."s".DS;
+        $file_path .= PHPFRAME_INSTALL_DIR.DS."src".DS.strtolower($super_class);
+        // Append 's' to dir name except for lang
+        if ($super_class != "Lang") {
+            $file_path .= "s";
+        // Append lang dir for lang classes
+        } else {
+            $file_path .= DS.PHPFrame::Config()->get("DEFAULT_LANG");
+        }
         
         // Remove superclass name from class name
         $class_name = str_replace($super_class, "", $class_name);
@@ -171,7 +178,7 @@ class PHPFrame
         $matches = array();
         preg_match_all('/[A-Z]{1}[a-z]+/', ucfirst($class_name), $matches);
         if (isset($matches[0]) && is_array($matches[0])) {
-            $file_path .= strtolower(implode(DS, $matches[0]));
+            $file_path .= DS.strtolower(implode(DS, $matches[0]));
         }
         
         // Append file extension
@@ -465,10 +472,11 @@ class PHPFrame
         // load the application language file if any
         if (defined("PHPFRAME_INSTALL_DIR")) {
             $lang_file = PHPFRAME_INSTALL_DIR.DS."src".DS."lang".DS;
-            $lang_file .= PHPFrame::Config()->get("DEFAULT_LANG").".php";
+            $lang_file .= PHPFrame::Config()->get("DEFAULT_LANG").DS;
+            $lang_file .= "global.php";
             
             if (file_exists($lang_file)) {
-                require_once $lang_file;
+                require $lang_file;
             } else {
                 $msg = 'Could not find language file ('.$lang_file.')';
                 throw new PHPFrame_Exception($msg);
@@ -479,7 +487,7 @@ class PHPFrame
         $lang_file = "PHPFrame".DS."Lang";
         $lang_file .= DS.PHPFrame::Config()->get("DEFAULT_LANG").".php";
         
-        if (!(require_once $lang_file)) {
+        if (!(require $lang_file)) {
             $msg = 'Could not find language file ('.$lang_file.')';
             throw new PHPFrame_Exception($msg);
         }

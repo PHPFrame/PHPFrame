@@ -208,7 +208,7 @@ class PHPFrame_User
         // Before we store new users we check whether email already exists in db
         $id = $this->_row->get('id');
         if (empty($id) && $this->_emailExists($this->_row->get('email'))) {
-            $this->_error[] = _PHPFRAME_LANG_EMAIL_ALREADY_REGISTERED;
+            $this->_error[] = PHPFrame_Lang::EMAIL_ALREADY_REGISTERED;
             return false;
         }
         

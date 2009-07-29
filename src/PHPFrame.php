@@ -120,7 +120,12 @@ class PHPFrame
             } elseif (sizeof($array) == 3) {
                 $file_path = "PHPFrame".DS.$array[1].DS.$array[2].".php";
             } elseif (sizeof($array) == 2) {
-                $file_path = "PHPFrame".DS.$array[1].DS.$array[1].".php";
+                if ($array[1] == "Lang") {
+                    $file_path = "PHPFrame".DS.$array[1].DS;
+                    $file_path .= PHPFrame::Config()->get("DEFAULT_LANG").".php";
+                } else {
+                    $file_path = "PHPFrame".DS.$array[1].DS.$array[1].".php";
+                }
             }
             
             // require the file if it exists

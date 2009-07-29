@@ -134,17 +134,17 @@ class PHPFrame_Utils_Filesystem
         // check for generic errors first          
         if ($file_error > 0) {
             switch ($file_error) {
-              case 1:  $array['error'] = _PHPFRAME_LANG_UPLOAD_ERROR_PHP_UP_MAX_FILESIZE;
-              case 2:  $array['error'] = _PHPFRAME_LANG_UPLOAD_ERROR_PHP_MAX_FILESIZE;
-              case 3:  $array['error'] = _PHPFRAME_LANG_UPLOAD_ERROR_PARTIAL_UPLOAD;
-              case 4:  $array['error'] = _PHPFRAME_LANG_UPLOAD_ERROR_NO_FILE;
+              case 1:  $array['error'] = PHPFrame_Lang::UPLOAD_ERROR_PHP_UP_MAX_FILESIZE;
+              case 2:  $array['error'] = PHPFrame_Lang::UPLOAD_ERROR_PHP_MAX_FILESIZE;
+              case 3:  $array['error'] = PHPFrame_Lang::UPLOAD_ERROR_PARTIAL_UPLOAD;
+              case 4:  $array['error'] = PHPFrame_Lang::UPLOAD_ERROR_NO_FILE;
             }
             return $array;
         }
         
         // check custom max_upload_size passed into the function
         if (!empty($max_upload_size) && $max_upload_size < $file_size) {
-            $array['error'] = _PHPFRAME_LANG_UPLOAD_ERROR_MAX_FILESIZE;
+            $array['error'] = PHPFrame_Lang::UPLOAD_ERROR_MAX_FILESIZE;
             $array['error'] .= ' max_upload_size: '.$max_upload_size.' | file_size: '.$file_size;
             return $array;
         }
@@ -161,7 +161,7 @@ class PHPFrame_Utils_Filesystem
             }
             
             if ($type_ok == 0) {
-                $array['error'] = _PHPFRAME_LANG_UPLOAD_ERROR_FILETYPE;
+                $array['error'] = PHPFrame_Lang::UPLOAD_ERROR_FILETYPE;
                 return $array;
             }    
         }
@@ -194,12 +194,12 @@ class PHPFrame_Utils_Filesystem
         // is_uploaded_file and move_uploaded_file added at version 4.0.3
         if (is_uploaded_file($file_tmp)) {
             if (!move_uploaded_file($file_tmp, $path)) {
-                $array['error'] = _PHPFRAME_LANG_UPLOAD_ERROR_MOVE;
+                $array['error'] = PHPFrame_Lang::UPLOAD_ERROR_MOVE;
                 return $array;
             }
         } 
         else {
-            $array['error'] = _PHPFRAME_LANG_UPLOAD_ERROR_ATTACK.' '.$file_name;
+            $array['error'] = PHPFrame_Lang::UPLOAD_ERROR_ATTACK.' '.$file_name;
             return $array;
         }
         

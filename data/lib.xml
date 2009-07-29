@@ -16,10 +16,10 @@
 	</data>
 	
 	<data>
-		<name>vCard</name>
+		<name>VCARD</name>
 		<def_value></def_value>
-		<description>Path to PHPMailer library</description>
-		<value>bitfolge/vcard.php</value>
+		<description>Path to Slava Ivanov's vCard class</description>
+		<value>vCard/vcardclass.inc</value>
 	</data>
 	
 </config>

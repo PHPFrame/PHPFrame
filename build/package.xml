@@ -112,6 +112,7 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/Image.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Rewrite.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/URI.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Utils/vCard.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    
    <file baseinstalldir="/" name="acl.xml" role="data" />

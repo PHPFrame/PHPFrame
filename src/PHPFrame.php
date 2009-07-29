@@ -367,7 +367,27 @@ class PHPFrame
     }
     
     /**
-     * Mount persistance layer, init app registry and session objects
+     * Initialise environment, init app registry and session objects
+     * 
+     * @static
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public static function Env()
+    {
+        // Initialise AppRegistry
+        self::AppRegistry();
+        // Get/init session object
+        self::Session();
+        
+        // Set run level to 2 to indicate that 
+        // environment layer is initialised...
+        self::$_run_level = 2;
+    }
+    
+    /**
+     * Mount persistance layer
      * 
      * @static
      * @access public
@@ -376,18 +396,25 @@ class PHPFrame
      */
     public static function Mount()
     {
+        if (self::$_run_level >= 3) {
+            return;
+        }
+        
+        if (self::$_run_level < 2) {
+            self::Env();
+        }
+        
         // Initialise Database
-        self::DB();
-        
-        // Initialise AppRegistry
-        self::AppRegistry();
-        
-        // Get/init session object
-        self::Session();
-        
-        // Set run level to 2 to indicate that 
-        // persistance layer is mounted...
-        self::$_run_level = 2;
+        try {
+            $db = self::DB();
+            if ($db instanceof PHPFrame_Database) {
+                // Set run level to 3 to indicate that 
+                // persistance layer is mounted...
+                self::$_run_level = 3;
+            }
+        } catch (Exception $e) {
+           PHPFrame_Debug_Logger::write("Could not create database object");
+        }
     }
     
     /**

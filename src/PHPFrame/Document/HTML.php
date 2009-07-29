@@ -138,10 +138,14 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
     
     public function renderPartial($name)
     {
-        if (!is_file($name)) {
-            $name .= ".php";
-            if (!is_file($name)) {
-                $msg = "Could not render partial";
+        $name = (string) trim($name);
+        $path = PHPFRAME_INSTALL_DIR.DS."src".DS."views";
+        $path .= DS."partials".DS.$name;
+        
+        if (!is_file($path)) {
+            $path .= ".php";
+            if (!is_file($path)) {
+                $msg = "Could not load partial ".$path;
                 throw new PHPFrame_Exception($msg);
             }
         }
@@ -149,7 +153,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
         // Start buffering
         ob_start();
         // Include partial file
-        require_once $name;
+        require_once $path;
         // save buffer in body property
         $partial = ob_get_contents();
         // clean output buffer

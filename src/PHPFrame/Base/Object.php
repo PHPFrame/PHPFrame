@@ -168,26 +168,6 @@ abstract class PHPFrame_Base_Object
     }
     
     /**
-     * serialize() checks if your class has a function with the magic name __sleep. 
-     * If so, that function is executed prior to any serialization. It can clean up the object 
-     * and is supposed to return an array with the names of all variables of that object that 
-     * should be serialized. If the method doesn't return anything then NULL is serialized and 
-     * E_NOTICE is issued.
-     * 
-     * The intended use of __sleep is to commit pending data or perform similar cleanup tasks. 
-     * Also, the function is useful if you have very large objects which do not need to be 
-     * saved completely. 
-     * 
-     * @access public
-     * @return array
-     * @since  1.0
-     */
-    public function __sleep()
-    {
-        return array_keys(get_object_vars($this));
-    }
-    
-    /**
      * The __toString method allows a class to decide how it will react when it is 
      * converted to a string.
      * 
@@ -225,22 +205,6 @@ abstract class PHPFrame_Base_Object
      * @since  1.0
      */
     public function __unset($name)
-    {
-        
-    }
-    
-    /**
-     * unserialize() checks for the presence of a function with the magic name __wakeup. 
-     * If present, this function can reconstruct any resources that the object may have.
-     * 
-     * The intended use of __wakeup is to reestablish any database connections that may have 
-     * been lost during serialization and perform other reinitialization tasks.
-     *  
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function __wakeup()
     {
         
     }

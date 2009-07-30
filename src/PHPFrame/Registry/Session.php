@@ -116,8 +116,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
 			
 			// Acquire session user object
 			$_SESSION['user'] = new PHPFrame_User();
-			$_SESSION['user']->set("id", 0);
-			$_SESSION['user']->set("groupid", 0);
+			$_SESSION['user']->setId(0);
+			$_SESSION['user']->setGroupId(0);
 			
 			// Acquire sysevents object
 			$_SESSION['sysevents'] = new PHPFrame_Application_Sysevents();

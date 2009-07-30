@@ -71,7 +71,7 @@ class PHPFrame_Mapper_Collection implements Iterator
      */
     public function current() 
     {
-        return $this->_objects[$this->_pointer];
+        return $this->getElement($this->_pointer);
     }
     
     /**

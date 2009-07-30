@@ -1,25 +1,26 @@
 <?php
 function loadFramework()
 {
-    //TODO: This needs to be removed. It is temporarily here to make up for the
-    // release of PHPFrame as a PEAR package
+    //Hack to override path to PHPFrame source
     $PHPFrame_path = "/Users/lupomontero/Documents/workspace/PHPFrame/src";
-    set_include_path(get_include_path() . PATH_SEPARATOR . $PHPFrame_path);
+    set_include_path($PHPFrame_path . PATH_SEPARATOR . get_include_path());
     
     /**
-     * Set convenience DS constant (directory separator depends on server operating system).
+     * Installation constants
      */
-    define( 'DS', DIRECTORY_SEPARATOR );
+    define('PHPFRAME_INSTALL_DIR', str_replace(DIRECTORY_SEPARATOR."examples", "", dirname(__FILE__)));
+    define("PHPFRAME_CONFIG_DIR", PHPFRAME_INSTALL_DIR.DIRECTORY_SEPARATOR."etc");
+    define("PHPFRAME_VAR_DIR", PHPFRAME_INSTALL_DIR.DIRECTORY_SEPARATOR."var");
     
-    include_once "config.php";
-    include_once "PHPFrame.php";
+    // Include PHPFrame main file
+    require_once "PHPFrame.php";
 }
 
 
 loadFramework();
 
 ?>
-<h1>PHPFrame Database Subpackage Examples</h1>
+<h1>PHPFrame Mapper Subpackage Examples</h1>
 
 <h2>Code</h2>
 

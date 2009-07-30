@@ -433,11 +433,11 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
             if ($x_api_signature === $test_signature) {
                 // Login the user as group API
                 $user = new PHPFrame_User();
-                $user->set('id', 2);
-                $user->set('groupid', 5);
-                $user->set('username', "api");
-                $user->set('firstname', 'API');
-                $user->set('lastname', 'User');
+                $user->setId(2);
+                $user->setGroupId(5);
+                $user->setUserName("api");
+                $user->setFirstName('API');
+                $user->setLastName('User');
                 
                 // Store user in session
                 $session = PHPFrame::Session();

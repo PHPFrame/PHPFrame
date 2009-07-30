@@ -116,11 +116,11 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
     {
         // Automatically log in as system user
         $user = new PHPFrame_User();
-        $user->set('id', 1);
-        $user->set('groupid', 1);
-        $user->set('username', 'system');
-        $user->set('firstname', 'System');
-        $user->set('lastname', 'User');
+        $user->setId(1);
+        $user->setGroupId(1);
+        $user->setUserName('system');
+        $user->setFirstName('System');
+        $user->setLastName('User');
         
         // Store user in session
         $session = PHPFrame::Session();

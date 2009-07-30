@@ -184,7 +184,7 @@ abstract class PHPFrame_Base_Object
      */
     public function __sleep()
     {
-        
+        return array_keys(get_object_vars($this));
     }
     
     /**

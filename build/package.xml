@@ -107,7 +107,6 @@
    <file baseinstalldir="/" name="PHPFrame/UI/HTML.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/IUI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/Helper.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/User/Mapper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/OpenID.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/User.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Crypt.php" role="php" />

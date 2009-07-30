@@ -51,6 +51,8 @@ class PHPFrame_MVC_Factory
     public static function getModel($model_name, $args=array()) 
     {
         $model_name = (string) trim($model_name);
+        $model_name = str_replace("/", " ", $model_name);
+        $model_name = str_replace(" ", "", ucwords($model_name));
         
         $class_name = ucfirst($model_name)."Model";
         

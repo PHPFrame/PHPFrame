@@ -107,7 +107,14 @@ class PHPFrame_Config
             return null;
         }
         
-        $this->_data[$key] = $value;
+        if (
+            isset($this->_data[$key]["name"])
+            && isset($this->_data[$key]["value"])
+        ) {
+            $this->_data[$key]["value"] = $value;
+        } else {
+            $this->_data[$key] = $value;
+        }
         
         return $this; 
     }

@@ -83,7 +83,7 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
             // Build string with setter name
             $setter_name = "set".ucwords(str_replace("_", " ", $key));
             $setter_name = str_replace(" ", "", $setter_name);
-            echo $setter_name."\n";
+            
             if ($reflectionObj->hasMethod($setter_name)) {
                 // Get reflection method for setter
                 $setter_method = $reflectionObj->getMethod($setter_name);

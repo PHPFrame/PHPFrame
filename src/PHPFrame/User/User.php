@@ -234,7 +234,13 @@ class PHPFrame_User extends PHPFrame_Mapper_DomainObject
     {
         $str = PHPFrame_Utils_Filter::validateRegExp($str, '/^.{6,100}$/');
         
-        $this->_password = $str; 
+        // Get random 32 char salt
+        $salt = PHPFrame_Utils_Crypt::genRandomPassword(32);
+        // Encrypt password using salt
+        $crypt = PHPFrame_Utils_Crypt::getCryptedPassword($str, $salt);
+        
+        // Set password to encrypted string
+        $this->_password = $crypt.':'.$salt; 
     }
     
     /**

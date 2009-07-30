@@ -144,7 +144,7 @@ class PHPFrame_UI_HTML
         $(document).ready(function() {
 
             // Dynamically add an HTML element at the end of the body to show the dialog
-            $("body").append('<div style="position: absolute" id="dialog_<?php echo $uid; ?>" title="<?php echo $label; ?>"></div>');
+            $("body").append('<div style="position: absolute" id="dialog_<?php echo $uid; ?>"></div>');
             // Add the loading div inside the newly created dialog box
             $("#dialog_<?php echo $uid; ?>").html('<div class="loading"></div>');
             

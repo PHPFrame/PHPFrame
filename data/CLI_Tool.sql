@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `phpframe_acl_groups` (
 --
 
 INSERT INTO `phpframe_acl_groups` (`id`, `groupid`, `component`, `action`, `value`) VALUES
-(1, 1, 'com_admin', '*', 'all'),
+(1, 1, 'admin', '*', 'all'),
 (2, 1, 'com_dashboard', '*', 'own'),
 (3, 2, 'com_dashboard', '*', 'own'),
 (4, 0, 'com_login', '*', 'own'),

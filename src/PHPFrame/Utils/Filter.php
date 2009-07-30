@@ -86,21 +86,23 @@ class PHPFrame_Utils_Filter
         }
         
         // Handle primitive value subject
-        if (is_int($subject) 
+        if (
+            is_int($subject) 
             || is_bool($subject) 
             || is_float($subject) 
-            || is_string($subject)) {
+            || is_string($subject)
+        ) {
             $subject = array($subject);
         }
         
         // Check that we are working with an array
         if (!is_array($subject)) {
             if ($exceptions) {
-                $exception_msg = "Wrong data type passed as 'subject' to";
-                $exception_msg .= "PHPFrame_Utils_Filter::validate().";
-                $exception_msg .= " Expected (int|bool|float|string|array)";
-                $exception_msg .= " and got (".gettype($subject).")";
-                throw new PHPFrame_Exception($exception_msg);
+                $msg = "Wrong data type passed as 'subject' to ";
+                $msg .= "PHPFrame_Utils_Filter::validate().";
+                $msg .= " Expected (int|bool|float|string|array)";
+                $msg .= " and got (".gettype($subject).")";
+                throw new PHPFrame_Exception($msg);
             } 
             return false;
         }
@@ -117,18 +119,31 @@ class PHPFrame_Utils_Filter
         $filtered_array = array();
         
         // Loop through array and validate
-        foreach ($subject as $str) {
-            $filtered = filter_var($str, $filter, $options);
-            if ($filtered === false) {
+        foreach ($subject as $var) {
+            $filtered_var = filter_var($var, $filter, $options);
+            if ($filtered_var === false) {
                 if ($exceptions) {
-                    $exception_msg = "Filter validation failed.";
-                    $exception_msg .= " Value (".$str.") doesn't";
-                    $exception_msg .= " conform to filter (".$filter.")";
-                    throw new PHPFrame_Exception($exception_msg);
+                    $msg = "Wrong parameter type.";
+            
+                    $backtrace = debug_backtrace();
+                    
+                    if (is_array($backtrace)) {
+                        foreach ($backtrace as $call) {
+                            if ($call["class"] != "PHPFrame_Utils_Filter") {
+                                break;
+                            }
+                        }
+                    }
+                    
+                    $msg .= " ".$call["class"]."::".$call["function"]."() expected argument";
+                    $msg .= " to be of type (".$type.") and got (".gettype($var).").";
+                    
+                    throw new PHPFrame_Exception($msg);
+            
                 }
                 return false;
             }
-            $filtered_array[] = $filtered;
+            $filtered_array[] = $filtered_var;
         }
         
         // Validation passed, now return filtered data
@@ -192,7 +207,7 @@ class PHPFrame_Utils_Filter
      */
     public static function validateBoolean($bool, $exceptions=true)
     {
-        return self::validate($bool, "bool", null, $exceptions);
+        return self::validate($bool, "boolean", null, $exceptions);
     }
     
     /**
@@ -287,5 +302,24 @@ class PHPFrame_Utils_Filter
     public static function validateIP($ip, $exceptions=true)
     {
         return self::validate($ip, "ip", null, $exceptions);
+    }
+    
+    /**
+     * Validate MySQL style datetime (YYYY-MM-DD HH:MM:SS)
+     * 
+     * @param mixed $datetime   The subject to be tested
+     * @param bool  $exceptions Switch to indicate whether we want to throw
+     *                          exceptions or simply return FALSE on failure.
+     *                          
+     * @static
+     * @access public
+     * @return mixed  Returns the filtered value(s) on success. Throws exception or 
+     *                returns FALSE on failure depending on $exceptions argument.
+     * @since  1.0
+     */
+    public static function validateDateTime($datetime, $exceptions=true)
+    {
+        $pattern = '/^([0-9]{4})-([0-1][0-9])-([0-3][0-9]) ([0-2][0-9]):([0-6][0-9]):([0-6][0-9])$/';
+        return self::validateRegExp($datetime, $pattern, $exceptions);
     }
 }

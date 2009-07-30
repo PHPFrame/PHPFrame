@@ -494,7 +494,11 @@ class PHPFrame_Database_Row
         $this->_fields = array();
         
         $table_name = $this->_id_obj->getTableName();
-        
+        $db_driver = PHPFrame::Config()->get('DB_DRIVER');
+        //MySQL on Windows converts all table names to lower case by default.
+        //this hack should handle this case
+        if (DS=='\\' && $db_driver=='MySQL')
+        	$table_name = strtolower($table_name);
         // Fetch the structure of the table that contains this row
         $table_structure = $this->_db->getStructure($table_name);
         

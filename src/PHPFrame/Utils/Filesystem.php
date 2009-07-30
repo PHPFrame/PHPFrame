@@ -74,6 +74,8 @@ class PHPFrame_Utils_Filesystem
         $path = (string) $path;
         $path_array = explode(DS, trim($path, DS));
         $path_prefix = DS;
+        if (DS=="\\") //if the DS is backslash we are on windows, path prefix should be empty
+        	$path_prefix = '';
         
         foreach ($path_array as $path_item) {
             // If dir doesnt exist we try to create it

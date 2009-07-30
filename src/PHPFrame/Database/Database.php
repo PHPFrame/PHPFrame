@@ -305,7 +305,11 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
         try {
             // Prepare statement
             $this->_stmt = $this->_pdo->prepare($sql);
-            
+			
+			if (!($this->_stmt instanceof PDOStatement)){
+				$msg = implode("\n", $this->_pdo->errorInfo());
+				throw new PHPFrame_Exception_Database($msg);
+			}
             // Execute statement
             $this->_stmt->execute($params);
             
@@ -360,6 +364,9 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
                                                   PHPFrame_Exception::ERROR, 
                                                   $this->_stmt);
         }
+		catch (PHPFrame_Exception_Database $e) {
+			throw $e;
+		}
     }
     
     /**
@@ -577,6 +584,9 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
         try {
             // Acquire PDO object
             $this->_pdo = new PDO($this->_dsn, $this->_db_user, $this->_db_pass);
+			if ($this->_dsn instanceof PHPFrame_Database_DSN_MySQL){
+				$this->_pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+			}
         }
         catch (PDOException $e) {
             throw new PHPFrame_Exception_Database($e->getMessage());

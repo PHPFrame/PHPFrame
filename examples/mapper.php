@@ -6,12 +6,6 @@ function loadFramework()
     $PHPFrame_path = "/Users/lupomontero/Documents/workspace/PHPFrame/src";
     set_include_path(get_include_path() . PATH_SEPARATOR . $PHPFrame_path);
     
-    /**
-     * Set convenience DS constant (directory separator depends on server operating system).
-     */
-    define( 'DS', DIRECTORY_SEPARATOR );
-    
-    include_once "config.php";
     include_once "PHPFrame.php";
 }
 

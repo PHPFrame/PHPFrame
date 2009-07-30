@@ -92,8 +92,6 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/IdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/SelectionFactory.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/UpdateFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/Factory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/Model.php" role="php" />

@@ -27,6 +27,11 @@
  */
 class PHPFrame_Mapper_DomainObjectFactory
 {
+    public function __construct($target_class)
+    {
+        $this->_target_class = (string) trim($target_class);
+    }
+    
     /**
      * Create domain object
      * 
@@ -38,6 +43,14 @@ class PHPFrame_Mapper_DomainObjectFactory
      */
     public function createObject(array $array)
     {
+        $class_name = $this->_target_class;
         
+        $reflectionObj = new ReflectionClass($class_name);
+        if (!$reflectionObj->isSubclassOf("PHPFrame_Mapper_DomainObject")) {
+            $msg = "Domain Object '".$class_name."' not supported.";
+            throw new PHPFrame_Exception($msg);
+        }
+        
+        return $reflectionObj->newInstanceArgs(array($array));
     }
 }

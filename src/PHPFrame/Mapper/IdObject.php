@@ -480,7 +480,7 @@ class PHPFrame_Mapper_IdObject
      * @return array
      * @since  1.0
      */
-    public function getSelectFields()
+    public function getObjectFields()
     {
         $array = array();
         

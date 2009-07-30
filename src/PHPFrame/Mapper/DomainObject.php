@@ -28,6 +28,25 @@
 abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
 {
     /**
+     * The object id
+     * 
+     * @var int
+     */
+    protected $id=null;
+    /**
+     * Date the object was first stored (in MySQL Datetime format)
+     * 
+     * @var string
+     */
+    protected $created=null;
+    /**
+     * Last modified datetime (in MySQL Datetime format)
+     * 
+     * @var string
+     */
+    protected $modified=null;
+    
+    /**
      * Constructor
      * 
      * @param array $options
@@ -47,8 +66,12 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
             $reflectionObj = new ReflectionClass($this);
             
             foreach ($options as $key=>$value) {
+                if (is_null($value)) {
+                    continue;
+                }
+                
                 // Build string with setter name
-                $setter_name = "set".ucfirst($key);
+                $setter_name = str_replace(" ", "", "set".ucwords(str_replace("_", " ", $key)));
                 
                 if ($reflectionObj->hasMethod($setter_name)) {
                     // Get reflection method for setter
@@ -61,6 +84,106 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
                 }
             }
         }
+    }
+    
+    public function __clone()
+    {
+        $this->id = null;
+        $this->created = null;
+        $this->modified = null;
+    }
+    
+    /**
+     * Get id
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public function getId()
+    {
+        return $this->id;   
+    }
+    
+    /**
+     * Set id
+     * 
+     * @param int $int
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setId($int)
+    {
+        $int = PHPFrame_Utils_Filter::validateInt($int);
+        
+        $this->id = $int;
+    }
+    
+    /**
+     * Get created datetime
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+    
+    /**
+     * Set created datetime
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setCreated($str)
+    {
+        //echo $str; exit;
+        $str = PHPFrame_Utils_Filter::validateDateTime($str);
+        
+        // Set property
+        $this->created = $str;
+    }
+    
+    /**
+     * Get last modified datetime
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getModified()
+    {
+        return $this->modified;
+    }
+    
+    /**
+     * Set last modified datetime
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setModified($str)
+    {
+        //echo $str; exit;
+        $str = PHPFrame_Utils_Filter::validateDateTime($str);
+        
+        // Set property
+        $this->modified = $str;
+    }
+    
+    public function markClean()
+    {
+        
     }
     
     /**

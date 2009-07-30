@@ -28,6 +28,39 @@
 class PHPFrame_Mapper_PersistenceFactory
 {
     /**
+     * Target class
+     * 
+     * @var string
+     */
+    private $_target_class=null;
+    
+    /**
+     * Constructor
+     * 
+     * @param string $target_class
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function __construct($target_class)
+    {
+        $this->_target_class = (string) trim($target_class);
+    }
+    
+    /**
+     * Get object assembler
+     * 
+     * @access public
+     * @return PHPFrame_Mapper_DomainObjectAssembler
+     * @since  1.0
+     */
+    public function getAssembler()
+    {
+        return new PHPFrame_Mapper_DomainObjectAssembler($this);
+    }
+    
+    /**
      * Get DomainObjectFactory
      * 
      * @access public
@@ -36,7 +69,21 @@ class PHPFrame_Mapper_PersistenceFactory
      */
     public function getDomainObjectFactory()
     {
+        return new PHPFrame_Mapper_DomainObjectFactory($this->_target_class);
+    }
+    
+    /**
+     * Create a new IdObject to work with the target class
+     * 
+     * @access public
+     * @return PHPFrame_Mapper_IdObject
+     * @since  1.0
+     */
+    public function getIdObject()
+    {
+        $options = array("select"=>"*", "from"=>$this->getTableName());
         
+        return new PHPFrame_Mapper_IdObject($options);
     }
     
     /**
@@ -46,32 +93,37 @@ class PHPFrame_Mapper_PersistenceFactory
      * @return PHPFrame_Mapper_Collection
      * @since  1.0
      */
-    public function getCollection()
+    public function getCollection(array $raw=null)
     {
-        
+        return new PHPFrame_Mapper_Collection($raw, $this->getDomainObjectFactory());
     }
     
     /**
-     * Get SelectionFactory
+     * Get target class
      * 
      * @access public
-     * @return PHPFrame_Mapper_SelectionFactory
+     * @return string
      * @since  1.0
      */
-    public function getSelectionFactory()
+    public function getTargetClass()
     {
-        
+        return $this->_target_class;
     }
     
     /**
-     * Get UpdateFactory
+     * Get table name
      * 
      * @access public
-     * @return PHPFrame_Mapper_UpdateFactory
+     * @return string
      * @since  1.0
      */
-    public function getUpdateFactory()
+    public function getTableName()
     {
+        // Remove PHPFrame_ prefix if needed
+        $table_name = str_replace("PHPFrame_", "#__", $this->getTargetClass());
+        // Make string lower case and add trailing "s"
+        $table_name = strtolower($table_name)."s";
         
+        return $table_name;
     }
 }

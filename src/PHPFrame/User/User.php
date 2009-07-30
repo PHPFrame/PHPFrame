@@ -25,159 +25,621 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_User
+class PHPFrame_User extends PHPFrame_Mapper_DomainObject
 {
-    private $_id=null;
-    private $_groupid=null;
-    private $_username=null;
-    private $_password=null;
-    private $_email=null;
-    private $_firstname=null;
-    private $_lastname=null;
-    private $_photo=null;
-    private $_notifications=null;
-    private $_show_email=null;
-    private $_block=null;
-    private $_created=null;
-    private $_last_visit=null;
-    private $_activation=null;
-    private $_params=null;
-    private $_ts=null;
-    private $_deleted=null;
-    
     /**
-     * User mapper object
-     *
-     * @var PHPFrame_User_Mapper
+     * The group id
+     * 
+     * @var int
      */
-    private $_mapper=null;
+    private $_groupid=0;
+    /**
+     * Username
+     * 
+     * @var string
+     */
+    private $_username=null;
+    /**
+     * Password
+     * 
+     * @var string
+     */
+    private $_password=null;
+    /**
+     * First name
+     * 
+     * @var string
+     */
+    private $_firstname=null;
+    /**
+     * Last name
+     * 
+     * @var string
+     */
+    private $_lastname=null;
+    /**
+     * Email
+     * 
+     * @var string
+     */
+    private $_email=null;
+    /**
+     * Photo
+     * 
+     * @var string
+     */
+    private $_photo=null;
+    /**
+     * Flag to indicate whether user will reveive email notifications
+     * 
+     * @var bool
+     */
+    private $_notifications=true;
+    /**
+     * Flag to indicate whether user's email will be shown in front-end
+     * 
+     * @var bool
+     */
+    private $_show_email=true;
+    /**
+     * Flag to indicate whether the user account has been blocked by an admin
+     * 
+     * @var bool
+     */
+    private $_block=false;
+    /**
+     * Date the user last visited the app (in MySQL Datetime format)
+     * 
+     * @var string
+     */
+    private $_last_visit=null;
+    /**
+     * Activation key
+     * 
+     * @var string
+     */
+    private $_activation=null;
+    /**
+     * User params
+     * 
+     * @var array
+     */
+    private $_params=array();
+    /**
+     * Date the user was deleted (in MySQL Datetime format)
+     * 
+     * This field is empty for all active users
+     * 
+     * @var string
+     */
+    private $_deleted=null;
+    /**
+     * vCard object used to store user details 
+     * 
+     * @var PHPFrame_Utils_vCard
+     */
+    private $_vcard=null;
+    /**
+     * An array containig openid urls linked to this user
+     * 
+     * @var array
+     */
+    private $_openid_urls=array();
     
     /**
      * Constructor
+     * 
+     * @param array $options
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct() {
-        $this->_mapper = new PHPFrame_User_Mapper();
-    }
-    
-    /**
-     * Magic getter invoked when trying to access an undefined property
-     * 
-     * @param string $key The property name
-     * 
-     * @access public
-     * @return mixed
-     * @since  1.0
-     */
-    public function __get($key) 
+    public function __construct(array $options=null)
     {
-        return $this->get($key);
-    }
-    
-    /**
-     * Magic method invoked when trying to use an IdObject as a string.
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function __toString()
-    {
-        return $this->toString();
-    }
-    
-    /**
-     * Convert object to string
-     * 
-     * @param bool $show_keys Boolean to indicate whether we want to show the
-     *                        column names. Default is TRUE.
-     *                        
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function toString($show_keys=true)
-    {
-        $str = "";
+        // If we are passed a vCard object we deal with this first
+        if (
+            isset($options['vcard'])
+            && $options['vcard'] instanceof PHPFrame_Utils_vCard
+        ) {
+            $this->_vcard = $options['vcard'];
+            unset($options['vcard']);
+        } else {
+            $this->_vcard = new PHPFrame_Utils_vCard();
+        }
         
-        return $str;
+        // Once we have set the vCard object we call the parent's constructor
+        // to process the options array
+        parent::__construct($options);
     }
     
     /**
-     * Return Row object as associative array
+     * Get groupid
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public function getGroupId()
+    {
+        return $this->_groupid;
+    }
+    
+    /**
+     * Set groupid
+     * 
+     * @param int $int
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setGroupId($int)
+    {
+        $int = PHPFrame_Utils_Filter::validateInt($int);
+        
+        $this->_groupid = $int; 
+    }
+    
+    /**
+     * Get username
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getUserName()
+    {
+        return $this->_username;
+    }
+    
+    /**
+     * Set username
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setUserName($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateRegExp($str, '/^[a-zA-Z]{3,20}$/');
+        
+        $this->_username = $str; 
+    }
+    
+    /**
+     * Get password
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getPassword()
+    {
+        return $this->_username;
+    }
+    
+    /**
+     * Set password
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setPassword($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateRegExp($str, '/^.{6,100}$/');
+        
+        $this->_password = $str; 
+    }
+    
+    /**
+     * Get first name
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getFirstName()
+    {
+        return $this->_vcard->getName("FIRST");
+    }
+    
+    /**
+     * Set first name
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setFirstName($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateRegExp($str, '/^[a-zA-Z \.\-]{1,50}$/');
+        
+        // Set first name in vCard object making sure we dont overwrite last name)
+        $this->_vcard->setName($this->getLastName(), $str, null, null, null);
+        
+        // Set property
+        $this->_firstname = $str;
+    }
+    
+    /**
+     * Get last name
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getLastName()
+    {
+        return $this->_vcard->getName("LAST");
+    }
+    
+    /**
+     * Set last name
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setLastName($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateRegExp($str, '/^[a-zA-Z \.\-]{1,50}$/');
+        
+        // Set last name in vCard object making sure we dont overwrite first name)
+        $this->_vcard->setName($str, $this->getFirstName(), null, null, null);
+        
+        // Set property
+        $this->_lastname = $str;
+    }
+    
+    /**
+     * Get email
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getEmail()
+    {
+        return $this->_email;
+    }
+
+    /**
+     * Set email
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setEmail($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateEmail($str);
+        
+        // Set last name in vCard object making sure we dont overwrite first name)
+        $this->_vcard->setEmail($str);
+        
+        // Set property
+        $this->_email = $str;
+    }
+    
+    /**
+     * Get photo
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getPhoto()
+    {
+        return $this->_photo;
+    }
+    
+    /**
+     * Set photo
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setPhoto($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateDefault($str);
+        
+        // Set last name in vCard object making sure we dont overwrite first name)
+        $this->_vcard->setPhoto($str);
+        
+        // Set property
+        $this->_photo = $str;
+    }
+    
+    /**
+     * Get notifications flag
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function getNotifications()
+    {
+        return $this->_notifications;
+    }
+    
+    /**
+     * Set notifications flag
+     * 
+     * @param bool $bool
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setNotifications($bool)
+    {
+        // Set local property
+        $this->_notifications = (bool) $bool;
+    }
+    
+    /**
+     * Get show_email flag
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function getShowEmail()
+    {
+        return $this->_show_email;
+    }
+    
+    /**
+     * Set show_email flag
+     * 
+     * @param bool $bool
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setShowEmail($bool)
+    {
+        // Set property
+        $this->_show_email = (bool) $bool;
+    }
+    
+    /**
+     * Get block flag
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function getBlock()
+    {
+        return $this->_block;
+    }
+    
+    /**
+     * Set block flag
+     * 
+     * @param bool $bool
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setBlock($bool)
+    {
+        // Set property
+        $this->_block = (bool) $bool;
+    }
+    
+    /**
+     * Get last visit datetime
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getLastVisit()
+    {
+        return $this->_last_visit;
+    }
+    
+    /**
+     * Set last visit datetime
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setLastVisit($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateDateTime($str);
+        
+        // Set property
+        $this->_last_visit = $str;
+    }
+    
+    /**
+     * Get activation key
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getActivation()
+    {
+        return $this->_activation;
+    }
+    
+    /**
+     * Set activation key
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setActivation($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateDefault($str);
+        
+        // Set property
+        $this->_activation = $str;
+    }
+    
+    /**
+     * Get params
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getParams()
+    {
+        return $this->_params;
+    }
+    
+    /**
+     * Set params
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setParams($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateDefault($str);
+        
+        // Set property
+        $this->_params = $str;
+    }
+    
+    /**
+     * Get deleted datetime
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getDeleted()
+    {
+        return $this->_deleted;
+    }
+    
+    /**
+     * Set deleted datetime
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setDeleted($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateDateTime($str);
+        
+        // Set property
+        $this->_deleted = $str;
+    }
+    
+    /**
+     * Get vCard object for this user
+     * 
+     * @access public
+     * @return PHPFrame_Utils_vCard
+     * @since  1.0
+     */
+    public function getVCard()
+    {
+        return $this->_vcard;
+    }
+    
+    /**
+     * Set vCard object for this user
+     * 
+     * @param PHPFrame_Utils_vCard $vcard
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setVCard(PHPFrame_Utils_vCard $vcard)
+    {
+        //TODO: Here we have to parse the vCard data 
+        // and update the firstname and lastname proerties
+        $this->_vcard = $vcard;
+    }
+    
+    /**
+     * Get OpenId URLs
      * 
      * @access public
      * @return array
      * @since  1.0
      */
-    public function toArray()
+    public function getOpenidUrls()
     {
-        $array = array();
-        
-        return $array;
-    }
-    
-    
-    
-    /**
-     * Get user property
-     * 
-     * @param string $key The property name
-     * 
-     * @access public
-     * @return mixed
-     * @since  1.0
-     */
-    public function get($key) 
-    {
-        if (!isset($this->$key)) {
-            return null;
-        }
-        
-        return $this->$key;
+        return $this->_openid_urls;
     }
     
     /**
-     * Set a property in the user object
+     * Add an OpenId URL for this user
      * 
-     * @param string $key   The property name
-     * @param mixed  $value The value we want to set
+     * @param string $str
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function set($key, $value) 
+    public function addOpenidUrl($str)
     {
-        if (property_exists($this, $key)) {
-            $this->$key = $value;
+        $str = PHPFrame_Utils_Filter::validateURL($str);
+        
+        if (!in_array($str, $this->_openid_urls)) {
+            $this->_openid_urls[] = $str;
         }
     }
     
     /**
-     * Load user row by id
+     * Remove a given URL from the openid_urls array
      * 
-     * This method overrides the inherited load method.
-     * 
-     * @param int|PHPFrame_Database_IdObject $id      Normally an integer with the primary 
-     *                                                key value of the row we want to load.
-     *                                                Alternatively you can pass an IdObject.
-     * @param string                         $exclude A list of key names to exclude from 
-     *                                                binding process separated by commas.
+     * @param string $str
      * 
      * @access public
-     * @return PHPFrame_User
+     * @return void
      * @since  1.0
      */
-    public function load($id, $exclude='password') 
+    public function removeOpenidUrl($str)
     {
-        // Delegate to row object
-        $this->_row->load($id, $exclude);
+        $str = PHPFrame_Utils_Filter::validateURL($str);
         
-        return $this;
+        foreach ($this->_openid_urls as $url) {
+            if ($str != $url) {
+                $array[] = $url;
+            }
+        }
+        
+        $this->_openid_urls = $array;
     }
     
     /**
@@ -191,36 +653,42 @@ class PHPFrame_User
      * @return void
      * @since  1.0
      */
-    public function bind($array, $exclude='') 
+    public function bind(array $array) 
     {
-        $this->_row->bind($array, $exclude);
+        //$this->_row->bind($array, $exclude);
     }
     
     /**
-     * Store user
+     * Return Row object as associative array
      * 
      * @access public
-     * @return bool   Returns TRUE on success or FALSE on failure.
+     * @return array
      * @since  1.0
      */
-    public function store() 
+    public function toArray()
     {
-        // Before we store new users we check whether email already exists in db
-        $id = $this->_row->get('id');
-        if (empty($id) && $this->_emailExists($this->_row->get('email'))) {
-            $this->_error[] = PHPFrame_Lang::EMAIL_ALREADY_REGISTERED;
-            return false;
+        $properties = get_object_vars($this);
+        
+        foreach ($properties as $key=>$value) {
+            // Ignore vCard object when rendering as array
+            if ($key == "_vcard") {
+                continue;
+            }
+            
+            if ($key == "_params" || $key == "_openid_urls"
+            ) {
+                $value = serialize($value);
+            }
+            
+            // Remove preceding slash if needed
+            if (preg_match('/^_/', $key)) {
+                $key = substr($key, 1);
+            }
+            
+            $array[$key] = $value;
         }
         
-        // Encrypt password for storage
-        if (!is_null($this->_row->get('password'))) {
-            $salt = PHPFrame_Utils_Crypt::genRandomPassword(32);
-            $crypt = PHPFrame_Utils_Crypt::getCryptedPassword($this->_row->get('password'), $salt);
-            $this->_row->set('password', $crypt.':'.$salt);
-        }
-        
-        // Invoke row store() method to store row in db
-        return $this->_mapper->store($this);
+        return $array;
     }
     
     /**

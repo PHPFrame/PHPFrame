@@ -113,6 +113,7 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         // Before we proceed to prepare the response we authenticate
         try {
             $this->_authenticate($HTTP_RAW_POST_DATA);
+            $this->_checkAPIPermisssions();
         } catch (PHPFrame_Exception_XMLRPC $e) {
             echo $e->getXMLRPCFault();
         	exit;
@@ -413,6 +414,19 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     	return $value;
     }
     
+    /**
+     * Checks whether the current request is from a valid XMLRPC API client. 
+     * This method inspects the request header keys for X-API-USERNAME and 
+     * X-API-SIGNATURE. If the API user is a valid user and the signature 
+     * matches the special hashing function (using the private API key shared 
+     * by both the client and server) of the xml payload, then the client is 
+     * deemed to authenticated. Otherwise a <code>PHPFrame_Exception_XMLRPC</code> 
+     * exception with fault code <code>INVALID_API_KEY_OR_USER</code> is thrown.
+     *  
+     * @param string $xml_payload the complete XML-RPC call string used to test 
+     * the api signature against 
+     * @return void or throws Exception if api authentication fails
+     */
     private function _authenticate($xml_payload)
     {
         if (isset($_SERVER["HTTP_X_API_USERNAME"])) {
@@ -458,6 +472,28 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
             $msg = "XMLRPC API authentication failed";
             $code = PHPFrame_Exception_XMLRPC::INVALID_API_KEY_OR_USER;
             throw new PHPFrame_Exception_XMLRPC($msg, $code);
+        }
+    }
+    
+    /**
+     * Checks whether the XMLRPC client is able to perform the requested action, throws 
+     * a <code>PHPFrame_Exception_XMLRPC</code> with fault code <code>INVALID_PERMISSIONS</code> 
+     * if not authorized.
+     * 
+     * @return void or throws PHPFrame_Exception_XMLRPC if XMLRPC client is not authorized 
+     * to perform the requested action
+     */
+    private function _checkAPIPermisssions()
+    {
+    	// Check permissions before we execute
+        $component = PHPFrame::Request()->getComponentName();
+        $action = PHPFrame::Request()->getAction();
+        $groupid = PHPFrame::Session()->getGroupId();
+        $permissions = PHPFrame::AppRegistry()->getPermissions();
+        if ($permissions->authorise($component, $action, $groupid) !== true) {
+        	$msg = "Insufficient XMLRPC API permissions to perform action. XMLRPC client is not allowed to ";
+        	$msg .= "perform the action: $action on component: $component.";
+        	throw new PHPFrame_Exception_XMLRPC($msg, PHPFrame_Exception_XMLRPC::INVALID_PERMISSIONS);
         }
     }
 }

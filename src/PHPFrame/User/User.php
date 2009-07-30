@@ -204,7 +204,7 @@ class PHPFrame_User extends PHPFrame_Mapper_DomainObject
      */
     public function setUserName($str)
     {
-        $str = PHPFrame_Utils_Filter::validateRegExp($str, '/^[a-zA-Z]{3,20}$/');
+        $str = PHPFrame_Utils_Filter::validateRegExp($str, '/^[a-zA-Z\.]{3,20}$/');
         
         $this->_username = $str; 
     }
@@ -640,22 +640,6 @@ class PHPFrame_User extends PHPFrame_Mapper_DomainObject
         }
         
         $this->_openid_urls = $array;
-    }
-    
-    /**
-     * Bind array to user object
-     * 
-     * @param array  $array    The array to bind to the user object
-     * @param string $exclude A list of key names to exclude from binding 
-     *                        process separated by commas.
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function bind(array $array) 
-    {
-        //$this->_row->bind($array, $exclude);
     }
     
     /**

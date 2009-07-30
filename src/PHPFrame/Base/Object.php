@@ -96,7 +96,11 @@ abstract class PHPFrame_Base_Object
     {
         // Check for accessor method following coding standards
         $reflectionObj = new ReflectionClass($this);
-        $accessor_name = "get".ucfirst($name);
+        
+        // Build string with getter name
+        $accessor_name = "get".ucwords(str_replace("_", " ", $name));
+        $accessor_name = str_replace(" ", "", $accessor_name);
+        
         if ($reflectionObj->hasMethod($accessor_name)) {
             $accessor_method = $reflectionObj->getMethod($accessor_name);
             $param_count = $accessor_method->getNumberOfParameters();

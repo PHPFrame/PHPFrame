@@ -59,30 +59,7 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
     {
         // Process options argument if passed
         if (!is_null($options)) {
-            // Make sure that we have been passed an array
-            $this->ensureType("array", $options);
-            
-            // Create reflection object
-            $reflectionObj = new ReflectionClass($this);
-            
-            foreach ($options as $key=>$value) {
-                if (is_null($value)) {
-                    continue;
-                }
-                
-                // Build string with setter name
-                $setter_name = str_replace(" ", "", "set".ucwords(str_replace("_", " ", $key)));
-                
-                if ($reflectionObj->hasMethod($setter_name)) {
-                    // Get reflection method for setter
-                    $setter_method = $reflectionObj->getMethod($setter_name);
-                    
-                    // Invoke setter if it takes only one required argument
-                    if ($setter_method->getNumberOfRequiredParameters() == 1) {
-                        $this->$setter_name($value);
-                    }
-                }
-            }
+            $this->bind($options);
         }
     }
     
@@ -91,6 +68,32 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
         $this->id = null;
         $this->created = null;
         $this->modified = null;
+    }
+    
+    public function bind(array $options)
+    {
+        // Create reflection object
+        $reflectionObj = new ReflectionClass($this);
+        
+        foreach ($options as $key=>$value) {
+            if (is_null($value)) {
+                continue;
+            }
+            
+            // Build string with setter name
+            $setter_name = "set".ucwords(str_replace("_", " ", $key));
+            $setter_name = str_replace(" ", "", $setter_name);
+            echo $setter_name."\n";
+            if ($reflectionObj->hasMethod($setter_name)) {
+                // Get reflection method for setter
+                $setter_method = $reflectionObj->getMethod($setter_name);
+                
+                // Invoke setter if it takes only one required argument
+                if ($setter_method->getNumberOfRequiredParameters() == 1) {
+                    $this->$setter_name($value);
+                }
+            }
+        }
     }
     
     /**
@@ -185,17 +188,6 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
     {
         
     }
-    
-    /**
-     * Bind array data to object
-     * 
-     * @param array $array
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    abstract public function bind(array $array);
     
     /**
      * Convert object to array

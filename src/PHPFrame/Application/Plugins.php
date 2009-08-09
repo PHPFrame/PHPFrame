@@ -46,7 +46,8 @@ class PHPFrame_Application_Plugins
         
         // If no plugins xml file found we use the one provided by PHPFrame dist
         if (!is_file($path)) {
-            $path = PEAR_INSTALL_DIR.DS."data".DS."etc".DS."plugins.xml";
+            $path = PEAR_INSTALL_DIR.DS;
+            $path .= "data".DS."PHPFrame".DS."etc".DS."plugins.xml";
         }
         
         $this->_config = PHPFrame_Config::instance($path);

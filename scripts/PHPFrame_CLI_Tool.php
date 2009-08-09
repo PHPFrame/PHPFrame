@@ -127,10 +127,10 @@ class PHPFrame_CLI_Tool_postinstall
 	
     private function _fetchSource()
     {
-        $source = "http://phpframe.googlecode.com/svn/PHPFrame_AppTemplate/trunk/";
+        $source = "http://phpframe.googlecode.com/svn/PHPFrame_CLI_Tool/trunk/";
         $cmd = "svn export --force ".$source." ".$this->_install_path.DIRECTORY_SEPARATOR;
         
-		$this->_output("Fetching PHPFrame_AppTemplate source from repository...");
+		$this->_output("Fetching PHPFrame_CLI_Tool source from repository...");
 		$this->_output("Using command \"".$cmd."\"...");
 		
 		$exec = PHPFrame_Utils_Exec::run($cmd);

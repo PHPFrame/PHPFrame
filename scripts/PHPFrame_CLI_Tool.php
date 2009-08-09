@@ -125,6 +125,12 @@ class PHPFrame_CLI_Tool_postinstall
 			return false;
 		}
 		
+        if (!$this->_makeWritableVar()) {
+			$this->_output("Error making var directory writable...");
+			$this->_output("Installation failed...");
+			return false;
+		}
+		
 		// If we got here installation succeded
 		$this->_output("PHPFrame CLI Tool successfully installed...");
 		return true;
@@ -133,7 +139,7 @@ class PHPFrame_CLI_Tool_postinstall
     private function _fetchSource()
     {
         $source = "http://phpframe.googlecode.com/svn/PHPFrame_CLI_Tool/trunk/";
-        $cmd = "svn export --force ".$source." ".$this->_install_path.DIRECTORY_SEPARATOR;
+        $cmd = "svn export --force ".$source." ".$this->_install_path.DS;
         
 		$this->_output("Fetching PHPFrame_CLI_Tool source from repository...");
 		$this->_output("Using command \"".$cmd."\"...");
@@ -171,6 +177,23 @@ class PHPFrame_CLI_Tool_postinstall
         $config_file = $this->_install_path.DS."etc".DS."config.xml";
         PHPFrame_Utils_Filesystem::write($config_file, $config->toXML());
 
+		return true;
+    }
+    
+    private function _makeWritableVar()
+    {
+        $cmd = "chmod 777 ".$this->_install_path.DS."var";
+        
+        $exec = new PHPFrame_Utils_Exec($cmd);
+		
+		$this->_output($exec->getOutput());
+		
+		if ($exec->getReturnVar() > 0) {
+			$this->_output("Failed to make var directory writable...");
+			
+			return false;
+		}
+		
 		return true;
     }
 

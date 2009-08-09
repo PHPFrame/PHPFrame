@@ -528,8 +528,8 @@ class PHPFrame
         $lib_xml = PHPFRAME_CONFIG_DIR.DS."lib.xml";
         
         if (!is_file($lib_xml)) {
-            $msg = "Could not find libraries configuration file";
-            throw new PHPFrame_Exception($msg);
+            $lib_xml = PEAR_INSTALL_DIR.DS;
+            $lib_xml .= "data".DS."PHPFrame".DS."etc".DS."lib.xml";
         }
         
         // Instanciate new config object

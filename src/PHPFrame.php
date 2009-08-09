@@ -248,8 +248,8 @@ class PHPFrame
         // Otherwise we use the system wide default config
         } else {
             require_once "PEAR/Config.php";
-			$data_dir = PEAR_Config::singleton()->get('data_dir');
-			$config_dir = $data_dir.DS."PHPFrame".DS."etc";
+			$config_dir = PEAR_INSTALL_DIR.DS;
+			$config_dir .= "data".DS."PHPFrame".DS."etc";
         }
         
         $config_file = $config_dir.DS."config.xml";

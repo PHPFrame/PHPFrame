@@ -114,6 +114,11 @@ class PHPFrame_CLI_Tool_postinstall
 		}
 		
 		// Create config file
+		$infoArray["APPNAME"] = "PHPFrame CLI Tool";
+		$infoArray["DEFAULT_CONTROLLER"] = "deploy";
+		$infoArray["IGNORE_ACL"] = "1";
+		$infoArray["SECRET"] = uniqid();
+		
         if (!$this->_createConfig($infoArray)) {
 			$this->_output("Error creating config file...");
 			$this->_output("Installation failed...");

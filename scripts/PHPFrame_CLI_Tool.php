@@ -101,10 +101,10 @@ class PHPFrame_CLI_Tool_postinstall
     public function run($infoArray, $paramGroupId)
     {
 		// Only process if info array contains data
-		if (!is_array($infoArray) || count($infoArray) < 1) {
-			$this->_output("Installation skipped...");
-			return false;
-		}
+//		if (!is_array($infoArray) || count($infoArray) < 1) {
+//			$this->_output("Installation skipped...");
+//			return false;
+//		}
 
 		// Fetch PHPFrame_CLI_Tool source
         if (!$this->_fetchSource()) {
@@ -133,7 +133,7 @@ class PHPFrame_CLI_Tool_postinstall
 		$this->_output("Fetching PHPFrame_CLI_Tool source from repository...");
 		$this->_output("Using command \"".$cmd."\"...");
 		
-		$exec = PHPFrame_Utils_Exec::run($cmd);
+		$exec = new PHPFrame_Utils_Exec($cmd);
 		
 		$this->_output($exec->getOutput());
 		
@@ -157,15 +157,13 @@ class PHPFrame_CLI_Tool_postinstall
 		$this->_output("Creating configuration file...");
         
         // Instanciate new config object
-        $config = PHPFrame_Config::instance();
+        $config = PHPFrame::Config();
         
         // Bind to array
         $config->bind($array);
         
         // Write to filesystem
-        $config_file = $this->_install_path.DIRECTORY_SEPARATOR;
-        $config_file .= "etc".DIRECTORY_SEPARATOR;
-        $config_file .= "config.xml";
+        $config_file = $this->_install_path.DS."etc".DS."config.xml";
         PHPFrame_Utils_Filesystem::write($config_file, $config->toXML());
 
 		return true;

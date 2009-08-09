@@ -136,7 +136,20 @@ class PHPFrame
             return;
         }
         
-        // Load libraries
+        // Load core libraries
+        if ($class_name == "InputFilter") {
+            $file_path = PEAR_INSTALL_DIR.DS; 
+            $file_path .= "data".DS."lib".DS."phpinputfilter".DS."inputfilter";
+            @include $file_path;
+            return;
+        } elseif ($class_name == "PHPMailer") {
+            $file_path = PEAR_INSTALL_DIR.DS; 
+            $file_path .= "data".DS."lib".DS."phpmailer".DS."phpmailer";
+            @include $file_path;
+            return;
+        }
+        
+        // Load custom libraries
         if (is_null(self::$_lib_config)) {
             self::$_lib_config = self::_fetchLibXML();
         }

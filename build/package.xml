@@ -119,8 +119,13 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/vCard.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    
+   <file baseinstalldir="/" name="lib/phpinputfilter/inputfilter.php" role="data" />
+   <file baseinstalldir="/" name="lib/phpinputfilter/GPL-3.0.txt" role="data" />
+   <file baseinstalldir="/" name="lib/phpmailer/language/phpmailer.lang-en.php" role="data" />
+   <file baseinstalldir="/" name="lib/phpmailer/LICENSE" role="data" />
+   <file baseinstalldir="/" name="lib/phpmailer/phpmailer.php" role="data" />
+   <file baseinstalldir="/" name="lib/phpmailer/smtp.php" role="data" />
    <file baseinstalldir="/" name="acl.xml" role="data" />
-   <file baseinstalldir="/" name="CLI_Tool.sql" role="data" />
    <file baseinstalldir="/" name="config.xml" role="data" />
    <file baseinstalldir="/" name="DummyController.php" role="data" />
    <file baseinstalldir="/" name="groups.xml" role="data" />
@@ -142,6 +147,7 @@
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@package_version@" to="version" type="package-info" />
     <tasks:postinstallscript>
+    <!-- 
      <tasks:paramgroup>
       <tasks:id>db</tasks:id>
       <tasks:param>
@@ -186,6 +192,7 @@
        <tasks:default></tasks:default>
       </tasks:param>
      </tasks:paramgroup>
+      -->
     </tasks:postinstallscript>
   </file>
 

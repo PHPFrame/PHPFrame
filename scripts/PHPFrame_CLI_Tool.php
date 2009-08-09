@@ -105,45 +105,10 @@ class PHPFrame_CLI_Tool_postinstall
 			$this->_output("Installation skipped...");
 			return false;
 		}
-		
-		// Check input array for db details
-		if (!$this->_checkDBInput($infoArray)) {
-			$this->_output("Not enough info to set up database...");
-			$this->_output("Installation failed...", true);
-			return false;
-		}
-		
-		// Create db and dbuser if requested
-		if (isset($infoArray["DB_ROOT"]) && isset($infoArray["DB_ROOT_PASS"])) {
-			$create_db_status = $this->_createDB(
-				$infoArray["DB_DRIVER"], 
-				$infoArray["DB_HOST"], 
-				$infoArray["DB_ROOT"], 
-				$infoArray["DB_ROOT_PASS"], 
-				$infoArray["DB_USER"], 
-				$infoArray["DB_PASS"], 
-				$infoArray["DB_NAME"]
-			);
-			
-			if (!$create_db_status) {
-				$this->_output("Error creating database...");
-				$this->_output("Installation failed...");
-				return false;
-			}
-		}
-		
-		// Check DSN database
-		
-		// Populate DB
-		if (!$this->_populateDB($infoArray["DB_USER"], $infoArray["DB_PASS"], $infoArray["DB_NAME"])) {
-			$this->_output("Error populating database...");
-			$this->_output("Installation failed...");
-			return false;
-		}
-		
-		// Fetch scaffold source
+
+		// Fetch PHPFrame_CLI_Tool source
         if (!$this->_fetchSource()) {
-			$this->_output("Error getting PHPFrame_AppTemplate source...");
+			$this->_output("Error getting PHPFrame_CLI_Tool source...");
 			$this->_output("Installation failed...");
 			return false;
 		}
@@ -159,66 +124,6 @@ class PHPFrame_CLI_Tool_postinstall
 		$this->_output("PHPFrame CLI Tool successfully installed...");
 		return true;
     }
-    
-	private function _createDB($db_driver, $db_host, $db_root, $db_root_pass, $db_user, $db_pass, $db_name)
-	{
-		try {
-			$concrete_dsn_class = "PHPFrame_Database_DSN_".$db_driver;
-			$dsn = new $concrete_dsn_class($db_host, "mysql");
-
-			$db = PHPFrame::DB($dsn, $db_root, $db_root_pass);
-
-			$sql_array[] = "CREATE USER '".$db_user."'@'localhost' IDENTIFIED BY '".$db_pass."'";
-			$sql_array[] = "GRANT USAGE ON * . * TO '".$db_user."'@'localhost' IDENTIFIED BY '".$db_pass."'";
-			$sql_array[] = "CREATE DATABASE `".$db_name."` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci";
-			$sql_array[] = "GRANT ALL PRIVILEGES ON `".$db_name."` . * TO '".$db_user."'@'localhost'";
-			
-			$this->_output("Creating database...");
-			
-			foreach ($sql_array as $sql) {
-				$this->_output("Running query: \"".$sql."\"...");
-				$db->query($sql);
-			}
-			
-			return true;
-			
-		} catch (Exception $e) {
-			$this->_output($e->getMessage());
-			return false;
-		}
-	}
-
-	private function _checkDSN($driver, $host)
-	{
-		
-	}
-	
-	private function _populateDB($db_user, $db_pass, $db_name)
-	{
-		try {
-			$sql_file = PEAR_INSTALL_DIR.DS."data".DS."PHPFrame".DS."CLI_Tool.sql";
-	        $cmd = "mysql -u ".$db_user." -p".$db_pass." ".$db_name." < ".$sql_file;
-
-			$this->_output("Populating database...");
-			$this->_output("Using command \"".$cmd."\"...");
-
-			$exec = PHPFrame_Utils_Exec::run($cmd);
-
-			$this->_output($exec->getOutput());
-
-			if ($exec->getReturnVar() > 0) {
-				$this->_output("Failed to populate database...");
-
-				return false;
-			}
-
-			return true;
-			
-		} catch (Exception $e) {
-			$this->_output($e->getMessage());
-			return false;
-		}
-	}
 	
     private function _fetchSource()
     {
@@ -283,18 +188,5 @@ class PHPFrame_CLI_Tool_postinstall
 		if ($trigger_error) {
 			trigger_error($msg);
 		}
-	}
-	
-	private function _checkDBInput($array)
-	{
-		$keys = array("DB_DRIVER", "DB_HOST", "DB_USER", "DB_PASS", "DB_NAME");
-		
-		foreach ($keys as $key) {
-			if (!isset($array[$key])) {
-				return false;
-			}
-		}
-		
-		return true;
 	}
 }

@@ -125,13 +125,15 @@
    <file baseinstalldir="/" name="lib/phpmailer/LICENSE" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/phpmailer.php" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/smtp.php" role="data" />
-   <file baseinstalldir="/" name="acl.xml" role="data" />
-   <file baseinstalldir="/" name="config.xml" role="data" />
+   <file baseinstalldir="/" name="lib/vcard/LICENSE" role="data" />
+   <file baseinstalldir="/" name="lib/vcard/vcardclass.inc" role="data" />
+   <file baseinstalldir="/" name="etc/acl.xml" role="data" />
+   <file baseinstalldir="/" name="etc/config.xml" role="data" />
+   <file baseinstalldir="/" name="etc/groups.xml" role="data" />
+   <file baseinstalldir="/" name="etc/lib.xml" role="data" />
+   <file baseinstalldir="/" name="etc/plugins.xml" role="data" />
+   <file baseinstalldir="/" name="etc/sources.xml" role="data" />
    <file baseinstalldir="/" name="DummyController.php" role="data" />
-   <file baseinstalldir="/" name="groups.xml" role="data" />
-   <file baseinstalldir="/" name="lib.xml" role="data" />
-   <file baseinstalldir="/" name="plugins.xml" role="data" />
-   <file baseinstalldir="/" name="sources.xml" role="data" />
    <file baseinstalldir="/" name="CREDITS" role="data" />
    <file baseinstalldir="/" name="LICENSE" role="data" />
    <file baseinstalldir="/" name="README" role="data" />

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-
+	
+	<!-- 
 	<data>
 		<name></name>
 		<menu_name></menu_name>
@@ -10,5 +11,6 @@
 		<system></system>
 		<ordering></ordering>
 	</data>
+	-->
 	
 </config>

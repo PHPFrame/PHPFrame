@@ -51,6 +51,11 @@ class PHPFrame_Application_Permissions
     {
         $this->_path = PHPFRAME_CONFIG_DIR.DS."acl.xml";
         
+        // If no acl xml file found we use the one provided by PHPFrame dist
+        if (!is_file($this->_path)) {
+            $this->_path = PEAR_INSTALL_DIR.DS."data".DS."etc".DS."acl.xml";
+        }
+        
         // Load ACL from file
         $this->_loadACL();
     }

@@ -139,12 +139,17 @@ class PHPFrame
         // Load core libraries
         if ($class_name == "InputFilter") {
             $file_path = PEAR_INSTALL_DIR.DS; 
-            $file_path .= "data".DS."lib".DS."phpinputfilter".DS."inputfilter";
+            $file_path .= "data".DS."PHPFrame".DS."lib".DS."phpinputfilter".DS."inputfilter.php";
             @include $file_path;
             return;
         } elseif ($class_name == "PHPMailer") {
             $file_path = PEAR_INSTALL_DIR.DS; 
-            $file_path .= "data".DS."lib".DS."phpmailer".DS."phpmailer";
+            $file_path .= "data".DS."PHPFrame".DS."lib".DS."phpmailer".DS."phpmailer.php";
+            @include $file_path;
+            return;
+        } elseif ($class_name == "VCARD") {
+            $file_path = PEAR_INSTALL_DIR.DS; 
+            $file_path .= "data".DS."PHPFrame".DS."lib".DS."vcard".DS."vcardclass.inc";
             @include $file_path;
             return;
         }

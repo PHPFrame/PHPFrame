@@ -63,8 +63,6 @@ class PHPFrame_CLI_Tool_postinstall
 
 		$msg = "\nPHPFrame CLI Tool installation";
 		$msg .= "\n------------------------------\n\n";
-		$msg .= "\nTo install please fill in all fields in order to install ";
-		$msg .= "or type 'abort' to skip installation.\n\n";
 		$msg .= "\nInstallation directory: ".$this->_install_path."\n\n";
         
 		echo $msg;
@@ -100,12 +98,6 @@ class PHPFrame_CLI_Tool_postinstall
      */
     public function run($infoArray, $paramGroupId)
     {
-		// Only process if info array contains data
-//		if (!is_array($infoArray) || count($infoArray) < 1) {
-//			$this->_output("Installation skipped...");
-//			return false;
-//		}
-
 		// Fetch PHPFrame_CLI_Tool source
         if (!$this->_fetchSource()) {
 			$this->_output("Error getting PHPFrame_CLI_Tool source...");

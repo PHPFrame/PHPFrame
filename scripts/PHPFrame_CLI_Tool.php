@@ -52,7 +52,7 @@ class PHPFrame_CLI_Tool_postinstall
     {
         // Include PHPFrame framework
         require_once "PHPFrame.php";
-        exit;
+        
         if (!class_exists('PHPFrame')) {
 			$this->_output("Missing PHPFrame. Please check your PEAR installation.");
 			return false;

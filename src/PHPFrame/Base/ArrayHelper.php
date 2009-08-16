@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Base/Array.php
+ * PHPFrame/Base/ArrayHelper.php
  * 
  * PHP version 5
  * 
@@ -15,7 +15,7 @@
  */
 
 /**
- * Array Class
+ * ArrayHelper Class
  * 
  * @category   MVC_Framework
  * @package    PHPFrame

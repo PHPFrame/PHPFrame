@@ -30,7 +30,11 @@
  * @since      1.0
  */
 class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
-{   
+{
+    private static $_instance=null;
+    private $_log_file_info=null;
+    private $_log_file_obj=null;
+    
     /**
      * Constructor
      * 
@@ -40,14 +44,50 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
      */
     private function __construct()
     {
-        // Check path is valid
-        // ...
+        if (defined("PHPFRAME_VAR_DIR")) {
+            $log_dir = PHPFRAME_VAR_DIR;
+        } else {
+            require_once "PEAR/Config.php";
+			$log_dir = PEAR_Config::singleton()->get('data_dir');
+			$log_dir .= DS."PHPFrame";
+        }
+        
+        $log_file = $log_dir.DS."log";
+        
+        // If log file doesn't exist we try to create it
+        if (!is_file($log_file) && !touch($log_file)) {
+            $msg = "Could not create log ";
+            $msg .= "file (".$log_file."). ";
+            $msg .= "Please check file permissions. ";
+            trigger_error($msg, E_USER_ERROR);
+        }
+        
+        // Instantiate file info object for log file
+        $this->_log_file_info = new PHPFrame_FS_FileInfo($log_file);
+        
+        if (!$this->_log_file_info->isWritable()) {
+            $msg = "Could not write log. ";
+            $msg .= "File ".$log_file." is not writable. ";
+            $msg .= "Please check file permissions. ";
+            trigger_error($msg, E_USER_ERROR);
+        }
+        
+        //$this->_log_file_obj = new PHPFrame_FS_FileObj($log_file);
+    }
+    
+    public static function instance()
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self;
+        }
+        
+        return self::$_instance;
     }
     
     /**
      * Handle observed objects updates
      * 
-     * @param SplSubject $subject The subjuct issuing the update
+     * @param SplSubject $subject The subject issuing the update
      * 
      * @access protected
      * @return void
@@ -93,16 +133,8 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         }
         
         // Write log to filesystem using PHPFrame's utility class
-        if (defined("PHPFRAME_VAR_DIR")) {
-            $log_dir = PHPFRAME_VAR_DIR;
-        } else {
-            require_once "PEAR/Config.php";
-			$log_dir = PEAR_Config::singleton()->get('data_dir');
-			$log_dir .= DS."PHPFrame";
-        }
-        
-        $log_file = $log_dir.DS."log";
-        
-        PHPFrame_Utils_Filesystem::write($log_file, $info.$msg, true);
+        $a = self::instance()->_log_file_info->openFile("a");
+        var_dump($a); exit;
+        //PHPFrame_Utils_Filesystem::write($log_file, $info.$msg, true);
     }
 }

@@ -72,7 +72,7 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
             trigger_error($msg, E_USER_ERROR);
         }
         
-        //$this->_log_file_obj = new PHPFrame_FS_FileObj($log_file);
+        //$this->_log_file_obj = new PHPFrame_FS_FileObject($log_file);
     }
     
     public static function instance()

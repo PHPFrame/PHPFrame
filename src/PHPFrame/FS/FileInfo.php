@@ -23,7 +23,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see        SplFileInfo, PHPFrame_FS_FileObj
+ * @see        SplFileInfo, PHPFrame_FS_FileObject
  * @since      1.0
  */
 class PHPFrame_FS_FileInfo 
@@ -93,7 +93,7 @@ class PHPFrame_FS_FileInfo
 	    }
 	    
 	    $this->setInfoClass(get_class($this));
-	    $this->setFileClass("PHPFrame_FS_FileObj");
+	    $this->setFileClass("PHPFrame_FS_FileObject");
 	}
 	
 	/**

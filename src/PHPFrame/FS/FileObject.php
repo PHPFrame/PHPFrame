@@ -26,7 +26,7 @@
  * @see        SplFileObject
  * @since      1.0
  */
-class PHPFrame_FS_FileObj extends SplFileObject
+class PHPFrame_FS_FileObject extends SplFileObject
 {
     
 }

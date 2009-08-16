@@ -11,7 +11,7 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id: PHPFrame_CLI_Tool.php 288 2009-07-23 01:31:09Z luis.montero@e-noise.com $
+ * @version    SVN: $Id$
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
@@ -52,14 +52,14 @@ class PHPFrame_CLI_Tool_postinstall
     {
         // Include PHPFrame framework
         require_once "PHPFrame.php";
-        
+        exit;
         if (!class_exists('PHPFrame')) {
 			$this->_output("Missing PHPFrame. Please check your PEAR installation.");
 			return false;
         }
         
-        $this->_install_path = PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR;
-        $this->_install_path .= "PHPFrame_CLI_Tool";
+        $this->_install_path = PEAR_Config::singleton()->get("install_dir");
+        $this->_install_path .= DS."PHPFrame_CLI_Tool";
 
 		$msg = "\nPHPFrame CLI Tool installation";
 		$msg .= "\n------------------------------\n\n";

@@ -138,18 +138,18 @@ class PHPFrame
         
         // Load core libraries
         if ($class_name == "InputFilter") {
-            $file_path = PEAR_INSTALL_DIR.DS; 
-            $file_path .= "data".DS."PHPFrame".DS."lib".DS."phpinputfilter".DS."inputfilter.php";
+            $file_path = PEAR_Config::singleton()->get("data_dir"); 
+            $file_path .= DS."PHPFrame".DS."lib".DS."phpinputfilter".DS."inputfilter.php";
             @include $file_path;
             return;
         } elseif ($class_name == "PHPMailer") {
-            $file_path = PEAR_INSTALL_DIR.DS; 
-            $file_path .= "data".DS."PHPFrame".DS."lib".DS."phpmailer".DS."phpmailer.php";
+            $file_path = PEAR_Config::singleton()->get("data_dir"); 
+            $file_path .= DS."PHPFrame".DS."lib".DS."phpmailer".DS."phpmailer.php";
             @include $file_path;
             return;
         } elseif ($class_name == "VCARD") {
-            $file_path = PEAR_INSTALL_DIR.DS; 
-            $file_path .= "data".DS."PHPFrame".DS."lib".DS."vcard".DS."vcardclass.inc";
+            $file_path = PEAR_Config::singleton()->get("data_dir"); 
+            $file_path .= DS."PHPFrame".DS."lib".DS."vcard".DS."vcardclass.inc";
             @include $file_path;
             return;
         }
@@ -242,13 +242,13 @@ class PHPFrame
      */
     public static function Config()
     {
-        // If we are in a scaffold app we use the app's config
+        // If we are in an app we use the app's config
         if (defined("PHPFRAME_CONFIG_DIR")) {
             $config_dir = PHPFRAME_CONFIG_DIR;
         // Otherwise we use the system wide default config
         } else {
-			$config_dir = PEAR_INSTALL_DIR.DS;
-			$config_dir .= "data".DS."PHPFrame".DS."etc";
+			$config_dir = PEAR_Config::singleton()->get("data_dir");
+			$config_dir .= DS."PHPFrame".DS."etc";
         }
         
         $config_file = $config_dir.DS."config.xml";
@@ -527,8 +527,8 @@ class PHPFrame
         $lib_xml = PHPFRAME_CONFIG_DIR.DS."lib.xml";
         
         if (!is_file($lib_xml)) {
-            $lib_xml = PEAR_INSTALL_DIR.DS;
-            $lib_xml .= "data".DS."PHPFrame".DS."etc".DS."lib.xml";
+            $lib_xml = PEAR_Config::singleton()->get("data_dir");
+            $lib_xml .= DS."PHPFrame".DS."etc".DS."lib.xml";
         }
         
         // Instanciate new config object

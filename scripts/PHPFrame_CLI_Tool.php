@@ -58,7 +58,7 @@ class PHPFrame_CLI_Tool_postinstall
 			return false;
         }
         
-        $this->_install_path = PEAR_Config::singleton()->get("install_dir");
+        $this->_install_path = PEAR_Config::singleton()->get("php_dir");
         $this->_install_path .= DS."PHPFrame_CLI_Tool";
 
 		$msg = "\nPHPFrame CLI Tool installation";

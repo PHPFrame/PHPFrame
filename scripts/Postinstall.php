@@ -121,7 +121,7 @@ class Postinstall_postinstall
 		}
 		
 		$cli_tool_log_file = $this->_data_dir.DS."CLI_Tool".DS."var";
-        if (!$this->_createCLIToolLogFile($cli_tool_log_file)) {
+        if (!$this->_createLogFile($cli_tool_log_file)) {
             $this->_output("Error creating log file for CLI tool...");
             $this->_output("Installation failed...");
             return false;

@@ -239,7 +239,6 @@ class PHPFrame
      */
     public static function Version() 
     {
-        $str = "PHPFrame\n";
         $str .= "\nRelease version: ";
         $str .= self::RELEASE_VERSION." ".self::RELEASE_STABILITY;
         $str .= "\nAPI version: ";

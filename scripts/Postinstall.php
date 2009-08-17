@@ -86,7 +86,7 @@ class Postinstall_postinstall
         
 		$msg = "\nPHPFrame Post Installation Script";
 		$msg .= "\n--------------------------------\n";
-		$msg .= "\nInstallation directory: ".$this->_install_dir."\n\n";
+		$msg .= "\nInstallation directory: ".$this->_install_dir;
         
 		echo $msg;
 		

@@ -72,7 +72,7 @@ class Postinstall_postinstall
      */
     public function init(PEAR_Config $config, PEAR_PackageFile_v2 $self, $lastInstalledVersion=null)
     {
-        // Include PHPFrame framework]
+        // Include PHPFrame framework
         require_once "PHPFrame.php";
         
         if (!class_exists('PHPFrame')) {
@@ -86,7 +86,7 @@ class Postinstall_postinstall
         
 		$msg = "\nPHPFrame Post Installation Script";
 		$msg .= "\n--------------------------------\n";
-		$msg .= "\nInstallation directory: ".$this->_install_dir;
+		$msg .= "\nInstallation directory: ".$this->_install_dir."\n";
         
 		echo $msg;
 		

@@ -25,7 +25,7 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class scripts_Postinstall_postinstall
+class PHPFrame_Postinstall_postinstall
 {
     /**
      * Path to PEAR install directory

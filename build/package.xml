@@ -151,13 +151,13 @@
    <file baseinstalldir="/" name="LICENSE" role="data" />
    <file baseinstalldir="/" name="README" role="data" />
    
-   <file baseinstalldir="" name="scripts/CLI_Tool.php" role="script">
+   <file baseinstalldir="" name="CLI_Tool.php" role="script">
     <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@package_version@" to="version" type="package-info" />
   </file>
   
-  <file baseinstalldir="" name="scripts/Postinstall.php" role="php">
+  <file baseinstalldir="" name="PHPFrame_Postinstall.php" role="php">
     <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -237,7 +237,7 @@ insalling the PEAR package. If you want to continue type "yes".
  </dependencies>
  <phprelease>
   <filelist>
-   <install as="phpframe" name="scripts/CLI_Tool.php" />
+   <install as="phpframe" name="CLI_Tool.php" />
   </filelist>
  </phprelease>
  <changelog>

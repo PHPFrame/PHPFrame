@@ -113,7 +113,7 @@ class Postinstall_postinstall
      */
     public function run($infoArray, $paramGroupId)
     {	
-        $cli_tool_log_file = $this->_data_dir;
+        $log_file = $this->_data_dir;
         if (!$this->_createLogFile($log_file)) {
 			$this->_output("Error creating log file...");
 			$this->_output("Installation failed...");

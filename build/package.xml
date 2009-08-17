@@ -161,52 +161,19 @@
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@package_version@" to="version" type="package-info" />
     <tasks:postinstallscript>
-    <!-- 
      <tasks:paramgroup>
-      <tasks:id>db</tasks:id>
+      <tasks:id>Log files</tasks:id>
       <tasks:param>
-   	   <tasks:name>DB_DRIVER</tasks:name>
-       <tasks:prompt>Database driver for phpframe command line tool (MySQL, SQLite, ...)</tasks:prompt>
+   	   <tasks:name>CONFIRM</tasks:name>
+       <tasks:prompt>
+        The postinstall script will make log files writable to all users. Only do 
+        this if you will be running PHPFrame as a different user to the one 
+        insalling the PEAR package. If you want to continue type "yes".
+       </tasks:prompt>
        <tasks:type>string</tasks:type>
-       <tasks:default>MySQL</tasks:default>
-      </tasks:param>
-      <tasks:param>
-   	   <tasks:name>DB_HOST</tasks:name>
-       <tasks:prompt>Database host for phpframe command line tool (normally "localhost")</tasks:prompt>
-       <tasks:type>string</tasks:type>
-       <tasks:default>localhost</tasks:default>
-      </tasks:param>
-      <tasks:param>
-   	   <tasks:name>DB_USER</tasks:name>
-       <tasks:prompt>Database user for phpframe command line tool</tasks:prompt>
-       <tasks:type>string</tasks:type>
-       <tasks:default>phpframe-cli</tasks:default>
-      </tasks:param>
-      <tasks:param>
-   	   <tasks:name>DB_PASS</tasks:name>
-       <tasks:prompt>Database password for phpframe command line tool</tasks:prompt>
-       <tasks:type>string</tasks:type>
-      </tasks:param>
-      <tasks:param>
-   	   <tasks:name>DB_NAME</tasks:name>
-       <tasks:prompt>Database name for phpframe command line tool</tasks:prompt>
-       <tasks:type>string</tasks:type>
-       <tasks:default>phpframe-cli</tasks:default>
-      </tasks:param>
-      <tasks:param>
-   	   <tasks:name>DB_ROOT</tasks:name>
-       <tasks:prompt>Database server root user (only needed if you want the installer to create the user for you).</tasks:prompt>
-       <tasks:type>string</tasks:type>
-       <tasks:default>root</tasks:default>
-      </tasks:param>
-      <tasks:param>
-   	   <tasks:name>DB_ROOT_PASS</tasks:name>
-       <tasks:prompt>Database server root password (only needed if you want the installer to create the user for you).</tasks:prompt>
-       <tasks:type>string</tasks:type>
-       <tasks:default></tasks:default>
+       <tasks:default>yes</tasks:default>
       </tasks:param>
      </tasks:paramgroup>
-      -->
     </tasks:postinstallscript>
   </file>
 

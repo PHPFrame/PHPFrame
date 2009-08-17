@@ -6,8 +6,8 @@ if (!class_exists("PEAR_Config")) {
 }
 
 // Build path to CLI tool
-$path_to_cli_tool = PEAR_Config::singleton()->get("data_dir");
-$path_to_cli_tool .= DIRECTORY_SEPARATOR;
+$path_to_cli_tool = PEAR_Config::singleton()->get("data_dir").DIRECTORY_SEPARATOR;
+$path_to_cli_tool .= "PHPFrame".DIRECTORY_SEPARATOR;
 $path_to_cli_tool .= "CLI_Tool".DIRECTORY_SEPARATOR;
 $path_to_cli_tool .= "public".DIRECTORY_SEPARATOR;
 $path_to_cli_tool .= "index.php";

@@ -48,11 +48,41 @@
 	<!-- copy files to tmp dir for publishing -->
 	<target name="copy">
 		<!-- copy data files -->
-		<copy todir="${tmp.dir}" overwrite="true">
-			<fileset dir="${project.basedir}">
-				<exclude name="build" />
+		<copy todir="${tmp.dir}/data" overwrite="true">
+			<fileset dir="${project.basedir}/data">
+				<include name="**" />
 			</fileset>
 		</copy>
+		
+		<!-- copy example files -->
+        <copy todir="${tmp.dir}/examples" overwrite="true">
+            <fileset dir="${project.basedir}/examples">
+                <include name="**" />
+            </fileset>
+        </copy>
+		
+		<!-- copy script files -->
+        <copy todir="${tmp.dir}/scripts" overwrite="true">
+            <fileset dir="${project.basedir}/scripts">
+                <include name="**" />
+            </fileset>
+        </copy>
+		
+		<!-- copy src files -->
+        <copy todir="${tmp.dir}" overwrite="true">
+            <fileset dir="${project.basedir}/src">
+                <include name="**" />
+            </fileset>
+        </copy>
+		
+		<!-- copy info files -->
+        <copy todir="${tmp.dir}" overwrite="true">
+        	<fileset dir="${project.basedir}">
+                <include name="CREDITS" />
+        		<include name="LICENSE" />
+                <include name="README" />
+            </fileset>
+        </copy>
 		
 		<!-- copy package.xml to use as template -->
 		<copy todir="${tmp.dir}" overwrite="true">

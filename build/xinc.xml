@@ -1,57 +1,57 @@
 <?xml version="1.0"?>
 <xinc>
-	
-	<project name="PHPFrame">
-		
-		<property name="dir" value="${projectdir}/${project.name}" />
-		<property name="build_dir" value="${dir}/build" />
-		
-		<schedule interval="60" />
-		
-		<modificationset>
-			<svn directory="${dir}" update="true" />
-			<!-- <buildalways/> -->
-		</modificationset>
-		
-		<builders>
-			<phingbuilder buildfile="${build_dir}/build.xml" target="build" />
-		</builders>
-		
-		<publishers>
-			<phpUnitTestResults file="${build_dir}/report/logfile.xml" />
-			
-			<onfailure>
-				<email to="phpframe-dev@googlegroups.com" 
-					   subject="${project.name} build ${build.number} failed" 
-					   message="Build of project failed" />
-			</onfailure>
-				
-			<onsuccess>
-				<!-- Make deliverable source code -->
-				<phingPublisher buildfile="${build_dir}/publish.xml" target="build" />
-				<artifactspublisher file="${build_dir}/publish.xml" />
-				<deliverable file="${build_dir}/dist/${project.name}-${build.label}.tgz" 
-							 alias="${project.name}.tgz" />
-				
-				<!-- Generate docs with phpdoc -->
-				<phingPublisher buildfile="${build_dir}/makedoc.xml" target="build" />
-				<artifactspublisher file="${build_dir}/makedoc.xml" />
-				<documentation file="${build_dir}/doc" 
-				               alias="PHPDoc Documentation" 
-				               index="${build_dir}/doc/index.html"/>
-				
-				<email to="phpframe-dev@googlegroups.com" 
-					   subject="${project.name} build ${build.number} success" 
-					   message="Build of project was successful" />
-			</onsuccess>
-				
-			<onrecovery>
-				<email to="phpframe-dev@googlegroups.com" 
-					   subject="${project.name} build ${build.number} was recovered" 
-					   message="The build passed after having failed before." />
-			</onrecovery>
-		</publishers>
-		
-	</project>
+    
+    <project name="PHPFrame">
+        
+        <property name="dir" value="${projectdir}/${project.name}" />
+        <property name="build_dir" value="${dir}/build" />
+        
+        <schedule interval="60" />
+        
+        <modificationset>
+            <svn directory="${dir}" update="true" />
+            <!-- <buildalways/> -->
+        </modificationset>
+        
+        <builders>
+            <phingbuilder buildfile="${build_dir}/build.xml" target="build" />
+        </builders>
+        
+        <publishers>
+            <phpUnitTestResults file="${build_dir}/report/logfile.xml" />
+            
+            <onfailure>
+                <email to="phpframe-dev@googlegroups.com" 
+                       subject="${project.name} build ${build.number} failed" 
+                       message="Build of project failed" />
+            </onfailure>
+                
+            <onsuccess>
+                <!-- Make deliverable source code -->
+                <phingPublisher buildfile="${build_dir}/publish.xml" target="build" />
+                <artifactspublisher file="${build_dir}/publish.xml" />
+                <deliverable file="${build_dir}/dist/${project.name}-${build.label}.tgz" 
+                             alias="${project.name}.tgz" />
+                
+                <!-- Generate docs with phpdoc -->
+                <phingPublisher buildfile="${build_dir}/makedoc.xml" target="build" />
+                <artifactspublisher file="${build_dir}/makedoc.xml" />
+                <documentation file="${build_dir}/doc" 
+                               alias="PHPDoc Documentation" 
+                               index="${build_dir}/doc/index.html"/>
+                
+                <email to="phpframe-dev@googlegroups.com" 
+                       subject="${project.name} build ${build.number} success" 
+                       message="Build of project was successful" />
+            </onsuccess>
+                
+            <onrecovery>
+                <email to="phpframe-dev@googlegroups.com" 
+                       subject="${project.name} build ${build.number} was recovered" 
+                       message="The build passed after having failed before." />
+            </onrecovery>
+        </publishers>
+        
+    </project>
 
 </xinc>

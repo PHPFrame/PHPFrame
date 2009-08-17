@@ -40,7 +40,7 @@ class PHPFrame_Postinstall_postinstall
      */
     private $_data_dir;
     
-	/**
+    /**
      * Constructor
      * 
      * @access public
@@ -76,20 +76,20 @@ class PHPFrame_Postinstall_postinstall
         require_once "PHPFrame.php";
         
         if (!class_exists('PHPFrame')) {
-			$this->_output("Missing PHPFrame. Please check your PEAR installation.");
-			return false;
+            $this->_output("Missing PHPFrame. Please check your PEAR installation.");
+            return false;
         }
         
         $this->_install_dir = PEAR_Config::singleton()->get("php_dir");
         $this->_data_dir = PEAR_Config::singleton()->get("data_dir");
         $this->_data_dir .= DS."PHPFrame";
         
-		$msg = "\nPHPFrame Post Installation Script";
-		$msg .= "\n--------------------------------\n";
-		$msg .= "\nInstallation directory: ".$this->_install_dir."\n";
+        $msg = "\nPHPFrame Post Installation Script";
+        $msg .= "\n--------------------------------\n";
+        $msg .= "\nInstallation directory: ".$this->_install_dir."\n";
         
-		echo $msg;
-		
+        echo $msg;
+        
         return true;
     }
     
@@ -120,21 +120,21 @@ class PHPFrame_Postinstall_postinstall
         
         $log_file = $this->_data_dir;
         if (!$this->_createLogFile($log_file)) {
-			$this->_output("Error creating log file...");
-			$this->_output("Installation failed...");
-			return false;
-		}
-		
-		$cli_tool_log_file = $this->_data_dir.DS."CLI_Tool".DS."var";
+            $this->_output("Error creating log file...");
+            $this->_output("Installation failed...");
+            return false;
+        }
+        
+        $cli_tool_log_file = $this->_data_dir.DS."CLI_Tool".DS."var";
         if (!$this->_createLogFile($cli_tool_log_file)) {
             $this->_output("Error creating log file for CLI tool...");
             $this->_output("Installation failed...");
             return false;
         }
-		
-		// If we got here installation succeded
-		$this->_output("PHPFrame postinstall completed successfully...");
-		return true;
+        
+        // If we got here installation succeded
+        $this->_output("PHPFrame postinstall completed successfully...");
+        return true;
     }
     
     /**
@@ -180,19 +180,19 @@ class PHPFrame_Postinstall_postinstall
      * @return void
      * @since  1.0
      */
-	private function _output($msg, $trigger_error=false)
-	{
-		// Convert messages in array format to string
-		if (is_array($msg)) {
-			$msg = implode("\n", $msg);
-		}
-		
-		// Echo message to user
-		echo $msg."\n";
-		
-		// Trigger PHP error is flag passed
-		if ($trigger_error) {
-			trigger_error($msg);
-		}
-	}
+    private function _output($msg, $trigger_error=false)
+    {
+        // Convert messages in array format to string
+        if (is_array($msg)) {
+            $msg = implode("\n", $msg);
+        }
+        
+        // Echo message to user
+        echo $msg."\n";
+        
+        // Trigger PHP error is flag passed
+        if ($trigger_error) {
+            trigger_error($msg);
+        }
+    }
 }

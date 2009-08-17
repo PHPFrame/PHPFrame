@@ -33,11 +33,11 @@ class PHPFrame_Utils_Exec
     
     public function __construct($cmd)
     {
-		$this->_cmd = (string) $cmd;
+        $this->_cmd = (string) $cmd;
         
         exec($this->_cmd, $this->_output, $this->_return_var);
 
-		return $this;
+        return $this;
     }
     
     public function getCmd()

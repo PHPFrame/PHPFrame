@@ -47,8 +47,8 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         if (defined("PHPFRAME_VAR_DIR")) {
             $log_dir = PHPFRAME_VAR_DIR;
         } else {
-			$log_dir = PEAR_Config::singleton()->get('data_dir');
-			$log_dir .= DS."PHPFrame";
+            $log_dir = PEAR_Config::singleton()->get('data_dir');
+            $log_dir .= DS."PHPFrame";
         }
         
         $log_file = $log_dir.DS."log";
@@ -125,11 +125,11 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         
         // Add log separator
         $info = "\n\n---\n";
-		
-		// Add date and time
+        
+        // Add date and time
         $info .= "[".date("Y-m-d H:i:s")."] ";
-		
-		// Add IP address if available
+        
+        // Add IP address if available
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $info .= "[ip:".$_SERVER['REMOTE_ADDR']."] ";
         } else {

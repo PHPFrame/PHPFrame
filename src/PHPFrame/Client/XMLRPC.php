@@ -27,7 +27,7 @@
  */
 class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
 {
-	
+    
     /**
      * Check if this is the correct helper for the client being used
      * 
@@ -59,7 +59,7 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
                 }
             }
             else{
-            	throw new PHPFrame_Exception("Given xml is invalid!");
+                throw new PHPFrame_Exception("Given xml is invalid!");
             }
         }
         return false;
@@ -116,10 +116,10 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
             $this->_checkAPIPermisssions();
         } catch (PHPFrame_Exception_XMLRPC $e) {
             echo $e->getXMLRPCFault();
-        	exit;
+            exit;
         }
         
-    	$response->setDocument(new PHPFrame_Document_RPC());    	
+        $response->setDocument(new PHPFrame_Document_RPC());        
     }
     
     public function redirect($url)
@@ -181,33 +181,33 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         $query_result = $domXPath->query($query);
         //look at the first struct element members to identify parameter values
         if (
-        	$query_result instanceof DOMNodeList 
-        	&& $query_result->length!=0 
-        	&& $query_result->item(0)->hasChildNodes()
+            $query_result instanceof DOMNodeList 
+            && $query_result->length!=0 
+            && $query_result->item(0)->hasChildNodes()
         ) {
-        	$parameters = array();
-        	foreach($query_result as $parameter){
-        		$parameters[] = $this->_parseXMLRPCRecurse($domXPath, $parameter);
-        	}
-        	try{
-        	//check if component action request is valid:
-        	$paramMap = $this->_getComponentActionParameterMapping($array['request']['component'], $array['request']['action'], $parameters);
-        	} catch (PHPFrame_Exception_XMLRPC $e){
-        		echo $e->getXMLRPCFault();
-        		exit;
-        	}
+            $parameters = array();
+            foreach($query_result as $parameter){
+                $parameters[] = $this->_parseXMLRPCRecurse($domXPath, $parameter);
+            }
+            try{
+            //check if component action request is valid:
+            $paramMap = $this->_getComponentActionParameterMapping($array['request']['component'], $array['request']['action'], $parameters);
+            } catch (PHPFrame_Exception_XMLRPC $e){
+                echo $e->getXMLRPCFault();
+                exit;
+            }
             foreach($paramMap as $key=>$value){
-            	$array['request'][$key] = $value;
+                $array['request'][$key] = $value;
             }
         }
         else{
-        	try{
-        		//check if component action request is valid:
-        		$paramMap = $this->_getComponentActionParameterMapping($array['request']['component'], $array['request']['action'], array());
-        	} catch (PHPFrame_Exception_XMLRPC $e){
-        		echo $e->getXMLRPCFault();
-        		exit;
-        	}
+            try{
+                //check if component action request is valid:
+                $paramMap = $this->_getComponentActionParameterMapping($array['request']['component'], $array['request']['action'], array());
+            } catch (PHPFrame_Exception_XMLRPC $e){
+                echo $e->getXMLRPCFault();
+                exit;
+            }
         }
 
         return $array;
@@ -224,37 +224,37 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      * if the node is a struct, an associative array with key value pairs is returned, 
      * if the node is an array 
      */
- 	private function _parseXMLRPCRecurse($domXPath, $node) {
- 		if (!(($node instanceof DOMNode) && $node->nodeName=='value')){
- 			throw new PHPFrame_Exception("Invalid parameter type, nodes must be of type DOMNode and must be a value node!");
- 		}
-    	//check if current value is a struct, array or scalar type
-    	if ($node->firstChild->nodeName=='struct'){
-    		$newStruct = array();
-    		$query = 'struct/member';
-    		$members = $domXPath->query($query, $node);
-    		foreach ($members as $member){
-    			$query = 'name';
-    			$key = $domXPath->query($query, $member)->item(0)->nodeValue;
-    			$query = 'value';
-    			$value = $this->_parseXMLRPCRecurse($domXPath, $domXPath->query($query, $member)->item(0));
-    			$newStruct[$key] = $value;
-    		}
-    		return $newStruct;
-    	}
-    	else if ($node->firstChild->nodeName=='array'){
-    		$newArray = array();
-    		$query = 'array/data/value';
-    		$values = $domXPath->query($query, $node);
-    		foreach ($values as $value){
-    			$newArray[] = $this->_parseXMLRPCRecurse($domXPath, $value);
-    		}
-    		return $newArray;
-    	}
-    	else{//value node must a scalar type
-    		$leafValue = $node->firstChild;
-    		return $this->_nodeScalarValue($leafValue);
-    	}
+     private function _parseXMLRPCRecurse($domXPath, $node) {
+         if (!(($node instanceof DOMNode) && $node->nodeName=='value')){
+             throw new PHPFrame_Exception("Invalid parameter type, nodes must be of type DOMNode and must be a value node!");
+         }
+        //check if current value is a struct, array or scalar type
+        if ($node->firstChild->nodeName=='struct'){
+            $newStruct = array();
+            $query = 'struct/member';
+            $members = $domXPath->query($query, $node);
+            foreach ($members as $member){
+                $query = 'name';
+                $key = $domXPath->query($query, $member)->item(0)->nodeValue;
+                $query = 'value';
+                $value = $this->_parseXMLRPCRecurse($domXPath, $domXPath->query($query, $member)->item(0));
+                $newStruct[$key] = $value;
+            }
+            return $newStruct;
+        }
+        else if ($node->firstChild->nodeName=='array'){
+            $newArray = array();
+            $query = 'array/data/value';
+            $values = $domXPath->query($query, $node);
+            foreach ($values as $value){
+                $newArray[] = $this->_parseXMLRPCRecurse($domXPath, $value);
+            }
+            return $newArray;
+        }
+        else{//value node must a scalar type
+            $leafValue = $node->firstChild;
+            return $this->_nodeScalarValue($leafValue);
+        }
     }
     
     /**
@@ -275,58 +275,58 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      */
     private function _getComponentActionParameterMapping($component, $action, $params)
     {
-    	$component = substr($component, 4);
-    	$reflectionClass = $this->_getComponentClass($component);
-    	if (!$reflectionClass){
-    		throw new PHPFrame_Exception_XMLRPC('No such component exists: '.$component, PHPFrame_Exception_XMLRPC::INVALID_COMPONENT);
-    		return;
-    	}
-    	if (!$reflectionClass->hasMethod($action)){
-    		throw new PHPFrame_Exception_XMLRPC('No such action: '.$action.' exists in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_ACTION);
-    		return;
-    	}
-    	$actionMethod = $reflectionClass->getMethod($action);
-    	if (!$actionMethod->isPublic()){
-    		throw new PHPFrame_Exception_XMLRPC('Component action: '.$action.' is inaccessible in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_ACTION);
-    		return;
-    	}
-    	$reflectionParameters = $actionMethod->getParameters();
-    	$numParams = count($reflectionParameters);
-    	$minReqParams = $actionMethod->getNumberOfRequiredParameters();
-    	if (count($params) > $numParams) {
-    		throw new PHPFrame_Exception_XMLRPC('Too many parameters have been specified for action: '.$action.' in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_NUMBER_PARAMETERS);
-    		return;
-    	}
-    	elseif (count($params) < $minReqParams) {
-    		throw new PHPFrame_Exception_XMLRPC('Too few parameters specified for action: '.$action.' in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_NUMBER_PARAMETERS);
-    	}
-    	$paramMap = array();
-    	$paramIndex = 0;
-    	foreach ($reflectionParameters as $reflectionParam){
-    		if ($paramIndex<count($params)){
-	    		$class = $reflectionParam->getClass();
-	    		$paramPosition = $reflectionParam->getPosition();
-	    		if ($reflectionParam->isArray() && !is_array($params[$paramPosition])){
-	    			throw new PHPFrame_Exception_XMLRPC('Parameter type mis-match for parameter '.$paramPosition.', expected an array, got primitive type', PHPFrame_Exception_XMLRPC::INVALID_PARAMETER_TYPE);
-	    			return;
-	    		}
-	    		else if (!empty($class) && !is_array($params[$paramPosition])){
-	    			throw new PHPFrame_Exception_XMLRPC('Parameter type mis-match for parameter '.$paramPosition.', expected a struct, got primitive type', PHPFrame_Exception_XMLRPC::INVALID_PARAMETER_TYPE);
-	    			return;
-	    		}
-	    		else if (!$reflectionParam->isArray() && empty($class) && is_array($params[$paramPosition])){
-	    			throw new PHPFrame_Exception_XMLRPC('Parameter type mis-match for parameter '.$paramPosition.', expected a primitive, got a struct/array', PHPFrame_Exception_XMLRPC::INVALID_PARAMETER_TYPE);
-	    			return;
-	    		}
-	    		else{
-	    			$paramMap[$reflectionParam->getName()] = $params[$paramPosition];
-	    		}
-	    		$paramIndex++;
-    		}
-    		else
-    			break;
-    	}
-    	return $paramMap;
+        $component = substr($component, 4);
+        $reflectionClass = $this->_getComponentClass($component);
+        if (!$reflectionClass){
+            throw new PHPFrame_Exception_XMLRPC('No such component exists: '.$component, PHPFrame_Exception_XMLRPC::INVALID_COMPONENT);
+            return;
+        }
+        if (!$reflectionClass->hasMethod($action)){
+            throw new PHPFrame_Exception_XMLRPC('No such action: '.$action.' exists in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_ACTION);
+            return;
+        }
+        $actionMethod = $reflectionClass->getMethod($action);
+        if (!$actionMethod->isPublic()){
+            throw new PHPFrame_Exception_XMLRPC('Component action: '.$action.' is inaccessible in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_ACTION);
+            return;
+        }
+        $reflectionParameters = $actionMethod->getParameters();
+        $numParams = count($reflectionParameters);
+        $minReqParams = $actionMethod->getNumberOfRequiredParameters();
+        if (count($params) > $numParams) {
+            throw new PHPFrame_Exception_XMLRPC('Too many parameters have been specified for action: '.$action.' in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_NUMBER_PARAMETERS);
+            return;
+        }
+        elseif (count($params) < $minReqParams) {
+            throw new PHPFrame_Exception_XMLRPC('Too few parameters specified for action: '.$action.' in component: '.$component, PHPFrame_Exception_XMLRPC::INVALID_NUMBER_PARAMETERS);
+        }
+        $paramMap = array();
+        $paramIndex = 0;
+        foreach ($reflectionParameters as $reflectionParam){
+            if ($paramIndex<count($params)){
+                $class = $reflectionParam->getClass();
+                $paramPosition = $reflectionParam->getPosition();
+                if ($reflectionParam->isArray() && !is_array($params[$paramPosition])){
+                    throw new PHPFrame_Exception_XMLRPC('Parameter type mis-match for parameter '.$paramPosition.', expected an array, got primitive type', PHPFrame_Exception_XMLRPC::INVALID_PARAMETER_TYPE);
+                    return;
+                }
+                else if (!empty($class) && !is_array($params[$paramPosition])){
+                    throw new PHPFrame_Exception_XMLRPC('Parameter type mis-match for parameter '.$paramPosition.', expected a struct, got primitive type', PHPFrame_Exception_XMLRPC::INVALID_PARAMETER_TYPE);
+                    return;
+                }
+                else if (!$reflectionParam->isArray() && empty($class) && is_array($params[$paramPosition])){
+                    throw new PHPFrame_Exception_XMLRPC('Parameter type mis-match for parameter '.$paramPosition.', expected a primitive, got a struct/array', PHPFrame_Exception_XMLRPC::INVALID_PARAMETER_TYPE);
+                    return;
+                }
+                else{
+                    $paramMap[$reflectionParam->getName()] = $params[$paramPosition];
+                }
+                $paramIndex++;
+            }
+            else
+                break;
+        }
+        return $paramMap;
     }
     
     /**
@@ -340,14 +340,14 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      */
     private function _getComponentClass($component)
     {
-    	$class_name = $component."Controller";
-    	// make a reflection object
-    	try{
+        $class_name = $component."Controller";
+        // make a reflection object
+        try{
         $reflectionObj = new ReflectionClass($class_name);
-    	} catch (Exception $e){
-    		return FALSE;
-    	}
-    	// Check if class is instantiable
+        } catch (Exception $e){
+            return FALSE;
+        }
+        // Check if class is instantiable
         if ($reflectionObj->isInstantiable()) {
             // Try to get the constructor
             $constructor = $reflectionObj->getConstructor();
@@ -363,7 +363,7 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         if ($reflectionObj->hasMethod('getInstance')) {
             $get_instance = $reflectionObj->getMethod('getInstance');
             if ($get_instance->isPublic() && $get_instance->isStatic()) {
-            	return $reflectionObj;
+                return $reflectionObj;
             }
         }
     }    
@@ -380,38 +380,38 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      */
     private function _nodeScalarValue($node)
     {
-    	if (!($node instanceof DOMNode))
-    		throw new PHPFrame_Exception("Invalid parameter, node must be of type DOMNode!");
-    	$nodeName = $node->nodeName;
-    	$time_reg = '/(^[0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2}$)/';
-    	switch ($nodeName){
-    		case 'i4':
-    		case 'int':
-    			$value = (int)$node->nodeValue;
-    			break;
-    		case 'boolean':
-    			$value = (boolean)$node->nodeValue;
-    			break;
-    		case 'string':
-    		case 'base64':
-    			$value = (string)$node->nodeValue;
-    			break;
-    		case 'double':
-    			$value = (float)$node->nodeValue;
-    			break;
-    		case 'dateTime.iso8601':
-    			$matches = array();
-    			$isValidTime = preg_match($time_reg, $node->nodeValue, $matches);
-    			if ($isValidTime!=1){
-    				throw new PHPFrame_Exception('Invalid dateTime format found for value '.$node->nodeValue.'!');
-    			}
-    			else
-    				$value = mktime($matches[4], $matches[5], $matches[6], $matches[2], $matches[3], $matches[1]);
-    			break;
-    		default:
-    			$value = "";
-    	}
-    	return $value;
+        if (!($node instanceof DOMNode))
+            throw new PHPFrame_Exception("Invalid parameter, node must be of type DOMNode!");
+        $nodeName = $node->nodeName;
+        $time_reg = '/(^[0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2}$)/';
+        switch ($nodeName){
+            case 'i4':
+            case 'int':
+                $value = (int)$node->nodeValue;
+                break;
+            case 'boolean':
+                $value = (boolean)$node->nodeValue;
+                break;
+            case 'string':
+            case 'base64':
+                $value = (string)$node->nodeValue;
+                break;
+            case 'double':
+                $value = (float)$node->nodeValue;
+                break;
+            case 'dateTime.iso8601':
+                $matches = array();
+                $isValidTime = preg_match($time_reg, $node->nodeValue, $matches);
+                if ($isValidTime!=1){
+                    throw new PHPFrame_Exception('Invalid dateTime format found for value '.$node->nodeValue.'!');
+                }
+                else
+                    $value = mktime($matches[4], $matches[5], $matches[6], $matches[2], $matches[3], $matches[1]);
+                break;
+            default:
+                $value = "";
+        }
+        return $value;
     }
     
     /**
@@ -485,15 +485,15 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      */
     private function _checkAPIPermisssions()
     {
-    	// Check permissions before we execute
+        // Check permissions before we execute
         $component = PHPFrame::Request()->getComponentName();
         $action = PHPFrame::Request()->getAction();
         $groupid = PHPFrame::Session()->getGroupId();
         $permissions = PHPFrame::AppRegistry()->getPermissions();
         if ($permissions->authorise($component, $action, $groupid) !== true) {
-        	$msg = "Insufficient XMLRPC API permissions to perform action. XMLRPC client is not allowed to ";
-        	$msg .= "perform the action: $action on component: $component.";
-        	throw new PHPFrame_Exception_XMLRPC($msg, PHPFrame_Exception_XMLRPC::INVALID_PERMISSIONS);
+            $msg = "Insufficient XMLRPC API permissions to perform action. XMLRPC client is not allowed to ";
+            $msg .= "perform the action: $action on component: $component.";
+            throw new PHPFrame_Exception_XMLRPC($msg, PHPFrame_Exception_XMLRPC::INVALID_PERMISSIONS);
         }
     }
 }

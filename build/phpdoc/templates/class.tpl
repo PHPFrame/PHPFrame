@@ -1,11 +1,11 @@
 {include file="header.tpl" eltype="class" hasel=true contents=$classcontents}
 
 {if $conflicts.conflict_type}<div class="warning">Conflicts with classes:<br />
-	{section name=me loop=$conflicts.conflicts}
-	{$conflicts.conflicts[me]}<br />
-	{/section}
+    {section name=me loop=$conflicts.conflicts}
+    {$conflicts.conflicts[me]}<br />
+    {/section}
 </div>
-	{/if}
+    {/if}
 {* original <div class="warning">{$conflicts</div> *}
 
 <table width="100%" border="0">
@@ -17,7 +17,7 @@
 {if $tutorial}
 <h4 class="classtutorial">{if $is_interface}Interface{else}Class{/if} Tutorial:</h4>
 <ul>
-	<li>{$tutorial}</li>
+    <li>{$tutorial}</li>
 </ul>
 {/if}
 {if count($tags) > 0}
@@ -118,7 +118,7 @@
 {section name=kids loop=$children}
 <dl>
 <dt>{$children[kids].link}</dt>
-	<dd>{$children[kids].sdesc}</dd>
+    <dd>{$children[kids].sdesc}</dd>
 </dl>
 {/section}
 </div>

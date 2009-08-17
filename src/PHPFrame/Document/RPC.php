@@ -62,31 +62,31 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     public function render(PHPFrame_MVC_View $view, $apply_theme=null) 
     {
-    	$events = PHPFrame::Session()->getSysevents()->asArray();
-    	
-    	if (
-    		is_array($events)
-    		&& isset($events['summary'])
-    		&& count($events['summary'])>1
-    	){
-    		$summary = $events['summary'];
-    		if ($summary[0] == 'error')
-    		{
-    			$this->_makeFaultPayload(5,$summary[1]);
-    		}
-    		else
-    		{
-    			$view->addData('sysevents',$summary);
-				$this->_makeParamPayload($view->getData());	
-    		}
-    	}
-    	else
-    	{
-    		$this->_makeParamPayload($view->getData());
-    	} 
+        $events = PHPFrame::Session()->getSysevents()->asArray();
+        
+        if (
+            is_array($events)
+            && isset($events['summary'])
+            && count($events['summary'])>1
+        ){
+            $summary = $events['summary'];
+            if ($summary[0] == 'error')
+            {
+                $this->_makeFaultPayload(5,$summary[1]);
+            }
+            else
+            {
+                $view->addData('sysevents',$summary);
+                $this->_makeParamPayload($view->getData());    
+            }
+        }
+        else
+        {
+            $this->_makeParamPayload($view->getData());
+        } 
     }
     
-	/**
+    /**
      * Make Fault Payload
      * 
      * This method is used to build an XML-RPC Falult Response with given faultCode and description
@@ -100,14 +100,14 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     private function _makeFaultPayload($fault_code, $fault_string)
     {
-    	$parent_node = $this->dom->getElementsByTagName("methodResponse")->item(0);
-		$parent_node = $this->addNode($parent_node,'fault');
-		$parent_node = $this->addNode($parent_node,'value');
-		$fault_array = array('faultCode'=>$fault_code,'faultString'=>$fault_string);
-		$parent_node = $this->_addStruct($parent_node,$fault_array);
+        $parent_node = $this->dom->getElementsByTagName("methodResponse")->item(0);
+        $parent_node = $this->addNode($parent_node,'fault');
+        $parent_node = $this->addNode($parent_node,'value');
+        $fault_array = array('faultCode'=>$fault_code,'faultString'=>$fault_string);
+        $parent_node = $this->_addStruct($parent_node,$fault_array);
     }
     
-	/**
+    /**
      * Make Param Payload
      * 
      * This method is used to build an XML-RPC Param Response from an array
@@ -120,13 +120,13 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     private function _makeParamPayload($param_value)
     {
- 		$parent_node = $this->dom->getElementsByTagName("methodResponse")->item(0);
-		$parent_node = $this->addNode($parent_node,'params');
-		$parent_node = $this->addNode($parent_node,'param');
-		$this->_buildNode($parent_node,'value',$param_value);
+         $parent_node = $this->dom->getElementsByTagName("methodResponse")->item(0);
+        $parent_node = $this->addNode($parent_node,'params');
+        $parent_node = $this->addNode($parent_node,'param');
+        $this->_buildNode($parent_node,'value',$param_value);
     }
     
-	/**
+    /**
      * Build Node
      * 
      * This method builds a DOMNode Tree|Leaf from the node Parent, Name and Value
@@ -140,47 +140,47 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     private function _buildNode($parent_node, $node_name, $node_value)
     {
-    	if (!empty($node_value))
-    	{
-    		$parent_node = $this->addNode($parent_node, $node_name);
-    		
-    		if (
-    			$node_value instanceof PHPFrame_User 
-    			|| $node_value instanceof PHPFrame_Database_RowCollection
-    			|| $node_value instanceof PHPFrame_Database_Row 
-    		){
-    			$node_value = $node_value->toArray();
-    		}
-    		
-	    	if (is_array($node_value))
-	    	{ 
-	    		if ($this->_isAssoc($node_value)){
-					$this->_addStruct($parent_node, $node_value);
-	    		}
-				else{
-					$this->_addArray($parent_node, $node_value);;
-				}
-	    	}
-	    	else
-	    	{ 
-				if ($parent_node->nodeName == 'value') 
-				{
-					$parent_node = $this->_addType($parent_node, $node_value);	
-				}
-				$this->addNodeContent($parent_node,$node_value);
-	    	}
-    	}
-    	else
-    	{
-    		if ($node_name == 'value') 
-			{
-				$parent_node = $this->addNode($parent_node, 'value');
-				$this->addNodeContent($parent_node,'NULL');	
-			}
-    	}
+        if (!empty($node_value))
+        {
+            $parent_node = $this->addNode($parent_node, $node_name);
+            
+            if (
+                $node_value instanceof PHPFrame_User 
+                || $node_value instanceof PHPFrame_Database_RowCollection
+                || $node_value instanceof PHPFrame_Database_Row 
+            ){
+                $node_value = $node_value->toArray();
+            }
+            
+            if (is_array($node_value))
+            { 
+                if ($this->_isAssoc($node_value)){
+                    $this->_addStruct($parent_node, $node_value);
+                }
+                else{
+                    $this->_addArray($parent_node, $node_value);;
+                }
+            }
+            else
+            { 
+                if ($parent_node->nodeName == 'value') 
+                {
+                    $parent_node = $this->_addType($parent_node, $node_value);    
+                }
+                $this->addNodeContent($parent_node,$node_value);
+            }
+        }
+        else
+        {
+            if ($node_name == 'value') 
+            {
+                $parent_node = $this->addNode($parent_node, 'value');
+                $this->addNodeContent($parent_node,'NULL');    
+            }
+        }
     }
        
-	/**
+    /**
      * Is Assoc
      * 
      * This method is used to check if an array is an associative array
@@ -191,25 +191,25 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      * @since  1.0
      * @return boolean True if array is associative or empty.
      */
-	private function _isAssoc($test_array)
-	{
-		$assoc = false;
-		if (empty($test_array)) return true;
-		$indexes = array_keys($test_array);
-		$counter = 0;
-		foreach($indexes as $index)
-		{
-			if ($counter !== $index)
-			{
-				$assoc = true;
-			}
-			$counter++;
-		}
-		unset($index);
-		return $assoc;
-	}
+    private function _isAssoc($test_array)
+    {
+        $assoc = false;
+        if (empty($test_array)) return true;
+        $indexes = array_keys($test_array);
+        $counter = 0;
+        foreach($indexes as $index)
+        {
+            if ($counter !== $index)
+            {
+                $assoc = true;
+            }
+            $counter++;
+        }
+        unset($index);
+        return $assoc;
+    }
     
-	/**
+    /**
      * Make Type
      * 
      * This method is used to wrap node values in tags denoting their type
@@ -222,18 +222,18 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     private function _addType($parent_node, $node_value)
     {
-    	$type = 'string';
-    	if (is_int($node_value)) $type = 'int';
-    	if (is_bool($node_value)) $type = 'boolean';
-    	if (is_float($node_value)) $type = 'double';
-    	if (is_double($node_value)) $type = 'double';
-    	
-    	$parent_node = $this->addNode($parent_node, $type);
-    	
-    	return $parent_node;
+        $type = 'string';
+        if (is_int($node_value)) $type = 'int';
+        if (is_bool($node_value)) $type = 'boolean';
+        if (is_float($node_value)) $type = 'double';
+        if (is_double($node_value)) $type = 'double';
+        
+        $parent_node = $this->addNode($parent_node, $type);
+        
+        return $parent_node;
     }
     
-	/**
+    /**
      * Make Struct
      * 
      * This method is used to build an XML-RPC <struct> structure from an assoc_array
@@ -245,17 +245,17 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     private function _addStruct($parent_node, $assoc_array)
     {
-    	$parent_node = $this->addNode($parent_node,'struct');
-    	
-    	foreach($assoc_array as $key => $value)
-    	{
-			$local_parent = $this->addNode($parent_node,'member');
-			$this->addNode($local_parent, 'name', null, $key);
-			$this->_buildNode($local_parent, 'value', $value);
-    	}
+        $parent_node = $this->addNode($parent_node,'struct');
+        
+        foreach($assoc_array as $key => $value)
+        {
+            $local_parent = $this->addNode($parent_node,'member');
+            $this->addNode($local_parent, 'name', null, $key);
+            $this->_buildNode($local_parent, 'value', $value);
+        }
     }
     
-	/**
+    /**
      * Make Array
      * 
      * This method is used to build an XML-RPC <array> structure from an indexed array
@@ -267,12 +267,12 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     private function _addArray($parent_node, $index_array)
     {
-    	$parent_node = $this->addNode($parent_node,'array');
-    	$parent_node = $this->addNode($parent_node,'data');
-    	foreach($index_array as $value)
-    	{
-    		$this->_buildNode($parent_node, 'value', $value);
-    	}
+        $parent_node = $this->addNode($parent_node,'array');
+        $parent_node = $this->addNode($parent_node,'data');
+        foreach($index_array as $value)
+        {
+            $this->_buildNode($parent_node, 'value', $value);
+        }
     }
     
     /**
@@ -289,42 +289,42 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     private function _indent($response)
     {
-	    $return_array = explode('>',$response);
-		$depth = -1;
-		for($i = 0; $i < count($return_array) - 1; $i++)
-		{
-			if(
-				strpos($return_array[$i],"\n")!==false
-			){
-				$return_array[$i] = trim($return_array[$i]);
-			}
-					
-			$end_tag = strpos($return_array[$i], "</");
-			if($end_tag!==false)
-			{
-				if ($end_tag != 0)
-				{
-					$return_array[$i] = $this->_padding($depth) . $return_array[$i];
-					$depth--; 
-					$return_array[$i] = str_replace("</","\r\n".$this->_padding($depth)."</",$return_array[$i]);
-				}
-				else
-				{
-					$depth--;
-					$return_array[$i] = $this->_padding($depth) . $return_array[$i];
-				}
-				$depth--;
-			}
-			else
-			{
-				$return_array[$i] = $this->_padding($depth) . $return_array[$i];
-			}
-			
-			$return_array[$i] = $return_array[$i] . ">\r\n";
-			$depth++;
-		}
-		$response = implode($return_array);
-		return $response;
+        $return_array = explode('>',$response);
+        $depth = -1;
+        for($i = 0; $i < count($return_array) - 1; $i++)
+        {
+            if(
+                strpos($return_array[$i],"\n")!==false
+            ){
+                $return_array[$i] = trim($return_array[$i]);
+            }
+                    
+            $end_tag = strpos($return_array[$i], "</");
+            if($end_tag!==false)
+            {
+                if ($end_tag != 0)
+                {
+                    $return_array[$i] = $this->_padding($depth) . $return_array[$i];
+                    $depth--; 
+                    $return_array[$i] = str_replace("</","\r\n".$this->_padding($depth)."</",$return_array[$i]);
+                }
+                else
+                {
+                    $depth--;
+                    $return_array[$i] = $this->_padding($depth) . $return_array[$i];
+                }
+                $depth--;
+            }
+            else
+            {
+                $return_array[$i] = $this->_padding($depth) . $return_array[$i];
+            }
+            
+            $return_array[$i] = $return_array[$i] . ">\r\n";
+            $depth++;
+        }
+        $response = implode($return_array);
+        return $response;
     }
     
     /**
@@ -337,11 +337,11 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
     public function toString($human_readable=false)
     {
         $response = $this->dom->saveXML();
-		if($human_readable)
-		{
-			$response = $this->_indent($response);
-		}
-    	return $response;
+        if($human_readable)
+        {
+            $response = $this->_indent($response);
+        }
+        return $response;
     }
     
     /**
@@ -357,11 +357,11 @@ class PHPFrame_Document_RPC extends PHPFrame_Document_XML
      */
     private function _padding($depth)
     {
-    	$padding = '';
-    	for ($tabs = 0; $tabs < $depth; $tabs++)
-    	{
-    		$padding .= '  ';
-    	}
-    	return $padding;	
+        $padding = '';
+        for ($tabs = 0; $tabs < $depth; $tabs++)
+        {
+            $padding .= '  ';
+        }
+        return $padding;    
     }
 }

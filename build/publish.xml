@@ -1,141 +1,141 @@
 <?xml version="1.0"?>
 <project name="PHPFrame" basedir="../" default="build">
-	
-	<!-- File paths used in packaging process -->
-	<property name="build.dir" value="${project.basedir}/build"/>
-	<property name="dist.dir" value="${build.dir}/dist"/>
-	<property name="tmp.dir" value="${build.dir}/tmp"/>
-	<property name="report.dir" value="${build.dir}/report"/>
-	
-	<!-- Package info  -->
-	<property name="channel" value="pear.e-noise.com" />
-	<property name="summary" value="PHPFrame is an object oriented PHP framework" />
-	<property name="description" value="PHPFrame is a minimal and object oriented PHP framework for quickly developing, powerful, flexible, robust and extendible web apps." />
-	
-	<!-- Release info -->
-	<property name="api.version" value="1.0" />
-	<property name="api.stability" value="alpha" />
-	<property name="release.version" value="0.0.4" />
-	<property name="release.stability" value="alpha" />
-	<property name="notes" value="No notes for now..." />
-	
-	<!-- Lead/Author -->
-	<property name="lead.name" value="Luis Montero" />
-	<property name="lead.user" value="luis.montero" />
-	<property name="lead.email" value="luis.montero@e-noise.com" />
-	<property name="lead.active" value="yes" />
-	
-	<!-- License -->
-	<property name="license" value="BSD Style" />
-	<property name="license.uri" value="http://www.opensource.org/licenses/bsd-license.php" />
-	
-	<!-- Date and time -->
-	<php function="date" returnProperty="date">
-	  <param value="Y-m-d"/>
-	</php>
-	<php function="date" returnProperty="time">
-	  <param value="h:i:s"/>
-	</php>
-	
-	<!-- Prepare directories before we start -->
-	<target name="prepare">
-		<mkdir dir="${dist.dir}"/>
-		
-		<delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
-		<mkdir dir="${tmp.dir}"/>
-	</target>
-	
-	<!-- copy files to tmp dir for publishing -->
-	<target name="copy">
-		<!-- copy data files -->
-		<copy todir="${tmp.dir}" overwrite="true">
-			<fileset dir="${project.basedir}/data">
-				<include name="**" />
-			</fileset>
-		</copy>
-		
-		<!-- copy example files -->
+    
+    <!-- File paths used in packaging process -->
+    <property name="build.dir" value="${project.basedir}/build"/>
+    <property name="dist.dir" value="${build.dir}/dist"/>
+    <property name="tmp.dir" value="${build.dir}/tmp"/>
+    <property name="report.dir" value="${build.dir}/report"/>
+    
+    <!-- Package info  -->
+    <property name="channel" value="pear.e-noise.com" />
+    <property name="summary" value="PHPFrame is an object oriented PHP framework" />
+    <property name="description" value="PHPFrame is a minimal and object oriented PHP framework for quickly developing, powerful, flexible, robust and extendible web apps." />
+    
+    <!-- Release info -->
+    <property name="api.version" value="1.0" />
+    <property name="api.stability" value="alpha" />
+    <property name="release.version" value="0.0.4" />
+    <property name="release.stability" value="alpha" />
+    <property name="notes" value="No notes for now..." />
+    
+    <!-- Lead/Author -->
+    <property name="lead.name" value="Luis Montero" />
+    <property name="lead.user" value="luis.montero" />
+    <property name="lead.email" value="luis.montero@e-noise.com" />
+    <property name="lead.active" value="yes" />
+    
+    <!-- License -->
+    <property name="license" value="BSD Style" />
+    <property name="license.uri" value="http://www.opensource.org/licenses/bsd-license.php" />
+    
+    <!-- Date and time -->
+    <php function="date" returnProperty="date">
+      <param value="Y-m-d"/>
+    </php>
+    <php function="date" returnProperty="time">
+      <param value="h:i:s"/>
+    </php>
+    
+    <!-- Prepare directories before we start -->
+    <target name="prepare">
+        <mkdir dir="${dist.dir}"/>
+        
+        <delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
+        <mkdir dir="${tmp.dir}"/>
+    </target>
+    
+    <!-- copy files to tmp dir for publishing -->
+    <target name="copy">
+        <!-- copy data files -->
+        <copy todir="${tmp.dir}" overwrite="true">
+            <fileset dir="${project.basedir}/data">
+                <include name="**" />
+            </fileset>
+        </copy>
+        
+        <!-- copy example files -->
         <copy todir="${tmp.dir}/examples" overwrite="true">
             <fileset dir="${project.basedir}/examples">
                 <include name="**" />
             </fileset>
         </copy>
-		
-		<!-- copy script files -->
+        
+        <!-- copy script files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${project.basedir}/scripts">
                 <include name="**" />
             </fileset>
         </copy>
-		
-		<!-- copy src files -->
+        
+        <!-- copy src files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${project.basedir}/src">
                 <include name="**" />
             </fileset>
         </copy>
-		
-		<!-- copy info files -->
+        
+        <!-- copy info files -->
         <copy todir="${tmp.dir}" overwrite="true">
-        	<fileset dir="${project.basedir}">
+            <fileset dir="${project.basedir}">
                 <include name="CREDITS" />
-        		<include name="LICENSE" />
+                <include name="LICENSE" />
                 <include name="README" />
             </fileset>
         </copy>
-		
-		<!-- copy package.xml to use as template -->
-		<copy todir="${tmp.dir}" overwrite="true">
-			<!-- Replace tokens -->
-			<filterchain>
-				<replacetokens begintoken="##" endtoken="##">
-					<token key="PROJECT_NAME" value="${xinc.project.name}" />
-					<token key="CHANNEL" value="${channel}" />
-					<token key="SUMMARY" value="${summary}" />
-					<token key="DESCRIPTION" value="${description}" />
-					
-					<token key="RELEASE_VERSION" value="${release.version}" />
-					<token key="RELEASE_STABILITY" value="${release.stability}" />
-					<token key="API_VERSION" value="${api.version}" />
-					<token key="API_STABILITY" value="${api.stability}" />
-					
-					<token key="DATE" value="${date}" />
-					<token key="TIME" value="${time}" />
-					
-					<token key="LEAD_NAME" value="${lead.name}" />
-					<token key="LEAD_USER" value="${lead.user}" />
-					<token key="LEAD_EMAIL" value="${lead.email}" />
-					<token key="LEAD_ACTIVE" value="${lead.active}" />
-					
-					<token key="LICENSE" value="${license}" />
-					<token key="LICENSE_URI" value="${license.uri}" />
-					
-					<token key="NOTES" value="${notes}" />
-				</replacetokens>
-			</filterchain>
-			
-			<fileset dir="${build.dir}">
-				<include name="package.xml" />
-			</fileset>
-		</copy>
-		
-	</target>
-	
-	<!-- Create archive for distribution -->
-	<target name="tar">
-		<!-- create tar using pear package command -->
-		<exec 
-			command="pear package" 
-			dir="${tmp.dir}" 
-			output="${report.dir}/pear_package.log" />
-		
-		<!-- Move created package to dist directory -->
-		<move file="${tmp.dir}/${xinc.project.name}-${release.version}.tgz" 
-			  tofile="${dist.dir}/${xinc.project.name}-${xinc.build.label}.tgz" 
-			  overwrite="true"/>
-			  
-	</target>
-	
-	<target name="build" depends="prepare, copy, tar" />
-	
+        
+        <!-- copy package.xml to use as template -->
+        <copy todir="${tmp.dir}" overwrite="true">
+            <!-- Replace tokens -->
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="PROJECT_NAME" value="${xinc.project.name}" />
+                    <token key="CHANNEL" value="${channel}" />
+                    <token key="SUMMARY" value="${summary}" />
+                    <token key="DESCRIPTION" value="${description}" />
+                    
+                    <token key="RELEASE_VERSION" value="${release.version}" />
+                    <token key="RELEASE_STABILITY" value="${release.stability}" />
+                    <token key="API_VERSION" value="${api.version}" />
+                    <token key="API_STABILITY" value="${api.stability}" />
+                    
+                    <token key="DATE" value="${date}" />
+                    <token key="TIME" value="${time}" />
+                    
+                    <token key="LEAD_NAME" value="${lead.name}" />
+                    <token key="LEAD_USER" value="${lead.user}" />
+                    <token key="LEAD_EMAIL" value="${lead.email}" />
+                    <token key="LEAD_ACTIVE" value="${lead.active}" />
+                    
+                    <token key="LICENSE" value="${license}" />
+                    <token key="LICENSE_URI" value="${license.uri}" />
+                    
+                    <token key="NOTES" value="${notes}" />
+                </replacetokens>
+            </filterchain>
+            
+            <fileset dir="${build.dir}">
+                <include name="package.xml" />
+            </fileset>
+        </copy>
+        
+    </target>
+    
+    <!-- Create archive for distribution -->
+    <target name="tar">
+        <!-- create tar using pear package command -->
+        <exec 
+            command="pear package" 
+            dir="${tmp.dir}" 
+            output="${report.dir}/pear_package.log" />
+        
+        <!-- Move created package to dist directory -->
+        <move file="${tmp.dir}/${xinc.project.name}-${release.version}.tgz" 
+              tofile="${dist.dir}/${xinc.project.name}-${xinc.build.label}.tgz" 
+              overwrite="true"/>
+              
+    </target>
+    
+    <target name="build" depends="prepare, copy, tar" />
+    
 </project>

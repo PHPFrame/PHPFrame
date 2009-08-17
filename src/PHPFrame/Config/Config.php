@@ -27,37 +27,37 @@
  */
 class PHPFrame_Config
 {
-	/**
-	 * Array holding instances of this class
-	 * 
-	 * @var array
-	 */
+    /**
+     * Array holding instances of this class
+     * 
+     * @var array
+     */
     private static $_instances=array();
-	/**
-	 * Full path to XML file with data
-	 * 
-	 * @var string
-	 */
+    /**
+     * Full path to XML file with data
+     * 
+     * @var string
+     */
     private $_path=null;
-	/**
-	 * Array holding config data
-	 * 
-	 * @var array
-	 */
+    /**
+     * Array holding config data
+     * 
+     * @var array
+     */
     private $_data=array();
     
-	/**
-	 * Constructor
-	 * 
-	 * Private constructor ensures singleton pattern. Use the instance() method to get an instance
-	 * of this class.
-	 *
-	 * @param string $path Full path to XML file with data
-	 *
-	 * @access private
-	 * @return void
-	 * @since  1.0
-	 */
+    /**
+     * Constructor
+     * 
+     * Private constructor ensures singleton pattern. Use the instance() method to get an instance
+     * of this class.
+     *
+     * @param string $path Full path to XML file with data
+     *
+     * @access private
+     * @return void
+     * @since  1.0
+     */
     private function __construct($path)
     {
         $this->_path = (string) $path;
@@ -84,14 +84,14 @@ class PHPFrame_Config
     public static function instance($path=null)
     {
         // Use default empty distro version of template
-		if (is_null($path)) {
-		    require_once "PEAR/Config.php";
-			$data_dir = PEAR_Config::singleton()->get('data_dir');
-			$path = $data_dir;
-			$path .= DIRECTORY_SEPARATOR."PHPFrame";
-			$path .= DIRECTORY_SEPARATOR."config.xml";
-		}
-		
+        if (is_null($path)) {
+            require_once "PEAR/Config.php";
+            $data_dir = PEAR_Config::singleton()->get('data_dir');
+            $path = $data_dir;
+            $path .= DIRECTORY_SEPARATOR."PHPFrame";
+            $path .= DIRECTORY_SEPARATOR."config.xml";
+        }
+        
         if (!isset(self::$_instances[$path])) {
             self::$_instances[$path] = new self($path);
         }
@@ -205,12 +205,12 @@ class PHPFrame_Config
         
         foreach ($this->toArray() as $row) {
             $data_node = $xml->addNode($config_node, "data", array());
-			
-			if (is_array($row)) {
-				foreach ($row as $key=>$value) {
+            
+            if (is_array($row)) {
+                foreach ($row as $key=>$value) {
                     $xml->addNode($data_node, $key, array(), $value);
-				}
-			}
+                }
+            }
         }
         
         return $xml->toString();
@@ -221,38 +221,38 @@ class PHPFrame_Config
         $xml = @simplexml_load_file($this->_path);
         
         if (
-			!$xml instanceof SimpleXMLElement
-			|| !$xml->data instanceof SimpleXMLElement
-		) {
+            !$xml instanceof SimpleXMLElement
+            || !$xml->data instanceof SimpleXMLElement
+        ) {
             $msg = get_class($this).": ";
             $msg .= "Could not load config from xml file.";
             trigger_error($msg);
         }
-		
+        
         foreach ($xml->data as $data) {
-			if (!$data instanceof SimpleXMLElement) {
-				continue;
-			}
-			
-			$array = array();
-			foreach ($data as $key=>$value) {
-				$array[$key] = (string) $value;
-			}
-			
-			if (
-				isset($array["value"]) 
-				&& $array["value"] == "" 
-				&& isset($array["def_value"]) 
-				&& $array["def_value"] != ""
-			) {
-				$array["value"] = $array["def_value"];
-			}
+            if (!$data instanceof SimpleXMLElement) {
+                continue;
+            }
             
-			if (isset($array["name"])) {
-				$this->_data[$array["name"]] = $array;
-			} else {
-			    $this->_data[] = $array;
-			}
+            $array = array();
+            foreach ($data as $key=>$value) {
+                $array[$key] = (string) $value;
+            }
+            
+            if (
+                isset($array["value"]) 
+                && $array["value"] == "" 
+                && isset($array["def_value"]) 
+                && $array["def_value"] != ""
+            ) {
+                $array["value"] = $array["def_value"];
+            }
+            
+            if (isset($array["name"])) {
+                $this->_data[$array["name"]] = $array;
+            } else {
+                $this->_data[] = $array;
+            }
         }
     }
 }

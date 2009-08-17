@@ -113,7 +113,7 @@ class PHPFrame_Application_Permissions
                 $array["groupid"] = trim((string) $data->groupid);
                 $array["controller"] = trim((string) $data->controller);
                 $array["action"] = trim((string) $data->action);
-    			$array["value"] = trim((string) $data->value);
+                $array["value"] = trim((string) $data->value);
                 
                 $this->_acl[] = $array;
             }

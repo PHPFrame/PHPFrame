@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package 
-	packagerversion="1.8.1" 
-	version="2.0" 
-	xmlns="http://pear.php.net/dtd/package-2.0" 
-	xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     
-	     http://pear.php.net/dtd/tasks-1.0.xsd     
-	     http://pear.php.net/dtd/package-2.0     
-	     http://pear.php.net/dtd/package-2.0.xsd">
-	     
+    packagerversion="1.8.1" 
+    version="2.0" 
+    xmlns="http://pear.php.net/dtd/package-2.0" 
+    xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     
+         http://pear.php.net/dtd/tasks-1.0.xsd     
+         http://pear.php.net/dtd/package-2.0     
+         http://pear.php.net/dtd/package-2.0.xsd">
+         
  <name>##PROJECT_NAME##</name>
  <channel>##CHANNEL##</channel>
  <summary>##SUMMARY##</summary>
@@ -165,7 +165,7 @@
      <tasks:paramgroup>
       <tasks:id>Log files</tasks:id>
       <tasks:param>
-   	   <tasks:name>CONFIRM</tasks:name>
+          <tasks:name>CONFIRM</tasks:name>
        <tasks:prompt>
 The postinstall script will make log files writable to all users. Only do 
 this if you will be running PHPFrame as a different user to the one 
@@ -189,18 +189,18 @@ insalling the PEAR package. If you want to continue type "yes".
     <min>1.4.0</min>
    </pearinstaller>
    <package>
-   	<name>Config</name>
-   	<channel>pear.php.net</channel>
-   	<min>1.10.11</min>
+       <name>Config</name>
+       <channel>pear.php.net</channel>
+       <min>1.10.11</min>
    </package>
    <extension>
-	<name>reflection</name>
+    <name>reflection</name>
    </extension>
    <extension>
-	<name>spl</name>
+    <name>spl</name>
    </extension>
    <extension>
-	<name>pdo</name>
+    <name>pdo</name>
    </extension>
    <extension>
     <name>pdo_mysql</name>
@@ -220,14 +220,14 @@ insalling the PEAR package. If you want to continue type "yes".
   </required>
   <optional>
    <package>
-	<name>PHPUnit</name>
-	<channel>pear.phpunit.de</channel>
-	<min>3.3.16</min>
+    <name>PHPUnit</name>
+    <channel>pear.phpunit.de</channel>
+    <min>3.3.16</min>
    </package>
    <package>
     <name>phing</name>
-	<channel>pear.phing.info</channel>
-	<min>2.3.3</min>
+    <channel>pear.phing.info</channel>
+    <min>2.3.3</min>
    </package>
    <extension>
     <name>xdebug</name>

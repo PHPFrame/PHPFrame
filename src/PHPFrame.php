@@ -106,7 +106,7 @@ class PHPFrame
      * @return void
      * @since  1.0
      * @todo   This method needs to be refactored into three different ones.
-     * 		   One to load the PHPFrame lib, then the custom libs and finally the 
+     *            One to load the PHPFrame lib, then the custom libs and finally the 
      *         MVC classes.
      */
     public static function __autoload($class_name) {
@@ -263,8 +263,8 @@ class PHPFrame
             $config_dir = PHPFRAME_CONFIG_DIR;
         // Otherwise we use the system wide default config
         } else {
-			$config_dir = PEAR_Config::singleton()->get("data_dir");
-			$config_dir .= DS."PHPFrame".DS."etc";
+            $config_dir = PEAR_Config::singleton()->get("data_dir");
+            $config_dir .= DS."PHPFrame".DS."etc";
         }
         
         $config_file = $config_dir.DS."config.xml";
@@ -336,10 +336,10 @@ class PHPFrame
      * Get database object
      * 
      * @param PHPFrame_Database_DSN $dsn An object of type PHPFrame_Database_DSN 
-     *        		                     used to get DB connection. This parameter 
-     *        							 is optional. If omitted a new DSN object 
-     *        							 will be created using the database
-     *        							 details provided by the config class. 
+     *                                     used to get DB connection. This parameter 
+     *                                     is optional. If omitted a new DSN object 
+     *                                     will be created using the database
+     *                                     details provided by the config class. 
      * @param string $db_user            If we specify a DSN object we might also 
      *                                   need to provide a db user in order to 
      *                                   connect to the database server.

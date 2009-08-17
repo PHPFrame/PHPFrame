@@ -46,7 +46,7 @@ class PHPFrame_Document_XML extends PHPFrame_Document
      */
     protected $dom=null;
     
-	/**
+    /**
      * Constructor
      * 
      * @access public

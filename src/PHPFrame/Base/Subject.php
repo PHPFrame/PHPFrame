@@ -40,51 +40,51 @@ abstract class PHPFrame_Base_Subject implements SplSubject
      */
     private $_obs=null;
     
-	/**
-	 * Attach an observer to this subject
-	 * 
-	 * @param PHPFrame_Base_Observer $observer The object to attach to this subject
-	 * 
-	 * @access public
-	 * @return void
-	 * @since  1.0
-	 */
-	public function attach(SplObserver $observer)
-	{
-	    if (!$this->_obs instanceof SplObjectStorage) {
-	        $this->_obs = new SplObjectStorage();
-	    }
-	    
-	    $this->_obs->attach($observer);
-	}
+    /**
+     * Attach an observer to this subject
+     * 
+     * @param PHPFrame_Base_Observer $observer The object to attach to this subject
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function attach(SplObserver $observer)
+    {
+        if (!$this->_obs instanceof SplObjectStorage) {
+            $this->_obs = new SplObjectStorage();
+        }
+        
+        $this->_obs->attach($observer);
+    }
 
-	/**
-	 * Detach an object from the subject
-	 * 
-	 * @param SplObserver $observer The observer object to detach
-	 * 
-	 * @access public
-	 * @return void
-	 * @since  1.0
-	 */
-	public function detach(SplObserver $observer)
-	{
-	    $this->_obs->detach($observer);
-	}
-	
-	/**
-	 * Notify observers
-	 * 
-	 * @access public
-	 * @return void
-	 * @since  1.0
-	 */
-	public function notify()
-	{
-	    if ($this->_obs instanceof SplObjectStorage) {
-    	    foreach ($this->_obs as $obs) {
-    	        $obs->update($this);
-    	    }
-	    }
-	}
+    /**
+     * Detach an object from the subject
+     * 
+     * @param SplObserver $observer The observer object to detach
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function detach(SplObserver $observer)
+    {
+        $this->_obs->detach($observer);
+    }
+    
+    /**
+     * Notify observers
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function notify()
+    {
+        if ($this->_obs instanceof SplObjectStorage) {
+            foreach ($this->_obs as $obs) {
+                $obs->update($this);
+            }
+        }
+    }
 }

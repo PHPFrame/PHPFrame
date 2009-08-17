@@ -11,7 +11,7 @@
 <h2>Classes:</h2>
 {section name=classes loop=$classes}
 <dt>{$classes[classes].link}</dt>
-	<dd>{$classes[classes].sdesc}</dd>
+    <dd>{$classes[classes].sdesc}</dd>
 {/section}
 </div><br /><br />
 {/if}

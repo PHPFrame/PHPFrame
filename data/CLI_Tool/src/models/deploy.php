@@ -44,68 +44,68 @@ class DeployModel extends PHPFrame_MVC_Model
         
         $msg = "Exporting latest version of AppTemplate...\n";
         $msg .= "Using command \"".$cmd."\"...";
-		PHPFrame_Debug_Logger::write($msg);
-		
-		$exec = new PHPFrame_Utils_Exec($cmd);
-		
+        PHPFrame_Debug_Logger::write($msg);
+        
+        $exec = new PHPFrame_Utils_Exec($cmd);
+        
         // Log output to file
-		PHPFrame_Debug_Logger::write($exec->getOutput());
-		
-		if ($exec->getReturnVar() > 0) {
-			$msg = "Failed to export latest version of AppTemplate.";
+        PHPFrame_Debug_Logger::write($exec->getOutput());
+        
+        if ($exec->getReturnVar() > 0) {
+            $msg = "Failed to export latest version of AppTemplate.";
             throw new PHPFrame_Exception($msg);
-		}
+        }
         
         $cmd = "cp -r ".$tmp_target.DS." ".$this->_install_dir.DS;
-		
+        
         $msg = "Overwriting files...\n";
         $msg .= "Using command \"".$cmd."\"...";
-		PHPFrame_Debug_Logger::write($msg);
-		
-		$exec = new PHPFrame_Utils_Exec($cmd);
-		
-		// Log output to file
-		PHPFrame_Debug_Logger::write($exec->getOutput());
-		
-		if ($exec->getReturnVar() > 0) {
-			$msg = "Failed to overwrite files.";
+        PHPFrame_Debug_Logger::write($msg);
+        
+        $exec = new PHPFrame_Utils_Exec($cmd);
+        
+        // Log output to file
+        PHPFrame_Debug_Logger::write($exec->getOutput());
+        
+        if ($exec->getReturnVar() > 0) {
+            $msg = "Failed to overwrite files.";
             throw new PHPFrame_Exception($msg);
-		}
-		
+        }
+        
         $cmd = "rm -rf ".$tmp_target;
-		
+        
         $msg = "Deleting temporary files...\n";
         $msg .= "Using command \"".$cmd."\"...";
-		PHPFrame_Debug_Logger::write($msg);
-		
-		$exec = new PHPFrame_Utils_Exec($cmd);
-		
-		// Log output to file
-		PHPFrame_Debug_Logger::write($exec->getOutput());
-		
-		if ($exec->getReturnVar() > 0) {
-			$msg = "Failed to remove temporary files.";
+        PHPFrame_Debug_Logger::write($msg);
+        
+        $exec = new PHPFrame_Utils_Exec($cmd);
+        
+        // Log output to file
+        PHPFrame_Debug_Logger::write($exec->getOutput());
+        
+        if ($exec->getReturnVar() > 0) {
+            $msg = "Failed to remove temporary files.";
             throw new PHPFrame_Exception($msg);
-		}
+        }
     }
     
     public function remove()
     {
         $cmd = "rm -rf ".$this->_install_dir.DS."*";
-		
+        
         $msg = "Removing app...\n";
         $msg .= "Using command \"".$cmd."\"...";
-		PHPFrame_Debug_Logger::write($msg);
-		
-		$exec = new PHPFrame_Utils_Exec($cmd);
-		
-		// Log output to file
-		PHPFrame_Debug_Logger::write($exec->getOutput());
-		
-		if ($exec->getReturnVar() > 0) {
-			$msg = "Failed to remove app.";
+        PHPFrame_Debug_Logger::write($msg);
+        
+        $exec = new PHPFrame_Utils_Exec($cmd);
+        
+        // Log output to file
+        PHPFrame_Debug_Logger::write($exec->getOutput());
+        
+        if ($exec->getReturnVar() > 0) {
+            $msg = "Failed to remove app.";
             throw new PHPFrame_Exception($msg);
-		}
+        }
     }
     
     private function _fetchSource()
@@ -121,20 +121,20 @@ class DeployModel extends PHPFrame_MVC_Model
         
         $source = $this->_sources_config->get("PHPFrame_AppTemplate").DS;
         $cmd = "svn export --force ".$source." ".$this->_install_dir.DS;
-		
+        
         $msg = "Fetching PHPFrame_AppTemplate source from repository...\n";
         $msg .= "Using command \"".$cmd."\"...";
-		PHPFrame_Debug_Logger::write($msg);
-		
-		$exec = new PHPFrame_Utils_Exec($cmd);
-		
-		// Log output to file
-		PHPFrame_Debug_Logger::write($exec->getOutput());
-		
-		if ($exec->getReturnVar() > 0) {
-			$msg = "Failed to checkout source from repository.";
+        PHPFrame_Debug_Logger::write($msg);
+        
+        $exec = new PHPFrame_Utils_Exec($cmd);
+        
+        // Log output to file
+        PHPFrame_Debug_Logger::write($exec->getOutput());
+        
+        if ($exec->getReturnVar() > 0) {
+            $msg = "Failed to checkout source from repository.";
             throw new PHPFrame_Exception($msg);
-		}
+        }
     }
     
     private function _createConfig($array)
@@ -145,7 +145,7 @@ class DeployModel extends PHPFrame_MVC_Model
             throw new PHPFrame_Exception($msg);
         }
         
-		PHPFrame_Debug_Logger::write("Creating configuration file...");
+        PHPFrame_Debug_Logger::write("Creating configuration file...");
         
         // Instanciate new config object
         $dist_config_xml = PEAR_Config::singleton()->get("data_dir");
@@ -171,12 +171,12 @@ class DeployModel extends PHPFrame_MVC_Model
             $exec = new PHPFrame_Utils_Exec($cmd);
             
             // Log output to file
-    		PHPFrame_Debug_Logger::write($exec->getOutput());
-    		
-    		if ($exec->getReturnVar() > 0) {
-    			$msg = "Failed to copy ".$file.".";
+            PHPFrame_Debug_Logger::write($exec->getOutput());
+            
+            if ($exec->getReturnVar() > 0) {
+                $msg = "Failed to copy ".$file.".";
                 throw new PHPFrame_Exception($msg);
-    		}
+            }
         }
         
     }
@@ -191,11 +191,11 @@ class DeployModel extends PHPFrame_MVC_Model
         $exec = new PHPFrame_Utils_Exec($cmd);
         
         // Log output to file
-		PHPFrame_Debug_Logger::write($exec->getOutput());
-		
-		if ($exec->getReturnVar() > 0) {
-			$msg = "Failed to create dummy controller.";
+        PHPFrame_Debug_Logger::write($exec->getOutput());
+        
+        if ($exec->getReturnVar() > 0) {
+            $msg = "Failed to create dummy controller.";
             throw new PHPFrame_Exception($msg);
-		}
+        }
     }
 }

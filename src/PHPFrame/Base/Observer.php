@@ -33,25 +33,25 @@
  */
 abstract class PHPFrame_Base_Observer implements SplObserver
 {
-	/**
-	 * Update 
-	 * 
-	 * @param PHPFrame_Base_Subject $subject Instance of the subject issuing the update
-	 * 
-	 * @access public
-	 * @return void
-	 * @since  1.0
-	 */
-	public function update(SplSubject $subject)
-	{
-	    $this->doUpdate();
-	}
-	
-	/**
-	 * 
-	 * @access protected
-	 * @return void
-	 * @since  1.0
-	 */
-	abstract protected function doUpdate(SplSubject $subject);
+    /**
+     * Update 
+     * 
+     * @param PHPFrame_Base_Subject $subject Instance of the subject issuing the update
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function update(SplSubject $subject)
+    {
+        $this->doUpdate();
+    }
+    
+    /**
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
+     */
+    abstract protected function doUpdate(SplSubject $subject);
 }

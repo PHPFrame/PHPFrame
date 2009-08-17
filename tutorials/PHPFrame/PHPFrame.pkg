@@ -1,138 +1,138 @@
 <refentry id="{@id}">
-	<refnamediv>
-		<refname>PHPFrame Documentation</refname>
-		<refpurpose>
-			This manual consists primarily of API documentation but also includes examples, 
-			tutorials, an overview of how the library works, installation and frequently 
-			questions.
-		</refpurpose>
-	</refnamediv>
-	
-	<refsynopsisdiv>
-		<author>
-			Luis Montero [e-noise.com]
-			<authorblurb>
-			{@link mailto:luis.montero@e-noise.com Luis Montero}
-			</authorblurb>
-		</author>
-	</refsynopsisdiv>
-	
-	{@toc}
-	
-	<refsect1 id="{@id intro}">
-		<title>Getting Started</title>
-		
-		<para>
-			This will be the User Guide for PHPFrame 1.0. 
-		</para>
-		
-		<refsect2>
-			<title>Downloading / Installing PHPFrame</title>
-			
-			<para>
-			The easiest way to install PHPFrame is using the PEAR package manager.
-			The PEAR package manager is bundled with PHP, so if you already have PHP 
-			running you should also have PEAR. 
-			</para>
-			
-			<para>
-			Before you start please make sure that the "pear" command is in your PATH.
-			</para>
-			
-			<para>
-			To install using PEAR installer:
-			</para>
-			
-			<para>
-			First we need to tell the PEAR installer about the channel. Type the following 
-			command at the terminal:
-			</para>
-			
-			<screen>
-				<prompt>bash$</prompt> 
-				<command>
-					pear channel-discover pear.e-noise.com
-				</command>
-				Adding Channel "pear.e-noise.com" succeeded
-				Discovery of channel "pear.e-noise.com" succeeded
-			</screen>
-			
-			<para>	
-			Now we can tell the PEAR installer to install the PHPFrame package:
-			</para>
-			
-			<screen>
-				<prompt>bash$</prompt> 
-				<command>
-					pear install pear.e-noise.com/PHPFrame
-				</command>
-				...
-			</screen>
-			
-			<screen>
-				<prompt>bash$</prompt> 
-				<command>
-					pear install channel://pear.e-noise.com/PHPFrame-0.0.1
-				</command>
-				...
-			</screen>
-			
-			<screen>
-				<prompt>bash$</prompt> 
-				<command>
-					pear run-scripts pear.e-noise.com/PHPFrame
-				</command>
-				...
-			</screen>
-			
-			<para>
-			To uninstall:
-			</para>
-			
-			<screen>
-				<prompt>bash$</prompt> 
-				<command>
-					pear uninstall pear.e-noise.com/PHPFrame
-				</command>
-				...
-			</screen>
-			
-			<screen>
-				<prompt>bash$</prompt> 
-				<command>
-					pear clear-cache
-				</command>
-				...
-			</screen>
-			
-			<note>
-			* Note that you will need write access to the directory where PEAR is installed.
-			If you are installing or unininstalling for all users in a system you will need 
-			administrative privileges.
-			</note>
-			
-		</refsect2>
-		
-		<refsect2>
-			<title>Adding the library to you project</title>
-		</refsect2>
-		
-		<refsect2>
-			<title>Starting a new project with PHPFrame scaffold</title>
-		</refsect2>
-		
-	</refsect1>
-	
-	<refsect1 id="{@id api}">
-		<title>PHPFrame API Reference</title>
-	</refsect1>
-	
-	<refsect1 id="{@id support}">
-		<title>Support</title>
-	</refsect1>
-	
-	<refsect1 id="{@id about}">
-		<title>About PHPFrame</title>
-	</refsect1>
-	
+    <refnamediv>
+        <refname>PHPFrame Documentation</refname>
+        <refpurpose>
+            This manual consists primarily of API documentation but also includes examples, 
+            tutorials, an overview of how the library works, installation and frequently 
+            questions.
+        </refpurpose>
+    </refnamediv>
+    
+    <refsynopsisdiv>
+        <author>
+            Luis Montero [e-noise.com]
+            <authorblurb>
+            {@link mailto:luis.montero@e-noise.com Luis Montero}
+            </authorblurb>
+        </author>
+    </refsynopsisdiv>
+    
+    {@toc}
+    
+    <refsect1 id="{@id intro}">
+        <title>Getting Started</title>
+        
+        <para>
+            This will be the User Guide for PHPFrame 1.0. 
+        </para>
+        
+        <refsect2>
+            <title>Downloading / Installing PHPFrame</title>
+            
+            <para>
+            The easiest way to install PHPFrame is using the PEAR package manager.
+            The PEAR package manager is bundled with PHP, so if you already have PHP 
+            running you should also have PEAR. 
+            </para>
+            
+            <para>
+            Before you start please make sure that the "pear" command is in your PATH.
+            </para>
+            
+            <para>
+            To install using PEAR installer:
+            </para>
+            
+            <para>
+            First we need to tell the PEAR installer about the channel. Type the following 
+            command at the terminal:
+            </para>
+            
+            <screen>
+                <prompt>bash$</prompt> 
+                <command>
+                    pear channel-discover pear.e-noise.com
+                </command>
+                Adding Channel "pear.e-noise.com" succeeded
+                Discovery of channel "pear.e-noise.com" succeeded
+            </screen>
+            
+            <para>    
+            Now we can tell the PEAR installer to install the PHPFrame package:
+            </para>
+            
+            <screen>
+                <prompt>bash$</prompt> 
+                <command>
+                    pear install pear.e-noise.com/PHPFrame
+                </command>
+                ...
+            </screen>
+            
+            <screen>
+                <prompt>bash$</prompt> 
+                <command>
+                    pear install channel://pear.e-noise.com/PHPFrame-0.0.1
+                </command>
+                ...
+            </screen>
+            
+            <screen>
+                <prompt>bash$</prompt> 
+                <command>
+                    pear run-scripts pear.e-noise.com/PHPFrame
+                </command>
+                ...
+            </screen>
+            
+            <para>
+            To uninstall:
+            </para>
+            
+            <screen>
+                <prompt>bash$</prompt> 
+                <command>
+                    pear uninstall pear.e-noise.com/PHPFrame
+                </command>
+                ...
+            </screen>
+            
+            <screen>
+                <prompt>bash$</prompt> 
+                <command>
+                    pear clear-cache
+                </command>
+                ...
+            </screen>
+            
+            <note>
+            * Note that you will need write access to the directory where PEAR is installed.
+            If you are installing or unininstalling for all users in a system you will need 
+            administrative privileges.
+            </note>
+            
+        </refsect2>
+        
+        <refsect2>
+            <title>Adding the library to you project</title>
+        </refsect2>
+        
+        <refsect2>
+            <title>Starting a new project with PHPFrame scaffold</title>
+        </refsect2>
+        
+    </refsect1>
+    
+    <refsect1 id="{@id api}">
+        <title>PHPFrame API Reference</title>
+    </refsect1>
+    
+    <refsect1 id="{@id support}">
+        <title>Support</title>
+    </refsect1>
+    
+    <refsect1 id="{@id about}">
+        <title>About PHPFrame</title>
+    </refsect1>
+    
 </refentry>

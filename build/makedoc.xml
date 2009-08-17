@@ -1,42 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="PHPFrame" basedir="../" default="build">
 
-	<property name="build.dir" value="${project.basedir}/build"/>
-	<property name="report.dir" value="${build.dir}/report"/>
-	<property name="doc.dir" value="${build.dir}/doc"/>
-	<property name="tmp.dir" value="${build.dir}/tmp"/>
-	
-	<!-- Prepare directories -->
-	<target name="prepare">
-		<delete dir="${doc.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
-		<mkdir dir="${doc.dir}"/>
-	</target>
-	
-	<!-- Generate API documentation from Javadoc comments using phpdoc -->
-	<target name="apidoc">
-		<exec 
-			command="phpdoc \
-					-d ${tmp.dir} \
-					-t ${doc.dir} \
-					-ric README,LICENSE,CREDITS \
-					-i build/,data/,examples/,scripts/,tests/ \
-					-s on \
-					-dn None \
-					-o HTML:Smarty:PHPFrame \
-					-ti 'PHPFrame API Documentation'" 
-			dir="${project.basedir}" 
-			output="${report.dir}/phpdoc.log" />
-	</target>
-	
-	<target name="sync">
-		<exec 
-			command="rsync -vru -e 'ssh -p 2222' --delete \
-					 ${doc.dir}/ \
-					 phpframe@e-noise.com:~/public_html/doc/" 
-			dir="${project.basedir}" 
-			output="${report.dir}/rsync_doc.log" />
-	</target>
-	
-	<target name="build" depends="prepare, apidoc, sync" />
-	
+    <property name="build.dir" value="${project.basedir}/build"/>
+    <property name="report.dir" value="${build.dir}/report"/>
+    <property name="doc.dir" value="${build.dir}/doc"/>
+    <property name="tmp.dir" value="${build.dir}/tmp/doc"/>
+    
+    <!-- Prepare directories -->
+    <target name="prepare">
+        <delete dir="${doc.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
+        <mkdir dir="${doc.dir}"/>
+        
+        <delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
+        <mkdir dir="${tmp.dir}"/>
+    </target>
+    
+    <!-- copy files to tmp dir for publishing -->
+    <target name="copy">
+        <!-- copy src files -->
+        <copy todir="${tmp.dir}" overwrite="true">
+            <fileset dir="${project.basedir}/src">
+                <include name="**" />
+            </fileset>
+        </copy>
+        
+        <!-- copy info files -->
+        <copy todir="${tmp.dir}" overwrite="true">
+            <fileset dir="${project.basedir}">
+                <include name="CREDITS" />
+                <include name="LICENSE" />
+                <include name="README" />
+            </fileset>
+        </copy>
+    </target>
+    
+    <!-- Generate API documentation from Javadoc comments using phpdoc -->
+    <target name="apidoc">
+        <exec 
+            command="phpdoc \
+                    -d ${tmp.dir} \
+                    -t ${doc.dir} \
+                    -ric README,LICENSE,CREDITS \
+                    -i build/,data/,examples/,scripts/,tests/ \
+                    -s on \
+                    -dn None \
+                    -o HTML:Smarty:PHPFrame \
+                    -ti 'PHPFrame API Documentation'" 
+            dir="${project.basedir}" 
+            output="${report.dir}/phpdoc.log" />
+    </target>
+    
+    <target name="sync">
+        <exec 
+            command="rsync -vru -e 'ssh -p 2222' --delete \
+                     ${doc.dir}/ \
+                     phpframe@e-noise.com:~/public_html/doc/" 
+            dir="${project.basedir}" 
+            output="${report.dir}/rsync_doc.log" />
+    </target>
+    
+    <target name="build" depends="prepare, apidoc, sync" />
+    
 </project>

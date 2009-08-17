@@ -27,17 +27,17 @@
  */
 class PHPFrame_Exception_XMLRPC extends PHPFrame_Exception
 {
-	
-	private $_faultCode;
-	
-	const INVALID_COMPONENT = 1;
-	const INVALID_ACTION = 2;
-	const INVALID_NUMBER_PARAMETERS = 3;
-	const INVALID_PARAMETER_TYPE = 4;
-	const INVALID_API_KEY_OR_USER = 5;
-	const INVALID_PERMISSIONS = 6;
-	
-	/**
+    
+    private $_faultCode;
+    
+    const INVALID_COMPONENT = 1;
+    const INVALID_ACTION = 2;
+    const INVALID_NUMBER_PARAMETERS = 3;
+    const INVALID_PARAMETER_TYPE = 4;
+    const INVALID_API_KEY_OR_USER = 5;
+    const INVALID_PERMISSIONS = 6;
+    
+    /**
      * Constructor
      * 
      * @param string       $message   The error message.
@@ -63,24 +63,24 @@ class PHPFrame_Exception_XMLRPC extends PHPFrame_Exception
      */
     public function getXMLRPCFault()
     {
-    	$fault = '<?xml version="1.0" encoding="UTF-8"?>
-    			<methodResponse>
-				   <fault>
-				      <value>
-				         <struct>
-				            <member>
-				               <name>faultCode</name>
-				               <value><int>'.$this->_faultCode.'</int></value>
-				               </member>
-				            <member>
-				               <name>faultString</name>
-				               <value><string>'.$this->getMessage().'</string></value>
-				               </member>
-				            </struct>
-				         </value>
-				      </fault>
-				   </methodResponse>';
-    	
-    	return $fault;
+        $fault = '<?xml version="1.0" encoding="UTF-8"?>
+                <methodResponse>
+                   <fault>
+                      <value>
+                         <struct>
+                            <member>
+                               <name>faultCode</name>
+                               <value><int>'.$this->_faultCode.'</int></value>
+                               </member>
+                            <member>
+                               <name>faultString</name>
+                               <value><string>'.$this->getMessage().'</string></value>
+                               </member>
+                            </struct>
+                         </value>
+                      </fault>
+                   </methodResponse>';
+        
+        return $fault;
     }
 }

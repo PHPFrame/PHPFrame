@@ -103,7 +103,7 @@
    <file baseinstalldir="/" name="PHPFrame/Registry/Request.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Session.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/SCM/GIT.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/SCM/SCM.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/SCM/ISCM.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/SCM/SVN.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/CLI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/HTML.php" role="php" />

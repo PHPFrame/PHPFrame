@@ -172,7 +172,7 @@ this if you will be running PHPFrame as a different user to the one
 insalling the PEAR package. If you want to continue type "yes".
        </tasks:prompt>
        <tasks:type>string</tasks:type>
-       <tasks:default>yes</tasks:default>
+       <tasks:default></tasks:default>
       </tasks:param>
      </tasks:paramgroup>
     </tasks:postinstallscript>

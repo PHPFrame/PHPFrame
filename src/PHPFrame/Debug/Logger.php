@@ -72,6 +72,13 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         }
     }
     
+    /**
+     * Get singleton instance of Logger
+     * 
+     * @access public
+     * @return PHPFrame_Debug_Logger
+     * @since  1.0
+     */
     public static function instance()
     {
         if (is_null(self::$_instance)) {

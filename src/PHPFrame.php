@@ -106,10 +106,20 @@ class PHPFrame
      * @return void
      * @since  1.0
      * @todo   This method needs to be refactored into three different ones.
-     * 		   One to load the PHPFrame lib, then the custom libs and finally the mvc classes.
+     * 		   One to load the PHPFrame lib, then the custom libs and finally the 
+     *         MVC classes.
      */
     public static function __autoload($class_name) {
         $file_path = "";
+        
+        if (preg_match('/^PEAR_([a-zA-Z0-9]+)_?([a-zA-Z0-9]+)?/', $class_name, $matches)) {
+            $path = "";
+            for ($i=1; $i<count($matches); $i++) {
+                $path .= DS.$matches[$i];
+            }
+            
+            require "PEAR".$path.".php";
+        }
         
         // PHPFrame classes
         if (strpos($class_name, 'PHPFrame') !== false) {
@@ -154,29 +164,35 @@ class PHPFrame
             return;
         }
         
-        // Load custom libraries
-        if (is_null(self::$_lib_config)) {
-            self::$_lib_config = self::_fetchLibXML();
-        }
-        
-        if (!is_array(self::$_lib_config)) {
-            $msg = "Could not load libraries configuration as array";
-            throw new PHPFrame_Exception($msg);
-        }
-        
-        foreach (self::$_lib_config as $lib) {
-            if ($lib["name"] == $class_name) {
-                $file_path = PHPFRAME_INSTALL_DIR.DS."lib".DS.$lib["value"];
-                
-                // require the file if it exists
-                if (is_file($file_path)) {
-                    @include $file_path;
-                    return;
+        // Load custom libraries (if we are in an app)
+        if (defined("PHPFRAME_CONFIG_DIR")) {
+            if (is_null(self::$_lib_config)) {
+                self::$_lib_config = self::_fetchLibXML();
+            }
+            
+            if (!is_array(self::$_lib_config)) {
+                $msg = "Could not load libraries configuration as array";
+                throw new PHPFrame_Exception($msg);
+            }
+            
+            foreach (self::$_lib_config as $lib) {
+                if ($lib["name"] == $class_name) {
+                    $file_path = PHPFRAME_INSTALL_DIR.DS."lib".DS.$lib["value"];
+                    
+                    // require the file if it exists
+                    if (is_file($file_path)) {
+                        @include $file_path;
+                        return;
+                    }
                 }
             }
         }
         
         // Load MVC classes
+        if (!defined("PHPFRAME_INSTALL_DIR")) {
+            return;
+        }
+        
         $super_classes = array("Controller", "Model", "View", "Helper", "Lang");
         foreach ($super_classes as $super_class) {
             if (preg_match('/'.$super_class.'$/', $class_name)) {

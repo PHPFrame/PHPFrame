@@ -50,7 +50,7 @@ class PHPFrame_CLI_Tool_postinstall
      */
     public function init(PEAR_Config $config, PEAR_PackageFile_v2 $self, $lastInstalledVersion=null)
     {
-        // Include PHPFrame framework
+        // Include PHPFrame framework]
         require_once "PHPFrame.php";
         
         if (!class_exists('PHPFrame')) {

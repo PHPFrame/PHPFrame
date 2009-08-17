@@ -4,7 +4,7 @@ function loadFramework()
     //TODO: This needs to be removed. It is temporarily here to make up for the
     // release of PHPFrame as a PEAR package
     $PHPFrame_path = "/Users/lupomontero/Documents/workspace/PHPFrame/src";
-    set_include_path(get_include_path() . PATH_SEPARATOR . $PHPFrame_path);
+    set_include_path($PHPFrame_path . PATH_SEPARATOR . get_include_path());
     
     include_once "PHPFrame.php";
 }

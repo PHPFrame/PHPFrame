@@ -19,7 +19,7 @@
 					-d ${tmp.dir} \
 					-t ${doc.dir} \
 					-ric README,LICENSE,CREDITS \
-					-i build/,examples/,tests/ \
+					-i build/,data/,examples/,scripts/,tests/ \
 					-s on \
 					-dn None \
 					-o HTML:Smarty:PHPFrame \

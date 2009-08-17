@@ -1,12 +1,12 @@
 <?php
 /**
- * PHPFrame/UI/CLI.php
+ * PHPFrame/SCM/ISCM.php
  * 
  * PHP version 5
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
- * @subpackage UI
+ * @subpackage SCM
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
@@ -15,20 +15,25 @@
  */
 
 /**
- * CLI UI Class
+ * SCM Interface
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
- * @subpackage UI
+ * @subpackage SCM
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_UI_CLI
+interface PHPFrame_ISCM
 {
-    public static function form()
-    {
-        
-    }
+    public function checkout($url, $path, $username=null, $password=null);
+    
+    public function update($path);
+    
+    public function switchURL($url, $path);
+    
+    public function export($url, $path);
+    
+    public function commit();
 }

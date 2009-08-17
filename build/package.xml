@@ -121,31 +121,31 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/vCard.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    
-   <file baseinstalldir="/" name="data/CLI_Tool/etc/config.xml" role="data" />
-   <file baseinstalldir="/" name="data/CLI_Tool/public/index.php" role="data" />
-   <file baseinstalldir="/" name="data/CLI_Tool/src/controllers/config.php" role="data" />
-   <file baseinstalldir="/" name="data/CLI_Tool/src/controllers/deploy.php" role="data" />
-   <file baseinstalldir="/" name="data/CLI_Tool/src/controllers/version.php" role="data" />
-   <file baseinstalldir="/" name="data/CLI_Tool/src/lang/en-GB/global.php" role="data" />
-   <file baseinstalldir="/" name="data/CLI_Tool/src/models/deploy.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/etc/config.xml" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/public/index.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/controllers/config.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/controllers/deploy.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/controllers/version.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/lang/en-GB/global.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/models/deploy.php" role="data" />
    
-   <file baseinstalldir="/" name="data/lib/phpinputfilter/inputfilter.php" role="data" />
-   <file baseinstalldir="/" name="data/lib/phpinputfilter/GPL-3.0.txt" role="data" />
-   <file baseinstalldir="/" name="data/lib/phpmailer/language/phpmailer.lang-en.php" role="data" />
-   <file baseinstalldir="/" name="data/lib/phpmailer/LICENSE" role="data" />
-   <file baseinstalldir="/" name="data/lib/phpmailer/phpmailer.php" role="data" />
-   <file baseinstalldir="/" name="data/lib/phpmailer/smtp.php" role="data" />
-   <file baseinstalldir="/" name="data/lib/vcard/LICENSE" role="data" />
-   <file baseinstalldir="/" name="data/lib/vcard/vcardclass.inc" role="data" />
+   <file baseinstalldir="/" name="lib/phpinputfilter/inputfilter.php" role="data" />
+   <file baseinstalldir="/" name="lib/phpinputfilter/GPL-3.0.txt" role="data" />
+   <file baseinstalldir="/" name="lib/phpmailer/language/phpmailer.lang-en.php" role="data" />
+   <file baseinstalldir="/" name="lib/phpmailer/LICENSE" role="data" />
+   <file baseinstalldir="/" name="lib/phpmailer/phpmailer.php" role="data" />
+   <file baseinstalldir="/" name="lib/phpmailer/smtp.php" role="data" />
+   <file baseinstalldir="/" name="lib/vcard/LICENSE" role="data" />
+   <file baseinstalldir="/" name="lib/vcard/vcardclass.inc" role="data" />
    
-   <file baseinstalldir="/" name="data/etc/acl.xml" role="data" />
-   <file baseinstalldir="/" name="data/etc/config.xml" role="data" />
-   <file baseinstalldir="/" name="data/etc/groups.xml" role="data" />
-   <file baseinstalldir="/" name="data/etc/lib.xml" role="data" />
-   <file baseinstalldir="/" name="data/etc/plugins.xml" role="data" />
-   <file baseinstalldir="/" name="data/etc/sources.xml" role="data" />
+   <file baseinstalldir="/" name="etc/acl.xml" role="data" />
+   <file baseinstalldir="/" name="etc/config.xml" role="data" />
+   <file baseinstalldir="/" name="etc/groups.xml" role="data" />
+   <file baseinstalldir="/" name="etc/lib.xml" role="data" />
+   <file baseinstalldir="/" name="etc/plugins.xml" role="data" />
+   <file baseinstalldir="/" name="etc/sources.xml" role="data" />
    
-   <file baseinstalldir="/" name="data/DummyController.php" role="data" />
+   <file baseinstalldir="/" name="DummyController.php" role="data" />
    
    <file baseinstalldir="/" name="CREDITS" role="data" />
    <file baseinstalldir="/" name="LICENSE" role="data" />

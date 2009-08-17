@@ -118,17 +118,28 @@ class PHPFrame_Postinstall_postinstall
             return false;
         }
         
-        $log_file = $this->_data_dir;
-        if (!$this->_createLogFile($log_file)) {
+        $log_path = $this->_data_dir;
+        if (!$this->_createLogFile($log_path)) {
             $this->_output("Error creating log file...");
             $this->_output("Installation failed...");
             return false;
         }
         
-        $cli_tool_log_file = $this->_data_dir.DS."CLI_Tool".DS."var";
-        if (!$this->_createLogFile($cli_tool_log_file)) {
+        $cli_tool_var_path = $this->_data_dir.DS."CLI_Tool".DS."var";
+        if (!$this->_createLogFile($cli_tool_var_path)) {
             $this->_output("Error creating log file for CLI tool...");
             $this->_output("Installation failed...");
+            return false;
+        }
+        
+        // Make var directory for CLI tool world writable
+        $cmd = "chmod 777 ".$cli_tool_var_path;
+        $exec = new PHPFrame_Utils_Exec($cmd);
+        $this->_output($exec->getOutput());
+        if ($exec->getReturnVar() > 0) {
+            $msg = "Failed to make world writable var directory for CLI tool (";
+            $msg .= $cli_tool_var_path.")...";
+            $this->_output($msg);
             return false;
         }
         

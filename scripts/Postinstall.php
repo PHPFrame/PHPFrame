@@ -85,7 +85,7 @@ class Postinstall_postinstall
         $this->_data_dir .= DS."PHPFrame";
         
 		$msg = "\nPHPFrame Post Installation Script";
-		$msg .= "\n--------------------------------\n\n";
+		$msg .= "\n--------------------------------\n";
 		$msg .= "\nInstallation directory: ".$this->_install_dir."\n\n";
         
 		echo $msg;
@@ -183,7 +183,7 @@ class Postinstall_postinstall
 		}
 		
 		// Echo message to user
-		echo "\n".$msg."\n\n";
+		echo $msg."\n";
 		
 		// Trigger PHP error is flag passed
 		if ($trigger_error) {

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<data>
+		<name>APPNAME</name>
+		<def_value></def_value>
+		<description>The app name</description>
+		<value>PHPFrame_CLI_Tool</value>
+	</data>
+	<data>
+		<name>BASE_URL</name>
+		<def_value></def_value>
+		<description>
+Base URL used when cannot autodetect (mainly when running on command line)
+Don't forget the trailing slash at the end
+		</description>
+		<value></value>
+	</data>
+	<data>
+		<name>THEME</name>
+		<def_value>default</def_value>
+		<description>App theme</description>
+		<value></value>
+	</data>
+	<data>
+		<name>DEFAULT_LANG</name>
+		<def_value>en-GB</def_value>
+		<description>The default language to load</description>
+		<value></value>
+	</data>
+	<data>
+		<name>TIMEZONE</name>
+		<def_value>Europe/London</def_value>
+		<description>
+Timezone
+
+For a list of supported timezones:
+http://www.php.net/manual/en/timezones.php
+		</description>
+		<value></value>
+	</data>
+	<data>
+		<name>DEBUG</name>
+		<def_value>0</def_value>
+		<description>This option switches the debugger on/off for sys admins</description>
+		<value></value>
+	</data>
+	<data>
+		<name>LOG_LEVEL</name>
+		<def_value>3</def_value>
+		<description>
+The severity of exceptions to log.
+
+Possible values:
+3 - notices, warnings and errors
+2 - warnings and errors
+1 - errors only
+		</description>
+		<value></value>
+	</data>
+	<data>
+		<name>SECRET</name>
+		<def_value>ChangeMeToSomethingRandomAndComplicated</def_value>
+		<description>Secret string used to generate secure hash</description>
+		<value></value>
+	</data>
+	
+	<data>
+		<name>DEFAULT_CONTROLLER</name>
+		<def_value>dummy</def_value>
+		<description>Default controller to use when none is specified</description>
+		<value>deploy</value>
+	</data>
+	<data>
+		<name>IGNORE_ACL</name>
+		<def_value></def_value>
+		<description>Whether or not we want to enforce the access level list as defined in etc/acl.xml</description>
+		<value>1</value>
+	</data>
+	
+	<data>
+		<name>DB_DRIVER</name>
+		<def_value>MySQL</def_value>
+		<description>Database driver</description>
+		<value></value>
+	</data>
+	<data>
+		<name>DB_HOST</name>
+		<def_value>localhost</def_value>
+		<description>Database server</description>
+		<value></value>
+	</data>
+	<data>
+		<name>DB_USER</name>
+		<def_value></def_value>
+		<description>Database user</description>
+		<value></value>
+	</data>
+	<data>
+		<name>DB_PASS</name>
+		<def_value></def_value>
+		<description>Database password</description>
+		<value></value>
+	</data>
+	<data>
+		<name>DB_NAME</name>
+		<def_value></def_value>
+		<description>Database name</description>
+		<value></value>
+	</data>
+	<data>
+		<name>DB_PREFIX</name>
+		<def_value>phpframe_</def_value>
+		<description>The prefix for database tables</description>
+		<value></value>
+	</data>
+	
+	
+	<data>
+		<name>UPLOAD_DIR</name>
+		<def_value>uploads</def_value>
+		<description>
+Relative path to folder to allow uploads. 
+Used for uploading images that will need to be accessible in html pages, 
+so it has to be within the web server root.
+		</description>
+		<value></value>
+	</data>
+	<data>
+		<name>MAX_UPLOAD_SIZE</name>
+		<def_value>2</def_value>
+		<description>Maximum size allowed for uploads (in Mb)</description>
+		<value></value>
+	</data>
+	<data>
+		<name>UPLOAD_ACCEPT</name>
+		<def_value>text/plain,image/jpeg,image/pjpeg,image/jpg,image/png,image/bmp,image/gif,application/pdf,application/octet-stream,application/msword,application/excel,application/vnd.ms-excel,application/x-excel,application/x-msexcel,application/vnd.ms-powerpoint,application/mspowerpoint,application/powerpoint</def_value>
+		<description>List of accepted mime types as CSV.</description>
+		<value></value>
+	</data>
+	
+	
+	<data>
+		<name>IMAP_HOST</name>
+		<def_value></def_value>
+		<description>The IMAP host name or IP address</description>
+		<value></value>
+	</data>
+	<data>
+		<name>IMAP_PORT</name>
+		<def_value>143</def_value>
+		<description>The IMAP port number to use</description>
+		<value></value>
+	</data>
+	<data>
+		<name>IMAP_USER</name>
+		<def_value></def_value>
+		<description>The IMAP login username</description>
+		<value></value>
+	</data>
+	<data>
+		<name>IMAP_PASSWORD</name>
+		<def_value></def_value>
+		<description>The IMAP password</description>
+		<value></value>
+	</data>
+	
+	
+	<data>
+		<name>MAILER</name>
+		<def_value>smtp</def_value>
+		<description>Method to send mail: ("mail", "sendmail", or "smtp").</description>
+		<value></value>
+	</data>
+	<data>
+		<name>SMTP_AUTH</name>
+		<def_value>1</def_value>
+		<description>If using SMTP mailer enable smtp authentication</description>
+		<value></value>
+	</data>
+	<data>
+		<name>SMTP_HOST</name>
+		<def_value></def_value>
+		<description>The SMTP host name or IP address.</description>
+		<value></value>
+	</data>
+	<data>
+		<name>SMTP_PORT</name>
+		<def_value>25</def_value>
+		<description>The SMTP port to use</description>
+		<value></value>
+	</data>
+	<data>
+		<name>SMTP_USER</name>
+		<def_value></def_value>
+		<description>The SMTP login name</description>
+		<value></value>
+	</data>
+	<data>
+		<name>SMTP_PASSWORD</name>
+		<def_value></def_value>
+		<description>The SMTP password</description>
+		<value></value>
+	</data>
+	<data>
+		<name>FROMADDRESS</name>
+		<def_value></def_value>
+		<description>The email address to use for notifications</description>
+		<value></value>
+	</data>
+	<data>
+		<name>FROMNAME</name>
+		<def_value></def_value>
+		<description>The from name for notifications</description>
+		<value></value>
+	</data>
+	
+</config>

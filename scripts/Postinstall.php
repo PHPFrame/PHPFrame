@@ -112,7 +112,12 @@ class Postinstall_postinstall
      * @since  1.0
      */
     public function run($infoArray, $paramGroupId)
-    {	
+    {
+        if (!isset($infoArray["CONFIRM"]) || $infoArray["CONFIRM"] != "yes") {
+            $this->_output("Installation aborted...");
+            return false;
+        }
+        
         $log_file = $this->_data_dir;
         if (!$this->_createLogFile($log_file)) {
 			$this->_output("Error creating log file...");

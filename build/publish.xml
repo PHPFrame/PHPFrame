@@ -49,22 +49,8 @@
 	<target name="copy">
 		<!-- copy data files -->
 		<copy todir="${tmp.dir}" overwrite="true">
-			<fileset dir="${project.basedir}/data">
-				<include name="**" />
-			</fileset>
-		</copy>
-		
-		<!-- copy script files -->
-		<copy todir="${tmp.dir}" overwrite="true">
-			<fileset dir="${project.basedir}/scripts">
-				<include name="**" />
-			</fileset>
-		</copy>
-		
-		<!-- copy source files -->
-		<copy todir="${tmp.dir}" overwrite="true">
-			<fileset dir="${project.basedir}/src">
-				<include name="**" />
+			<fileset dir="${project.basedir}">
+				<exclude name="build" />
 			</fileset>
 		</copy>
 		
@@ -102,11 +88,6 @@
 				<include name="package.xml" />
 			</fileset>
 		</copy>
-		
-		<!-- copy info files -->
-		<copy file="${project.basedir}/CREDITS" tofile="${tmp.dir}/CREDITS" overwrite="true" />
-		<copy file="${project.basedir}/LICENSE" tofile="${tmp.dir}/LICENSE" overwrite="true" />
-		<copy file="${project.basedir}/README" tofile="${tmp.dir}/README" overwrite="true" />
 		
 	</target>
 	

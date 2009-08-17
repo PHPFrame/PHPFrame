@@ -152,6 +152,22 @@ class PHPFrame_FS_FileInfo
 	    return new $class_name(parent::getPath(), $this->_human_readable);
 	}
 	
+	/**
+	 * Open file
+	 * 
+	 * @param string   $open_mode
+	 * @param bool     $use_include_path
+	 * @param resource $context
+	 * 
+	 * @access public
+     * @return PHPFrame_FS_FileObject
+     * @since  1.0
+	 */
+	public function openFile($open_mode="r", $use_include_path=false, $context=null)
+	{
+	    return new PHPFrame_FS_FileObject(parent::getRealPath());
+	}
+	
 	/*
 	 * Array Access interface implementation (offsetExists(), offsetGet(), 
 	 * offsetSet() and offsetUnset())

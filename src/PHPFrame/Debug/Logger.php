@@ -47,7 +47,6 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         if (defined("PHPFRAME_VAR_DIR")) {
             $log_dir = PHPFRAME_VAR_DIR;
         } else {
-            require_once "PEAR/Config.php";
 			$log_dir = PEAR_Config::singleton()->get('data_dir');
 			$log_dir .= DS."PHPFrame";
         }
@@ -71,8 +70,6 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
             $msg .= "Please check file permissions. ";
             trigger_error($msg, E_USER_ERROR);
         }
-        
-        //$this->_log_file_obj = new PHPFrame_FS_FileObject($log_file);
     }
     
     public static function instance()
@@ -133,8 +130,7 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         }
         
         // Write log to filesystem using PHPFrame's utility class
-        $a = self::instance()->_log_file_info->openFile("a");
-        var_dump($a); exit;
-        //PHPFrame_Utils_Filesystem::write($log_file, $info.$msg, true);
+        $log_file_obj = self::instance()->_log_file_info->openFile("a");
+        $log_file_obj->fwrite($info.$msg);
     }
 }

@@ -28,5 +28,18 @@
  */
 class PHPFrame_FS_FileObject extends SplFileObject
 {
-    
+    public function __construct(
+        $file_name, 
+        $open_mode="r", 
+        $use_include_path=false, 
+        $context=null
+    ) {
+        // Do not pass null context to parent as it would fail because context is
+        // of type resource
+        if (is_null($context)) {
+            parent::__construct($file_name, $open_mode, $use_include_path);
+        } else {
+            parent::__construct($file_name, $open_mode, $use_include_path, $context);
+        }
+    }
 }

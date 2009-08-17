@@ -53,8 +53,6 @@ abstract class PHPFrame_Base_Singleton extends PHPFrame_Base_Object
     /**
      * Variable holding an array of "single" instances of this classes children.
      * 
-     * @static
-     * @access    private
      * @var array
      */
     private static $_instances=array();
@@ -62,8 +60,9 @@ abstract class PHPFrame_Base_Singleton extends PHPFrame_Base_Object
     /**
      * Constructor
      * 
-     * The protected constructor ensures this class is not instantiated using the 'new' keyword.
-     * Singleton objects are instantiated using the getInstance() method.
+     * The protected constructor ensures this class is not instantiated using the 
+     * 'new' keyword. Singleton objects are instantiated using the getInstance() 
+     * method.
      * 
      * @return void
      */
@@ -77,19 +76,25 @@ abstract class PHPFrame_Base_Singleton extends PHPFrame_Base_Object
      * If $class_name is empty this method returns an instance of its own,
      * not the child class that inherited this method.
      * 
+     * @param string $class_name The class name to instantiate.
+     * @param array  $params     Parameters to be passed to new instance constructor
+     * 
      * @static
-     * @access    public
-     * @param    string    $class_name    The class name to instantiate.
-     * @param    array    $params        Parameters to be passed to new instance constructor.
-     * @return    object
+     * @access public
+     * @return object
+     * @since  1.0
      */
-    public static function &getInstance($class_name, $params=array()) {
+    public static function getInstance($class_name, $params=array()) {
         // Check whether the requested class has alreay been instantiated
         if (!array_key_exists($class_name, self::$_instances)) {
             // instance does not exist, so create it
             if (class_exists($class_name)) {
                 //self::$_instances[$class_name] = new $class_name;
-                eval('self::$_instances[$class_name] = new $class_name('.implode(",", $params).');');
+                eval(
+                    'self::$_instances[$class_name] = new $class_name('
+                    .implode(",", $params)
+                    .');'
+                );
             }
             else {
                 throw new Exception('Class '.$class_name.' not found.');
@@ -102,10 +107,12 @@ abstract class PHPFrame_Base_Singleton extends PHPFrame_Base_Object
     /**
      * Unset a singleton object
      * 
+     * @param string $class_name
+     * 
      * @static
-     * @access    public
-     * @param    string    $class_name
-     * @return    void
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function destroyInstance($class_name) {
            // Check whether the requested class has alreay been instantiated

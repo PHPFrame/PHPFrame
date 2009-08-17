@@ -27,6 +27,24 @@
  */
 class PHPFrame_Base_String
 {
+    private $_str=null;
+    
+    /**
+     * Constructor
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function __construct($str="")
+    {
+        $str = (string) trim($str);
+        
+        $this->_str = $str;
+    }
+    
     /**
      * Format a string for html output.
      * 

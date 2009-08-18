@@ -25,7 +25,7 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Config
+abstract class PHPFrame_Config
 {
     /**
      * Array holding instances of this class
@@ -38,13 +38,13 @@ class PHPFrame_Config
      * 
      * @var string
      */
-    private $_path=null;
+    protected $_path=null;
     /**
      * Array holding config data
      * 
      * @var array
      */
-    private $_data=array();
+    protected $data=array();
     
     /**
      * Constructor
@@ -58,7 +58,7 @@ class PHPFrame_Config
      * @return void
      * @since  1.0
      */
-    private function __construct($path)
+    protected function __construct($path)
     {
         $this->_path = (string) $path;
         
@@ -71,48 +71,25 @@ class PHPFrame_Config
         return $this->toString();
     }
     
-    public function __get($key)
+    public static function instance($path)
     {
-        return $this->get($key);
-    }
-    
-    public function __set($key, $value)
-    {
-        return $this->set($key, $value);
-    }
-    
-    public static function instance($path=null)
-    {
-        // Use default empty distro version of template
-        if (is_null($path)) {
-            require_once "PEAR/Config.php";
-            $data_dir = PEAR_Config::singleton()->get('data_dir');
-            $path = $data_dir;
-            $path .= DIRECTORY_SEPARATOR."PHPFrame";
-            $path .= DIRECTORY_SEPARATOR."config.xml";
-        }
+        $path = (string) trim($path);
         
         if (!isset(self::$_instances[$path])) {
-            self::$_instances[$path] = new self($path);
+            $class_name = "PHPFrame_Config_";
+            $class_name .= strtoupper(substr($path, (strrpos($path, ".")+1)));
+            
+            self::$_instances[$path] = new $class_name($path);
         }
         
         return self::$_instances[$path];
     }
     
-    public function get($key)
+    public function get($key, $section="General")
     {
-        if (!isset($this->_data[$key])) {
-            return null;
-        }
+        $this->_ensureKeyExists($section, $key);
         
-        if (
-            isset($this->_data[$key]["name"])
-            && isset($this->_data[$key]["value"])
-        ) {
-            return $this->_data[$key]["value"];
-        }
-        
-        return $this->_data[$key];
+        return $this->data[$section][$key];
     }
     
     /**
@@ -127,20 +104,11 @@ class PHPFrame_Config
      * @return PHPFrame_Config
      * @since  1.0
      */
-    public function set($key, $value)
+    public function set($key, $value, $section="General")
     {
-        if (!isset($this->_data[$key])) {
-            return null;
-        }
+        $this->_ensureKeyExists($section);
         
-        if (
-            isset($this->_data[$key]["name"])
-            && isset($this->_data[$key]["value"])
-        ) {
-            $this->_data[$key]["value"] = $value;
-        } else {
-            $this->_data[$key] = $value;
-        }
+        $this->data[$section][$key] = $value;
         
         return $this; 
     }
@@ -153,10 +121,15 @@ class PHPFrame_Config
             trigger_error($msg);
         }
         
-        foreach ($array as $key=>$value) {
-            if (array_key_exists($key, $this->_data)) {
-                $this->set($key, $value);
-            }
+        foreach ($array as $section=>$value) {
+            var_dump($section, $value); 
+//            if (array_key_exists($key, $this->data)) {
+//                foreach ($this->data[$key] as $k=>$v) {
+//                    if ($a) {
+//                        $this->set($key, $value);
+//                    }
+//                }
+//            }
         }
         
     }
@@ -181,77 +154,33 @@ class PHPFrame_Config
             $this->_path = (string) trim($path);
         }
         
-        // Store object as XML in filesystem
+        // Store object as string in filesystem
         // This will throw an exception on failure
-        PHPFrame_Utils_Filesystem::write($this->_path, $this->toXML());
-    }
-    
-    public function toString()
-    {
-        $str = "FIX ME!!! (".get_class($this)."::toString())";
-        
-        return $str;
+        PHPFrame_Utils_Filesystem::write($this->_path, (string) $this);
     }
     
     public function toArray()
     {
-        return $this->_data;
+        return $this->data;
     }
     
-    public function toXML()
-    {
-        $xml = new PHPFrame_Document_XML();
-        $config_node = $xml->addNode(null, "config");
-        
-        foreach ($this->toArray() as $row) {
-            $data_node = $xml->addNode($config_node, "data", array());
-            
-            if (is_array($row)) {
-                foreach ($row as $key=>$value) {
-                    $xml->addNode($data_node, $key, array(), $value);
-                }
-            }
-        }
-        
-        return $xml->toString();
-    }
+    abstract public function toString();
     
-    private function _fetchData()
+    abstract protected function _fetchData();
+    
+    private function _ensureKeyExists($section, $key=null)
     {
-        $xml = @simplexml_load_file($this->_path);
-        
-        if (
-            !$xml instanceof SimpleXMLElement
-            || !$xml->data instanceof SimpleXMLElement
-        ) {
-            $msg = get_class($this).": ";
-            $msg .= "Could not load config from xml file.";
-            trigger_error($msg);
+        if (!isset($this->data[$section])) {
+            $msg = "Configuration file (".$this->_path.") does not containg section ";
+            $msg .= $section;
+            throw new PHPFrame_Exception($msg);
         }
         
-        foreach ($xml->data as $data) {
-            if (!$data instanceof SimpleXMLElement) {
-                continue;
-            }
-            
-            $array = array();
-            foreach ($data as $key=>$value) {
-                $array[$key] = (string) $value;
-            }
-            
-            if (
-                isset($array["value"]) 
-                && $array["value"] == "" 
-                && isset($array["def_value"]) 
-                && $array["def_value"] != ""
-            ) {
-                $array["value"] = $array["def_value"];
-            }
-            
-            if (isset($array["name"])) {
-                $this->_data[$array["name"]] = $array;
-            } else {
-                $this->_data[] = $array;
+        if (!is_null($key)) {
+            if (!isset($this->data[$section][$key])) {
+                $msg = "Configuration file (".$this->_path.") does not containg key ";
+                $msg .= $key." under section [".$section."]";
+                throw new PHPFrame_Exception($msg);
             }
         }
     }

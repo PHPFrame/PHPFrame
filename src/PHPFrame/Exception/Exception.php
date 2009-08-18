@@ -51,10 +51,10 @@
 class PHPFrame_Exception extends Exception
 {
     // PHPFrame exception codes
-    const ERROR=1;
-    const WARNING=2;
-    const NOTICE=3;
-    const STRICT=4;
+    const ERROR   = 0x00000001;
+    const WARNING = 0x00000002;
+    const NOTICE  = 0x00000003;
+    const STRICT  = 0x00000004;
     
     /**
      * A string containing more information about the exception
@@ -74,19 +74,19 @@ class PHPFrame_Exception extends Exception
      * @return void
      * @since  1.0
      */
-    public function __construct($message=null, $code=self::ERROR, $verbose='') 
+    public function __construct($message, $code=self::ERROR, $verbose='') 
     {
         $this->_verbose = $verbose;
         
-         // Construct parent class to build Exception 
+        // Construct parent class to build Exception 
         parent::__construct($message, $code);
         
         // Log the exception to file if needed
         //if ($code < PHPFrame::Config()->get("LOG_LEVEL")) {
             // Cast exception object to string
-            $exception = (string) $this;
+            //$exception = (string) $this;
             // Write log
-            PHPFrame_Debug_Logger::write($exception);
+            //PHPFrame_Debug_Logger::write($exception);
         //}
     }
     

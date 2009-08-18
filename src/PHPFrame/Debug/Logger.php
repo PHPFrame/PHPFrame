@@ -124,7 +124,7 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         }
         
         // Add log separator
-        $info = "\n\n---\n";
+        $info = "\n---\n";
         
         // Add date and time
         $info .= "[".date("Y-m-d H:i:s")."] ";

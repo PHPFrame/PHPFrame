@@ -62,11 +62,19 @@ var_dump($user4->toArray());
 </pre>
 <?php
 
-$factory = new PHPFrame_Mapper_PersistenceFactory("PHPFrame_User");
+$mapper = new PHPFrame_Mapper("PHPFrame_User", "users");
+try {
+$obj = $mapper->findOne(1);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+var_dump($mapper, $obj); exit;
+
 $assembler = $factory->getAssembler();
 $id_obj = $factory->getIdObject();
 echo '<h2>Assembler: </h2>';
 var_dump($factory, $assembler, $id_obj);
+exit;
 
 $user = $assembler->findOne(62);
 echo '<h2>Found one user: </h2>';

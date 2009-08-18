@@ -189,6 +189,13 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
         
     }
     
+    public function toArray()
+    {
+        $array = get_object_vars($this);
+        
+        return $this->_doToArray($array);
+    }
+    
     /**
      * Convert object to array
      * 
@@ -196,5 +203,5 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
      * @return array
      * @since  1.0
      */
-    abstract public function toArray();
+    abstract protected function _doToArray($array);
 }

@@ -104,12 +104,13 @@ class PHPFrame_Exception_Handler
         $str .= $exception->getTraceAsString();
         
         
-        $debug = PHPFrame::Config()->get("DEBUG");
+        $debug = PHPFrame::Config()->get("enable", "Debug");
         if ($debug == 1) {
             echo '<pre>'.$str.'</pre>';
         }
         
         // Log the error to file
         PHPFrame_Debug_Logger::write($str);
+        exit;
     }
 }

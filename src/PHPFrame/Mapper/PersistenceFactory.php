@@ -15,7 +15,7 @@
  */
 
 /**
- * PersistenceFactory Class
+ * Abstract Persistence Factory Class
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
@@ -25,7 +25,7 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Mapper_PersistenceFactory
+abstract class PHPFrame_Mapper_PersistenceFactory
 {
     /**
      * Target class
@@ -33,6 +33,12 @@ class PHPFrame_Mapper_PersistenceFactory
      * @var string
      */
     private $_target_class=null;
+    /**
+     * Target class
+     * 
+     * @var string
+     */
+    private $_table_name=null;
     
     /**
      * Constructor
@@ -43,21 +49,45 @@ class PHPFrame_Mapper_PersistenceFactory
      * @return void
      * @since  1.0
      */
-    public function __construct($target_class)
-    {
+    public function __construct($target_class, $table_name) {
         $this->_target_class = (string) trim($target_class);
+        $this->_table_name = (string) trim($table_name);
     }
     
     /**
-     * Get object assembler
+     * Get concrete persistence factory
+     * 
+     * @param string $target_class
+     * @param string $table_name
+     * @param int    $storage
+     * @param bool   $try_alternative_storage
      * 
      * @access public
-     * @return PHPFrame_Mapper_DomainObjectAssembler
+     * @return PHPFrame_Mapper_PersistenceFactory
      * @since  1.0
      */
-    public function getAssembler()
-    {
-        return new PHPFrame_Mapper_DomainObjectAssembler($this);
+    public static function getFactory(
+        $target_class, 
+        $table_name, 
+        $storage=self::STORAGE_SQL, 
+        $try_alternative_storage=true
+    ) {
+        switch ($storage) {
+            case self::STORAGE_SQL :
+                $class_name = "PHPFrame_Mapper_SQLPersistenceFactory";
+                break;
+            
+            case self::STORAGE_XML :
+                $class_name = "PHPFrame_Mapper_XMLPersistenceFactory";
+                break;
+            
+            default :
+                throw new PHPFrame_Exception("Storage mechanism not supported");
+        }
+        
+        $factory = new $class_name($target_class, $table_name);
+        
+        return $factory;
     }
     
     /**
@@ -70,20 +100,6 @@ class PHPFrame_Mapper_PersistenceFactory
     public function getDomainObjectFactory()
     {
         return new PHPFrame_Mapper_DomainObjectFactory($this->_target_class);
-    }
-    
-    /**
-     * Create a new IdObject to work with the target class
-     * 
-     * @access public
-     * @return PHPFrame_Mapper_IdObject
-     * @since  1.0
-     */
-    public function getIdObject()
-    {
-        $options = array("select"=>"*", "from"=>$this->getTableName());
-        
-        return new PHPFrame_Mapper_IdObject($options);
     }
     
     /**
@@ -119,11 +135,24 @@ class PHPFrame_Mapper_PersistenceFactory
      */
     public function getTableName()
     {
-        // Remove PHPFrame_ prefix if needed
-        $table_name = str_replace("PHPFrame_", "#__", $this->getTargetClass());
-        // Make string lower case and add trailing "s"
-        $table_name = strtolower($table_name)."s";
-        
-        return $table_name;
+        return $this->_table_name;
     }
+    
+    /**
+     * Get object assembler
+     * 
+     * @access public
+     * @return PHPFrame_Mapper_DomainObjectAssembler
+     * @since  1.0
+     */
+    abstract public function getAssembler();
+    
+    /**
+     * Create a new IdObject to work with the target class
+     * 
+     * @access public
+     * @return PHPFrame_Mapper_IdObject
+     * @since  1.0
+     */
+    abstract public function getIdObject();
 }

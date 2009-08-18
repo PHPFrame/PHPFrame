@@ -23,13 +23,13 @@ Don't forget the trailing slash at the end
         <value></value>
     </data>
     <data>
-        <name>DEFAULT_LANG</name>
+        <name>default_lang</name>
         <def_value>en-GB</def_value>
         <description>The default language to load</description>
         <value></value>
     </data>
     <data>
-        <name>TIMEZONE</name>
+        <name>timezone</name>
         <def_value>Europe/London</def_value>
         <description>
 Timezone

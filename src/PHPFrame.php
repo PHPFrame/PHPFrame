@@ -112,6 +112,7 @@ class PHPFrame
     public static function __autoload($class_name) {
         $file_path = "";
         
+        // Load default PEAR classes
         if (preg_match('/^PEAR_([a-zA-Z0-9]+)_?([a-zA-Z0-9]+)?/', $class_name, $matches)) {
             $path = "";
             for ($i=1; $i<count($matches); $i++) {
@@ -119,6 +120,13 @@ class PHPFrame
             }
             
             require "PEAR".$path.".php";
+            return;
+        }
+        
+        // Load PEAR XML tools
+        if (preg_match('/^XML_([a-zA-Z]+)/', $class_name, $matches)) {
+            require "XML".DS.$matches[1].".php";
+            return;
         }
         
         // PHPFrame classes
@@ -132,7 +140,7 @@ class PHPFrame
             } elseif (sizeof($array) == 2) {
                 if ($array[1] == "Lang") {
                     $file_path = "PHPFrame".DS.$array[1].DS;
-                    $file_path .= PHPFrame::Config()->get("DEFAULT_LANG").".php";
+                    $file_path .= PHPFrame::Config()->get("default_lang").".php";
                 } else {
                     $file_path = "PHPFrame".DS.$array[1].DS.$array[1].".php";
                 }
@@ -205,7 +213,7 @@ class PHPFrame
         
         // Append lang dir for lang classes
         if ($super_class == "Lang") {
-            $file_path .= DS.PHPFrame::Config()->get("DEFAULT_LANG");
+            $file_path .= DS.PHPFrame::Config()->get("default_lang");
         // Append 's' to dir name except for all others except domain objects
         } elseif ($super_class != "Domain") {
             $file_path .= "s";
@@ -274,7 +282,7 @@ class PHPFrame
             $config_dir .= DS."PHPFrame".DS."etc";
         }
         
-        $config_file = $config_dir.DS."config.xml";
+        $config_file = $config_dir.DS."phpframe.ini";
         
         return PHPFrame_Config::instance($config_file);
     }
@@ -412,7 +420,7 @@ class PHPFrame
         self::Config();
         
         // Set timezone
-        date_default_timezone_set(self::Config()->get("TIMEZONE"));
+        date_default_timezone_set(self::Config()->get("timezone"));
         
         // Set run level to 1, framework is ready to go!!!
         self::$_run_level = 1;
@@ -517,7 +525,7 @@ class PHPFrame
         // load the application language file if any
         if (defined("PHPFRAME_INSTALL_DIR")) {
             $lang_file = PHPFRAME_INSTALL_DIR.DS."src".DS."lang".DS;
-            $lang_file .= PHPFrame::Config()->get("DEFAULT_LANG").DS;
+            $lang_file .= PHPFrame::Config()->get("default_lang").DS;
             $lang_file .= "global.php";
             
             if (file_exists($lang_file)) {
@@ -530,7 +538,7 @@ class PHPFrame
         
         // Include the PHPFrame framework's language file
         $lang_file = "PHPFrame".DS."Lang";
-        $lang_file .= DS.PHPFrame::Config()->get("DEFAULT_LANG").".php";
+        $lang_file .= DS.PHPFrame::Config()->get("default_lang").".php";
         
         if (!(require $lang_file)) {
             $msg = 'Could not find language file ('.$lang_file.')';

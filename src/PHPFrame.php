@@ -193,7 +193,7 @@ class PHPFrame
             return;
         }
         
-        $super_classes = array("Controller", "Model", "View", "Helper", "Lang");
+        $super_classes = array("Controller", "Model", "View", "Helper", "Lang", "Domain");
         foreach ($super_classes as $super_class) {
             if (preg_match('/'.$super_class.'$/', $class_name)) {
                 break;
@@ -202,22 +202,29 @@ class PHPFrame
         
         // Set base path for objects of given superclass
         $file_path .= PHPFRAME_INSTALL_DIR.DS."src".DS.strtolower($super_class);
-        // Append 's' to dir name except for lang
-        if ($super_class != "Lang") {
-            $file_path .= "s";
+        
         // Append lang dir for lang classes
-        } else {
+        if ($super_class == "Lang") {
             $file_path .= DS.PHPFrame::Config()->get("DEFAULT_LANG");
+        // Append 's' to dir name except for all others except domain objects
+        } elseif ($super_class != "Domain") {
+            $file_path .= "s";
+            
         }
         
         // Remove superclass name from class name
-        $class_name = str_replace($super_class, "", $class_name);
-        
-        // Build dir path by breaking camel case class name
-        $matches = array();
-        preg_match_all('/[A-Z]{1}[a-z]+/', ucfirst($class_name), $matches);
-        if (isset($matches[0]) && is_array($matches[0])) {
-            $file_path .= DS.strtolower(implode(DS, $matches[0]));
+        if ($super_class == "Domain") {
+            $file_path .= DS.$class_name;
+        } else {
+            $class_name = str_replace($super_class, "", $class_name);
+            
+            // Build dir path by breaking camel case class name
+            $pattern = '/[A-Z]{1}[a-zA-Z0-9]+/';
+            $matches = array();
+            preg_match_all($pattern, ucfirst($class_name), $matches);
+            if (isset($matches[0]) && is_array($matches[0])) {
+                $file_path .= DS.strtolower(implode(DS, $matches[0]));
+            }
         }
         
         // Append file extension

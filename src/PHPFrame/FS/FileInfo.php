@@ -165,7 +165,12 @@ class PHPFrame_FS_FileInfo
      */
     public function openFile($open_mode="r", $use_include_path=false, $context=null)
     {
-        return new PHPFrame_FS_FileObject(parent::getRealPath());
+        return new PHPFrame_FS_FileObject(
+            parent::getRealPath(),
+            $open_mode, 
+            $use_include_path,
+            $context=null
+        );
     }
     
     /*

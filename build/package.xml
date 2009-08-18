@@ -93,7 +93,20 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/IdObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/JSONDomainObjectAssembler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/JSONIdObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/JSONPersistenceFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/Mapper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedObjectAssembler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedIdObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedPersistenceFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/SQLDomainObjectAssembler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/SQLIdObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistenceFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/XMLDomainObjectAssembler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/XMLIdObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/Factory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/Model.php" role="php" />
@@ -140,10 +153,7 @@
    
    <file baseinstalldir="/" name="etc/acl.xml" role="data" />
    <file baseinstalldir="/" name="etc/groups.xml" role="data" />
-   <file baseinstalldir="/" name="etc/lib.xml" role="data" />
    <file baseinstalldir="/" name="etc/phpframe.ini" role="data" />
-   <file baseinstalldir="/" name="etc/plugins.xml" role="data" />
-   <file baseinstalldir="/" name="etc/sources.xml" role="data" />
    
    <file baseinstalldir="/" name="DummyController.php" role="data" />
    

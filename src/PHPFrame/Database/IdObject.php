@@ -32,6 +32,8 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @see        PHPFrame_Database_RowCollection
  * @since      1.0
+ * @deprecated
+ * @see PHPFrame_Mapper
  */
 class PHPFrame_Database_IdObject
 {

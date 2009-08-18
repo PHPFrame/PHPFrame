@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Mapper/IdObject.php
+ * PHPFrame/Mapper/XMLIdObject.php
  * 
  * PHP version 5
  * 
@@ -16,7 +16,7 @@
  */
 
 /**
- * IdObject class
+ * XML IdObject class
  * 
  * This class encapsulates the selection of rows from the database.
  * 

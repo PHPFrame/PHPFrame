@@ -15,7 +15,7 @@
  */
 
 /**
- * XMLDomainObjectAssembler Class
+ * XML Domain Object Assembler Class
  * 
  * @category   MVC_Framework
  * @package    PHPFrame

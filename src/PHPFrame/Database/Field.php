@@ -27,6 +27,8 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
+ * @deprecated
+ * @see PHPFrame_Mapper
  */
 class PHPFrame_Database_Field
 {

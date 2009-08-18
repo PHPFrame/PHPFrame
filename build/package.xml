@@ -98,7 +98,7 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/JSONPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/Mapper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedObjectAssembler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedDomainObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLDomainObjectAssembler.php" role="php" />

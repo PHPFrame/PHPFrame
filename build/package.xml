@@ -139,9 +139,9 @@
    <file baseinstalldir="/" name="lib/vcard/vcardclass.inc" role="data" />
    
    <file baseinstalldir="/" name="etc/acl.xml" role="data" />
-   <file baseinstalldir="/" name="etc/config.xml" role="data" />
    <file baseinstalldir="/" name="etc/groups.xml" role="data" />
    <file baseinstalldir="/" name="etc/lib.xml" role="data" />
+   <file baseinstalldir="/" name="etc/phpframe.ini" role="data" />
    <file baseinstalldir="/" name="etc/plugins.xml" role="data" />
    <file baseinstalldir="/" name="etc/sources.xml" role="data" />
    

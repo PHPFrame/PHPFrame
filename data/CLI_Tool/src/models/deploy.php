@@ -18,7 +18,7 @@ class DeployModel extends PHPFrame_MVC_Model
         $this->_sources_config = PHPFrame_Config::instance($xml_path);
     }
     
-    public function install($config=array())
+    public function install($config=array(), $allow_non_empty_dir=false)
     {
         if (!isset($config["APPNAME"]) || empty($config["APPNAME"])) {
             $msg = "App name is required";
@@ -26,7 +26,7 @@ class DeployModel extends PHPFrame_MVC_Model
         }
         
         // Fetch source from repo
-        $this->_fetchSource();
+        $this->_fetchSource($allow_non_empty_dir);
         
         // Create configuration xml files based on distro templates
         $this->_createConfig($config);
@@ -108,14 +108,19 @@ class DeployModel extends PHPFrame_MVC_Model
         }
     }
     
-    private function _fetchSource()
+    private function _fetchSource($allow_non_empty_dir=false)
     {
         // before anything else we check that the directory is writable
         PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_dir);
         
         // check that the directory is empty
-        if (!PHPFrame_Utils_Filesystem::isEmptyDir($this->_install_dir)) {
+        if (
+            !$allow_non_empty_dir 
+            && !PHPFrame_Utils_Filesystem::isEmptyDir($this->_install_dir)
+        ) {
             $msg = "Target directory is not empty.";
+            $msg .= "\nUse \"phpframe --app_name MyApp ";
+            $msg .= "--allow_non_empty_dir true\" to force install";
             throw new PHPFrame_Exception($msg);
         }
         

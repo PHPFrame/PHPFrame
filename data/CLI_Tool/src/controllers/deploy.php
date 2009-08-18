@@ -14,16 +14,17 @@ class DeployController extends PHPFrame_MVC_ActionController
         parent::__construct("install");
     }
     
-    public function install($app_name)
+    public function install($app_name, $allow_non_empty_dir=false)
     {
         $app_name = (string) trim($app_name);
+        $allow_non_empty_dir = (bool) trim($allow_non_empty_dir);
         
         try {
             // Get model and pass install dir to constructor
             $model = $this->getModel("deploy", array($this->_install_dir));
             
             // Install new app
-            $model->install(array("APPNAME"=>$app_name));
+            $model->install(array("APPNAME"=>$app_name), $allow_non_empty_dir);
             
             $msg = "App created successfully";
             $this->sysevents->setSummary($msg, "success");

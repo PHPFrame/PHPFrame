@@ -25,20 +25,62 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Mapper_Collection implements Iterator
+class PHPFrame_Mapper_Collection implements Iterator, Countable
 {
+    /**
+     * A domain factory object used to create objects in collection
+     * 
+     * @var PHPFrame_Mapper_DomainObjectFactory
+     */
     private $_obj_fact;
-    private $_total;
+    /**
+     * Raw array used to generate domain objects
+     * 
+     * @var array
+     */
     private $_raw;
-    private $_result;
+    /**
+     * The total number of elements in the collection
+     * 
+     * @var int
+     */
+    private $_total;
+    /**
+     * Internal array pointer
+     * 
+     * @var int
+     */
     private $_pointer=0;
+    /**
+     * Storage array used to manage the collection's objects
+     * 
+     * @var array;
+     */
     private $_objects=array();
     
+    /**
+     * Constructor
+     * 
+     * @param array                               $raw
+     * @param PHPFrame_Mapper_DomainObjectFactory $obj_factory
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function __construct(
         array $raw=null, 
         PHPFrame_Mapper_DomainObjectFactory $obj_factory=null
     ) {
         if (!is_null($raw) && !is_null($obj_factory)) {
+            // If the raw array is only one level of depth we assume it is 
+            // only one element and we wrap it in an array to make is a collection 
+            // of a single entry
+            $depth = PHPFrame_Base_ArrayHelper::depth($raw);
+            if ($depth == 1) {
+                $raw = array($raw);
+            }
+            
             $this->_raw = $raw;
             $this->_total = count($raw);
         }
@@ -46,9 +88,18 @@ class PHPFrame_Mapper_Collection implements Iterator
         $this->_obj_fact = $obj_factory;
     }
     
+    /**
+     * Get domain object at given key
+     * 
+     * @param string $key
+     * 
+     * @access public
+     * @return PHPFrame_Mapper_DomainObject
+     * @since  1.0
+     */
     public function getElement($key)
     {
-        if ($key >= $this->_total || $key < 0) {
+        if ($key >= $this->count() || $key < 0) {
             return null;   
         }
         
@@ -63,6 +114,43 @@ class PHPFrame_Mapper_Collection implements Iterator
     }
     
     /**
+     * Add domain object to the collection
+     * 
+     * @param PHPFrame_Mapper_DomainObject $obj
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function addElement(PHPFrame_Mapper_DomainObject $obj)
+    {
+        if (in_array($obj, $this->_objects)) {
+            return;
+        }
+        
+        $this->_objects[$this->_total++] = $obj;
+    }
+    
+    /**
+     * Remove domain object from the collection
+     * 
+     * @param PHPFrame_Mapper_DomainObject $obj
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function removeElement(PHPFrame_Mapper_DomainObject $obj)
+    {
+        if (!in_array($obj, $this->_objects)) {
+            return;
+        }
+        
+        $key = array_keys($this->_objects, $obj);
+        unset($this->_objects[$key]);
+    }
+    
+    /**
      * Implementation of Iterator::current()
      * 
      * @access public
@@ -71,7 +159,7 @@ class PHPFrame_Mapper_Collection implements Iterator
      */
     public function current() 
     {
-        return $this->getElement($this->_pointer);
+        return $this->getElement($this->key());
     }
     
     /**
@@ -107,7 +195,7 @@ class PHPFrame_Mapper_Collection implements Iterator
      */
     public function valid() 
     {
-        return ($this->key() < $this->_total);
+        return ($this->key() < $this->count());
     }
     
     /**
@@ -120,5 +208,10 @@ class PHPFrame_Mapper_Collection implements Iterator
     public function rewind() 
     {
         $this->_pointer = 0;
+    }
+    
+    public function count()
+    {
+        return $this->_total;
     }
 }

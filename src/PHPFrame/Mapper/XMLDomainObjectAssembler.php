@@ -27,7 +27,8 @@
  */
 class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObjectAssembler
 {
-    private $_path=null;
+    private $_path_info=null;
+    private $_file_info=null;
     
     /**
      * Constructor
@@ -42,12 +43,38 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
     {
         parent::__construct($factory);
         
-        if (!is_null($path)) {
-            $this->_path = trim((string) $path);
+        if (!defined("PHPFRAME_VAR_DIR") && is_null($path)) {
+            $msg = "No path has been defined to store XML domain objects. ";
+            $msg .= "If you are trying to use the Mapper package outside of an ";
+            $msg .= "MVC app you can manually set the PHPFRAME_VAR_DIR constant ";
+            $msg .= "before you instantiate the mapper objects.";
+            throw new PHPFrame_Exception($msg);
+            
         }
         
-        //$this->_path = PHPFRAME_VAR_DIR."";
-        var_dump($this->_path); exit;
+        // If no path is specified we use default location
+        if (is_null($path)) {
+            $path = PHPFRAME_VAR_DIR.DS."domain.objects";
+        }
+        
+        // Make sure the directory is writable
+        PHPFrame_Utils_Filesystem::ensureWritableDir($path);
+        
+        // Create FileInfo object for dir path
+        $this->_path_info = new PHPFrame_FS_FileInfo($path);
+        
+        // Build full path to XML file
+        $file_name = $this->_path_info->getRealPath();
+        $file_name .= DS.$this->factory->getTableName().".xml";
+        
+        // Create FileInfo object for XML file
+        // Create XML file if it doesnt exist
+        if (!is_file($file_name)) {
+            $file_obj = new PHPFrame_FS_FileObject($file_name, "w");
+            $this->_file_info = $file_obj->getFileInfo();
+        } else {
+            $this->_file_info = new PHPFrame_FS_FileInfo($file_name);
+        }
     }
     
     /**
@@ -95,11 +122,28 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
      */
     public function find(PHPFrame_Mapper_IdObject $id_obj=null)
     {
-        // Get raw data as array from db
-        $raw = PHPFrame::DB()->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
+//        if (is_null($id_obj)) {
+//            $id_obj = $this->factory->getIdObject();
+//        }
+        
+        // Get raw data as array from XML
+        $serialiser = new XML_Unserializer();
+        
+        $raw = array();
+        
+        if ($serialiser->unserialize($this->_file_info->getRealPath(), true)) {
+            $raw_tmp = $serialiser->getUnserializedData();
+            if (!$raw_tmp instanceof PEAR_Error) {
+                
+                $raw = $raw_tmp[$this->factory->getTargetClass()];
+                
+            }
+        }
+        
+        //var_dump($raw);
         
         // Create collectioj object
-        $collection = $this->_factory->getCollection($raw);
+        $collection = $this->factory->getCollection($raw);
         
         return $collection;
     }
@@ -115,40 +159,52 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
      */
     public function insert(PHPFrame_Mapper_DomainObject $obj)
     {
-        if ($obj->getId() <= 0) {
-            $obj->setCreated(date("Y-m-d H:i:s"));
-        }
+        // Get current collection
+        $collection = $this->find();
         
+        // Update modified time
         $obj->setModified(date("Y-m-d H:i:s"));
         
-        $obj->setId($this->_getNewId());
-        
-        $file_obj = new PHPFrame_FS_FileObject($this->_path, "w");
-        var_dump($file_obj); exit;
-        //...
-        exit;
-        
-        $sql = $this->$build_query_method($obj->toArray());
-        $params = $this->_buildQueryParams($obj->toArray());
-        //echo $sql; exit;
-        PHPFrame::DB()->query($sql, $params);
-        
+        // Prepare new elements (insert)
         if ($obj->getId() <= 0) {
-            $obj->setId(PHPFrame::DB()->lastInsertId());
+            $obj->setId($this->_getNewId());
+            $obj->setCreated(date("Y-m-d H:i:s"));
+            
+            // Add new element to collection
+            $collection->addElement($obj);
+        
+        // Prepare existing elements (update)
+        } else {
+            foreach ($collection as $item) {
+                if ($item->getId() == $obj->getId()) {
+                    $item = $obj->toArray();
+                }
+            }
         }
+        
+        // Open the file in "write" mode
+        $file_obj = $this->_file_info->openFile("w");
+        $file_obj->fwrite($this->_serializeCollection($collection));
         
         $obj->markClean();
     }
     
-    private function _serializeObj(PHPFrame_Mapper_DomainObject $obj)
+    private function _serializeCollection(PHPFrame_Mapper_Collection $collection)
     {
         $options = array(
             "indent"    => "    ",
-            "rootName"=> get_class($obj)
+            "rootName"=> "collection",
+            "defaultTagName"=> $this->factory->getTargetClass()
         );
         
+        // Flatten collectio object to array
+        $array = array();
+        foreach ($collection as $item) {
+            $array[] = $item->toArray();
+        }
+        
         $serialiser = new XML_Serializer($options);
-        $serialiser->serialize($obj->toArray());
+        $serialiser->serialize($array);
         $serialised = $serialiser->getSerializedData();
         
         return $serialised;
@@ -156,6 +212,15 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
     
     private function _getNewId()
     {
-        return 1;
+        $newid = 1;
+        
+        $collection = $this->find();
+        foreach ($collection as $item) {
+            if ($item->getId() > $newid) {
+                $newid = $item->getId();
+            }
+        }
+        
+        return ($newid+1);
     }
 }

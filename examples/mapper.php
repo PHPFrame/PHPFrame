@@ -9,7 +9,6 @@ function loadFramework()
     include_once "PHPFrame.php";
 }
 
-
 loadFramework();
 
 ?>
@@ -18,98 +17,33 @@ loadFramework();
 <h2>Code</h2>
 
 <pre style="border:1px solid #990000; padding:20px; background-color: #FFFFCC;">
-$factory = new PHPFrame_Mapper_PersistenceFactory("PHPFrame_User");
-$assembler = $factory->getAssembler();
-$id_obj = $factory->getIdObject();
-echo '<h2>Assembler: </h2>';
-var_dump($factory, $assembler, $id_obj);
 
-$user = $assembler->findOne(62);
-echo '<h2>Found one user: </h2>';
-var_dump($user);
-
-$collection = $assembler->find($id_obj);
-echo '<h2>Found collection: </h2>';
-foreach ($collection as $obj) {
-    var_dump($obj);
-}
-
-$user2 = clone $user;
-echo '<h2>Cloned user: </h2>';
-var_dump($user2); 
-
-//$assembler->insert($user2);
-//echo '<h2>Cloned user after insert: </h2>';
-//var_dump($user2); 
-
-
-$options = array("groupid"=>2, "email"=>"some@email.com");
-$user3 = new PHPFrame_User($options);
-echo '<h2>User initialised with options: </h2>';
-var_dump($user3->toArray());
-
-$user4 = new PHPFrame_User();
-$user4->setGroupId(1);
-$user4->setEmail("me@lupomontero.com");
-$user4->setUserName("lupo.montero");
-$user4->setFirstName("Lupo");
-$user4->setLastName("Montero");
-$user4->setPhoto("default.png");
-$user4->addOpenidUrl("http://www.e-noise.com");
-
-echo '<h2>User properties set using setter methods: </h2>';
-var_dump($user4->toArray());
 </pre>
+
 <?php
+$plugin = new PHPFrame_Addons_Plugin();
+echo '<h2>Object to be inserted</h2>';
+var_dump($plugin);
 
-$mapper = new PHPFrame_Mapper("PHPFrame_User", "users");
-try {
-$obj = $mapper->findOne(1);
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
-var_dump($mapper, $obj); exit;
+$mapper = new PHPFrame_Mapper(
+    "PHPFrame_Addons_Plugin", 
+    null, 
+    PHPFrame_Mapper::STORAGE_XML, 
+    false, 
+    "/Users/lupomontero/Desktop".DS."domain.objects"
+);
 
-$assembler = $factory->getAssembler();
-$id_obj = $factory->getIdObject();
-echo '<h2>Assembler: </h2>';
-var_dump($factory, $assembler, $id_obj);
-exit;
-
-$user = $assembler->findOne(62);
-echo '<h2>Found one user: </h2>';
-var_dump($user);
-
-$collection = $assembler->find($id_obj);
-echo '<h2>Found collection: </h2>';
-foreach ($collection as $obj) {
-    var_dump($obj);
+// Show objects before insert
+echo '<h2>Collection BEFORE insert</h2>';
+foreach ($mapper->find() as $item) {
+    var_dump($item);
 }
 
-$user2 = clone $user;
-echo '<h2>Cloned user: </h2>';
-var_dump($user2); 
+// Insert new object
+$mapper->insert($plugin);
 
-//$assembler->insert($user2);
-//echo '<h2>Cloned user after insert: </h2>';
-//var_dump($user2); 
-
-
-$options = array("groupid"=>2, "email"=>"some@email.com");
-$user3 = new PHPFrame_User($options);
-echo '<h2>User initialised with options: </h2>';
-var_dump($user3->toArray());
-
-$user4 = new PHPFrame_User();
-$user4->setGroupId(1);
-$user4->setEmail("me@lupomontero.com");
-$user4->setUserName("lupo.montero");
-$user4->setFirstName("Lupo");
-$user4->setLastName("Montero");
-$user4->setPhoto("default.png");
-$user4->addOpenidUrl("http://www.e-noise.com");
-
-echo '<h2>User properties set using setter methods: </h2>';
-var_dump($user4->toArray());
-
-exit;
+// Show updated collection
+echo '<h2>Collection AFTER insert</h2>';
+foreach ($mapper->find() as $item) {
+    var_dump($item);
+}

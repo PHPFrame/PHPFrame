@@ -1,6 +1,11 @@
 <?php
 class PHPFrame_Addons_Plugin extends PHPFrame_Mapper_DomainObject
 {
+    protected $name="";
+    protected $author="";
+    protected $enabled=false;
+    protected $version="";
+     
     /**
      * Constructor
      * 

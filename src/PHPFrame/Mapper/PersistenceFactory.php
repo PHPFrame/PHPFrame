@@ -44,14 +44,21 @@ abstract class PHPFrame_Mapper_PersistenceFactory
      * Constructor
      * 
      * @param string $target_class
+     * @param string $table_name
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($target_class, $table_name) {
+    public function __construct($target_class, $table_name=null) {
         $this->_target_class = (string) trim($target_class);
-        $this->_table_name = (string) trim($table_name);
+        
+        if (!is_null($table_name)) {
+            $this->_table_name = trim((string) $table_name);
+        } else {
+            $this->_table_name = $this->_target_class;
+        }
+        
     }
     
     /**

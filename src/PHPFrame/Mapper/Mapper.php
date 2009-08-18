@@ -47,6 +47,7 @@ class PHPFrame_Mapper
      * @param string $table_name
      * @param int    $storage
      * @param bool   $try_alternative_storage
+     * @param string $path
      * 
      * @access public
      * @return void
@@ -54,9 +55,10 @@ class PHPFrame_Mapper
      */
     public function __construct(
         $target_class, 
-        $table_name, 
+        $table_name=null, 
         $storage=self::STORAGE_SQL, 
-        $try_alternative_storage=true
+        $try_alternative_storage=true,
+        $path=null
     ) {
         // Check if DB feature is enabled before allowing its use
         // We need this in order to implement fallback to XML storage
@@ -75,18 +77,18 @@ class PHPFrame_Mapper
         switch ($storage) {
             case self::STORAGE_SQL :
                 $class_name = "PHPFrame_Mapper_SQLPersistenceFactory";
+                $this->_factory = new $class_name($target_class, $table_name);
                 break;
             
             case self::STORAGE_XML :
                 $class_name = "PHPFrame_Mapper_XMLPersistenceFactory";
+                $this->_factory = new $class_name($target_class, $table_name, $path);
                 break;
             
             default :
                 $msg = "Storage mechanism not supported";
                 throw new PHPFrame_Exception($msg);
         }
-        
-        $this->_factory = new $class_name($target_class, $table_name);
     }
     
     /**

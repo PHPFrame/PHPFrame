@@ -42,4 +42,9 @@ class PHPFrame_FS_FileObject extends SplFileObject
             parent::__construct($file_name, $open_mode, $use_include_path, $context);
         }
     }
+    
+    public function getFileInfo($class_name="PHPFrame_FS_FileInfo")
+    {
+        return new $class_name($this->getRealPath());
+    }
 }

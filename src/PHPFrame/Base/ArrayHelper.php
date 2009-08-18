@@ -40,6 +40,19 @@ class PHPFrame_Base_ArrayHelper
                 && 0 !== count(array_diff_key($array, array_keys(array_keys($array)))));
     }
     
+    public static function depth(array $array)
+    {
+        $depth = count($array) > 0 ? 1 : 0; 
+        
+        foreach ($array as $value) {
+            if (is_array($value)) {
+                $depth = self::depth($value) + 1;
+            }
+        }
+        
+        return (int) $depth;
+    }
+    
     /**
      * Convert array to string
      * 

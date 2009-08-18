@@ -27,6 +27,8 @@
  */
 class PHPFrame_Mapper_XMLPersistenceFactory extends PHPFrame_Mapper_PersistenceFactory
 {
+    private $_path=null;
+    
     /**
      * Constructor
      * 
@@ -36,8 +38,12 @@ class PHPFrame_Mapper_XMLPersistenceFactory extends PHPFrame_Mapper_PersistenceF
      * @return void
      * @since  1.0
      */
-    public function __construct($target_class, $table_name) {
+    public function __construct($target_class, $table_name, $path=null) {
         parent::__construct($target_class, $table_name);
+        
+        if (!is_null($path)) {
+            $this->_path = trim((string) $path);
+        }
     }
     
     /**
@@ -49,7 +55,7 @@ class PHPFrame_Mapper_XMLPersistenceFactory extends PHPFrame_Mapper_PersistenceF
      */
     public function getAssembler()
     {
-        return new PHPFrame_Mapper_XMLDomainObjectAssembler($this);
+        return new PHPFrame_Mapper_XMLDomainObjectAssembler($this, $this->_path);
     }
     
     /**

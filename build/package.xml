@@ -138,7 +138,7 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/vCard.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    
-   <file baseinstalldir="/" name="CLI_Tool/etc/config.xml" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/etc/phpframe.ini" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/public/index.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/config.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/deploy.php" role="data" />

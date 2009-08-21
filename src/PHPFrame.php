@@ -109,7 +109,8 @@ class PHPFrame
      *            One to load the PHPFrame lib, then the custom libs and finally the 
      *         MVC classes.
      */
-    public static function __autoload($class_name) {
+    public static function __autoload($class_name)
+    {
         $file_path = "";
         
         // Load default PEAR classes

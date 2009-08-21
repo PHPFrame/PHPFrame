@@ -202,7 +202,7 @@ class PHPFrame
             return;
         }
         
-        $super_classes = array("Controller", "Model", "View", "Helper", "Lang", "Domain");
+        $super_classes = array("Controller", "Model", "View", "Helper", "Lang");
         foreach ($super_classes as $super_class) {
             if (preg_match('/'.$super_class.'$/', $class_name)) {
                 break;
@@ -215,27 +215,23 @@ class PHPFrame
         // Append lang dir for lang classes
         if ($super_class == "Lang") {
             $file_path .= DS.PHPFrame::Config()->get("default_lang");
-        // Append 's' to dir name except for all others except domain objects
-        } elseif ($super_class != "Domain") {
+        // Append 's' to dir name except for all others
+        } else {
             $file_path .= "s";
             
         }
         
         // Remove superclass name from class name
-        if ($super_class == "Domain") {
-            $file_path .= DS.$class_name;
-        } else {
-            $class_name = str_replace($super_class, "", $class_name);
+        $class_name = str_replace($super_class, "", $class_name);
             
-            // Build dir path by breaking camel case class name
-            $pattern = '/[A-Z]{1}[a-zA-Z0-9]+/';
-            $matches = array();
-            preg_match_all($pattern, ucfirst($class_name), $matches);
-            if (isset($matches[0]) && is_array($matches[0])) {
-                $file_path .= DS.strtolower(implode(DS, $matches[0]));
-            }
+        // Build dir path by breaking camel case class name
+        $pattern = '/[A-Z]{1}[a-zA-Z0-9]+/';
+        $matches = array();
+        preg_match_all($pattern, ucfirst($class_name), $matches);
+        if (isset($matches[0]) && is_array($matches[0])) {
+            $file_path .= DS.strtolower(implode(DS, $matches[0]));
         }
-        
+    
         // Append file extension
         $file_path .= ".php";
         

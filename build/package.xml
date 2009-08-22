@@ -34,14 +34,20 @@
  <notes>##NOTES##</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
-   <file baseinstalldir="/" name="PHPFrame/Addons/Lib.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Addons/Plugin.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Addons/Theme.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Addons/Dependencies.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Addons/Info.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Addons/LibInfo.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Addons/PluginInfo.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Addons/ThemeInfo.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Application/ACL.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Application/FrontController.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Application/Libraries.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Pathway.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Permissions.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Plugins.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Response.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Sysevents.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Base/Array.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/ArrayHelper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Number.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Object.php" role="php" />
@@ -55,8 +61,6 @@
    <file baseinstalldir="/" name="PHPFrame/Client/Mobile.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/XMLRPC.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Config/Config.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Config/INI.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Config/XML.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/Database.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DSN.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/Field.php" role="php" />
@@ -155,7 +159,6 @@
    <file baseinstalldir="/" name="lib/vcard/LICENSE" role="data" />
    <file baseinstalldir="/" name="lib/vcard/vcardclass.inc" role="data" />
    
-   <file baseinstalldir="/" name="etc/acl.xml" role="data" />
    <file baseinstalldir="/" name="etc/groups.xml" role="data" />
    <file baseinstalldir="/" name="etc/phpframe.ini" role="data" />
    

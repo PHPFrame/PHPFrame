@@ -32,7 +32,7 @@
                 <phingPublisher buildfile="${build_dir}/publish.xml" target="build" />
                 <artifactspublisher file="${build_dir}/publish.xml" />
                 <deliverable file="${build_dir}/dist/${project.name}-${release.version}-${build.label}.tgz" 
-                             alias="${project.name}-${release.version}.tgz" />
+                             alias="${project.name}.tgz" />
                 
                 <!-- Generate docs with phpdoc -->
                 <phingPublisher buildfile="${build_dir}/makedoc.xml" target="build" />

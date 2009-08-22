@@ -67,6 +67,18 @@ class PHPFrame
      */
     const RELEASE_STABILITY="##RELEASE_STABILITY##";
     /**
+     * The build label
+     * 
+     * @var string
+     */
+    const BUILD_LABEL="##BUILD_NUMBER##";
+    /**
+     * The build date
+     * 
+     * @var string
+     */
+    const BUILD_DATE="##BUILD_DATE##";
+    /**
      * Run level
      * 
      * @var int
@@ -241,11 +253,12 @@ class PHPFrame
      */
     public static function Version() 
     {
-        $str = "PHPFrame ";
-        $str .= "\nRelease version: ";
+        $str  = "PHPFrame ";
         $str .= self::RELEASE_VERSION." ".self::RELEASE_STABILITY;
+        $str .= " (".self::BUILD_LABEL.": ".self::BUILD_DATE.") ";
         $str .= "\nAPI version: ";
         $str .= self::API_VERSION." ".self::API_STABILITY;
+        $str .= "\nCopyright (c) 2008-2009 E-noise.com Limited";
         
         return $str;
     }
@@ -265,7 +278,7 @@ class PHPFrame
             $config_dir = PHPFRAME_CONFIG_DIR;
         // Otherwise we use the system wide default config
         } else {
-            $config_dir = PEAR_Config::singleton()->get("data_dir");
+            $config_dir  = PEAR_Config::singleton()->get("data_dir");
             $config_dir .= DS."PHPFrame".DS."etc";
         }
         

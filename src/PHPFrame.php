@@ -47,25 +47,25 @@ class PHPFrame
      * 
      * @var string
      */
-    const API_VERSION="1.0";
+    const API_VERSION="##API_VERSION##";
     /**
      * The PHPFrame version
      * 
      * @var string
      */
-    const API_STABILITY="alpha";
+    const API_STABILITY="##API_STABILITY##";
     /**
      * The PHPFrame version
      * 
      * @var string
      */
-    const RELEASE_VERSION="0.0.4";
+    const RELEASE_VERSION="##RELEASE_VERSION##";
     /**
      * The PHPFrame version
      * 
      * @var string
      */
-    const RELEASE_STABILITY="alpha";
+    const RELEASE_STABILITY="##RELEASE_STABILITY##";
     /**
      * Run level
      * 

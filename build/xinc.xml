@@ -5,6 +5,7 @@
         
         <property name="dir" value="${projectdir}/${project.name}" />
         <property name="build_dir" value="${dir}/build" />
+        <property name="release.version" value="0.0.4" />
         
         <schedule interval="60" />
         

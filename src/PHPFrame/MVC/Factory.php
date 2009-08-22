@@ -50,9 +50,16 @@ class PHPFrame_MVC_Factory
      */
     public static function getModel($model_name, $args=array()) 
     {
-        $class_name = (string) trim($model_name);
-        $class_name = str_replace("/", " ", $model_name);
-        $class_name = str_replace(" ", "", $model_name);
+        $array      = explode("/", $model_name);
+        $class_name = end($array);
+        
+        if (!class_exists($class_name)) {
+            $file_name  = PHPFRAME_INSTALL_DIR.DS."src".DS."models";
+            $file_name .= DS.$model_name.".php";
+            if (is_file($file_name)) {
+                @include $file_name;
+            }
+        }
         
         // make a reflection object
         $reflectionObj = new ReflectionClass($class_name);

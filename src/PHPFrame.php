@@ -191,12 +191,6 @@ class PHPFrame
         
         $file_path .= PHPFRAME_INSTALL_DIR.DS."src".DS;
         
-        // Models...
-        if (is_file($file_path.DS."models".DS.$class_name.".php")) {
-            @include $file_path.DS."models".DS.$class_name.".php";
-            return;
-        }
-        
         $super_classes = array("Controller", "View", "Helper", "Lang");
         foreach ($super_classes as $super_class) {
             if (preg_match('/'.$super_class.'$/', $class_name)) {

@@ -72,7 +72,7 @@
             <screen>
                 <prompt>bash$</prompt> 
                 <command>
-                    pear install channel://pear.e-noise.com/PHPFrame-0.0.1
+                    pear install http://xinc.e-noise.com/api/deliverable/get/download/PHPFrame/latest-successful/PHPFrame.tgz
                 </command>
                 ...
             </screen>

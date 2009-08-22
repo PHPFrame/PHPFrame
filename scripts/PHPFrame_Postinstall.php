@@ -125,7 +125,7 @@ class PHPFrame_Postinstall_postinstall
             return false;
         }
         
-        $cli_tool_var_path = $this->_data_dir.DS."CLI_Tool".DS."var";
+        $cli_tool_var_path = $this->_data_dir.DS."CLI_Tool".DS."tmp";
         if (!$this->_createLogFile($cli_tool_var_path)) {
             $this->_output("Error creating log file for CLI tool...");
             $this->_output("Installation failed...");

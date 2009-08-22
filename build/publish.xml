@@ -15,7 +15,7 @@
     <!-- Release info -->
     <property name="api.version" value="1.0" />
     <property name="api.stability" value="alpha" />
-    <!-- <property name="release.version" value="0.0.4" /> -->
+    <property name="release.version" value="0.0.5" />
     <property name="release.stability" value="alpha" />
     <property name="notes" value="No notes for now..." />
     
@@ -74,7 +74,7 @@
             <filterchain>
                 <replacetokens begintoken="##" endtoken="##">
                     
-                    <token key="RELEASE_VERSION" value="${xinc.release.version}" />
+                    <token key="RELEASE_VERSION" value="${release.version}" />
                     <token key="RELEASE_STABILITY" value="${release.stability}" />
                     <token key="API_VERSION" value="${api.version}" />
                     <token key="API_STABILITY" value="${api.stability}" />
@@ -105,7 +105,7 @@
                     <token key="SUMMARY" value="${summary}" />
                     <token key="DESCRIPTION" value="${description}" />
                     
-                    <token key="RELEASE_VERSION" value="${xinc.release.version}" />
+                    <token key="RELEASE_VERSION" value="${release.version}" />
                     <token key="RELEASE_STABILITY" value="${release.stability}" />
                     <token key="API_VERSION" value="${api.version}" />
                     <token key="API_STABILITY" value="${api.stability}" />
@@ -141,8 +141,8 @@
             output="${report.dir}/pear_package.log" />
         
         <!-- Move created package to dist directory -->
-        <move file="${tmp.dir}/${xinc.project.name}-${xinc.release.version}.tgz" 
-              tofile="${dist.dir}/${xinc.project.name}-${xinc.release.version}-${xinc.build.label}.tgz" 
+        <move file="${tmp.dir}/${xinc.project.name}-${release.version}.tgz" 
+              tofile="${dist.dir}/${xinc.project.name}-${release.version}-${xinc.build.label}.tgz" 
               overwrite="true"/>
               
     </target>

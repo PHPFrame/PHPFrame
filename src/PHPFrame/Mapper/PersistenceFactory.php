@@ -32,13 +32,13 @@ abstract class PHPFrame_Mapper_PersistenceFactory
      * 
      * @var string
      */
-    private $_target_class=null;
+    private $_target_class = null;
     /**
      * Target class
      * 
      * @var string
      */
-    private $_table_name=null;
+    private $_table_name = null;
     
     /**
      * Constructor

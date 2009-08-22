@@ -125,20 +125,33 @@ class PHPFrame_Postinstall_postinstall
             return false;
         }
         
-        $cli_tool_var_path = $this->_data_dir.DS."CLI_Tool".DS."tmp";
-        if (!$this->_createLogFile($cli_tool_var_path)) {
+        $cli_tool_tmp_path = $this->_data_dir.DS."CLI_Tool".DS."tmp";
+        if (!$this->_createLogFile($cli_tool_tmp_path)) {
             $this->_output("Error creating log file for CLI tool...");
             $this->_output("Installation failed...");
             return false;
         }
         
-        // Make var directory for CLI tool world writable
-        $cmd = "chmod 777 ".$cli_tool_var_path;
+        // Make tmp directory for CLI tool world writable
+        $cmd = "chmod 777 ".$cli_tool_tmp_path;
         $exec = new PHPFrame_Utils_Exec($cmd);
         $this->_output($exec->getOutput());
         if ($exec->getReturnVar() > 0) {
             $msg = "Failed to make world writable var directory for CLI tool (";
-            $msg .= $cli_tool_var_path.")...";
+            $msg .= $cli_tool_tmp_path.")...";
+            $this->_output($msg);
+            return false;
+        }
+        
+        // Create empty config xml files
+        $cli_tool_etc_path = $this->_data_dir.DS."CLI_Tool".DS."etc";
+        $cmd  = "touch ".$cli_tool_etc_path.DS."acl.xml ";
+        $cmd .= $cli_tool_etc_path.DS."lib.xml ".$cli_tool_etc_path.DS."plugins.xml";
+        $exec = new PHPFrame_Utils_Exec($cmd);
+        $this->_output($exec->getOutput());
+        if ($exec->getReturnVar() > 0) {
+            $msg = "Failed to create empty config xml files in (";
+            $msg .= $cli_tool_etc_path.")...";
             $this->_output($msg);
             return false;
         }

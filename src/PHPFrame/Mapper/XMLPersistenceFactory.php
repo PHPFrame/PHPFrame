@@ -27,7 +27,7 @@
  */
 class PHPFrame_Mapper_XMLPersistenceFactory extends PHPFrame_Mapper_PersistenceFactory
 {
-    private $_path=null;
+    private $_path = null;
     
     /**
      * Constructor

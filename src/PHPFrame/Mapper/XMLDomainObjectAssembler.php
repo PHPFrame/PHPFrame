@@ -27,8 +27,8 @@
  */
 class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObjectAssembler
 {
-    private $_path_info=null;
-    private $_file_info=null;
+    private $_path_info = null;
+    private $_file_info = null;
     
     /**
      * Constructor

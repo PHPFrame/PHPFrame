@@ -129,6 +129,7 @@ class PHPFrame_Debug_Profiler
         $report .= "Total => ";
         $report .= round(self::$_milestones[(count(self::$_milestones)-1)][1] - self::$_milestones[0][1], 2);
         $report .= " msec";
+        $report .= "\n\n";
         
         return $report;
     } 

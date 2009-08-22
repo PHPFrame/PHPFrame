@@ -212,7 +212,7 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
     
     private function _getNewId()
     {
-        $newid = 1;
+        $newid = 0;
         
         $collection = $this->find();
         foreach ($collection as $item) {

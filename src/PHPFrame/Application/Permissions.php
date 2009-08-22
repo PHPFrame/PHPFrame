@@ -28,17 +28,17 @@
 class PHPFrame_Application_Permissions
 {
     /**
-     * Path to xml file with acl
-     * 
-     * @var string
+     * A mapper object used to store and retrieve access level list
+     *
+     * @var PHPFrame_Mapper_Collection
      */
-    private $_path=null;
+    private $_mapper;
     /**
-     * Access level list loaded from database.
-     * 
-     * @var array
+     * A collection object holding access level list
+     *
+     * @var PHPFrame_Mapper_Collection
      */
-    private $_acl=array();
+    private $_acl;
     
     /**
      * Constructor
@@ -49,24 +49,31 @@ class PHPFrame_Application_Permissions
      */
     public function __construct() 
     {
-        $this->_path = PHPFRAME_CONFIG_DIR.DS."acl.xml";
+        // Get installed plugins from file
+        $this->_mapper = new PHPFrame_Mapper(
+            "PHPFrame_Application_ACL", 
+            "acl", 
+            PHPFrame_Mapper::STORAGE_XML, 
+            false, 
+            PHPFRAME_CONFIG_DIR
+        );
         
-        // If no acl xml file found we use the one provided by PHPFrame dist
-        if (!is_file($this->_path)) {
-            $this->_path .= PEAR_Config::singleton()->get("data_dir");
-            $this->_path = DS."PHPFrame".DS."etc".DS."acl.xml";
-        }
+        $acl = new PHPFrame_Application_ACL(array(
+            "groupid"=>1, 
+            "controller"=>"dummy", 
+            "action"=>"*", 
+            "value"=>"all"
+        ));
         
-        // Load ACL from file
-        $this->_loadACL();
+        $this->_acl = $this->_mapper->find();
     }
     
     /**
      * Authorise action in a component for a given user group
      * 
-     * @param string $component The component we want to authorise
-     * @param string $action    The action we want to authorise
-     * @param int    $groupid   The groupid of the user we want to authorise
+     * @param string $controller The controller we want to authorise
+     * @param string $action     The action we want to authorise
+     * @param int    $groupid    The groupid of the user we want to authorise
      * 
      * @access public
      * @return bool
@@ -79,7 +86,7 @@ class PHPFrame_Application_Permissions
             return true;
         }
         
-        $ignore_acl = PHPFrame::Config()->get("IGNORE_ACL");
+        $ignore_acl = PHPFrame::Config()->get("ignore_acl");
         if ($ignore_acl == 1) {
             return true;
         }
@@ -94,29 +101,5 @@ class PHPFrame_Application_Permissions
         }
         
         return false;
-    }
-    
-    /**
-     * Load access levels from file
-     * 
-     * @access private
-     * @return array   An array with config data
-     * @since  1.0
-     */
-    private function _loadACL() 
-    {
-        // Read ACL from file
-        $xml = @simplexml_load_file($this->_path);
-        
-        if ($xml instanceof SimpleXMLElement) {
-            foreach ($xml->data as $data) {
-                $array["groupid"] = trim((string) $data->groupid);
-                $array["controller"] = trim((string) $data->controller);
-                $array["action"] = trim((string) $data->action);
-                $array["value"] = trim((string) $data->value);
-                
-                $this->_acl[] = $array;
-            }
-        }
     }
 }

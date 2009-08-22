@@ -518,7 +518,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
     private function _applyTheme(PHPFrame_MVC_View $view) 
     {
         // Add theme stylesheets
-        $this->addStyleSheet("themes/".PHPFrame::Config()->get("THEME")."/css/styles.css");
+        $this->addStyleSheet("themes/".PHPFrame::Config()->get("theme")."/css/styles.css");
         
         // make pathway available in local scope
         $pathway = $view->getPathway();
@@ -534,7 +534,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
             $template_filename = 'index.php';
         }
         
-        $template_path = PHPFRAME_INSTALL_DIR.DS."public".DS."themes".DS.PHPFrame::Config()->get("THEME");
+        $template_path = PHPFRAME_INSTALL_DIR.DS."public".DS."themes".DS.PHPFrame::Config()->get("theme");
         
         // Start buffering
         ob_start();

@@ -50,11 +50,9 @@ class PHPFrame_MVC_Factory
      */
     public static function getModel($model_name, $args=array()) 
     {
-        $model_name = (string) trim($model_name);
-        $model_name = str_replace("/", " ", $model_name);
-        $model_name = str_replace(" ", "", ucwords($model_name));
-        
-        $class_name = ucfirst($model_name)."Model";
+        $class_name = (string) trim($model_name);
+        $class_name = str_replace("/", " ", $model_name);
+        $class_name = str_replace(" ", "", $model_name);
         
         // make a reflection object
         $reflectionObj = new ReflectionClass($class_name);

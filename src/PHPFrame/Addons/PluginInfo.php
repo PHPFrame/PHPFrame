@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Addons/Theme.php
+ * PHPFrame/Addons/Plugin.php
  * 
  * PHP version 5
  * 
@@ -15,7 +15,7 @@
  */
 
 /**
- * Addons Theme Class
+ * Addons Plugin Class
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
@@ -25,29 +25,11 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Addons_Theme extends PHPFrame_Mapper_DomainObject
+class PHPFrame_Addons_PluginInfo extends PHPFrame_Addons_Info
 {
-    protected $name="";
-    protected $author="";
-    protected $enabled=false;
-    protected $version="";
-     
-    /**
-     * Constructor
-     * 
-     * @param array $options
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function __construct(array $options=null)
-    {
-        parent::__construct($options);
-    }
-    
-    protected function _doToArray($array)
-    {
-        return $array;
-    }
+    protected $controllers;
+    protected $helpers;
+    protected $lang;
+    protected $models;
+    protected $views;
 }

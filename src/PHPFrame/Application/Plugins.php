@@ -28,35 +28,51 @@
 class PHPFrame_Application_Plugins
 {
     /**
-     * Config object used to store plugin data
+     * A mapper object used to store and retrieve plugin data
      *
-     * @var PHPFrame_Config
+     * @var PHPFrame_Mapper_Collection
      */
-    private $_config=null;
+    private $_mapper;
+    /**
+     * A collection object holding data about installed plugins
+     *
+     * @var PHPFrame_Mapper_Collection
+     */
+    private $_plugins;
     
     /**
      * Construct
      * 
+     * @access public
      * @return void
      * @since  1.0
      */
-    function __construct() 
+    public function __construct() 
     {
-        $path = PHPFRAME_CONFIG_DIR.DS."plugins.xml";
+        // Get installed plugins from file
+        $this->_mapper = new PHPFrame_Mapper(
+            "PHPFrame_Addons_PluginInfo", 
+            "plugins", 
+            PHPFrame_Mapper::STORAGE_XML, 
+            false, 
+            PHPFRAME_CONFIG_DIR
+        );
         
-        // If no plugins xml file found we use the one provided by PHPFrame dist
-        if (!is_file($path)) {
-            $path = PEAR_Config::singleton()->get("data_dir");
-            $path .= DS."PHPFrame".DS."etc".DS."plugins.xml";
-        }
+        $this->_plugins = $this->_mapper->find();
+    }
+    
+    public function install($name)
+    {
+        //$plugins_mapper->insert(new PHPFrame_Addons_Plugin());
+    }
+    
+    public function uninstall($name)
+    {
         
-        $this->_config = PHPFrame_Config::instance($path);
     }
     
     /**
-     * Load plugin by name (ie: dashboard)
-     * 
-     * it loads properties from XML and returns an assoc array.
+     * Get plugin info by name
      * 
      * @param string $name The plugin name.
      * 
@@ -64,30 +80,43 @@ class PHPFrame_Application_Plugins
      * @return array
      * @since  1.0
      */
-    public function loadByName($name) 
+    public function getInfo($name) 
     {
-        foreach ($this->_config->toArray() as $plugin) {
-            if ($plugin['name'] == $name) {
+        foreach ($this->_plugins as $plugin) {
+            if ($plugin->getName() == $name) {
                 return $plugin;
             }
         }
         
-        return null;
+        $msg = "Plugin '".$name."' is not installed";
+        throw new PHPFrame_Exception($msg);
     }
     
     /**
      * This methods tests whether the specified plugin is installed and enabled.
      *
-     * @param string $name The plugin name to check (ie: dashboard, user, projects, ...)
+     * @param string $name The plugin name to check (ie: dashboard, user, 
+     *                     projects, ...)
      * 
      * @access public
      * @return bool
      * @since  1.0
      */
-    public static function isEnabled($name) 
+    public function isEnabled($name) 
     {
-        foreach ($this->_config->toArray() as $plugin) {
-            if ($plugin['name'] == $name && $plugin['enabled'] == 1) {
+        foreach ($this->_plugins as $plugin) {
+            if ($plugin->getName() == $name && $plugin->isEnabled()) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public function isInstalled($name)
+    {
+        foreach ($this->_plugins as $plugin) {
+            if ($plugin->getName() == $name && $plugin->isInstalled()) {
                 return true;
             }
         }

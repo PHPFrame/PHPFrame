@@ -178,7 +178,7 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
     {
         // If controller has not been set we return the default value
         if (empty($this->_array['request']['controller'])) {
-            $this->_array['request']['controller'] = PHPFrame::Config()->get("DEFAULT_CONTROLLER");
+            $this->_array['request']['controller'] = PHPFrame::Config()->get("default_controller");
         }
         
         return $this->_array['request']['controller'];

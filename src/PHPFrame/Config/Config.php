@@ -25,26 +25,26 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-abstract class PHPFrame_Config
+class PHPFrame_Config
 {
     /**
      * Array holding instances of this class
      * 
      * @var array
      */
-    private static $_instances=array();
+    private static $_instances = array();
     /**
      * Full path to XML file with data
      * 
      * @var string
      */
-    protected $_path=null;
+    private $_path = null;
     /**
      * Array holding config data
      * 
      * @var array
      */
-    protected $data=array();
+    private $_data = array();
     
     /**
      * Constructor
@@ -58,7 +58,7 @@ abstract class PHPFrame_Config
      * @return void
      * @since  1.0
      */
-    protected function __construct($path)
+    private function __construct($path)
     {
         $this->_path = (string) $path;
         
@@ -76,20 +76,29 @@ abstract class PHPFrame_Config
         $path = (string) trim($path);
         
         if (!isset(self::$_instances[$path])) {
-            $class_name = "PHPFrame_Config_";
-            $class_name .= strtoupper(substr($path, (strrpos($path, ".")+1)));
-            
-            self::$_instances[$path] = new $class_name($path);
+            self::$_instances[$path] = new self($path);
         }
         
         return self::$_instances[$path];
     }
     
-    public function get($key, $section="General")
+    public function get($key)
     {
+        $key = strtolower(trim((string) $key));
+        
+        preg_match('/([a-zA-Z_]+)\.?(.*)?/', $key, $matches);
+        
+        if (isset($matches[2]) && !empty($matches[2])) {
+            $section = $matches[1];
+            $key = $matches[2];
+        } else {
+            $section = "general";
+            $key = $matches[1];
+        }
+
         $this->_ensureKeyExists($section, $key);
         
-        return $this->data[$section][$key];
+        return $this->_data[$section][$key];
     }
     
     /**
@@ -104,11 +113,11 @@ abstract class PHPFrame_Config
      * @return PHPFrame_Config
      * @since  1.0
      */
-    public function set($key, $value, $section="General")
+    public function set($key, $value, $section="general")
     {
         $this->_ensureKeyExists($section);
         
-        $this->data[$section][$key] = $value;
+        $this->_data[$section][$key] = $value;
         
         return $this; 
     }
@@ -123,8 +132,8 @@ abstract class PHPFrame_Config
         
         foreach ($array as $section=>$value) {
             var_dump($section, $value); 
-//            if (array_key_exists($key, $this->data)) {
-//                foreach ($this->data[$key] as $k=>$v) {
+//            if (array_key_exists($key, $this->_data)) {
+//                foreach ($this->_data[$key] as $k=>$v) {
 //                    if ($a) {
 //                        $this->set($key, $value);
 //                    }
@@ -161,26 +170,28 @@ abstract class PHPFrame_Config
     
     public function toArray()
     {
-        return $this->data;
+        return $this->_data;
     }
     
-    abstract public function toString();
-    
-    abstract protected function _fetchData();
+    private function _fetchData()
+    {
+        $array = parse_ini_file($this->_path, true);
+        $this->_data = $array;
+    }
     
     private function _ensureKeyExists($section, $key=null)
     {
-        if (!isset($this->data[$section])) {
+        if (!isset($this->_data[$section])) {
             $msg = "Configuration file (".$this->_path.") does not containg section ";
             $msg .= $section;
-            throw new PHPFrame_Exception($msg);
+            trigger_error($msg, E_USER_ERROR);
         }
         
         if (!is_null($key)) {
-            if (!isset($this->data[$section][$key])) {
+            if (!isset($this->_data[$section][$key])) {
                 $msg = "Configuration file (".$this->_path.") does not containg key ";
                 $msg .= $key." under section [".$section."]";
-                throw new PHPFrame_Exception($msg);
+                trigger_error($msg, E_USER_ERROR);
             }
         }
     }

@@ -72,12 +72,6 @@ class PHPFrame
      * @var int
      */
     private static $_run_level=0;
-    /**
-     * Array containing libraries config as array
-     *  
-     * @var array
-     */
-    private static $_lib_config=null;
     
     /**
      * Constructor
@@ -175,18 +169,11 @@ class PHPFrame
         
         // Load custom libraries (if we are in an app)
         if (defined("PHPFRAME_CONFIG_DIR")) {
-            if (is_null(self::$_lib_config)) {
-                self::$_lib_config = self::_fetchLibXML();
-            }
+            $libraries = PHPFrame::AppRegistry()->getLibraries();
             
-            if (!is_array(self::$_lib_config)) {
-                $msg = "Could not load libraries configuration as array";
-                throw new PHPFrame_Exception($msg);
-            }
-            
-            foreach (self::$_lib_config as $lib) {
-                if ($lib["name"] == $class_name) {
-                    $file_path = PHPFRAME_INSTALL_DIR.DS."lib".DS.$lib["value"];
+            foreach ($libraries as $lib) {
+                if ($lib->getName() == $class_name) {
+                    $file_path = PHPFRAME_INSTALL_DIR.DS."lib".DS.$lib->getPath();
                     
                     // require the file if it exists
                     if (is_file($file_path)) {
@@ -202,7 +189,15 @@ class PHPFrame
             return;
         }
         
-        $super_classes = array("Controller", "Model", "View", "Helper", "Lang");
+        $file_path .= PHPFRAME_INSTALL_DIR.DS."src".DS;
+        
+        // Models...
+        if (is_file($file_path.DS."models".DS.$class_name.".php")) {
+            @include $file_path.DS."models".DS.$class_name.".php";
+            return;
+        }
+        
+        $super_classes = array("Controller", "View", "Helper", "Lang");
         foreach ($super_classes as $super_class) {
             if (preg_match('/'.$super_class.'$/', $class_name)) {
                 break;
@@ -210,7 +205,7 @@ class PHPFrame
         }
         
         // Set base path for objects of given superclass
-        $file_path .= PHPFRAME_INSTALL_DIR.DS."src".DS.strtolower($super_class);
+        $file_path .= strtolower($super_class);
         
         // Append lang dir for lang classes
         if ($super_class == "Lang") {
@@ -238,6 +233,7 @@ class PHPFrame
         // require the file if it exists
         if (is_file($file_path)) {
             @include $file_path;
+            return;
         }
     }
     
@@ -289,7 +285,7 @@ class PHPFrame
      * 
      * @param sring $path The path to the cache directory where to store the app
      *                    registry. If not passed it uses a directory called
-     *                    "cache" within the directory specified in PHPFRAME_VAR_DIR
+     *                    "cache" within the directory specified in PHPFRAME_TMP_DIR
      * 
      * @static
      * @access public
@@ -299,7 +295,7 @@ class PHPFrame
     public static function AppRegistry($path='') 
     {
         if (empty($path)) {
-            $path = PHPFRAME_VAR_DIR.DS."cache";
+            $path = PHPFRAME_TMP_DIR.DS."cache";
         }
         
         return PHPFrame_Registry_Application::getInstance($path);
@@ -373,20 +369,20 @@ class PHPFrame
         // Set DSN using details from config object
         if (!$dsn instanceof PHPFrame_Database_DSN) {
             $dsn_concrete_class = "PHPFrame_Database_DSN_";
-            $dsn_concrete_class .= PHPFrame::Config()->get("DB_DRIVER");
+            $dsn_concrete_class .= PHPFrame::Config()->get("db.driver");
             
             $dsn = new $dsn_concrete_class(
-                PHPFrame::Config()->get("DB_HOST"), 
-                PHPFrame::Config()->get("DB_NAME")
+                PHPFrame::Config()->get("db.host"), 
+                PHPFrame::Config()->get("db.name")
             );
         }
         
         if (is_null($db_user)) {
-            $db_user = PHPFrame::Config()->get("DB_USER");
+            $db_user = PHPFrame::Config()->get("db.user");
         }
         
         if (is_null($db_pass)) {
-            $db_pass = PHPFrame::Config()->get("DB_PASS");
+            $db_pass = PHPFrame::Config()->get("db.pass");
         }
         
         if (!$dsn instanceof PHPFrame_Database_DSN) {
@@ -541,29 +537,6 @@ class PHPFrame
             $msg = 'Could not find language file ('.$lang_file.')';
             throw new PHPFrame_Exception($msg);
         }
-    }
-    
-    /**
-     * Fetch lib config from xml file
-     * 
-     * @access private
-     * @return array
-     * @since  1.0
-     */
-    private static function _fetchLibXML()
-    {
-        $lib_xml = PHPFRAME_CONFIG_DIR.DS."lib.xml";
-        
-        if (!is_file($lib_xml)) {
-            $lib_xml = PEAR_Config::singleton()->get("data_dir");
-            $lib_xml .= DS."PHPFrame".DS."etc".DS."lib.xml";
-        }
-        
-        // Instanciate new config object
-        $lib_config = PHPFrame_Config::instance($lib_xml);
-        
-        // Return config as array
-        return $lib_config->toArray();
     }
 }
 

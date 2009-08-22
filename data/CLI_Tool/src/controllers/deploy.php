@@ -24,7 +24,7 @@ class DeployController extends PHPFrame_MVC_ActionController
             $model = $this->getModel("deploy", array($this->_install_dir));
             
             // Install new app
-            $model->install(array("APPNAME"=>$app_name), $allow_non_empty_dir);
+            $model->install(array("app_name"=>$app_name), $allow_non_empty_dir);
             
             $msg = "App created successfully";
             $this->sysevents->setSummary($msg, "success");

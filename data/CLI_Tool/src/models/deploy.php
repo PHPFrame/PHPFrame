@@ -20,7 +20,7 @@ class DeployModel extends PHPFrame_MVC_Model
     
     public function install($config=array(), $allow_non_empty_dir=false)
     {
-        if (!isset($config["APPNAME"]) || empty($config["APPNAME"])) {
+        if (!isset($config["app_name"]) || empty($config["app_name"])) {
             $msg = "App name is required";
             throw new PHPFrame_Exception($msg);
         }

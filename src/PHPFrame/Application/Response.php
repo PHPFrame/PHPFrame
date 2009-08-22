@@ -32,25 +32,25 @@ class PHPFrame_Application_Response
      * 
      * @var PHPFrame_Application_Response
      */
-    private static $_instance=null;
+    private static $_instance = null;
     /**
      * HTTP Response code
      * 
      * @var int
      */
-    private $_code=null;
+    private $_code = null;
     /**
      * An array containing the raw headers
      * 
      * @var array
      */
-    private $_header=array();
+    private $_header = array();
     /**
      * The document object used by this response
      * 
      * @var PHPFrame_Document
      */
-    private $_document=null;
+    private $_document = null;
     
     /**
      * Constructor
@@ -193,10 +193,12 @@ class PHPFrame_Application_Response
             echo $this->_document->getBody();    
         }
         
-        if (PHPFrame::Config()->get("DEBUG") == 1) {
-            echo "<pre>";
+        if (PHPFrame::Config()->get("debug.enable") == 1) {
+            if (PHPFrame::Session()->getClientName() != "cli") {
+                echo "<pre>";
+            }
+            
             echo PHPFrame_Debug_Profiler::getReport();
-            echo "</pre>";
         }
         
         // Exit setting status to 0, 

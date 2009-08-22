@@ -32,45 +32,46 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
      * 
      * @var object of type PHPFrame_Application_FrontController
      */
-    private static $_instance=null;
+    private static $_instance = null;
     /**
      * Path to the cache directory in filesystem
      * 
      * @var string
      */
-    private $_path=null;
+    private $_path = null;
     /**
      * Path to the cache file name in filesystem
      * 
      * @var string
      */
-    private $_cache_file=null;
+    private $_cache_file = null;
     /**
      * Array containing keys that should be treated as readonly as far as client
      * code is concerned
      * 
      * @var array
      */
-    private $_readonly=array("permissions", "plugins");
+    private $_readonly = array("permissions", "plugins");
     /**
      * An array to store application registry data set on runtime
      * 
      * @var array
      */
-    private $_data=array();
+    private $_data = array();
     /**
-     * A boolean to indicate whether the data has changed since it was last written to file
+     * A boolean to indicate whether the data has changed since it was last 
+     * written to file
      * 
      * @var bool
      */
-    private $_dirty=false;
+    private $_dirty = false;
     
     /**
      * Constructor
      * 
      * The constructor is declared "protected" to make sure that this class can only
-     * be instantiated using the static method getInstance(), serving up always the same
-     * instance that the class stores statically.
+     * be instantiated using the static method getInstance(), serving up always the 
+     * same instance that the class stores statically.
      * 
      * Yes, you have guessed right, this class is a "singleton".
      * 
@@ -92,20 +93,23 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
         else {
             // Rebuild app registry
             $permissions = new PHPFrame_Application_Permissions();
-            $plugins = new PHPFrame_Application_Plugins();
+            $libs        = new PHPFrame_Application_Libraries();
+            $plugins     = new PHPFrame_Application_Plugins();
+            
             
             // Store objects in App Regsitry
             $this->set("permissions", $permissions);
-            $this->set("plugins", $plugins);
+            $this->set("libraries", $libs);
+            $this->set("plugins", $plugins); 
         }
     }
     
     /**
      * Destructor
      * 
-     * The destructor method will be called as soon as all references to a particular 
-     * object are removed or when the object is explicitly destroyed or in any order 
-     * in shutdown sequence.
+     * The destructor method will be called as soon as all references to a 
+     * particular object are removed or when the object is explicitly destroyed or 
+     * in any order in shutdown sequence.
      * 
      * @access public
      * @return void
@@ -137,8 +141,8 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     /**
      * Get Instance
      * 
-     * @param string $path Path to cache directory. It only needs to be passed the first
-     *                     time the method is callled.
+     * @param string $path Path to cache directory. It only needs to be passed the 
+     *                     first time the method is callled.
      * 
      * @static
      * @access public
@@ -233,7 +237,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     }
     
     /**
-     * Get Plugins object
+     * Get Plugins
      * 
      * @access public
      * @return PHPFrame_Application_Plugins
@@ -242,6 +246,18 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     public function getPlugins() 
     {
         return $this->_data['plugins'];
+    }
+    
+    /**
+     * Get Libraries
+     * 
+     * @access public
+     * @return PHPFrame_Application_Plugins
+     * @since  1.0
+     */
+    public function getLibraries() 
+    {
+        return $this->_data['libraries'];
     }
     
     /**

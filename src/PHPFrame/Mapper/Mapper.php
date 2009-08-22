@@ -62,7 +62,7 @@ class PHPFrame_Mapper
     ) {
         // Check if DB feature is enabled before allowing its use
         // We need this in order to implement fallback to XML storage
-        $db_enable = (bool) PHPFrame::Config()->get("enable", "DB");
+        $db_enable = (bool) PHPFrame::Config()->get("db.enable");
         
         if ($storage == self::STORAGE_SQL && !$db_enable) {
             if ($try_alternative_storage) {

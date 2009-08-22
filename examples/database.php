@@ -10,6 +10,7 @@ function loadFramework()
      */
     define('PHPFRAME_INSTALL_DIR', str_replace(DIRECTORY_SEPARATOR."examples", "", dirname(__FILE__)));
     define("PHPFRAME_CONFIG_DIR", PHPFRAME_INSTALL_DIR.DIRECTORY_SEPARATOR."etc");
+    define("PHPFRAME_TMP_DIR", PHPFRAME_INSTALL_DIR.DIRECTORY_SEPARATOR."tmp");
     define("PHPFRAME_VAR_DIR", PHPFRAME_INSTALL_DIR.DIRECTORY_SEPARATOR."var");
     
     // Include PHPFrame main file

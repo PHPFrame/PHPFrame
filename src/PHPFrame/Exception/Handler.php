@@ -104,7 +104,7 @@ class PHPFrame_Exception_Handler
         $str .= $exception->getTraceAsString();
         
         
-        $debug = PHPFrame::Config()->get("enable", "Debug");
+        $debug = PHPFrame::Config()->get("debug.enable");
         if ($debug == 1) {
             echo '<pre>'.$str.'</pre>';
         }

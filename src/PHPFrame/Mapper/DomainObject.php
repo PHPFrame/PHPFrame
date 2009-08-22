@@ -45,6 +45,13 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
      * @var string
      */
     protected $modified=null;
+    /**
+     * Boolean indicating whether the object is dirty (has changed since it was 
+     * last stored).
+     * 
+     * @var bool
+     */
+    private $_dirty=false;
     
     /**
      * Constructor
@@ -184,24 +191,55 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
         $this->modified = $str;
     }
     
+    /**
+     * Mark object as clean
+     * 
+     * @return void
+     */
     public function markClean()
     {
-        
-    }
-    
-    public function toArray()
-    {
-        $array = get_object_vars($this);
-        
-        return $this->_doToArray($array);
+        $this->_dirty = false;
     }
     
     /**
-     * Convert object to array
+     * Mark object as dirty
+     * 
+     * @return void
+     */
+    public function markDirty()
+    {
+        $this->_dirty = false;
+    }
+    
+    /**
+     * Is object dirty? If it is it means that it has changed since it was last 
+     * persisted.
+     * 
+     * @return void
+     */
+    public function isDirty()
+    {
+        return $this->_dirty;
+    }
+    
+    /**
+     * Get object as array
      * 
      * @access public
      * @return array
      * @since  1.0
      */
-    abstract protected function _doToArray($array);
+    public function toArray()
+    {
+        $array = array();
+        $props_array = get_object_vars($this);
+        
+        foreach ($props_array as $key=>$value) {
+            if ($key != "_dirty") {
+                $array[$key] = $value;
+            }
+        }
+        
+        return $array;
+    }
 }

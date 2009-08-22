@@ -71,7 +71,7 @@ class PHPFrame
      * 
      * @var string
      */
-    const BUILD_LABEL="##BUILD_NUMBER##";
+    const BUILD_LABEL="##BUILD_LABEL##";
     /**
      * The build date
      * 

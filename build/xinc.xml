@@ -25,9 +25,6 @@
                 <email to="phpframe-dev@googlegroups.com" 
                        subject="${project.name} build ${build.number} failed" 
                        message="Build of project failed" />
-                       
-                <phingPublisher buildfile="${build_dir}/notify.xml" target="build" />
-                <artifactspublisher file="${build_dir}/notify.xml" />
             </onfailure>
                 
             <onsuccess>
@@ -47,18 +44,12 @@
                 <email to="phpframe-dev@googlegroups.com" 
                        subject="${project.name} build ${build.number} success" 
                        message="Build of project was successful" />
-                       
-                <phingPublisher buildfile="${build_dir}/notify.xml" target="build" />
-                <artifactspublisher file="${build_dir}/notify.xml" />
             </onsuccess>
                 
             <onrecovery>
                 <email to="phpframe-dev@googlegroups.com" 
                        subject="${project.name} build ${build.number} was recovered" 
                        message="The build passed after having failed before." />
-                       
-                <phingPublisher buildfile="${build_dir}/notify.xml" target="build" />
-                <artifactspublisher file="${build_dir}/notify.xml" />
             </onrecovery>
         </publishers>
         

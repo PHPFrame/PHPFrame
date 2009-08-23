@@ -26,7 +26,8 @@
                        subject="${project.name} build ${build.number} failed" 
                        message="Build of project failed" />
                        
-                <phingPublisher buildfile="${build_dir}/notify.xml" target="notify" />
+                <phingPublisher buildfile="${build_dir}/notify.xml" target="build" />
+                <artifactspublisher file="${build_dir}/notify.xml" />
             </onfailure>
                 
             <onsuccess>
@@ -47,7 +48,8 @@
                        subject="${project.name} build ${build.number} success" 
                        message="Build of project was successful" />
                        
-                <phingPublisher buildfile="${build_dir}/notify.xml" target="notify" />
+                <phingPublisher buildfile="${build_dir}/notify.xml" target="build" />
+                <artifactspublisher file="${build_dir}/notify.xml" />
             </onsuccess>
                 
             <onrecovery>
@@ -55,7 +57,8 @@
                        subject="${project.name} build ${build.number} was recovered" 
                        message="The build passed after having failed before." />
                        
-                <phingPublisher buildfile="${build_dir}/notify.xml" target="notify" />
+                <phingPublisher buildfile="${build_dir}/notify.xml" target="build" />
+                <artifactspublisher file="${build_dir}/notify.xml" />
             </onrecovery>
         </publishers>
         

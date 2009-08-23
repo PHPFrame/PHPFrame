@@ -22,4 +22,3 @@ $email->AddAddress("luis.montero@e-noise.com", "Luis Montero");
 if ($email->Send() !== true) {
     trigger_error("Error sending notification");
 }
-                    

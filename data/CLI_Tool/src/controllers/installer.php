@@ -76,9 +76,4 @@ class InstallerController extends PHPFrame_MVC_ActionController
         $view = $this->getView("deploy");
         $view->display();
     }
-    
-    public function upgrade()
-    {
-        //...
-    }
 }

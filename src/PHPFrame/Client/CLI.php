@@ -69,6 +69,88 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
      */
     public function populateRequest() 
     {
+        require_once 'Console/CommandLine.php';
+        
+        // create the parser
+        $parser = new Console_CommandLine(array(
+            'description' => PHPFrame::Config()->get("app_name"),
+            'version'     => PHPFrame::Config()->get("version")
+        ));
+        
+        // add an option to delete original files after zipping
+        $parser->addOption(
+            'quiet',
+            array(
+                'short_name'  => '-q',
+                'long_name'   => '--quiet',
+                'action'      => 'StoreTrue',
+                'description' => 'Operate in quiet mode (no output)'
+            )
+        );
+        
+        // add the files argument, the user can specify one or several files
+        $parser->addOption(
+            'infile',
+            array(
+                'short_name'  => '-i',
+                'long_name'   => '--infile',
+                'description' => 'List of input files separated by commas',
+                'optional'    => true
+            )
+        );
+        
+        // add the out file name argument
+        $parser->addOption(
+            'outfile', 
+            array(
+                'short_name'  => '-o',
+                'long_name'   => '--outfile',
+                'description' => 'File to save the output',
+                'optional'    => true
+            )
+        );
+        
+        $parser->addArgument(
+            'controller', 
+            array(
+                'description' => 'The controller to run',
+                'optional'    => true
+            )
+        );
+        
+        $parser->addArgument(
+            'action', 
+            array(
+                'description' => 'The action to run',
+                'optional'    => true
+            )
+        );
+        
+        $parser->addArgument(
+            'params', 
+            array(
+                'multiple' => true,
+                'description' => 'List of request parameters separated by spaces',
+                'optional'    => true
+            )
+        );
+        
+        
+        // run the parser
+        try {
+            $result = $parser->parse();
+            // write your program here...
+            print_r($result->options);
+            print_r($result->args);
+        } catch (Exception $exc) {
+            $parser->displayError($exc->getMessage());
+        }
+
+
+
+        echo "got here\n";
+        exit;
+
         // Get arguments passed via command line and parse them as request vars
         global $argv;
         

@@ -1,5 +1,5 @@
 <?php
-class DeployModel extends PHPFrame_MVC_Model
+class Deploy extends PHPFrame_MVC_Model
 {
     private $_install_dir=null;
     private $_sources_config=null;

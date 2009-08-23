@@ -47,6 +47,17 @@
     
     <!-- copy files to tmp dir for publishing -->
     <target name="copy">
+    	<!-- Replace tokens -->
+        <filterchain>
+            <replacetokens begintoken="##" endtoken="##">
+                <token key="RELEASE_VERSION" value="${release.version}" />
+                <token key="RELEASE_STABILITY" value="${release.stability}" />
+                <token key="API_VERSION" value="${api.version}" />
+                <token key="API_STABILITY" value="${api.stability}" />
+                <token key="BUILD_LABEL" value="${xinc.build.label}" />
+                <token key="BUILD_DATE" value="${date}" />
+            </replacetokens>
+        </filterchain>
         <!-- copy data files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${project.basedir}/data">

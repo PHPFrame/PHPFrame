@@ -5,7 +5,7 @@
     <property name="report.dir" value="${build.dir}/report"/>
     
     <target name="build">
-    	<exec executable="php" dir="${build.dir}" failonerror="off">
+    	<exec executable="/usr/local/zend/bin/php" dir="${build.dir}" failonerror="off">
     	    <arg line="notify.php" />
     	</exec>
     	

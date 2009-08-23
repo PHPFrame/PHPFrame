@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="PHPFrame" basedir="../" default="notify">
+
+    <property name="build.dir" value="${project.basedir}/build"/>
+    <property name="report.dir" value="${build.dir}/report"/>
+    
+    <target name="notify">
+        <exec 
+            command="php ${build.dir}/notify.php" 
+            dir="${project.basedir}" 
+            output="${report.dir}/notify.log" />
+    </target>
+    
+</project>

@@ -145,10 +145,9 @@
    <file baseinstalldir="/" name="CLI_Tool/etc/phpframe.ini" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/public/index.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/config.php" role="data" />
-   <file baseinstalldir="/" name="CLI_Tool/src/controllers/deploy.php" role="data" />
-   <file baseinstalldir="/" name="CLI_Tool/src/controllers/version.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/controllers/installer.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/lang/en-GB/global.php" role="data" />
-   <file baseinstalldir="/" name="CLI_Tool/src/models/deploy.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/models/AppTemplate.php" role="data" />
    
    <file baseinstalldir="/" name="lib/phpinputfilter/inputfilter.php" role="data" />
    <file baseinstalldir="/" name="lib/phpinputfilter/GPL-3.0.txt" role="data" />

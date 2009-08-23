@@ -135,50 +135,32 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
             )
         );
         
-        
-        // run the parser
         try {
+            // Create request array to be used for return
+            $request = array();
+            
+            // Parse input options
             $result = $parser->parse();
-            // write your program here...
-            print_r($result->options);
-            print_r($result->args);
+            
+            // Get params array if isset
+            if (isset($result->args['params'])) {
+                $params = $result->args['params'];
+                unset($result->args['params']);
+                foreach ($params as $param) {
+                    parse_str($param, $param_pair);
+                    // Store param in request array
+                    $request = array_merge($request, $param_pair);
+                }
+            }
+            
+            $request = array_merge($result->options, $result->args, $request);
+            
+            return array("request" => $request);
+            
         } catch (Exception $exc) {
             $parser->displayError($exc->getMessage());
+            exit;
         }
-
-
-
-        echo "got here\n";
-        exit;
-
-        // Get arguments passed via command line and parse them as request vars
-        global $argv;
-        
-        $request = array();
-        $keys = array();
-        
-        for ($i=1; $i<count($argv); $i++) {
-            // If two hyphens passed we take as full flag
-            if (preg_match('/^\-\-[a-zA-Z]+/', $argv[$i], $matches)) {
-                $keys[] = substr($argv[$i], 2);
-            // If we get only one hyphen we try to replace short names
-            } elseif (preg_match('/^\-[a-zA-Z]+/', $argv[$i], $matches)) {
-                $key = substr($argv[$i], 1);
-                
-                if ($key == "c") {
-                    $key = "controller";
-                } elseif ($key == "a") {
-                    $key = "action";
-                }
-                
-                $keys[] = $key;
-            // Else we add the value to the last key
-            } else {
-                $request['request'][end($keys)] = $argv[$i];
-            }
-        }
-        
-        return $request;
     }
     
     /**

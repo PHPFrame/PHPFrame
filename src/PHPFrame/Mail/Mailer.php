@@ -40,18 +40,18 @@ class PHPFrame_Mail_Mailer extends PHPMailer
      */
     public function __construct() 
     {
-        $this->Mailer = PHPFrame::Config()->get("MAILER");
-        $this->Host = PHPFrame::Config()->get("SMTP_HOST");
-        $this->Port = PHPFrame::Config()->get("SMTP_PORT");
-        $this->SMTPAuth = PHPFrame::Config()->get("SMTP_AUTH");
-        $this->Username = PHPFrame::Config()->get("SMTP_USER");
-        $this->Password = PHPFrame::Config()->get("SMTP_PASSWORD");
-        $this->From = PHPFrame::Config()->get("FROMADDRESS");
-        $this->FromName = PHPFrame::Config()->get("FROMNAME");
+        $this->Mailer = PHPFrame::Config()->get("mailer");
+        $this->Host = PHPFrame::Config()->get("smtp.host");
+        $this->Port = PHPFrame::Config()->get("smtp.port");
+        $this->SMTPAuth = PHPFrame::Config()->get("smtp.auth");
+        $this->Username = PHPFrame::Config()->get("smtp.user");
+        $this->Password = PHPFrame::Config()->get("smtp.pass");
+        $this->From = PHPFrame::Config()->get("fromaddress");
+        $this->FromName = PHPFrame::Config()->get("fromname");
         
         // Sets the hostname to use in Message-Id and Received headers and as default HELO string. 
         // If empty, the value returned by SERVER_NAME is used or 'localhost.localdomain'.
-        $this->Hostname = PHPFrame::Config()->get("SMTP_HOST");
+        $this->Hostname = PHPFrame::Config()->get("smtp.host");
     }
     
     /**

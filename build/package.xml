@@ -147,7 +147,7 @@
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/config.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/installer.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/lang/en-GB/global.php" role="data" />
-   <file baseinstalldir="/" name="CLI_Tool/src/models/AppTemplate.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/models/apptemplate.php" role="data" />
    
    <file baseinstalldir="/" name="lib/phpinputfilter/inputfilter.php" role="data" />
    <file baseinstalldir="/" name="lib/phpinputfilter/GPL-3.0.txt" role="data" />

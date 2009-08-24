@@ -60,8 +60,7 @@
    <file baseinstalldir="/" name="PHPFrame/Client/IClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/Mobile.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/XMLRPC.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Config/Config.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/Database.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Config.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DSN.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/Field.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/IdObject.php" role="php" />
@@ -76,23 +75,25 @@
    <file baseinstalldir="/" name="PHPFrame/Database/DSN/Oracle.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DSN/PgSQL.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DSN/SQLite.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Informer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Logger.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Profiler.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Document/Document.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/HTML.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/Plain.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/RPC.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/XML.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/Database.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/Error.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Exception/Exception.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/Filesystem.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/Handler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/XMLRPC.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Exception.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FS/FileInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FS/FileObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/HTTP/Request/DownloadListener.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Lang/en-GB.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />
@@ -104,7 +105,6 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/JSONDomainObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/JSONIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/JSONPersistenceFactory.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/Mapper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedDomainObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedIdObject.php" role="php" />
@@ -115,14 +115,15 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLDomainObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistenceFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/Factory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/Model.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/View.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Application.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Registry/Registry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Request.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Session.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Registry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/SCM/GIT.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/SCM/ISCM.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/SCM/SVN.php" role="php" />
@@ -131,7 +132,7 @@
    <file baseinstalldir="/" name="PHPFrame/UI/IUI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/Helper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/OpenID.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/User/User.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/User.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Crypt.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Exec.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Filesystem.php" role="php" />
@@ -218,6 +219,11 @@ insalling the PEAR package. If you want to continue type "yes".
        <name>Console_CommandLine</name>
        <channel>pear.php.net</channel>
        <min>1.1.0</min>
+   </package>
+   <package>
+       <name>Console_ProgressBar</name>
+       <channel>pear.php.net</channel>
+       <min>0.5.2beta</min>
    </package>
    <extension>
     <name>reflection</name>

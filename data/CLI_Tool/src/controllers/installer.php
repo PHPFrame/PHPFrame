@@ -11,10 +11,10 @@ class InstallerController extends PHPFrame_MVC_ActionController
             $this->_install_dir = (string) trim($install_dir);
         }
         
-        parent::__construct("install");
+        parent::__construct("new_app");
     }
     
-    public function install($app_name, $allow_non_empty_dir=false)
+    public function new_app($app_name, $allow_non_empty_dir=false)
     {
         $app_name = (string) trim($app_name);
         $allow_non_empty_dir = (bool) trim($allow_non_empty_dir);
@@ -35,8 +35,7 @@ class InstallerController extends PHPFrame_MVC_ActionController
             $this->sysevents->addEventLog($e->getMessage(), "error");
         }
         
-        $view = $this->getView("deploy");
-        $view->display();
+        $this->getView()->display();
     }
     
     public function update()

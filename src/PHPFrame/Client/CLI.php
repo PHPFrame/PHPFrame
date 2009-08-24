@@ -69,8 +69,6 @@ class PHPFrame_Client_CLI implements PHPFrame_Client_IClient
      */
     public function populateRequest() 
     {
-        require_once 'Console/CommandLine.php';
-        
         // create the parser
         $parser = new Console_CommandLine(array(
             'description' => PHPFrame::Config()->get("app_name"),

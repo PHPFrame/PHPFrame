@@ -119,46 +119,19 @@ class PHPFrame
     {
         $file_path = "";
         
-        // Load default PEAR classes
-        if (preg_match('/^PEAR_([a-zA-Z0-9]+)_?([a-zA-Z0-9]+)?/', $class_name, $matches)) {
-            $path = "";
-            for ($i=1; $i<count($matches); $i++) {
-                $path .= DS.$matches[$i];
+        // Load other pear dependencies
+        $pear_packages = array("PEAR", "PHPFrame", "XML", "Console", "HTTP");
+        foreach ($pear_packages as $package) {
+            if (!preg_match('/^'.$package.'_/', $class_name)) {
+                continue;
             }
             
-            require "PEAR".$path.".php";
-            return;
-        }
-        
-        // Load PEAR XML tools
-        if (preg_match('/^XML_([a-zA-Z]+)/', $class_name, $matches)) {
-            require "XML".DS.$matches[1].".php";
-            return;
-        }
-        
-        // PHPFrame classes
-        if (strpos($class_name, 'PHPFrame') !== false) {
-            $array = explode('_', $class_name);
-            
-            if (sizeof($array) == 4) {
-                $file_path = "PHPFrame".DS.$array[1].DS.$array[2].DS.$array[3].".php";
-            } elseif (sizeof($array) == 3) {
-                $file_path = "PHPFrame".DS.$array[1].DS.$array[2].".php";
-            } elseif (sizeof($array) == 2) {
-                if ($array[1] == "Lang") {
-                    $file_path = "PHPFrame".DS.$array[1].DS;
-                    $file_path .= PHPFrame::Config()->get("default_lang").".php";
-                } else {
-                    $file_path = "PHPFrame".DS.$array[1].DS.$array[1].".php";
-                }
+            $pattern = '/_([a-zA-Z0-9]+)/';
+            if (preg_match_all($pattern, $class_name, $matches)) {
+                $file_path = $package.DS.implode(DS, $matches[1]).".php";
+                @include $file_path;
+                return;
             }
-            
-            // require the file if it exists
-            // We do not test to see if the file exists because it is a relative path that
-            // depends on the include path. Testing is_file() for the relative path alone 
-            // returns false
-            @include $file_path;
-            return;
         }
         
         // Load core libraries

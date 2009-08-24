@@ -1,21 +1,18 @@
 <?php
 class AppTemplate extends PHPFrame_MVC_Model
 {
-    private $_install_dir=null;
-    private $_sources_config=null;
+    private $_install_dir = null;
+    private $_preferred_mirror = null;
+    private $_preferred_state = null;
     
     public function __construct($install_dir)
     {
         $this->_install_dir = (string) trim($install_dir);
         
-        $xml_path = $this->_install_dir.DS."etc".DS."sources.xml";
-        
-        if (!is_file($xml_path)) {
-            $xml_path = PEAR_Config::singleton()->get("data_dir");
-            $xml_path .= DS."PHPFrame".DS."etc".DS."sources.xml";
-        }
-        
-        $this->_sources_config = PHPFrame_Config::instance($xml_path);
+        $config = PHPFrame::Config();
+        $this->_preferred_mirror  = $config->get("sources.preferred_mirror");
+        $this->_preferred_mirror .= "/app_templates";
+        $this->_preferred_state   = $config->get("sources.preferred_state");
     }
     
     public function install($config=array(), $allow_non_empty_dir=false)
@@ -119,10 +116,30 @@ class AppTemplate extends PHPFrame_MVC_Model
             && !PHPFrame_Utils_Filesystem::isEmptyDir($this->_install_dir)
         ) {
             $msg = "Target directory is not empty.";
-            $msg .= "\nUse \"phpframe --app_name MyApp ";
-            $msg .= "--allow_non_empty_dir true\" to force install";
+            $msg .= "\nUse \"phpframe installer new_app app_name=MyApp ";
+            $msg .= "allow_non_empty_dir=true\" to force install";
             throw new PHPFrame_Exception($msg);
         }
+        
+        $url     = $this->_preferred_mirror."/PHPFrame-AppTemplate-Full-0.0.1.tgz";
+        $target  = PHPFRAME_TMP_DIR.DS."download";
+        $target .= DS."PHPFrame-AppTemplate-Full-0.0.1.tgz";
+        
+        $download = new PHPFrame_HTTP_Request_DownloadListener();
+        $download->setTarget($target);
+        
+        $req = new HTTP_Request($url);
+        $req->attach($download);
+        @$req->sendRequest(false);
+        
+        if ($req->getResponseCode() != 200) {
+            $msg  = "Error downloading package. ";
+            $msg .= "Reason: ".$req->getResponseReason();
+            throw new PHPFrame_Exception($msg);
+        }
+        
+        //var_dump();
+        exit;
         
         $source = $this->_sources_config->get("PHPFrame_AppTemplate").DS;
         $cmd = "svn export --force ".$source." ".$this->_install_dir.DS;

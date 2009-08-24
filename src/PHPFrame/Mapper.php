@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Mapper/Mapper.php
+ * PHPFrame/Mapper.php
  * 
  * PHP version 5
  * 

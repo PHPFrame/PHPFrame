@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Exception/Exception.php
+ * PHPFrame/Exception.php
  * 
  * PHP version 5
  * 

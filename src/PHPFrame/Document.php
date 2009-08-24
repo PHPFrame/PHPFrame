@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Document/Document.php
+ * PHPFrame/Document.php
  * 
  * PHP version 5
  * 

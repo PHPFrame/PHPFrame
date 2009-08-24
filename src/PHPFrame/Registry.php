@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Registry/Registry.php
+ * PHPFrame/Registry.php
  * 
  * PHP version 5
  * 

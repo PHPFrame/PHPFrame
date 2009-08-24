@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Database/Database.php
+ * PHPFrame/Database.php
  * 
  * PHP version 5
  * 

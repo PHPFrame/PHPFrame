@@ -34,7 +34,7 @@
       <param value="Y-m-d"/>
     </php>
     <php function="date" returnProperty="time">
-      <param value="h:i:s"/>
+      <param value="H:i:s"/>
     </php>
     
     <!-- Prepare directories before we start -->
@@ -47,7 +47,7 @@
     
     <!-- copy files to tmp dir for publishing -->
     <target name="copy">
-    	<!-- Replace tokens -->
+        <!-- Replace tokens -->
         <filterchain>
             <replacetokens begintoken="##" endtoken="##">
                 <token key="RELEASE_VERSION" value="${release.version}" />
@@ -81,7 +81,7 @@
         
         <!-- copy src files -->
         <copy todir="${tmp.dir}" overwrite="true">
-        	<!-- Replace tokens -->
+            <!-- Replace tokens -->
             <filterchain>
                 <replacetokens begintoken="##" endtoken="##">
                     <token key="RELEASE_VERSION" value="${release.version}" />
@@ -89,7 +89,7 @@
                     <token key="API_VERSION" value="${api.version}" />
                     <token key="API_STABILITY" value="${api.stability}" />
                     <token key="BUILD_LABEL" value="${xinc.build.label}" />
-                	<token key="BUILD_DATE" value="${date}" />
+                    <token key="BUILD_DATE" value="${date}" />
                 </replacetokens>
             </filterchain>
             <fileset dir="${project.basedir}/src">

@@ -32,31 +32,97 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
      * 
      * @var string
      */
-    protected $name="";
+    protected $name;
+    /**
+     * The dist channel
+     * 
+     * @var string
+     */
+    protected $channel;
+    /**
+     * The summary
+     * 
+     * @var string
+     */
+    protected $summary;
+    /**
+     * The description
+     * 
+     * @var string
+     */
+    protected $description;
     /**
      * The author
      * 
      * @var string
      */
-    protected $author="";
+    protected $author;
     /**
-     * Boolean indicating whether addon is enabled
-     * 
-     * @var bool
-     */
-    protected $enabled=false;
-    /**
-     * The addon version number
+     * The release date
      * 
      * @var string
      */
-    protected $version="";
+    protected $date;
+    /**
+     * The release time
+     * 
+     * @var string
+     */
+    protected $time;
+    /**
+     * The release and api version
+     * 
+     * @var array
+     */
+    protected $version = array("release"=>null, "api"=>null);
+    /**
+     * Stability info for release and api (alpha, beta or stable)
+     * 
+     * @var array
+     */
+    protected $stability = array("release"=>null, "api"=>null);
+    /**
+     * License name and URI
+     * 
+     * @var array
+     */
+    protected $license = array();
+    /**
+     * Notes
+     * 
+     * @var string
+     */
+    protected $notes;
     /**
      * The addon dependencies
      * 
      * @var PHPFrame_Addons_Dependencies
      */
     protected $dependencies;
+    /**
+     * Package contents
+     * 
+     * @var array
+     */
+    protected $contents = array();
+    /**
+     * Array containing list of installation scripts
+     * 
+     * @var array
+     */
+    protected $install = array();
+    /**
+     * Array containing list of uninstallation scripts
+     * 
+     * @var array
+     */
+    protected $uninstall = array();
+    /**
+     * Boolean indicating whether addon is enabled
+     * 
+     * @var bool
+     */
+    protected $enabled=false;
      
     /**
      * Constructor
@@ -97,6 +163,78 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
     }
     
     /**
+     * Get channel
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+    
+    /**
+     * Set channel
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setChannel($str)
+    {
+        $this->channel = $str;
+    }
+    
+    /**
+     * Get summary
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+    
+    /**
+     * Set summary
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setSummary($str)
+    {
+        $this->summary = $str;
+    }
+    
+    /**
+     * Get description
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+    
+    /**
+     * Set description
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setDescription($str)
+    {
+        $this->description = $str;
+    }
+    
+    /**
      * Get author
      * 
      * @access public
@@ -109,15 +247,15 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
     }
     
     /**
-     * Get version
+     * Get release version
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function getVersion()
+    public function getReleaseVersion()
     {
-        return $this->version;
+        return $this->version["release"];
     }
     
     /**
@@ -167,7 +305,7 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
      * @return void
      * @since  1.0
      */
-    public function setDependencies($dependencies)
+    public function setDependencies(PHPFrame_Addons_Dependencies $dependencies)
     {
         $this->dependencies = $dependencies;
     }

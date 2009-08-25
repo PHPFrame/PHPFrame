@@ -27,9 +27,5 @@
  */
 class PHPFrame_Addons_FeatureInfo extends PHPFrame_Addons_Info
 {
-    protected $controllers;
-    protected $helpers;
-    protected $lang;
-    protected $models;
-    protected $views;
+    
 }

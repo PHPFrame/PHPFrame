@@ -49,7 +49,7 @@ class PHPFrame_Application_Libraries
      */
     public function __construct() 
     {
-        // Get installed plugins from file
+        // Get installed libraries from file
         $this->_mapper = new PHPFrame_Mapper(
             "PHPFrame_Addons_LibInfo", 
             "lib", 

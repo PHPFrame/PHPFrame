@@ -35,16 +35,16 @@
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" name="PHPFrame/Addons/Dependencies.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Addons/FeatureInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Addons/Info.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Addons/LibInfo.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Addons/PluginInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Addons/ThemeInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/ACL.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Application/Features.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/FrontController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Libraries.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Pathway.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Permissions.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Application/Plugins.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Response.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Sysevents.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Array.php" role="php" />
@@ -145,8 +145,9 @@
    
    <file baseinstalldir="/" name="CLI_Tool/etc/phpframe.ini" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/public/index.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/controllers/app.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/config.php" role="data" />
-   <file baseinstalldir="/" name="CLI_Tool/src/controllers/installer.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/controllers/ext.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/lang/en-GB/global.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/models/apptemplate.php" role="data" />
    

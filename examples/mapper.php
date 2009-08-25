@@ -9,12 +9,12 @@
 <?php
 include_once "PHPFrame.php";
 
-$plugin = new PHPFrame_Addons_Plugin();
+$feature = new PHPFrame_Addons_FeatureInfo();
 echo '<h2>Object to be inserted</h2>';
-var_dump($plugin);
+var_dump($feature);
 
 $mapper = new PHPFrame_Mapper(
-    "PHPFrame_Addons_Plugin", 
+    "PHPFrame_Addons_FeatureInfo", 
     null, 
     PHPFrame_Mapper::STORAGE_XML, 
     false, 
@@ -28,7 +28,7 @@ foreach ($mapper->find() as $item) {
 }
 
 // Insert new object
-$mapper->insert($plugin);
+$mapper->insert($feature);
 
 // Show updated collection
 echo '<h2>Collection AFTER insert</h2>';

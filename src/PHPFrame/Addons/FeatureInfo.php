@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Addons/Plugin.php
+ * PHPFrame/Addons/FeatureInfo.php
  * 
  * PHP version 5
  * 
@@ -15,7 +15,7 @@
  */
 
 /**
- * Addons Plugin Class
+ * Addons Feature Info Class
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
@@ -25,7 +25,7 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Addons_PluginInfo extends PHPFrame_Addons_Info
+class PHPFrame_Addons_FeatureInfo extends PHPFrame_Addons_Info
 {
     protected $controllers;
     protected $helpers;

@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Application/Plugins.php
+ * PHPFrame/Application/Features.php
  * 
  * PHP version 5
  * 
@@ -15,7 +15,7 @@
  */
 
 /**
- * Plugins Class
+ * Features Class
  * 
  * @category   MVC_Framework
  * @package    PHPFrame
@@ -25,20 +25,20 @@
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since      1.0
  */
-class PHPFrame_Application_Plugins
+class PHPFrame_Application_Features
 {
     /**
-     * A mapper object used to store and retrieve plugin data
+     * A mapper object used to store and retrieve feature data
      *
      * @var PHPFrame_Mapper_Collection
      */
     private $_mapper;
     /**
-     * A collection object holding data about installed plugins
+     * A collection object holding data about installed features
      *
      * @var PHPFrame_Mapper_Collection
      */
-    private $_plugins;
+    private $_features;
     
     /**
      * Construct
@@ -49,21 +49,21 @@ class PHPFrame_Application_Plugins
      */
     public function __construct() 
     {
-        // Get installed plugins from file
+        // Get installed features from file
         $this->_mapper = new PHPFrame_Mapper(
-            "PHPFrame_Addons_PluginInfo", 
-            "plugins", 
+            "PHPFrame_Addons_FeatureInfo", 
+            "features", 
             PHPFrame_Mapper::STORAGE_XML, 
             false, 
             PHPFRAME_CONFIG_DIR
         );
         
-        $this->_plugins = $this->_mapper->find();
+        $this->_features = $this->_mapper->find();
     }
     
     public function install($name)
     {
-        //$plugins_mapper->insert(new PHPFrame_Addons_Plugin());
+        //$this->_mapper->insert(new PHPFrame_Addons_FeatureInfo());
     }
     
     public function uninstall($name)
@@ -72,9 +72,9 @@ class PHPFrame_Application_Plugins
     }
     
     /**
-     * Get plugin info by name
+     * Get feature info by name
      * 
-     * @param string $name The plugin name.
+     * @param string $name The feature name.
      * 
      * @access public
      * @return array
@@ -82,20 +82,20 @@ class PHPFrame_Application_Plugins
      */
     public function getInfo($name) 
     {
-        foreach ($this->_plugins as $plugin) {
-            if ($plugin->getName() == $name) {
-                return $plugin;
+        foreach ($this->_features as $feature) {
+            if ($feature->getName() == $name) {
+                return $feature;
             }
         }
         
-        $msg = "Plugin '".$name."' is not installed";
+        $msg = "Feature '".$name."' is not installed";
         throw new PHPFrame_Exception($msg);
     }
     
     /**
-     * This methods tests whether the specified plugin is installed and enabled.
+     * This methods tests whether the specified feature is installed and enabled.
      *
-     * @param string $name The plugin name to check (ie: dashboard, user, 
+     * @param string $name The feature name to check (ie: dashboard, user, 
      *                     projects, ...)
      * 
      * @access public
@@ -104,8 +104,8 @@ class PHPFrame_Application_Plugins
      */
     public function isEnabled($name) 
     {
-        foreach ($this->_plugins as $plugin) {
-            if ($plugin->getName() == $name && $plugin->isEnabled()) {
+        foreach ($this->_features as $feature) {
+            if ($feature->getName() == $name && $feature->isEnabled()) {
                 return true;
             }
         }
@@ -115,8 +115,8 @@ class PHPFrame_Application_Plugins
     
     public function isInstalled($name)
     {
-        foreach ($this->_plugins as $plugin) {
-            if ($plugin->getName() == $name && $plugin->isInstalled()) {
+        foreach ($this->_features as $feature) {
+            if ($feature->getName() == $name && $feature->isInstalled()) {
                 return true;
             }
         }

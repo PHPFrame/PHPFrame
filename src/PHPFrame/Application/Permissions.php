@@ -49,7 +49,7 @@ class PHPFrame_Application_Permissions
      */
     public function __construct() 
     {
-        // Get installed plugins from file
+        // Get ACL from file
         $this->_mapper = new PHPFrame_Mapper(
             "PHPFrame_Application_ACL", 
             "acl", 

@@ -146,7 +146,7 @@ class PHPFrame_Postinstall_postinstall
         // Create empty config xml files
         $cli_tool_etc_path = $this->_data_dir.DS."CLI_Tool".DS."etc";
         $cmd  = "touch ".$cli_tool_etc_path.DS."acl.xml ";
-        $cmd .= $cli_tool_etc_path.DS."lib.xml ".$cli_tool_etc_path.DS."plugins.xml";
+        $cmd .= $cli_tool_etc_path.DS."lib.xml ".$cli_tool_etc_path.DS."features.xml";
         $exec = new PHPFrame_Utils_Exec($cmd);
         $this->_output($exec->getOutput());
         if ($exec->getReturnVar() > 0) {

@@ -120,7 +120,7 @@ class PHPFrame
         $file_path = "";
         
         // Load other pear dependencies
-        $pear_packages = array("PEAR", "PHPFrame", "XML", "Console", "HTTP");
+        $pear_packages = array("PEAR", "PHPFrame", "XML", "Console", "HTTP", "Archive");
         foreach ($pear_packages as $package) {
             if (!preg_match('/^'.$package.'_/', $class_name)) {
                 continue;

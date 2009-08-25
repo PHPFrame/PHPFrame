@@ -15,75 +15,33 @@ class AppTemplate extends PHPFrame_MVC_Model
         $this->_preferred_state   = $config->get("sources.preferred_state");
     }
     
-    public function install($config=array(), $allow_non_empty_dir=false)
+    public function install(array $config, $template=null, $allow_non_empty_dir=false)
     {
         if (!isset($config["app_name"]) || empty($config["app_name"])) {
             $msg = "App name is required";
             throw new PHPFrame_Exception($msg);
         }
         
-        // Fetch source from repo
-        $this->_fetchSource($allow_non_empty_dir);
+        // before anything else we check that the directory is writable
+        PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_dir);
+        
+        // Fetch package from dist server
+        $this->_fetchSource($template, $allow_non_empty_dir);
         
         // Create configuration xml files based on distro templates
         $this->_createConfig($config);
         
         // Create dummy controller
         $this->_createDummyController();
+        
+        //Create writable tmp and var folders for app
+        PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_dir.DS."tmp");
+        PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_dir.DS."var");
     }
     
     public function update()
     {
-        $source = $this->_sources_config->get("PHPFrame_AppTemplate").DS;
-        $tmp_target = $this->_install_dir.DS."var".DS."tmp.install".DS."AppTemplate".DS;
-        
-        $cmd = "svn export --force ".$source." ".$tmp_target;
-        
-        $msg = "Exporting latest version of AppTemplate...\n";
-        $msg .= "Using command \"".$cmd."\"...";
-        PHPFrame_Debug_Logger::write($msg);
-        
-        $exec = new PHPFrame_Utils_Exec($cmd);
-        
-        // Log output to file
-        PHPFrame_Debug_Logger::write($exec->getOutput());
-        
-        if ($exec->getReturnVar() > 0) {
-            $msg = "Failed to export latest version of AppTemplate.";
-            throw new PHPFrame_Exception($msg);
-        }
-        
-        $cmd = "cp -r ".$tmp_target.DS." ".$this->_install_dir.DS;
-        
-        $msg = "Overwriting files...\n";
-        $msg .= "Using command \"".$cmd."\"...";
-        PHPFrame_Debug_Logger::write($msg);
-        
-        $exec = new PHPFrame_Utils_Exec($cmd);
-        
-        // Log output to file
-        PHPFrame_Debug_Logger::write($exec->getOutput());
-        
-        if ($exec->getReturnVar() > 0) {
-            $msg = "Failed to overwrite files.";
-            throw new PHPFrame_Exception($msg);
-        }
-        
-        $cmd = "rm -rf ".$tmp_target;
-        
-        $msg = "Deleting temporary files...\n";
-        $msg .= "Using command \"".$cmd."\"...";
-        PHPFrame_Debug_Logger::write($msg);
-        
-        $exec = new PHPFrame_Utils_Exec($cmd);
-        
-        // Log output to file
-        PHPFrame_Debug_Logger::write($exec->getOutput());
-        
-        if ($exec->getReturnVar() > 0) {
-            $msg = "Failed to remove temporary files.";
-            throw new PHPFrame_Exception($msg);
-        }
+        //...
     }
     
     public function remove()
@@ -91,13 +49,10 @@ class AppTemplate extends PHPFrame_MVC_Model
         $cmd = "rm -rf ".$this->_install_dir.DS."*";
         
         $msg = "Removing app...\n";
-        $msg .= "Using command \"".$cmd."\"...";
-        PHPFrame_Debug_Logger::write($msg);
+        $msg .= "Using command \"".$cmd."\"...\n";
+        echo $msg;
         
         $exec = new PHPFrame_Utils_Exec($cmd);
-        
-        // Log output to file
-        PHPFrame_Debug_Logger::write($exec->getOutput());
         
         if ($exec->getReturnVar() > 0) {
             $msg = "Failed to remove app.";
@@ -105,58 +60,55 @@ class AppTemplate extends PHPFrame_MVC_Model
         }
     }
     
-    private function _fetchSource($allow_non_empty_dir=false)
+    private function _fetchSource($template="Full", $allow_non_empty_dir=false)
     {
-        // before anything else we check that the directory is writable
-        PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_dir);
-        
         // check that the directory is empty
         if (
             !$allow_non_empty_dir 
             && !PHPFrame_Utils_Filesystem::isEmptyDir($this->_install_dir)
         ) {
             $msg = "Target directory is not empty.";
-            $msg .= "\nUse \"phpframe installer new_app app_name=MyApp ";
+            $msg .= "\nUse \"phpframe app new_app app_name=MyApp ";
             $msg .= "allow_non_empty_dir=true\" to force install";
             throw new PHPFrame_Exception($msg);
         }
         
-        $url     = $this->_preferred_mirror."/PHPFrame-AppTemplate-Full-0.0.1.tgz";
-        $target  = PHPFRAME_TMP_DIR.DS."download";
-        $target .= DS."PHPFrame-AppTemplate-Full-0.0.1.tgz";
+        //TODO: before we download we should check whether local files exists for
+        // current version
         
+        // download package from preferred mirror
+        $file_name     = "PHPFrame_AppTemplate-Full-0.0.1.tgz";
+        $url           = $this->_preferred_mirror."/".$file_name;
+        $download_tmp  = PHPFrame_Utils_Filesystem::getSystemTempDir();
+        $download_tmp .= DS."PHPFrame".DS."download";
+        $target        = $download_tmp.DS.$file_name;
+        
+        // Make sure we can write in download directory
+        PHPFrame_Utils_Filesystem::ensureWritableDir($download_tmp);
+        
+        echo "Attempting to download ".$url."...\n";
+        
+        // Create the download listener
         $download = new PHPFrame_HTTP_Request_DownloadListener();
         $download->setTarget($target);
         
+        // Create the http request
         $req = new HTTP_Request($url);
         $req->attach($download);
         @$req->sendRequest(false);
         
+        // If response is not OK we throw exception
         if ($req->getResponseCode() != 200) {
             $msg  = "Error downloading package. ";
             $msg .= "Reason: ".$req->getResponseReason();
             throw new PHPFrame_Exception($msg);
         }
         
-        //var_dump();
-        exit;
+        echo "\nExtracting archive...\n";
         
-        $source = $this->_sources_config->get("PHPFrame_AppTemplate").DS;
-        $cmd = "svn export --force ".$source." ".$this->_install_dir.DS;
-        
-        $msg = "Fetching PHPFrame_AppTemplate source from repository...\n";
-        $msg .= "Using command \"".$cmd."\"...";
-        PHPFrame_Debug_Logger::write($msg);
-        
-        $exec = new PHPFrame_Utils_Exec($cmd);
-        
-        // Log output to file
-        PHPFrame_Debug_Logger::write($exec->getOutput());
-        
-        if ($exec->getReturnVar() > 0) {
-            $msg = "Failed to checkout source from repository.";
-            throw new PHPFrame_Exception($msg);
-        }
+        // Extract archive in install dir
+        $archive = new Archive_Tar($target, "gz");
+        $archive->extract($this->_install_dir);
     }
     
     private function _createConfig($array)
@@ -167,40 +119,27 @@ class AppTemplate extends PHPFrame_MVC_Model
             throw new PHPFrame_Exception($msg);
         }
         
-        PHPFrame_Debug_Logger::write("Creating configuration file...");
+        echo "Creating configuration file...\n";
         
         // Instanciate new config object
-        $dist_config_xml = PEAR_Config::singleton()->get("data_dir");
-        $dist_config_xml .= DS."PHPFrame".DS."etc".DS."config.xml";
-        $config = PHPFrame_Config::instance($dist_config_xml);
+        $dist_config_ini = PEAR_Config::singleton()->get("data_dir");
+        $dist_config_ini .= DS."PHPFrame".DS."etc".DS."phpframe.ini";
+        $config = PHPFrame_Config::instance($dist_config_ini);
         
         // Bind to array
         $config->bind($array);
         
+        // Create random secret string
+        $config->set("secret", md5(uniqid()));
+        
         // Write to filesystem
-        $config_file = $this->_install_dir.DS;
-        $config_file .= "etc".DS."config.xml";
-        PHPFrame_Utils_Filesystem::write($config_file, $config->toXML());
+        $config_path = $this->_install_dir.DS."etc";
         
-        // Copy other default XML files
-        $files = array("acl.xml", "groups.xml", "lib.xml", "plugins.xml", "sources.xml");
-        foreach ($files as $file) {
-            $source = PEAR_Config::singleton()->get("data_dir");
-            $source .= DS."PHPFrame".DS."etc".DS.$file;
-            $target = $this->_install_dir.DS."etc".DS.$file;
-            $cmd = "cp ".$source." ".$target;
-            
-            $exec = new PHPFrame_Utils_Exec($cmd);
-            
-            // Log output to file
-            PHPFrame_Debug_Logger::write($exec->getOutput());
-            
-            if ($exec->getReturnVar() > 0) {
-                $msg = "Failed to copy ".$file.".";
-                throw new PHPFrame_Exception($msg);
-            }
-        }
+        // Make sure we can write in etc directory
+        PHPFrame_Utils_Filesystem::ensureWritableDir($config_path);
         
+        $config_file_name = $config_path.DS."phpframe.ini";
+        $config->store($config_file_name);
     }
     
     private function _createDummyController()
@@ -208,16 +147,12 @@ class AppTemplate extends PHPFrame_MVC_Model
         $source = PEAR_Config::singleton()->get("data_dir");
         $source .= DS."PHPFrame".DS."DummyController.php";
         $target = $this->_install_dir.DS."src".DS."controllers".DS."dummy.php";
-        $cmd = "cp ".$source." ".$target;
         
-        $exec = new PHPFrame_Utils_Exec($cmd);
+        echo "Creating dummy controller...\n";
         
-        // Log output to file
-        PHPFrame_Debug_Logger::write($exec->getOutput());
-        
-        if ($exec->getReturnVar() > 0) {
+        if (!copy($source, $target)) {
             $msg = "Failed to create dummy controller.";
-            throw new PHPFrame_Exception($msg);
+            throw new PHPFrame_Exception($msg);   
         }
     }
 }

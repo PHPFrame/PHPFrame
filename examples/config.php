@@ -1,16 +1,24 @@
 <?php
-//Hack to override path to PHPFrame source
-$PHPFrame_path = "/Users/lupomontero/Documents/workspace/PHPFrame/src";
-set_include_path($PHPFrame_path . PATH_SEPARATOR . get_include_path());
 require "PHPFrame.php";
 
 define("PHPFRAME_VAR_DIR", dirname(__FILE__));
 define("PHPFRAME_TMP_DIR", dirname(__FILE__));
 
-$config_file = "/Users/lupomontero/Documents/workspace/PHPFrame/data/etc/groups.xml";
-$config = PHPFrame_Config::instance($config_file);
+// Get default config
+$config = PHPFrame::Config();
+
+// Dump the sections and keys in current config object
+var_dump($config->getSections());
+var_dump($config->getKeys());
+
+// Set some config keys
+$config->set("app_name", "UPDATED APP NAME");
+$config->set("debug.enable", true);
+$config->set("debug.log_level", 3);
+
+
+// echo config object as ini string
+echo $config;
+
+// Dump config object
 var_dump($config);
-
-$config2 = PHPFrame::Config();
-
-var_dump($config2);

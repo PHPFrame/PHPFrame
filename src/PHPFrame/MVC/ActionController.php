@@ -260,7 +260,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * @return object
      * @since  1.0
      */
-    protected function getView($name)
+    protected function getView($name="")
     {
         return PHPFrame_MVC_Factory::getView($name);
     }

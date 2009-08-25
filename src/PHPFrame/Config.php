@@ -34,7 +34,7 @@ class PHPFrame_Config
      */
     private static $_instances = array();
     /**
-     * Full path to XML file with data
+     * Full path to ini file with data
      * 
      * @var string
      */
@@ -52,7 +52,7 @@ class PHPFrame_Config
      * Private constructor ensures singleton pattern. Use the instance() method to get an instance
      * of this class.
      *
-     * @param string $path Full path to XML file with data
+     * @param string $path Full path to ini file with data
      *
      * @access private
      * @return void
@@ -66,11 +66,42 @@ class PHPFrame_Config
         $this->_fetchData();
     }
     
+    /**
+     * Convert object to string
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
-        return $this->toString();
+        $str  = "; This is a configuration file\n";
+        $str .= "; Comments start with ';', as in php.ini\n\n";
+        
+        foreach ($this->_data as $section_name=>$section_value) {
+            $str .= "[".$section_name."]\n\n";
+            
+            if (is_array($section_value)) {
+                foreach ($section_value as $param_name=>$param_value) {
+                    $str .= $param_name." = ".$param_value."\n";
+                }
+            }
+            
+            $str .= "\n";
+        }
+        
+        return $str;
     }
     
+    /**
+     * Get singleton instance of config class for a given path
+     * 
+     * @param string $path
+     * 
+     * @access public
+     * @return PHPFrame_Config
+     * @since  1.0
+     */
     public static function instance($path)
     {
         $path = (string) trim($path);
@@ -82,22 +113,24 @@ class PHPFrame_Config
         return self::$_instances[$path];
     }
     
+    /**
+     * Get config key
+     * 
+     * @param string $key
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function get($key)
     {
-        $key = strtolower(trim((string) $key));
+        // Make sure the key actually exists in internal array
+        $this->keyExists($key, true);
         
-        preg_match('/([a-zA-Z_]+)\.?(.*)?/', $key, $matches);
+        // Parse key string to section and key
+        list($section, $key) = $this->_parseKey($key);
         
-        if (isset($matches[2]) && !empty($matches[2])) {
-            $section = $matches[1];
-            $key = $matches[2];
-        } else {
-            $section = "general";
-            $key = $matches[1];
-        }
-
-        $this->_ensureKeyExists($section, $key);
-        
+        // Return value from internal array
         return $this->_data[$section][$key];
     }
     
@@ -106,52 +139,116 @@ class PHPFrame_Config
      *
      * This method returns the current instance allowing for fluent syntax
      *
-     * @param string $key
-     * @param array  $value
+     * @param string $key   The config key we want to set (ie: debug.enable)
+     * @param array  $value The new value for the config key
      *
      * @access public
-     * @return PHPFrame_Config
+     * @return void
      * @since  1.0
      */
-    public function set($key, $value, $section="general")
+    public function set($key, $value)
     {
-        $this->_ensureKeyExists($section);
+        // Make sure the key actually exists in internal array
+        $this->keyExists($key, true);
         
+        // Parse key string to section and key
+        list($section, $key) = $this->_parseKey($key);
+        
+        // Set value in internal array
         $this->_data[$section][$key] = $value;
-        
-        return $this; 
-    }
-    
-    public function bind($array)
-    {
-        if (!is_array($array)) {
-            $msg = get_class($this)."::bind() ";
-            $msg .= "expected an array as only argument.";
-            trigger_error($msg);
-        }
-        
-        foreach ($array as $section=>$value) {
-            var_dump($section, $value); 
-//            if (array_key_exists($key, $this->_data)) {
-//                foreach ($this->_data[$key] as $k=>$v) {
-//                    if ($a) {
-//                        $this->set($key, $value);
-//                    }
-//                }
-//            }
-        }
-        
-    }
-    
-    public function getKeys()
-    {
-        return array_keys($this->toArray());
     }
     
     /**
-     * Store config object in filesystem as XML
+     * Bind array to config object
+     * 
+     * @param array $array
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function bind(array $array)
+    {   
+        foreach ($array as $key=>$value) {
+            if ($this->keyExists($key)) {
+                $this->set($key, $value);
+            }
+        }
+    }
+    
+    /**
+     * Get config sections
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getSections()
+    {
+        return array_keys($this->_data);
+    }
+    
+    /**
+     * Get config keys
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getKeys()
+    {
+        $array = array();
+        
+        foreach ($this->_data as $section_name=>$section_value) {
+            if (is_array($section_value)) {
+                foreach ($section_value as $param_key=>$param_value) {
+                    if ($section_name != "general") {
+                        $param_key = $section_name.".".$param_key;
+                    }
+                    
+                    $array[] = $param_key;
+                }
+            }
+        }
+        
+        return $array;
+    }
+    
+    /**
+     * Ensure a given key exists in internal array
+     * 
+     * @param string $key
+     * @param bool   $ensure If set to TRUE method will trigger error
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function keyExists($str=null, $ensure=false)
+    {
+        list($section, $key) = $this->_parseKey($str);
+        
+        if (
+            !isset($this->_data[$section]) 
+            || !isset($this->_data[$section][$key])
+        ) {
+            if ($ensure) {
+                $msg  = "Configuration file (".$this->_path.") ";
+                $msg .= "does not containg key ";
+                $msg .= "'".$str."'";
+                trigger_error($msg, E_USER_ERROR);
+            } else {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Store config object in filesystem as ini file
      *
-     * @param string $path Full path to XML file with data
+     * @param string $path Full path to ini file with data
      *
      * @access public
      * @return void
@@ -160,39 +257,49 @@ class PHPFrame_Config
     public function store($path=null)
     {
         if (!is_null($path)) {
-            $this->_path = (string) trim($path);
+            $this->_path = trim((string) $path);
         }
         
         // Store object as string in filesystem
         // This will throw an exception on failure
-        PHPFrame_Utils_Filesystem::write($this->_path, (string) $this);
+        $file = new PHPFrame_FS_FileObject($this->_path, "w");
+        $file->fwrite((string) $this);
     }
     
-    public function toArray()
-    {
-        return $this->_data;
-    }
-    
+    /**
+     * Fetch data from ini file
+     * 
+     * @access private
+     * @return void
+     * @since  1.0
+     */
     private function _fetchData()
     {
         $array = parse_ini_file($this->_path, true);
         $this->_data = $array;
     }
     
-    private function _ensureKeyExists($section, $key=null)
+    /**
+     * Parse key string into section and key
+     * 
+     * @access private
+     * @return array
+     * @since  1.0
+     */
+    private function _parseKey($str)
     {
-        if (!isset($this->_data[$section])) {
-            $msg = "Configuration file (".$this->_path.") does not containg section ";
-            $msg .= $section;
-            trigger_error($msg, E_USER_ERROR);
+        $str = strtolower(trim((string) $str));
+        
+        preg_match('/([a-zA-Z_]+)\.?(.*)?/', $str, $matches);
+        
+        if (isset($matches[2]) && !empty($matches[2])) {
+            $section = $matches[1];
+            $key = $matches[2];
+        } else {
+            $section = "general";
+            $key = $matches[1];
         }
         
-        if (!is_null($key)) {
-            if (!isset($this->_data[$section][$key])) {
-                $msg = "Configuration file (".$this->_path.") does not containg key ";
-                $msg .= $key." under section [".$section."]";
-                trigger_error($msg, E_USER_ERROR);
-            }
-        }
+        return array($section, $key);
     }
 }

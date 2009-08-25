@@ -82,7 +82,12 @@ class PHPFrame_Document_Plain extends PHPFrame_Document
      */
     public function toString()
     {
-        $str = $this->title."\n\n";
+        $str = "";
+        
+        if ($this->title) {
+            $str .= $this->title."\n\n";
+        }
+        
         $str .= $this->body;
         
         return $str;

@@ -1,17 +1,3 @@
-<?php
-function loadFramework()
-{
-    //TODO: This needs to be removed. It is temporarily here to make up for the
-    // release of PHPFrame as a PEAR package
-    $PHPFrame_path = "/Users/lupomontero/Documents/workspace/PHPFrame/src";
-    set_include_path($PHPFrame_path . PATH_SEPARATOR . get_include_path());
-    
-    include_once "PHPFrame.php";
-}
-
-loadFramework();
-
-?>
 <h1>PHPFrame Database Subpackage Examples</h1>
 
 <h2>Code</h2>
@@ -21,6 +7,8 @@ loadFramework();
 </pre>
 
 <?php
+include_once "PHPFrame.php";
+
 $plugin = new PHPFrame_Addons_Plugin();
 echo '<h2>Object to be inserted</h2>';
 var_dump($plugin);

@@ -1,5 +1,5 @@
 <?php
-class InstallerController extends PHPFrame_MVC_ActionController
+class AppController extends PHPFrame_MVC_ActionController
 {
     private $_install_dir=null;
     
@@ -14,7 +14,7 @@ class InstallerController extends PHPFrame_MVC_ActionController
         parent::__construct("new_app");
     }
     
-    public function new_app($app_name, $allow_non_empty_dir=false)
+    public function new_app($app_name, $template=null, $allow_non_empty_dir=false)
     {
         $app_name = (string) trim($app_name);
         $allow_non_empty_dir = (bool) trim($allow_non_empty_dir);
@@ -24,13 +24,17 @@ class InstallerController extends PHPFrame_MVC_ActionController
             $model = $this->getModel("AppTemplate", array($this->_install_dir));
             
             // Install new app
-            $model->install(array("app_name"=>$app_name), $allow_non_empty_dir);
+            $model->install(
+                array("app_name"=>$app_name), 
+                $template, 
+                $allow_non_empty_dir
+            );
             
             $msg = "App created successfully";
             $this->sysevents->setSummary($msg, "success");
             
         } catch (Exception $e) {
-            $msg = "Error creating app";
+            $msg = "Could NOT create new app";
             $this->sysevents->setSummary($msg, "error");
             $this->sysevents->addEventLog($e->getMessage(), "error");
         }
@@ -53,8 +57,7 @@ class InstallerController extends PHPFrame_MVC_ActionController
             $this->sysevents->addEventLog($e->getMessage(), "error");
         }
         
-        $view = $this->getView("deploy");
-        $view->display();
+        $this->getView()->display();
     }
     
     public function remove()
@@ -72,7 +75,6 @@ class InstallerController extends PHPFrame_MVC_ActionController
             $this->sysevents->addEventLog($e->getMessage(), "error");
         }
         
-        $view = $this->getView("deploy");
-        $view->display();
+        $this->getView()->display();
     }
 }

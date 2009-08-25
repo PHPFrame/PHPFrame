@@ -32,7 +32,7 @@ class PHPFrame_Utils_Filesystem
      * 
      * @param string $fname   The full path to the file
      * @param string $content The content to store in the file
-     * @param bool   $append  Flag to indicate whether we want to append the content. 
+     * @param bool   $append  Flag to indicate whether we want to append the content
      *                        Default is FALSE
      * 
      * @access public
@@ -46,17 +46,20 @@ class PHPFrame_Utils_Filesystem
         
         // Open file for writing
         if (!$fhandle = fopen($fname, $mode)) {
-            throw new PHPFrame_Exception_Filesystem('Error opening file '.$fname.' for writing.');
+            $msg = 'Error opening file '.$fname.' for writing.';
+            throw new PHPFrame_Exception_Filesystem($msg);
         }
         
         // Write contents into file
         if (!fwrite($fhandle, $content)) {
-            throw new PHPFrame_Exception_Filesystem('Error writing file '.$fname.'.');
+            $msg = 'Error writing file '.$fname.'.';
+            throw new PHPFrame_Exception_Filesystem($msg);
         }
         
         // Close file
         if (!fclose($fhandle)) {
-            throw new PHPFrame_Exception_Filesystem('Error closing file '.$fname.' after writing.');
+            $msg = 'Error closing file '.$fname.' after writing.';
+            throw new PHPFrame_Exception_Filesystem($msg);
         }
     }
     
@@ -74,8 +77,11 @@ class PHPFrame_Utils_Filesystem
         $path = (string) $path;
         $path_array = explode(DS, trim($path, DS));
         $path_prefix = DS;
-        if (DS=="\\") //if the DS is backslash we are on windows, path prefix should be empty
+        
+        //if the DS is backslash we are on windows, path prefix should be empty
+        if (DS=="\\") {
             $path_prefix = '';
+        }
         
         foreach ($path_array as $path_item) {
             // If dir doesnt exist we try to create it
@@ -90,7 +96,8 @@ class PHPFrame_Utils_Filesystem
         }
         
         if (!is_writable($path)) {
-            throw new PHPFrame_Exception_Filesystem("Directory ".$path." is not writable.");
+            $msg = "Directory ".$path." is not writable.";
+            throw new PHPFrame_Exception_Filesystem($msg);
         }
     }
     
@@ -121,11 +128,16 @@ class PHPFrame_Utils_Filesystem
         $overwrite=false
     ) {
         // Get file data from request
-        $file_tmp = $_FILES[$fieldName]['tmp_name']; // $file_tmp is where file went on webserver
-        $file_name = $_FILES[$fieldName]['name']; // $file_tmp_name is original file name
-        $file_size = $_FILES[$fieldName]['size']; // $file_size is size in bytes
-        $file_type = $_FILES[$fieldName]['type']; // $file_type is mime type e.g. image/gif
-        $file_error = $_FILES[$fieldName]['error']; // $file_error is any error encountered
+        // $file_tmp is where file went on webserver
+        $file_tmp = $_FILES[$fieldName]['tmp_name'];
+        // $file_tmp_name is original file name
+        $file_name = $_FILES[$fieldName]['name'];
+        // $file_size is size in bytes 
+        $file_size = $_FILES[$fieldName]['size'];
+        // $file_type is mime type e.g. image/gif
+        $file_type = $_FILES[$fieldName]['type'];
+        // $file_error is any error encountered
+        $file_error = $_FILES[$fieldName]['error'];
         
         // Make sure that upload target is writable
         self::ensureWritableDir($dir);
@@ -146,12 +158,14 @@ class PHPFrame_Utils_Filesystem
         
         // check custom max_upload_size passed into the function
         if (!empty($max_upload_size) && $max_upload_size < $file_size) {
-            $array['error'] = PHPFrame_Lang::UPLOAD_ERROR_MAX_FILESIZE;
-            $array['error'] .= ' max_upload_size: '.$max_upload_size.' | file_size: '.$file_size;
+            $array['error']  = PHPFrame_Lang::UPLOAD_ERROR_MAX_FILESIZE;
+            $array['error'] .= ' max_upload_size: '.$max_upload_size;
+            $array['error'] .= ' | file_size: '.$file_size;
             return $array;
         }
         
-        // Checkeamos el MIME type con la lista que formatos validos ($accept - valores separados por ',')
+        // Checkeamos el MIME type con la lista que formatos validos ($accept - 
+        // valores separados por ',')
         if ($accept != "*") {
             $valid_file_types = explode(",", $accept);
             $type_ok = 0;
@@ -205,7 +219,32 @@ class PHPFrame_Utils_Filesystem
             return $array;
         }
         
-        $array = array('file_name' => $file_name, 'file_size' => $file_size, 'file_type' => $file_type, 'error' => '');
+        $array = array(
+            'file_name' => $file_name, 
+            'file_size' => $file_size, 
+            'file_type' => $file_type, 
+            'error' => ''
+        );
         return $array;
+    }
+    
+    /**
+     * Get the operating system's temp directory path
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public static function getSystemTempDir()
+    {
+        $tmp_dir = sys_get_temp_dir();
+        
+        // Remove trailing slash if provided
+        // We do this to enforce consistent behaviour across systems
+        if (preg_match('/(.+)\/$/', $tmp_dir, $matches)) {
+            return $matches[1];
+        }
+        
+        return $tmp_dir;
     }
 }

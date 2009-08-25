@@ -1,10 +1,6 @@
 <?php
 function loadFramework()
-{
-    //Hack to override path to PHPFrame source
-    $PHPFrame_path = "/Users/lupomontero/Documents/workspace/PHPFrame/src";
-    set_include_path($PHPFrame_path . PATH_SEPARATOR . get_include_path());
-    
+{   
     /**
      * Installation constants
      */

@@ -10,7 +10,7 @@ class DummyController extends PHPFrame_MVC_ActionController
     {
         echo "<h1>Hello PHPFrame</h1>";
         echo "This is the Default Action in the Default Controller <br />";
-        echo "You can set the Default Controller in etc/config.xml <br />";
+        echo "You can set the Default Controller in etc/phpframe.ini <br />";
         echo "Feel free to replace me, I am just an example.";
     }
 }

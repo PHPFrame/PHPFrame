@@ -109,7 +109,7 @@ class PHPFrame_Application_Sysevents
         }
         
         if (is_array($this->_events_log) && count($this->_events_log) > 0) {
-            $str .= "\n\nEvents log: \n";
+            $str .= "\nEvents log: \n";
             foreach ($this->_events_log as $event_log) {
                 $str .= ucfirst($event_log[0]).": ".$event_log[1]."\n";
             }

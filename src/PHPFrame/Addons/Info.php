@@ -86,7 +86,7 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
      * 
      * @var array
      */
-    protected $license = array();
+    protected $license = array("name"=>null, "uri"=>null);
     /**
      * Notes
      * 
@@ -247,6 +247,66 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
     }
     
     /**
+     * Set author
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setAuthor($str)
+    {
+        $this->author = $str;
+    }
+    
+    /**
+     * Get date
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+    
+    /**
+     * Set date
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setDate($str)
+    {
+        $this->date = $str;
+    }
+    
+    /**
+     * Get time
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getTime()
+    {
+        return $this->time;
+    }
+    
+    /**
+     * Set time
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setTime($str)
+    {
+        $this->time = $str;
+    }
+    
+    /**
      * Get release version
      * 
      * @access public
@@ -256,6 +316,158 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
     public function getReleaseVersion()
     {
         return $this->version["release"];
+    }
+    
+    /**
+     * Set version
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setVersion(array $array)
+    {
+        $this->version = $array;
+    }
+    
+    /**
+     * Set stability
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setStability(array $array)
+    {
+        $this->stability = $array;
+    }
+    
+    /**
+     * Set license
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setLicense(array $array)
+    {
+        $this->license = $array;
+    }
+    
+    /**
+     * Set notes
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setNotes($str)
+    {
+        $this->notes = $str;
+    }
+    
+    /**
+     * Get dependencies
+     * 
+     * @access public
+     * @return PHPFrame_Addons_Dependencies
+     * @since  1.0
+     */
+    public function getDependencies()
+    {
+        return $this->dependencies;
+    }
+    
+    /**
+     * Set dependencies
+     * 
+     * @param PHPFrame_Addons_Dependencies $dependencies
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setDependencies(PHPFrame_Addons_Dependencies $dependencies)
+    {
+        $this->dependencies = $dependencies;
+    }
+    
+    /**
+     * Get contents
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getContents()
+    {
+        return $this->contents;
+    }
+    
+    /**
+     * Add content
+     * 
+     * @param array $array
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function addContent(array $array)
+    {
+        $this->contents[] = $array;
+    }
+    
+    /**
+     * Get install scripts
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getInstallScripts()
+    {
+        return $this->install;
+    }
+    
+    /**
+     * Add install script
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function addInstallScript($str)
+    {
+        $this->install[] = array("path"=>$str, "role"=>"php");
+    }
+    
+    /**
+     * Get uninstall scripts
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getUninstallScripts()
+    {
+        return $this->uninstall;
+    }
+    
+    /**
+     * Add uninstall script
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function addUninstallScript($str)
+    {
+        $this->uninstall[] = array("path"=>$str, "role"=>"php");
     }
     
     /**
@@ -282,31 +494,5 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
     public function setEnabled($bool)
     {
         $this->enabled = (bool) $bool;
-    }
-
-    /**
-     * Get dependencies
-     * 
-     * @access public
-     * @return PHPFrame_Addons_Dependencies
-     * @since  1.0
-     */
-    public function getDependencies()
-    {
-        return $this->dependencies;
-    }
-    
-    /**
-     * Set dependencies
-     * 
-     * @param PHPFrame_Addons_Dependencies $bool
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function setDependencies(PHPFrame_Addons_Dependencies $dependencies)
-    {
-        $this->dependencies = $dependencies;
     }
 }

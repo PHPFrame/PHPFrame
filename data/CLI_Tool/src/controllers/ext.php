@@ -1,10 +1,6 @@
 <?php
 class ExtController extends PHPFrame_MVC_ActionController
 {
-    const TYPE_FEATURE = 0x00000001;
-    const TYPE_THEME  = 0x00000002;
-    const TYPE_LIB    = 0x00000003;
-    
     private $_install_dir=null;
     
     public function __construct($install_dir=null)
@@ -18,28 +14,37 @@ class ExtController extends PHPFrame_MVC_ActionController
         parent::__construct("install");
     }
     
-    public function install($name, $type=self::TYPE_FEATURE)
+    public function install($name, $type=null)
     {
+        $ext_installer = $this->getModel("ExtInstaller", array($this->_install_dir));
         
+        try {
+            $ext_installer->install($name, $type);
+            
+        } catch (Exception $e) {
+            $this->sysevents->setSummary($e->getMessage());
+        }
+        
+        $this->getView()->display();
     }
     
-    public function upgrade($name, $type=self::TYPE_FEATURE)
+    public function upgrade($name, $type=self::EXT_FEATURE)
     {
-        
+        echo "This should upgrade a given extension";
     }
     
-    public function remove($name, $type=self::TYPE_FEATURE)
+    public function remove($name, $type=self::EXT_FEATURE)
     {
-        
+        echo "This should remove a given extension";
     }
     
     public function list_installed()
     {
-        
+        echo "This should show a list of installed extensions";
     }
     
     public function list_available()
     {
-        
+        echo "This should show a list of available extensions";
     }
 }

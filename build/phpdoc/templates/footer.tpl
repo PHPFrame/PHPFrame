@@ -83,12 +83,12 @@
 <!-- ******************** start #footer ******************** -->
 <div id="footer">
 
-<a href="content/about">About</a>
+<a href="http://www.phpframe.org/content/about">About</a>
 
  | 
-<a href="content/disclaimer">Disclaimer</a>
+<a href="http://www.phpframe.org/content/disclaimer">Disclaimer</a>
  | 
-<a href="sitemap">Sitemap</a>
+<a href="http://www.phpframe.org/sitemap">Sitemap</a>
  | 
 Copyright &copy; 2009 E-noise.com Limited
 

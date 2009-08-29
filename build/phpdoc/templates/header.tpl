@@ -18,7 +18,7 @@
 <!-- ******************** start #header ******************** -->
 <div id="header">
     
-<h1><a href="content/index">PHPFrame.org</a></h1>
+<h1><a href="http://www.phpframe.org/">PHPFrame.org</a></h1>
     
 <!-- ******************** start #twitter-box ******************** -->
 <div id="twitter-box">
@@ -44,22 +44,22 @@
 
 <ul>
     <li>
-        <a href="content/index">Home</a>
+        <a href="http://www.phpframe.org/content/index">Home</a>
     </li>
     <li>
-        <a href="content/download">Download</a>
+        <a href="http://www.phpframe.org/content/download">Download</a>
     </li>
     <li>
-        <a href="content/doc">Documentation</a>
+        <a href="http://www.phpframe.org/content/doc">Documentation</a>
     </li>
     <li>
-        <a href="content/tutorials">Tutorials</a>
+        <a href="http://www.phpframe.org/content/tutorials">Tutorials</a>
     </li>
     <li>
-        <a href="content/tracker">Bug tracker</a>
+        <a href="http://www.phpframe.org/content/tracker">Bug tracker</a>
     </li>
     <li>
-        <a href="content/discussion">Discussion</a>
+        <a href="http://www.phpframe.org/content/discussion">Discussion</a>
     </li>
 </ul>
 
@@ -75,7 +75,15 @@
 <!-- ******************** start #content ******************** -->
 <div id="content" class="doc-index">
 
-<div class="pathway"><span class="pathway_item"><a href="index.php">Home</a></span> &gt;&gt; <span class="pathway_item">API Documentation</span></div>
+<div class="pathway">
+    <span class="pathway_item">
+        <a href="http://www.phpframe.org/index.php">Home</a>
+    </span>
+     &gt;&gt; 
+    <span class="pathway_item">
+        API Documentation
+    </span>
+</div>
 
 <h2>API Documentation</h2>
 <!-- End top chunk copied from main site -->

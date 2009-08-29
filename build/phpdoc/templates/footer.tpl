@@ -4,12 +4,6 @@
         </div>
         
     </div><!-- close #main_col -->
-    
-    <div class="clear"></div>
-
-    <div id="footer">
-        Copyright &copy; 2009 E-noise.com Limited
-    </div><!-- close #"footer" -->
 
 </div><!-- close #wrapper -->
 

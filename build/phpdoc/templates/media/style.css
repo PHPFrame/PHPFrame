@@ -1,2 +1,19 @@
 @import "generic.css";
 @import "phpdoc.css";
+
+div#left
+{
+    float:left;
+    width: 200px;
+}
+
+div#main_col
+{
+    float:left;
+    min-width: 760px;
+}
+
+div#main_col hr
+{
+    margin: 15px 0;
+}

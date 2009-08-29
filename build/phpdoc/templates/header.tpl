@@ -3,7 +3,8 @@
 <title>{$title}</title>
 <meta name="generator" content="PHPDoc">
 <meta http_equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="http://www.phpframe.org/phpdoc/api/">
+<base href="http://www.phpframe.org/doc/api/">
+<link rel="stylesheet" href="media/styles.css" type="text/css">
 <link rel="stylesheet" href="http://www.phpframe.org/themes/phpframe.org/css/styles.css" type="text/css">
 <script type="text/javascript" src="http://www.phpframe.org/lib/jquery/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="http://www.phpframe.org/lib/jquery/js/jquery-ui-1.7.custom.min.js"></script>
@@ -44,24 +45,21 @@
 <ul>
     <li>
         <a href="content/index">Home</a>
-
     </li>
     <li>
         <a href="content/download">Download</a>
     </li>
     <li>
-        <a href="doc">Documentation</a>
+        <a href="content/doc">Documentation</a>
     </li>
     <li>
-
-        <a href="tutorials">Tutorials</a>
+        <a href="content/tutorials">Tutorials</a>
     </li>
     <li>
-        <a href="tracker">Bug tracker</a>
+        <a href="content/tracker">Bug tracker</a>
     </li>
     <li>
-        <a href="discussion">Discussion</a>
-
+        <a href="content/discussion">Discussion</a>
     </li>
 </ul>
 

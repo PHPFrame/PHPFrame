@@ -4,10 +4,10 @@
  * 
  * PHP version 5
  * 
- * @category   MVC_Framework
+ * @category PHPFrame
  * @package    PHPFrame
  * @subpackage Database
- * @author     Luis Montero <luis.montero@e-noise.com>
+ * @author   Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version    SVN: $Id$
@@ -31,13 +31,13 @@
  *       Special attention should also be paid to the handling of "foreign" fields
  *       as the result of queries with JOIN clauses.
  * 
- * @category   MVC_Framework
+ * @category PHPFrame
  * @package    PHPFrame
  * @subpackage Database
- * @author     Luis Montero <luis.montero@e-noise.com>
- * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @since      1.0
+ * @author   Luis Montero <luis.montero@e-noise.com>
+ * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since    1.0
  * @deprecated
  * @see PHPFrame_Mapper
  */

@@ -4,10 +4,10 @@
  * 
  * PHP version 5
  * 
- * @category   MVC_Framework
+ * @category PHPFrame
  * @package    PHPFrame
  * @subpackage Base
- * @author     Luis Montero <luis.montero@e-noise.com>
+ * @author   Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version    SVN: $Id$
@@ -22,10 +22,10 @@
  * 
  * This class is designed to work together with the PHPFrame_Base_Subject class.
  * 
- * @category   MVC_Framework
+ * @category PHPFrame
  * @package    PHPFrame
  * @subpackage Base
- * @author     Luis Montero <luis.montero@e-noise.com>
+ * @author   Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @see        PHPFrame_Base_Subject

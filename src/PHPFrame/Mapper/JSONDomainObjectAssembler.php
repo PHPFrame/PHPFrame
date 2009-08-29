@@ -4,10 +4,9 @@
  * 
  * PHP version 5
  * 
- * @category   MVC_Framework
+ * @category PHPFrame
  * @package    PHPFrame
- * @subpackage Mapper
- * @author     Luis Montero <luis.montero@e-noise.com>
+ * @author   Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version    SVN: $Id: JSONDomainObjectAssembler.php 460 2009-08-18 20:16:02Z luis.montero@e-noise.com $
@@ -17,13 +16,12 @@
 /**
  * JSON Domain Object Assembler Class
  * 
- * @category   MVC_Framework
+ * @category PHPFrame
  * @package    PHPFrame
- * @subpackage Mapper
- * @author     Luis Montero <luis.montero@e-noise.com>
- * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @since      1.0
+ * @author   Luis Montero <luis.montero@e-noise.com>
+ * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since    1.0
  */
 class PHPFrame_Mapper_JSONDomainObjectAssembler extends PHPFrame_Mapper_DomainObjectAssembler
 {

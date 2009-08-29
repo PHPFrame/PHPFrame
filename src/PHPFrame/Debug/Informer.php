@@ -4,10 +4,10 @@
  * 
  * PHP version 5
  * 
- * @category   MVC_Framework
+ * @category PHPFrame
  * @package    PHPFrame
  * @subpackage Debug
- * @author     Luis Montero <luis.montero@e-noise.com>
+ * @author   Luis Montero <luis.montero@e-noise.com>
  * @copyright  2009 E-noise.com Limited
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version    SVN: $Id$
@@ -20,10 +20,10 @@
  * This class implements the "Observer" base class in order to subscribe to updates
  * from "observable" objects (objects of type PHPFrame_Base_Subject).
  * 
- * @category   MVC_Framework
+ * @category PHPFrame
  * @package    PHPFrame
  * @subpackage Debug
- * @author     Luis Montero <luis.montero@e-noise.com>
+ * @author   Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @see        PHPFrame_Base_Observer

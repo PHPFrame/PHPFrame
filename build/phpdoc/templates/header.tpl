@@ -10,11 +10,11 @@
 <div id="left">
 
 {if count($ric) >= 1}
-<div class="sidebar">
+<div class="sidebar ric">
 
-<ul id="ric">
+<ul>
 {section name=ric loop=$ric}
-    <li><a href="{$subdir}{$ric[ric].file}">{$ric[ric].name}</a></li>
+    <li class="textfile"><a href="{$subdir}{$ric[ric].file}">{$ric[ric].name}</a></li>
 {/section}
 </ul>
 
@@ -22,12 +22,12 @@
 {/if}
     
 {if $hastodos}
-<div id="todolist" class="sidebar">
-    <p><a href="{$subdir}{$todolink}">Todo List</a></p>
+<div class="sidebar todolist">
+    <a href="{$subdir}{$todolink}">Todo List</a>
 </div><!-- end todos .sidebar -->
 {/if}
 
-<div class="sidebar">
+<div class="sidebar packages">
 
 <h3>Packages:</h3>
 
@@ -45,7 +45,7 @@
 
 
 {if $tutorials}
-<div class="sidebar">
+<div class="sidebar tutorials">
 
 <h3>Tutorials/Manuals:</h3>
 
@@ -70,32 +70,37 @@
     {/section}
 {/if}
 
-</div><!-- end tutorials .sidebar -->
+</div><!-- end .tutorials .sidebar -->
 {/if}
 
 {if !$noleftindex}{assign var="noleftindex" value=false}{/if}
 
 {if !$noleftindex}
-<div class="sidebar">
 
 <!--
 {if $compiledfileindex}
+<div class="sidebar files">
     <h3>Files:</h3>
     {eval var=$compiledfileindex}
+</div>
 {/if}
 -->
 
 {if $compiledinterfaceindex}
+<div class="sidebar interfaces">
     <h3>Interfaces:</h3>
       {eval var=$compiledinterfaceindex}
+</div><!-- end .interfaces .sidebar -->
 {/if}
 
 {if $compiledclassindex}
+<div class="sidebar classes">
     <h3>Classes:</h3>
       {eval var=$compiledclassindex}
+</div><!-- end .classes .sidebar -->
 {/if}
 
-</div><!-- end files, classes and interfaces .sidebar -->
+
 {/if}
 
 </div><!-- close #left -->

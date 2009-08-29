@@ -11,9 +11,24 @@ div#main_col
 {
     float:left;
     min-width: 760px;
+    max-width: 780px;
+}
+
+div#main_col ul li,
+div#main_col ul li a,
+div#main_col td,
+div#main_col table tr td,
+div#main_col p,
+div#main_col dt,
+div#main_col div
+{
+    font-size: 13px;
 }
 
 div#main_col hr
 {
     margin: 15px 0;
+    height: 1px;
+    border: 0;
+    background-color: #999999;
 }

@@ -1,15 +1,13 @@
 <html>
 <head>
 <title>{$title}</title>
-<link rel="stylesheet" type="text/css" href="{$subdir}media/style.css">
-
 <meta name="generator" content="PHPDoc">
 <meta http_equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="http://www.phpframe.org/phpdoc/api">
+<base href="http://www.phpframe.org/phpdoc/api/">
+<link rel="stylesheet" href="http://www.phpframe.org/themes/phpframe.org/css/styles.css" type="text/css">
 <script type="text/javascript" src="http://www.phpframe.org/lib/jquery/js/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="http://phpframe.org/lib/jquery/js/jquery-ui-1.7.custom.min.js"></script>
+<script type="text/javascript" src="http://www.phpframe.org/lib/jquery/js/jquery-ui-1.7.custom.min.js"></script>
 <script type="text/javascript" src="http://www.phpframe.org/themes/phpframe.org/js/twitter.js"></script>
-
 </head>
 <body>
     
@@ -52,7 +50,7 @@
         <a href="content/download">Download</a>
     </li>
     <li>
-        <a href="doc">API Doc</a>
+        <a href="doc">Documentation</a>
     </li>
     <li>
 

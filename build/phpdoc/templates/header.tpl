@@ -2,10 +2,89 @@
 <head>
 <title>{$title}</title>
 <link rel="stylesheet" type="text/css" href="{$subdir}media/style.css">
+
+<meta name="generator" content="PHPDoc">
+<meta http_equiv="Content-Type" content="text/html; charset=UTF-8">
+<base href="http://www.phpframe.org/phpdoc/api">
+<script type="text/javascript" src="http://www.phpframe.org/lib/jquery/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="http://phpframe.org/lib/jquery/js/jquery-ui-1.7.custom.min.js"></script>
+<script type="text/javascript" src="http://www.phpframe.org/themes/phpframe.org/js/twitter.js"></script>
+
 </head>
 <body>
     
+<!-- ******************** start #wrapper ******************** -->
 <div id="wrapper">
+
+<!-- ******************** start #header ******************** -->
+<div id="header">
+    
+<h1><a href="content/index">PHPFrame.org</a></h1>
+    
+<!-- ******************** start #twitter-box ******************** -->
+<div id="twitter-box">
+
+<div id="tweetdate"></div>
+<div id="tweetcontent"></div>
+
+<a href="http://www.twitter.com/phpframe" title="Follow us on Twitter">
+    <img src="themes/phpframe.org/images/twitter.png" 
+         alt="Twitter Logo" />
+
+</a>
+
+<div style="clear: both;"></div>
+    
+</div>
+<!-- ******************** end #twitter-box ******************** -->
+
+<div style="clear: both;"></div>
+
+<!-- ******************** start #topmenu ******************** -->
+<div id="topmenu">
+
+<ul>
+    <li>
+        <a href="content/index">Home</a>
+
+    </li>
+    <li>
+        <a href="content/download">Download</a>
+    </li>
+    <li>
+        <a href="doc">API Doc</a>
+    </li>
+    <li>
+
+        <a href="tutorials">Tutorials</a>
+    </li>
+    <li>
+        <a href="tracker">Bug tracker</a>
+    </li>
+    <li>
+        <a href="discussion">Discussion</a>
+
+    </li>
+</ul>
+
+</div>
+<!-- ******************** end #topmenu ******************** -->
+
+</div>
+<!-- ******************** end #header ******************** -->
+
+<div style="clear: both;"></div>
+
+
+<!-- ******************** start #content ******************** -->
+<div id="content" class="doc-index">
+
+<div class="pathway"><span class="pathway_item"><a href="index.php">Home</a></span> &gt;&gt; <span class="pathway_item">API Documentation</span></div>
+
+<h2>API Documentation</h2>
+<!-- End top chunk copied from main site -->
+
+
     
 <div id="left">
 

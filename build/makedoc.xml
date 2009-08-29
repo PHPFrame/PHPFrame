@@ -44,7 +44,7 @@
                     -ric README,LICENSE,CREDITS \
                     -i build/,data/,examples/,scripts/,tests/ \
                     -s on \
-                    -dn None \
+                    -dn PHPFrame \
                     -o HTML:Smarty:PHPFrame \
                     -ti 'PHPFrame API Documentation'" 
             dir="${project.basedir}" 

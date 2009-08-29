@@ -178,7 +178,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
         $db_pass=null
     ) {
         // Set internal properties
-        $this->_dsn = $dsn;
+        $this->_dsn     = $dsn;
         $this->_db_user = $db_user;
         $this->_db_pass = $db_pass;
         
@@ -255,7 +255,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
     public function getStructure($table_name=null)
     {
         // Replace table prefix with config value
-        $table_name = str_replace('#__', PHPFrame::Config()->get("DB_PREFIX"), $table_name);
+        $table_name = str_replace('#__', PHPFrame::Config()->get("db.prefix"), $table_name);
         
         if (!is_array($this->_structure) || count($this->_structure) < 1) {
             $this->_fetchStructure();
@@ -299,7 +299,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
     public function query($sql, $params=array(), $fetch_mode=self::FETCH_STMT) 
     {
         // Replace table prefix with config value
-        $sql = str_replace('#__', PHPFrame::Config()->get("DB_PREFIX"), $sql);
+        $sql = str_replace('#__', PHPFrame::Config()->get("db.prefix"), $sql);
         
         // Run SQL query
         try {
@@ -384,7 +384,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
      */
     public function prepare($statement, $options=array())
     {
-        $statement = str_replace('#__', PHPFrame::Config()->get("DB_PREFIX"), $statement);
+        $statement = str_replace('#__', PHPFrame::Config()->get("db.prefix"), $statement);
         
         return $this->_pdo->prepare($statement, $options);
     }

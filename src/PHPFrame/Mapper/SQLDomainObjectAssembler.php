@@ -56,7 +56,7 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
             $id = $id_obj;
             
             // Get table name
-            $table_name = $this->_factory->getTableName();
+            $table_name = $this->factory->getTableName();
             
             // Create new IdObject
             $id_obj = new PHPFrame_Mapper_IdObject(array("select"=>"*", "from"=>$table_name));
@@ -90,7 +90,7 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         $raw = PHPFrame::DB()->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
         
         // Create collectioj object
-        $collection = $this->_factory->getCollection($raw);
+        $collection = $this->factory->getCollection($raw);
         
         return $collection;
     }
@@ -129,7 +129,7 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
     
     private function _buildInsertQuery(array $array)
     {
-        $sql = "INSERT INTO ".$this->_factory->getTableName()." (`";
+        $sql = "INSERT INTO ".$this->factory->getTableName()." (`";
         $sql .= implode("`, `", array_keys($array));
         $sql .= "`) VALUES (:";
         $sql .= implode(", :", array_keys($array));
@@ -144,7 +144,7 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
     
     private function _buildUpdateQuery(array $array)
     {
-        $sql = "UPDATE ".$this->_factory->getTableName()." SET ";
+        $sql = "UPDATE ".$this->factory->getTableName()." SET ";
         
         $count = 0;
         foreach (array_keys($array) as $key) {

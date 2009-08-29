@@ -9,13 +9,13 @@
 <?php
 include_once "PHPFrame.php";
 
-$feature = new PHPFrame_Addons_FeatureInfo();
+$acl = new PHPFrame_Application_ACL();
 echo '<h2>Object to be inserted</h2>';
-var_dump($feature);
+var_dump($acl);
 
 $mapper = new PHPFrame_Mapper(
-    "PHPFrame_Addons_FeatureInfo", 
-    null, 
+    "PHPFrame_Application_ACL", 
+    "acl", 
     PHPFrame_Mapper::STORAGE_XML, 
     false, 
     "/Users/lupomontero/Desktop".DS."domain.objects"
@@ -28,7 +28,7 @@ foreach ($mapper->find() as $item) {
 }
 
 // Insert new object
-$mapper->insert($feature);
+$mapper->insert($acl);
 
 // Show updated collection
 echo '<h2>Collection AFTER insert</h2>';

@@ -96,7 +96,7 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
     /**
      * The addon dependencies
      * 
-     * @var PHPFrame_Addons_Dependencies
+     * @var array
      */
     protected $dependencies;
     /**
@@ -370,7 +370,7 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
      * Get dependencies
      * 
      * @access public
-     * @return PHPFrame_Addons_Dependencies
+     * @return array
      * @since  1.0
      */
     public function getDependencies()
@@ -381,15 +381,15 @@ abstract class PHPFrame_Addons_Info extends PHPFrame_Mapper_DomainObject
     /**
      * Set dependencies
      * 
-     * @param PHPFrame_Addons_Dependencies $dependencies
+     * @param array $array
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setDependencies(PHPFrame_Addons_Dependencies $dependencies)
+    public function setDependencies(array $array)
     {
-        $this->dependencies = $dependencies;
+        $this->dependencies = $array;
     }
     
     /**

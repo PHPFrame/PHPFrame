@@ -390,11 +390,11 @@ class PHPMailer
      */
     function SendmailSend($header, $body) {
         if ($this->Sender != "") {
-			$this->Sender = escapeshellcmd($this->Sender);
+            $this->Sender = escapeshellcmd($this->Sender);
             $sendmail = sprintf("%s -oi -f %s -t", $this->Sendmail, $this->Sender);
-		} else {
+        } else {
             $sendmail = sprintf("%s -oi -t", $this->Sendmail);
-		}
+        }
         if(!@$mail = popen($sendmail, "w"))
         {
             $this->SetError($this->Lang("execute") . $this->Sendmail);

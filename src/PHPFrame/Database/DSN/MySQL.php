@@ -101,7 +101,7 @@ class PHPFrame_Database_DSN_MySQL extends PHPFrame_Database_DSN
     public function toArray() 
     {
         $array = array();
-        $array['db_driver'] = $this->db_driver;
+        $array['db.driver'] = $this->db.driver;
         $array['db_host'] = $this->_db_host;
         $array['db_name'] = $this->_db_name;
         

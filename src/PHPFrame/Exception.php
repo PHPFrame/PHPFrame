@@ -61,7 +61,7 @@ class PHPFrame_Exception extends Exception
      * 
      * @var string
      */
-    protected $_verbose=null;
+    protected $verbose=null;
     
     /**
      * Constructor
@@ -76,7 +76,7 @@ class PHPFrame_Exception extends Exception
      */
     public function __construct($message, $code=self::ERROR, $verbose='') 
     {
-        $this->_verbose = $verbose;
+        $this->verbose = $verbose;
         
         // Construct parent class to build Exception 
         parent::__construct($message, $code);
@@ -91,7 +91,7 @@ class PHPFrame_Exception extends Exception
     }
     
     /**
-     * Magig method invoked when object is used as string
+     * Magic method invoked when object is used as string
      * 
      * @access public
      * @return string
@@ -101,7 +101,7 @@ class PHPFrame_Exception extends Exception
     {
         $str = parent::__toString();
         $str .= "\n\nVerbose:\n";
-        $str .= $this->_verbose;
+        $str .= $this->verbose;
         
         return $str;
     }
@@ -115,6 +115,7 @@ class PHPFrame_Exception extends Exception
      */
     public function getVerbose() 
     {
-        return $this->_verbose;
+        echo $this->verbose; exit;
+        return $this->verbose;
     }
 }

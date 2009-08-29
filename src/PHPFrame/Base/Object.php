@@ -145,7 +145,8 @@ abstract class PHPFrame_Base_Object
      */
     public function __set($name, $value)
     {
-        
+        $msg = "Property does not exist";
+        throw new PHPFrame_Exception($msg);
     }
     
     /**

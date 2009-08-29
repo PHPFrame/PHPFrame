@@ -41,7 +41,7 @@ abstract class PHPFrame_Database_DSN
     /**
      * Constructor
      * 
-     * @param string $db_driver A string identifying the database driver. Possible 
+     * @param string $db.driver A string identifying the database driver. Possible 
      *                          values are: mysql, pgsql, OCI, ODBC, ...
      *                          
      * @since 1.0    

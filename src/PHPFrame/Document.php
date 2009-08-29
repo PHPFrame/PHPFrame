@@ -124,7 +124,7 @@ abstract class PHPFrame_Document
     }
     
     /**
-     * Get the documeny title
+     * Get the document title
      * 
      * @access public
      * @return string

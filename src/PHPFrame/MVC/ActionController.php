@@ -44,19 +44,19 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * 
      * @var array of objects of type PHPFrame_MVC_ActionController
      */
-    private static $_instances=array();
+    private static $_instances = array();
     /**
      * Default controller action
      * 
      * @var string
      */
-    protected $default_action=null;
+    protected $default_action = null;
     /**
      * A string containing a url to be redirected to. Leave empty for no redirection.
      *
      * @var string
      */
-    protected $redirect_url=null;
+    protected $redirect_url = null;
     /**
      * A reference to the System Events object.
      * 
@@ -64,14 +64,14 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * 
      * @var PHPFrame_Application_Sysevents
      */
-    protected $sysevents=null;
+    protected $sysevents = null;
     /**
      * This is a flag we use to indicate whether the controller's executed task was 
      * successful or not.
      * 
      * @var boolean
      */
-    protected $success=false;
+    protected $success = false;
     
     /**
      * Constructor

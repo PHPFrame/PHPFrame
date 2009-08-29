@@ -1,0 +1,76 @@
+/* Reset all elements */
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+html {}
+
+body
+{
+    font-family: Helvetica;
+    font-size: 12px;
+}
+
+h1
+{
+    font-family: serif;
+}
+
+h2
+{
+    font-family: serif;
+    margin: 0 0 25px 0;
+    font-size: 5em;
+}
+
+h3
+{
+    font-family: serif;
+}
+
+h4
+{
+    font-family: serif;
+}
+
+h5
+{
+    font-family: serif;
+}
+
+div {}
+
+p
+{
+    margin: 0 0 15px 0;
+    line-height: 1.2em;
+}
+
+a
+{
+    color: #669999;
+    text-decoration: none;
+}
+a:hover
+{
+    text-decoration: underline;
+}
+a:visited {}
+
+ul {}
+ol {}
+li {}
+
+img
+{
+    border: 0;
+}
+
+quote {}
+
+iframe
+{
+    border: 0;
+}

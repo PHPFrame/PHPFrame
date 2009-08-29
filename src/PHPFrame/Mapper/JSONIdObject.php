@@ -4,14 +4,14 @@
  * 
  * PHP version 5
  * 
- * @category PHPFrame
- * @package    PHPFrame
- * @author   Luis Montero <luis.montero@e-noise.com>
- * @copyright  2009 E-noise.com Limited
- * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id: XMLIdObject.php 458 2009-08-18 13:31:29Z luis.montero@e-noise.com $
- * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @since      1.0
+ * @category  PHPFrame
+ * @package   Mapper
+ * @author    Luis Montero <luis.montero@e-noise.com>
+ * @copyright 2009 E-noise.com Limited
+ * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id: XMLIdObject.php 458 2009-08-18 13:31:29Z luis.montero@e-noise.com $
+ * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since     1.0
  */
 
 /**
@@ -20,7 +20,7 @@
  * This class encapsulates the selection of rows from the database.
  * 
  * @category PHPFrame
- * @package    PHPFrame
+ * @package  Mapper
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame

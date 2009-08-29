@@ -4,20 +4,20 @@
  * 
  * PHP version 5
  * 
- * @category PHPFrame
- * @package    PHPFrame
- * @author   Luis Montero <luis.montero@e-noise.com>
- * @copyright  2009 E-noise.com Limited
- * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id: JSONDomainObjectAssembler.php 460 2009-08-18 20:16:02Z luis.montero@e-noise.com $
- * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @category  PHPFrame
+ * @package   Mapper
+ * @author    Luis Montero <luis.montero@e-noise.com>
+ * @copyright 2009 E-noise.com Limited
+ * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id: JSONDomainObjectAssembler.php 460 2009-08-18 20:16:02Z luis.montero@e-noise.com $
+ * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
 /**
  * JSON Domain Object Assembler Class
  * 
  * @category PHPFrame
- * @package    PHPFrame
+ * @package  Mapper
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame

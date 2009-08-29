@@ -3,8 +3,7 @@
 <title>{$title}</title>
 <meta name="generator" content="PHPDoc">
 <meta http_equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="http://www.phpframe.org/doc/api/">
-<link rel="stylesheet" href="media/styles.css" type="text/css">
+<link rel="stylesheet" href="http://www.phpframe.org/doc/api/media/styles.css" type="text/css">
 <link rel="stylesheet" href="http://www.phpframe.org/themes/phpframe.org/css/styles.css" type="text/css">
 <script type="text/javascript" src="http://www.phpframe.org/lib/jquery/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="http://www.phpframe.org/lib/jquery/js/jquery-ui-1.7.custom.min.js"></script>
@@ -27,7 +26,7 @@
 <div id="tweetcontent"></div>
 
 <a href="http://www.twitter.com/phpframe" title="Follow us on Twitter">
-    <img src="themes/phpframe.org/images/twitter.png" 
+    <img src="http://www.phpframe.org/themes/phpframe.org/images/twitter.png" 
          alt="Twitter Logo" />
 
 </a>

@@ -19,8 +19,9 @@
     <target name="copy">
         <!-- copy src files -->
         <copy todir="${tmp.dir}" overwrite="true">
-            <fileset dir="${project.basedir}/src">
-                <include name="**" />
+            <fileset dir="${project.basedir}">
+                <include name="src" />
+            	<include name="tutorials" />
             </fileset>
         </copy>
         

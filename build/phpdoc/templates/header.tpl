@@ -50,7 +50,7 @@
         <a href="http://www.phpframe.org/content/download">Download</a>
     </li>
     <li>
-        <a href="http://www.phpframe.org/content/doc">Documentation</a>
+        <a href="http://www.phpframe.org/doc/api">Documentation</a>
     </li>
     <li>
         <a href="http://www.phpframe.org/content/tutorials">Tutorials</a>

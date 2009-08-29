@@ -13,7 +13,5 @@
 
 </div><!-- close #wrapper -->
 
-</center>
-
 </body>
 </html>

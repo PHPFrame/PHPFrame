@@ -1,6 +1,3 @@
-@import "generic.css";
-@import "phpdoc.css";
-
 div#left
 {
     float:left;
@@ -73,3 +70,130 @@ div.sidebar ul li
 {
     padding: 1px 0;
 }
+
+
+/******************** Doc styles ********************/
+
+h2.ref-purpose
+{
+    color: #56595E;
+    background-color: #FFFFFF;
+    font-weight: normal;
+    font-size: 1em;
+}
+
+td.code_border
+{
+  color:              #000000;
+  background-color:   #c0c0c0;
+}
+
+td.code
+{
+  color:              #000000;
+  background-color:   #f0f0f0;
+}
+
+td.type
+{
+  font-style:         italic;
+}
+
+div.credit
+{
+  font-size:          50px;
+  text-align:         center;
+}
+
+div.package
+{
+  padding-left:       5px;
+}
+
+div.tags
+{
+  padding-left:       15px;
+}
+
+div.function
+{
+  padding-left:       15px;
+}
+
+div.top
+{
+  font-size:          1em;
+}
+
+div.warning
+{
+  color:              #ff0000;
+  background-color:   transparent;
+}
+
+div.description
+{
+  padding-left:       15px;
+}
+
+span.smalllinenumber
+{
+  font-size:          1em;
+}
+
+.php {
+    padding: 1em;
+}
+.php-src { font-family: 'Courier New', Courier, monospace; font-weight: normal; }
+
+/* Syntax highlighting */
+
+.src-code { background-color: #f5f5f5; border: 1px solid #ccc9a4; padding: 0 0 0 1em; margin : 0px;
+            font-family: 'Courier New', Courier, monospace; font-weight: normal; font-size: 0.9em; }
+.src-line {  font-family: 'Courier New', Courier, monospace; font-weight: normal; font-size: 0.9em; }
+
+.src-comm { color: green; }
+.src-id {  }
+.src-inc { color: #0000FF; }
+.src-key { color: #0000FF; }
+.src-num { color: #CC0000; }
+.src-str { color: #66cccc; }
+.src-sym { font-weight: bold; }
+.src-var { }
+
+.src-php { font-weight: bold; }
+
+.src-doc { color: #009999 }
+.src-doc-close-template { color: #0000FF }
+.src-doc-coretag { color: #0099FF; font-weight: bold }
+.src-doc-inlinetag { color: #0099FF }
+.src-doc-internal { color: #6699cc }
+.src-doc-tag { color: #0080CC }
+.src-doc-template { color: #0000FF }
+.src-doc-type { font-style: italic }
+.src-doc-var { font-style: italic }
+
+.tute-tag { color: #009999 }
+.tute-attribute-name { color: #0000FF }
+.tute-attribute-value { color: #0099FF }
+.tute-entity { font-weight: bold; }
+.tute-comment { font-style: italic }
+.tute-inline-tag { color: #636311; font-weight: bold }
+
+/* tutorial */
+
+.authors {  }
+.author { font-style: italic; font-weight: bold }
+.author-blurb { margin: .5em 0em .5em 2em; font-size: 85%; font-weight: normal; font-style: normal }
+.example { border: 1px dashed #999999; background-color: #EEEEEE; padding: .5em; }
+.listing { border: 1px dashed #999999; background-color: #EEEEEE; padding: .5em; white-space: nowrap; }
+.release-info { font-size: 85%; font-style: italic; margin: 1em 0em }
+.ref-title-box {  }
+.ref-title {  }
+.ref-purpose { font-style: italic; color: #666666 }
+.ref-synopsis {  }
+h2.title { margin: 1em 0em 0em 0em; padding: .25em; background-color: #F20530; color:#FFFFFF; }
+h3.title { margin: 1em 0em 0em 0em; padding: .25em; color:#F20530; }
+.cmd-synopsis { margin: 1em 0em }
+.cmd-title { font-weight: bold }
+.toc { margin-left: 2em; padding-left: 0em }

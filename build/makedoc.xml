@@ -54,7 +54,7 @@
         <exec 
             command="rsync -vru -e 'ssh -p 2222' --delete \
                      ${doc.dir}/ \
-                     phpframe@e-noise.com:~/public_html/doc/" 
+                     phpframe@e-noise.com:~/doc/api/" 
             dir="${project.basedir}" 
             output="${report.dir}/rsync_doc.log" />
     </target>

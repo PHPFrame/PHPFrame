@@ -4,14 +4,15 @@
 div#left
 {
     float:left;
-    width: 200px;
+    width: 220px;
+    margin: 0 20px 0 0;
 }
 
 div#main_col
 {
     float:left;
-    min-width: 760px;
-    max-width: 780px;
+    min-width: 740px;
+    max-width: 760px;
 }
 
 div#main_col ul li,
@@ -31,4 +32,44 @@ div#main_col hr
     height: 1px;
     border: 0;
     background-color: #999999;
+}
+
+div.sidebar
+{
+    border: 1px solid #CCCCCC;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    padding: 10px;
+    margin: 0 0 15px 0;
+}
+
+div.sidebar h3
+{
+    background-repeat: no-repeat;
+    padding: 3px 0 0 20px;
+    margin: 0 0 10px 0;
+}
+
+div.packages h3
+{
+    background-image: url(package.png);
+}
+
+div.classes h3
+{
+    background-image: url(class.png);
+}
+
+div.interfaces h3
+{
+    background-image: url(interface.png);
+}
+
+div.sidebar ul {}
+
+div.sidebar ul li
+{
+    padding: 1px 0;
 }

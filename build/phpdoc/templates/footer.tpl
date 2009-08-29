@@ -5,7 +5,7 @@
         
     </div><!-- close #main_col -->
 
-
+    <div style="clear:both;"></div>
 
 <!-- Begin bottom chunk copied from main site -->
 </div>

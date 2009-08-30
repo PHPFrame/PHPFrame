@@ -12,6 +12,18 @@ div#main_col
     max-width: 760px;
 }
 
+div#main_col h1
+{
+    font-size: 2.4em;
+}
+
+div#main_col h2
+{
+    font-size: 1.8em;
+    padding: 0;
+    margin: 20px 0 15px 0;
+}
+
 div#main_col ul li,
 div#main_col ul li a,
 div#main_col td,
@@ -192,7 +204,7 @@ span.smalllinenumber
 .ref-title {  }
 .ref-purpose { font-style: italic; color: #666666 }
 .ref-synopsis {  }
-h2.title { margin: 1em 0em 0em 0em; padding: .25em; background-color: #F20530; color:#FFFFFF; }
+h2.title { margin: 1em 0em 0em 0em; padding: .25em; }
 h3.title { margin: 1em 0em 0em 0em; padding: .25em; color:#F20530; }
 .cmd-synopsis { margin: 1em 0em }
 .cmd-title { font-weight: bold }

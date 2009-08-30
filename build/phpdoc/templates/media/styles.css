@@ -76,6 +76,25 @@ div.interfaces h3
     background-image: url(interface.png);
 }
 
+div.tutorials h3
+{
+    background-image: url(book.png);
+}
+
+div.todolist a
+{
+	background-repeat: no-repeat;
+    padding: 3px 0 0 20px;
+    background-image: url(task.png);
+}
+
+li.textfile
+{
+	background-repeat: no-repeat;
+    padding: 3px 0 0 20px;
+    background-image: url(textfile.png);
+}
+
 div.sidebar ul {}
 
 div.sidebar ul li

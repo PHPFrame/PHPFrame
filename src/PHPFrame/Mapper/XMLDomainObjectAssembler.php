@@ -187,6 +187,29 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         $obj->markClean();
     }
     
+    /**
+     * Delete domain object from the database
+     * 
+     * @param PHPFrame_Mapper_DomainObject $obj
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function delete(PHPFrame_Mapper_DomainObject $obj)
+    {
+        throw new PHPFrame_Exception("Method not implemented...");
+    }
+    
+    /**
+     * Serialise collection as an XML string
+     * 
+     * @param PHPFrame_Mapper_Collection $collection
+     * 
+     * @access private
+     * @return string
+     * @since  1.0
+     */
     private function _serializeCollection(PHPFrame_Mapper_Collection $collection)
     {
         $options = array(
@@ -208,6 +231,13 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         return $serialised;
     }
     
+    /**
+     * Get new id based on highest in current collection
+     * 
+     * @access private
+     * @return int
+     * @since  1.0
+     */
     private function _getNewId()
     {
         $newid = 0;

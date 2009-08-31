@@ -62,7 +62,7 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         }
         
         if (!$id_obj instanceof PHPFrame_Mapper_IdObject) {
-            $msg = "Wrong argument type. ";
+            $msg  = "Wrong argument type. ";
             $msg .= get_class($this)."::findOne() expected only argument to be of type ";
             $msg .= "PHPFrame_Mapper_IdObject or integer.";
             throw new PHPFrame_Exception($msg);
@@ -113,9 +113,8 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         
         $obj->setModified(date("Y-m-d H:i:s"));
         
-        $sql = $this->$build_query_method($obj->toArray());
+        $sql    = $this->$build_query_method($obj->toArray());
         $params = $this->_buildQueryParams($obj->toArray());
-        //echo $sql; exit;
         PHPFrame::DB()->query($sql, $params);
         
         if ($obj->getId() <= 0) {
@@ -125,9 +124,36 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         $obj->markClean();
     }
     
+    /**
+     * Delete domain object from the database
+     * 
+     * @param PHPFrame_Mapper_DomainObject $obj
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function delete(PHPFrame_Mapper_DomainObject $obj)
+    {
+        $sql    = "DELETE FROM `".$this->factory->getTableName()."`";
+        $sql   .= " WHERE id = :id";
+        $params = array(":id"=>$obj->getId());
+        
+        PHPFrame::DB()->query($sql, $params);
+    }
+    
+    /**
+     * Build the INSERT SQL query
+     * 
+     * @param array $array
+     * 
+     * @access private
+     * @return string
+     * @since  1.0
+     */
     private function _buildInsertQuery(array $array)
     {
-        $sql = "INSERT INTO ".$this->factory->getTableName()." (`";
+        $sql  = "INSERT INTO ".$this->factory->getTableName()." (`";
         $sql .= implode("`, `", array_keys($array));
         $sql .= "`) VALUES (:";
         $sql .= implode(", :", array_keys($array));
@@ -140,6 +166,15 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         return $sql;
     }
     
+    /**
+     * Build the UPDATE SQL query
+     * 
+     * @param array $array
+     * 
+     * @access private
+     * @return string
+     * @since  1.0
+     */
     private function _buildUpdateQuery(array $array)
     {
         $sql = "UPDATE ".$this->factory->getTableName()." SET ";
@@ -157,6 +192,15 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         return $sql;
     }
     
+    /**
+     * Build SQL query parameters
+     * 
+     * @param array $array
+     * 
+     * @access private
+     * @return array
+     * @since  1.0
+     */
     private function _buildQueryParams(array $array)
     {
         foreach ($array as $key=>$value) {

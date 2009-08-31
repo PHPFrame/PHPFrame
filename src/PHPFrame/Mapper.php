@@ -17,7 +17,11 @@
  * Mapper Class
  * 
  * This class is a facade class to simplify the interface of the whole Mapper 
- * subpackage
+ * subpackage.
+ * 
+ * This class should be extended to provide more specialised mappers for common 
+ * domain objects that require mapping. See the UsersMapper class in the user 
+ * feature for an example. 
  * 
  * @category PHPFrame
  * @package  Mapper
@@ -129,6 +133,20 @@ class PHPFrame_Mapper
     public function insert(PHPFrame_Mapper_DomainObject $obj)
     {
         return $this->_factory->getAssembler()->insert($obj);
+    }
+    
+    /**
+     * Delete domain object from persisted media (db or file)
+     * 
+     * @param PHPFrame_Mapper_DomainObject $obj
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function delete(PHPFrame_Mapper_DomainObject $obj)
+    {
+        return $this->_factory->getAssembler()->delete($obj);
     }
     
     /**

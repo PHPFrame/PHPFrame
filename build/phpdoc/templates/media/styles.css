@@ -57,7 +57,7 @@ div.sidebar
 div.sidebar h3
 {
     background-repeat: no-repeat;
-    padding: 3px 0 0 20px;
+    padding: 2px 0 0 20px;
     margin: 0 0 10px 0;
 }
 
@@ -83,17 +83,21 @@ div.tutorials h3
 
 div.todolist a
 {
-	background-repeat: no-repeat;
-    padding: 3px 0 0 20px;
+    background-repeat: no-repeat;
+    padding: 2px 0 0 20px;
     background-image: url(task.png);
 }
 
 li.textfile
 {
-	background-repeat: no-repeat;
-    padding: 3px 0 0 20px;
+    display: block;
+    list-style: none;
+    background-repeat: no-repeat;
+    padding: 2px 0 0 20px !important;
+    margin:0;
     background-image: url(textfile.png);
-}
+    background-position: 0px 0px;
+}=
 
 div.sidebar ul {}
 
@@ -132,7 +136,7 @@ td.type
 
 div.credit
 {
-  font-size:          50px;
+  font-size:          0.9em !important;
   text-align:         center;
 }
 

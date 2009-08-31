@@ -68,7 +68,7 @@ class PHPFrame_MVC_View
      */
     public function __construct($name) 
     {
-        $this->_name = (string) trim($name);
+        $this->_name = trim((string) $name);
         
         // Acquire pathway object
         $this->_pathway = new PHPFrame_Application_Pathway();

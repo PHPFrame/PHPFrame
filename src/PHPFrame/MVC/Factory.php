@@ -48,6 +48,7 @@ class PHPFrame_MVC_Factory
      */
     public static function getModel($model_name, $args=array()) 
     {
+        $model_name = strtolower(trim((string) $model_name));
         $array      = explode("/", $model_name);
         $class_name = end($array);
         

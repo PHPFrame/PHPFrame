@@ -1,6 +1,6 @@
-<refentry id="{@id}">
+<refentry id="{@id PHPFrame">
     <refnamediv>
-        <refname>PHPFrame Documentation</refname>
+        <refname>Index</refname>
         <refpurpose>
             This manual consists primarily of API documentation but also includes examples, 
             tutorials, an overview of how the library works, installation and frequently 
@@ -30,109 +30,17 @@
             <title>Downloading / Installing PHPFrame</title>
             
             <para>
-            The easiest way to install PHPFrame is using the PEAR package manager.
-            The PEAR package manager is bundled with PHP, so if you already have PHP 
-            running you should also have PEAR. 
+            For download and installation information check the 
+            <a href="content/download">download page</a>.
             </para>
-            
-            <para>
-            Before you start please make sure that the "pear" command is in your PATH.
-            </para>
-            
-            <para>
-            To install using PEAR installer:
-            </para>
-            
-            <para>
-            First we need to tell the PEAR installer about the channel. Type the following 
-            command at the terminal:
-            </para>
-            
-            <screen>
-                <prompt>bash$</prompt> 
-                <command>
-                    pear channel-discover pear.e-noise.com
-                </command>
-                Adding Channel "pear.e-noise.com" succeeded
-                Discovery of channel "pear.e-noise.com" succeeded
-            </screen>
-            
-            <para>    
-            Now we can tell the PEAR installer to install the PHPFrame package:
-            </para>
-            
-            <screen>
-                <prompt>bash$</prompt> 
-                <command>
-                    pear install pear.e-noise.com/PHPFrame
-                </command>
-                ...
-            </screen>
-            
-            <screen>
-                <prompt>bash$</prompt> 
-                <command>
-                    pear install http://xinc.e-noise.com/api/deliverable/get/download/PHPFrame/latest-successful/PHPFrame.tgz
-                </command>
-                ...
-            </screen>
-            
-            <screen>
-                <prompt>bash$</prompt> 
-                <command>
-                    pear run-scripts pear.e-noise.com/PHPFrame
-                </command>
-                ...
-            </screen>
-            
-            <para>
-            To uninstall:
-            </para>
-            
-            <screen>
-                <prompt>bash$</prompt> 
-                <command>
-                    pear uninstall pear.e-noise.com/PHPFrame
-                </command>
-                ...
-            </screen>
-            
-            <screen>
-                <prompt>bash$</prompt> 
-                <command>
-                    pear clear-cache
-                </command>
-                ...
-            </screen>
-            
-            <note>
-            * Note that you will need write access to the directory where PEAR is installed.
-            If you are installing or unininstalling for all users in a system you will need 
-            administrative privileges.
-            </note>
-            
         </refsect2>
         
         <refsect2>
-            <title>Adding the library to you project</title>
+            <title>Starting a new project with PHPFrame command line tool</title>
+            
+            <para>Tutorial coming soon...</para>
         </refsect2>
         
-        <refsect2>
-            <title>Starting a new project with PHPFrame scaffold</title>
-        </refsect2>
-        
-    </refsect1>
-    
-    <refsect1 id="{@id api}">
-        <title>PHPFrame API Reference</title>
-    </refsect1>
-    
-    <refsect1 id="{@id support}">
-        <title>Support</title>
-    </refsect1>
-    
-    <refsect1 id="{@id about}">
-        <title>About PHPFrame</title>
     </refsect1>
     
 </refentry>

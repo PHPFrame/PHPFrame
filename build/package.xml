@@ -101,13 +101,7 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/IdObject.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/JSONDomainObjectAssembler.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/JSONIdObject.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/JSONPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedDomainObjectAssembler.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedIdObject.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/SerializedPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLDomainObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistenceFactory.php" role="php" />

@@ -29,9 +29,9 @@
  */
 class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
 {
-    private static $_instance=null;
-    private $_log_file_info=null;
-    private $_log_file_obj=null;
+    private static $_instance = null;
+    private $_log_file_info = null;
+    private $_log_file_obj = null;
     
     /**
      * Constructor

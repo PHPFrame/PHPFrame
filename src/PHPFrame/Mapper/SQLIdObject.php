@@ -366,19 +366,19 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * Set limit clause
      * 
      * @param int $limit     The total number of entries we want to limit to
-     * @param int $limistart The entry number of the first record in the current page
+     * @param int $limitstart The entry number of the first record in the current page
      * 
      * @access public
      * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
-    public function limit($limit, $limistart=null)
+    public function limit($limit, $limitstart=null)
     {
         // Validate input type and set internal property 
         $this->_limit = PHPFrame_Utils_Filter::validateInt($limit);
         
-        if (!is_null($limistart)) {
-            $this->limistart($limistart);
+        if (!is_null($limitstart)) {
+            $this->limitstart($limitstart);
         }
         
         return $this;
@@ -387,16 +387,16 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
     /**
      * Set row number of first row in current page
      * 
-     * @param int $limistart The entry number of the first record in the current page
+     * @param int $limitstart The entry number of the first record in the current page
      * 
      * @access public
      * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
-    public function limistart($limistart)
+    public function limitstart($limitstart)
     {
         // Validate input type and set internal property 
-        $this->_limitstart = PHPFrame_Utils_Filter::validateInt($limistart);
+        $this->_limitstart = PHPFrame_Utils_Filter::validateInt($limitstart);
  
         return $this;
     }

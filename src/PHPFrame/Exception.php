@@ -113,7 +113,6 @@ class PHPFrame_Exception extends Exception
      */
     public function getVerbose() 
     {
-        echo $this->verbose; exit;
         return $this->verbose;
     }
 }

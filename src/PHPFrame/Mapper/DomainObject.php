@@ -22,6 +22,11 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
+ * @todo     Domain objects should be made traversable by means of the Iterator 
+ *           interface so that we can use the iterator_to_array() function instead 
+ *           of having a toArray() method in the domain object class itself.
+ * @todo     Domain objects should implement the ArrayAccess interface in order to 
+ *           hook to PHP's array syntax.
  */
 abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
 {

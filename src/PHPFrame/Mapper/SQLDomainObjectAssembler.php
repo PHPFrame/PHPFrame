@@ -23,7 +23,8 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObjectAssembler
+class PHPFrame_Mapper_SQLDomainObjectAssembler 
+    extends PHPFrame_Mapper_DomainObjectAssembler
 {
     /**
      * Constructor
@@ -57,13 +58,14 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
             $table_name = $this->factory->getTableName();
             
             // Create new IdObject
-            $id_obj = new PHPFrame_Mapper_IdObject(array("select"=>"*", "from"=>$table_name));
+            $id_obj = $this->factory->getIdObject();
             $id_obj->where("id", "=", ":id")->params(":id", $id);
         }
         
         if (!$id_obj instanceof PHPFrame_Mapper_IdObject) {
             $msg  = "Wrong argument type. ";
-            $msg .= get_class($this)."::findOne() expected only argument to be of type ";
+            $msg .= get_class($this);
+            $msg .= "::findOne() expected only argument to be of type ";
             $msg .= "PHPFrame_Mapper_IdObject or integer.";
             throw new PHPFrame_Exception($msg);
         }
@@ -90,12 +92,11 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         }
         
         // Get raw data as array from db
-        $raw = PHPFrame::DB()->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
+        $db  = PHPFrame::DB();
+        $raw = $db->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
         
         // Create collectioj object
-        $collection = $this->factory->getCollection($raw);
-        
-        return $collection;
+        return $this->factory->getCollection($raw);
     }
     
     /**

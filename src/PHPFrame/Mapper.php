@@ -98,7 +98,7 @@ class PHPFrame_Mapper
     /**
      * Find a domain object using an IdObject
      * 
-     * @param PHPFrame_Mapper_IdObject $id_obj
+     * @param PHPFrame_Mapper_IdObject|int $id_obj
      * 
      * @access public
      * @return PHPFrame_Mapper_DomainObject
@@ -112,7 +112,7 @@ class PHPFrame_Mapper
     /**
      * Find a collection of domain objects using an IdObject
      * 
-     * @param PHPFrame_Mapper_IdObject|int $id_obj
+     * @param PHPFrame_Mapper_IdObject $id_obj
      * 
      * @access public
      * @return PHPFrame_Mapper_Collection

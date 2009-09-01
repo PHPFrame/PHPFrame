@@ -216,7 +216,7 @@ class PHPFrame_User extends PHPFrame_Mapper_DomainObject
      */
     public function getPassword()
     {
-        return $this->_username;
+        return $this->_password;
     }
     
     /**
@@ -232,13 +232,30 @@ class PHPFrame_User extends PHPFrame_Mapper_DomainObject
     {
         $str = PHPFrame_Utils_Filter::validateRegExp($str, '/^.{6,100}$/');
         
+        // Set password to encrypted string
+        $this->_password = $str;
+    }
+    
+    /**
+     * Create enrypted password
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function encryptPassword($str)
+    {
+        $str = PHPFrame_Utils_Filter::validateRegExp($str, '/^.{6,100}$/');
+        
         // Get random 32 char salt
         $salt = PHPFrame_Utils_Crypt::genRandomPassword(32);
         // Encrypt password using salt
         $crypt = PHPFrame_Utils_Crypt::getCryptedPassword($str, $salt);
         
         // Set password to encrypted string
-        $this->_password = $crypt.':'.$salt; 
+        return $crypt.':'.$salt;
     }
     
     /**

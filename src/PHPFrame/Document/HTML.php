@@ -31,13 +31,13 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
      * 
      * @var string
      */
-    protected $qualified_name="html";
+    protected $qualified_name = "html";
     /**
      * Pathway object
      * 
      * @var PHPFrame_Application_Pathway
      */
-    private $_pathway=null;
+    private $_pathway = null;
     
     /**
      * Constructor

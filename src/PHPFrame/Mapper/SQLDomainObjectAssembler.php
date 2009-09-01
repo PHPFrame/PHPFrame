@@ -84,6 +84,11 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
      */
     public function find(PHPFrame_Mapper_IdObject $id_obj=null)
     {
+        // Create default select statemen if no id object is provided
+        if (is_null($id_obj)) {
+            $id_obj = $this->factory->getIdObject();
+        }
+        
         // Get raw data as array from db
         $raw = PHPFrame::DB()->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
         

@@ -15,9 +15,9 @@
  */
 
 /**
- * IdObject class
+ * Identity Object abstract class
  * 
- * This class encapsulates the selection of rows from the database.
+ * This class encapsulates the selection of domain objects when using a mapper.
  * 
  * @category PHPFrame
  * @package  Mapper
@@ -26,75 +26,14 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Mapper_IdObject
+abstract class PHPFrame_Mapper_IdObject
 {
-    /**
-     * An array with the columns to get in SELECT statement
-     * 
-     * @var array
-     */
-    private $_select=array();
-    /**
-     * The name of the table this collection represents
-     * 
-     * @var string
-     */
-    private $_from=null;
-    /**
-     * Array containing joins
-     * 
-     * @var array
-     */
-    private $_join=array();
-    /**
-     * An array containing conditions for the SQL WHERE clause
-     * 
-     * @var string
-     */
-    private $_where=array();
-    /**
-     * String containing the group by clause
-     * 
-     * @var string
-     */
-    private $_groupby=null;
-    /**
-     * Column to use for ordering
-     * 
-     * @var string
-     */
-    private $_orderby=null;
-    /**
-     * Column to use for ordering
-     * 
-     * @var string
-     */
-    private $_orderdir="ASC";
-    /**
-     * Number of rows per page
-     * 
-     * @var int
-     */
-    private $_limit=-1;
-    /**
-     * Row number from where the current page start
-     * 
-     * @var int
-     */
-    private $_limitstart=0;
-    /**
-     * Input parameters used in prepared statements.
-     * 
-     * @var array
-     */
-    private $_params=array();
-    
     /**
      * Constructor
      * 
      * @param array $options An associative array with initialisation options.
      *                       For a list of available options invoke 
-     *                       PHPFrame_Database_IdObject::getOptions().
+     *                       PHPFrame_Mapper_IdObject::getOptions().
      * 
      * @access public
      * @return void
@@ -127,10 +66,7 @@ class PHPFrame_Mapper_IdObject
      * @return string
      * @since  1.0
      */
-    public function __toString()
-    {
-        return $this->getSQL();
-    }
+    abstract public function __toString();
     
     /**
      * Return an array with the list of available options in this object.
@@ -154,142 +90,24 @@ class PHPFrame_Mapper_IdObject
     /**
      * Set the fields array used in select statement
      * 
-     * This method takes either a string a single column name or an array of column
-     * names.
-     * 
-     * The "*" character is allowed and used to select "all" columns.
-     * 
-     * This method returns the IdObject object, making it possible to use "fluent syntax".
-     * 
-     * Example:
-     * 
-     * <code>
-     * // Select all columns from table "my_table"
-     * $id_object = new PHPFrame_Database_IdObject();
-     * $id_object->select("*")->from("my_table");
-     * // echo the SQL, this will automatically cast the IdObject to string
-     * echo $id_object;
-     * 
-     * 
-     * // The same as above but passing the "select" and "table" options to the constructor.
-     * $options = array("select"=>"*", "from"->"my_table");
-     * $id_object = new PHPFrame_Database_IdObject($options);
-     * // echo the SQL, this will automatically cast the IdObject to string
-     * echo $id_object;
-     * 
-     * // Now we create a new IdObject and select only some specified fields
-     * $id_object = new PHPFrame_Database_IdObject();
-     * $id_object->select(array("id", "name", "email"))->from("my_table");
-     * </code>
-     * 
      * @param string|array $fields a string or array of strings with field names
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
-    public function select($fields)
-    {
-        // Validate input type and set internal property
-        $pattern = "/^[a-zA-Z_ \.\*\(\)\#]+$/";
-        $fields = PHPFrame_Utils_Filter::validateRegExp($fields, $pattern);
-        
-        if (is_string($fields)) {
-            $fields = array($fields);
-        }
-        
-        $processed_fields = array();
-        
-        foreach ($fields as $field) {
-            // Parse table.field format if needed
-            $pattern = "/^([a-zA-Z_\#]+)\.([a-zA-Z_\*]+)( AS ([a-zA-Z_]+))?$/";
-            preg_match($pattern, $field, $matches);
-            
-            if (is_array($matches) && count($matches) == 5) {
-                $processed_fields[] = array("table_name"=>$matches[1], 
-                                            "field_name"=>$matches[2], 
-                                            "field_alias"=>$matches[4]);
-                
-            } elseif (is_array($matches) && count($matches) == 3) {
-                $processed_fields[] = array("table_name"=>$matches[1], 
-                                            "field_name"=>$matches[2], 
-                                            "field_alias"=>null);
-            } else {
-                $processed_fields[] = array("table_name"=>null, 
-                                            "field_name"=>$field, 
-                                            "field_alias"=>null);
-            }
-        }
-        
-        $this->_select = $processed_fields;
-        
-        return $this;
-    }
+    abstract public function select($fields);
     
     /**
      * Set the table from which to select rows
      * 
-     * This method supports only one table in the from clause. 
-     * Please use the join() method to add join tables.
-     * 
-     * Tables may be passed with an alias. Ie: "table_name AS tn".
-     * 
      * @param string $table A string with the table name
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
-    public function from($table)
-    {
-        // Check if input contaings alias
-        preg_match("/([a-zA-Z_\#\.]+) (as) ([a-zA-Z_]+)/i", $table, $matches);
-        if (count($matches) == 4) {
-            $table = array($matches[1], $matches[3]);
-        }
-        
-        // Validate input type and set internal property
-        $pattern = "/^[a-zA-Z_\#\.]+$/";
-        $this->_from = PHPFrame_Utils_Filter::validateRegExp($table, $pattern);
-        
-        return $this;
-    }
-    
-    /**
-     * Add a join clause to the select statement
-     * 
-     * @param sting $join A join statement
-     * 
-     * @access public
-     * @return PHPFrame_Database_IdObject
-     * @since  1.0
-     */
-    public function join($join)
-    {
-        $join = (string) trim($join);
-        $join_array = explode(" ON ", $join);
-        
-        $array = array();
-        
-        $array["table_alias"] = substr($join_array[0], (strrpos($join_array[0], " ")+1));
-        $join_type_and_table = substr($join_array[0], 0, strrpos($join_array[0], " "));
-        
-        // Validate input type and set internal property
-        $pattern = "/^([a-zA-Z]*[ ]{0,1}JOIN) ([a-zA-Z_ \#\.\(\)]+)/";
-        preg_match($pattern, $join_type_and_table, $matches);
-        
-        $array["type"] = $matches[1];
-        $array["table_name"] = $matches[2];
-        
-        $pattern = "/([a-zA-Z]+\.[a-zA-Z_]+) (=) ([a-zA-Z]+\.[a-zA-Z_]+)/";
-        preg_match($pattern, $join_array[1], $matches);
-        
-        $array["on"] = array($matches[1], $matches[2], $matches[3]);
-        
-        $this->_join[] = $array;
-        
-        return $this;
-    }
+    abstract public function from($table);
     
     /**
      * Add "where" condition
@@ -299,177 +117,10 @@ class PHPFrame_Mapper_IdObject
      * @param string $right
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
-    public function where($left, $operator, $right)
-    {
-        // Validate input types and set internal property
-        $pattern = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:]+$/";
-        $left = PHPFrame_Utils_Filter::validateRegExp($left, $pattern);
-        $right = PHPFrame_Utils_Filter::validateRegExp($right, $pattern);
-        // Validate operators
-        $pattern = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN)$/";
-        $operator = PHPFrame_Utils_Filter::validateRegExp($operator, $pattern);
-        
-        $this->_where[] = array($left, $operator, $right);
-        
-        return $this;
-    }
-    
-    /**
-     * Set group by clause
-     * 
-     * @param string $column The column name to group by
-     * 
-     * @access public
-     * @return PHPFrame_Database_IdObject
-     * @since  1.0
-     */
-    public function groupby($column)
-    {
-        // Validate input type and set internal property
-        $pattern = "/^[a-zA-Z_ \#\.]+$/";
-        $this->_groupby = PHPFrame_Utils_Filter::validateRegExp($column, $pattern);
-        
-        return $this;
-    }
-    
-    /**
-     * Set order by clause
-     * 
-     * @param string $column    The column name to order by
-     * @param string $direction The order direction (either ASC or DESC)
-     * 
-     * @access public
-     * @return PHPFrame_Database_IdObject
-     * @since  1.0
-     */
-    public function orderby($column, $direction=null)
-    {
-        // Validate input type and set internal property
-        $pattern = "/^[a-zA-Z_\#\.]+$/";
-        $this->_orderby = PHPFrame_Utils_Filter::validateRegExp($column, $pattern);
-        
-        if (!is_null($direction)) {
-            $this->orderdir($direction);
-        }
-        
-        return $this;
-    }
-    
-    /**
-     * Set order direction
-     * 
-     * @param string $column    The column name to order by
-     * @param string $direction The order direction (either ASC or DESC)
-     * 
-     * @access public
-     * @return PHPFrame_Database_IdObject
-     * @since  1.0
-     */
-    public function orderdir($direction)
-    {
-        // Validate input type and set internal property
-        $pattern = "/^(ASC|DESC)$/i";
-        $this->_orderdir = PHPFrame_Utils_Filter::validateRegExp($direction, $pattern);
-        
-        return $this;
-    }
-    
-    /**
-     * Set limit clause
-     * 
-     * @param int $limit     The total number of entries we want to limit to
-     * @param int $limistart The entry number of the first record in the current page
-     * 
-     * @access public
-     * @return PHPFrame_Database_IdObject
-     * @since  1.0
-     */
-    public function limit($limit, $limistart=null)
-    {
-        // Validate input type and set internal property 
-        $this->_limit = PHPFrame_Utils_Filter::validateInt($limit);
-        
-        if (!is_null($limistart)) {
-            $this->limistart($limistart);
-        }
-        
-        return $this;
-    }
-    
-    /**
-     * Set row number of first row in current page
-     * 
-     * @param int $limistart The entry number of the first record in the current page
-     * 
-     * @access public
-     * @return PHPFrame_Database_IdObject
-     * @since  1.0
-     */
-    public function limistart($limistart)
-    {
-        // Validate input type and set internal property 
-        $this->_limitstart = PHPFrame_Utils_Filter::validateInt($limistart);
- 
-        return $this;
-    }
-    
-    /**
-     * Set the value of a query parameter
-     * 
-     * @param string $key   The parameter marker
-     * @param string $value The paramter value
-     * 
-     * @access public
-     * @return PHPFrame_Database_IdObject
-     * @since  1.0
-     */
-    public function params($key, $value)
-    {
-        $this->_params[$key] = $value;
-        
-        return $this;
-    }
-    
-    /**
-     * Get full SQL statement for this IdObject
-     * 
-     * @param bool $limit A flag to indicate whether or not we want to include
-     *                    LIMIT clause.
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function getSQL($limit=true)
-    {
-        $sql = $this->_getSelectSQL();
-        $sql .= "\n".$this->_getFromSQL();
-        
-        if ($this->_getJoinsSQL()) {
-            $sql .= "\n".$this->_getJoinsSQL();
-        }
-        
-        if ($this->_getWhereSQL()) {
-            $sql .= "\n".$this->_getWhereSQL();
-        }
-        
-        if ($this->_getGroupBySQL()) {
-            $sql .= "\n".$this->_getGroupBySQL();
-        }
-        
-        if ($this->_getOrderBySQL()) {
-            $sql .= "\n".$this->_getOrderBySQL();
-        }
-        
-        if ($this->_getLimitSQL() && $limit) {
-            $sql .= "\n".$this->_getLimitSQL();
-        }
-        
-        return $sql;
-    }
+    abstract public function where($left, $operator, $right);
     
     /**
      * Get the an array with the fields in the SELECT query
@@ -478,26 +129,7 @@ class PHPFrame_Mapper_IdObject
      * @return array
      * @since  1.0
      */
-    public function getObjectFields()
-    {
-        $array = array();
-        
-        foreach ($this->_select as $field) {
-            // If the field specifies a table name we check to see whether 
-            // it is an alias and replace it with table name
-            if (!empty($field["table_name"])) {
-                $table_name = $this->_tableAliasToName($field["table_name"]);
-                $table_name = (empty($table_name)) ? $field["table_name"] : $table_name;
-                $array[] = $table_name.".".$field["field_name"];
-                
-            // If no table name is specified we assume main "from" table
-            } else {
-                $array[] = $field["field_name"];
-            }
-        }
-        
-        return $array;
-    }
+    abstract public function getObjectFields();
     
     /**
      * Get the table name in the FROM part of the query
@@ -506,230 +138,5 @@ class PHPFrame_Mapper_IdObject
      * @return string
      * @since  1.0
      */
-    public function getTableName()
-    {
-        if (is_array($this->_from)) {
-            return $this->_from[0];
-        }
-        
-        return $this->_from;
-    }
-    
-    public function getJoinTables()
-    {
-        return $this->_join;
-    }
-    
-    /**
-     * Get query parameters
-     * 
-     * @access public
-     * @return array
-     * @since  1.0
-     */
-    public function getParams()
-    {
-        return $this->_params;
-    }
-    
-    /**
-     * Get limit
-     * 
-     * The total number of entries the subset will be limited to.
-     * 
-     * @access public
-     * @return int
-     * @since  1.0
-     */
-    public function getLimit()
-    {
-        return $this->_limit;
-    }
-    
-    /**
-     * Get limit start
-     * 
-     * The entry number of the first record in the current subset/page.
-     * 
-     * @access public
-     * @return int
-     * @since  1.0
-     */
-    public function getLimitstart()
-    {
-        return $this->_limitstart;
-    }
-    
-    /**
-     * Get SELECT SQL
-     * 
-     * @access private
-     * @return string
-     * @since  1.0
-     */
-    private function _getSelectSQL()
-    {
-        if (count($this->_select) < 1) {
-            $exception_msg = "Can not build query. No fields have been selected.";
-            throw new PHPFrame_Exception_Database($exception_msg);
-        }
-        
-        $sql = "SELECT ";
-        
-        for ($i=0; $i<count($this->_select); $i++) {
-            if ($i>0) $sql .= ", ";
-            
-            if (!empty($this->_select[$i]["table_name"])) {
-                $sql .= $this->_select[$i]["table_name"].".";
-            }
-            
-            $sql .= $this->_select[$i]["field_name"];
-            
-            if (!empty($this->_select[$i]["field_alias"])) {
-                $sql .= " AS ".$this->_select[$i]["field_alias"];
-            }
-        }
-        
-        return $sql;
-    }
-    
-    /**
-     * Get FROM SQL
-     * 
-     * @access private
-     * @return string
-     * @since  1.0
-     */
-    private function _getFromSQL()
-    {
-        if (empty($this->_from)) {
-            $exception_msg = "Can not build query. No table to select from.";
-            throw new PHPFrame_Exception_Database($exception_msg);
-        }
-        
-        if (is_array($this->_from)) {
-            $sql = "FROM ".implode(" AS ", $this->_from);
-        } else {
-            $sql = "FROM ".$this->_from;
-        }
-        
-        return $sql;
-    }
-    
-    /**
-     * 
-     * Get JOIN SQL
-     * 
-     * @access private
-     * @return string
-     * @since  1.0
-     */
-    private function _getJoinsSQL()
-    {
-        $sql = "";
-        
-        foreach ($this->_join as $join) {
-            $sql .= " ".$join["type"]." ".$join["table_name"]." ".$join["table_alias"]." ON ";
-            $sql .= $join["on"][0]." ".$join["on"][1]." ".$join["on"][2];
-        }
-        
-        return $sql;
-    }
-    
-    /**
-     * Get WHERE SQL
-     * 
-     * @access private
-     * @return string
-     * @since  1.0
-     */
-    private function _getWhereSQL()
-    {
-        $sql = "";
-        
-        if (count($this->_where) > 0) {
-            $sql .= "WHERE ";
-            
-            for ($i=0; $i<count($this->_where); $i++) {
-                if ($i>0) {
-                    $sql .= " AND ";
-                }
-                $sql .= "(".$this->_where[$i][0];
-                $sql .= " ".$this->_where[$i][1];
-                $sql .= " ".$this->_where[$i][2].")";
-            }
-        }
-        
-        return $sql;
-    }
-    
-    /**
-     * Get GROUP BY SQL
-     * 
-     * @access private
-     * @return string
-     * @since  1.0
-     */
-    private function _getGroupBySQL()
-    {
-        $sql = "";
-        
-        if (!empty($this->_groupby)) {
-            $sql = "GROUP BY ".$this->_groupby;   
-        }
-        
-        return $sql;
-    }
-    
-    /**
-     * Get ORDER BY SQL statement
-     * 
-     * @access private
-     * @return string
-     * @since  1.0
-     */
-    private function _getOrderBySQL() 
-    {
-        $sql = "";
-        
-        if (is_string($this->_orderby) && $this->_orderby != "") {
-            $sql .= " ORDER BY ".$this->_orderby." ";
-            $sql .= ($this->_orderdir == "DESC") ? $this->_orderdir : "ASC";
-        }
-        
-        return $sql;
-    }
-    
-    /**
-     * Get LIMIT SQL statement
-     * 
-     * @access private
-     * @return string
-     * @since  1.0
-     */
-    private function _getLimitSQL() 
-    {
-        $sql = "";
-        
-        if ($this->_limit > 0) {
-            $sql .= "LIMIT ".$this->_limitstart.", ".$this->_limit;
-        }
-        
-        return $sql;
-    }
-    
-    private function _tableAliasToName($alias)
-    {
-        if (isset($this->_from[1]) && $this->_from[1] == $alias) {
-            return $this->_from[0];
-        }
-        
-        foreach ($this->_join as $join) {
-            if ($join["table_alias"] == $alias) {
-                return $join["table_name"];
-            }
-        }
-        
-        return null;
-    }
+    abstract public function getTableName();
 }

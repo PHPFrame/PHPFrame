@@ -26,75 +26,75 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Mapper_SQLIdObject
+class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
 {
     /**
      * An array with the columns to get in SELECT statement
      * 
      * @var array
      */
-    private $_select=array();
+    private $_select = array();
     /**
      * The name of the table this collection represents
      * 
      * @var string
      */
-    private $_from=null;
+    private $_from = null;
     /**
      * Array containing joins
      * 
      * @var array
      */
-    private $_join=array();
+    private $_join = array();
     /**
      * An array containing conditions for the SQL WHERE clause
      * 
      * @var string
      */
-    private $_where=array();
+    private $_where = array();
     /**
      * String containing the group by clause
      * 
      * @var string
      */
-    private $_groupby=null;
+    private $_groupby = null;
     /**
      * Column to use for ordering
      * 
      * @var string
      */
-    private $_orderby=null;
+    private $_orderby = null;
     /**
      * Column to use for ordering
      * 
      * @var string
      */
-    private $_orderdir="ASC";
+    private $_orderdir = "ASC";
     /**
      * Number of rows per page
      * 
      * @var int
      */
-    private $_limit=-1;
+    private $_limit = -1;
     /**
      * Row number from where the current page start
      * 
      * @var int
      */
-    private $_limitstart=0;
+    private $_limitstart = 0;
     /**
      * Input parameters used in prepared statements.
      * 
      * @var array
      */
-    private $_params=array();
+    private $_params = array();
     
     /**
      * Constructor
      * 
      * @param array $options An associative array with initialisation options.
      *                       For a list of available options invoke 
-     *                       PHPFrame_Database_IdObject::getOptions().
+     *                       PHPFrame_Mapper_IdObject::getOptions().
      * 
      * @access public
      * @return void
@@ -102,22 +102,7 @@ class PHPFrame_Mapper_SQLIdObject
      */
     public function __construct($options=null)
     {
-        // Process input options
-        if (!is_null($options)) {
-            if (!PHPFrame_Base_ArrayHelper::isAssoc($options)) {
-                $msg = "Options passed in wrong format.";
-                $msg .= " Options should be passed as an associative";
-                $msg .= " array with key value pairs.";
-                throw new PHPFrame_Exception_Database($msg);
-            }
-            
-            // Options is an array
-            foreach ($options as $key=>$val) {
-                if (method_exists($this, $key)) {
-                    call_user_func_array(array($this, $key), $val);
-                }
-            }
-        }
+        parent::__construct($options);
     }
     
     /**
@@ -140,15 +125,8 @@ class PHPFrame_Mapper_SQLIdObject
      * @since  1.0
      */
     public function getOptions()
-    {
-        $raw_keys = array_keys(get_object_vars($this));
-        
-        // Remove preceding underscore from property names
-        foreach ($raw_keys as $key) {
-            $keys[] = substr($key, 1);
-        }
-        
-        return $keys;
+    {   
+        return parent::getOptions();
     }
     
     /**
@@ -165,7 +143,7 @@ class PHPFrame_Mapper_SQLIdObject
      * 
      * <code>
      * // Select all columns from table "my_table"
-     * $id_object = new PHPFrame_Database_IdObject();
+     * $id_object = new PHPFrame_Mapper_IdObject();
      * $id_object->select("*")->from("my_table");
      * // echo the SQL, this will automatically cast the IdObject to string
      * echo $id_object;
@@ -173,19 +151,19 @@ class PHPFrame_Mapper_SQLIdObject
      * 
      * // The same as above but passing the "select" and "table" options to the constructor.
      * $options = array("select"=>"*", "from"->"my_table");
-     * $id_object = new PHPFrame_Database_IdObject($options);
+     * $id_object = new PHPFrame_Mapper_IdObject($options);
      * // echo the SQL, this will automatically cast the IdObject to string
      * echo $id_object;
      * 
      * // Now we create a new IdObject and select only some specified fields
-     * $id_object = new PHPFrame_Database_IdObject();
+     * $id_object = new PHPFrame_Mapper_IdObject();
      * $id_object->select(array("id", "name", "email"))->from("my_table");
      * </code>
      * 
      * @param string|array $fields a string or array of strings with field names
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
     public function select($fields)
@@ -206,18 +184,24 @@ class PHPFrame_Mapper_SQLIdObject
             preg_match($pattern, $field, $matches);
             
             if (is_array($matches) && count($matches) == 5) {
-                $processed_fields[] = array("table_name"=>$matches[1], 
-                                            "field_name"=>$matches[2], 
-                                            "field_alias"=>$matches[4]);
+                $processed_fields[] = array(
+                    "table_name"=>$matches[1],
+                    "field_name"=>$matches[2],
+                    "field_alias"=>$matches[4]
+                );
                 
             } elseif (is_array($matches) && count($matches) == 3) {
-                $processed_fields[] = array("table_name"=>$matches[1], 
-                                            "field_name"=>$matches[2], 
-                                            "field_alias"=>null);
+                $processed_fields[] = array(
+                    "table_name"=>$matches[1],
+                    "field_name"=>$matches[2],
+                    "field_alias"=>null
+                );
             } else {
-                $processed_fields[] = array("table_name"=>null, 
-                                            "field_name"=>$field, 
-                                            "field_alias"=>null);
+                $processed_fields[] = array(
+                    "table_name"=>null, 
+                    "field_name"=>$field, 
+                    "field_alias"=>null
+                );
             }
         }
         
@@ -237,7 +221,7 @@ class PHPFrame_Mapper_SQLIdObject
      * @param string $table A string with the table name
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
     public function from($table)
@@ -261,24 +245,24 @@ class PHPFrame_Mapper_SQLIdObject
      * @param sting $join A join statement
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
     public function join($join)
     {
-        $join = (string) trim($join);
+        $join       = trim((string) $join);
         $join_array = explode(" ON ", $join);
         
         $array = array();
         
         $array["table_alias"] = substr($join_array[0], (strrpos($join_array[0], " ")+1));
-        $join_type_and_table = substr($join_array[0], 0, strrpos($join_array[0], " "));
+        $join_type_and_table  = substr($join_array[0], 0, strrpos($join_array[0], " "));
         
         // Validate input type and set internal property
         $pattern = "/^([a-zA-Z]*[ ]{0,1}JOIN) ([a-zA-Z_ \#\.\(\)]+)/";
         preg_match($pattern, $join_type_and_table, $matches);
         
-        $array["type"] = $matches[1];
+        $array["type"]       = $matches[1];
         $array["table_name"] = $matches[2];
         
         $pattern = "/([a-zA-Z]+\.[a-zA-Z_]+) (=) ([a-zA-Z]+\.[a-zA-Z_]+)/";
@@ -299,17 +283,18 @@ class PHPFrame_Mapper_SQLIdObject
      * @param string $right
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
     public function where($left, $operator, $right)
     {
         // Validate input types and set internal property
         $pattern = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:]+$/";
-        $left = PHPFrame_Utils_Filter::validateRegExp($left, $pattern);
-        $right = PHPFrame_Utils_Filter::validateRegExp($right, $pattern);
+        $left    = PHPFrame_Utils_Filter::validateRegExp($left, $pattern);
+        $right   = PHPFrame_Utils_Filter::validateRegExp($right, $pattern);
+        
         // Validate operators
-        $pattern = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN)$/";
+        $pattern  = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN)$/";
         $operator = PHPFrame_Utils_Filter::validateRegExp($operator, $pattern);
         
         $this->_where[] = array($left, $operator, $right);
@@ -323,13 +308,13 @@ class PHPFrame_Mapper_SQLIdObject
      * @param string $column The column name to group by
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
     public function groupby($column)
     {
         // Validate input type and set internal property
-        $pattern = "/^[a-zA-Z_ \#\.]+$/";
+        $pattern        = "/^[a-zA-Z_ \#\.]+$/";
         $this->_groupby = PHPFrame_Utils_Filter::validateRegExp($column, $pattern);
         
         return $this;
@@ -342,13 +327,13 @@ class PHPFrame_Mapper_SQLIdObject
      * @param string $direction The order direction (either ASC or DESC)
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
     public function orderby($column, $direction=null)
     {
         // Validate input type and set internal property
-        $pattern = "/^[a-zA-Z_\#\.]+$/";
+        $pattern        = "/^[a-zA-Z_\#\.]+$/";
         $this->_orderby = PHPFrame_Utils_Filter::validateRegExp($column, $pattern);
         
         if (!is_null($direction)) {
@@ -365,13 +350,13 @@ class PHPFrame_Mapper_SQLIdObject
      * @param string $direction The order direction (either ASC or DESC)
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
     public function orderdir($direction)
     {
         // Validate input type and set internal property
-        $pattern = "/^(ASC|DESC)$/i";
+        $pattern         = "/^(ASC|DESC)$/i";
         $this->_orderdir = PHPFrame_Utils_Filter::validateRegExp($direction, $pattern);
         
         return $this;
@@ -384,7 +369,7 @@ class PHPFrame_Mapper_SQLIdObject
      * @param int $limistart The entry number of the first record in the current page
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
     public function limit($limit, $limistart=null)
@@ -405,7 +390,7 @@ class PHPFrame_Mapper_SQLIdObject
      * @param int $limistart The entry number of the first record in the current page
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
     public function limistart($limistart)
@@ -423,7 +408,7 @@ class PHPFrame_Mapper_SQLIdObject
      * @param string $value The paramter value
      * 
      * @access public
-     * @return PHPFrame_Database_IdObject
+     * @return PHPFrame_Mapper_IdObject
      * @since  1.0
      */
     public function params($key, $value)
@@ -445,7 +430,7 @@ class PHPFrame_Mapper_SQLIdObject
      */
     public function getSQL($limit=true)
     {
-        $sql = $this->_getSelectSQL();
+        $sql  = $this->_getSelectSQL();
         $sql .= "\n".$this->_getFromSQL();
         
         if ($this->_getJoinsSQL()) {
@@ -488,7 +473,7 @@ class PHPFrame_Mapper_SQLIdObject
             if (!empty($field["table_name"])) {
                 $table_name = $this->_tableAliasToName($field["table_name"]);
                 $table_name = (empty($table_name)) ? $field["table_name"] : $table_name;
-                $array[] = $table_name.".".$field["field_name"];
+                $array[]    = $table_name.".".$field["field_name"];
                 
             // If no table name is specified we assume main "from" table
             } else {
@@ -629,7 +614,8 @@ class PHPFrame_Mapper_SQLIdObject
         $sql = "";
         
         foreach ($this->_join as $join) {
-            $sql .= " ".$join["type"]." ".$join["table_name"]." ".$join["table_alias"]." ON ";
+            $sql .= " ".$join["type"]." ".$join["table_name"];
+            $sql .= " ".$join["table_alias"]." ON ";
             $sql .= $join["on"][0]." ".$join["on"][1]." ".$join["on"][2];
         }
         

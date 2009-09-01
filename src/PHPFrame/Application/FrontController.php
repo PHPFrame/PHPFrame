@@ -26,6 +26,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @see      PHPFrame
  * @since    1.0
+ * @internal
  */
 class PHPFrame_Application_FrontController
 {   

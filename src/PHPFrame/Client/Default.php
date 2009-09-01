@@ -22,6 +22,7 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
+ * @internal
  */
 class PHPFrame_Client_Default implements PHPFrame_Client_IClient
 {

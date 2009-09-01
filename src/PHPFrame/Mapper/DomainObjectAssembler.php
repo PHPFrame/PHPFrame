@@ -16,6 +16,8 @@
 /**
  * DomainObjectAssembler Class
  * 
+ * This is an abstract class that will need to be extended by all i
+ * 
  * @category PHPFrame
  * @package  Mapper
  * @author   Luis Montero <luis.montero@e-noise.com>
@@ -47,9 +49,9 @@ abstract class PHPFrame_Mapper_DomainObjectAssembler
     }
     
     /**
-     * Find a domain object using an IdObject
+     * Find a domain object using an IdObject or numeric id
      * 
-     * @param PHPFrame_Mapper_IdObject $id_obj
+     * @param PHPFrame_Mapper_IdObject|int $id_obj
      * 
      * @access public
      * @return PHPFrame_Mapper_DomainObject
@@ -60,7 +62,7 @@ abstract class PHPFrame_Mapper_DomainObjectAssembler
     /**
      * Find a collection of domain objects using an IdObject
      * 
-     * @param PHPFrame_Mapper_IdObject|int $id_obj
+     * @param PHPFrame_Mapper_IdObject $id_obj
      * 
      * @access public
      * @return PHPFrame_Mapper_Collection
@@ -78,4 +80,15 @@ abstract class PHPFrame_Mapper_DomainObjectAssembler
      * @since  1.0
      */
     abstract public function insert(PHPFrame_Mapper_DomainObject $obj);
+    
+    /**
+     * Delete domain object
+     * 
+     * @param PHPFrame_Mapper_DomainObject $obj
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    abstract public function delete(PHPFrame_Mapper_DomainObject $obj);
 }

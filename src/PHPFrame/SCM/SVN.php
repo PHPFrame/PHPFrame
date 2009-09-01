@@ -22,6 +22,8 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
+ * @todo     This class will not be implemented in version 1.0
+ * @ignore
  */
 class PHPFrame_SCM_SVN implements PHPFrame_SCM
 {

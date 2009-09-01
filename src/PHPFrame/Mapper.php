@@ -29,11 +29,13 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
+ * @todo     XML storage needs to be replaced with SQLite3 as a save alternative to 
+ *           a database server.
  */
 class PHPFrame_Mapper
 {
-    const STORAGE_SQL             = 0x00000001;
-    const STORAGE_XML             = 0x00000002;
+    const STORAGE_SQL = 0x00000001;
+    const STORAGE_XML = 0x00000002;
     
     /**
      * Persistence Factory object used for the current mapper

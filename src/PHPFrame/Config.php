@@ -38,11 +38,11 @@
  * 
  * Iteration example:
  * 
- * <example>
+ * <code>
  * foreach (PHPFrame::Config() as $key=>$value) {
  *     echo $key.': '.$value;
  * }
- * </example>
+ * </code>
  * 
  * @category PHPFrame
  * @package  Config
@@ -99,10 +99,12 @@ class PHPFrame_Config implements IteratorAggregate
      * This method is automatically called when trying to use the object as a string 
      * or by explicitly casting it to string.
      * 
-     * <example>
+     * Example:
+     * 
+     * <code>
      * $config = PHPFrame::Config();
      * echo $config;
-     * </example>
+     * </code>
      * 
      * The above example should print the config object as a string in the ini 
      * format.

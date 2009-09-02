@@ -5,7 +5,7 @@
     
     <!-- {@toc} -->
     
-    <refsect1 id="{@id description">
+    <refsect1 id="{@id description}">
         <title>Package decription</title>
         
         <para>
@@ -20,7 +20,7 @@
     
     </refsect1>
         
-    <refsect1 id="{@id examples">
+    <refsect1 id="{@id examples}">
         <title>Examples</title>
         
         <example>
@@ -36,7 +36,7 @@ $config = PHPFrame::Config();
 echo '<h2>The config object as a string</h2>';
 echo '<pre>'.$config.'</pre>';
 
-// Now lets see what keys are abailablein current config object
+// Now lets see what keys are available in current config object
 echo '<h2>The keys available in this config object</h2>';
 var_dump($config->getKeys());
 

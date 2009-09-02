@@ -3,13 +3,13 @@
         <refname>Config Package</refname>
     </refnamediv>
     
-    {@toc}
+    <!-- {@toc} -->
     
-    <refsect1 id="{@id intro}">
+    <refsect1 id="{@id description">
         <title>Package decription</title>
         
         <para>
-        The Config package consists only of one class (PHPFrame_Config) that 
+        The Config package consists only of one class ({@link PHPFrame_Config}) that 
         provides allows to read, parse and write ini files.
         </para>
         
@@ -17,6 +17,11 @@
         Config objects are primary used to work with the default configuration file 
         normally stored in etc/phpframe.ini
         </para>
+    
+    </refsect1>
+        
+    <refsect1 id="{@id examples">
+        <title>Examples</title>
         
         <example>
             <title>Showing some of the config object's functionality</title>

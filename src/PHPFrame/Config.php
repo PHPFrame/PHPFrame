@@ -14,8 +14,6 @@
  */
 
 /**
- * Config Class
- * 
  * This class produces objects that are used to manage data stored in ini files. 
  * In applications built using the provided application template this class is
  * used to manage the global configuration options stored in etc/phpframe.ini.
@@ -38,8 +36,12 @@
  * IteratorAggregate interface. This means that instances can be used as an array 
  * in foreach loops.
  * 
- * <example>
+ * Iteration example:
  * 
+ * <example>
+ * foreach (PHPFrame::Config() as $key=>$value) {
+ *     echo $key.': '.$value;
+ * }
  * </example>
  * 
  * @category PHPFrame
@@ -94,6 +96,17 @@ class PHPFrame_Config implements IteratorAggregate
     /**
      * Convert object to string
      * 
+     * This method is automatically called when trying to use the object as a string 
+     * or by explicitly casting it to string.
+     * 
+     * <example>
+     * $config = PHPFrame::Config();
+     * echo $config;
+     * </example>
+     * 
+     * The above example should print the config object as a string in the ini 
+     * format.
+     * 
      * @access public
      * @return string
      * @since  1.0
@@ -130,7 +143,13 @@ class PHPFrame_Config implements IteratorAggregate
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->_data);
+        $array = array();
+        
+        foreach ($this->getKeys() as $key) {
+            $array[$key] = $this->get($key);
+        }
+        
+        return new RecursiveArrayIterator($array);
     }
     
     /**

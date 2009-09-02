@@ -24,7 +24,7 @@
         <title>Examples</title>
         
         <example>
-            <title>Showing some of the config object's functionality</title>
+            <title>The config object as a string</title>
             <programlisting>
 <![CDATA[
 // Get default config
@@ -33,23 +33,246 @@ $config = PHPFrame::Config();
 // print config object as string
 // Note that if we try to use a config object as a string it will automatically 
 // be cast to a string representing the ini file 
-echo '<h2>The config object as a string</h2>';
 echo '<pre>'.$config.'</pre>';
+]]>
+            </programlisting>
+            <screen>
+<![CDATA[
+; This is a configuration file
+; Comments start with ';', as in php.ini
 
-// Now lets see what keys are available in current config object
-echo '<h2>The keys available in this config object</h2>';
+[general]
+
+app_name = 
+version = 
+base_url = 
+theme = default
+default_lang = en-GB
+secret = ChangeMeToSomethingRandomAndComplicated
+timezone = Europe/London
+default_controller = dummy
+ignore_acl = 1
+
+[filesystem]
+
+upload_dir = uploads
+max_upload_size = 2
+upload_accept = text/plain,image/jpeg,image/pjpeg,image/jpg,image/png,image/bmp,image/gif,application/pdf,application/octet-stream,application/msword,application/excel,application/vnd.ms-excel,application/x-excel,application/x-msexcel,application/vnd.ms-powerpoint,application/mspowerpoint,application/powerpoint
+
+[debug]
+
+enable = 
+log_level = 1
+
+[sources]
+
+preferred_mirror = http://dist.phpframe.org
+preferred_state = stable
+
+[db]
+
+enable = 
+driver = MySQL
+host = localhost
+user = 
+pass = 
+name = 
+prefix = phpframe_
+
+[smtp]
+
+enable = 
+mailer = smtp
+auth = 1
+host = 
+port = 25
+user = 
+pass = 
+fromaddress = someone@example.com
+fromname = Someone
+
+[imap]
+
+enable = 
+host = 
+port = 143
+user = 
+pass = 
+]]>
+            </screen>
+        </example>
+        
+        <example>
+            <title>Lets see what keys are available in current config object</title>
+            <programlisting>
+<![CDATA[
 var_dump($config->getKeys());
-
+]]>
+            </programlisting>
+            <screen>
+<![CDATA[
+Array
+(
+    [0] => app_name
+    [1] => version
+    [2] => base_url
+    [3] => theme
+    [4] => default_lang
+    [5] => secret
+    [6] => timezone
+    [7] => default_controller
+    [8] => ignore_acl
+    [9] => filesystem.upload_dir
+    [10] => filesystem.max_upload_size
+    [11] => filesystem.upload_accept
+    [12] => debug.enable
+    [13] => debug.log_level
+    [14] => sources.preferred_mirror
+    [15] => sources.preferred_state
+    [16] => db.enable
+    [17] => db.driver
+    [18] => db.host
+    [19] => db.user
+    [20] => db.pass
+    [21] => db.name
+    [22] => db.prefix
+    [23] => smtp.enable
+    [24] => smtp.mailer
+    [25] => smtp.auth
+    [26] => smtp.host
+    [27] => smtp.port
+    [28] => smtp.user
+    [29] => smtp.pass
+    [30] => smtp.fromaddress
+    [31] => smtp.fromname
+    [32] => imap.enable
+    [33] => imap.host
+    [34] => imap.port
+    [35] => imap.user
+    [36] => imap.pass
+)
+]]>
+            </screen>
+        </example>
+        
+        <example>
+            <title>Set config keys</title>
+            <programlisting>
+<![CDATA[
 // Set some config keys
 $config->set("app_name", "New app name");
 $config->set("debug.enable", true);
 $config->set("debug.log_level", 3);
 
 // Lets prove that the data was updated
-echo 'The new name of our app is: ';
-echo $config->get("app_name");
+echo 'The new name of our app is: '.$config->get("app_name");
 ]]>
-            </programlisting>        
+            </programlisting>
+        </example>
+        
+        <example>
+            <title>Iterating the config object</title>
+            <programlisting>
+<![CDATA[
+foreach (PHPFrame::Config() as $key=>$value) {
+    echo $key.': '.$value."\n";
+}
+]]>
+            </programlisting>
+            <screen>
+<![CDATA[
+app_name: New app name
+version: 
+base_url: 
+theme: default
+default_lang: en-GB
+secret: ChangeMeToSomethingRandomAndComplicated
+timezone: Europe/London
+default_controller: dummy
+ignore_acl: 1
+filesystem.upload_dir: uploads
+filesystem.max_upload_size: 2
+filesystem.upload_accept: text/plain,image/jpeg,image/pjpeg,image/jpg,image/png,image/bmp,image/gif,application/pdf,application/octet-stream,application/msword,application/excel,application/vnd.ms-excel,application/x-excel,application/x-msexcel,application/vnd.ms-powerpoint,application/mspowerpoint,application/powerpoint
+debug.enable: 1
+debug.log_level: 3
+sources.preferred_mirror: http://dist.phpframe.org
+sources.preferred_state: stable
+db.enable: 
+db.driver: MySQL
+db.host: localhost
+db.user: 
+db.pass: 
+db.name: 
+db.prefix: phpframe_
+smtp.enable: 
+smtp.mailer: smtp
+smtp.auth: 1
+smtp.host: 
+smtp.port: 25
+smtp.user: 
+smtp.pass: 
+smtp.fromaddress: someone@example.com
+smtp.fromname: Someone
+imap.enable: 
+imap.host: 
+imap.port: 143
+imap.user: 
+imap.pass: 
+]]>
+            </screen>
+        </example>
+        
+        <example>
+            <title>Converting the config object to array</title>
+            <programlisting>
+<![CDATA[
+print_r(iterator_to_array(PHPFrame::Config()));
+]]>
+            </programlisting>
+            <screen>
+<![CDATA[
+Array
+(
+    [app_name] => New app name
+    [version] => 
+    [base_url] => 
+    [theme] => default
+    [default_lang] => en-GB
+    [secret] => ChangeMeToSomethingRandomAndComplicated
+    [timezone] => Europe/London
+    [default_controller] => dummy
+    [ignore_acl] => 1
+    [filesystem.upload_dir] => uploads
+    [filesystem.max_upload_size] => 2
+    [filesystem.upload_accept] => text/plain,image/jpeg,image/pjpeg,image/jpg,image/png,image/bmp,image/gif,application/pdf,application/octet-stream,application/msword,application/excel,application/vnd.ms-excel,application/x-excel,application/x-msexcel,application/vnd.ms-powerpoint,application/mspowerpoint,application/powerpoint
+    [debug.enable] => 1
+    [debug.log_level] => 3
+    [sources.preferred_mirror] => http://dist.phpframe.org
+    [sources.preferred_state] => stable
+    [db.enable] => 
+    [db.driver] => MySQL
+    [db.host] => localhost
+    [db.user] => 
+    [db.pass] => 
+    [db.name] => 
+    [db.prefix] => phpframe_
+    [smtp.enable] => 
+    [smtp.mailer] => smtp
+    [smtp.auth] => 1
+    [smtp.host] => 
+    [smtp.port] => 25
+    [smtp.user] => 
+    [smtp.pass] => 
+    [smtp.fromaddress] => someone@example.com
+    [smtp.fromname] => Someone
+    [imap.enable] => 
+    [imap.host] => 
+    [imap.port] => 143
+    [imap.user] => 
+    [imap.pass] => 
+)
+]]>
+            </screen>      
         </example>
         
     </refsect1>

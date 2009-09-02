@@ -1,24 +1,24 @@
 <?php
 require "PHPFrame.php";
 
-define("PHPFRAME_VAR_DIR", dirname(__FILE__));
-define("PHPFRAME_TMP_DIR", dirname(__FILE__));
-
 // Get default config
 $config = PHPFrame::Config();
 
-// Dump the sections and keys in current config object
-var_dump($config->getSections());
+// print config object as string
+// Note that if we try to use a config object as a string it will automatically 
+// be cast to a string representing the ini file 
+echo '<h2>The config object as a string</h2>';
+echo '<pre>'.$config.'</pre>';
+
+// Now lets see what keys are abailablein current config object
+echo '<h2>The keys available in this config object</h2>';
 var_dump($config->getKeys());
 
 // Set some config keys
-$config->set("app_name", "UPDATED APP NAME");
+$config->set("app_name", "New app name");
 $config->set("debug.enable", true);
 $config->set("debug.log_level", 3);
 
-
-// echo config object as ini string
-echo $config;
-
-// Dump config object
-var_dump($config);
+// Lets prove that the data was updated
+echo 'The new name of our app is: ';
+echo $config->get("app_name");

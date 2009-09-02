@@ -4,14 +4,13 @@
  * 
  * PHP version 5
  * 
- * @category PHPFrame
- * @package    PHPFrame
- * @subpackage Main
- * @author   Luis Montero <luis.montero@e-noise.com>
- * @copyright  2009 E-noise.com Limited
- * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @category  PHPFrame
+ * @package   PHPFrame
+ * @author    Luis Montero <luis.montero@e-noise.com>
+ * @copyright 2009 E-noise.com Limited
+ * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 
 /**
@@ -33,8 +32,7 @@ spl_autoload_register(array("PHPFrame", "__autoload"));
  * It also provides information about the installed PHPFrame version.
  * 
  * @category PHPFrame
- * @package    PHPFrame
- * @subpackage Main
+ * @package  PHPFrame
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -43,25 +41,25 @@ spl_autoload_register(array("PHPFrame", "__autoload"));
 class PHPFrame
 {
     /**
-     * The PHPFrame version
+     * The PHPFrame API version
      * 
      * @var string
      */
     const API_VERSION="##API_VERSION##";
     /**
-     * The PHPFrame version
+     * The PHPFrame API stability
      * 
      * @var string
      */
     const API_STABILITY="##API_STABILITY##";
     /**
-     * The PHPFrame version
+     * The PHPFrame release version
      * 
      * @var string
      */
     const RELEASE_VERSION="##RELEASE_VERSION##";
     /**
-     * The PHPFrame version
+     * The PHPFrame release stability
      * 
      * @var string
      */
@@ -111,9 +109,6 @@ class PHPFrame
      * @access public
      * @return void
      * @since  1.0
-     * @todo   This method needs to be refactored into three different ones.
-     *            One to load the PHPFrame lib, then the custom libs and finally the 
-     *         MVC classes.
      */
     public static function __autoload($class_name)
     {

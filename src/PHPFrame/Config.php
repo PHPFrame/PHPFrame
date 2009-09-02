@@ -16,14 +16,41 @@
 /**
  * Config Class
  * 
+ * This class produces objects that are used to manage data stored in ini files. 
+ * In applications built using the provided application template this class is
+ * used to manage the global configuration options stored in etc/phpframe.ini.
+ * 
+ * The global configuration stored in an app's etc/phpframe.ini file will normally 
+ * be accessed using PHPFrame::Config(). Using this method in the main "facade" 
+ * class makes it straight forward to acquire the right config object without 
+ * having to specify the full path as an argument. 
+ * 
+ * Config objects can directly be instantiated using the PHPFrame_Config::instance() 
+ * method to ensure that we create only one instance for each given path. This 
+ * method is responsible for serving instances and only creating new ones if no 
+ * instance exists for the given path and thus providing "singleton" config objects.
+ * 
+ * The singleton pattern is enforced by declaring a private constructor and 
+ * therefore only making possible to instantiate the class via the instance() 
+ * method. 
+ * 
+ * Config objects are traversable because this class implements the 
+ * IteratorAggregate interface. This means that instances can be used as an array 
+ * in foreach loops.
+ * 
+ * <example>
+ * 
+ * </example>
+ * 
  * @category PHPFrame
  * @package  Config
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @uses     PHPFrame_FS_FileObject, IteratorAggregate
  * @since    1.0
  */
-class PHPFrame_Config
+class PHPFrame_Config implements IteratorAggregate
 {
     /**
      * Array holding instances of this class
@@ -47,8 +74,8 @@ class PHPFrame_Config
     /**
      * Constructor
      * 
-     * Private constructor ensures singleton pattern. Use the instance() method to get an instance
-     * of this class.
+     * Private constructor ensures singleton pattern. Use the instance() method 
+     * to get an instance of this class.
      *
      * @param string $path Full path to ini file with data
      *
@@ -58,7 +85,7 @@ class PHPFrame_Config
      */
     private function __construct($path)
     {
-        $this->_path = (string) $path;
+        $this->_path = trim((string) $path);
         
         // Fetch data from file
         $this->_fetchData();
@@ -89,6 +116,21 @@ class PHPFrame_Config
         }
         
         return $str;
+    }
+    
+    /**
+     * Get iterator
+     * 
+     * This method implements the IteratorAggregate interface and thus makes config 
+     * objects traversable, hooking to the foreach construct.
+     * 
+     * @access public
+     * @return ArrayIterator
+     * @since  1.0
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->_data);
     }
     
     /**
@@ -273,7 +315,11 @@ class PHPFrame_Config
      */
     private function _fetchData()
     {
-        $array = parse_ini_file($this->_path, true);
+        if (!$array = @parse_ini_file($this->_path, true)) {
+            $msg = "Could not load configuration file ".$this->_path;
+            trigger_error($msg, E_USER_ERROR);
+        }
+        
         $this->_data = $array;
     }
     

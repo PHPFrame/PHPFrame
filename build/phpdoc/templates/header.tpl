@@ -91,24 +91,6 @@
     
 <div id="left">
 
-{if count($ric) >= 1}
-<div class="sidebar ric">
-
-<ul>
-{section name=ric loop=$ric}
-    <li class="textfile"><a href="{$subdir}{$ric[ric].file}">{$ric[ric].name}</a></li>
-{/section}
-</ul>
-
-</div><!-- end ric .sidebar -->
-{/if}
-    
-{if $hastodos}
-<div class="sidebar todolist">
-    <a href="{$subdir}{$todolink}">Todo List</a>
-</div><!-- end todos .sidebar -->
-{/if}
-
 <div class="sidebar packages">
 
 <h3>Packages:</h3>
@@ -154,6 +136,26 @@
 
 </div><!-- end .tutorials .sidebar -->
 {/if}
+
+
+{if count($ric) >= 1}
+<div class="sidebar ric">
+
+<ul>
+{section name=ric loop=$ric}
+    <li class="textfile"><a href="{$subdir}{$ric[ric].file}">{$ric[ric].name}</a></li>
+{/section}
+</ul>
+
+</div><!-- end ric .sidebar -->
+{/if}
+    
+{if $hastodos}
+<div class="sidebar todolist">
+    <a href="{$subdir}{$todolink}">Todo List</a>
+</div><!-- end todos .sidebar -->
+{/if}
+
 
 {if !$noleftindex}{assign var="noleftindex" value=false}{/if}
 

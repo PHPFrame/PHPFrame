@@ -14,21 +14,21 @@
  */
 
 /**
- * DomainObject Class
+ * The Domain Object class is an abstract class that needs to be extended by objects 
+ * that you want to use with the Mapper package.
+ * 
+ * To see an example of how to extend this class have a look at {@link PHPFrame_User}.
  * 
  * @category PHPFrame
  * @package  Mapper
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @uses     IteratorAggregate
  * @since    1.0
- * @todo     Domain objects should be made traversable by means of the Iterator 
- *           interface so that we can use the iterator_to_array() function instead 
- *           of having a toArray() method in the domain object class itself.
- * @todo     Domain objects should implement the ArrayAccess interface in order to 
- *           hook to PHP's array syntax.
  */
 abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
+    implements IteratorAggregate
 {
     /**
      * The object id
@@ -73,6 +73,13 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
         }
     }
     
+    /**
+     * Magic method to handle the cloning of domain objects
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function __clone()
     {
         $this->id = null;
@@ -80,6 +87,30 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
         $this->modified = null;
     }
     
+    /**
+     * Get iterator
+     * 
+     * This method implements the IteratorAggregate interface and thus makes domain  
+     * objects traversable, hooking to the foreach construct.
+     * 
+     * @access public
+     * @return ArrayIterator
+     * @since  1.0
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->toArray());
+    } 
+    
+    /**
+     * Bind array to object
+     * 
+     * @param array $options
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function bind(array $options)
     {
         // Create reflection object
@@ -157,7 +188,6 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
      */
     public function setCreated($str)
     {
-        //echo $str; exit;
         $str = PHPFrame_Utils_Filter::validateDateTime($str);
         
         // Set property
@@ -187,7 +217,6 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
      */
     public function setModified($str)
     {
-        //echo $str; exit;
         $str = PHPFrame_Utils_Filter::validateDateTime($str);
         
         // Set property
@@ -228,11 +257,11 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
     /**
      * Get object as array
      * 
-     * @access public
+     * @access protected
      * @return array
      * @since  1.0
      */
-    public function toArray()
+    protected function toArray()
     {
         $array = array();
         $props_array = get_object_vars($this);

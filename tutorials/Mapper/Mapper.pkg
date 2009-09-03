@@ -111,7 +111,17 @@ foreach ($mapper->find() as $item) {
         </programlisting>
         <screen>
 <![CDATA[
-
+PHPFrame_Application_ACL Object
+(
+    [groupid:protected] => 
+    [controller:protected] => 
+    [action:protected] => 
+    [value:protected] => 
+    [id:protected] => 
+    [created:protected] => 
+    [modified:protected] => 
+    [_dirty:private] => 
+)
 ]]>
         </screen>
     </example>

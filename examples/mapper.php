@@ -9,29 +9,28 @@
 <?php
 include_once "PHPFrame.php";
 
-$acl = new PHPFrame_Application_ACL();
-echo '<h2>Object to be inserted</h2>';
-var_dump($acl);
-
+// Instantiate generic mapper for PHPFrame_Application_ACL class 
+// and specify XML storage
 $mapper = new PHPFrame_Mapper(
     "PHPFrame_Application_ACL", 
     "acl", 
     PHPFrame_Mapper::STORAGE_XML, 
     false, 
-    "/Users/lupomontero/Desktop".DS."domain.objects"
+    DS."tmp".DS."domain.objects"
 );
 
-// Show objects before insert
-echo '<h2>Collection BEFORE insert</h2>';
-foreach ($mapper->find() as $item) {
-    var_dump($item);
-}
+// Instantiate domain object
+$acl = new PHPFrame_Application_ACL(array(
+    "groupid"=>1, 
+    "controller"=>"dummy", 
+    "action"=>"*", 
+    "value"=>"all"
+));
 
 // Insert new object
 $mapper->insert($acl);
 
-// Show updated collection
-echo '<h2>Collection AFTER insert</h2>';
+// Find objects and iterate through collection
 foreach ($mapper->find() as $item) {
-    var_dump($item);
+    print_r($item);
 }

@@ -119,61 +119,61 @@ h2.ref-purpose
 
 td.code_border
 {
-  color:              #000000;
-  background-color:   #c0c0c0;
+  color: #000000;
+  background-color: #c0c0c0;
 }
 
 td.code
 {
-  color:              #000000;
-  background-color:   #f0f0f0;
+  color: #000000;
+  background-color: #f0f0f0;
 }
 
 td.type
 {
-  font-style:         italic;
+  font-style: italic;
 }
 
 div.credit
 {
-  font-size:          0.9em !important;
-  text-align:         center;
+  font-size: 0.9em !important;
+  text-align: center;
 }
 
 div.package
 {
-  padding-left:       5px;
+  padding-left: 5px;
 }
 
 div.tags
 {
-  padding-left:       15px;
+  padding-left: 15px;
 }
 
 div.function
 {
-  padding-left:       15px;
+  padding-left: 15px;
 }
 
 div.top
 {
-  font-size:          1em;
+  font-size: 1em;
 }
 
 div.warning
 {
-  color:              #ff0000;
-  background-color:   transparent;
+  color: #ff0000;
+  background-color: transparent;
 }
 
 div.description
 {
-  padding-left:       15px;
+  padding-left: 15px;
 }
 
 span.smalllinenumber
 {
-  font-size:          1em;
+  font-size: 1em;
 }
 
 .php {
@@ -188,13 +188,13 @@ span.smalllinenumber
 .src-line {  font-family: 'Courier New', Courier, monospace; font-weight: normal; font-size: 0.9em; }
 
 .src-comm { color: green; }
-.src-id {  }
+.src-id {}
 .src-inc { color: #0000FF; }
 .src-key { color: #0000FF; }
 .src-num { color: #CC0000; }
 .src-str { color: #66cccc; }
 .src-sym { font-weight: bold; }
-.src-var { }
+.src-var {}
 
 .src-php { font-weight: bold; }
 
@@ -217,18 +217,18 @@ span.smalllinenumber
 
 /* tutorial */
 
-.authors {  }
-.author { font-style: italic; font-weight: bold }
+.authors {}
+.author { font-style: italic; }
 .author-blurb { margin: .5em 0em .5em 2em; font-size: 85%; font-weight: normal; font-style: normal }
-.example { border: 1px dashed #999999; background-color: #EEEEEE; padding: .5em; }
+.example {}
 .listing { border: 1px dashed #999999; background-color: #EEEEEE; padding: .5em; white-space: nowrap; }
 .release-info { font-size: 85%; font-style: italic; margin: 1em 0em }
-.ref-title-box {  }
-.ref-title {  }
+.ref-title-box {}
+.ref-title {}
 .ref-purpose { font-style: italic; color: #666666 }
-.ref-synopsis {  }
-h2.title { margin: 1em 0em 0em 0em; padding: .25em; }
-h3.title { margin: 1em 0em 0em 0em; padding: .25em; color:#F20530; }
+.ref-synopsis {}
+h2.title {}
+h3.title {}
 .cmd-synopsis { margin: 1em 0em }
 .cmd-title { font-weight: bold }
 .toc { margin-left: 2em; padding-left: 0em }

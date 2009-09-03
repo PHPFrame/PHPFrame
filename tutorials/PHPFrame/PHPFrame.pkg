@@ -1,46 +1,47 @@
 <refentry id="{@id}">
-    <refnamediv>
-        <refname>Index</refname>
-        <refpurpose>
-            This manual consists primarily of API documentation but also includes examples, 
-            tutorials, an overview of how the library works, installation and frequently 
-            questions.
-        </refpurpose>
-    </refnamediv>
+
+<refnamediv>
+    <refname>Index</refname>
+    <refpurpose>
+    This manual consists primarily of API documentation but also includes examples, 
+    tutorials, an overview of how the framework works, installation and frequently 
+    questions.
+    </refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+    <author>
+        Luis Montero [e-noise.com]
+        <authorblurb>
+        {@link mailto:luis.montero@e-noise.com Luis Montero}
+        </authorblurb>
+    </author>
+</refsynopsisdiv>
+
+{@toc}
+
+<refsect1 id="{@id intro}">
+    <title>Getting Started</title>
     
-    <refsynopsisdiv>
-        <author>
-            Luis Montero [e-noise.com]
-            <authorblurb>
-            {@link mailto:luis.montero@e-noise.com Luis Montero}
-            </authorblurb>
-        </author>
-    </refsynopsisdiv>
+    <para>
+        This will be the User Guide for PHPFrame 1.0. 
+    </para>
     
-    {@toc}
-    
-    <refsect1 id="{@id intro}">
-        <title>Getting Started</title>
+    <refsect2>
+        <title>Downloading / Installing PHPFrame</title>
         
         <para>
-            This will be the User Guide for PHPFrame 1.0. 
+        For download and installation information check the 
+        <a href="content/download">download page</a>.
         </para>
+    </refsect2>
+    
+    <refsect2>
+        <title>Starting a new project with PHPFrame command line tool</title>
         
-        <refsect2>
-            <title>Downloading / Installing PHPFrame</title>
-            
-            <para>
-            For download and installation information check the 
-            <a href="content/download">download page</a>.
-            </para>
-        </refsect2>
-        
-        <refsect2>
-            <title>Starting a new project with PHPFrame command line tool</title>
-            
-            <para>Tutorial coming soon...</para>
-        </refsect2>
-        
-    </refsect1>
+        <para>Tutorial coming soon...</para>
+    </refsect2>
+    
+</refsect1>
     
 </refentry>

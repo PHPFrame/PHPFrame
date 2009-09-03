@@ -1,31 +1,32 @@
 <refentry id="{@id}">
-    <refnamediv>
-        <refname>Config Package</refname>
-    </refnamediv>
+
+<refnamediv>
+    <refname>Config Package</refname>
+</refnamediv>
+
+<!-- {@toc} -->
     
-    <!-- {@toc} -->
+<refsect1 id="{@id description}">
+    <title>Package decription</title>
     
-    <refsect1 id="{@id description}">
-        <title>Package decription</title>
-        
-        <para>
-        The Config package consists only of one class ({@link PHPFrame_Config}) that 
-        provides allows to read, parse and write ini files.
-        </para>
-        
-        <para>
-        Config objects are primary used to work with the default configuration file 
-        normally stored in etc/phpframe.ini
-        </para>
+    <para>
+    The Config package consists only of one class ({@link PHPFrame_Config}) that 
+    provides allows to read, parse and write ini files.
+    </para>
     
-    </refsect1>
-        
-    <refsect1 id="{@id examples}">
-        <title>Examples</title>
-        
-        <example>
-            <title>The config object as a string</title>
-            <programlisting>
+    <para>
+    Config objects are primary used to work with the default configuration file 
+    normally stored in etc/phpframe.ini
+    </para>
+
+</refsect1>
+    
+<refsect1 id="{@id examples}">
+    <title>Examples</title>
+    
+    <example>
+        <title>The config object as a string</title>
+        <programlisting>
 <![CDATA[
 // Get default config
 $config = PHPFrame::Config();
@@ -35,8 +36,8 @@ $config = PHPFrame::Config();
 // be cast to a string representing the ini file 
 echo '<pre>'.$config.'</pre>';
 ]]>
-            </programlisting>
-            <screen>
+        </programlisting>
+        <screen>
 <![CDATA[
 ; This is a configuration file
 ; Comments start with ';', as in php.ini
@@ -99,17 +100,17 @@ port = 143
 user = 
 pass = 
 ]]>
-            </screen>
-        </example>
-        
-        <example>
-            <title>Lets see what keys are available in current config object</title>
-            <programlisting>
+        </screen>
+    </example>
+    
+    <example>
+        <title>Lets see what keys are available in current config object</title>
+        <programlisting>
 <![CDATA[
 var_dump($config->getKeys());
 ]]>
-            </programlisting>
-            <screen>
+        </programlisting>
+        <screen>
 <![CDATA[
 Array
 (
@@ -152,12 +153,12 @@ Array
     [36] => imap.pass
 )
 ]]>
-            </screen>
-        </example>
-        
-        <example>
-            <title>Set config keys</title>
-            <programlisting>
+        </screen>
+    </example>
+    
+    <example>
+        <title>Set config keys</title>
+        <programlisting>
 <![CDATA[
 // Set some config keys
 $config->set("app_name", "New app name");
@@ -167,19 +168,19 @@ $config->set("debug.log_level", 3);
 // Lets prove that the data was updated
 echo 'The new name of our app is: '.$config->get("app_name");
 ]]>
-            </programlisting>
-        </example>
-        
-        <example>
-            <title>Iterating the config object</title>
-            <programlisting>
+        </programlisting>
+    </example>
+    
+    <example>
+        <title>Iterating the config object</title>
+        <programlisting>
 <![CDATA[
 foreach (PHPFrame::Config() as $key=>$value) {
     echo $key.': '.$value."\n";
 }
 ]]>
-            </programlisting>
-            <screen>
+        </programlisting>
+        <screen>
 <![CDATA[
 app_name: New app name
 version: 
@@ -219,17 +220,17 @@ imap.port: 143
 imap.user: 
 imap.pass: 
 ]]>
-            </screen>
-        </example>
-        
-        <example>
-            <title>Converting the config object to array</title>
-            <programlisting>
+        </screen>
+    </example>
+    
+    <example>
+        <title>Converting the config object to array</title>
+        <programlisting>
 <![CDATA[
 print_r(iterator_to_array(PHPFrame::Config()));
 ]]>
-            </programlisting>
-            <screen>
+        </programlisting>
+        <screen>
 <![CDATA[
 Array
 (
@@ -272,9 +273,9 @@ Array
     [imap.pass] => 
 )
 ]]>
-            </screen>      
-        </example>
-        
-    </refsect1>
+        </screen>      
+    </example>
+    
+</refsect1>
     
 </refentry>

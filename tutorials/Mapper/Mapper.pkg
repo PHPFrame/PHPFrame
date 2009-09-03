@@ -1,85 +1,86 @@
 <refentry id="{@id}">
-    <refnamediv>
-        <refname>Mapper Package</refname>
-    </refnamediv>
+
+<refnamediv>
+    <refname>Mapper Package</refname>
+</refnamediv>
+
+<!-- {@toc} -->
+
+<refsect1 id="{@id description}">
+    <title>Package decription</title>
     
-    <!-- {@toc} -->
+    <para>
+    The mapper package provides a set of objects to easily get your objects in 
+    and out of the database.
+    </para>
     
-    <refsect1 id="{@id description}">
-        <title>Package decription</title>
-        
+    <para>
+    Mappers are designed to be used with "domain objects" that descend from the 
+    {@link PHPFrame_Mapper_DomainObject} class. You will normally be creating 
+    your app models by extending this class, making it really easy to persist 
+    those objects.
+    </para>
+
+</refsect1>
+
+<refsect1 id="{@id classes}">
+    <title>Mapper classes</title>
+    
+    <itemizedlist>
+        <listitem>
         <para>
-        The mapper package provides a set of objects to easily get your objects in 
-        and out of the database.
+        {@link PHPFrame_Mapper}
         </para>
-        
+    </listitem>
+    <listitem>
         <para>
-        Mappers are designed to be used with "domain objects" that descend from the 
-        {@link PHPFrame_Mapper_DomainObject} class. You will normally be creating 
-        your app models by extending this class, making it really easy to persist 
-        those objects.
+        {@link PHPFrame_Mapper_Collection}
         </para>
-    
-    </refsect1>
-    
-    <refsect1 id="{@id classes}">
-        <title>Mapper classes</title>
-        
-        <itemizedlist>
-            <listitem>
-            <para>
-            {@link PHPFrame_Mapper}
-            </para>
-        </listitem>
-        <listitem>
-            <para>
-            {@link PHPFrame_Mapper_Collection}
-            </para>
-        </listitem>
-        <listitem>
-            <para>
-            {@link PHPFrame_Mapper_DomainObject}
-            </para>
-        </listitem>
-        <listitem>
-            <para>
-            {@link PHPFrame_Mapper_DomainObjectAssembler}
-            </para>
-        </listitem>
-        <listitem>
-            <para>
-            {@link PHPFrame_Mapper_DomainObjectFactory}
-            </para>
-        </listitem>
-        <listitem>
-            <para>
-            {@link PHPFrame_Mapper_IdObject}
-            </para>
-        </listitem>
-        <listitem>
-            <para>
-            {@link PHPFrame_Mapper_PersistenceFactory}
-            </para>
-        </listitem>
-        </itemizedlist>
-        
+    </listitem>
+    <listitem>
         <para>
-        
+        {@link PHPFrame_Mapper_DomainObject}
         </para>
+    </listitem>
+    <listitem>
+        <para>
+        {@link PHPFrame_Mapper_DomainObjectAssembler}
+        </para>
+    </listitem>
+    <listitem>
+        <para>
+        {@link PHPFrame_Mapper_DomainObjectFactory}
+        </para>
+    </listitem>
+    <listitem>
+        <para>
+        {@link PHPFrame_Mapper_IdObject}
+        </para>
+    </listitem>
+    <listitem>
+        <para>
+        {@link PHPFrame_Mapper_PersistenceFactory}
+        </para>
+    </listitem>
+    </itemizedlist>
     
-    </refsect1>
-        
-    <refsect1 id="{@id examples}">
-        <title>Examples</title>
-        
-        <example>
-            <title>Find a domain object using the a generic mapper</title>
-            <para>
-            In this example we create an instance of PHPFrame_Application_ACL, which 
-            extends PHPFrame_Mapper_DomainObject, so that we can use it with the 
-            mapper.
-            </para>
-            <programlisting>
+    <para>
+    
+    </para>
+
+</refsect1>
+    
+<refsect1 id="{@id examples}">
+    <title>Examples</title>
+    
+    <example>
+        <title>Find a domain object using the a generic mapper</title>
+        <para>
+        In this example we create an instance of PHPFrame_Application_ACL, which 
+        extends PHPFrame_Mapper_DomainObject, so that we can use it with the 
+        mapper.
+        </para>
+        <programlisting>
 <![CDATA[
 // Instantiate generic mapper for PHPFrame_Application_ACL class 
 // and specify XML storage
@@ -107,14 +108,14 @@ foreach ($mapper->find() as $item) {
     var_dump($item);
 }
 ]]>
-            </programlisting>
-            <screen>
+        </programlisting>
+        <screen>
 <![CDATA[
 
 ]]>
-            </screen>
-        </example>
-        
-    </refsect1>
+        </screen>
+    </example>
+    
+</refsect1>
     
 </refentry>

@@ -139,12 +139,8 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
             }
         }
         
-        //var_dump($raw);
-        
-        // Create collectioj object
-        $collection = $this->factory->getCollection($raw);
-        
-        return $collection;
+        // Create collection object
+        return $this->factory->getCollection($raw);
     }
     
     /**
@@ -221,8 +217,9 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         
         // Flatten collectio object to array
         $array = array();
+        
         foreach ($collection as $item) {
-            $array[] = $item->toArray();
+            $array[] = iterator_to_array($item);
         }
         
         $serialiser = new XML_Serializer($options);

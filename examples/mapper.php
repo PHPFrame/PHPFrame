@@ -1,4 +1,4 @@
-<h1>PHPFrame Database Subpackage Examples</h1>
+<h1>PHPFrame Mapper Subpackage Examples</h1>
 
 <h2>Code</h2>
 

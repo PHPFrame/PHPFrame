@@ -105,7 +105,7 @@ $mapper->insert($acl);
 
 // Find objects and iterate through collection
 foreach ($mapper->find() as $item) {
-    var_dump($item);
+    print_r($item);
 }
 ]]>
         </programlisting>
@@ -113,13 +113,13 @@ foreach ($mapper->find() as $item) {
 <![CDATA[
 PHPFrame_Application_ACL Object
 (
-    [groupid:protected] => 
-    [controller:protected] => 
-    [action:protected] => 
-    [value:protected] => 
-    [id:protected] => 
-    [created:protected] => 
-    [modified:protected] => 
+    [groupid:protected] => 1
+    [controller:protected] => dummy
+    [action:protected] => *
+    [value:protected] => all
+    [id:protected] => 1
+    [created:protected] => 2009-09-03 14:18:06
+    [modified:protected] => 2009-09-03 14:18:06
     [_dirty:private] => 
 )
 ]]>

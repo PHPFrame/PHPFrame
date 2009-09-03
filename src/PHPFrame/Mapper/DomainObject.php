@@ -19,6 +19,45 @@
  * 
  * To see an example of how to extend this class have a look at {@link PHPFrame_User}.
  * 
+ * Domain objects implement the IteratorAggregate interface, which means that they 
+ * can be iterated using the foreach construct and easily converted to an array by 
+ * using PHPs iterator_to_array() function.
+ * 
+ * For example:
+ * 
+ * <code>
+ * // Create a new user object (this object extends domain object)
+ * $user = new PHPFrame_User(array("username"=>"lupo"));
+ * // Print the user oject as an array
+ * print_r(iterator_to_array($user));
+ * </code>
+ * 
+ * This will produce the following output:
+ * 
+ * <pre>
+ * Array
+ * (
+ *  [groupid] => 0
+ *  [username] => lupo
+ *  [password] =>
+ *  [firstname] =>
+ *  [lastname] => 
+ *  [email] => 
+ *  [photo] =>
+ *  [notifications] => 1
+ *  [show_email] => 1
+ *  [block] =>
+ *  [last_visit] =>
+ *  [activation] =>
+ *  [params] => a:0:{}
+ *  [deleted] => 
+ *  [openid_urls] => a:0:{}
+ *  [id] =>
+ *  [created] =>
+ *  [modified] => 
+ *  )
+ * <pre>
+ * 
  * @category PHPFrame
  * @package  Mapper
  * @author   Luis Montero <luis.montero@e-noise.com>

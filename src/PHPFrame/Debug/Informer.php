@@ -26,6 +26,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @see      PHPFrame_Base_Observer
  * @since    1.0
+ * @ignore
  */
 class PHPFrame_Debug_Informer extends PHPFrame_Base_Observer
 {

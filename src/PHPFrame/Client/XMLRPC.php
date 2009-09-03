@@ -11,6 +11,7 @@
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @ignore
  */
 
 /**
@@ -22,7 +23,7 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
- * @internal
+ * @ignore
  */
 class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
 {

@@ -1,0 +1,113 @@
+<refentry id="{@id}">
+
+<refnamediv>
+    <refname>Registry Package</refname>
+</refnamediv>
+
+<!-- {@toc} -->
+
+<refsect1 id="{@id description}">
+    <title>Package decription</title>
+    
+    <para>
+    The registry package provides three concrete classes that give you access to 
+    objects that are available "globally".     
+    </para>
+    
+    <para>
+    Registry objects will all be implemented following the singleton pattern as they 
+    need to be available from all scopes.
+    </para>
+    
+    <para>
+    The Registry package is sublassed into {@link PHPFrame_Registry_Application} , 
+    {@link PHPFrame_Registry_Request} and {@link PHPFrame_Registry_Session}. Each of 
+    these will produce a singleton object that stores data in the given "scope".
+    </para>
+
+</refsect1>
+
+<refsect1 id="{@id classes}">
+    <title>Registry classes</title>
+    
+    <itemizedlist>
+        <listitem>
+        <para>
+        {@link PHPFrame_Registry_Application}
+        </para>
+        <para>
+        The Application registry will contain data that is shared application wide, 
+        this means that it is shared between all sessions and all requests. So the 
+        kind of data we find in the Application Registry is configuration data such 
+        as permissions, information about installed components and other objects 
+        that should be the same for the whole app. 
+        </para>
+        <para>
+        The application registry is persisted in a file in the tmp/cache directory 
+        and should only need to be rebuilt when its state is altered (when we 
+        add/edit/remove variables from the registry).  
+        </para>
+    </listitem>
+    <listitem>
+        <para>
+        {@link PHPFrame_Registry_Request}
+        </para>
+        <para>
+        The Request registry is a centralised storage object for all request 
+        specific data. This object is not persisted and only exists within the 
+        lifespan of a given request. 
+        </para>
+        <para>
+        In the Request Registry we find all variables that we would otherwise find 
+        within PHP's $_REQUEST, $_POST and $_GET super globals.
+        </para>
+        <para>
+        The request is therefore responsible for informing the whole app about the  
+        requested controller, action and accompanying parameters.
+        </para>
+    </listitem>
+    <listitem>
+        <para>
+        {@link PHPFrame_Registry_Session}
+        </para>
+        <para>
+        The Session registry unsurprisinly handles data that will be shared across a 
+        number of requests that make up a "session". This object wraps around PHP's 
+        $_SESSION super global.
+        </para>
+        <para>
+        The Session Registry is responsible for storing information about the user 
+        currently logged on, the client that is being used (PC, mobile, CLI or 
+        XMLRPC) and the system events that might have been raised by a prvious 
+        request and haven't yet been displayed to the user.
+        </para>
+    </listitem>
+    </itemizedlist>
+
+</refsect1>
+    
+<refsect1 id="{@id examples}">
+    <title>Examples</title>
+    
+    <example>
+        <title>Find a domain object using the a generic mapper</title>
+        <para>
+        In this example we create an instance of PHPFrame_Application_ACL, which 
+        extends PHPFrame_Mapper_DomainObject, so that we can use it with the 
+        mapper.
+        </para>
+        <programlisting>
+<![CDATA[
+
+]]>
+        </programlisting>
+        <screen>
+<![CDATA[
+
+]]>
+        </screen>
+    </example>
+    
+</refsect1>
+    
+</refentry>

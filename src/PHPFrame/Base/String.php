@@ -14,7 +14,8 @@
  */
 
 /**
- * String Class
+ * This class provides objects used to represent strings in an Object Oriented 
+ * context.
  * 
  * @category PHPFrame
  * @package  Base
@@ -25,7 +26,12 @@
  */
 class PHPFrame_Base_String
 {
-    private $_str=null;
+    /**
+     * Private propery used to store the string as a primitive value
+     * 
+     * @var string
+     */
+    private $_str="";
     
     /**
      * Constructor
@@ -36,47 +42,115 @@ class PHPFrame_Base_String
      * @return void
      * @since  1.0
      */
-    public function __construct($str="")
+    public function __construct($str=null)
     {
-        $str = (string) trim($str);
-        
-        $this->_str = $str;
+        if (!is_null($str)) {
+             $this->_str = trim((string) $str);
+        }
+    }
+    
+    /**
+     * Magic method called we try to use a string object as a string
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function __toString()
+    {
+        return $this->_str;
+    }
+    
+    /**
+     * Get string length
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public function len()
+    {
+        return strlen($this->_str);
+    }
+    
+    /**
+     * Get string in upper case
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function upper()
+    {
+        return strtoupper($this->_str);
+    }
+    
+    /**
+     * Get string in lower case
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function lower()
+    {
+        return strtolower($this->_str);
+    }
+    
+    /**
+     * Get string with first character in upper case
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function upperFirst()
+    {
+        return ucfirst($this->_str);
+    }
+    
+    /**
+     * Get string with first character in every word in upper case
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function upperWords()
+    {
+        return ucwords($this->_str);
     }
     
     /**
      * Format a string for html output.
      * 
-     * @todo This function needs to be written. It does nothing at the moment.
+     * @param bool $javascript_safe A boolean used to indicate whether we should
+     *                              make the string safe for javascript.
      * 
-     * @param string $str             The string to process.
-     * @param bool   $javascript_safe A boolean used to indicate whether we should
-     *                                make the string safe for javascript.
-     * 
-     * @static
      * @access public
      * @return string
      * @since  1.0
      */
-    public static function html($str, $javascript_safe=false) 
+    public function html($javascript_safe=false) 
     {
-        return $str;
+        return htmlspecialchars($this->_str);
     }
     
     /**
      * Limit string to a set number of characters
      * 
-     * @param string $str               The string we want to limit.
      * @param int    $max_chars         The number of characters we want to limit to.
      * @param bool   $add_trailing_dots Boolean to indicate whether we want to add
      *                                  trailing dots or not. Default is TRUE.
      * 
-     * @static
      * @access public
      * @return string
      * @since  1.0
      */
-    public static function limitChars($str, $max_chars, $add_trailing_dots=true) 
+    public function limitChars($max_chars, $add_trailing_dots=true) 
     {
+        $str = $this->_str;
+        
         if (strlen($str) > $max_chars) {
             $str = substr($str, 0, $max_chars);
             if ($add_trailing_dots === true) {
@@ -92,17 +166,18 @@ class PHPFrame_Base_String
     /**
      * Limit the number of words.
      * 
-     * @param string $str               The string we want to limit.
      * @param int    $max_chars         The number of characters we want to limit to.
      * @param bool   $add_trailing_dots Boolean to indicate whether we want to add
      *                                  trailing dots or not. Default is TRUE.
-     * @static
+     * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public static function limitWords($str, $max_chars, $add_trailing_dots=true) 
+    public function limitWords($max_chars, $add_trailing_dots=true) 
     {
+        $str = $this->_str;
+        
         if (strlen($str) > $max_chars) {
             $str = substr($str, 0, $max_chars);
             $str = substr($str, 0, strrpos($str, " "));
@@ -113,27 +188,26 @@ class PHPFrame_Base_String
     }
     
     /**
-     * This method is used to format a string into a string of the given length.
+     * This method is used to format the string into the given length.
      * If the string is longer than the specified length it is trimmed to fit.
      * If the string is shorter than the specified length it is padded with spaces
      * on the left side to fit length.
      * 
-     * @param string $str               The string to format
      * @param int    $length            The length we want to format the string to.
      * @param bool   $add_trailing_dots Boolean to indicate whether we want to add
      *                                  trailing dots or not. Default is TRUE.
      * 
-     * @static
      * @access public
      * @return string
      * @since  1.0
      */
-    public static function fixLength($str, $length, $add_trailing_dots=true)
+    public function fixLength($length, $add_trailing_dots=true)
     {
         // Cast input params to strict types
-        $str = (string) trim($str);
         $length = (int) $length;
         $add_trailing_dots = (bool) $add_trailing_dots;
+        
+        $str = $this->_str;
         
         if (strlen($str) > $length) {
             // Trim to fixed length

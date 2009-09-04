@@ -14,16 +14,27 @@
  */
 
 /**
- * Array Class
+ * Base Array Class
+ * 
+ * This class provides a basic array object that extends SPL's ArrayObject.
+ * 
+ * Array objects behave like arrays so they can be iterated using the foreach 
+ * construct and also accessed using array sytax.
+ * 
+ * This class adds two methods on top of the SPL ArrayObject:
+ * 
+ *  - {@link PHPFrame_Base_Array::isAssoc()}
+ *  - {@link PHPFrame_Base_Array::depth()}
  * 
  * @category PHPFrame
  * @package  Base
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see      ArrayObject
  * @since    1.0
  */
-class PHPFrame_Base_Array implements ArrayAccess, Countable, Iterator
+class PHPFrame_Base_Array extends ArrayObject
 {
     /**
      * Private property holding the array data
@@ -46,154 +57,60 @@ class PHPFrame_Base_Array implements ArrayAccess, Countable, Iterator
         if (!is_null($array)) {
             $this->_array = $array;
         }
-    }
-    
-    /*
-     * Array Access interface implementation (offsetExists(), offsetGet(), 
-     * offsetSet() and offsetUnset())
-     */
-    
-    /**
-     * Check whether a given offset exists in uderlying array
-     * 
-     * @param string $offset
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    public function offsetExists($offset)
-    {
-        return array_key_exists($offset, $this->_array);
+        
+        parent::__construct($this->_array);
     }
     
     /**
-     * Get a given offset from uderlying array
-     * 
-     * @param string $offset
+     * Magic method called we try to use an array object as a string
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function offsetGet($offset)
+    public function __toString()
     {
-        $offset = (string) trim($offset);
-        
-        return $this->_array[$offset];
-    }
-
-    /**
-     * Set a given offset in uderlying array
-     * 
-     * @param string $offset
-     * @param mixed $value
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function offsetSet($offset, $value)
-    {
-        $offset = (string) trim($offset);
-        
-        $this->_array[$offset] = $value;
-    }
-
-    /**
-     * Unset a given offset from in uderlying array
-     * 
-     * @param string $offset
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function offsetUnset($offset)
-    {
-        unset($this->_array[$offset]);
+        return print_r($this, true);
     }
     
-    /* 
-     * Countable interface implementation 
+    /**
+     * Is associative array?
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
      */
+    public function isAssoc() {
+        return (is_array($this->_array) 
+                && 0 !== count(array_diff_key(
+                    $this->_array, 
+                    array_keys(array_keys($this->_array))
+                )));
+    }
     
     /**
-     * Count
+     * Get array depth
+     * 
+     * @param array $array
      * 
      * @access public
      * @return int
      * @since  1.0
      */
-    public function count()
+    public function depth(array $array=null)
     {
-        return count($this->_array);
-    }
-    
-    /* 
-     * Iterator interface implementation 
-     */
-    
-    /**
-     * Get element at current pointer position
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function current()
-    {
-        return $this->_array[$this->key()];
-    }
-
-    /**
-     * Move pointer one step forward
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function next()
-    {
-        $this->_pointer++;
-    }
-    
-    /**
-     * Get current key at pointer position
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function key()
-    {
-        $keys = array_keys($this->_array);
-        $key = $keys[$this->_pointer];
+        if (is_null($array)) {
+            $array = $this->_array;
+        }
         
-        return $key;
-    }
-    
-    /**
-     * Rewind internal pointer
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function rewind()
-    {
-        $this->_pointer = 0;
-    }
-
-    /**
-     * Check whether the current pointer position is valid
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    public function valid()
-    {
-        return ($this->_pointer < $this->count());
+        $depth = count($array) > 0 ? 1 : 0; 
+        
+        foreach ($array as $value) {
+            if (is_array($value)) {
+                $depth = $this->depth($value) + 1;
+            }
+        }
+        
+        return (int) $depth;
     }
 }

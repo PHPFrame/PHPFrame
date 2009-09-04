@@ -85,7 +85,8 @@
     </itemizedlist>
 
 </refsect1>
-    
+
+<!-- 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
     
@@ -109,5 +110,6 @@
     </example>
     
 </refsect1>
-    
+ -->
+ 
 </refentry>

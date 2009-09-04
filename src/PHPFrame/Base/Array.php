@@ -14,8 +14,6 @@
  */
 
 /**
- * Base Array Class
- * 
  * This class provides a basic array object that extends SPL's ArrayObject.
  * 
  * Array objects behave like arrays so they can be iterated using the foreach 

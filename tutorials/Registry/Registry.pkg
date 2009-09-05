@@ -115,11 +115,11 @@
     <title>Examples</title>
     
     <example>
-        <title>Find a domain object using the a generic mapper</title>
+        <title>Print registry objects</title>
         <para>
-        In this example we create an instance of PHPFrame_Application_ACL, which 
-        extends PHPFrame_Mapper_DomainObject, so that we can use it with the 
-        mapper.
+        In this example we simply print the registry objects to the screen. Note 
+        that before using them the required constants are set and PHPFrame::Env() is 
+        called. This wil initialise the registries.
         </para>
         <programlisting>
 <![CDATA[

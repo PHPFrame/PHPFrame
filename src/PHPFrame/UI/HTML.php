@@ -14,10 +14,11 @@
  */
 
 /**
- * HTML Class
+ * This class provides a number of static methods to be used for generating useful 
+ * HTML elements and Javascript.
  * 
- * This class provides a number of static methods to be used for generating useful HTML elements and Javascript.
- * This class is mostly used in the views tmpl layer for quickly building buttons, calendars, autocomleters, and so on.
+ * This class is mostly used in the views tmpl layer for quickly building buttons, 
+ * calendars, autocomleters, and so on.
  * 
  * All methods in this class are static.
  * 
@@ -33,10 +34,13 @@ class PHPFrame_UI_HTML
     /**
      * Build an select option object
      * 
-     * @param    string    $value The option value
-     * @param    string    $label The option label
-     * @return     object    A standard object with the passed label and value as properties.
-     * @since     1.0
+     * @param string $value The option value
+     * @param string $label The option label
+     * 
+     * @access public
+     * @return object A standard object with the passed label and value as 
+     *                properties.
+     * @since  1.0
      */
     public static function selectOption($value, $label) 
     {
@@ -50,14 +54,23 @@ class PHPFrame_UI_HTML
     /**
      * Build a generic select tag.
      * 
-     * @param    array    $options    An array of option objects
-     * @param    string    $name        A string to use in the name attribute of the select tag.
-     * @param    string    $attribs    A string containing standard HTML attributes for the select tag. ie: 'class="myClass" multiple="multiple"'
-     * @param     string    $selected    The selected value. This parameter is optional.
-     * @return    void
-     * @since     1.0
+     * @param array  $options  An array of option objects
+     * @param string $name     A string to use in the name attribute of the select 
+     *                         tag.
+     * @param string $attribs  A string containing standard HTML attributes for the 
+     *                         select tag. ie: 'class="myClass" multiple="multiple"'
+     * @param string $selected The selected value. This parameter is optional.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public static function selectGenericlist($options, $name, $attribs, $selected=NULL) 
+    public static function selectGenericlist(
+        $options, 
+        $name, 
+        $attribs, 
+        $selected=NULL
+    )
     {
         $html = '<select name="'.$name.'" '.$attribs.'>';
         foreach ($options as $option) {
@@ -77,10 +90,12 @@ class PHPFrame_UI_HTML
     /**
      * Add jQuery validation behaviour to a given form
      * 
-     * @access    public
-     * @param    string    $formid    The form's id attribute.
-     * @return    void
-     * @since    1.0
+     * 
+     * @param string $formid The form's id attribute.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function validate($formid) 
     {
@@ -115,14 +130,18 @@ class PHPFrame_UI_HTML
      * @param string $target         The target URL to load via AJAX.
      * @param int    $width          The dialog box width
      * @param int    $height         The dialog box height
-     * @param bool   $form           A boolean to indicate whether the dialog contains a form 
-     *                               in order to include submit buton.
-     * @param string $ajax_container A jQuery selector string to select the HTML element where 
-     *                               to load the AJAX response. This parameter is optional, if 
-     *                               omitted the browser window will be redirected to the link's 
-     *                               href instead of using an AJAX request.
-     * @return    string
-     * @since     1.0
+     * @param bool   $form           A boolean to indicate whether the dialog 
+     *                               contains a form in order to include submit 
+     *                               button.
+     * @param string $ajax_container A jQuery selector string to select the HTML 
+     *                               element where to load the AJAX response. This 
+     *                               parameter is optional, if omitted the browser 
+     *                               window will be redirected to the link's href 
+     *                               instead of using an AJAX request.
+     *                               
+     * @access public                              
+     * @return string
+     * @since  1.0
      */
     public static function dialog(
         $label, 
@@ -219,27 +238,42 @@ class PHPFrame_UI_HTML
     /**
      * Build and display a jQuery UI confirm box
      * 
-     * To use the confirm behaviour you will need to create anchor tags and give them a class, title and href attributes.
+     * To use the confirm behaviour you will need to create anchor tags and give 
+     * them a class, title and href attributes.
      * 
      * For example:
      * 
      * <code>
-     * <?php PHPFrame_UI_HTML::confirm('delete_entry', 'Delete entry', 'Are you sure you want to delete entry'); ?>
+     * <?php 
+     * PHPFrame_UI_HTML::confirm(
+     *     'delete_entry', 
+     *     'Delete entry', 
+     *     'Are you sure you want to delete entry'
+     * );
+     * ?>
      * 
-     * <a class="delete_entry" title="The name of the entry we are deleting" href="The URL to go if user confirms action">
+     * <a class="delete_entry" 
+     *    title="The name of the entry we are deleting" 
+     *    href="The URL to go if user confirms action">
      * </code>
      * 
-     * @access    public
-     * @param    string    $a_class        The class attribute used to select the delete links.
-     * @param    string    $title            A string to use in the dialog box title bar.
-     * @param    string    $msg            A string with the message to display in the confirm box.
-     * @param    string    $ajax_container    A jQuery selector string to select the HTML element where to load 
-     *                                     the AJAX response. This parameter is optional, if omitted the browser 
-     *                                     window will be redirected to the link's href instead of using an AJAX request.
-     * @return    void
-     * @since    1.0
+     * 
+     * @param string $a_class        The class attribute used to select the delete 
+     *                               links.
+     * @param string $title          A string to use in the dialog box title bar.
+     * @param string $msg            A string with the message to display in the 
+     *                               confirm box.
+     * @param string $ajax_container A jQuery selector string to select the HTML 
+     *                               element where to load the AJAX response. This 
+     *                               parameter is optional, if omitted the browser 
+     *                               window will be redirected to the link's href 
+     *                               instead of using an AJAX request.
+     *                                    
+     * @access public                                   
+     * @return void
+     * @since  1.0
      */
-    public static function confirm($a_class, $title, $msg, $ajax_container='') 
+    public static function confirm($a_class, $title, $msg, $ajax_container='')
     {
         $uid = uniqid();
         ?>
@@ -326,27 +360,35 @@ class PHPFrame_UI_HTML
     /**
      * Build a date picker using jQuery UI Calendar and display it
      * 
-     * This method will generate two input tags, one is shown to the user and it triggers 
-     * the date picker, and the other one holding the date value in MySQL date format to 
-     * be used for storing.
+     * This method will generate two input tags, one is shown to the user and it 
+     * triggers the date picker, and the other one holding the date value in MySQL 
+     * date format to be used for storing.
      * 
-     * @todo    add jQuery tooltip: display format hint in tooltip
-     * @param    string    $name        The name attribute for the input tag. 
-     * @param    string    $id            The id of the input tag
-     * @param    string    $selected    The selected value if any. In YYYY-MM-DD.
-     * @param    string    $format        Format in which to present the date to the user. Possible values 'dd/mm/yy', 'mm/dd/yy', 'yy/mm/dd'. 
-     *                                 This doesn't affect the hidden input value with the MySQL date.
-     * @param     array    $attribs    An array containing attributes for the input tag
-     * @param    bool    $show_format_hint    Show/hide date format hint.
-     * @return    void
-     * @since     1.0
+     * @todo add jQuery tooltip: display format hint in tooltip
+     * 
+     * @param string $name             The name attribute for the input tag. 
+     * @param string $id               The id of the input tag
+     * @param string $selected         The selected value if any. In YYYY-MM-DD.
+     * @param string $format           Format in which to present the date to the 
+     *                                 user. Possible values 'dd/mm/yy', 'mm/dd/yy', 
+     *                                 'yy/mm/dd'. This doesn't affect the hidden 
+     *                                 input value with the MySQL date.
+     * @param array  $attribs          An array containing attributes for the input 
+     *                                 tag
+     * @param bool   $show_format_hint Show/hide date format hint.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
-    public static function calendar($name, 
-                                    $id='', 
-                                    $selected='', 
-                                    $format='dd/mm/yy', 
-                                    $attribs=array(), 
-                                    $show_format_hint=false) 
+    public static function calendar(
+        $name, 
+        $id='', 
+        $selected='', 
+        $format='dd/mm/yy', 
+        $attribs=array(), 
+        $show_format_hint=false
+    ) 
     {
         //set $id to $name if empty
         if (empty($id)) {
@@ -406,15 +448,24 @@ class PHPFrame_UI_HTML
     /**
      * Function to build input with autocomplete and display it
      * 
-     * @param     string    $field_name        The name attribute fot the input tag
-     * @param    string    $attribs         A string containing attributes for the input tag
-     * @param    array    $tokens            An array with the key/value pairs used to build the list of options
-     * @param    bool    $matchContains    Optional parameter (default: TRUE). If TRUE search matches inside string, 
-     *                                     if FALSE only at the beginning.
-     * @return     void
-     * @since    1.0
+     * @param string $field_name    The name attribute fot the input tag
+     * @param string $attribs       A string containing attributes for the input tag
+     * @param array  $tokens        An array with the key/value pairs used to build 
+     *                              the list of options
+     * @param bool   $matchContains Optional parameter (default: TRUE). If TRUE 
+     *                              search matches inside string, if FALSE only at 
+     *                              the beginning.
+     * 
+     * @access public                             
+     * @return void
+     * @since  1.0
      */
-    public static function autocomplete($field_name, $attribs, $tokens, $matchContains=true) 
+    public static function autocomplete(
+        $field_name, 
+        $attribs, 
+        $tokens, 
+        $matchContains=true
+    )
     {
         $document = PHPFrame::Response()->getDocument();
         $document->addScript('lib/jquery/plugins/autocomplete/jquery.autocomplete.pack.js');
@@ -466,17 +517,24 @@ class PHPFrame_UI_HTML
         <?php
     }
     
-    public function dragAndDrop() 
-    {
-        ?>
-        
-        <?php
-    }
-    
-    public static function upload($data=array(), 
-                                  $name='userfile', 
-                                  $onComplete='', 
-                                  $action='index.php') 
+    /**
+     * Build upload button
+     * 
+     * @param array  $data
+     * @param string $name
+     * @param string $onComplete
+     * @param string $action
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public static function upload(
+        $data=array(), 
+        $name='userfile', 
+        $onComplete='', 
+        $action='index.php'
+    ) 
     {
         $document = PHPFrame::getDocument('html');
         $document->addScript('lib/jquery/plugins/ajax-upload/jquery.ajax-upload-2.6.js');
@@ -554,44 +612,60 @@ class PHPFrame_UI_HTML
      * 
      * Use in conjuction with PHPFrame_Utils_Crypt::checkToken
      * 
-     * @return     void
-     * @since     1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function formToken() 
     {
-        ?><input type="hidden" name="<?php echo PHPFrame::Session()->getToken(); ?>" value="1" /><?php
+        $token = PHPFrame::Session()->getToken();
+        ?><input type="hidden" name="<?php echo $token; ?>" value="1" /><?php
     }
     
     /**
      * Build an html button tag and echo it.
      * 
-     * @param    string    $type        The button type. Possible values are 'button', 'submit', 'reset'
-     * @param    string    $label        A string to use as the button's label.
-     * @param     string    $onclick    A string to be printed in the onclick attribute of the button tag.
-     * @return    void
-     * @since     1.0
+     * @param string $type    The button type. Possible values are 'button', 
+     *                        'submit', 'reset'
+     * @param string $label   A string to use as the button's label.
+     * @param string $onclick A string to be printed in the onclick attribute 
+     *                        of the button tag.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function button($type='button', $label='', $onclick='') 
     {
-        ?><button type="<?php echo $type; ?>" onclick="<?php echo $onclick; ?>"><?php echo PHPFrame_Base_String::html( $label ); ?></button><?php
+        ?>
+        <button type="<?php echo $type; ?>" onclick="<?php echo $onclick; ?>">
+            <?php echo $label; ?>
+        </button>
+        <?php
     }
     
     /**
      * Build an html 'back' button tag and echo it.
      * 
-     * @return    void
-     * @since     1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function buttonBack() 
     {
-        ?><button type="button" onclick="Javascript:window.history.back();"><?php echo PHPFrame_Base_String::html( _LANG_BACK ); ?></button>     <?php
+        ?>
+        <button type="button" onclick="Javascript:window.history.back();">
+            <?php echo GlobalLang::BACK; ?>
+        </button>
+        <?php
     }
     
     /**
      * Redirects to previous page using Javascript window.history.back()
      * 
-     * @return    void
-     * @since     1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function historyBack() 
     {
@@ -605,9 +679,11 @@ class PHPFrame_UI_HTML
     /**
      * Outputs message in Javascript alert box
      *
-     * @param    string    $msg    A string containing the message to show in the alert box.
-     * @return    void
-     * @since     1.0
+     * @param string $msg A string containing the message to show in the alert box.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public static function alert($msg) 
     {
@@ -621,18 +697,27 @@ class PHPFrame_UI_HTML
     /**
      * Loader method.
      * 
-     * Use this method to create html elements by using keywords to invoke the methods.
+     * Use this method to create html elements by using keywords to invoke the 
+     * methods.
      * 
      * For example: 
      * 
      * <code>
      * $options[] = PHPFrame_UI_HTML::_('select.option', $row->id, $row->name );
-     * $output = PHPFrame_UI_HTML::_('select.genericlist', $options, 'projectid', $attribs, $selected);
+     * $output = PHPFrame_UI_HTML::_(
+     *     'select.genericlist', 
+     *     $options, 
+     *     'projectid', 
+     *     $attribs, 
+     *     $selected
+     * );
      * </code>
      * 
-     * @param    string    $str
-     * @return     void
-     * @since     1.0
+     * @param string $str
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
      */
     public static function _($str) 
     {
@@ -649,8 +734,7 @@ class PHPFrame_UI_HTML
             $args = func_get_args();
             array_shift( $args );
             return call_user_func_array( array( 'PHPFrame_UI_HTML', $function_name ), $args );
-        }
-        else {
+        } else {
             throw new RuntimeException('PHPFrame_UI_HTML::'.$function_name.' not supported.');
         }
         

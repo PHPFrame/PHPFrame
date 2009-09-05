@@ -14,7 +14,8 @@
  */
 
 /**
- * Set convenience DS constant (directory separator depends on server operating system).
+ * Set convenience DS constant (directory separator depends on server operating 
+ * system).
  */
 define("DS", DIRECTORY_SEPARATOR);
 
@@ -24,8 +25,6 @@ define("DS", DIRECTORY_SEPARATOR);
 spl_autoload_register(array("PHPFrame", "__autoload"));
 
 /**
- * PHPFrame Class
- * 
  * This class provides a number of static methods that serve as a simplified
  * interface or facade to the PHPFrame framework.
  * 
@@ -45,43 +44,43 @@ class PHPFrame
      * 
      * @var string
      */
-    const API_VERSION="##API_VERSION##";
+    const API_VERSION = "##API_VERSION##";
     /**
      * The PHPFrame API stability
      * 
      * @var string
      */
-    const API_STABILITY="##API_STABILITY##";
+    const API_STABILITY = "##API_STABILITY##";
     /**
      * The PHPFrame release version
      * 
      * @var string
      */
-    const RELEASE_VERSION="##RELEASE_VERSION##";
+    const RELEASE_VERSION = "##RELEASE_VERSION##";
     /**
      * The PHPFrame release stability
      * 
      * @var string
      */
-    const RELEASE_STABILITY="##RELEASE_STABILITY##";
+    const RELEASE_STABILITY = "##RELEASE_STABILITY##";
     /**
      * The build label
      * 
      * @var string
      */
-    const BUILD_LABEL="##BUILD_LABEL##";
+    const BUILD_LABEL = "##BUILD_LABEL##";
     /**
      * The build date
      * 
      * @var string
      */
-    const BUILD_DATE="##BUILD_DATE##";
+    const BUILD_DATE = "##BUILD_DATE##";
     /**
      * Run level
      * 
      * @var int
      */
-    private static $_run_level=0;
+    private static $_run_level = 0;
     
     /**
      * Constructor
@@ -115,7 +114,15 @@ class PHPFrame
         $file_path = "";
         
         // Load other pear dependencies
-        $pear_packages = array("PEAR", "PHPFrame", "XML", "Console", "HTTP", "Archive");
+        $pear_packages = array(
+            "PEAR", 
+            "PHPFrame", 
+            "XML", 
+            "Console", 
+            "HTTP", 
+            "Archive"
+        );
+        
         foreach ($pear_packages as $package) {
             if (!preg_match('/^'.$package.'_/', $class_name)) {
                 continue;
@@ -131,8 +138,9 @@ class PHPFrame
         
         // Load core libraries
         if ($class_name == "InputFilter") {
-            $file_path = PEAR_Config::singleton()->get("data_dir"); 
-            $file_path .= DS."PHPFrame".DS."lib".DS."phpinputfilter".DS."inputfilter.php";
+            $file_path  = PEAR_Config::singleton()->get("data_dir"); 
+            $file_path .= DS."PHPFrame".DS."lib".DS."phpinputfilter".DS;
+            $file_path .= "inputfilter.php";
             @include $file_path;
             return;
         } elseif ($class_name == "PHPMailer") {
@@ -266,10 +274,10 @@ class PHPFrame
     public static function AppRegistry() 
     {
         if (self::getRunLevel() < 2) {
-            $msg  = "It looks like you are trying to access an app registry but no ";
-            $msg .= "app has been initialised. ";
-            $msg .= "Please call PHPFrame::Env() before trying to access the ";
-            $msg .= "application registry.";
+            $msg  = "It looks like you are trying to access an app registry but no";
+            $msg .= " app has been initialised.";
+            $msg .= " Please call PHPFrame::Env() before trying to access the";
+            $msg .= " application registry.";
             throw new LogicException($msg);
         }
         
@@ -287,10 +295,10 @@ class PHPFrame
     public static function Session() 
     {
         if (self::getRunLevel() < 2) {
-            $msg  = "It looks like you are trying to access the session registry ";
-            $msg .= "but no app has been initialised. ";
-            $msg .= "Please call PHPFrame::Env() before trying to access the ";
-            $msg .= "session registry.";
+            $msg  = "It looks like you are trying to access the session registry";
+            $msg .= " but no app has been initialised.";
+            $msg .= " Please call PHPFrame::Env() before trying to access the";
+            $msg .= " session registry.";
             throw new LogicException($msg);
         }
         
@@ -308,10 +316,10 @@ class PHPFrame
     public static function Request() 
     {
         if (self::getRunLevel() < 2) {
-            $msg  = "It looks like you are trying to access the request registry ";
-            $msg .= "but no app has been initialised. ";
-            $msg .= "Please call PHPFrame::Env() before trying to access the ";
-            $msg .= "request registry.";
+            $msg  = "It looks like you are trying to access the request registry";
+            $msg .= " but no app has been initialised.";
+            $msg .= " Please call PHPFrame::Env() before trying to access the";
+            $msg .= " request registry.";
             throw new LogicException($msg);
         }
         
@@ -335,17 +343,18 @@ class PHPFrame
      * Get database object
      * 
      * @param PHPFrame_Database_DSN $dsn An object of type PHPFrame_Database_DSN 
-     *                                     used to get DB connection. This parameter 
-     *                                     is optional. If omitted a new DSN object 
-     *                                     will be created using the database
-     *                                     details provided by the config class. 
+     *                                   used to get DB connection. This parameter 
+     *                                   is optional. If omitted a new DSN object 
+     *                                   will be created using the database
+     *                                   details provided by the config class. 
      * @param string $db_user            If we specify a DSN object we might also 
      *                                   need to provide a db user in order to 
      *                                   connect to the database server.
      * @param string $db_pass            When both a DSN object and a db user have 
      *                                   been passed we might also need to provide 
      *                                   a password for the db connection.
-     * @param PHPFrame_Config $config    A config object to use instead of the previous.
+     * @param PHPFrame_Config $config    A config object to use instead of the 
+     *                                   previous.
      * 
      * @static
      * @access public
@@ -414,7 +423,8 @@ class PHPFrame
     }
     
     /**
-     * Initialise environment, init app registry, session and request
+     * Initialise environment, init app registry, session. Request registry is not 
+     * initialised here as this is done in the front controller.
      * 
      * @static
      * @access public
@@ -428,9 +438,6 @@ class PHPFrame
         
         // Get/init session object
         PHPFrame_Registry_Session::getInstance();
-        
-        // Get/init request object
-        PHPFrame_Registry_Request::getInstance();
         
         // Set run level to 2 to indicate that 
         // environment layer is initialised...

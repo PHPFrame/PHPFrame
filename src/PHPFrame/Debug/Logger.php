@@ -52,10 +52,10 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         $log_file = $log_dir.DS."log";
         
         // If log file doesn't exist we try to create it
-        if (!is_file($log_file) && !touch($log_file)) {
+        if (!is_file($log_file) && !@touch($log_file)) {
             $msg = "Could not create log ";
             $msg .= "file (".$log_file."). ";
-            $msg .= "Please check file permissions. ";
+            $msg .= "Please check file permissions. Error triggered ";
             trigger_error($msg, E_USER_ERROR);
         }
         

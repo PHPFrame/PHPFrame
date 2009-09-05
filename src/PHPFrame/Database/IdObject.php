@@ -111,7 +111,8 @@ class PHPFrame_Database_IdObject
     {
         // Process input options
         if (!is_null($options)) {
-            if (!PHPFrame_Base_ArrayHelper::isAssoc($options)) {
+            $options = new PHPFrame_Base_Array($options);
+            if (!$options->isAssoc()) {
                 $msg = "Options passed in wrong format.";
                 $msg .= " Options should be passed as an associative";
                 $msg .= " array with key value pairs.";

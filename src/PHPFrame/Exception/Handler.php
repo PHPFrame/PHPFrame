@@ -95,15 +95,12 @@ class PHPFrame_Exception_Handler
      */
     public static function handleException($exception) 
     {
-        $str  = 'PHPFrame Uncaught exception: '.$exception->getMessage()."\n";
-        $str .= 'File: '.$exception->getFile()."\n";
-        $str .= 'Line: '.$exception->getLine()."\n";
-        $str .= 'Code: '.$exception->getCode()."\n";
+        $str  = "Uncaught ".get_class($exception).": ";
+        $str .= $exception->getMessage()."\n";
+        $str .= "File: ".$exception->getFile()."\n";
+        $str .= "Line: ".$exception->getLine()."\n";
+        $str .= "Code: ".$exception->getCode()."\n";
         $str .= $exception->getTraceAsString();
-          
-        if ($exception instanceof PHPFrame_Exception) {
-            $str .= "\n".$exception->getVerbose();
-        }
         
         $debug = PHPFrame::Config()->get("debug.enable");
         if ($debug == 1) {

@@ -14,13 +14,25 @@
  */
 
 /**
- * Session Class
+ * The Session Registry class produces a singleton object that encapsulates and 
+ * centralises access to session data.
+ * 
+ * The session object is accessed from the PHPFrame facade class as follows:
+ * 
+ * <code>
+ * $session = PHPFrame::Session();
+ * </code>
  *
  * @category PHPFrame
  * @package  Registry
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see      PHPFrame_Registry
+ * @uses     PHPFrame, PHPFrame_Registry_Request, PHPFrame_Utils_URI, PHPFrame_User, 
+ *           PHPFrame_Application_Sysevents, PHPFrame_Client_IClient, 
+ *           PHPFrame_Client_CLI, PHPFrame_Client_Default, PHPFrame_Client_XMLRPC, 
+ *           PHPFrame_Client_Mobile
  * @since    1.0
  */
 class PHPFrame_Registry_Session extends PHPFrame_Registry
@@ -30,13 +42,13 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      *
      * @var object of type PHPFrame_Registry_Session
      */
-    private static $_instance=null;
+    private static $_instance = null;
     /**
      * A string used to name the session
      *
      * @var string
      */
-    private $_session_name="PHPFrame";
+    private $_session_name = "PHPFrame";
     /**
      * Cookie lifetime
      *
@@ -45,7 +57,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      *
      * @var int
      */
-    private $_cookie_lifetime=0;
+    private $_cookie_lifetime = 0;
     /**
      * The path on the server in which the cookie will be available on. If set
      * to '/', the cookie will be available within the entire domain . If set
@@ -54,7 +66,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      *
      * @var string
      */
-    private $_cookie_path="/";
+    private $_cookie_path = "/";
     /**
      * The domain that the cookie is available. To make the cookie available on
      * all subdomains of example.com then you'd set it to '.example.com'.
@@ -62,7 +74,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      *
      * @var string
      */
-    private $_cookie_domain=null;
+    private $_cookie_domain = null;
     /**
      * Indicates that the cookie should only be transmitted over a secure HTTPS
      * connection from the client. When set to TRUE, the cookie will only be set
@@ -70,7 +82,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      *
      * @var bool
      */
-    private $_cookie_secure=false;
+    private $_cookie_secure = false;
     /**
      * When TRUE the cookie will be made accessible only through the HTTP protocol.
      * This means that the cookie won't be accessible by scripting languages, such
@@ -79,7 +91,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
      *
      * @var bool
      */
-    private $_cookie_httponly=true;
+    private $_cookie_httponly = true;
 
     /**
      * Constructor
@@ -91,8 +103,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     protected function __construct()
     {
         // Get path and domain to use for cookie
-        $uri = new PHPFrame_Utils_URI();
-        $this->_cookie_path = $uri->getDirname()."/";
+        $uri                  = new PHPFrame_Utils_URI();
+        $this->_cookie_path   = $uri->getDirname()."/";
         $this->_cookie_domain = $uri->getHost();
         
         // Set custom session name
@@ -137,8 +149,8 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
             // user object so that we can put them back in place when the next non-api
             // request is received
             $_SESSION['overriden_client'] = $_SESSION['client'];
-            $_SESSION['overriden_user'] = $_SESSION['user'];
-            $_SESSION['client'] = new PHPFrame_Client_XMLRPC();
+            $_SESSION['overriden_user']   = $_SESSION['user'];
+            $_SESSION['client']           = new PHPFrame_Client_XMLRPC();
             
         } elseif (
             !isset($_SERVER["HTTP_X_API_USERNAME"])
@@ -149,7 +161,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
             // If we already have a session with an xmlrpc client object but no api
             // headers are included in request we then revert the client and user objects
             $_SESSION['client'] = $_SESSION['overriden_client'];
-            $_SESSION['user'] = $_SESSION['overriden_user'];
+            $_SESSION['user']   = $_SESSION['overriden_user'];
             unset($_SESSION['overriden_client']);
             unset($_SESSION['overriden_user']);
         }
@@ -515,9 +527,9 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
     {
         static $chars = '0123456789abcdef';
 
-        $max = strlen( $chars ) - 1;
+        $max   = strlen( $chars ) - 1;
         $token = '';
-        $name = session_name();
+        $name  = session_name();
 
         for($i=0; $i<$length; ++$i) {
             $token .= $chars[ (rand(0, $max)) ];

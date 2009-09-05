@@ -20,10 +20,35 @@
     </para>
     
     <para>
-    The Registry package is sublassed into {@link PHPFrame_Registry_Application} , 
+    The Registry package is subclassed into {@link PHPFrame_Registry_Application} , 
     {@link PHPFrame_Registry_Request} and {@link PHPFrame_Registry_Session}. Each of 
     these will produce a singleton object that stores data in the given "scope".
     </para>
+    
+    <para>
+    Registry objects are only meant to be used within an application context. That 
+    basically means that before working with this package your app must have defined 
+    the following constants:
+    </para>
+    
+    <itemizedlist>
+        <listitem>
+            <para>PHPFRAME_INSTALL_DIR</para>
+            <para>Absolute path to directory where application is installed.</para>
+        </listitem>
+        <listitem>
+            <para>PHPFRAME_CONFIG_DIR</para>
+            <para>Absolute path to application specific "etc" directory.</para>
+        </listitem>
+        <listitem>
+            <para>PHPFRAME_TMP_DIR</para>
+            <para>Absolute path to application specific "tmp" directory.</para>
+        </listitem>
+        <listitem>
+            <para>PHPFRAME_VAR_DIR</para>
+            <para>Absolute path to application specific "var" directory.</para>
+        </listitem>
+    </itemizedlist>
 
 </refsect1>
 

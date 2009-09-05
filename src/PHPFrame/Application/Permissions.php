@@ -47,6 +47,14 @@ class PHPFrame_Application_Permissions
      */
     public function __construct() 
     {
+        if (!defined("PHPFRAME_CONFIG_DIR")) {
+            $msg  = "Could not initialise permissions. It looks like you are ";
+            $msg .= "trying to instantiate the permissions object outside of an ";
+            $msg .= "application context. Application specific constant ";
+            $msg .= "PHPFRAME_CONFIG_DIR has not been defined.";
+            throw new LogicException($msg);
+        }
+        
         // Get ACL from file
         $this->_mapper = new PHPFrame_Mapper(
             "PHPFrame_Application_ACL", 
@@ -55,13 +63,6 @@ class PHPFrame_Application_Permissions
             false, 
             PHPFRAME_CONFIG_DIR
         );
-        
-        $acl = new PHPFrame_Application_ACL(array(
-            "groupid"=>1, 
-            "controller"=>"dummy", 
-            "action"=>"*", 
-            "value"=>"all"
-        ));
         
         $this->_acl = $this->_mapper->find();
     }

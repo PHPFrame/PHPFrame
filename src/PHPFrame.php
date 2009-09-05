@@ -258,22 +258,22 @@ class PHPFrame
     /**
      * Get application registry
      * 
-     * @param sring $path The path to the cache directory where to store the app
-     *                    registry. If not passed it uses a directory called
-     *                    "cache" within the directory specified in PHPFRAME_TMP_DIR
-     * 
      * @static
      * @access public
      * @return PHPFrame_Registry_Application
      * @since  1.0
      */
-    public static function AppRegistry($path='') 
+    public static function AppRegistry() 
     {
-        if (empty($path)) {
-            $path = PHPFRAME_TMP_DIR.DS."cache";
+        if (self::getRunLevel() < 2) {
+            $msg  = "It looks like you are trying to access an app registry but no ";
+            $msg .= "app has been initialised. ";
+            $msg .= "Please call PHPFrame::Env() before trying to access the ";
+            $msg .= "application registry.";
+            throw new LogicException($msg);
         }
         
-        return PHPFrame_Registry_Application::getInstance($path);
+        return PHPFrame_Registry_Application::getInstance();
     }
     
     /**
@@ -286,6 +286,14 @@ class PHPFrame
      */
     public static function Session() 
     {
+        if (self::getRunLevel() < 2) {
+            $msg  = "It looks like you are trying to access the session registry ";
+            $msg .= "but no app has been initialised. ";
+            $msg .= "Please call PHPFrame::Env() before trying to access the ";
+            $msg .= "session registry.";
+            throw new LogicException($msg);
+        }
+        
         return PHPFrame_Registry_Session::getInstance();
     }
     
@@ -299,6 +307,14 @@ class PHPFrame
      */
     public static function Request() 
     {
+        if (self::getRunLevel() < 2) {
+            $msg  = "It looks like you are trying to access the request registry ";
+            $msg .= "but no app has been initialised. ";
+            $msg .= "Please call PHPFrame::Env() before trying to access the ";
+            $msg .= "request registry.";
+            throw new LogicException($msg);
+        }
+        
         return PHPFrame_Registry_Request::getInstance();
     }
     
@@ -395,7 +411,7 @@ class PHPFrame
     }
     
     /**
-     * Initialise environment, init app registry and session objects
+     * Initialise environment, init app registry, session and request
      * 
      * @static
      * @access public
@@ -405,9 +421,13 @@ class PHPFrame
     public static function Env()
     {
         // Initialise AppRegistry
-        self::AppRegistry();
+        PHPFrame_Registry_Application::getInstance();
+        
         // Get/init session object
-        self::Session();
+        PHPFrame_Registry_Session::getInstance();
+        
+        // Get/init request object
+        PHPFrame_Registry_Request::getInstance();
         
         // Set run level to 2 to indicate that 
         // environment layer is initialised...

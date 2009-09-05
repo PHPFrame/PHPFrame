@@ -14,21 +14,27 @@
  */
 
 /**
- * Request Registry Class
- * 
  * This class encapsulates access to the request arrays and provides input filtering.
  * 
  * The request class is responsible for processing the incoming request according to 
  * the current session's client.
  * 
- * @todo       This class needs to be changed to use PHPFrame_Utils_Filter instead of
- *             phpinputfilter
+ * The request object is accessed from the PHPFrame facade class as follows:
+ * 
+ * <code>
+ * $session = PHPFrame::Request();
+ * </code>
+ * 
+ * @todo This class needs to be changed to use PHPFrame_Utils_Filter instead of
+ *       phpinputfilter
  *             
  * @category PHPFrame
  * @package  Registry
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see      PHPFrame_Registry
+ * @uses     InputFilter, PHPFrame, PHPFrame_Registry_Session, PHPFrame_Config
  * @since    1.0
  */
 class PHPFrame_Registry_Request extends PHPFrame_Registry
@@ -38,19 +44,19 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
      * 
      * @var PHPFrame_Registry_Request
      */
-    private static $_instance=null;
+    private static $_instance = null;
     /**
      * Instance of PHPInputFilter
      * 
      * @var object
      */
-    private static $_inputfilter=null;
+    private static $_inputfilter = null;
     /**
      * A unification array of filtered global arrays
      * 
      * @var array
      */
-    private $_array=array();
+    private $_array = array();
     
     /**
      * Constructor
@@ -66,11 +72,14 @@ class PHPFrame_Registry_Request extends PHPFrame_Registry
         }
         
         // Populate request array using session's client
-        $this->_array = PHPFrame::Session()->getClient()->populateRequest();
+        // Note that we dont use PHPFrame::Session() as the globale
+        // run level might not yet have been set to 2 (env initialised)
+        $session = PHPFrame_Registry_Session::getInstance();
+        $this->_array = $session->getClient()->populateRequest();
         
         //add other globals
-        $this->_array['files'] = $_FILES;
-        $this->_array['env'] = $_ENV;
+        $this->_array['files']  = $_FILES;
+        $this->_array['env']    = $_ENV;
         $this->_array['server'] = $_SERVER;
     }
     

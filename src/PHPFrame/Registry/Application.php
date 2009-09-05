@@ -14,13 +14,24 @@
  */
 
 /**
- * Application Registry Class
+ * The Application Registry class produces a singleton object that provides 
+ * an application wide scope to be shared by all requests and sessions. 
+ * 
+ * The application registry is accessed from the PHPFrame facade class as follows:
+ * 
+ * <code>
+ * $session = PHPFrame::AppRegistry();
+ * </code>
  * 
  * @category PHPFrame
  * @package  Registry
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see      PHPFrame_Registry
+ * @uses     PHPFrame_Application_Permissions, PHPFrame_Application_Libraries, 
+ *           PHPFrame_Application_Features, PHPFrame_Exception, 
+ *           PHPFrame_Utils_Filesystem
  * @since    1.0
  */
 class PHPFrame_Registry_Application extends PHPFrame_Registry
@@ -28,7 +39,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     /**
      * Instance of itself in order to implement the singleton pattern
      * 
-     * @var object of type PHPFrame_Application_FrontController
+     * @var object of type PHPFrame_Registry_Application
      */
     private static $_instance = null;
     /**
@@ -77,8 +88,20 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
      * @return void
      * @since  1.0
      */
-    protected function __construct($path) 
+    protected function __construct() 
     {
+        if (!defined("PHPFRAME_TMP_DIR")) {
+            $msg  = "Application registry could not be initialised. ";
+            $msg .= "PHPFRAME_TMP_DIR constant has not been defined. ";
+            $msg .= "Please make sure that you use the application registry from ";
+            $msg .= "an application context. Your app will need to define the ";
+            $msg .= "PHPFRAME_TMP_DIR constant with a valid path to the directory ";
+            $msg .= "where store the app registry's cache.";
+            throw new LogicException($msg);
+        }
+        
+        $path = PHPFRAME_TMP_DIR.DS."cache";
+        
         // Set path to cache file
         $this->_path = $path;
         $this->_cache_file = "application.registry";
@@ -86,7 +109,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
         // Read data from cache
         if (is_file($this->getFilePath())) {
             $serialized_array = file_get_contents($this->getFilePath());
-            $this->_data = unserialize($serialized_array);
+            $this->_data      = unserialize($serialized_array);
         }
         else {
             // Rebuild app registry
@@ -138,20 +161,15 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
     /**
      * Get Instance
      * 
-     * @param string $path Path to cache directory. It only needs to be passed the 
-     *                     first time the method is callled.
-     * 
      * @static
      * @access public
      * @return PHPFrame_Registry
      * @since  1.0
      */
-    public static function getInstance($path='') 
+    public static function getInstance() 
     {
-        $path = (string) $path;
-        
         if (!isset(self::$_instance)) {
-            self::$_instance = new self($path);
+            self::$_instance = new self();
         }
         
         return self::$_instance;

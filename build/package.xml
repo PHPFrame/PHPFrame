@@ -88,7 +88,6 @@
    <file baseinstalldir="/" name="PHPFrame/Exception/Handler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/XMLRPC.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Exception.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FS/FileInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FS/FileObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/Request/DownloadListener.php" role="php" />

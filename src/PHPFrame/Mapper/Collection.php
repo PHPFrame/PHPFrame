@@ -74,8 +74,9 @@ class PHPFrame_Mapper_Collection implements Iterator, Countable
             // If the raw array is only one level of depth we assume it is 
             // only one element and we wrap it in an array to make is a collection 
             // of a single entry
-            $depth = PHPFrame_Base_ArrayHelper::depth($raw);
-            if ($depth == 1) {
+            $array_obj = new PHPFrame_Base_Array($raw);
+            
+            if ($array_obj->depth() == 1) {
                 $raw = array($raw);
             }
             

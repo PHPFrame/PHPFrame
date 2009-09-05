@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Exception_Database extends PHPFrame_Exception
+class PHPFrame_Exception_Database extends RuntimeException
 {
     /**
      * SQLSTATE error code (a five characters alphanumeric identifier defined 
@@ -48,8 +48,7 @@ class PHPFrame_Exception_Database extends PHPFrame_Exception
     /**
      * Constructor
      * 
-     * @param string       $message   The error message.
-     * @param int          $code      The error code.
+     * @param string       $msg       The error message.
      * @param PDOStatement $statement 
      * 
      * @access public
@@ -57,8 +56,7 @@ class PHPFrame_Exception_Database extends PHPFrame_Exception
      * @since  1.0
      */
     public function __construct(
-        $message=null, 
-        $code=PHPFrame_Exception::ERROR,
+        $msg=null, 
         PDOStatement $stmt=null
     ) {
         if ($stmt instanceof PDOStatement) {
@@ -68,10 +66,10 @@ class PHPFrame_Exception_Database extends PHPFrame_Exception
              $this->_driver_msg = $error_info[2];
         }
         
-        $verbose = "SQLSTATE: ". $this->_sqlstate;
-        $verbose .= "\nDriver code: ".$this->_driver_code;
-        $verbose .= "\nDriver message: ".$this->_driver_msg;
+        $msg .= " SQLSTATE: ". $this->_sqlstate;
+        $msg .= "\nDriver code: ".$this->_driver_code;
+        $msg .= "\nDriver message: ".$this->_driver_msg;
         
-        parent::__construct($message, $code, $verbose);
+        parent::__construct($msg);
     }
 }

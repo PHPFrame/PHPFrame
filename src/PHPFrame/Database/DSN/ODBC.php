@@ -39,7 +39,7 @@ class PHPFrame_Database_DSN_ODBC extends PHPFrame_Database_DSN
     {
         // ...
         $exception_msg = "Oops... This database DSN has not been implemented yet.";
-        throw new PHPFrame_Exception($exception_msg);
+        throw new RuntimeException($exception_msg);
     }
     
     /**

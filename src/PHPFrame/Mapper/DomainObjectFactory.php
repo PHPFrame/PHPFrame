@@ -55,7 +55,7 @@ class PHPFrame_Mapper_DomainObjectFactory
         $reflectionObj = new ReflectionClass($class_name);
         if (!$reflectionObj->isSubclassOf("PHPFrame_Mapper_DomainObject")) {
             $msg = "Domain Object '".$class_name."' not supported.";
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
         
         return $reflectionObj->newInstanceArgs(array($array));

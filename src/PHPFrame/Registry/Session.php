@@ -510,7 +510,7 @@ class PHPFrame_Registry_Session extends PHPFrame_Registry
         }
 
         //throw error if no helper is found
-        throw new PHPFrame_Exception(PHPFrame_Lang::SESSION_ERROR_NO_CLIENT_DETECTED);
+        throw new RuntimeException(PHPFrame_Lang::SESSION_ERROR_NO_CLIENT_DETECTED);
     }
 
     /**

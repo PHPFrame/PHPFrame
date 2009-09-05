@@ -358,7 +358,7 @@ class PHPFrame
         $db_pass=null
     ) {
         // Set DSN using details from config object
-        if (!$dsn instanceof PHPFrame_Database_DSN) {
+        if (is_null($dsn)) {
             $dsn_concrete_class = "PHPFrame_Database_DSN_";
             $dsn_concrete_class .= PHPFrame::Config()->get("db.driver");
             
@@ -366,6 +366,14 @@ class PHPFrame
                 PHPFrame::Config()->get("db.host"), 
                 PHPFrame::Config()->get("db.name")
             );
+        } elseif (!$dsn instanceof PHPFrame_Database_DSN) {
+            $msg = "Argument \$dsn must be instance of PHPFrame_Database_DSN.";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        if (!$dsn instanceof PHPFrame_Database_DSN) {
+            $msg = "Could not acquire DSN object to instantiate DB object.";
+            throw new RuntimeException($msg);
         }
         
         if (is_null($db_user)) {
@@ -374,11 +382,6 @@ class PHPFrame
         
         if (is_null($db_pass)) {
             $db_pass = PHPFrame::Config()->get("db.pass");
-        }
-        
-        if (!$dsn instanceof PHPFrame_Database_DSN) {
-            $msg = "Could not acquire DSN object to instantiate DB object.";
-            throw new PHPFrame_Exception($msg);
         }
         
         return PHPFrame_Database::getInstance($dsn, $db_user, $db_pass);
@@ -520,7 +523,7 @@ class PHPFrame
                 require $lang_file;
             } else {
                 $msg = 'Could not find language file ('.$lang_file.')';
-                throw new PHPFrame_Exception($msg);
+                throw new RuntimeException($msg);
             }
         }
         
@@ -530,7 +533,7 @@ class PHPFrame
         
         if (!(require $lang_file)) {
             $msg = 'Could not find language file ('.$lang_file.')';
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
     }
 }

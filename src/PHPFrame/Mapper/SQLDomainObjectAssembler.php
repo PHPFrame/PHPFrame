@@ -68,7 +68,7 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler
             $msg .= get_class($this);
             $msg .= "::findOne() expected only argument to be of type ";
             $msg .= "PHPFrame_Mapper_IdObject or integer.";
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
         
         $collection = $this->find($id_obj);

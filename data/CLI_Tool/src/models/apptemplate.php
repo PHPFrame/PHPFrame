@@ -19,7 +19,7 @@ class AppTemplate extends PHPFrame_MVC_Model
     {
         if (!isset($config["app_name"]) || empty($config["app_name"])) {
             $msg = "App name is required";
-            throw new PHPFrame_Exception($msg);
+            throw new InvalidArgumentException($msg);
         }
         
         // before anything else we check that the directory is writable
@@ -56,7 +56,7 @@ class AppTemplate extends PHPFrame_MVC_Model
         
         if ($exec->getReturnVar() > 0) {
             $msg = "Failed to remove app.";
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
     }
     
@@ -70,7 +70,7 @@ class AppTemplate extends PHPFrame_MVC_Model
             $msg = "Target directory is not empty.";
             $msg .= "\nUse \"phpframe app new_app app_name=MyApp ";
             $msg .= "allow_non_empty_dir=true\" to force install";
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
         
         //TODO: before we download we should check whether local files exists for
@@ -101,7 +101,7 @@ class AppTemplate extends PHPFrame_MVC_Model
         if ($req->getResponseCode() != 200) {
             $msg  = "Error downloading package. ";
             $msg .= "Reason: ".$req->getResponseReason();
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
         
         echo "\nExtracting archive...\n";
@@ -116,7 +116,7 @@ class AppTemplate extends PHPFrame_MVC_Model
         if (!is_array($array)) {
             $msg = get_class($this)."::_createConfig()";
             $msg .= " expected an array as only argument.";
-            throw new PHPFrame_Exception($msg);
+            throw new InvalidArgumentException($msg);
         }
         
         echo "Creating configuration file...\n";
@@ -152,7 +152,7 @@ class AppTemplate extends PHPFrame_MVC_Model
         
         if (!copy($source, $target)) {
             $msg = "Failed to create dummy controller.";
-            throw new PHPFrame_Exception($msg);   
+            throw new RuntimeException($msg);   
         }
     }
 }

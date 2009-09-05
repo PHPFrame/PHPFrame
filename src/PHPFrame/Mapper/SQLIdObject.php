@@ -556,7 +556,7 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
     {
         if (count($this->_select) < 1) {
             $exception_msg = "Can not build query. No fields have been selected.";
-            throw new PHPFrame_Exception_Database($exception_msg);
+            throw new LogicException($exception_msg);
         }
         
         $sql = "SELECT ";
@@ -589,7 +589,7 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
     {
         if (empty($this->_from)) {
             $exception_msg = "Can not build query. No table to select from.";
-            throw new PHPFrame_Exception_Database($exception_msg);
+            throw new LogicException($exception_msg);
         }
         
         if (is_array($this->_from)) {

@@ -30,8 +30,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @see      PHPFrame_Registry
  * @uses     PHPFrame_Application_Permissions, PHPFrame_Application_Libraries, 
- *           PHPFrame_Application_Features, PHPFrame_Exception, 
- *           PHPFrame_Utils_Filesystem
+ *           PHPFrame_Application_Features, PHPFrame_Utils_Filesystem
  * @since    1.0
  */
 class PHPFrame_Registry_Application extends PHPFrame_Registry
@@ -218,7 +217,7 @@ class PHPFrame_Registry_Application extends PHPFrame_Registry
         if (array_key_exists($key, $this->_readonly)) {
             $msg = "Tried to set a read-only key (";
             $msg .= $key.") in Application Registry.";
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
         
         $this->_data[$key] = $value;

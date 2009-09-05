@@ -19,7 +19,7 @@ class ExtInstaller
     {
         if (!in_array($ext_type, $this->_types)) {
             $msg = "Extenion type unknown";
-            throw new PHPFrame_Exception($msg);
+            throw new InvalidArgumentException($msg);
         }
         
         // Check if already downloaded latest version
@@ -51,7 +51,7 @@ class ExtInstaller
         if ($req->getResponseCode() != 200) {
             $msg  = "Error downloading package. ";
             $msg .= "Reason: ".$req->getResponseReason();
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
         
         echo "\nExtracting archive...\n";
@@ -69,7 +69,7 @@ class ExtInstaller
             $raw = $serialiser->getUnserializedData();
             if ($raw instanceof PEAR_Error) {
                 $msg = "Error reading extension XML definition file";
-                throw new PHPFrame_Exception($msg);
+                throw new RuntimeException($msg);
             }
         }
         var_dump($raw);
@@ -83,7 +83,7 @@ class ExtInstaller
         // Copy files to destination
 //        if (copy()) {
 //            $msg = "Could not copy extension files";
-//            throw new PHPFrame_Exception($msg);
+//            throw new RuntimeException($msg);
 //        }
         
         // Run install script

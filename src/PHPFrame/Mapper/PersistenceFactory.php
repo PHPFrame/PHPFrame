@@ -87,7 +87,7 @@ abstract class PHPFrame_Mapper_PersistenceFactory
                 break;
             
             default :
-                throw new PHPFrame_Exception("Storage mechanism not supported");
+                throw new RuntimeException("Storage mechanism not supported");
         }
         
         $factory = new $class_name($target_class, $table_name);

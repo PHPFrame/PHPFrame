@@ -87,7 +87,7 @@ class PHPFrame_Application_Features
         }
         
         $msg = "Feature '".$name."' is not installed";
-        throw new PHPFrame_Exception($msg);
+        throw new RuntimeException($msg);
     }
     
     /**

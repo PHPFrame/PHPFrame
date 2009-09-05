@@ -114,7 +114,7 @@ abstract class PHPFrame_Base_Object
         
         // If we havent been able to get a value yet we throw an exception
         $msg = "Property '".$name."' doesn't exist in class ".get_class($this);
-        throw new PHPFrame_Exception($msg);
+        throw new LogicException($msg);
     }
     
     /**
@@ -144,7 +144,7 @@ abstract class PHPFrame_Base_Object
     public function __set($name, $value)
     {
         $msg = "Property does not exist";
-        throw new PHPFrame_Exception($msg);
+        throw new LogicException($msg);
     }
     
     /**

@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Exception_XMLRPC extends PHPFrame_Exception
+class PHPFrame_Exception_XMLRPC extends RuntimeException
 {
     
     private $_faultCode;

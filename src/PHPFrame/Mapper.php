@@ -74,7 +74,7 @@ class PHPFrame_Mapper
             } else {
                 $msg = "SQL Persistance is not enabled and fallback to XML ";
                 $msg .= "storage was explicitly disabled in constructor.";
-                throw new PHPFrame_Exception($msg);
+                throw new LogicException($msg);
             }
         }
         
@@ -91,7 +91,7 @@ class PHPFrame_Mapper
             
             default :
                 $msg = "Storage mechanism not supported";
-                throw new PHPFrame_Exception($msg);
+                throw new LogicException($msg);
         }
     }
     

@@ -214,7 +214,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         // Check that we got the right type
         if (!$client instanceof PHPFrame_Client_IClient) {
             $msg = "Action controller could not redirect using client object";
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
         
         // Delegate redirection to client object if it is of the right type
@@ -281,7 +281,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
             $reflection_obj = new ReflectionMethod($this, $action);
             if (!$reflection_obj->isPublic()) {
                 $msg = "Action ".$action."() not supported by ".__CLASS__.".";
-                throw new PHPFrame_Exception($msg);
+                throw new RuntimeException($msg);
             }
            
             // Get method parameters
@@ -307,7 +307,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         } catch (Exception $e) {
             $msg = "Action ".$action."() not supported by ".__CLASS__.". ";
             $msg .= $e->getMessage();
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
     }
 }

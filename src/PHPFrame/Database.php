@@ -314,9 +314,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
             $error_info = $this->_stmt->errorInfo();
             if (is_array($error_info) && count($error_info) > 1) {
                 $msg = "Error running query";
-                throw new PHPFrame_Exception_Database($msg, 
-                                                      PHPFrame_Exception::ERROR, 
-                                                      $this->_stmt);
+                throw new PHPFrame_Exception_Database($msg, $this->_stmt);
             }
             
             switch ($fetch_mode) {
@@ -358,9 +356,7 @@ class PHPFrame_Database extends PHPFrame_Base_Subject
             }
         }
         catch (PDOException $e) {
-            throw new PHPFrame_Exception_Database('Query failed', 
-                                                  PHPFrame_Exception::ERROR, 
-                                                  $this->_stmt);
+            throw new PHPFrame_Exception_Database('Query failed', $this->_stmt);
         }
         catch (PHPFrame_Exception_Database $e) {
             throw $e;

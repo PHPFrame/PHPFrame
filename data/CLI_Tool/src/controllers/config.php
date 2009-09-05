@@ -5,10 +5,10 @@ class ConfigController extends PHPFrame_MVC_ActionController
     
     public function __construct()
     {
-        $path = getcwd().DS."etc".DS."config.xml";
+        $path = getcwd().DS."etc".DS."phpframe.ini";
         if (!is_file($path)) {
             $msg = "Cannot load config File";
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
         
         $this->_config = PHPFrame_Config::instance($path);

@@ -47,7 +47,7 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
             $msg .= "If you are trying to use the Mapper package outside of an ";
             $msg .= "MVC app you can manually set the PHPFRAME_VAR_DIR constant ";
             $msg .= "before you instantiate the mapper objects.";
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
             
         }
         
@@ -102,7 +102,7 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
             $msg = "Wrong argument type. ";
             $msg .= get_class($this)."::findOne() expected only argument to be of type ";
             $msg .= "PHPFrame_Mapper_IdObject or integer.";
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         }
         
         $collection = $this->find($id_obj);
@@ -195,7 +195,7 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
      */
     public function delete(PHPFrame_Mapper_DomainObject $obj)
     {
-        throw new PHPFrame_Exception("Method not implemented...");
+        throw new RuntimeException("Method not implemented...");
     }
     
     /**

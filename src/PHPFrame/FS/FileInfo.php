@@ -218,7 +218,7 @@ class PHPFrame_FS_FileInfo
     {
         $msg = "Can not set property. ";
         $msg .= get_class($this)."::".$offset." is read only.";
-        throw new PHPFrame_Exception($msg);
+        throw new RuntimeException($msg);
         //$this->_props[$offset] = $value;
     }
 

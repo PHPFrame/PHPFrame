@@ -45,19 +45,19 @@ class PHPFrame_Utils_Filesystem
         // Open file for writing
         if (!$fhandle = fopen($fname, $mode)) {
             $msg = 'Error opening file '.$fname.' for writing.';
-            throw new PHPFrame_Exception_Filesystem($msg);
+            throw new RuntimeException($msg);
         }
         
         // Write contents into file
         if (!fwrite($fhandle, $content)) {
             $msg = 'Error writing file '.$fname.'.';
-            throw new PHPFrame_Exception_Filesystem($msg);
+            throw new RuntimeException($msg);
         }
         
         // Close file
         if (!fclose($fhandle)) {
             $msg = 'Error closing file '.$fname.' after writing.';
-            throw new PHPFrame_Exception_Filesystem($msg);
+            throw new RuntimeException($msg);
         }
     }
     
@@ -86,7 +86,7 @@ class PHPFrame_Utils_Filesystem
             if (!is_dir($path_prefix.$path_item)) {
                 if (!mkdir($path_prefix.$path_item, 0771)) {
                     $msg = "Could not create directory ".$path_prefix.$path_item.".";
-                    throw new PHPFrame_Exception_Filesystem($msg);
+                    throw new RuntimeException($msg);
                 }
             }
             
@@ -95,7 +95,7 @@ class PHPFrame_Utils_Filesystem
         
         if (!is_writable($path)) {
             $msg = "Directory ".$path." is not writable.";
-            throw new PHPFrame_Exception_Filesystem($msg);
+            throw new RuntimeException($msg);
         }
     }
     

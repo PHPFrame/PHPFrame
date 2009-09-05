@@ -182,8 +182,7 @@ class PHPFrame_Database_Field
             $exception_msg = "Wrong type for column '".$this->getField()."'. ";
             $exception_msg .= "Expected '".$this->_type."' and got '";
             $exception_msg .= $this->getValue()."'";
-            $exception_code = PHPFrame_Exception::WARNING;
-            throw new PHPFrame_Exception($exception_msg, $exception_code);
+            throw new RuntimeException($exception_msg);
         }
     }
     

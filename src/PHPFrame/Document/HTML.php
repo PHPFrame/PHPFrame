@@ -120,7 +120,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
             // clean output buffer
             ob_end_clean();
         } else {
-            throw new PHPFrame_Exception("Layout template file ".$tmpl_path." not found.");
+            throw new RuntimeException("Layout template file ".$tmpl_path." not found.");
         }
         
         if ($apply_theme) {
@@ -144,7 +144,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
             $path .= ".php";
             if (!is_file($path)) {
                 //$msg = "Could not load partial ".$path;
-                //throw new PHPFrame_Exception($msg);
+                //throw new RuntimeException($msg);
                 return "";
             }
         }
@@ -203,7 +203,7 @@ class PHPFrame_Document_HTML extends PHPFrame_Document_XML
         if (!is_null($headings) && !is_array($headings)) {
             $msg = "Wrong data type.";
             $msg .= "Headings must be passed as an array.";
-            throw new PHPFrame_Exception($msg);
+            throw new RuntimeException($msg);
         } elseif (is_null($headings)) {
             // If no specified headings we get keys from collection
             $headings = $collection->getKeys();

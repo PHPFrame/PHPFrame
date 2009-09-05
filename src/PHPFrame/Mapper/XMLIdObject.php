@@ -41,7 +41,7 @@ class PHPFrame_Mapper_XMLIdObject extends PHPFrame_Mapper_IdObject
      */
     public function __construct($options=null)
     {
-        throw new PHPFrame_Exception("This class has not been implemented yet!");
+        throw new RuntimeException("This class has not been implemented yet!");
         
         parent::__construct($options);
     }

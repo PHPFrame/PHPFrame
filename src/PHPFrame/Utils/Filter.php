@@ -80,7 +80,7 @@ class PHPFrame_Utils_Filter
         $type = (string) strtolower($type);
         // Check if filter type is supported
         if (!in_array($type, self::$_types)) {
-            throw new PHPFrame_Exception("Filter type (".$type.") not supported.");
+            throw new RuntimeException("Filter type (".$type.") not supported.");
         }
         
         // Handle primitive value subject
@@ -100,7 +100,7 @@ class PHPFrame_Utils_Filter
                 $msg .= "PHPFrame_Utils_Filter::validate().";
                 $msg .= " Expected (int|bool|float|string|array)";
                 $msg .= " and got (".gettype($subject).")";
-                throw new PHPFrame_Exception($msg);
+                throw new RuntimeException($msg);
             } 
             return false;
         }
@@ -136,7 +136,7 @@ class PHPFrame_Utils_Filter
                     $msg .= " ".$call["class"]."::".$call["function"]."() expected argument";
                     $msg .= " to be of type (".$type.") and got (".gettype($var).").";
                     
-                    throw new PHPFrame_Exception($msg);
+                    throw new RuntimeException($msg);
             
                 }
                 return false;

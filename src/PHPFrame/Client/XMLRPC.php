@@ -41,27 +41,26 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
     public static function detect() 
     {
         global $HTTP_RAW_POST_DATA;
+        
         //check existance of $_HTTP_RAW_POST_DATA array
         if (count($HTTP_RAW_POST_DATA) > 0) {
             //check for a valid XML structure
             $domDocument = new DOMDocument;
-            if ($domDocument->loadXML($HTTP_RAW_POST_DATA))
-            {
+            if ($domDocument->loadXML($HTTP_RAW_POST_DATA)) {
                 $domXPath = new DOMXPath($domDocument);
                 //check for valid RPC
                 //query always returns DOMNodelist,
                 //item(0) returns DOMNode or null,
                 //DOMNode has $nodeValue and null->nodeValue = null
                 //TODO: xmlrpc detect perhaps check for empty methodName string?
-                if ($domXPath->query("//methodCall/methodName")->item(0)->nodeValue != null)
-                {
+                if ($domXPath->query("//methodCall/methodName")->item(0)->nodeValue != null) {
                     return new self;
                 }
-            }
-            else{
-                throw new PHPFrame_Exception("Given xml is invalid!");
+            } else {
+                throw new RuntimeException("Given xml is invalid!");
             }
         }
+        
         return false;
     }
     
@@ -225,33 +224,40 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      * if the node is an array 
      */
      private function _parseXMLRPCRecurse($domXPath, $node) {
-         if (!(($node instanceof DOMNode) && $node->nodeName=='value')){
-             throw new PHPFrame_Exception("Invalid parameter type, nodes must be of type DOMNode and must be a value node!");
+         if (!(($node instanceof DOMNode) && $node->nodeName=='value')) {
+             $msg  = "Invalid parameter type, nodes must be of type DOMNode and ";
+             $msg .= "must be a value node!";
+             throw new InvalidArgumentException($msg);
          }
+         
         //check if current value is a struct, array or scalar type
-        if ($node->firstChild->nodeName=='struct'){
+        if ($node->firstChild->nodeName=='struct') {
             $newStruct = array();
             $query = 'struct/member';
             $members = $domXPath->query($query, $node);
             foreach ($members as $member){
                 $query = 'name';
-                $key = $domXPath->query($query, $member)->item(0)->nodeValue;
+                $key   = $domXPath->query($query, $member)->item(0)->nodeValue;
                 $query = 'value';
-                $value = $this->_parseXMLRPCRecurse($domXPath, $domXPath->query($query, $member)->item(0));
+                $value = $this->_parseXMLRPCRecurse(
+                    $domXPath, 
+                    $domXPath->query($query, $member)->item(0)
+                );
+                
                 $newStruct[$key] = $value;
             }
             return $newStruct;
-        }
-        else if ($node->firstChild->nodeName=='array'){
+        } else if ($node->firstChild->nodeName=='array') {
             $newArray = array();
-            $query = 'array/data/value';
+            $query  = 'array/data/value';
             $values = $domXPath->query($query, $node);
-            foreach ($values as $value){
+            
+            foreach ($values as $value) {
                 $newArray[] = $this->_parseXMLRPCRecurse($domXPath, $value);
             }
+            
             return $newArray;
-        }
-        else{//value node must a scalar type
+        } else{//value node must a scalar type
             $leafValue = $node->firstChild;
             return $this->_nodeScalarValue($leafValue);
         }
@@ -380,8 +386,11 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
      */
     private function _nodeScalarValue($node)
     {
-        if (!($node instanceof DOMNode))
-            throw new PHPFrame_Exception("Invalid parameter, node must be of type DOMNode!");
+        if (!($node instanceof DOMNode)) {
+            $msg = "Invalid parameter, node must be of type DOMNode!";
+            throw new InvalidArgumentException($msg);
+        }
+        
         $nodeName = $node->nodeName;
         $time_reg = '/(^[0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2}$)/';
         switch ($nodeName){
@@ -402,11 +411,21 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
             case 'dateTime.iso8601':
                 $matches = array();
                 $isValidTime = preg_match($time_reg, $node->nodeValue, $matches);
-                if ($isValidTime!=1){
-                    throw new PHPFrame_Exception('Invalid dateTime format found for value '.$node->nodeValue.'!');
-                }
-                else
-                    $value = mktime($matches[4], $matches[5], $matches[6], $matches[2], $matches[3], $matches[1]);
+                
+                if ($isValidTime!=1) {
+                    $msg  = "Invalid dateTime format found for value ";
+                    $msg .= $node->nodeValue."!";
+                    throw new DomainException($msg);
+                } else
+                    $value = mktime(
+                        $matches[4], 
+                        $matches[5], 
+                        $matches[6], 
+                        $matches[2], 
+                        $matches[3], 
+                        $matches[1]
+                    );
+                    
                 break;
             default:
                 $value = "";
@@ -465,7 +484,7 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
             } else {
                 $msg = "XMLRPC API authentication failed. ";
                 $msg .= "API key not valid.";
-                throw new PHPFrame_Exception($msg);
+                throw new RuntimeException($msg);
             }
             
         } catch (Exception $e) {
@@ -490,10 +509,15 @@ class PHPFrame_Client_XMLRPC implements PHPFrame_Client_IClient
         $action = PHPFrame::Request()->getAction();
         $groupid = PHPFrame::Session()->getGroupId();
         $permissions = PHPFrame::AppRegistry()->getPermissions();
+        
         if ($permissions->authorise($component, $action, $groupid) !== true) {
-            $msg = "Insufficient XMLRPC API permissions to perform action. XMLRPC client is not allowed to ";
+            $msg  = "Insufficient XMLRPC API permissions to perform action. XMLRPC ";
+            $msg .= "client is not allowed to ";
             $msg .= "perform the action: $action on component: $component.";
-            throw new PHPFrame_Exception_XMLRPC($msg, PHPFrame_Exception_XMLRPC::INVALID_PERMISSIONS);
+            throw new PHPFrame_Exception_XMLRPC(
+                $msg, 
+                PHPFrame_Exception_XMLRPC::INVALID_PERMISSIONS
+            );
         }
     }
 }

@@ -48,7 +48,7 @@ abstract class PHPFrame_Mapper_IdObject
                 $msg = "Options passed in wrong format.";
                 $msg .= " Options should be passed as an associative";
                 $msg .= " array with key value pairs.";
-                throw new PHPFrame_Exception_Database($msg);
+                throw new InvalidArgumentException($msg);
             }
             
             // Options is an array

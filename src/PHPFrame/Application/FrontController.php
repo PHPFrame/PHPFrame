@@ -78,7 +78,7 @@ class PHPFrame_Application_FrontController
             // Execute task
             $controller->execute();
         } else {
-            throw new PHPFrame_Exception("Controller not supported.");
+            throw new RuntimeException("Controller not supported.");
         }
     }
 }

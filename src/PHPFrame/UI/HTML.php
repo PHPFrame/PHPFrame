@@ -651,7 +651,7 @@ class PHPFrame_UI_HTML
             return call_user_func_array( array( 'PHPFrame_UI_HTML', $function_name ), $args );
         }
         else {
-            throw new PHPFrame_Exception('PHPFrame_UI_HTML::'.$function_name.' not supported.');
+            throw new RuntimeException('PHPFrame_UI_HTML::'.$function_name.' not supported.');
         }
         
     }

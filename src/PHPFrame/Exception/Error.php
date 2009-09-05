@@ -27,7 +27,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Exception_Error extends PHPFrame_Exception
+class PHPFrame_Exception_Error extends Exception
 {
     /**
      * The PHP Error Context

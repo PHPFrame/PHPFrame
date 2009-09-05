@@ -210,10 +210,9 @@ class PHPFrame_Database_Row
             return $this->_fields[$field_name];
         }
         
-        throw new PHPFrame_Exception("Tried to get column '".$field_name
-                                     ."' that doesn't exist in "
-                                     .$this->_id_obj->getTableName(), 
-                                      PHPFrame_Exception::WARNING);
+        $msg  = "Tried to get column '".$field_name."' that doesn't exist in ";
+        $msg .= $this->_id_obj->getTableName();
+        throw new RuntimeException($msg);
     }
     
     public function getPrimaryKey()
@@ -276,10 +275,9 @@ class PHPFrame_Database_Row
     public function set($property, $value)
     {
         if (!$this->hasField($property)) {
-            throw new PHPFrame_Exception("Tried to set column '".$property
-                                         ."' that doesn't exist in "
-                                         .$this->_id_obj->getTableName(), 
-                                          PHPFrame_Exception::WARNING);
+            $msg  = "Tried to set column '".$property."' that doesn't exist in ";
+            $msg .= $this->_id_obj->getTableName();
+            throw new DomainException($msg);
         }
         
         foreach ($this->_fields as $key=>$field) {

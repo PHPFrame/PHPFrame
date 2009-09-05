@@ -111,7 +111,6 @@
 
 </refsect1>
 
-<!-- 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
     
@@ -124,17 +123,33 @@
         </para>
         <programlisting>
 <![CDATA[
+/**
+ * Installation constants
+ */
+define('PHPFRAME_INSTALL_DIR', dirname(__FILE__));
+define("PHPFRAME_CONFIG_DIR", PHPFRAME_INSTALL_DIR.DIRECTORY_SEPARATOR."etc");
+define("PHPFRAME_TMP_DIR", PHPFRAME_INSTALL_DIR.DIRECTORY_SEPARATOR."tmp");
+define("PHPFRAME_VAR_DIR", PHPFRAME_INSTALL_DIR.DIRECTORY_SEPARATOR."var");
 
+
+PHPFrame::Env();
+
+print_r(PHPFrame::AppRegistry());
+
+print_r(PHPFrame::Session());
+
+print_r(PHPFrame::Request());
 ]]>
         </programlisting>
+        <!-- 
         <screen>
 <![CDATA[
 
 ]]>
         </screen>
+        -->
     </example>
     
 </refsect1>
- -->
  
 </refentry>

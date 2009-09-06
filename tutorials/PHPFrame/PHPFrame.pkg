@@ -45,12 +45,12 @@
         etc/phpframe.ini. We can easily get configuration parameters from any scope 
         in the application by using this method.
         </para>
-        <programlisting role="tutorial">
+        <code>
 <![CDATA[
 $config = PHPFrame::Config();
 print_r($config->get("default_lang"));
 ]]>
-        </programlisting>
+        </code>
         
         <screen>
 <![CDATA[
@@ -72,7 +72,7 @@ en-GB
         to run a specific action in a given controller. Access levels are set up in 
         an XML file stored in etc/acl.xml.
         </para>
-        <programlisting role="tutorial">
+        <programlisting>
 <![CDATA[
 // Set constant with app specific path to tmp directory
 define("PHPFRAME_TMP_DIR", dirname(__FILE__).DIRECTORY_SEPARATOR."tmp");
@@ -108,7 +108,7 @@ if ($permissions->authorise("content", "save", $group_id, true)) {
         file of your app you can pass a DSN object {@link PHPFrame_Database_DSN()} and 
         optional username and password to {@link PHPFrame::DB()}; 
         </para>
-        <programlisting role="tutorial">
+        <programlisting>
 <![CDATA[
 $db = PHPFrame::DB();
 $result = $db->fetchAssocList("SELECT * FROM a_table");

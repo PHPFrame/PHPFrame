@@ -1,0 +1,76 @@
+<refentry id="{@id}">
+
+<refnamediv>
+    <refname>Exception Package</refname>
+</refnamediv>
+
+<!-- {@toc} -->
+
+<refsect1 id="{@id description}">
+    <title>Package decription</title>
+    
+    <para>
+    The Exception package ...
+    </para>
+
+</refsect1>
+
+<refsect1 id="{@id classes}">
+    <title>Classes in Exception Package</title>
+    
+    <itemizedlist>
+    
+        <listitem>
+        <para>
+        {@link PHPFrame_Exception_Handler}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Exception_Error}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Exception_Database}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Exception_XMLRPC}
+        </para>
+        </listitem>
+        
+    </itemizedlist>
+
+</refsect1>
+
+<!-- 
+<refsect1 id="{@id examples}">
+    <title>Examples</title>
+    
+    <example>
+        <title></title>
+        <para>
+        </para>
+        <programlisting>
+<![CDATA[
+
+]]>
+        </programlisting>
+        
+        <screen>
+<![CDATA[
+
+]]>
+        </screen>
+       
+    </example>
+    
+</refsect1>
+-->
+
+</refentry>

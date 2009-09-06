@@ -1,0 +1,69 @@
+<refentry id="{@id}">
+
+<refnamediv>
+    <refname>Debug Package</refname>
+</refnamediv>
+
+<!-- {@toc} -->
+
+<refsect1 id="{@id description}">
+    <title>Package decription</title>
+    
+    <para>
+    The Debug package ...
+    </para>
+
+</refsect1>
+
+<refsect1 id="{@id classes}">
+    <title>Classes in Debug Package</title>
+    
+    <itemizedlist>
+        <listitem>
+        <para>
+        {@link PHPFrame_Debug_Informer}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Debug_Logger}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Debug_Profiler}
+        </para>
+        </listitem>
+        
+    </itemizedlist>
+
+</refsect1>
+
+<!-- 
+<refsect1 id="{@id examples}">
+    <title>Examples</title>
+    
+    <example>
+        <title></title>
+        <para>
+        </para>
+        <programlisting>
+<![CDATA[
+
+]]>
+        </programlisting>
+        
+        <screen>
+<![CDATA[
+
+]]>
+        </screen>
+       
+    </example>
+    
+</refsect1>
+-->
+
+</refentry>

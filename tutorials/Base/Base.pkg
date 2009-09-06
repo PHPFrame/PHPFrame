@@ -1,0 +1,93 @@
+<refentry id="{@id}">
+
+<refnamediv>
+    <refname>Base Package</refname>
+</refnamediv>
+
+<!-- {@toc} -->
+
+<refsect1 id="{@id description}">
+    <title>Package decription</title>
+    
+    <para>
+    The Base package ...
+    </para>
+
+</refsect1>
+
+<refsect1 id="{@id classes}">
+    <title>Classes in Base Package</title>
+    
+    <itemizedlist>
+        <listitem>
+        <para>
+        {@link PHPFrame_Base_Array}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Base_Number}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Base_String}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Base_Object}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Base_Observer}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Base_Subject}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Base_Singleton}
+        </para>
+        </listitem>
+        
+    </itemizedlist>
+
+</refsect1>
+
+<!-- 
+<refsect1 id="{@id examples}">
+    <title>Examples</title>
+    
+    <example>
+        <title></title>
+        <para>
+        </para>
+        <programlisting>
+<![CDATA[
+
+]]>
+        </programlisting>
+        
+        <screen>
+<![CDATA[
+
+]]>
+        </screen>
+       
+    </example>
+    
+</refsect1>
+-->
+
+</refentry>

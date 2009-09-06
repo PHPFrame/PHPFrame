@@ -1,0 +1,58 @@
+<refentry id="{@id}">
+
+<refnamediv>
+    <refname>User Package</refname>
+</refnamediv>
+
+<!-- {@toc} -->
+
+<refsect1 id="{@id description}">
+    <title>Package decription</title>
+    
+    <para>
+    The User package ...
+    </para>
+
+</refsect1>
+
+<refsect1 id="{@id classes}">
+    <title>Classes in User Package</title>
+    
+    <itemizedlist>
+    
+        <listitem>
+        <para>
+        {@link PHPFrame_User}
+        </para>
+        </listitem>
+        
+    </itemizedlist>
+
+</refsect1>
+
+<!-- 
+<refsect1 id="{@id examples}">
+    <title>Examples</title>
+    
+    <example>
+        <title></title>
+        <para>
+        </para>
+        <programlisting>
+<![CDATA[
+
+]]>
+        </programlisting>
+        
+        <screen>
+<![CDATA[
+
+]]>
+        </screen>
+       
+    </example>
+    
+</refsect1>
+-->
+
+</refentry>

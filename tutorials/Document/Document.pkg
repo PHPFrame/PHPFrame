@@ -1,0 +1,81 @@
+<refentry id="{@id}">
+
+<refnamediv>
+    <refname>Document Package</refname>
+</refnamediv>
+
+<!-- {@toc} -->
+
+<refsect1 id="{@id description}">
+    <title>Package decription</title>
+    
+    <para>
+    The Document package ...
+    </para>
+
+</refsect1>
+
+<refsect1 id="{@id classes}">
+    <title>Classes in Document Package</title>
+    
+    <itemizedlist>
+        <listitem>
+        <para>
+        {@link PHPFrame_Document}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Document_HTML}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Document_Plain}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Document_RPC}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_Document_XML}
+        </para>
+        </listitem>
+        
+    </itemizedlist>
+
+</refsect1>
+
+<!-- 
+<refsect1 id="{@id examples}">
+    <title>Examples</title>
+    
+    <example>
+        <title></title>
+        <para>
+        </para>
+        <programlisting>
+<![CDATA[
+
+]]>
+        </programlisting>
+        
+        <screen>
+<![CDATA[
+
+]]>
+        </screen>
+       
+    </example>
+    
+</refsect1>
+-->
+
+</refentry>

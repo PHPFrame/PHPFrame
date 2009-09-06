@@ -1,0 +1,65 @@
+<refentry id="{@id}">
+
+<refnamediv>
+    <refname>FS Package</refname>
+</refnamediv>
+
+<!-- {@toc} -->
+
+<refsect1 id="{@id description}">
+    <title>Package decription</title>
+    
+    <para>
+    The FS or "FileSystem" package provides a set of classes to interact with files 
+    and directories. This classes wrap around the SPL's file system related 
+    classes: SplFileInfo and SplFileObject.   
+    </para>
+
+</refsect1>
+
+<refsect1 id="{@id classes}">
+    <title>Classes in FS Package</title>
+    
+    <itemizedlist>
+        <listitem>
+        <para>
+        {@link PHPFrame_FS_FileInfo}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_FS_FileObject}
+        </para>
+        </listitem>
+        
+    </itemizedlist>
+
+</refsect1>
+
+<!-- 
+<refsect1 id="{@id examples}">
+    <title>Examples</title>
+    
+    <example>
+        <title></title>
+        <para>
+        </para>
+        <programlisting>
+<![CDATA[
+
+]]>
+        </programlisting>
+        
+        <screen>
+<![CDATA[
+
+]]>
+        </screen>
+       
+    </example>
+    
+</refsect1>
+-->
+
+</refentry>

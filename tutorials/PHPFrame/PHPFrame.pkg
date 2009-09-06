@@ -1,47 +1,139 @@
 <refentry id="{@id}">
 
 <refnamediv>
-    <refname>Index</refname>
-    <refpurpose>
-    This manual consists primarily of API documentation but also includes examples, 
-    tutorials, an overview of how the framework works, installation and frequently 
-    questions.
-    </refpurpose>
+    <refname>PHPFrame Package</refname>
 </refnamediv>
 
-<refsynopsisdiv>
-    <author>
-        Luis Montero [e-noise.com]
-        <authorblurb>
-        {@link mailto:luis.montero@e-noise.com Luis Montero}
-        </authorblurb>
-    </author>
-</refsynopsisdiv>
+<!-- {@toc} -->
 
-{@toc}
-
-<refsect1 id="{@id intro}">
-    <title>Getting Started</title>
+<refsect1 id="{@id description}">
+    <title>Package decription</title>
     
     <para>
-        This will be the User Guide for PHPFrame 1.0. 
+    PHPFrame is organised into "packages" as listed on the left column. 
+    At the root of the package structure is the PHPFrame class.
     </para>
+
+</refsect1>
+
+<refsect1 id="{@id classes}">
+    <title>The {@link PHPFrame} class</title>
     
-    <refsect2>
-        <title>Downloading / Installing PHPFrame</title>
-        
+    <para>
+    This class provides a number of static methods that serve as a simplified
+    interface or facade to PHPFrame's "global" objects, such as the registries 
+    ({@link PHPFrame::Request()}, {@link PHPFrame::Session()} and  
+    {@link PHPFrame::AppRegistry()}), the config ({@link PHPFrame::AppRegistry()}) 
+    and actions involving the state of the framework.
+    </para>
+
+</refsect1>
+
+<refsect1 id="{@id examples}">
+    <title>Examples</title>
+    
+    <example>
+        <title>
+        Accessing configuration information using {@link PHPFrame::Config()}
+        </title>
         <para>
-        For download and installation information check the 
-        <a href="content/download">download page</a>.
+        PHPFrame::Config() returns the config object with the data as defined in 
+        etc/phpframe.ini. We can easily get configuration parameters from any scope 
+        in the application by using this method.
         </para>
-    </refsect2>
-    
-    <refsect2>
-        <title>Starting a new project with PHPFrame command line tool</title>
+        <programlisting>
+<![CDATA[
+$config = PHPFrame::Config();
+print_r($config->get("default_lang"));
+]]>
+        </programlisting>
         
-        <para>Tutorial coming soon...</para>
-    </refsect2>
+        <screen>
+<![CDATA[
+en-GB
+]]>
+        </screen>
+       
+    </example>
+    
+    <example>
+        <title>Accessing the registries</title>
+        <para>
+        In this example we first set the application environment. Then we get the 
+        permissions object from the AppRegistry as well as the group id of the 
+        current session's user.
+        </para>
+        <para>
+        With this data we can now easily check whether the current user is allowed 
+        to run a specific action in a given controller. Access levels are set up in 
+        an XML file stored in etc/acl.xml.
+        </para>
+        <programlisting>
+<![CDATA[
+// Set constant with app specific path to tmp directory
+define("PHPFRAME_TMP_DIR", dirname(__FILE__).DIRECTORY_SEPARATOR."tmp");
+// Initialise PHPFrame environment
+PHPFrame::Env();
+
+// Get permissions object and current user's group id from registries
+$permissions = PHPFrame::AppRegistry()->getPermissions();
+$group_id    = PHPFrame::Session()->getGroupId();
+
+// Check whether current user is allowed to call an action called 'save' in a 
+// controller called 'content'
+if ($permissions->authorise("content", "save", $group_id, true)) {
+    echo "You are allowed to call action 'save' in controller 'content'!";
+} else {
+    echo "Sorry, you can not save content.";
+}
+]]>
+        </programlisting>
+       
+    </example>
+    
+    <example>
+        <title>Acquiring global database object</title>
+        <para>
+        In this example we get the global database object and run a query on a table 
+        called 'a_table'.
+        </para>
+        <para>
+        Note that we get the db object using {@link PHPFrame::DB()} without passing any 
+        argument, so the values defined in etc/phpframe/ini will be used. If you 
+        want to access different data sources to the one defined in the main config 
+        file of your app you can pass a DSN object {@link PHPFrame_Database_DSN()} and 
+        optional username and password to {@link PHPFrame::DB()}; 
+        </para>
+        <programlisting>
+<![CDATA[
+$db = PHPFrame::DB();
+$result = $db->fetchAssocList("SELECT * FROM a_table");
+print_r($result);
+]]>
+        </programlisting>
+        <screen>
+<![CDATA[
+Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [name] => An entry
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [name] => Another entry
+        )
+
+)
+]]>
+        </screen>
+       
+    </example>
     
 </refsect1>
-    
+
 </refentry>
+

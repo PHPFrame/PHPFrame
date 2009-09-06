@@ -26,7 +26,11 @@
     {@link PHPFrame::AppRegistry()}), the config ({@link PHPFrame::Config()}) 
     and actions involving the state of the framework.
     </para>
-
+    
+    <link linkend='http://www.phpframe.org/uploads/content/Global-Objects.png'>
+    <imagedata fileref="http://www.phpframe.org/uploads/content/Global-Objects-min.png"/>
+    </link>
+    
 </refsect1>
 
 <refsect1 id="{@id examples}">

@@ -28,7 +28,7 @@
     </para>
     
     <link linkend='http://www.phpframe.org/uploads/content/Global-Objects.png'>
-    <imagedata fileref="http://www.phpframe.org/uploads/content/Global-Objects-min.png"/>
+    <graphic fileref="http://www.phpframe.org/uploads/content/Global-Objects-min.png" />
     </link>
     
 </refsect1>
@@ -45,7 +45,7 @@
         etc/phpframe.ini. We can easily get configuration parameters from any scope 
         in the application by using this method.
         </para>
-        <programlisting>
+        <programlisting role="tutorial">
 <![CDATA[
 $config = PHPFrame::Config();
 print_r($config->get("default_lang"));
@@ -72,7 +72,7 @@ en-GB
         to run a specific action in a given controller. Access levels are set up in 
         an XML file stored in etc/acl.xml.
         </para>
-        <programlisting>
+        <programlisting role="tutorial">
 <![CDATA[
 // Set constant with app specific path to tmp directory
 define("PHPFRAME_TMP_DIR", dirname(__FILE__).DIRECTORY_SEPARATOR."tmp");
@@ -108,7 +108,7 @@ if ($permissions->authorise("content", "save", $group_id, true)) {
         file of your app you can pass a DSN object {@link PHPFrame_Database_DSN()} and 
         optional username and password to {@link PHPFrame::DB()}; 
         </para>
-        <programlisting>
+        <programlisting role="tutorial">
 <![CDATA[
 $db = PHPFrame::DB();
 $result = $db->fetchAssocList("SELECT * FROM a_table");

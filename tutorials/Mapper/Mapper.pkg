@@ -4,7 +4,7 @@
     <refname>Mapper Package</refname>
 </refnamediv>
 
-<!-- {@toc} -->
+{@toc}
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>

@@ -23,7 +23,7 @@
     This class provides a number of static methods that serve as a simplified
     interface or facade to PHPFrame's "global" objects, such as the registries 
     ({@link PHPFrame::Request()}, {@link PHPFrame::Session()} and  
-    {@link PHPFrame::AppRegistry()}), the config ({@link PHPFrame::AppRegistry()}) 
+    {@link PHPFrame::AppRegistry()}), the config ({@link PHPFrame::Config()}) 
     and actions involving the state of the framework.
     </para>
 

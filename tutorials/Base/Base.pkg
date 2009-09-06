@@ -10,7 +10,7 @@
     <title>Package decription</title>
     
     <para>
-    The Base package ...
+    The Base package provides a set of basic "types".
     </para>
 
 </refsect1>
@@ -65,29 +65,13 @@
 
 </refsect1>
 
-<!-- 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
     
-    <example>
-        <title></title>
-        <para>
-        </para>
-        <programlisting>
-<![CDATA[
-
-]]>
-        </programlisting>
-        
-        <screen>
-<![CDATA[
-
-]]>
-        </screen>
-       
-    </example>
+    <para>
+    For example usage please check each individual class using the links above.
+    </para>
     
 </refsect1>
--->
 
 </refentry>

@@ -28,7 +28,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Utils_Filter
+class PHPFrame_Filter
 {
     /**
      * An array with the different types of filters
@@ -48,7 +48,7 @@ class PHPFrame_Utils_Filter
      * Validate data stored in variable
      * 
      * <code>
-     *  $validEmail = PHPFrame_Utils_Filter::validate($email, 'email');
+     *  $validEmail = PHPFrame_Filter::validate($email, 'email');
      *  // validEmail will contain either the filtered string or 
      *  // boolean FALSE if validation fails
      * </code>
@@ -97,7 +97,7 @@ class PHPFrame_Utils_Filter
         if (!is_array($subject)) {
             if ($exceptions) {
                 $msg = "Wrong data type passed as 'subject' to ";
-                $msg .= "PHPFrame_Utils_Filter::validate().";
+                $msg .= "PHPFrame_Filter::validate().";
                 $msg .= " Expected (int|bool|float|string|array)";
                 $msg .= " and got (".gettype($subject).")";
                 throw new RuntimeException($msg);
@@ -127,7 +127,7 @@ class PHPFrame_Utils_Filter
                     
                     if (is_array($backtrace)) {
                         foreach ($backtrace as $call) {
-                            if ($call["class"] != "PHPFrame_Utils_Filter") {
+                            if ($call["class"] != "PHPFrame_Filter") {
                                 break;
                             }
                         }

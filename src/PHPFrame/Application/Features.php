@@ -23,18 +23,18 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Application_Features
+class PHPFrame_Features
 {
     /**
      * A mapper object used to store and retrieve feature data
      *
-     * @var PHPFrame_Mapper_Collection
+     * @var PHPFrame_DomainObjectCollection
      */
     private $_mapper;
     /**
      * A collection object holding data about installed features
      *
-     * @var PHPFrame_Mapper_Collection
+     * @var PHPFrame_DomainObjectCollection
      */
     private $_features;
     
@@ -49,7 +49,7 @@ class PHPFrame_Application_Features
     {
         // Get installed features from file
         $this->_mapper = new PHPFrame_Mapper(
-            "PHPFrame_Addons_FeatureInfo", 
+            "PHPFrame_FeatureInfo", 
             "features", 
             PHPFrame_Mapper::STORAGE_XML, 
             false, 
@@ -61,7 +61,7 @@ class PHPFrame_Application_Features
     
     public function install($name)
     {
-        //$this->_mapper->insert(new PHPFrame_Addons_FeatureInfo());
+        //$this->_mapper->insert(new PHPFrame_FeatureInfo());
     }
     
     public function uninstall($name)

@@ -31,16 +31,16 @@
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see      PHPFrame_MVC_Model, PHPFrame_MVC_View
+ * @see      PHPFrame_Model, PHPFrame_View
  * @since    1.0
  * @abstract 
  */
-abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
+abstract class PHPFrame_ActionController extends PHPFrame_Subject
 {
     /**
      * Instances of its concrete children
      * 
-     * @var array of objects of type PHPFrame_MVC_ActionController
+     * @var array of objects of type PHPFrame_ActionController
      */
     private static $_instances = array();
     /**
@@ -60,7 +60,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * 
      * This object is used to report system messages from the action controllers.
      * 
-     * @var PHPFrame_Application_Sysevents
+     * @var PHPFrame_Sysevents
      */
     protected $sysevents = null;
     /**
@@ -97,7 +97,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      *                               action controller.
      * 
      * @access public
-     * @return PHPFrame_MVC_ActionController
+     * @return PHPFrame_ActionController
      * @since  1.0
      */
     public static function getInstance($controller_name) 
@@ -186,7 +186,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      * Set the redirection URL.
      *
      * @param string $url The URL we want to redirect to when we call 
-     *                    PHPFrame_MVC_ActionController::redirect()
+     *                    PHPFrame_ActionController::redirect()
      * 
      * @access protected
      * @return void
@@ -212,7 +212,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
         $client = PHPFrame::Session()->getClient();
         
         // Check that we got the right type
-        if (!$client instanceof PHPFrame_Client_IClient) {
+        if (!$client instanceof PHPFrame_IClient) {
             $msg = "Action controller could not redirect using client object";
             throw new RuntimeException($msg);
         }
@@ -244,7 +244,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      */
     protected function getModel($name, $args=array()) 
     {
-        return PHPFrame_MVC_Factory::getModel($name, $args);
+        return PHPFrame_MVCFactory::getModel($name, $args);
     }
     
     /**
@@ -260,7 +260,7 @@ abstract class PHPFrame_MVC_ActionController extends PHPFrame_Base_Subject
      */
     protected function getView($name="")
     {
-        return PHPFrame_MVC_Factory::getView($name);
+        return PHPFrame_MVCFactory::getView($name);
     }
     
     /**

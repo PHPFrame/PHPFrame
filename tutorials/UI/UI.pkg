@@ -27,19 +27,19 @@
     <itemizedlist>
         <listitem>
         <para>
-        {@link PHPFrame_UI_IUI}
+        {@link PHPFrame_IUI}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_UI_CLI}
+        {@link PHPFrame_CLIUI}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_UI_HTML}
+        {@link PHPFrame_HTMLUI}
         </para>
         </listitem>
         

@@ -26,10 +26,10 @@
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see      PHPFrame_Base_Observer
+ * @see      PHPFrame_Observer
  * @since    1.0
  */
-abstract class PHPFrame_Base_Subject implements SplSubject
+abstract class PHPFrame_Subject implements SplSubject
 {
     /**
      * An "storage" object to store observers
@@ -41,7 +41,7 @@ abstract class PHPFrame_Base_Subject implements SplSubject
     /**
      * Attach an observer to this subject
      * 
-     * @param PHPFrame_Base_Observer $observer The object to attach to this subject
+     * @param PHPFrame_Observer $observer The object to attach to this subject
      * 
      * @access public
      * @return void

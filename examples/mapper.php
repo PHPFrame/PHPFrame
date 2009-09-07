@@ -9,10 +9,10 @@
 <?php
 include_once "PHPFrame.php";
 
-// Instantiate generic mapper for PHPFrame_Application_ACL class 
+// Instantiate generic mapper for PHPFrame_ACL class 
 // and specify XML storage
 $mapper = new PHPFrame_Mapper(
-    "PHPFrame_Application_ACL", 
+    "PHPFrame_ACL", 
     "acl", 
     PHPFrame_Mapper::STORAGE_XML, 
     false, 
@@ -20,7 +20,7 @@ $mapper = new PHPFrame_Mapper(
 );
 
 // Instantiate domain object
-$acl = new PHPFrame_Application_ACL(array(
+$acl = new PHPFrame_ACL(array(
     "groupid"=>1, 
     "controller"=>"dummy", 
     "action"=>"*", 

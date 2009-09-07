@@ -24,19 +24,18 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_Mapper_SQLDomainObjectAssembler 
-    extends PHPFrame_Mapper_DomainObjectAssembler
+class PHPFrame_SQLDomainObjectAssembler extends PHPFrame_DomainObjectAssembler
 {
     /**
      * Constructor
      * 
-     * @param PHPFrame_Mapper_PersistenceFactory $factory
+     * @param PHPFrame_PersistenceFactory $factory
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct(PHPFrame_Mapper_PersistenceFactory $factory)
+    public function __construct(PHPFrame_PersistenceFactory $factory)
     {
         parent::__construct($factory);
     }
@@ -44,10 +43,10 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler
     /**
      * Find a domain object using an IdObject
      * 
-     * @param PHPFrame_Mapper_IdObject $id_obj
+     * @param PHPFrame_IdObject $id_obj
      * 
      * @access public
-     * @return PHPFrame_Mapper_DomainObject
+     * @return PHPFrame_DomainObject
      * @since  1.0
      */
     public function findOne($id_obj)
@@ -63,11 +62,11 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler
             $id_obj->where("id", "=", ":id")->params(":id", $id);
         }
         
-        if (!$id_obj instanceof PHPFrame_Mapper_IdObject) {
+        if (!$id_obj instanceof PHPFrame_IdObject) {
             $msg  = "Wrong argument type. ";
             $msg .= get_class($this);
             $msg .= "::findOne() expected only argument to be of type ";
-            $msg .= "PHPFrame_Mapper_IdObject or integer.";
+            $msg .= "PHPFrame_IdObject or integer.";
             throw new RuntimeException($msg);
         }
         
@@ -79,13 +78,13 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler
     /**
      * Find a collection of domain objects using an IdObject
      * 
-     * @param PHPFrame_Mapper_IdObject|int $id_obj
+     * @param PHPFrame_IdObject|int $id_obj
      * 
      * @access public
-     * @return PHPFrame_Mapper_Collection
+     * @return PHPFrame_DomainObjectCollection
      * @since  1.0
      */
-    public function find(PHPFrame_Mapper_IdObject $id_obj=null)
+    public function find(PHPFrame_IdObject $id_obj=null)
     {
         // Create default select statemen if no id object is provided
         if (is_null($id_obj)) {
@@ -103,13 +102,13 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler
     /**
      * Persist domain object
      * 
-     * @param PHPFrame_Mapper_DomainObject $obj
+     * @param PHPFrame_DomainObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function insert(PHPFrame_Mapper_DomainObject $obj)
+    public function insert(PHPFrame_DomainObject $obj)
     {
         if ($obj->getId() <= 0) {
             $obj->setCreated(date("Y-m-d H:i:s"));
@@ -134,13 +133,13 @@ class PHPFrame_Mapper_SQLDomainObjectAssembler
     /**
      * Delete domain object from the database
      * 
-     * @param PHPFrame_Mapper_DomainObject $obj
+     * @param PHPFrame_DomainObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function delete(PHPFrame_Mapper_DomainObject $obj)
+    public function delete(PHPFrame_DomainObject $obj)
     {
         $sql    = "DELETE FROM `".$this->factory->getTableName()."`";
         $sql   .= " WHERE id = :id";

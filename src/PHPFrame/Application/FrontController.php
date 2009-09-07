@@ -28,7 +28,7 @@
  * @since    1.0
  * @internal
  */
-class PHPFrame_Application_FrontController
+class PHPFrame_FrontController
 {   
     /**
      * Constructor
@@ -40,16 +40,16 @@ class PHPFrame_Application_FrontController
     public function __construct()
     {
         // Set profiler milestone
-        PHPFrame_Debug_Profiler::setMilestone('Start');
+        PHPFrame_Profiler::setMilestone('Start');
         
         // Rewrite Request URI
-        PHPFrame_Utils_Rewrite::rewriteRequest();
+        PHPFrame_Rewrite::rewriteRequest();
         
         // Initialise request
         $request = PHPFrame::Request();
         
         // Set profiler milestone
-        PHPFrame_Debug_Profiler::setMilestone('Front controller constructed');
+        PHPFrame_Profiler::setMilestone('Front controller constructed');
     }
     
     /**
@@ -57,8 +57,8 @@ class PHPFrame_Application_FrontController
      * 
      * @access public
      * @return void
-     * @uses   PHPFrame, PHPFrame_MVC_ActionController, PHPFrame_Environment_IClient
-     *         PHPFrame_Application_Response
+     * @uses   PHPFrame, PHPFrame_ActionController, PHPFrame_Environment_IClient
+     *         PHPFrame_Response
      * @since  1.0
      */
     public function run() 
@@ -72,9 +72,9 @@ class PHPFrame_Application_FrontController
         $controller_name = PHPFrame::Request()->getControllerName();
         
         // Create the action controller
-        $controller = PHPFrame_MVC_ActionController::getInstance($controller_name);
+        $controller = PHPFrame_ActionController::getInstance($controller_name);
         // Check that action controller is of valid type and run it if it is
-        if ($controller instanceof PHPFrame_MVC_ActionController) {
+        if ($controller instanceof PHPFrame_ActionController) {
             // Execute task
             $controller->execute();
         } else {

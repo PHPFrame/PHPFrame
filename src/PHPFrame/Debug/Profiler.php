@@ -24,7 +24,7 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_Debug_Profiler
+class PHPFrame_Profiler
 {
     /**
      * Key count

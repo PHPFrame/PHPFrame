@@ -23,18 +23,18 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Application_Libraries
+class PHPFrame_Libraries
 {
     /**
      * A mapper object used to store and retrieve libraries info
      *
-     * @var PHPFrame_Mapper_Collection
+     * @var PHPFrame_DomainObjectCollection
      */
     private $_mapper;
     /**
      * A collection object holding libraries info
      *
-     * @var PHPFrame_Mapper_Collection
+     * @var PHPFrame_DomainObjectCollection
      */
     private $_libs;
     

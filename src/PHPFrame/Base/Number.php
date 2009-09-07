@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Base_Number
+class PHPFrame_Number
 {
     /**
      * Format bytes to human readable.

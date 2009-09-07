@@ -26,14 +26,14 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-abstract class PHPFrame_Mapper_IdObject
+abstract class PHPFrame_IdObject
 {
     /**
      * Constructor
      * 
      * @param array $options An associative array with initialisation options.
      *                       For a list of available options invoke 
-     *                       PHPFrame_Mapper_IdObject::getOptions().
+     *                       PHPFrame_IdObject::getOptions().
      * 
      * @access public
      * @return void
@@ -43,7 +43,7 @@ abstract class PHPFrame_Mapper_IdObject
     {
         // Process input options
         if (!is_null($options)) {
-            $options = new PHPFrame_Base_Array($options);
+            $options = new PHPFrame_Array($options);
             if (!$options->isAssoc()) {
                 $msg = "Options passed in wrong format.";
                 $msg .= " Options should be passed as an associative";
@@ -94,7 +94,7 @@ abstract class PHPFrame_Mapper_IdObject
      * @param string|array $fields a string or array of strings with field names
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     abstract public function select($fields);
@@ -105,7 +105,7 @@ abstract class PHPFrame_Mapper_IdObject
      * @param string $table A string with the table name
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     abstract public function from($table);
@@ -118,7 +118,7 @@ abstract class PHPFrame_Mapper_IdObject
      * @param string $right
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     abstract public function where($left, $operator, $right);

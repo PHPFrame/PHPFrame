@@ -26,7 +26,10 @@ spl_autoload_register(array("PHPFrame", "__autoload"));
 
 /**
  * This class provides a number of static methods that serve as a simplified
- * interface or facade to the PHPFrame framework.
+ * interface or facade to PHPFrame's "global" objects, such as the registries 
+ * ({@link PHPFrame::Request()}, {@link PHPFrame::Session()} and  
+ * {@link PHPFrame::AppRegistry()}), the config ({@link PHPFrame::AppRegistry()}) 
+ * and actions involving the state of the framework.
  * 
  * It also provides information about the installed PHPFrame version.
  * 
@@ -76,6 +79,33 @@ class PHPFrame
      */
     const BUILD_DATE = "##BUILD_DATE##";
     /**
+     * Core subpackages
+     * 
+     * @var array
+     */
+    private static $_subpackages = array(
+        "Application", 
+        "Base", 
+        "Client", 
+        "Config", 
+        "Database", 
+        "Debug", 
+        "Document",
+        "Exception",
+        "Ext",
+        "FS",
+        "HTTP",
+        "Lang",
+        "Mail",
+        "Mapper",
+        "MVC",
+        "Registry",
+        "VersionControl",
+        "UI",
+        "User",
+        "Utils"
+    );
+    /**
      * Run level
      * 
      * @var int
@@ -113,10 +143,17 @@ class PHPFrame
     {
         $file_path = "";
         
+        // Load core PHPFrame classes
+        if (preg_match('/^PHPFrame_([a-zA-Z0-9]+)/', $class_name, $matches)) {
+            $file_path = $matches[1].".php";
+            //echo get_include_path()."\n".$file_path; exit;
+            @include $file_path;
+            return;
+        }
+        
         // Load other pear dependencies
         $pear_packages = array(
             "PEAR", 
-            "PHPFrame", 
             "XML", 
             "Console", 
             "HTTP", 
@@ -268,7 +305,7 @@ class PHPFrame
      * 
      * @static
      * @access public
-     * @return PHPFrame_Registry_Application
+     * @return PHPFrame_AppRegistry
      * @since  1.0
      */
     public static function AppRegistry() 
@@ -281,7 +318,7 @@ class PHPFrame
             throw new LogicException($msg);
         }
         
-        return PHPFrame_Registry_Application::getInstance();
+        return PHPFrame_AppRegistry::getInstance();
     }
     
     /**
@@ -289,7 +326,7 @@ class PHPFrame
      * 
      * @static
      * @access public
-     * @return PHPFrame_Registry_Session
+     * @return PHPFrame_SessionRegistry
      * @since  1.0
      */
     public static function Session() 
@@ -302,7 +339,7 @@ class PHPFrame
             throw new LogicException($msg);
         }
         
-        return PHPFrame_Registry_Session::getInstance();
+        return PHPFrame_SessionRegistry::getInstance();
     }
     
     /**
@@ -310,7 +347,7 @@ class PHPFrame
      * 
      * @static
      * @access public
-     * @return PHPFrame_Registry_Request
+     * @return PHPFrame_RequestRegistry
      * @since  1.0
      */
     public static function Request() 
@@ -323,7 +360,7 @@ class PHPFrame
             throw new LogicException($msg);
         }
         
-        return PHPFrame_Registry_Request::getInstance();
+        return PHPFrame_RequestRegistry::getInstance();
     }
     
     /**
@@ -331,18 +368,18 @@ class PHPFrame
      * 
      * @static
      * @access public
-     * @return PHPFrame_Application_Response
+     * @return PHPFrame_Response
      * @since  1.0
      */
     public static function Response()
     {
-        return PHPFrame_Application_Response::getInstance();
+        return PHPFrame_Response::getInstance();
     }
     
     /**
      * Get database object
      * 
-     * @param PHPFrame_Database_DSN $dsn An object of type PHPFrame_Database_DSN 
+     * @param PHPFrame_DSN $dsn An object of type PHPFrame_DSN 
      *                                   used to get DB connection. This parameter 
      *                                   is optional. If omitted a new DSN object 
      *                                   will be created using the database
@@ -362,25 +399,25 @@ class PHPFrame
      * @since  1.0
      */
     public static function DB(
-        PHPFrame_Database_DSN $dsn=null,
+        PHPFrame_DSN $dsn=null,
         $db_user=null,
         $db_pass=null
     ) {
         // Set DSN using details from config object
         if (is_null($dsn)) {
-            $dsn_concrete_class = "PHPFrame_Database_DSN_";
+            $dsn_concrete_class = "PHPFrame_DSN_";
             $dsn_concrete_class .= PHPFrame::Config()->get("db.driver");
             
             $dsn = new $dsn_concrete_class(
                 PHPFrame::Config()->get("db.host"), 
                 PHPFrame::Config()->get("db.name")
             );
-        } elseif (!$dsn instanceof PHPFrame_Database_DSN) {
-            $msg = "Argument \$dsn must be instance of PHPFrame_Database_DSN.";
+        } elseif (!$dsn instanceof PHPFrame_DSN) {
+            $msg = "Argument \$dsn must be instance of PHPFrame_DSN.";
             throw new InvalidArgumentException($msg);
         }
         
-        if (!$dsn instanceof PHPFrame_Database_DSN) {
+        if (!$dsn instanceof PHPFrame_DSN) {
             $msg = "Could not acquire DSN object to instantiate DB object.";
             throw new RuntimeException($msg);
         }
@@ -406,11 +443,17 @@ class PHPFrame
      */
     public static function Boot()
     {
+        // Add core subpackages to include path
+        foreach (self::$_subpackages as $subpackage) {
+            $subpackage_path = dirname(__FILE__).DS."PHPFrame".DS.$subpackage;
+            set_include_path($subpackage_path.PATH_SEPARATOR.get_include_path());
+        }
+        
         // Load language files
         self::_loadLanguage();
         
         // Initialise phpFame's error and exception handlers.
-        PHPFrame_Exception_Handler::init();
+        PHPFrame_ExceptionHandler::init();
         
         // Initialise app config
         self::Config();
@@ -434,10 +477,10 @@ class PHPFrame
     public static function Env()
     {
         // Initialise AppRegistry
-        PHPFrame_Registry_Application::getInstance();
+        PHPFrame_AppRegistry::getInstance();
         
         // Get/init session object
-        PHPFrame_Registry_Session::getInstance();
+        PHPFrame_SessionRegistry::getInstance();
         
         // Set run level to 2 to indicate that 
         // environment layer is initialised...
@@ -471,7 +514,7 @@ class PHPFrame
                 self::$_run_level = 3;
             }
         } catch (Exception $e) {
-           PHPFrame_Debug_Logger::write("Could not create database object");
+           PHPFrame_Logger::write("Could not create database object");
         }
     }
     
@@ -493,7 +536,7 @@ class PHPFrame
             self::Mount();
         }
         
-        $frontcontroller = new PHPFrame_Application_FrontController();
+        $frontcontroller = new PHPFrame_FrontController();
         $frontcontroller->run();
     }
     

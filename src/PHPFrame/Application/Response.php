@@ -23,12 +23,12 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Application_Response
+class PHPFrame_Response
 {
     /**
      * Instance of itself
      * 
-     * @var PHPFrame_Application_Response
+     * @var PHPFrame_Response
      */
     private static $_instance = null;
     /**
@@ -63,7 +63,7 @@ class PHPFrame_Application_Response
     /**
      * Get instance
      * 
-     * @return PHPFrame_Application_Response
+     * @return PHPFrame_Response
      */
     public static function getInstance()
     {
@@ -148,13 +148,13 @@ class PHPFrame_Application_Response
      * This method is invoked by the views and renders the ouput data in the
      * document specific format.
      * 
-     * @param PHPFrame_MVC_View $view The view object to process.
+     * @param PHPFrame_View $view The view object to process.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-     public function render(PHPFrame_MVC_View $view)
+     public function render(PHPFrame_View $view)
      {
          $tmpl = PHPFrame::Request()->get("tmpl", "");
          if ($tmpl == "component") {
@@ -196,7 +196,7 @@ class PHPFrame_Application_Response
                 echo "<pre>";
             }
             
-            echo PHPFrame_Debug_Profiler::getReport();
+            echo PHPFrame_Profiler::getReport();
         }
         
         // Exit setting status to 0, 

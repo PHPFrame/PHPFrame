@@ -26,14 +26,14 @@
  * @todo     This class still needs to be implemented
  * @ignore
  */
-class PHPFrame_Mapper_XMLIdObject extends PHPFrame_Mapper_IdObject
+class PHPFrame_XMLIdObject extends PHPFrame_IdObject
 {
     /**
      * Constructor
      * 
      * @param array $options An associative array with initialisation options.
      *                       For a list of available options invoke 
-     *                       PHPFrame_Mapper_IdObject::getOptions().
+     *                       PHPFrame_IdObject::getOptions().
      * 
      * @access public
      * @return void
@@ -76,7 +76,7 @@ class PHPFrame_Mapper_XMLIdObject extends PHPFrame_Mapper_IdObject
      * @param string|array $fields a string or array of strings with field names
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function select($fields) {}
@@ -87,7 +87,7 @@ class PHPFrame_Mapper_XMLIdObject extends PHPFrame_Mapper_IdObject
      * @param string $table A string with the table name
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function from($table) {}
@@ -100,7 +100,7 @@ class PHPFrame_Mapper_XMLIdObject extends PHPFrame_Mapper_IdObject
      * @param string $right
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function where($left, $operator, $right) {}

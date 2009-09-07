@@ -1,5 +1,5 @@
 <?php
-class AppTemplate extends PHPFrame_MVC_Model
+class AppTemplate extends PHPFrame_Model
 {
     private $_install_dir = null;
     private $_preferred_mirror = null;
@@ -23,7 +23,7 @@ class AppTemplate extends PHPFrame_MVC_Model
         }
         
         // before anything else we check that the directory is writable
-        PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_dir);
+        PHPFrame_Filesystem::ensureWritableDir($this->_install_dir);
         
         // Fetch package from dist server
         $this->_fetchSource($template, $allow_non_empty_dir);
@@ -35,8 +35,8 @@ class AppTemplate extends PHPFrame_MVC_Model
         $this->_createDummyController();
         
         //Create writable tmp and var folders for app
-        PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_dir.DS."tmp");
-        PHPFrame_Utils_Filesystem::ensureWritableDir($this->_install_dir.DS."var");
+        PHPFrame_Filesystem::ensureWritableDir($this->_install_dir.DS."tmp");
+        PHPFrame_Filesystem::ensureWritableDir($this->_install_dir.DS."var");
     }
     
     public function update()
@@ -52,7 +52,7 @@ class AppTemplate extends PHPFrame_MVC_Model
         $msg .= "Using command \"".$cmd."\"...\n";
         echo $msg;
         
-        $exec = new PHPFrame_Utils_Exec($cmd);
+        $exec = new PHPFrame_Exec($cmd);
         
         if ($exec->getReturnVar() > 0) {
             $msg = "Failed to remove app.";
@@ -65,7 +65,7 @@ class AppTemplate extends PHPFrame_MVC_Model
         // check that the directory is empty
         if (
             !$allow_non_empty_dir 
-            && !PHPFrame_Utils_Filesystem::isEmptyDir($this->_install_dir)
+            && !PHPFrame_Filesystem::isEmptyDir($this->_install_dir)
         ) {
             $msg = "Target directory is not empty.";
             $msg .= "\nUse \"phpframe app new_app app_name=MyApp ";
@@ -79,12 +79,12 @@ class AppTemplate extends PHPFrame_MVC_Model
         // download package from preferred mirror
         $file_name     = "PHPFrame_AppTemplate-Full-0.0.1.tgz";
         $url           = $this->_preferred_mirror."/".$file_name;
-        $download_tmp  = PHPFrame_Utils_Filesystem::getSystemTempDir();
+        $download_tmp  = PHPFrame_Filesystem::getSystemTempDir();
         $download_tmp .= DS."PHPFrame".DS."download";
         $target        = $download_tmp.DS.$file_name;
         
         // Make sure we can write in download directory
-        PHPFrame_Utils_Filesystem::ensureWritableDir($download_tmp);
+        PHPFrame_Filesystem::ensureWritableDir($download_tmp);
         
         echo "Attempting to download ".$url."...\n";
         
@@ -136,7 +136,7 @@ class AppTemplate extends PHPFrame_MVC_Model
         $config_path = $this->_install_dir.DS."etc";
         
         // Make sure we can write in etc directory
-        PHPFrame_Utils_Filesystem::ensureWritableDir($config_path);
+        PHPFrame_Filesystem::ensureWritableDir($config_path);
         
         $config_file_name = $config_path.DS."phpframe.ini";
         $config->store($config_file_name);

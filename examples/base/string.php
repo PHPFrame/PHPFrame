@@ -1,7 +1,7 @@
 <?php
 include_once "PHPFrame.php";
 
-$str_obj = new PHPFrame_Base_String("i am a string");
+$str_obj = new PHPFrame_String("i am a string");
 
 var_dump(
     $str_obj, 

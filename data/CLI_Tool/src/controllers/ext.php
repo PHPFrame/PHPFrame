@@ -1,5 +1,5 @@
 <?php
-class ExtController extends PHPFrame_MVC_ActionController
+class ExtController extends PHPFrame_ActionController
 {
     private $_install_dir=null;
     

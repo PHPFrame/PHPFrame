@@ -25,25 +25,25 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-abstract class PHPFrame_Mapper_DomainObjectAssembler
+abstract class PHPFrame_DomainObjectAssembler
 {
     /**
      * Reference to the factory object to use
      * 
-     * @var PHPFrame_Mapper_PersistenceFactory
+     * @var PHPFrame_PersistenceFactory
      */
     protected $factory=null;
     
     /**
      * Constructor
      * 
-     * @param PHPFrame_Mapper_PersistenceFactory $factory
+     * @param PHPFrame_PersistenceFactory $factory
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct(PHPFrame_Mapper_PersistenceFactory $factory)
+    public function __construct(PHPFrame_PersistenceFactory $factory)
     {
         $this->factory = $factory;
     }
@@ -51,10 +51,10 @@ abstract class PHPFrame_Mapper_DomainObjectAssembler
     /**
      * Find a domain object using an IdObject or numeric id
      * 
-     * @param PHPFrame_Mapper_IdObject|int $id_obj
+     * @param PHPFrame_IdObject|int $id_obj
      * 
      * @access public
-     * @return PHPFrame_Mapper_DomainObject
+     * @return PHPFrame_DomainObject
      * @since  1.0
      */
     abstract public function findOne($id_obj);
@@ -62,33 +62,33 @@ abstract class PHPFrame_Mapper_DomainObjectAssembler
     /**
      * Find a collection of domain objects using an IdObject
      * 
-     * @param PHPFrame_Mapper_IdObject $id_obj
+     * @param PHPFrame_IdObject $id_obj
      * 
      * @access public
-     * @return PHPFrame_Mapper_Collection
+     * @return PHPFrame_DomainObjectCollection
      * @since  1.0
      */
-    abstract public function find(PHPFrame_Mapper_IdObject $id_obj=null);
+    abstract public function find(PHPFrame_IdObject $id_obj=null);
     
     /**
      * Persist domain object
      * 
-     * @param PHPFrame_Mapper_DomainObject $obj
+     * @param PHPFrame_DomainObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    abstract public function insert(PHPFrame_Mapper_DomainObject $obj);
+    abstract public function insert(PHPFrame_DomainObject $obj);
     
     /**
      * Delete domain object
      * 
-     * @param PHPFrame_Mapper_DomainObject $obj
+     * @param PHPFrame_DomainObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    abstract public function delete(PHPFrame_Mapper_DomainObject $obj);
+    abstract public function delete(PHPFrame_DomainObject $obj);
 }

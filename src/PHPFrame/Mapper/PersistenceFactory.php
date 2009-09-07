@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-abstract class PHPFrame_Mapper_PersistenceFactory
+abstract class PHPFrame_PersistenceFactory
 {
     /**
      * Target class
@@ -68,7 +68,7 @@ abstract class PHPFrame_Mapper_PersistenceFactory
      * @param bool   $try_alternative_storage
      * 
      * @access public
-     * @return PHPFrame_Mapper_PersistenceFactory
+     * @return PHPFrame_PersistenceFactory
      * @since  1.0
      */
     public static function getFactory(
@@ -79,11 +79,11 @@ abstract class PHPFrame_Mapper_PersistenceFactory
     ) {
         switch ($storage) {
             case self::STORAGE_SQL :
-                $class_name = "PHPFrame_Mapper_SQLPersistenceFactory";
+                $class_name = "PHPFrame_SQLPersistenceFactory";
                 break;
             
             case self::STORAGE_XML :
-                $class_name = "PHPFrame_Mapper_XMLPersistenceFactory";
+                $class_name = "PHPFrame_XMLPersistenceFactory";
                 break;
             
             default :
@@ -99,24 +99,24 @@ abstract class PHPFrame_Mapper_PersistenceFactory
      * Get DomainObjectFactory
      * 
      * @access public
-     * @return PHPFrame_Mapper_DomainObjectFactory
+     * @return PHPFrame_DomainObjectFactory
      * @since  1.0
      */
     public function getDomainObjectFactory()
     {
-        return new PHPFrame_Mapper_DomainObjectFactory($this->_target_class);
+        return new PHPFrame_DomainObjectFactory($this->_target_class);
     }
     
     /**
      * Get Collection
      * 
      * @access public
-     * @return PHPFrame_Mapper_Collection
+     * @return PHPFrame_DomainObjectCollection
      * @since  1.0
      */
     public function getCollection(array $raw=null)
     {
-        return new PHPFrame_Mapper_Collection($raw, $this->getDomainObjectFactory());
+        return new PHPFrame_DomainObjectCollection($raw, $this->getDomainObjectFactory());
     }
     
     /**
@@ -147,7 +147,7 @@ abstract class PHPFrame_Mapper_PersistenceFactory
      * Get object assembler
      * 
      * @access public
-     * @return PHPFrame_Mapper_DomainObjectAssembler
+     * @return PHPFrame_DomainObjectAssembler
      * @since  1.0
      */
     abstract public function getAssembler();
@@ -156,7 +156,7 @@ abstract class PHPFrame_Mapper_PersistenceFactory
      * Create a new IdObject to work with the target class
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     abstract public function getIdObject();

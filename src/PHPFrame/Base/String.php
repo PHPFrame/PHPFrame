@@ -24,7 +24,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Base_String
+class PHPFrame_String
 {
     /**
      * Private propery used to store the string as a primitive value

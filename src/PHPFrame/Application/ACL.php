@@ -24,7 +24,7 @@
  * @since    1.0
  * @internal
  */
-class PHPFrame_Application_ACL extends PHPFrame_Mapper_DomainObject
+class PHPFrame_ACL extends PHPFrame_DomainObject
 {
     protected $groupid;
     protected $controller;

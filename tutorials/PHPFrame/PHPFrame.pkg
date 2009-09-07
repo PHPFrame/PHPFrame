@@ -76,7 +76,7 @@
         Note that we get the db object using {@link PHPFrame::DB()} without passing any 
         argument, so the values defined in etc/phpframe/ini will be used. If you 
         want to access different data sources to the one defined in the main config 
-        file of your app you can pass a DSN object {@link PHPFrame_Database_DSN()} and 
+        file of your app you can pass a DSN object {@link PHPFrame_DSN()} and 
         optional username and password to {@link PHPFrame::DB()}; 
         </para>
         <programlisting>{@example PHPFrame/example-3.php 3}</programlisting>

@@ -21,43 +21,43 @@
     <itemizedlist>
         <listitem>
         <para>
-        {@link PHPFrame_Base_Array}
+        {@link PHPFrame_Array}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Base_Number}
+        {@link PHPFrame_Number}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Base_String}
+        {@link PHPFrame_String}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Base_Object}
+        {@link PHPFrame_Object}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Base_Observer}
+        {@link PHPFrame_Observer}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Base_Subject}
+        {@link PHPFrame_Subject}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Base_Singleton}
+        {@link PHPFrame_Singleton}
         </para>
         </listitem>
         

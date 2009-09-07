@@ -2,6 +2,6 @@
 require "PHPFrame.php";
 
 $file_path = "/Users/lupomontero/Desktop";
-$file_info = new PHPFrame_FS_FileInfo($file_path, true);
+$file_info = new PHPFrame_FileInfo($file_path, true);
 
 var_dump($file_info);

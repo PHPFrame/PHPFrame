@@ -17,17 +17,17 @@
  * Logger Class
  * 
  * This class implements the "Observer" base class in order to subscribe to updates
- * from "observable" objects (objects of type PHPFrame_Base_Subject).
+ * from "observable" objects (objects of type PHPFrame_Subject).
  * 
  * @category PHPFrame
  * @package  Debug
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see      PHPFrame_Base_Observer
+ * @see      PHPFrame_Observer
  * @since    1.0
  */
-class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
+class PHPFrame_Logger extends PHPFrame_Observer
 {
     private static $_instance = null;
     private $_log_file_info = null;
@@ -60,7 +60,7 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
         }
         
         // Instantiate file info object for log file
-        $this->_log_file_info = new PHPFrame_FS_FileInfo($log_file);
+        $this->_log_file_info = new PHPFrame_FileInfo($log_file);
         
         if (!$this->_log_file_info->isWritable()) {
             $msg = "Could not write log. ";
@@ -74,7 +74,7 @@ class PHPFrame_Debug_Logger extends PHPFrame_Base_Observer
      * Get singleton instance of Logger
      * 
      * @access public
-     * @return PHPFrame_Debug_Logger
+     * @return PHPFrame_Logger
      * @since  1.0
      */
     public static function instance()

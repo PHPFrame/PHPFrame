@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Mail_Mailer extends PHPMailer
+class PHPFrame_Mailer extends PHPMailer
 {
     private $_messageid_sfx=null;
     private $_error=array();

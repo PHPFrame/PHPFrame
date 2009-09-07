@@ -16,7 +16,7 @@
 /**
  * Pathway Class
  * 
- * This class is used by objects of type PHPFrame_Document_HTML. They have an pathway
+ * This class is used by objects of type PHPFrame_HTMLDocument. They have an pathway
  * instance used when rendering output in HTML format.
  * 
  * @category PHPFrame
@@ -24,10 +24,10 @@
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see      PHPFrame_Document_HTML
+ * @see      PHPFrame_HTMLDocument
  * @since    1.0
  */
-class PHPFrame_Application_Pathway
+class PHPFrame_Pathway
 {
     /**
      * Associative array containing the pathway items

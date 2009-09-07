@@ -21,19 +21,19 @@
     <itemizedlist>
         <listitem>
         <para>
-        {@link PHPFrame_Debug_Informer}
+        {@link PHPFrame_Informer}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Debug_Logger}
+        {@link PHPFrame_Logger}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Debug_Profiler}
+        {@link PHPFrame_Profiler}
         </para>
         </listitem>
         

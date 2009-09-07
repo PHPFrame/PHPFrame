@@ -23,55 +23,55 @@
     <itemizedlist>
         <listitem>
         <para>
-        {@link PHPFrame_Utils_Crypt}
+        {@link PHPFrame_Crypt}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Utils_Exec}
+        {@link PHPFrame_Exec}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Utils_FeedReader}
+        {@link PHPFrame_FeedReader}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Utils_Filesystem}
+        {@link PHPFrame_Filesystem}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Utils_Filter}
+        {@link PHPFrame_Filter}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Utils_Image}
+        {@link PHPFrame_Image}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Utils_Rewrite}
+        {@link PHPFrame_Rewrite}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Utils_URI}
+        {@link PHPFrame_URI}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Utils_vCard}
+        {@link PHPFrame_vCard}
         </para>
         </listitem>
     </itemizedlist>

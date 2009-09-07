@@ -24,7 +24,7 @@
  * 
  * Example:
  * <code>
- * class singletonClass extends PHPFrame_Base_Singleton {
+ * class singletonClass extends PHPFrame_Singleton {
  *         // Class code...
  * }
  * 
@@ -32,9 +32,9 @@
  * $mySingletonObject1 = new singletonClass();
  * 
  * // This will assign the singleton object to $mySingletonObject2
- * $mySingletonObject2 = PHPFrame_Base_Singleton::getInstance('singletonClass');
+ * $mySingletonObject2 = PHPFrame_Singleton::getInstance('singletonClass');
  * 
- * // This will also work, because the getInstance() method is inherited from the PHPFrame_Base_Singleton class
+ * // This will also work, because the getInstance() method is inherited from the PHPFrame_Singleton class
  * $mySingletonObject3 = singletonClass::getInstance('singletonClass');
  * </code>
  * 
@@ -46,7 +46,7 @@
  * @since    1.0
  * @abstract
  */
-abstract class PHPFrame_Base_Singleton extends PHPFrame_Base_Object
+abstract class PHPFrame_Singleton extends PHPFrame_Object
 {
     /**
      * Variable holding an array of "single" instances of this classes children.

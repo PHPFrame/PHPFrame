@@ -20,8 +20,8 @@
     </para>
     
     <para>
-    The Registry package is subclassed into {@link PHPFrame_Registry_Application} , 
-    {@link PHPFrame_Registry_Request} and {@link PHPFrame_Registry_Session}. Each of 
+    The Registry package is subclassed into {@link PHPFrame_AppRegistry} , 
+    {@link PHPFrame_RequestRegistry} and {@link PHPFrame_SessionRegistry}. Each of 
     these will produce a singleton object that stores data in the given "scope".
     </para>
     
@@ -58,7 +58,7 @@
     <itemizedlist>
         <listitem>
         <para>
-        {@link PHPFrame_Registry_Application}
+        {@link PHPFrame_AppRegistry}
         </para>
         <para>
         The Application registry will contain data that is shared application wide, 
@@ -75,7 +75,7 @@
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_Registry_Request}
+        {@link PHPFrame_RequestRegistry}
         </para>
         <para>
         The Request registry is a centralised storage object for all request 
@@ -93,7 +93,7 @@
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_Registry_Session}
+        {@link PHPFrame_SessionRegistry}
         </para>
         <para>
         The Session registry unsurprisinly handles data that will be shared across a 

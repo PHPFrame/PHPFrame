@@ -35,14 +35,14 @@
  * @since    1.0
  * @ignore
  */
-interface PHPFrame_Client_IClient
+interface PHPFrame_IClient
 {
     /**
      * Check if this is the correct helper for the client being used and returns instance if so
      * 
      * @static
      * @access public
-     * @return PHPFrame_Client_IClient|boolean
+     * @return PHPFrame_IClient|boolean
      * @since  1.0
      */
     public static function detect();
@@ -73,15 +73,15 @@ interface PHPFrame_Client_IClient
      * something before the component is executed.
      * 
      * The implementing Client classes will need to make sure the set the response 
-     * content to the right document type. See PHPFrame_Client_Default for an example. 
+     * content to the right document type. See PHPFrame_DefaultClient for an example. 
      * 
-     * @param PHPFrame_Application_Response $response The response object to prepare.
+     * @param PHPFrame_Response $response The response object to prepare.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function prepareResponse(PHPFrame_Application_Response $response);
+    public function prepareResponse(PHPFrame_Response $response);
     
     public function redirect($url);
 }

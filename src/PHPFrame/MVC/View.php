@@ -27,10 +27,10 @@
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see      PHPFrame_MVC_ActionController, PHPFrame_MVC_Model
+ * @see      PHPFrame_ActionController, PHPFrame_Model
  * @since    1.0
  */
-class PHPFrame_MVC_View
+class PHPFrame_View
 {
     /**
      * The view name
@@ -47,7 +47,7 @@ class PHPFrame_MVC_View
     /**
      * A pathway object for this view
      * 
-     * @var PHPFrame_Application_Pathway
+     * @var PHPFrame_Pathway
      */
     protected $_pathway=null;
     /**
@@ -71,7 +71,7 @@ class PHPFrame_MVC_View
         $this->_name = trim((string) $name);
         
         // Acquire pathway object
-        $this->_pathway = new PHPFrame_Application_Pathway();
+        $this->_pathway = new PHPFrame_Pathway();
         
         // Get reference to the document used to render the view
         // This document is stored in the response object
@@ -121,7 +121,7 @@ class PHPFrame_MVC_View
      * Get the view's pathway object
      * 
      * @access public
-     * @return PHPFrame_Application_Pathway
+     * @return PHPFrame_Pathway
      * @since  1.0
      */
     public function getPathway()
@@ -133,7 +133,7 @@ class PHPFrame_MVC_View
      * Get the view's pathway object
      * 
      * @access public
-     * @return PHPFrame_Application_Pathway
+     * @return PHPFrame_Pathway
      * @since  1.0
      */
     public function getDocument()

@@ -66,7 +66,7 @@
  * @uses     IteratorAggregate
  * @since    1.0
  */
-abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
+abstract class PHPFrame_DomainObject extends PHPFrame_Object
     implements IteratorAggregate
 {
     /**
@@ -199,7 +199,7 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
      */
     public function setId($int)
     {
-        $int = PHPFrame_Utils_Filter::validateInt($int);
+        $int = PHPFrame_Filter::validateInt($int);
         
         $this->id = $int;
     }
@@ -227,7 +227,7 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
      */
     public function setCreated($str)
     {
-        $str = PHPFrame_Utils_Filter::validateDateTime($str);
+        $str = PHPFrame_Filter::validateDateTime($str);
         
         // Set property
         $this->created = $str;
@@ -256,7 +256,7 @@ abstract class PHPFrame_Mapper_DomainObject extends PHPFrame_Base_Object
      */
     public function setModified($str)
     {
-        $str = PHPFrame_Utils_Filter::validateDateTime($str);
+        $str = PHPFrame_Filter::validateDateTime($str);
         
         // Set property
         $this->modified = $str;

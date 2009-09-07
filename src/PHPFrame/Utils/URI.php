@@ -32,7 +32,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Utils_URI
+class PHPFrame_URI
 {
     /**
      * The URI scheme

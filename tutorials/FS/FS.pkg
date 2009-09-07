@@ -23,13 +23,13 @@
     <itemizedlist>
         <listitem>
         <para>
-        {@link PHPFrame_FS_FileInfo}
+        {@link PHPFrame_FileInfo}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_FS_FileObject}
+        {@link PHPFrame_FileObject}
         </para>
         </listitem>
         

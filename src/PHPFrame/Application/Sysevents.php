@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Application_Sysevents
+class PHPFrame_Sysevents
 {
     /**
      * Events summary

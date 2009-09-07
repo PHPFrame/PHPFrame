@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Mapper_DomainObjectFactory
+class PHPFrame_DomainObjectFactory
 {
     /**
      * Constructor
@@ -45,7 +45,7 @@ class PHPFrame_Mapper_DomainObjectFactory
      * @param array $array
      * 
      * @access public
-     * @return PHPFrame_Mapper_DomainObject
+     * @return PHPFrame_DomainObject
      * @since  1.0
      */
     public function createObject(array $array)
@@ -53,7 +53,7 @@ class PHPFrame_Mapper_DomainObjectFactory
         $class_name = $this->_target_class;
         
         $reflectionObj = new ReflectionClass($class_name);
-        if (!$reflectionObj->isSubclassOf("PHPFrame_Mapper_DomainObject")) {
+        if (!$reflectionObj->isSubclassOf("PHPFrame_DomainObject")) {
             $msg = "Domain Object '".$class_name."' not supported.";
             throw new RuntimeException($msg);
         }

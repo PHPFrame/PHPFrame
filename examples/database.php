@@ -22,7 +22,7 @@ loadFramework();
 <h2>Code</h2>
 
 <pre style="border:1px solid #990000; padding:20px; background-color: #FFFFCC;">
-$row = new PHPFrame_Database_Row("#__users");
+$row = new PHPFrame_DatabaseRow("#__users");
 
 $id_obj = new PHPFrame_Database_IdObject();
 $id_obj->select(array("u.*", "g.name AS groupname"))
@@ -33,7 +33,7 @@ $row->load($id_obj);
 </pre>
 <?php
 
-$row = new PHPFrame_Database_Row("#__users");
+$row = new PHPFrame_DatabaseRow("#__users");
 
 $id_obj = new PHPFrame_Database_IdObject();
 $id_obj->select(array("u.*", "g.name AS groupname"))

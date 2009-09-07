@@ -34,10 +34,6 @@
  <notes>##NOTES##</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
-   <file baseinstalldir="/" name="PHPFrame/Addons/FeatureInfo.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Addons/Info.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Addons/LibInfo.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Addons/ThemeInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/ACL.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Features.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/FrontController.php" role="php" />
@@ -53,50 +49,47 @@
    <file baseinstalldir="/" name="PHPFrame/Base/Singleton.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/String.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Subject.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Client/CLI.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Client/Default.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Client/CLIClient.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Client/DefaultClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/IClient.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Client/Mobile.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Client/XMLRPC.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Config.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Client/MobileClient.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Client/XMLRPCClient.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Config/Config.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/Database.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/DatabaseField.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/DatabaseRow.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/DatabaseRowCollection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DSN.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/Field.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/IdObject.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/Row.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/RowCollection.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DSN/DBLIB.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DSN/Firebird.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DSN/IBM.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DSN/Informix.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DSN/MySQL.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DSN/ODBC.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DSN/Oracle.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DSN/PgSQL.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DSN/SQLite.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/MySQLDSN.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/SQLiteDSN.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Informer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Logger.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Profiler.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Document/HTML.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Document/Plain.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Document/RPC.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Document/XML.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Document.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Exception/Database.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Exception/Error.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Exception/Handler.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Exception/XMLRPC.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document/Document.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document/HTMLDocument.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document/PlainDocument.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document/RPCDocument.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document/XMLDocument.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Exception/DatabaseException.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Exception/ErrorException.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Exception/ExceptionHandler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Exception/XMLRPCException.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Ext/ExtInfo.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Ext/FeatureInfo.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Ext/LibInfo.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Ext/ThemeInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FS/FileInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FS/FileObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/Request/DownloadListener.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Lang/en-GB.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/Collection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectAssembler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectCollection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/DomainObjectFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/IdObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/Mapper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLDomainObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLIdObject.php" role="php" />
@@ -104,24 +97,20 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLDomainObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistenceFactory.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/MVC/Factory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/MVC/MVCFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/Model.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/View.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Registry/Application.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Registry/Request.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Registry/Session.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Registry.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/SCM/GIT.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/SCM/ISCM.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/SCM/SVN.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/UI/CLI.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/UI/HTML.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Registry/AppRegistry.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Registry/Registry.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Registry/RequestRegistry.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Registry/SessionRegistry.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/UI/CLIUI.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/UI/HTMLUI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/IUI.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/User/Helper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/OpenID.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/User.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/User/User.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/User/UserHelper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Crypt.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Exec.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/FeedReader.php" role="php" />
@@ -131,6 +120,9 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/Rewrite.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/URI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/vCard.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/VersionControl/GITVersionControl.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/VersionControl/IVersionControl.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/VersionControl/SVNVersionControl.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    
    <file baseinstalldir="/" name="CLI_Tool/etc/phpframe.ini" role="data" />

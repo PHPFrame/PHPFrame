@@ -24,7 +24,7 @@
  * @see      SplFileObject
  * @since    1.0
  */
-class PHPFrame_FS_FileObject extends SplFileObject
+class PHPFrame_FileObject extends SplFileObject
 {
     public function __construct(
         $file_name, 
@@ -41,7 +41,7 @@ class PHPFrame_FS_FileObject extends SplFileObject
         }
     }
     
-    public function getFileInfo($class_name="PHPFrame_FS_FileInfo")
+    public function getFileInfo($class_name="PHPFrame_FileInfo")
     {
         return new $class_name($this->getRealPath());
     }

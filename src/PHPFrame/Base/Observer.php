@@ -19,22 +19,22 @@
  * 
  * This class provides an abstract implementation of the SplObserver interface.
  * 
- * This class is designed to work together with the PHPFrame_Base_Subject class.
+ * This class is designed to work together with the PHPFrame_Subject class.
  * 
  * @category PHPFrame
  * @package  Base
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see      PHPFrame_Base_Subject
+ * @see      PHPFrame_Subject
  * @since    1.0
  */
-abstract class PHPFrame_Base_Observer implements SplObserver
+abstract class PHPFrame_Observer implements SplObserver
 {
     /**
      * Update 
      * 
-     * @param PHPFrame_Base_Subject $subject Instance of the subject issuing the update
+     * @param PHPFrame_Subject $subject Instance of the subject issuing the update
      * 
      * @access public
      * @return void

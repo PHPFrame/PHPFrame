@@ -34,7 +34,7 @@ class ExtInstaller
         $target        = $download_tmp.DS.$file_name.".tgz";
         
         // Make sure we can write in download directory
-        PHPFrame_Utils_Filesystem::ensureWritableDir($download_tmp);
+        PHPFrame_Filesystem::ensureWritableDir($download_tmp);
         
         echo "Attempting to download ".$url."...\n";
         
@@ -58,7 +58,7 @@ class ExtInstaller
         
         // Extract archive in install dir
         $tmp_dir = $download_tmp.DS.$file_name;
-        PHPFrame_Utils_Filesystem::ensureWritableDir($tmp_dir);
+        PHPFrame_Filesystem::ensureWritableDir($tmp_dir);
         
         $archive = new Archive_Tar($target, "gz");
         $archive->extract($tmp_dir);

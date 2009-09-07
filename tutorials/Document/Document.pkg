@@ -27,25 +27,25 @@
         
         <listitem>
         <para>
-        {@link PHPFrame_Document_HTML}
+        {@link PHPFrame_HTMLDocument}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Document_Plain}
+        {@link PHPFrame_PlainDocument}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Document_RPC}
+        {@link PHPFrame_RPCDocument}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Document_XML}
+        {@link PHPFrame_XMLDocument}
         </para>
         </listitem>
         

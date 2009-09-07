@@ -24,7 +24,7 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_Mapper_SQLPersistenceFactory extends PHPFrame_Mapper_PersistenceFactory
+class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
 {
     /**
      * Constructor
@@ -43,25 +43,25 @@ class PHPFrame_Mapper_SQLPersistenceFactory extends PHPFrame_Mapper_PersistenceF
      * Get object assembler
      * 
      * @access public
-     * @return PHPFrame_Mapper_DomainObjectAssembler
+     * @return PHPFrame_DomainObjectAssembler
      * @since  1.0
      */
     public function getAssembler()
     {
-        return new PHPFrame_Mapper_SQLDomainObjectAssembler($this);
+        return new PHPFrame_SQLDomainObjectAssembler($this);
     }
     
     /**
      * Create a new IdObject to work with the target class
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function getIdObject()
     {
         $options = array("select"=>"*", "from"=>$this->getTableName());
         
-        return new PHPFrame_Mapper_SQLIdObject($options);
+        return new PHPFrame_SQLIdObject($options);
     }
 }

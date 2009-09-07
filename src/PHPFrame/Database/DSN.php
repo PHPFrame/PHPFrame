@@ -27,7 +27,7 @@
  * @since    1.0
  * @abstract
  */
-abstract class PHPFrame_Database_DSN
+abstract class PHPFrame_DSN
 {
     /**
      * A string identifying the database driver

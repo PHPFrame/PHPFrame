@@ -1,5 +1,5 @@
 <?php
-class DummyController extends PHPFrame_MVC_ActionController
+class DummyController extends PHPFrame_ActionController
 {
     public function __construct()
     {

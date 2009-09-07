@@ -22,25 +22,25 @@
     
         <listitem>
         <para>
-        {@link PHPFrame_MVC_ActionController}
+        {@link PHPFrame_ActionController}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_MVC_Factory}
+        {@link PHPFrame_MVCFactory}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_MVC_Model}
+        {@link PHPFrame_Model}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_MVC_View}
+        {@link PHPFrame_View}
         </para>
         </listitem>
         

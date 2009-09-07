@@ -24,7 +24,7 @@
  * @see      PHPFrame
  * @since    1.0
  */
-interface PHPFrame_UI_IUI
+interface PHPFrame_IUI
 {
     
 }

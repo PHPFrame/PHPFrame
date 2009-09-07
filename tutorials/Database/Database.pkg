@@ -28,7 +28,7 @@
         
         <listitem>
         <para>
-        {@link PHPFrame_Database_DSN}
+        {@link PHPFrame_DSN}
         </para>
         </listitem>
         

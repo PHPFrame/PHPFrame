@@ -21,8 +21,8 @@
  * 
  * This class adds two methods on top of the SPL ArrayObject:
  * 
- *  - {@link PHPFrame_Base_Array::isAssoc()}
- *  - {@link PHPFrame_Base_Array::depth()}
+ *  - {@link PHPFrame_Array::isAssoc()}
+ *  - {@link PHPFrame_Array::depth()}
  * 
  * @category PHPFrame
  * @package  Base
@@ -32,7 +32,7 @@
  * @see      ArrayObject
  * @since    1.0
  */
-class PHPFrame_Base_Array extends ArrayObject
+class PHPFrame_Array extends ArrayObject
 {
     /**
      * Private property holding the array data

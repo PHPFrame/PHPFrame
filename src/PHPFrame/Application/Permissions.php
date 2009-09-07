@@ -23,18 +23,18 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Application_Permissions
+class PHPFrame_Permissions
 {
     /**
      * A mapper object used to store and retrieve access level list
      *
-     * @var PHPFrame_Mapper_Collection
+     * @var PHPFrame_DomainObjectCollection
      */
     private $_mapper;
     /**
      * A collection object holding access level list
      *
-     * @var PHPFrame_Mapper_Collection
+     * @var PHPFrame_DomainObjectCollection
      */
     private $_acl;
     
@@ -57,7 +57,7 @@ class PHPFrame_Application_Permissions
         
         // Get ACL from file
         $this->_mapper = new PHPFrame_Mapper(
-            "PHPFrame_Application_ACL", 
+            "PHPFrame_ACL", 
             "acl", 
             PHPFrame_Mapper::STORAGE_XML, 
             false, 
@@ -73,12 +73,15 @@ class PHPFrame_Application_Permissions
      * @param string $controller The controller we want to authorise
      * @param string $action     The action we want to authorise
      * @param int    $groupid    The groupid of the user we want to authorise
+     * @param bool   $enforce    Default is FALSE. If set to yes permissions 
+     *                           will be enforced regardless of IGNORE_ACL being 
+     *                           set in global configuration.
      * 
      * @access public
      * @return bool
      * @since  1.0
      */
-    public function authorise($controller, $action, $groupid) 
+    public function authorise($controller, $action, $groupid, $enforce=false) 
     {
         // Bypass auth for admin users
         if ($groupid == 1) {
@@ -86,7 +89,7 @@ class PHPFrame_Application_Permissions
         }
         
         $ignore_acl = PHPFrame::Config()->get("ignore_acl");
-        if ($ignore_acl == 1) {
+        if ($ignore_acl == 1 && !$enforce) {
             return true;
         }
         

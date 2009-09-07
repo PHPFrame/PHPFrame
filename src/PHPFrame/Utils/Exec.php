@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Utils_Exec
+class PHPFrame_Exec
 {
     private $_cmd=null;
     private $_output=null;

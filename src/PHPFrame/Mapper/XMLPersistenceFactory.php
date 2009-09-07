@@ -24,7 +24,7 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_Mapper_XMLPersistenceFactory extends PHPFrame_Mapper_PersistenceFactory
+class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
 {
     private $_path = null;
     
@@ -49,25 +49,25 @@ class PHPFrame_Mapper_XMLPersistenceFactory extends PHPFrame_Mapper_PersistenceF
      * Get object assembler
      * 
      * @access public
-     * @return PHPFrame_Mapper_DomainObjectAssembler
+     * @return PHPFrame_DomainObjectAssembler
      * @since  1.0
      */
     public function getAssembler()
     {
-        return new PHPFrame_Mapper_XMLDomainObjectAssembler($this, $this->_path);
+        return new PHPFrame_XMLDomainObjectAssembler($this, $this->_path);
     }
     
     /**
      * Create a new IdObject to work with the target class
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function getIdObject()
     {
         $options = array("select"=>"*", "from"=>$this->getTableName());
         
-        return new PHPFrame_Mapper_XMLIdObject($options);
+        return new PHPFrame_XMLIdObject($options);
     }
 }

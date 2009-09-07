@@ -16,7 +16,7 @@
     
     <para>
     Mappers are designed to be used with "domain objects" that descend from the 
-    {@link PHPFrame_Mapper_DomainObject} class. You will normally be creating 
+    {@link PHPFrame_DomainObject} class. You will normally be creating 
     your app models by extending this class, making it really easy to persist 
     those objects.
     </para>
@@ -34,32 +34,32 @@
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_Mapper_Collection}
+        {@link PHPFrame_DomainObjectCollection}
         </para>
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_Mapper_DomainObject}
+        {@link PHPFrame_DomainObject}
         </para>
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_Mapper_DomainObjectAssembler}
+        {@link PHPFrame_DomainObjectAssembler}
         </para>
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_Mapper_DomainObjectFactory}
+        {@link PHPFrame_DomainObjectFactory}
         </para>
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_Mapper_IdObject}
+        {@link PHPFrame_IdObject}
         </para>
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_Mapper_PersistenceFactory}
+        {@link PHPFrame_PersistenceFactory}
         </para>
     </listitem>
     </itemizedlist>
@@ -72,16 +72,16 @@
     <example>
         <title>Find a domain object using the a generic mapper</title>
         <para>
-        In this example we create an instance of PHPFrame_Application_ACL, which 
-        extends PHPFrame_Mapper_DomainObject, so that we can use it with the 
+        In this example we create an instance of PHPFrame_ACL, which 
+        extends PHPFrame_DomainObject, so that we can use it with the 
         mapper.
         </para>
         <programlisting>
 <![CDATA[
-// Instantiate generic mapper for PHPFrame_Application_ACL class 
+// Instantiate generic mapper for PHPFrame_ACL class 
 // and specify XML storage
 $mapper = new PHPFrame_Mapper(
-    "PHPFrame_Application_ACL", 
+    "PHPFrame_ACL", 
     "acl", 
     PHPFrame_Mapper::STORAGE_XML, 
     false, 
@@ -89,7 +89,7 @@ $mapper = new PHPFrame_Mapper(
 );
 
 // Instantiate domain object
-$acl = new PHPFrame_Application_ACL(array(
+$acl = new PHPFrame_ACL(array(
     "groupid"=>1, 
     "controller"=>"dummy", 
     "action"=>"*", 
@@ -107,7 +107,7 @@ foreach ($mapper->find() as $item) {
         </programlisting>
         <screen>
 <![CDATA[
-PHPFrame_Application_ACL Object
+PHPFrame_ACL Object
 (
     [groupid:protected] => 1
     [controller:protected] => dummy

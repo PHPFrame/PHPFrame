@@ -17,18 +17,18 @@
  * Informer Class
  * 
  * This class implements the "Observer" base class in order to subscribe to updates
- * from "observable" objects (objects of type PHPFrame_Base_Subject).
+ * from "observable" objects (objects of type PHPFrame_Subject).
  * 
  * @category PHPFrame
  * @package  Debug
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see      PHPFrame_Base_Observer
+ * @see      PHPFrame_Observer
  * @since    1.0
  * @ignore
  */
-class PHPFrame_Debug_Informer extends PHPFrame_Base_Observer
+class PHPFrame_Informer extends PHPFrame_Observer
 {
     /**
      * Handle observed objects updates

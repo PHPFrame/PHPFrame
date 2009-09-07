@@ -21,10 +21,10 @@
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see      SplFileInfo, PHPFrame_FS_FileObject
+ * @see      SplFileInfo, PHPFrame_FileObject
  * @since    1.0
  */
-class PHPFrame_FS_FileInfo 
+class PHPFrame_FileInfo 
     extends SplFileInfo implements Iterator, ArrayAccess, Countable
 {
     /**
@@ -91,7 +91,7 @@ class PHPFrame_FS_FileInfo
         }
         
         $this->setInfoClass(get_class($this));
-        $this->setFileClass("PHPFrame_FS_FileObject");
+        $this->setFileClass("PHPFrame_FileObject");
     }
     
     /**
@@ -158,12 +158,12 @@ class PHPFrame_FS_FileInfo
      * @param resource $context
      * 
      * @access public
-     * @return PHPFrame_FS_FileObject
+     * @return PHPFrame_FileObject
      * @since  1.0
      */
     public function openFile($open_mode="r", $use_include_path=false, $context=null)
     {
-        return new PHPFrame_FS_FileObject(
+        return new PHPFrame_FileObject(
             parent::getRealPath(),
             $open_mode, 
             $use_include_path,
@@ -385,7 +385,7 @@ class PHPFrame_FS_FileInfo
     {
         foreach ($this->_props as $key=>$value) {
             if ($key == "size") {
-                $value = PHPFrame_Base_Number::bytes($value);
+                $value = PHPFrame_Number::bytes($value);
             } elseif (preg_match('/time$/', $key)) {
                 $value = date("Y-m-d H:i:s", $value);
             } elseif ($key == "perms") {

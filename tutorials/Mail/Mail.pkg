@@ -11,8 +11,8 @@
     
     <para>
     The Mail package provides two classes, one to deal with outgoing email 
-    ({@link PHPFrame_Mail_Mailer}) and one to handle incoming email 
-    ({@link PHPFrame_Mail_IMAP}).   
+    ({@link PHPFrame_Mailer}) and one to handle incoming email 
+    ({@link PHPFrame_IMAP}).   
     </para>
 
 </refsect1>
@@ -23,13 +23,13 @@
     <itemizedlist>
         <listitem>
         <para>
-        {@link PHPFrame_Mail_IMAP}
+        {@link PHPFrame_IMAP}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Mail_Mailer}
+        {@link PHPFrame_Mailer}
         </para>
         
         <para>

@@ -26,7 +26,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
+class PHPFrame_SQLIdObject extends PHPFrame_IdObject
 {
     /**
      * An array with the columns to get in SELECT statement
@@ -94,7 +94,7 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * 
      * @param array $options An associative array with initialisation options.
      *                       For a list of available options invoke 
-     *                       PHPFrame_Mapper_IdObject::getOptions().
+     *                       PHPFrame_IdObject::getOptions().
      * 
      * @access public
      * @return void
@@ -143,7 +143,7 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * 
      * <code>
      * // Select all columns from table "my_table"
-     * $id_object = new PHPFrame_Mapper_IdObject();
+     * $id_object = new PHPFrame_IdObject();
      * $id_object->select("*")->from("my_table");
      * // echo the SQL, this will automatically cast the IdObject to string
      * echo $id_object;
@@ -151,26 +151,26 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * 
      * // The same as above but passing the "select" and "table" options to the constructor.
      * $options = array("select"=>"*", "from"->"my_table");
-     * $id_object = new PHPFrame_Mapper_IdObject($options);
+     * $id_object = new PHPFrame_IdObject($options);
      * // echo the SQL, this will automatically cast the IdObject to string
      * echo $id_object;
      * 
      * // Now we create a new IdObject and select only some specified fields
-     * $id_object = new PHPFrame_Mapper_IdObject();
+     * $id_object = new PHPFrame_IdObject();
      * $id_object->select(array("id", "name", "email"))->from("my_table");
      * </code>
      * 
      * @param string|array $fields a string or array of strings with field names
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function select($fields)
     {
         // Validate input type and set internal property
         $pattern = "/^[a-zA-Z_ \.\*\(\)\#]+$/";
-        $fields = PHPFrame_Utils_Filter::validateRegExp($fields, $pattern);
+        $fields = PHPFrame_Filter::validateRegExp($fields, $pattern);
         
         if (is_string($fields)) {
             $fields = array($fields);
@@ -221,7 +221,7 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * @param string $table A string with the table name
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function from($table)
@@ -234,7 +234,7 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
         
         // Validate input type and set internal property
         $pattern = "/^[a-zA-Z_\#\.]+$/";
-        $this->_from = PHPFrame_Utils_Filter::validateRegExp($table, $pattern);
+        $this->_from = PHPFrame_Filter::validateRegExp($table, $pattern);
         
         return $this;
     }
@@ -245,7 +245,7 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * @param sting $join A join statement
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function join($join)
@@ -283,19 +283,19 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * @param string $right
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function where($left, $operator, $right)
     {
         // Validate input types and set internal property
         $pattern = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:]+$/";
-        $left    = PHPFrame_Utils_Filter::validateRegExp($left, $pattern);
-        $right   = PHPFrame_Utils_Filter::validateRegExp($right, $pattern);
+        $left    = PHPFrame_Filter::validateRegExp($left, $pattern);
+        $right   = PHPFrame_Filter::validateRegExp($right, $pattern);
         
         // Validate operators
         $pattern  = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN)$/";
-        $operator = PHPFrame_Utils_Filter::validateRegExp($operator, $pattern);
+        $operator = PHPFrame_Filter::validateRegExp($operator, $pattern);
         
         $this->_where[] = array($left, $operator, $right);
         
@@ -308,14 +308,14 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * @param string $column The column name to group by
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function groupby($column)
     {
         // Validate input type and set internal property
         $pattern        = "/^[a-zA-Z_ \#\.]+$/";
-        $this->_groupby = PHPFrame_Utils_Filter::validateRegExp($column, $pattern);
+        $this->_groupby = PHPFrame_Filter::validateRegExp($column, $pattern);
         
         return $this;
     }
@@ -327,14 +327,14 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * @param string $direction The order direction (either ASC or DESC)
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function orderby($column, $direction=null)
     {
         // Validate input type and set internal property
         $pattern        = "/^[a-zA-Z_\#\.]+$/";
-        $this->_orderby = PHPFrame_Utils_Filter::validateRegExp($column, $pattern);
+        $this->_orderby = PHPFrame_Filter::validateRegExp($column, $pattern);
         
         if (!is_null($direction)) {
             $this->orderdir($direction);
@@ -350,14 +350,14 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * @param string $direction The order direction (either ASC or DESC)
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function orderdir($direction)
     {
         // Validate input type and set internal property
         $pattern         = "/^(ASC|DESC)$/i";
-        $this->_orderdir = PHPFrame_Utils_Filter::validateRegExp($direction, $pattern);
+        $this->_orderdir = PHPFrame_Filter::validateRegExp($direction, $pattern);
         
         return $this;
     }
@@ -369,13 +369,13 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * @param int $limitstart The entry number of the first record in the current page
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function limit($limit, $limitstart=null)
     {
         // Validate input type and set internal property 
-        $this->_limit = PHPFrame_Utils_Filter::validateInt($limit);
+        $this->_limit = PHPFrame_Filter::validateInt($limit);
         
         if (!is_null($limitstart)) {
             $this->limitstart($limitstart);
@@ -390,13 +390,13 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * @param int $limitstart The entry number of the first record in the current page
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function limitstart($limitstart)
     {
         // Validate input type and set internal property 
-        $this->_limitstart = PHPFrame_Utils_Filter::validateInt($limitstart);
+        $this->_limitstart = PHPFrame_Filter::validateInt($limitstart);
  
         return $this;
     }
@@ -408,7 +408,7 @@ class PHPFrame_Mapper_SQLIdObject extends PHPFrame_Mapper_IdObject
      * @param string $value The paramter value
      * 
      * @access public
-     * @return PHPFrame_Mapper_IdObject
+     * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function params($key, $value)

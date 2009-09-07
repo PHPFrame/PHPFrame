@@ -133,7 +133,7 @@ class PHPFrame_Postinstall_postinstall
         
         // Make tmp directory for CLI tool world writable
         $cmd = "chmod 777 ".$cli_tool_tmp_path;
-        $exec = new PHPFrame_Utils_Exec($cmd);
+        $exec = new PHPFrame_Exec($cmd);
         $this->_output($exec->getOutput());
         if ($exec->getReturnVar() > 0) {
             $msg = "Failed to make world writable var directory for CLI tool (";
@@ -146,7 +146,7 @@ class PHPFrame_Postinstall_postinstall
         $cli_tool_etc_path = $this->_data_dir.DS."CLI_Tool".DS."etc";
         $cmd  = "touch ".$cli_tool_etc_path.DS."acl.xml ";
         $cmd .= $cli_tool_etc_path.DS."lib.xml ".$cli_tool_etc_path.DS."features.xml";
-        $exec = new PHPFrame_Utils_Exec($cmd);
+        $exec = new PHPFrame_Exec($cmd);
         $this->_output($exec->getOutput());
         if ($exec->getReturnVar() > 0) {
             $msg = "Failed to create empty config xml files in (";
@@ -171,11 +171,11 @@ class PHPFrame_Postinstall_postinstall
      */
     private function _createLogFile($path)
     {
-        PHPFrame_Utils_Filesystem::ensureWritableDir($path);
+        PHPFrame_Filesystem::ensureWritableDir($path);
         
         $log_file = $path.DS."log";
         $cmd = "touch ".$log_file;
-        $exec = new PHPFrame_Utils_Exec($cmd);
+        $exec = new PHPFrame_Exec($cmd);
         $this->_output($exec->getOutput());
         if ($exec->getReturnVar() > 0) {
             $this->_output("Failed to touch new log file (".$log_file.")...");
@@ -183,7 +183,7 @@ class PHPFrame_Postinstall_postinstall
         }
         
         $cmd = "chmod 666 ".$log_file;
-        $exec = new PHPFrame_Utils_Exec($cmd);
+        $exec = new PHPFrame_Exec($cmd);
         $this->_output($exec->getOutput());
         if ($exec->getReturnVar() > 0) {
             $this->_output("Failed to make log file writable (".$log_file.")...");

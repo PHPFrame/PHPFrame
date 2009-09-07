@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Utils_Rewrite
+class PHPFrame_Rewrite
 {
     /**
      * Rewrite the request
@@ -109,7 +109,7 @@ class PHPFrame_Utils_Rewrite
      */
     public static function rewriteURL($url, $xhtml=true) 
     {
-        $uri = new PHPFrame_Utils_URI();
+        $uri = new PHPFrame_URI();
         
         if (!preg_match('/^http/i', $url)) {
             $url = $uri->getBase().$url;

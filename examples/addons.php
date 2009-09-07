@@ -1,7 +1,7 @@
 <?php
 require "PHPFrame.php";
 
-$ext = new PHPFrame_Addons_FeatureInfo();
+$ext = new PHPFrame_FeatureInfo();
 $ext->setName("Users");
 $ext->setChannel("dist.phpframe.org");
 $ext->setSummary("This is the summary");

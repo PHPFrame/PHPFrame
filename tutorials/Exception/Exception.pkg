@@ -8,10 +8,98 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
+
+    <para>
+    Exception handling in PHPFrame heavily relies on the built in SPL exception 
+    classes. The Exception package only adds a few specialised Exception classes 
+    and provides the exception "handler" itself.
+    </para>
     
     <para>
-    The Exception package ...
+    SPL Exception types used in PHPFrame:
     </para>
+    
+    <itemizedlist>
+        
+        <listitem>
+        <para>{@link Exception}</para>
+        <para>
+        This is the root Exception class from which all other exceptions will 
+        inherit. This class defines the exception interface that will apply to all 
+        exception objects.
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link LogicException}</para>
+        <para>
+        Logic exceptions should be used to differienciate "compile time" exceptions 
+        from "runtime" exceptions due to bad data being passed to the application.
+        </para>
+        <para>
+        Logic excpetions should be thrown when a programming error occurs. For 
+        example, if you try to call PHPFrame::AppRegistry() in a standalone script 
+        a LogicException will be throws warning you that before you can use the 
+        method you need to set up the environment by calling PHPFrame::Env(). This 
+        is purely a programming error and nothing to do with the data that was 
+        passed to the app.
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link RuntimeException}</para>
+        <para>
+        Runtime exceptions are designed to handle everything that is not a 
+        LogicException. Runtime exceptions apply when the problem they report only 
+        happens at runtime and because of the data that was passed to the app.
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link BadFunctionCallException}</para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link BadMethodCallException}</para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link InvalidArgumentException}</para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link DomainException}</para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link LengthException}</para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link OutOfRangeException}</para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link OutOfBoundsException}</para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link OverflowException}</para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link UnderflowException}</para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link RangeException}</para>
+        </listitem>
+        
+        <listitem>
+        <para>{@link UnexpectedValueException}</para>
+        </listitem>
+        
+    </itemizedlist>
 
 </refsect1>
 
@@ -28,19 +116,19 @@
         
         <listitem>
         <para>
-        {@link PHPFrame_Exception_Error}
+        {@link PHPFrame_ErrorException}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Exception_Database}
+        {@link PHPFrame_DatabaseException}
         </para>
         </listitem>
         
         <listitem>
         <para>
-        {@link PHPFrame_Exception_XMLRPC}
+        {@link PHPFrame_XMLRPCException}
         </para>
         </listitem>
         
@@ -48,29 +136,13 @@
 
 </refsect1>
 
-<!-- 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
     
-    <example>
-        <title></title>
-        <para>
-        </para>
-        <programlisting>
-<![CDATA[
-
-]]>
-        </programlisting>
-        
-        <screen>
-<![CDATA[
-
-]]>
-        </screen>
-       
-    </example>
+    <para>
+    For usage examples please check the individual exception classes.
+    </para>
     
 </refsect1>
--->
 
 </refentry>

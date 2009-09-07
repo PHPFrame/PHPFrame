@@ -1,5 +1,5 @@
 <?php
-class ConfigController extends PHPFrame_MVC_ActionController
+class ConfigController extends PHPFrame_ActionController
 {
     private $_config=null;
     

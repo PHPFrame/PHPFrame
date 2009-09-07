@@ -25,7 +25,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-abstract class PHPFrame_Base_Object
+abstract class PHPFrame_Object
 {
     /**
      * __call() is triggered when invoking inaccessible methods in an object context. 
@@ -61,7 +61,7 @@ abstract class PHPFrame_Base_Object
      * Clone
      * 
      * @access public
-     * @return PHPFrame_Base_Object
+     * @return PHPFrame_Object
      * @since  1.0
      */
     public function __clone()
@@ -156,7 +156,7 @@ abstract class PHPFrame_Base_Object
      * @param array $properties
      * 
      * @access public
-     * @return PHPFrame_Base_Object
+     * @return PHPFrame_Object
      * @since  1.0
      */
     public static function __set_state(array $properties)

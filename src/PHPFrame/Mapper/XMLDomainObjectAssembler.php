@@ -24,7 +24,7 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObjectAssembler
+class PHPFrame_XMLDomainObjectAssembler extends PHPFrame_DomainObjectAssembler
 {
     private $_path_info = null;
     private $_file_info = null;
@@ -32,13 +32,13 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
     /**
      * Constructor
      * 
-     * @param PHPFrame_Mapper_PersistenceFactory $factory
+     * @param PHPFrame_PersistenceFactory $factory
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct(PHPFrame_Mapper_PersistenceFactory $factory, $path=null)
+    public function __construct(PHPFrame_PersistenceFactory $factory, $path=null)
     {
         parent::__construct($factory);
         
@@ -57,10 +57,10 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         }
         
         // Make sure the directory is writable
-        PHPFrame_Utils_Filesystem::ensureWritableDir($path);
+        PHPFrame_Filesystem::ensureWritableDir($path);
         
         // Create FileInfo object for dir path
-        $this->_path_info = new PHPFrame_FS_FileInfo($path);
+        $this->_path_info = new PHPFrame_FileInfo($path);
         
         // Build full path to XML file
         $file_name = $this->_path_info->getRealPath();
@@ -69,20 +69,20 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
         // Create FileInfo object for XML file
         // Create XML file if it doesnt exist
         if (!is_file($file_name)) {
-            $file_obj = new PHPFrame_FS_FileObject($file_name, "w");
+            $file_obj = new PHPFrame_FileObject($file_name, "w");
             $this->_file_info = $file_obj->getFileInfo();
         } else {
-            $this->_file_info = new PHPFrame_FS_FileInfo($file_name);
+            $this->_file_info = new PHPFrame_FileInfo($file_name);
         }
     }
     
     /**
      * Find a domain object using an IdObject
      * 
-     * @param PHPFrame_Mapper_IdObject $id_obj
+     * @param PHPFrame_IdObject $id_obj
      * 
      * @access public
-     * @return PHPFrame_Mapper_DomainObject
+     * @return PHPFrame_DomainObject
      * @since  1.0
      */
     public function findOne($id_obj)
@@ -94,14 +94,14 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
             $table_name = $this->_factory->getTableName();
             
             // Create new IdObject
-            $id_obj = new PHPFrame_Mapper_IdObject(array("select"=>"*", "from"=>$table_name));
+            $id_obj = new PHPFrame_IdObject(array("select"=>"*", "from"=>$table_name));
             $id_obj->where("id", "=", ":id")->params(":id", $id);
         }
         
-        if (!$id_obj instanceof PHPFrame_Mapper_IdObject) {
+        if (!$id_obj instanceof PHPFrame_IdObject) {
             $msg = "Wrong argument type. ";
             $msg .= get_class($this)."::findOne() expected only argument to be of type ";
-            $msg .= "PHPFrame_Mapper_IdObject or integer.";
+            $msg .= "PHPFrame_IdObject or integer.";
             throw new RuntimeException($msg);
         }
         
@@ -113,13 +113,13 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
     /**
      * Find a collection of domain objects using an IdObject
      * 
-     * @param PHPFrame_Mapper_IdObject|int $id_obj
+     * @param PHPFrame_IdObject|int $id_obj
      * 
      * @access public
-     * @return PHPFrame_Mapper_Collection
+     * @return PHPFrame_DomainObjectCollection
      * @since  1.0
      */
-    public function find(PHPFrame_Mapper_IdObject $id_obj=null)
+    public function find(PHPFrame_IdObject $id_obj=null)
     {
 //        if (is_null($id_obj)) {
 //            $id_obj = $this->factory->getIdObject();
@@ -146,13 +146,13 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
     /**
      * Persist domain object
      * 
-     * @param PHPFrame_Mapper_DomainObject $obj
+     * @param PHPFrame_DomainObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function insert(PHPFrame_Mapper_DomainObject $obj)
+    public function insert(PHPFrame_DomainObject $obj)
     {
         // Get current collection
         $collection = $this->find();
@@ -187,13 +187,13 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
     /**
      * Delete domain object from the database
      * 
-     * @param PHPFrame_Mapper_DomainObject $obj
+     * @param PHPFrame_DomainObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function delete(PHPFrame_Mapper_DomainObject $obj)
+    public function delete(PHPFrame_DomainObject $obj)
     {
         throw new RuntimeException("Method not implemented...");
     }
@@ -201,13 +201,13 @@ class PHPFrame_Mapper_XMLDomainObjectAssembler extends PHPFrame_Mapper_DomainObj
     /**
      * Serialise collection as an XML string
      * 
-     * @param PHPFrame_Mapper_Collection $collection
+     * @param PHPFrame_DomainObjectCollection $collection
      * 
      * @access private
      * @return string
      * @since  1.0
      */
-    private function _serializeCollection(PHPFrame_Mapper_Collection $collection)
+    private function _serializeCollection(PHPFrame_DomainObjectCollection $collection)
     {
         $options = array(
             "indent"    => "    ",

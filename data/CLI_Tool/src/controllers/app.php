@@ -1,5 +1,5 @@
 <?php
-class AppController extends PHPFrame_MVC_ActionController
+class AppController extends PHPFrame_ActionController
 {
     private $_install_dir=null;
     

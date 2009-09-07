@@ -25,7 +25,8 @@
  * @since    1.0
  */
 class PHPFrame_FileInfo 
-    extends SplFileInfo implements Iterator, ArrayAccess, Countable
+    extends SplFileInfo 
+    implements Iterator, ArrayAccess, Countable
 {
     /**
      * An array holding the file info properties
@@ -52,28 +53,19 @@ class PHPFrame_FileInfo
      * @var string
      */
     private $_file_class=null;
-    /**
-     * A flag to indicate whether properties array should be processed for user
-     * friendly values.
-     * 
-     * @var bool
-     */
-    private $_human_readable=false;
     
     /**
      * Constructor
      * 
      * @param string $file_name
-     * @param bool   $human_readable
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($file_name, $human_readable=false)
+    public function __construct($file_name)
     {
-        $file_name = (string) trim($file_name);
-        $this->_human_readable = (boolean) $human_readable;
+        $file_name = trim((string) $file_name);
         
         if (!is_file($file_name) && !is_dir($file_name)) {
             $msg = "Can not get file info for file ";
@@ -84,11 +76,6 @@ class PHPFrame_FileInfo
         parent::__construct($file_name);
         
         $this->_populateProps();
-        
-        
-        if ($this->_human_readable) {
-            $this->_makeHumanReadable();
-        }
         
         $this->setInfoClass(get_class($this));
         $this->setFileClass("PHPFrame_FileObject");
@@ -105,7 +92,7 @@ class PHPFrame_FileInfo
      */
     public function setInfoClass($class_name)
     {
-        $this->_info_class = (string) trim($class_name);
+        $this->_info_class = trim((string) $class_name);
     }
     
     /**
@@ -119,7 +106,7 @@ class PHPFrame_FileInfo
      */
     public function setFileClass($class_name)
     {
-        $this->_file_class = (string) trim($class_name);
+        $this->_file_class = trim((string) $class_name);
     }
 
     /**
@@ -133,7 +120,7 @@ class PHPFrame_FileInfo
     {
         $class_name = $this->_getInfoClass();
         
-        return new $class_name(parent::getRealPath(), $this->_human_readable);
+        return new $class_name(parent::getRealPath());
     }
     
     /**
@@ -147,7 +134,7 @@ class PHPFrame_FileInfo
     {
         $class_name = $this->_getInfoClass();
         
-        return new $class_name(parent::getPath(), $this->_human_readable);
+        return new $class_name(parent::getPath());
     }
     
     /**
@@ -372,27 +359,5 @@ class PHPFrame_FileInfo
         }
         
         return $class_name;
-    }
-    
-    /**
-     * Process properties array to make human readable (user friendly)
-     * 
-     * @access private
-     * @return void
-     * @since  1.0
-     */
-    private function _makeHumanReadable()
-    {
-        foreach ($this->_props as $key=>$value) {
-            if ($key == "size") {
-                $value = PHPFrame_Number::bytes($value);
-            } elseif (preg_match('/time$/', $key)) {
-                $value = date("Y-m-d H:i:s", $value);
-            } elseif ($key == "perms") {
-                $value = substr(sprintf('%o', $value), -4);
-            }
-            
-            $this->_props[$key] = $value;
-        }
     }
 }

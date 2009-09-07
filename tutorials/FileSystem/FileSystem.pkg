@@ -1,7 +1,7 @@
 <refentry id="{@id}">
 
 <refnamediv>
-    <refname>FS Package</refname>
+    <refname>FileSystem Package</refname>
 </refnamediv>
 
 <!-- {@toc} -->
@@ -10,7 +10,7 @@
     <title>Package decription</title>
     
     <para>
-    The FS or "FileSystem" package provides a set of classes to interact with files 
+    The FileSystem package provides a set of classes to interact with files 
     and directories. This classes wrap around the SPL's file system related 
     classes: SplFileInfo and SplFileObject.   
     </para>
@@ -18,7 +18,7 @@
 </refsect1>
 
 <refsect1 id="{@id classes}">
-    <title>Classes in FS Package</title>
+    <title>Classes in FileSystem Package</title>
     
     <itemizedlist>
         <listitem>
@@ -37,29 +37,69 @@
 
 </refsect1>
 
-<!-- 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
     
     <example>
-        <title></title>
-        <para>
-        </para>
-        <programlisting>
-<![CDATA[
-
-]]>
-        </programlisting>
+        <title>Creating a PHPFrame_FileInfo object for a given path</title>
+        <para></para>
+        <programlisting>{@example FileSystem/example-1.php 3}</programlisting>
         
         <screen>
 <![CDATA[
-
+Array
+(
+    [path] => /Users/lupomontero
+    [filename] => Desktop
+    [basename] => Desktop
+    [pathname] => /Users/lupomontero/Desktop
+    [perms] => 16832
+    [inode] => 223946
+    [size] => 1870
+    [owner] => 501
+    [group] => 20
+    [atime] => 1252291180
+    [mtime] => 1252300371
+    [ctime] => 1252300371
+    [type] => dir
+    [iswritable] => 1
+    [isreadable] => 1
+    [isexecutable] => 1
+    [isfile] => 
+    [isdir] => 1
+    [islink] => 
+    [realpath] => /Users/lupomontero/Desktop
+)
 ]]>
         </screen>
        
     </example>
     
+        <example>
+        <title>Opening file using {@link PHPFrame_FileInfo::openFile()}</title>
+        <para></para>
+        <programlisting>{@example FileSystem/example-2.php 3}</programlisting>
+        
+        <screen>
+<![CDATA[
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas laoreet elementum 
+arcu non condimentum. Donec pretium pulvinar tellus et ornare. Cras interdum tellus 
+vel justo convallis vestibulum. Donec odio elit, mollis ac congue dapibus, gravida 
+ut mauris. Aliquam pulvinar mi risus, vel consequat odio. Nam in dui lacus. Aenean 
+tincidunt ipsum eget ante fringilla eu viverra tortor congue. Morbi accumsan dapibus 
+felis vel eleifend. Maecenas vel erat vel nulla consectetur imperdiet. Etiam 
+ultricies nibh et leo accumsan eget tincidunt mauris tincidunt.
+]]>
+        </screen>
+       
+    </example>
+    
+    <example>
+        <title>Writing and reading data using the {@link PHPFrame_FileObject} class</title>
+        <programlisting>{@example FileSystem/example-3.php 3}</programlisting>
+        <screen>Some content...</screen>
+    </example>
+    
 </refsect1>
--->
 
 </refentry>

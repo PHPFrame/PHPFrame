@@ -156,7 +156,7 @@ Array
         </para>
         <orderedlist>
             <listitem>
-            <para>You are calling this code from within an applicatio context</para>
+            <para>You are calling this code from within an application context</para>
             </listitem>
             <listitem>
             <para>
@@ -166,7 +166,7 @@ Array
             </listitem>
             <listitem>
             <para>
-            You have created a database table calles "#__customers", where the "#__" 
+            You have created a database table called "#__customers", where the "#__" 
             will be replaced with the "db.prefix" as configured in your 
             etc/phpframe.ini file.
             </para>
@@ -190,6 +190,11 @@ Array
         (http://localhost/myapp/customers) we should see a table with the customer 
         data we saved using the mapper.
         </para>
+        
+        <note>
+        If no database connection is available the domain objects will be 
+        automatically stored in var/domain.objects/#__customers.xml.
+        </note>
     </example>
     
 </refsect1>

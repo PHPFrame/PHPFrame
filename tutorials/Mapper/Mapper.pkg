@@ -67,11 +67,20 @@
 </refsect1>
 
 
-<refsect1 id="{@id extending}">
+<refsect1 id="{@id extending-domainobject}">
     <title>Extending the DomainObject class</title>
     
     <para>
+    Domain objects are designed so that they can be easily mapped using the mapper 
+    package, so in order to make use of the mappig tools you will need to make your 
+    "domain objects" extend the DomainObject base class.
+    </para>
     
+    <para>
+    Domain objects, also known as business objects, are objects that represent the 
+    entities in the business domain that the program is designed to support. For 
+    example, an order entry program might have business objects to represent each 
+    order, customer and invoice.
     </para>
     
     <example>
@@ -126,6 +135,61 @@ Array
     
 </refsect1>
 
+<refsect1 id="{@id extending-mapper}">
+    <title>Extending the Mapper</title>
+    
+    <para>
+    When working with your own domain objects you will often find it useful to 
+    create your own specialised mappers by extending the {@link PHPFrame_Mapper}
+    class.
+    </para>
+    
+    <example>
+        <title>Custom Mapper example</title>
+        <para>
+        In this example we define a Customer class that extends DomainObject and 
+        then write a specialised mapper to map this class to a database table called 
+        "#__customers". 
+        </para>
+        <para>
+        This examples assumes that:
+        </para>
+        <orderedlist>
+            <listitem>
+            <para>You are calling this code from within an applicatio context</para>
+            </listitem>
+            <listitem>
+            <para>
+            You have set up a database connection in your application specific 
+            etc/phpframe.ini file
+            </para>
+            </listitem>
+            <listitem>
+            <para>
+            You have created a database table calles "#__customers", where the "#__" 
+            will be replaced with the "db.prefix" as configured in your 
+            etc/phpframe.ini file.
+            </para>
+            </listitem>
+        </orderedlist>
+        <programlisting>{@example Mapper/example-3.php 3}</programlisting>
+        <screen>
+<![CDATA[
+Array
+(
+    [first_field] => Blah blah
+    [second_field] => Another value
+    [third_field] => 
+    [id] => 
+    [created] => 
+    [modified] => 
+)
+]]>
+        </screen>
+    </example>
+    
+</refsect1>
+
 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
@@ -137,7 +201,7 @@ Array
         extends PHPFrame_DomainObject, so that we can use it with the 
         mapper.
         </para>
-        <programlisting>{@example Mapper/example-3.php 3}</programlisting>
+        <programlisting>{@example Mapper/example-4.php 3}</programlisting>
         <screen>
 <![CDATA[
 PHPFrame_ACL Object

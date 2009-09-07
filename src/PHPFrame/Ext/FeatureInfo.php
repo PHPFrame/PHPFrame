@@ -1,11 +1,11 @@
 <?php
 /**
- * PHPFrame/Addons/FeatureInfo.php
+ * PHPFrame/Ext/FeatureInfo.php
  * 
  * PHP version 5
  * 
  * @category  PHPFrame
- * @package   Addons
+ * @package   Ext
  * @author    Luis Montero <luis.montero@e-noise.com>
  * @copyright 2009 E-noise.com Limited
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
@@ -17,7 +17,7 @@
  * Feature Info Class
  * 
  * @category PHPFrame
- * @package  Addons
+ * @package  Ext
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame

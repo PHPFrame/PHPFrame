@@ -45,18 +45,9 @@
         etc/phpframe.ini. We can easily get configuration parameters from any scope 
         in the application by using this method.
         </para>
-        <code>
-<![CDATA[
-$config = PHPFrame::Config();
-print_r($config->get("default_lang"));
-]]>
-        </code>
+        <programlisting>{@example PHPFrame/example-1.php}</programlisting>
         
-        <screen>
-<![CDATA[
-en-GB
-]]>
-        </screen>
+        <screen>en-GB</screen>
        
     </example>
     

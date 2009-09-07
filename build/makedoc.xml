@@ -20,6 +20,7 @@
         <!-- copy src files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${project.basedir}">
+            	<include name="examples/**" />
                 <include name="src/**" />
             	<include name="tutorials/**" />
             </fileset>

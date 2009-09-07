@@ -195,11 +195,7 @@ imap.pass:
     
     <example>
         <title>Converting the config object to array</title>
-        <programlisting>
-<![CDATA[
-print_r(iterator_to_array(PHPFrame::Config()));
-]]>
-        </programlisting>
+        <programlisting>{@example Config/example-5.php 3}</programlisting>
         <screen>
 <![CDATA[
 Array

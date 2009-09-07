@@ -26,6 +26,17 @@
  */
 class PHPFrame_FileObject extends SplFileObject
 {
+    /**
+     * 
+     * @param string   $file_name
+     * @param string   $open_mode        [Optional]
+     * @param bool     $use_include_path [Optional]
+     * @param resource $context          [Optional] A stream context
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function __construct(
         $file_name, 
         $open_mode="r", 
@@ -41,6 +52,15 @@ class PHPFrame_FileObject extends SplFileObject
         }
     }
     
+    /**
+     * Get FileInfo object
+     * 
+     * @param string $class_name [Optional]
+     * 
+     * @access public
+     * @return SplFileInfo
+     * @since  1.0
+     */
     public function getFileInfo($class_name="PHPFrame_FileInfo")
     {
         return new $class_name($this->getRealPath());

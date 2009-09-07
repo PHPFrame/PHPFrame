@@ -55,12 +55,6 @@
         </para>
         </listitem>
         
-        <listitem>
-        <para>
-        {@link PHPFrame_Singleton}
-        </para>
-        </listitem>
-        
     </itemizedlist>
 
 </refsect1>

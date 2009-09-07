@@ -10,7 +10,7 @@
     <title>Package decription</title>
     
     <para>
-    The mapper package provides a set of "domain" objects to easily get your objects 
+    The mapper package provides a set of objects to easily get your "domain" objects 
     in and out of the database (or whatever storage mechanism).
     </para>
     

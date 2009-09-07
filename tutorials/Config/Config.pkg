@@ -26,17 +26,7 @@
     
     <example>
         <title>The config object as a string</title>
-        <programlisting>
-<![CDATA[
-// Get default config
-$config = PHPFrame::Config();
-
-// print config object as string
-// Note that if we try to use a config object as a string it will automatically 
-// be cast to a string representing the ini file 
-echo '<pre>'.$config.'</pre>';
-]]>
-        </programlisting>
+        <programlisting>{@example Config/example-1.php 3}</programlisting>
         <screen>
 <![CDATA[
 ; This is a configuration file
@@ -105,11 +95,7 @@ pass =
     
     <example>
         <title>Lets see what keys are available in current config object</title>
-        <programlisting>
-<![CDATA[
-var_dump($config->getKeys());
-]]>
-        </programlisting>
+        <programlisting>{@example Config/example-2.php 3}</programlisting>
         <screen>
 <![CDATA[
 Array
@@ -158,28 +144,12 @@ Array
     
     <example>
         <title>Set config keys</title>
-        <programlisting>
-<![CDATA[
-// Set some config keys
-$config->set("app_name", "New app name");
-$config->set("debug.enable", true);
-$config->set("debug.log_level", 3);
-
-// Lets prove that the data was updated
-echo 'The new name of our app is: '.$config->get("app_name");
-]]>
-        </programlisting>
+        <programlisting>{@example Config/example-3.php 3}</programlisting>
     </example>
     
     <example>
         <title>Iterating the config object</title>
-        <programlisting>
-<![CDATA[
-foreach (PHPFrame::Config() as $key=>$value) {
-    echo $key.': '.$value."\n";
-}
-]]>
-        </programlisting>
+        <programlisting>{@example Config/example-4.php 3}</programlisting>
         <screen>
 <![CDATA[
 app_name: New app name

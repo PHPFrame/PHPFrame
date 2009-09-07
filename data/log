@@ -1,0 +1,13 @@
+
+---
+[2009-09-07 03:32:41] [ip:::1] Uncaught InvalidArgumentException: Passed variable is not an array or object, using empty array instead
+File: /Users/lupomontero/Documents/workspace/PHPFrame/src/PHPFrame/Base/Array.php
+Line: 59
+Code: 0
+#0 /Users/lupomontero/Documents/workspace/PHPFrame/src/PHPFrame/Base/Array.php(59): ArrayObject->__construct('0')
+#1 /Users/lupomontero/Documents/workspace/PHPFrame/src/PHPFrame/Mapper/DomainObjectCollection.php(77): PHPFrame_Array->__construct('0')
+#2 /Users/lupomontero/Documents/workspace/PHPFrame/src/PHPFrame/Mapper/PersistenceFactory.php(119): PHPFrame_DomainObjectCollection->__construct('0', Object(PHPFrame_DomainObjectFactory))
+#3 /Users/lupomontero/Documents/workspace/PHPFrame/src/PHPFrame/Mapper/XMLDomainObjectAssembler.php(143): PHPFrame_PersistenceFactory->getCollection('0')
+#4 /Users/lupomontero/Documents/workspace/PHPFrame/src/PHPFrame/Mapper/Mapper.php(121): PHPFrame_XMLDomainObjectAssembler->find(NULL)
+#5 /Users/lupomontero/Documents/workspace/PHPFrame/examples/mapper.php(34): PHPFrame_Mapper->find()
+#6 {main}

@@ -14,8 +14,6 @@
  */
 
 /**
- * Action Controller class
- * 
  * This class is used to implement the MVC (Model/View/Controller) pattern 
  * in the components.
  * 
@@ -35,7 +33,7 @@
  * @since    1.0
  * @abstract 
  */
-abstract class PHPFrame_ActionController extends PHPFrame_Subject
+abstract class PHPFrame_ActionController
 {
     /**
      * Instances of its concrete children
@@ -104,8 +102,9 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     {
         $class_name = ucfirst($controller_name)."Controller";
         
-        $is_set = isset(self::$_instances[$class_name]);
+        $is_set  = isset(self::$_instances[$class_name]);
         $is_type = @(self::$_instances[$class_name] instanceof self);
+        
         if (!$is_set || !$is_type) {
             self::$_instances[$class_name] = new $class_name;
         }
@@ -135,8 +134,8 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         }
         
         // Check permissions before we execute
-        $controller = PHPFrame::Request()->getControllerName();
-        $groupid = PHPFrame::Session()->getGroupId();
+        $controller  = PHPFrame::Request()->getControllerName();
+        $groupid     = PHPFrame::Session()->getGroupId();
         $permissions = PHPFrame::AppRegistry()->getPermissions();
         
         if ($permissions->authorise($controller, $action, $groupid) === true) {
@@ -266,7 +265,8 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     /**
      * Invoke action in concrete controller
      * 
-     * This method thows an exception if the action is not supported by the controller.
+     * This method thows an exception if the action is not supported by the 
+     * controller or if any required arguments are not defined in the request.
      * 
      * @param string $action The action to inkoe in the concrete action controller
      * 
@@ -276,38 +276,65 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     private function _invokeAction($action)
     {
+        // Get reflection object for action's method
         try {
-            // Get reflection object for action's method
-            $reflection_obj = new ReflectionMethod($this, $action);
-            if (!$reflection_obj->isPublic()) {
-                $msg = "Action ".$action."() not supported by ".__CLASS__.".";
-                throw new RuntimeException($msg);
-            }
-           
-            // Get method parameters
-            $params = $reflection_obj->getParameters();
+            $reflection_method = new ReflectionMethod($this, $action);
+        } catch (ReflectionException $e) {
+            $reflection_class  = new ReflectionClass($this);
+            $parent_class      = $reflection_class->getParentClass();
+            $parent_methods    = array();
+            $supported_methods = array();
             
-            // Loop through parameters and get data from request array
-            $args = array();
-            foreach ($params as $param) {
-                $name = $param->getName();
-                $default = null;
-                
-                // Set default value if available
-                if ($param->isDefaultValueAvailable()) {
-                    $default = $param->getDefaultValue();
+            foreach ($parent_class->getMethods() as $parent_method) {
+                $parent_methods[] = $parent_method->getName();
+            }
+            
+            foreach ($reflection_class->getMethods() as $method) {
+                $is_inherited = in_array($method->getName(), $parent_methods);
+                if ($method->isPublic() && !$is_inherited) {
+                    $supported_methods[] = $method->getName();
                 }
-                
-                $args[] = PHPFrame::Request()->get($name, $default);
             }
             
-            // Invoke action
-            $reflection_obj->invokeArgs($this, $args);
-            
-        } catch (Exception $e) {
-            $msg = "Action ".$action."() not supported by ".__CLASS__.". ";
-            $msg .= $e->getMessage();
-            throw new RuntimeException($msg);
+            $msg  = get_class($this)." does NOT support an action called '";
+            $msg .= $action."'. ".get_class($this)." supports the following ";
+            $msg .= "actions: '".implode("','", $supported_methods)."'.";
+            throw new BadMethodCallException($msg);
         }
+        
+        if (!$reflection_method->isPublic()) {
+            $msg  = "Action ".$action."() is defined in ".get_class($this);
+            $msg .=" but its visibility is NOT public.";
+            throw new LogicException($msg);
+        }
+        
+        // Get request parameters
+        $args = array();
+        foreach ($reflection_method->getParameters() as $param) {
+            if ($param->isDefaultValueAvailable()) {
+                $default_value = $param->getDefaultValue();
+            } else {
+                $default_value = null;
+            }
+            
+            $request_param = PHPFrame::Request()->get(
+                $param->getName(), 
+                $default_value
+            );
+            
+            // Check that required parameters are included in request
+            if (!$param->isDefaultValueAvailable()) {
+                if (is_null($request_param)) {
+                    $msg  = "Required argument '".$param->getName()."' not passed ";
+                    $msg .= "to ".get_class($this)."::".$action."().";
+                    throw new BadMethodCallException($msg);
+                }
+            }
+            
+            $args[$param->getName()] = $request_param;
+        }
+        
+        // Invoke action
+        $reflection_method->invokeArgs($this, $args);
     }
 }

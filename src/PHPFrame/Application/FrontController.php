@@ -14,10 +14,8 @@
  */
 
 /**
- * FrontController Class
- * 
- * This is the FrontController. Its main objective is to initialise the framework 
- * and decide which action controller should be run.
+ * The FrontController's main objective is to initialise the framework 
+ * and execute the requested controller action. 
  * 
  * @category PHPFrame
  * @package  Application
@@ -71,14 +69,15 @@ class PHPFrame_FrontController
         // Get requested controller name
         $controller_name = PHPFrame::Request()->getControllerName();
         
+        /**
+         * Register MVC autoload function
+         */
+        spl_autoload_register(array("PHPFrame_MVCFactory", "__autoload"));
+
         // Create the action controller
-        $controller = PHPFrame_ActionController::getInstance($controller_name);
-        // Check that action controller is of valid type and run it if it is
-        if ($controller instanceof PHPFrame_ActionController) {
-            // Execute task
-            $controller->execute();
-        } else {
-            throw new RuntimeException("Controller not supported.");
-        }
+        $controller = PHPFrame_MVCFactory::getActionController($controller_name);
+        
+        // Execute the action in the given controller
+        $controller->execute();
     }
 }

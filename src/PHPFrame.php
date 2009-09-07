@@ -151,7 +151,7 @@ class PHPFrame
             return;
         }
         
-        // Load other pear dependencies
+        // Load PEAR dependencies
         $pear_packages = array(
             "PEAR", 
             "XML", 
@@ -207,52 +207,6 @@ class PHPFrame
                     }
                 }
             }
-        }
-        
-        // Load MVC classes
-        if (!defined("PHPFRAME_INSTALL_DIR")) {
-            return;
-        }
-        
-        $file_path .= PHPFRAME_INSTALL_DIR.DS."src".DS;
-        
-        $super_classes = array("Controller", "View", "Helper", "Lang");
-        foreach ($super_classes as $super_class) {
-            if (preg_match('/'.$super_class.'$/', $class_name)) {
-                break;
-            }
-        }
-        
-        // Set base path for objects of given superclass
-        $file_path .= strtolower($super_class);
-        
-        // Append lang dir for lang classes
-        if ($super_class == "Lang") {
-            $file_path .= DS.PHPFrame::Config()->get("default_lang");
-        // Append 's' to dir name except for all others
-        } else {
-            $file_path .= "s";
-            
-        }
-        
-        // Remove superclass name from class name
-        $class_name = str_replace($super_class, "", $class_name);
-            
-        // Build dir path by breaking camel case class name
-        $pattern = '/[A-Z]{1}[a-zA-Z0-9]+/';
-        $matches = array();
-        preg_match_all($pattern, ucfirst($class_name), $matches);
-        if (isset($matches[0]) && is_array($matches[0])) {
-            $file_path .= DS.strtolower(implode(DS, $matches[0]));
-        }
-    
-        // Append file extension
-        $file_path .= ".php";
-        
-        // require the file if it exists
-        if (is_file($file_path)) {
-            @include $file_path;
-            return;
         }
     }
     

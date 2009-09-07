@@ -14,8 +14,6 @@
  */
 
 /**
- * View Class
- * 
  * This class is used to implement the MVC (Model/View/Controller) pattern.
  * 
  * Views are used to render the output of a controller into a form suitable for 
@@ -37,25 +35,25 @@ class PHPFrame_View
      * 
      * @var string
      */
-    protected $_name=null;
+    protected $_name = null;
     /**
      * Data array for view
      * 
      * @var array
      */
-    protected $_data=array();
+    protected $_data = array();
     /**
      * A pathway object for this view
      * 
      * @var PHPFrame_Pathway
      */
-    protected $_pathway=null;
+    protected $_pathway = null;
     /**
      * A reference to the document used to render this view
      * 
      * @var PHPFrame_Document
      */
-    protected $_document=null;
+    protected $_document = null;
     
     /**
      * Constructor

@@ -1,4 +1,5 @@
-<?php if (isset($data["customers"]) && $data["customers"] instanceof PHPFrame_DomainObjectCollection) : ?>
+<?php if (isset($data["customers"]) 
+          && $data["customers"] instanceof PHPFrame_DomainObjectCollection) : ?>
 <table>
 <tr>
     <th>First name:</th>

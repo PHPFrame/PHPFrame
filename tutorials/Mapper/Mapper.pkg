@@ -10,15 +10,15 @@
     <title>Package decription</title>
     
     <para>
-    The mapper package provides a set of objects to easily get your objects in 
-    and out of the database.
+    The mapper package provides a set of "domain" objects to easily get your objects 
+    in and out of the database (or whatever storage mechanism).
     </para>
     
     <para>
     Mappers are designed to be used with "domain objects" that descend from the 
     {@link PHPFrame_DomainObject} class. You will normally be creating 
     your app models by extending this class, making it really easy to persist 
-    those objects.
+    these objects.
     </para>
 
 </refsect1>

@@ -34,12 +34,12 @@
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_DomainObjectCollection}
+        {@link PHPFrame_DomainObject}
         </para>
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_DomainObject}
+        {@link PHPFrame_DomainObjectCollection}
         </para>
     </listitem>
     <listitem>
@@ -73,6 +73,57 @@
     <para>
     
     </para>
+    
+    <example>
+        <title>Custom DomainObject example</title>
+        <para></para>
+        <programlisting>{@example Mapper/example-1.php 3}</programlisting>
+        <screen>
+<![CDATA[
+Array
+(
+    [first_field] => Blah blah
+    [second_field] => Another value
+    [third_field] => 
+    [id] => 
+    [created] => 
+    [modified] => 
+)
+]]>
+        </screen>
+    </example>
+    
+    <example>
+        <title>The built-in User object is a DomainObject</title>
+        <para></para>
+        <programlisting>{@example Mapper/example-2.php 3}</programlisting>
+        <screen>
+<![CDATA[
+Array
+(
+    [groupid] => 0
+    [username] => lupo
+    [password] => 
+    [firstname] => 
+    [lastname] => 
+    [email] => 
+    [photo] => 
+    [notifications] => 1
+    [show_email] => 1
+    [block] => 
+    [last_visit] => 
+    [activation] => 
+    [params] => a:0:{}
+    [deleted] => 
+    [openid_urls] => a:0:{}
+    [id] => 
+    [created] => 
+    [modified] => 
+)
+]]>
+        </screen>
+    </example>
+    
 </refsect1>
 
 
@@ -86,35 +137,7 @@
         extends PHPFrame_DomainObject, so that we can use it with the 
         mapper.
         </para>
-        <programlisting>
-<![CDATA[
-// Instantiate generic mapper for PHPFrame_ACL class 
-// and specify XML storage
-$mapper = new PHPFrame_Mapper(
-    "PHPFrame_ACL", 
-    "acl", 
-    PHPFrame_Mapper::STORAGE_XML, 
-    false, 
-    DS."tmp".DS."domain.objects"
-);
-
-// Instantiate domain object
-$acl = new PHPFrame_ACL(array(
-    "groupid"=>1, 
-    "controller"=>"dummy", 
-    "action"=>"*", 
-    "value"=>"all"
-));
-
-// Insert new object
-$mapper->insert($acl);
-
-// Find objects and iterate through collection
-foreach ($mapper->find() as $item) {
-    print_r($item);
-}
-]]>
-        </programlisting>
+        <programlisting>{@example Mapper/example-3.php 3}</programlisting>
         <screen>
 <![CDATA[
 PHPFrame_ACL Object
@@ -124,8 +147,8 @@ PHPFrame_ACL Object
     [action:protected] => *
     [value:protected] => all
     [id:protected] => 1
-    [created:protected] => 2009-09-03 14:18:06
-    [modified:protected] => 2009-09-03 14:18:06
+    [created:protected] => 2009-09-07 15:06:18
+    [modified:protected] => 2009-09-07 15:06:18
     [_dirty:private] => 
 )
 ]]>

@@ -1,11 +1,3 @@
-<h1>PHPFrame Mapper Subpackage Examples</h1>
-
-<h2>Code</h2>
-
-<pre style="border:1px solid #990000; padding:20px; background-color: #FFFFCC;">
-
-</pre>
-
 <?php
 include_once "PHPFrame.php";
 

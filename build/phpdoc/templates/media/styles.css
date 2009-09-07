@@ -187,14 +187,14 @@ span.smalllinenumber
             font-family: 'Courier New', Courier, monospace; font-weight: normal; font-size: 0.9em; }
 .src-line {  font-family: 'Courier New', Courier, monospace; font-weight: normal; font-size: 0.9em; }
 
-.src-comm { color: green; }
+.src-comm { color: #666666; }
 .src-id {}
 .src-inc { color: #0000FF; }
 .src-key { color: #0000FF; }
 .src-num { color: #CC0000; }
-.src-str { color: #66cccc; }
+.src-str { color: #339900; }
 .src-sym { font-weight: bold; }
-.src-var {}
+.src-var { color: #990000 }
 
 .src-php { font-weight: bold; }
 

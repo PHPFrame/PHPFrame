@@ -405,8 +405,8 @@ class PHPFrame
     ) {
         // Set DSN using details from config object
         if (is_null($dsn)) {
-            $dsn_concrete_class = "PHPFrame_DSN_";
-            $dsn_concrete_class .= PHPFrame::Config()->get("db.driver");
+            $dsn_concrete_class = "PHPFrame_";
+            $dsn_concrete_class .= PHPFrame::Config()->get("db.driver")."DSN";
             
             $dsn = new $dsn_concrete_class(
                 PHPFrame::Config()->get("db.host"), 

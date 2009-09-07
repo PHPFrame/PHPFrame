@@ -4,7 +4,7 @@
     <refname>Exception Package</refname>
 </refnamediv>
 
-<!-- {@toc} -->
+{@toc}
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
@@ -44,6 +44,57 @@
         is purely a programming error and nothing to do with the data that was 
         passed to the app.
         </para>
+        
+        <itemizedlist>
+            <listitem>
+            <para>{@link BadFunctionCallException}</para>
+            <para>
+            BadFunctionCallExceptions should be thrown when a function is invoked 
+            incorrectly. The most common scenario is when a function is invoked 
+            either with too many or too few arguments.
+            </para>
+            </listitem>
+            
+            <listitem>
+            <para>{@link BadMethodCallException}</para>
+            <para>
+            The same as BadFunctionCallException but in the context of a method.
+            </para>
+            </listitem>
+            
+            <listitem>
+            <para>{@link InvalidArgumentException}</para>
+            <para>
+            This kind of exception is used when an invalid argument is passed into 
+            function or method.
+            </para>
+            </listitem>
+            
+            <listitem>
+            <para>{@link DomainException}</para>
+            <para>
+            Domain exceptions are thrown when a value passed into a function doesn't 
+            belong to a set of possible values. (Not to confuse with RangeException).
+            </para>
+            </listitem>
+            
+            <listitem>
+            <para>{@link LengthException}</para>
+            <para>
+            LengthException refers to exeptions that are to do with length, normally 
+            either string length or array length.
+            </para>
+            </listitem>
+            
+            <listitem>
+            <para>{@link OutOfRangeException}</para>
+            <para>
+            Exception thrown when a value does not match with a range.
+            </para>
+            </listitem>
+        
+        </itemizedlist>
+        
         </listitem>
         
         <listitem>
@@ -53,50 +104,49 @@
         LogicException. Runtime exceptions apply when the problem they report only 
         happens at runtime and because of the data that was passed to the app.
         </para>
-        </listitem>
         
-        <listitem>
-        <para>{@link BadFunctionCallException}</para>
-        </listitem>
+        <itemizedlist>
+            <listitem>
+            <para>{@link OutOfBoundsException}</para>
+            <para>
+            OutOfBoundsException is raised when a request for a given key is made 
+            to an array or object implementing ArrayAccess and the requested index 
+            is not in the data. 
+            </para>
+            </listitem>
+            
+            <listitem>
+            <para>{@link OverflowException}</para>
+            <para>
+            OverflowException is normally used when the contents of a variable would 
+            overflow its storage location. For example, when having to write into a 
+            database.
+            </para>
+            </listitem>
+            
+            <listitem>
+            <para>{@link UnderflowException}</para>
+            <para>
+            UnderflowException handles arithmetical underflow that may occur when 
+            the result of an operation would imply a loss of accuracy. This kind of 
+            problems can happen when working with floats.
+            </para>
+            </listitem>
+            
+            <listitem>
+            <para>{@link RangeException}</para>
+            <para>
+            RangeException are similar to DomainException but instead of looking at 
+            input it looks at the return of a function being withing a set of 
+            possible values. 
+            </para>
+            </listitem>
+            
+            <listitem>
+            <para>{@link UnexpectedValueException}</para>
+            </listitem>
+        </itemizedlist>
         
-        <listitem>
-        <para>{@link BadMethodCallException}</para>
-        </listitem>
-        
-        <listitem>
-        <para>{@link InvalidArgumentException}</para>
-        </listitem>
-        
-        <listitem>
-        <para>{@link DomainException}</para>
-        </listitem>
-        
-        <listitem>
-        <para>{@link LengthException}</para>
-        </listitem>
-        
-        <listitem>
-        <para>{@link OutOfRangeException}</para>
-        </listitem>
-        
-        <listitem>
-        <para>{@link OutOfBoundsException}</para>
-        </listitem>
-        
-        <listitem>
-        <para>{@link OverflowException}</para>
-        </listitem>
-        
-        <listitem>
-        <para>{@link UnderflowException}</para>
-        </listitem>
-        
-        <listitem>
-        <para>{@link RangeException}</para>
-        </listitem>
-        
-        <listitem>
-        <para>{@link UnexpectedValueException}</para>
         </listitem>
         
     </itemizedlist>
@@ -110,7 +160,7 @@
     
         <listitem>
         <para>
-        {@link PHPFrame_Exception_Handler}
+        {@link PHPFrame_ExceptionHandler}
         </para>
         </listitem>
         

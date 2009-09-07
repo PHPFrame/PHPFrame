@@ -65,7 +65,17 @@
     </itemizedlist>
 
 </refsect1>
+
+
+<refsect1 id="{@id extending}">
+    <title>Extending the DomainObject class</title>
     
+    <para>
+    
+    </para>
+</refsect1>
+
+
 <refsect1 id="{@id examples}">
     <title>Examples</title>
     

@@ -93,7 +93,7 @@ class PHPFrame
         "Document",
         "Exception",
         "Ext",
-        "FS",
+        "FileSystem",
         "HTTP",
         "Lang",
         "Mail",

@@ -145,6 +145,7 @@ Array
     <example>
         <title>Set config keys</title>
         <programlisting>{@example Config/example-3.php 3}</programlisting>
+        <screen>The new name of our app is: New app name</screen>
     </example>
     
     <example>

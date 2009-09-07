@@ -36,29 +36,41 @@
 
 </refsect1>
 
-<!-- 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
     
     <example>
-        <title></title>
+        <title>Run query and get results as an associative array</title>
         <para>
+        Note that in this example we instantiate a DSN object and pass it to 
+        {@link PHPFrame::DB()} along with the username and password. If you have 
+        configured the default database connection in etc/phpframe.ini you can call 
+        {@link PHPFrame::DB()} without any parameters.
         </para>
-        <programlisting>
-<![CDATA[
-
-]]>
-        </programlisting>
+        <programlisting>{@example Database/example-1.php 3}</programlisting>
         
         <screen>
 <![CDATA[
+Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [name] => An entry
+        )
 
+    [1] => Array
+        (
+            [id] => 2
+            [name] => Another entry
+        )
+
+)
 ]]>
         </screen>
        
     </example>
     
 </refsect1>
--->
 
 </refentry>

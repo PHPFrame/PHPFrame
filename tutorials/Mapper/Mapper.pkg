@@ -172,20 +172,24 @@ Array
             </para>
             </listitem>
         </orderedlist>
-        <programlisting>{@example Mapper/example-3.php 3}</programlisting>
-        <screen>
-<![CDATA[
-Array
-(
-    [first_field] => Blah blah
-    [second_field] => Another value
-    [third_field] => 
-    [id] => 
-    [created] => 
-    [modified] => 
-)
-]]>
-        </screen>
+        
+        <para>You should put this file in src/controllers/customers.php</para>
+        <programlisting>{@example Mapper/example-3/controller.php}</programlisting>
+        
+        <para>You should put this file in src/models/customer.php</para>
+        <programlisting>{@example Mapper/example-3/customer.php}</programlisting>
+        
+        <para>You should put this file in src/models/customermapper.php</para>
+        <programlisting>{@example Mapper/example-3/customermapper.php}</programlisting>
+        
+        <para>You should put this file in src/views/customers/list.php</para>
+        <programlisting>{@example Mapper/example-3/view.php}</programlisting>
+        
+        <para>
+        If you run your app specifying the "customers" controller 
+        (http://localhost/myapp/customers) we should see a table with the customer 
+        data we saved using the mapper.
+        </para>
     </example>
     
 </refsect1>

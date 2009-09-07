@@ -498,11 +498,11 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         //loop through files
         foreach ($available_clients as $client) {
             //build class names
-            $className = 'PHPFrame_Client_'.$client;
+            $className = "PHPFrame_".$client."Client";
             if (is_callable(array($className, 'detect'))) {
                 //call class's detect() to check if this is the helper we need
-                $_SESSION['client'] = call_user_func(array($className, 'detect'));
-                if ($_SESSION['client'] instanceof PHPFrame_IClient) {
+                $_SESSION["client"] = call_user_func(array($className, "detect"));
+                if ($_SESSION["client"] instanceof PHPFrame_IClient) {
                     //break out of the function if we found our helper
                     return;
                 }

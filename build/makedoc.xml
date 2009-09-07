@@ -43,7 +43,7 @@
                     -d ${tmp.dir} \
                     -t ${doc.dir} \
                     -ric README,LICENSE,CREDITS \
-                    -i build/,data/,examples/,scripts/,tests/ \
+                    -i examples/ \
                     -s on \
                     -dn PHPFrame \
                     -o HTML:Smarty:PHPFrame \

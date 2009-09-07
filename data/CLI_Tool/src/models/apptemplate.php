@@ -1,5 +1,5 @@
 <?php
-class AppTemplate extends PHPFrame_Model
+class AppTemplate
 {
     private $_install_dir = null;
     private $_preferred_mirror = null;

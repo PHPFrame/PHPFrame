@@ -27,7 +27,7 @@
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see      PHPFrame_ActionController, PHPFrame_Model
+ * @see      PHPFrame_ActionController
  * @since    1.0
  */
 class PHPFrame_View

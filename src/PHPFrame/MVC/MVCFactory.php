@@ -41,10 +41,8 @@ class PHPFrame_MVCFactory
      * @param array  $args           An array with arguments to be passed to the
      *                               model's constructor if needed.
      * 
-     * @return PHPFrame_Model
+     * @return object
      * @since  1.0
-     * @todo   Have to add type checking using instanceof operator to guarantee that 
-     *         we return an object of type PHPFrame_Model
      */
     public static function getModel($model_name, $args=array()) 
     {

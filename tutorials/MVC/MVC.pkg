@@ -28,19 +28,13 @@
         
         <listitem>
         <para>
-        {@link PHPFrame_MVCFactory}
-        </para>
-        </listitem>
-        
-        <listitem>
-        <para>
-        {@link PHPFrame_Model}
-        </para>
-        </listitem>
-        
-        <listitem>
-        <para>
         {@link PHPFrame_View}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_MVCFactory}
         </para>
         </listitem>
         

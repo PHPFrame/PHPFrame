@@ -98,7 +98,6 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/MVCFactory.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/MVC/Model.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/View.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/AppRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Registry.php" role="php" />

@@ -63,27 +63,7 @@
         to run a specific action in a given controller. Access levels are set up in 
         an XML file stored in etc/acl.xml.
         </para>
-        <programlisting>
-<![CDATA[
-// Set constant with app specific path to tmp directory
-define("PHPFRAME_TMP_DIR", dirname(__FILE__).DIRECTORY_SEPARATOR."tmp");
-// Initialise PHPFrame environment
-PHPFrame::Env();
-
-// Get permissions object and current user's group id from registries
-$permissions = PHPFrame::AppRegistry()->getPermissions();
-$group_id    = PHPFrame::Session()->getGroupId();
-
-// Check whether current user is allowed to call an action called 'save' in a 
-// controller called 'content'
-if ($permissions->authorise("content", "save", $group_id, true)) {
-    echo "You are allowed to call action 'save' in controller 'content'!";
-} else {
-    echo "Sorry, you can not save content.";
-}
-]]>
-        </programlisting>
-       
+        <programlisting>{@example PHPFrame/example-2.php}</programlisting>
     </example>
     
     <example>
@@ -99,13 +79,7 @@ if ($permissions->authorise("content", "save", $group_id, true)) {
         file of your app you can pass a DSN object {@link PHPFrame_Database_DSN()} and 
         optional username and password to {@link PHPFrame::DB()}; 
         </para>
-        <programlisting>
-<![CDATA[
-$db = PHPFrame::DB();
-$result = $db->fetchAssocList("SELECT * FROM a_table");
-print_r($result);
-]]>
-        </programlisting>
+        <programlisting>{@example PHPFrame/example-3.php 2}</programlisting>
         <screen>
 <![CDATA[
 Array

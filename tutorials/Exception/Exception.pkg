@@ -45,6 +45,8 @@
         passed to the app.
         </para>
         
+        <para>LogicException sub-classes:</para>
+        
         <itemizedlist>
             <listitem>
             <para>{@link BadFunctionCallException}</para>
@@ -96,7 +98,7 @@
         </itemizedlist>
         
     </refsect2>
-        
+    
     <refsect2 id="{@id RuntimeException}">
         <title>{@link RuntimeException}</title>
         <para>
@@ -104,6 +106,8 @@
         LogicException. Runtime exceptions apply when the problem they report only 
         happens at runtime and because of the data that was passed to the app.
         </para>
+        
+        <para>RuntimeException sub-classes:</para>
         
         <itemizedlist>
             <listitem>

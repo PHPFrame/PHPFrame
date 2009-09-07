@@ -14,24 +14,24 @@
     classes. The Exception package only adds a few specialised Exception classes 
     and provides the exception "handler" itself.
     </para>
+
+</refsect1>
+
+
+<refsect1 id="{@id spl-exceptions}">
+    <title>SPL Exception types used in PHPFrame</title>
     
-    <para>
-    SPL Exception types used in PHPFrame:
-    </para>
-    
-    <itemizedlist>
-        
-        <listitem>
-        <para>{@link Exception}</para>
+    <refsect2 id="{@id Exception}">
+        <title>{@link Exception}</title>
         <para>
         This is the root Exception class from which all other exceptions will 
         inherit. This class defines the exception interface that will apply to all 
         exception objects.
         </para>
-        </listitem>
-        
-        <listitem>
-        <para>{@link LogicException}</para>
+    </refsect2>
+    
+    <refsect2 id="{@id LogicException}">
+        <title>{@link LogicException}</title>
         <para>
         Logic exceptions should be used to differienciate "compile time" exceptions 
         from "runtime" exceptions due to bad data being passed to the application.
@@ -95,10 +95,10 @@
         
         </itemizedlist>
         
-        </listitem>
+    </refsect2>
         
-        <listitem>
-        <para>{@link RuntimeException}</para>
+    <refsect2 id="{@id RuntimeException}">
+        <title>{@link RuntimeException}</title>
         <para>
         Runtime exceptions are designed to handle everything that is not a 
         LogicException. Runtime exceptions apply when the problem they report only 
@@ -146,11 +146,8 @@
             <para>{@link UnexpectedValueException}</para>
             </listitem>
         </itemizedlist>
-        
-        </listitem>
-        
-    </itemizedlist>
-
+    </refsect2>
+    
 </refsect1>
 
 <refsect1 id="{@id classes}">

@@ -68,9 +68,61 @@
 <refsect1 id="{@id examples}">
     <title>Examples</title>
     
-    <para>
-    For example usage please check each individual class using the links above.
-    </para>
+    <example>
+        <title>Using Array objects</title>
+        <para>
+        In this example we instantiate a couple of array objects, print them,  
+        test using the {@link PHPFrame_Array::isAssoc()} method and finally echo the 
+        array depths.
+        </para>
+        <programlisting>{@example Base/array.php 3}</programlisting>
+        <screen>
+<![CDATA[
+PHPFrame_Array Object
+(
+    [0] => 1
+    [1] => 2
+    [2] => 3
+)
+PHPFrame_Array Object
+(
+    [first] => 1
+    [second] => 2
+    [0] => 3
+    [array] => Array
+        (
+            [0] => 1
+            [1] => 2
+            [2] => 3
+        )
+
+)
+$array_obj is NOT an associative array
+$assoc_array_obj is an associative array
+$array_obj has a depth of 1
+$assoc_array_obj has a depth of 2
+]]>
+        </screen>
+       
+    </example>
+    
+        <example>
+        <title>Using String objects</title>
+        <para>
+        In this example demonstrate basic functionality in the String class.
+        </para>
+        <programlisting>{@example Base/string.php 3}</programlisting>
+        <screen>
+<![CDATA[
+i am a string & and object... (29 character(s) long)
+i am a string &amp; and object... (HTML friendly string)
+I AM A STRING & AND OBJECT... (Upper case)
+I am a string & and object... (Upper case first character)
+I Am A String & And Object... (Upper case first character of every word)
+]]>
+        </screen>
+       
+    </example>
     
 </refsect1>
 

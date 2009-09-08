@@ -14,7 +14,12 @@
  */
 
 /**
- * Profiler Class
+ * The profiler class offers functionality to measure app performance based on a 
+ * number of "milestones" added by client code. By default there are a few points 
+ * defined in the PHPFrame core (PHPFrame::Boot(), PHPFrame::Mount(), 
+ * PHPFrame::Env(), PHPFrame_FrontController::__construct(), 
+ * PHPFrame_ActionController::__construct(), PHPFrame_View::display() and  
+ * PHPFrame_Response::render()).
  * 
  * @category PHPFrame
  * @package  Debug
@@ -42,8 +47,9 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
     /**
      * Constructor
      * 
-     * The private constructor ensures this class is not instantiated and is alwas 
-     * used statically.
+     * The private constructor ensures this class can only be instantiated using 
+     * the {@link PHPFrame_Profiler::instance()} method and thus implementing the 
+     * singleton pattern. 
      * 
      * @access private
      * @return void
@@ -76,9 +82,14 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
             $count++;
         }
         
+        // Work out difference between first and last entries
+        $keys       = array_keys($this->_milestones);
+        $last_key   = $keys[(count($this->_milestones)-1)];
+        $last_item  = $this->_milestones[$last_key];
+        $first_item = $this->_milestones[$keys[0]];
+        
         $str .= "Total => ";
-        $keys = array_keys($this->_milestones);
-        $str .= round($this->_milestones[$keys[(count($this->_milestones)-1)]] - $this->_milestones[$keys[0]], 2);
+        $str .= round($last_item - $first_item, 2);
         $str .= " msec\n";
         
         return $str;
@@ -145,7 +156,8 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
         foreach (debug_backtrace() as $backtrace_call) {
             $isset = isset($backtrace_call["class"]);
             if ($isset && $backtrace_call["class"] != "PHPFrame_Profiler") {
-                $key = $backtrace_call["class"]."::".$backtrace_call["function"]."()";
+                $key  = $backtrace_call["class"]."::";
+                $key .= $backtrace_call["function"]."()";
                 $this->_milestones[$key] = $this->_microtime_float();
                 break;
             }

@@ -402,6 +402,9 @@ class PHPFrame
             set_include_path($subpackage_path.PATH_SEPARATOR.get_include_path());
         }
         
+        // Set profiler milestone
+        PHPFrame_Profiler::instance()->addMilestone();
+        
         // Initialise app config
         $config = self::Config();
         
@@ -443,6 +446,9 @@ class PHPFrame
      */
     public static function Env()
     {
+        // Set profiler milestone
+        PHPFrame_Profiler::instance()->addMilestone();
+        
         // Initialise AppRegistry
         PHPFrame_AppRegistry::getInstance();
         
@@ -464,6 +470,9 @@ class PHPFrame
      */
     public static function Mount()
     {
+        // Set profiler milestone
+        PHPFrame_Profiler::instance()->addMilestone();
+        
         if (self::$_run_level >= 3) {
             return;
         }

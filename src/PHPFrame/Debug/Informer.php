@@ -14,8 +14,6 @@
  */
 
 /**
- * Informer Class
- * 
  * This class implements the "Observer" base class in order to subscribe to updates
  * from "observable" objects (objects of type PHPFrame_Subject).
  * 
@@ -26,12 +24,26 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @see      PHPFrame_Observer
  * @since    1.0
- * @ignore
  */
 class PHPFrame_Informer extends PHPFrame_Observer
 {
+    /**
+     * Reference to PHPMailer object used by this informer
+     * 
+     * @var PHPFrame_Mailer
+     */
     private $_mailer;
     
+    /**
+     * Constructor
+     * 
+     * @param array $recipients An arra containing email addresses of the recipients 
+     *                          of this informer.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function __construct(array $recipients)
     {
         $this->_mailer = new PHPFrame_Mailer();
@@ -44,7 +56,7 @@ class PHPFrame_Informer extends PHPFrame_Observer
     /**
      * Handle observed objects updates
      * 
-     * @param SplSubject $subject The subjuct issuing the update
+     * @param PHPFrame_Subject $subject The subject issuing the update
      * 
      * @access protected
      * @return void
@@ -64,5 +76,4 @@ class PHPFrame_Informer extends PHPFrame_Observer
             $this->_mailer->Send();
         }
     }
-    
 }

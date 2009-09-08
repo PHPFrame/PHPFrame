@@ -38,16 +38,13 @@ class PHPFrame_FrontController
     public function __construct()
     {
         // Set profiler milestone
-        PHPFrame_Profiler::setMilestone('Start');
+        PHPFrame_Profiler::instance()->addMilestone();
         
         // Rewrite Request URI
         PHPFrame_Rewrite::rewriteRequest();
         
         // Initialise request
         $request = PHPFrame::Request();
-        
-        // Set profiler milestone
-        PHPFrame_Profiler::setMilestone('Front controller constructed');
     }
     
     /**

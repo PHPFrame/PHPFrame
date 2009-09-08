@@ -102,15 +102,14 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
         $path = PHPFRAME_TMP_DIR.DS."cache";
         
         // Set path to cache file
-        $this->_path = $path;
+        $this->_path       = $path;
         $this->_cache_file = "application.registry";
         
         // Read data from cache
         if (is_file($this->getFilePath())) {
             $serialized_array = file_get_contents($this->getFilePath());
             $this->_data      = unserialize($serialized_array);
-        }
-        else {
+        } else {
             // Rebuild app registry
             $permissions = new PHPFrame_Permissions();
             $libs        = new PHPFrame_Libraries();

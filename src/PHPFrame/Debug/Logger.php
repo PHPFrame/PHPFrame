@@ -89,7 +89,7 @@ class PHPFrame_Logger extends PHPFrame_Observer
     /**
      * Handle observed objects updates
      * 
-     * @param SplSubject $subject The subject issuing the update
+     * @param PHPFrame_Subject $subject The subject issuing the update
      * 
      * @access protected
      * @return void

@@ -24,31 +24,106 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_Profiler extends PHPFrame_Observer
+class PHPFrame_Profiler implements IteratorAggregate, Countable
 {
     /**
-     * Key count
+     * Reference to single instance of itself
      * 
-     * @var int
+     * @var PHPFrame_Profiler
      */
-    private static $_key_count=0;
+    private static $_instance = null;
+    
     /**
      * An array containing user defined execution milestones
      * 
      * @var array
      */
-    private static $_milestones=array();
+    private $_milestones = array();
     
     /**
      * Constructor
      * 
-     * The private constructor ensures this class is not instantiated and is alwas used statically.
+     * The private constructor ensures this class is not instantiated and is alwas 
+     * used statically.
      * 
      * @access private
      * @return void
      * @since  1.0
      */
-    private function __construct() {}
+    private function __construct()
+    {
+        $this->addMilestone();
+    }
+    
+    /**
+     * Magic method invoked whe trying to use an object of this class as a string.
+     * 
+     * @access private
+     * @return string
+     * @since  1.0
+     */
+    public function __toString() 
+    {
+        $str   = "";
+        $count = 0;
+        
+        foreach ($this->_milestones as $key=>$value) {
+            if ($count > 0) {
+                $value = round($value - $this->_milestones[$prev_key], 2);
+                $str  .= $prev_key." => ".$value." msec\n";
+            }
+            
+            $prev_key = $key;
+            $count++;
+        }
+        
+        $str .= "Total => ";
+        $keys = array_keys($this->_milestones);
+        $str .= round($this->_milestones[$keys[(count($this->_milestones)-1)]] - $this->_milestones[$keys[0]], 2);
+        $str .= " msec\n";
+        
+        return $str;
+    } 
+    
+    /**
+     * Get singleton instance
+     * 
+     * @access public
+     * @return PHPFrame_Profiler
+     * @since  1.0
+     */
+    public static function instance()
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self;
+        }
+        
+        return self::$_instance;
+    }
+    
+    /**
+     * Get iterator
+     * 
+     * @access private
+     * @return ArrayIterator
+     * @since  1.0
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->_milestones);
+    }
+    
+    /**
+     * Count elements in internal array
+     * 
+     * @access private
+     * @return ArrayIterator
+     * @since  1.0
+     */
+    public function count()
+    {
+        return count($this->_milestones);
+    }
     
     /**
      * Set milestone in the profiler
@@ -59,97 +134,35 @@ class PHPFrame_Profiler extends PHPFrame_Observer
      * @return void
      * @since  1.0
      */
-    public static function setMilestone($name) 
+    public function addMilestone() 
     {
-        self::$_milestones[self::$_key_count] = array($name, self::_microtime_float());
-        self::$_key_count++;
-    }
-    
-    /**
-     * Get Report
-     * 
-     * @access public
-     * @return mixed
-     * @since  1.0
-     */
-    public static function getReport($array=false) 
-    {
-        if ($array) {
-            return self::_asArray();
-        }
-        else {
-            return self::_asString();
-        }
-    }
-    
-    protected function doUpdate(PHPFrame_Subject $subject)
-    {
-        echo "dont know what to do with this update. btw, im in ";
-        echo get_class($this)."::doUpdate()";
-        exit;
-    }
-    
-    private static function _asArray() 
-    {
-        self::setMilestone('End');
-        
-        foreach (self::$_milestones as $key=>$value) {
-            if (isset($prev_key)) {
-                $report[$key][0] = $value[0];
-                $report[$key][1] = round($value[1] - self::$_milestones[$prev_key][1], 2);
-            }
-            else {
-                $report[$key][0] = self::$_milestones[0][0];
-                $report[$key][1] = 0;
-            }
-            
-            $prev_key = $key;
+        if (!PHPFrame::Config()->get("debug.enable")) {
+            return;
         }
         
-        $report['Total'] = round(self::$_milestones[(count(self::$_milestones)-1)][1] - self::$_milestones[0][1], 2);
+        $stack = array();
         
-        return $report;
-    }
-    
-    private static function _asString() 
-    {
-        self::setMilestone('End');
-        
-        $report = "Profiler\n";
-        $report .= "--------\n\n";
-        
-        foreach (self::$_milestones as $key=>$value) {
-            if (isset($prev_key)) {
-                $report .= $value[0]." => ";
-                $report .= round($value[1] - self::$_milestones[$prev_key][1], 2);
+        // Filter out profiler's calls from the backtrace
+        foreach (debug_backtrace() as $backtrace_call) {
+            $isset = isset($backtrace_call["class"]);
+            if ($isset && $backtrace_call["class"] != "PHPFrame_Profiler") {
+                $key = $backtrace_call["class"]."::".$backtrace_call["function"]."()";
+                $this->_milestones[$key] = $this->_microtime_float();
+                break;
             }
-            else {
-                $report .= self::$_milestones[0][0]." => 0";
-            }
-            
-            $report .= " msec\n";
-            
-            $prev_key = $key;
         }
-        
-        $report .= "Total => ";
-        $report .= round(self::$_milestones[(count(self::$_milestones)-1)][1] - self::$_milestones[0][1], 2);
-        $report .= " msec";
-        $report .= "\n\n";
-        
-        return $report;
-    } 
+    }
     
     /**
      * Calculate current microtime in miliseconds
      * 
-     * @return    float
-     * @since    1.0
+     * @access private
+     * @return float
+     * @since  1.0
      */
-    private static function _microtime_float() 
+    private function _microtime_float() 
     {
-        list ($msec, $sec) = explode(' ', microtime());
-        $microtime = ( (float)$msec + (float)$sec ) * 1000;
-        return $microtime;
+        list ($msec, $sec) = explode(" ", microtime());
+        return ((float) $msec + (float) $sec) * 1000;
     }
 }

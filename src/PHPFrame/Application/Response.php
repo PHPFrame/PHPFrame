@@ -156,6 +156,8 @@ class PHPFrame_Response
      */
      public function render(PHPFrame_View $view)
      {
+         PHPFrame_Profiler::instance()->addMilestone();
+         
          $tmpl = PHPFrame::Request()->get("tmpl", "");
          if ($tmpl == "component") {
              $apply_theme = false;
@@ -196,7 +198,13 @@ class PHPFrame_Response
                 echo "<pre>";
             }
             
-            echo PHPFrame_Profiler::getReport();
+            PHPFrame_Profiler::instance()->addMilestone();
+            
+            echo "Profiler Milestones:\n\n";
+            echo PHPFrame_Profiler::instance();
+            
+            //echo "\n\nBacktrace:\n\n";
+            //debug_print_backtrace();
         }
         
         // Exit setting status to 0, 

@@ -75,6 +75,9 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     {
         // Set default action property
         $this->_default_action = (string) $default_action;
+        
+        // Set profiler milestone
+        PHPFrame_Profiler::instance()->addMilestone();
     }
     
     /**

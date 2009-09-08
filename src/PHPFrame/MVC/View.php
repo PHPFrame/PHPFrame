@@ -150,6 +150,9 @@ class PHPFrame_View
      */
     public function display() 
     {
+        // Set profiler milestone
+        PHPFrame_Profiler::instance()->addMilestone();
+        
         // Delegate rendering to response object
         // The response object will render the view object 
         // depending on the document typ

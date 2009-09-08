@@ -25,33 +25,31 @@
  */
 class PHPFrame_XMLRPCException extends RuntimeException
 {
+    private $_fault_code;
     
-    private $_faultCode;
-    
-    const INVALID_COMPONENT = 1;
-    const INVALID_ACTION = 2;
+    const INVALID_COMPONENT         = 1;
+    const INVALID_ACTION            = 2;
     const INVALID_NUMBER_PARAMETERS = 3;
-    const INVALID_PARAMETER_TYPE = 4;
-    const INVALID_API_KEY_OR_USER = 5;
-    const INVALID_PERMISSIONS = 6;
+    const INVALID_PARAMETER_TYPE    = 4;
+    const INVALID_API_KEY_OR_USER   = 5;
+    const INVALID_PERMISSIONS       = 6;
     
     /**
      * Constructor
      * 
-     * @param string       $message   The error message.
-     * @param int          $code      The error code.
+     * @param string $message         The error message.
+     * @param int    $xmlrpcFaultCode The XMLRPC fault code.
+     * @param int    $code            The error code if any.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct(
-        $message=null,
-        $xmlrpcFaultCode,
-        $code=PHPFrame_Exception::ERROR
-    ) {
+    public function __construct($message=null, $xmlrpcFaultCode, $code=null)
+    {
        parent::__construct($message, $code);
-       $_faultCode = $xmlrpcFaultCode;
+       
+       $this->_fault_code = $xmlrpcFaultCode;
     }
     
     /**
@@ -68,7 +66,7 @@ class PHPFrame_XMLRPCException extends RuntimeException
                          <struct>
                             <member>
                                <name>faultCode</name>
-                               <value><int>'.$this->_faultCode.'</int></value>
+                               <value><int>'.$this->_fault_code.'</int></value>
                                </member>
                             <member>
                                <name>faultString</name>

@@ -58,35 +58,6 @@ class PHPFrame_ErrorException extends Exception
     {
         $this->_context = $context;
         
-        switch ($code) {
-            case E_ERROR :
-            case E_PARSE :
-            case E_USER_ERROR :
-            case E_CORE_ERROR :
-            case E_COMPILE_ERROR :
-            case E_RECOVERABLE_ERROR :
-                $code = PHPFrame_Exception::ERROR;
-                break;
-                
-            case E_WARNING :
-            case E_USER_WARNING :
-            case E_CORE_WARNING :
-            case E_COMPILE_WARNING :
-                $code = PHPFrame_Exception::WARNING;
-                break;
-                
-            case E_NOTICE :
-            case E_USER_NOTICE :
-                $code = PHPFrame_Exception::NOTICE;
-                break;
-                
-            case E_STRICT :
-            case E_DEPRECATED :
-            case E_USER_DEPRECATED :
-                $code = PHPFrame_Exception::STRICT;
-                break;
-        }
-        
         // Invoke parent
         parent::__construct($message, $code);
         

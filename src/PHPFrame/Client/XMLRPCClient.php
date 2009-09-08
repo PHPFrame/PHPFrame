@@ -15,7 +15,7 @@
  */
 
 /**
- * Client for Mobile Devices
+ * XMLRPC Client implementation
  * 
  * @category PHPFrame
  * @package  Client
@@ -189,8 +189,12 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
                 $parameters[] = $this->_parseXMLRPCRecurse($domXPath, $parameter);
             }
             try{
-            //check if component action request is valid:
-            $paramMap = $this->_getComponentActionParameterMapping($array['request']['component'], $array['request']['action'], $parameters);
+                //check if component action request is valid:
+                $paramMap = $this->_getComponentActionParameterMapping(
+                    $array['request']['component'], 
+                    $array['request']['action'], 
+                    $parameters
+                );
             } catch (PHPFrame_XMLRPCException $e){
                 echo $e->getXMLRPCFault();
                 exit;
@@ -202,7 +206,11 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
         else{
             try{
                 //check if component action request is valid:
-                $paramMap = $this->_getComponentActionParameterMapping($array['request']['component'], $array['request']['action'], array());
+                $paramMap = $this->_getComponentActionParameterMapping(
+                    $array['request']['component'], 
+                    $array['request']['action'], 
+                    array()
+                );
             } catch (PHPFrame_XMLRPCException $e){
                 echo $e->getXMLRPCFault();
                 exit;
@@ -283,55 +291,95 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
     {
         $component = substr($component, 4);
         $reflectionClass = $this->_getComponentClass($component);
-        if (!$reflectionClass){
-            throw new PHPFrame_XMLRPCException('No such component exists: '.$component, PHPFrame_XMLRPCException::INVALID_COMPONENT);
+        if (!$reflectionClass) {
+            throw new PHPFrame_XMLRPCException(
+                'No such component exists: '.$component, 
+                PHPFrame_XMLRPCException::INVALID_COMPONENT
+            );
             return;
         }
-        if (!$reflectionClass->hasMethod($action)){
-            throw new PHPFrame_XMLRPCException('No such action: '.$action.' exists in component: '.$component, PHPFrame_XMLRPCException::INVALID_ACTION);
+        
+        if (!$reflectionClass->hasMethod($action)) {
+            throw new PHPFrame_XMLRPCException(
+                'No such action: '.$action.' exists in component: '.$component, 
+                PHPFrame_XMLRPCException::INVALID_ACTION
+            );
             return;
         }
+        
         $actionMethod = $reflectionClass->getMethod($action);
-        if (!$actionMethod->isPublic()){
-            throw new PHPFrame_XMLRPCException('Component action: '.$action.' is inaccessible in component: '.$component, PHPFrame_XMLRPCException::INVALID_ACTION);
+        if (!$actionMethod->isPublic()) {
+            throw new PHPFrame_XMLRPCException(
+                'Action: '.$action.' is inaccessible in component: '.$component, 
+                PHPFrame_XMLRPCException::INVALID_ACTION
+            );
             return;
         }
+        
         $reflectionParameters = $actionMethod->getParameters();
         $numParams = count($reflectionParameters);
         $minReqParams = $actionMethod->getNumberOfRequiredParameters();
         if (count($params) > $numParams) {
-            throw new PHPFrame_XMLRPCException('Too many parameters have been specified for action: '.$action.' in component: '.$component, PHPFrame_XMLRPCException::INVALID_NUMBER_PARAMETERS);
+            throw new PHPFrame_XMLRPCException(
+                'Too many parameters for action: '.$action.' in component: '.$component, 
+                PHPFrame_XMLRPCException::INVALID_NUMBER_PARAMETERS
+            );
             return;
+        } elseif (count($params) < $minReqParams) {
+            throw new PHPFrame_XMLRPCException(
+                'Too few parameters for action: '.$action.' in component: '.$component,
+                PHPFrame_XMLRPCException::INVALID_NUMBER_PARAMETERS
+            );
         }
-        elseif (count($params) < $minReqParams) {
-            throw new PHPFrame_XMLRPCException('Too few parameters specified for action: '.$action.' in component: '.$component, PHPFrame_XMLRPCException::INVALID_NUMBER_PARAMETERS);
-        }
+        
         $paramMap = array();
         $paramIndex = 0;
-        foreach ($reflectionParameters as $reflectionParam){
-            if ($paramIndex<count($params)){
+        foreach ($reflectionParameters as $reflectionParam) {
+            if ($paramIndex<count($params)) {
                 $class = $reflectionParam->getClass();
                 $paramPosition = $reflectionParam->getPosition();
-                if ($reflectionParam->isArray() && !is_array($params[$paramPosition])){
-                    throw new PHPFrame_XMLRPCException('Parameter type mis-match for parameter '.$paramPosition.', expected an array, got primitive type', PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE);
+                if (
+                    $reflectionParam->isArray() 
+                    && !is_array($params[$paramPosition])
+                )
+                {
+                    $msg  = 'Parameter type mis-match for parameter '.$paramPosition;
+                    $msg .= ', expected an array, got primitive type';
+                    throw new PHPFrame_XMLRPCException(
+                        $msg, 
+                        PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE
+                    );
                     return;
-                }
-                else if (!empty($class) && !is_array($params[$paramPosition])){
-                    throw new PHPFrame_XMLRPCException('Parameter type mis-match for parameter '.$paramPosition.', expected a struct, got primitive type', PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE);
+                } elseif (!empty($class) && !is_array($params[$paramPosition])) {
+                    $msg  = 'Parameter type mis-match for parameter '.$paramPosition;
+                    $msg .= ', expected a struct, got primitive type';
+                    throw new PHPFrame_XMLRPCException(
+                        $msg, 
+                        PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE
+                    );
                     return;
-                }
-                else if (!$reflectionParam->isArray() && empty($class) && is_array($params[$paramPosition])){
-                    throw new PHPFrame_XMLRPCException('Parameter type mis-match for parameter '.$paramPosition.', expected a primitive, got a struct/array', PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE);
+                } elseif (
+                    !$reflectionParam->isArray() 
+                    && empty($class) 
+                    && is_array($params[$paramPosition])
+                )
+                {
+                    $msg  = 'Parameter type mis-match for parameter '.$paramPosition;
+                    $msg .= ', expected a primitive, got a struct/array';
+                    throw new PHPFrame_XMLRPCException(
+                        $msg, 
+                        PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE
+                    );
                     return;
-                }
-                else{
+                } else {
                     $paramMap[$reflectionParam->getName()] = $params[$paramPosition];
                 }
                 $paramIndex++;
-            }
-            else
+            } else {
                 break;
+            }   
         }
+        
         return $paramMap;
     }
     
@@ -347,12 +395,14 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
     private function _getComponentClass($component)
     {
         $class_name = $component."Controller";
+        
         // make a reflection object
         try{
         $reflectionObj = new ReflectionClass($class_name);
         } catch (Exception $e){
             return FALSE;
         }
+        
         // Check if class is instantiable
         if ($reflectionObj->isInstantiable()) {
             // Try to get the constructor
@@ -365,6 +415,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
                 }
             }
         }
+        
         //check if the class has a static getInstance method
         if ($reflectionObj->hasMethod('getInstance')) {
             $get_instance = $reflectionObj->getMethod('getInstance');
@@ -396,18 +447,22 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
         switch ($nodeName){
             case 'i4':
             case 'int':
-                $value = (int)$node->nodeValue;
+                $value = (int) $node->nodeValue;
                 break;
+                
             case 'boolean':
-                $value = (boolean)$node->nodeValue;
+                $value = (boolean) $node->nodeValue;
                 break;
+                
             case 'string':
             case 'base64':
-                $value = (string)$node->nodeValue;
+                $value = (string) $node->nodeValue;
                 break;
+                
             case 'double':
-                $value = (float)$node->nodeValue;
+                $value = (float) $node->nodeValue;
                 break;
+                
             case 'dateTime.iso8601':
                 $matches = array();
                 $isValidTime = preg_match($time_reg, $node->nodeValue, $matches);
@@ -416,7 +471,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
                     $msg  = "Invalid dateTime format found for value ";
                     $msg .= $node->nodeValue."!";
                     throw new DomainException($msg);
-                } else
+                } else {
                     $value = mktime(
                         $matches[4], 
                         $matches[5], 
@@ -425,11 +480,14 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
                         $matches[3], 
                         $matches[1]
                     );
-                    
+                }
+                
                 break;
+                
             default:
                 $value = "";
         }
+        
         return $value;
     }
     
@@ -451,14 +509,16 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
         if (isset($_SERVER["HTTP_X_API_USERNAME"])) {
             $x_api_user = $_SERVER["HTTP_X_API_USERNAME"];
         }
+        
         if (isset($_SERVER["HTTP_X_API_SIGNATURE"])) {
             $x_api_signature = $_SERVER["HTTP_X_API_SIGNATURE"];
         }
         
         // Get API user's key
         try {
-            $sql = "SELECT `key` FROM #__api_clients WHERE user = '".$x_api_user."'";
-            $params = array(":user"=>$x_api_user);
+            $sql     = "SELECT `key` FROM #__api_clients ";
+            $sql    .= " WHERE user = '".$x_api_user."'";
+            $params  = array(":user"=>$x_api_user);
             $api_key = PHPFrame::DB()->fetchColumn($sql, $params);
             
             $test_signature = md5(md5($xml_payload.$api_key).$api_key);
@@ -482,13 +542,13 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
                 return;
                 
             } else {
-                $msg = "XMLRPC API authentication failed. ";
+                $msg  = "XMLRPC API authentication failed. ";
                 $msg .= "API key not valid.";
                 throw new RuntimeException($msg);
             }
             
         } catch (Exception $e) {
-            $msg = "XMLRPC API authentication failed";
+            $msg  = "XMLRPC API authentication failed";
             $code = PHPFrame_XMLRPCException::INVALID_API_KEY_OR_USER;
             throw new PHPFrame_XMLRPCException($msg, $code);
         }
@@ -505,9 +565,9 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
     private function _checkAPIPermisssions()
     {
         // Check permissions before we execute
-        $component = PHPFrame::Request()->getComponentName();
-        $action = PHPFrame::Request()->getAction();
-        $groupid = PHPFrame::Session()->getGroupId();
+        $component   = PHPFrame::Request()->getComponentName();
+        $action      = PHPFrame::Request()->getAction();
+        $groupid     = PHPFrame::Session()->getGroupId();
         $permissions = PHPFrame::AppRegistry()->getPermissions();
         
         if ($permissions->authorise($component, $action, $groupid) !== true) {

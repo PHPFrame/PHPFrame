@@ -23,30 +23,56 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_ExceptionHandler
+class PHPFrame_ExceptionHandler extends PHPFrame_Subject
 {
     /**
-     * Initialise the error and exception handlers
+     * Propery holding single instance of this class
+     * 
+     * @var PHPFrame_ExceptionHandler
+     */
+    private static $_instance = null;
+    
+    /**
+     * We declare a private constructor to avoid instantiation from client code 
+     * enforce the singleton pattern.
+     * 
+     * The constructor initialises the error and exception handlers
      * 
      * This method encapsulates set_error_handler() and set_exception_handler().
      * 
-     * @static
-     * @access public
+     * @access private
      * @return void
      * @since  1.0
      */
-    public static function init() 
+    private function __construct()
     {
         //error_reporting(E_ALL | E_NOTICE | E_STRICT);
         error_reporting(E_ALL);
         //set_error_handler(array("PHPFrame_ExceptionHandler", "handleError"));
-        set_exception_handler(array('PHPFrame_ExceptionHandler', 'handleException'));
+        set_exception_handler(array('PHPFrame_ExceptionHandler','handleException'));
+    }
+    
+    /**
+     * Get singleton instance of PHPFrame_ExceptionHandler
+     * 
+     * @access public
+     * @return PHPFrame_ExceptionHandler
+     * @since  1.0
+     */
+    public static function instance()
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self;
+        }
+        
+        return self::$_instance;
     }
     
     /**
      * Restore error and exception handlers to PHP defaults
      * 
-     * This method encapsulates restore_error_handler() and restore_exception_handler().
+     * This method encapsulates restore_error_handler() and 
+     * restore_exception_handler().
      * 
      * @static
      * @access public
@@ -75,10 +101,22 @@ class PHPFrame_ExceptionHandler
      * @return void
      * @since  1.0
      */
-    public static function handleError($errno, $errstr, $errfile, $errline, $errcontext) 
+    public static function handleError(
+        $errno, 
+        $errstr, 
+        $errfile, 
+        $errline, 
+        $errcontext
+    )
     {
         // Throw error as custom exception
-        throw new PHPFrame_ErrorException($errstr, $errno, $errfile, $errline, $errcontext);
+        throw new PHPFrame_ErrorException(
+            $errstr, 
+            $errno, 
+            $errfile, 
+            $errline, 
+            $errcontext
+        );
     }
     
     /**
@@ -90,7 +128,7 @@ class PHPFrame_ExceptionHandler
      * @access public
      * @return void
      * @since  1.0
-     * @todo   This method needs to decide what to do with the uncaught exceptions. 
+     * @todo   This method needs to decide what to do with the uncaught exceptions.
      *         Right now it simply outputs some basic info.
      */
     public static function handleException($exception) 
@@ -102,13 +140,14 @@ class PHPFrame_ExceptionHandler
         $str .= "Code: ".$exception->getCode()."\n";
         $str .= $exception->getTraceAsString();
         
+        // Display the exception details if debugging is enabled
         $debug = PHPFrame::Config()->get("debug.enable");
         if ($debug == 1) {
             echo '<pre>'.$str.'</pre>';
         }
         
-        // Log the error to file
-        PHPFrame_Logger::write($str);
+        // Notify event to observers
+        self::instance()->notifyEvent($str, PHPFrame_Subject::EVENT_TYPE_ERROR);
         exit;
     }
 }

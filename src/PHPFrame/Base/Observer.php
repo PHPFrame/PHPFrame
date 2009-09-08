@@ -42,7 +42,7 @@ abstract class PHPFrame_Observer implements SplObserver
      */
     public function update(SplSubject $subject)
     {
-        $this->doUpdate();
+        $this->doUpdate($subject);
     }
     
     /**
@@ -51,5 +51,5 @@ abstract class PHPFrame_Observer implements SplObserver
      * @return void
      * @since  1.0
      */
-    abstract protected function doUpdate(SplSubject $subject);
+    abstract protected function doUpdate(PHPFrame_Subject $subject);
 }

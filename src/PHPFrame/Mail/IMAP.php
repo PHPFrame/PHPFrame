@@ -36,15 +36,16 @@ class PHPFrame_IMAP
     /**
      * Constructor
      * 
-     * @return    void
-     * @since    1.0
+     * @access public
+     * @return void
+     * @since  1.0
      */
     public function __construct($host, $port, $user, $password, $mailbox_name="INBOX") 
     {
-        $this->_host = $host;
-        $this->_port = $port;
-        $this->_user = $user;
-        $this->_password = $password;
+        $this->_host         = $host;
+        $this->_port         = $port;
+        $this->_user         = $user;
+        $this->_password     = $password;
         $this->_mailbox_name = $mailbox_name;
         
         // Build mailbox name
@@ -61,7 +62,7 @@ class PHPFrame_IMAP
     /**
      * This function gets messages in the current mailbox.
      * 
-     * @return    array    An array of message objects.
+     * @return array An array of message objects.
      */
     public function getMessages() 
     {

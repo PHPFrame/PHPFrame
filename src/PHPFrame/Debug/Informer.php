@@ -30,6 +30,17 @@
  */
 class PHPFrame_Informer extends PHPFrame_Observer
 {
+    private $_mailer;
+    
+    public function __construct(array $recipients)
+    {
+        $this->_mailer = new PHPFrame_Mailer();
+        
+        foreach ($recipients as $recipient) {
+            $this->_mailer->AddAddress(PHPFrame_Filter::validateEmail($recipient));
+        }
+    }
+    
     /**
      * Handle observed objects updates
      * 
@@ -39,9 +50,19 @@ class PHPFrame_Informer extends PHPFrame_Observer
      * @return void
      * @since  1.0
      */
-    protected function doUpdate(SplSubject $subject)
+    protected function doUpdate(PHPFrame_Subject $subject)
     {
-        // ...
+        list($msg, $type) = $subject->getLastEvent();
+        
+        $informer_level = PHPFrame::Config()->get("debug.informer_level");
+        if ($type <= $informer_level) {
+            // Build the email
+            $this->_mailer->Subject = "PHPFrame Informer notification";
+            $this->_mailer->Body    = $msg;
+            
+            // Send the email
+            $this->_mailer->Send();
+        }
     }
     
 }

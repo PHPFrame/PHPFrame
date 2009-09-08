@@ -23,97 +23,76 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Sysevents
+class PHPFrame_Sysevents extends PHPFrame_Observer 
+    implements IteratorAggregate, Countable
 {
     /**
-     * Events summary
+     * Internal array to store the system events
      * 
      * @var array
      */
-    private $_summary=array();
-    /**
-     * Events log
-     * 
-     * An array containig more info about what was reported to the system events.
-     * 
-     * @var array
-     */
-    private $_events_log=array();
+    private $_events;
     
     /**
      * Constructor
      * 
+     * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct() {}
-    
-    /**
-     * Set system events summary
-     * 
-     * @param string $msg  The summary message.
-     * @param string $type Possible values "error", "warning", "notice", "success", 
-     *                     "info". Default value is "error".
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setSummary($msg, $type=null) 
+    public function __construct()
     {
-        if (is_null($type)) $type = "error";
-        $this->_summary = array($type, $msg);
+        $this->_events = array();
     }
     
-    /**
-     * Add event log
-     * 
-     * @param string $msg  The event log message.
-     * @param string $type Possible values "error", "warning", "notice", "success", 
-     *                     "info". Default value is "error".
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function addEventLog($msg, $type=null) 
-    {
-        if (is_null($type)) $type = "error";
-        $this->_events_log[] = array($type, $msg);
-    }
-    
-    /**
-     * Get system events as array.
-     * 
-     * This method is used to get the system events for output.
-     * 
-     * @return array
-     * @since  1.0
-     */
-    public function asArray() 
-    {
-        return array("summary" => $this->_summary, "events_log" => $this->_events_log);
-    }
-    
-    /**
-     * Get system events as string.
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function asString() 
+    public function __toString()
     {
         $str = "";
-        if (count($this->_summary) > 0) {
-            $str .= ucfirst($this->_summary[0]).": ".$this->_summary[1];
-        }
         
-        if (is_array($this->_events_log) && count($this->_events_log) > 0) {
-            $str .= "\nEvents log: \n";
-            foreach ($this->_events_log as $event_log) {
-                $str .= ucfirst($event_log[0]).": ".$event_log[1]."\n";
-            }
+        foreach ($this->_events as $event) {
+            $str .= strtoupper($event[1]).": ".$event[0]."\n";
         }
         
         return $str;
+    }
+    
+    /**
+     * Get iterator object
+     * 
+     * Note that we reverse the order of the elements in order to iterate starting 
+     * from the latest entry.
+     * 
+     * @access public
+     * @return Iterator
+     * @since  1.0
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator(array_reverse($this->_events));
+    }
+    
+    /**
+     * Count elements in internal array
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public function count()
+    {
+        return count($this->_events);
+    }
+    
+    /**
+     * Append a system event
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function append($msg, $type=self::INFO)
+    {
+        $this->_events[] = array($msg, $type);
     }
     
     /**
@@ -121,13 +100,31 @@ class PHPFrame_Sysevents
      * 
      * This should be done after displaying the messages to the user.
      * 
+     * @access public
      * @return void
      * @since  1.0
      */
     public function clear() 
     {
         // Clear private vars
-        $this->_summary = array();
-        $this->_events_log = array();
+        $this->_events = array();
+    }
+    
+    /**
+     * Implementation of update method triggered by observed objects
+     * 
+     * @see src/PHPFrame/Base/PHPFrame_Observer#doUpdate($subject)
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
+     */
+    protected function doUpdate(PHPFrame_Subject $subject)
+    {
+        list($msg, $type) = $subject->getLastEvent();
+        
+        if (isset($msg) && !empty($msg)) {
+            $this->append($msg, $type);
+        }
     }
 }

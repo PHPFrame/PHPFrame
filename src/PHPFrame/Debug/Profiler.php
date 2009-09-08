@@ -24,7 +24,7 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_Profiler
+class PHPFrame_Profiler extends PHPFrame_Observer
 {
     /**
      * Key count
@@ -80,6 +80,13 @@ class PHPFrame_Profiler
         else {
             return self::_asString();
         }
+    }
+    
+    protected function doUpdate(PHPFrame_Subject $subject)
+    {
+        echo "dont know what to do with this update. btw, im in ";
+        echo get_class($this)."::doUpdate()";
+        exit;
     }
     
     private static function _asArray() 

@@ -55,8 +55,9 @@ class PHPFrame_FrontController
      * 
      * @access public
      * @return void
-     * @uses   PHPFrame, PHPFrame_ActionController, PHPFrame_Environment_IClient
-     *         PHPFrame_Response
+     * @uses   PHPFrame_SessionRegistry, PHPFrame_IClient, PHPFrame_Response, 
+     *         PHPFrame_RequestRegistry, PHPFrame_MVCFactory, 
+     *         PHPFrame_ActionController
      * @since  1.0
      */
     public function run() 
@@ -76,6 +77,9 @@ class PHPFrame_FrontController
 
         // Create the action controller
         $controller = PHPFrame_MVCFactory::getActionController($controller_name);
+        
+        // Attach observers to the action controller
+        $controller->attach(PHPFrame::Session()->getSysevents());
         
         // Execute the action in the given controller
         $controller->execute();

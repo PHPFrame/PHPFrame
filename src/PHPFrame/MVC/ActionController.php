@@ -33,7 +33,7 @@
  * @since    1.0
  * @abstract 
  */
-abstract class PHPFrame_ActionController
+abstract class PHPFrame_ActionController extends PHPFrame_Subject
 {
     /**
      * Instances of its concrete children
@@ -46,28 +46,20 @@ abstract class PHPFrame_ActionController
      * 
      * @var string
      */
-    protected $default_action = null;
+    private $_default_action = null;
     /**
      * A string containing a url to be redirected to. Leave empty for no redirection.
      *
      * @var string
      */
-    protected $redirect_url = null;
-    /**
-     * A reference to the System Events object.
-     * 
-     * This object is used to report system messages from the action controllers.
-     * 
-     * @var PHPFrame_Sysevents
-     */
-    protected $sysevents = null;
+    private $_redirect_url = null;
     /**
      * This is a flag we use to indicate whether the controller's executed task was 
      * successful or not.
      * 
      * @var boolean
      */
-    protected $success = false;
+    private $_success = false;
     
     /**
      * Constructor
@@ -82,17 +74,14 @@ abstract class PHPFrame_ActionController
     protected function __construct($default_action) 
     {
         // Set default action property
-        $this->default_action = (string) $default_action;
-        
-        // Get reference to System Events object
-        $this->sysevents = PHPFrame::Session()->getSysevents();
+        $this->_default_action = (string) $default_action;
     }
     
     /**
      * Get Instance
      * 
      * @param string $controller_name A string with the name of the concrete
-     *                               action controller.
+     *                                action controller.
      * 
      * @access public
      * @return PHPFrame_ActionController
@@ -113,9 +102,7 @@ abstract class PHPFrame_ActionController
     }
     
     /**
-     * Execute action
-     * 
-     * This method executes a given task (runs a named member method).
+     * This method executes a given action (invokes a named member method).
      *
      * @access public
      * @return void
@@ -128,7 +115,7 @@ abstract class PHPFrame_ActionController
         
         // If no specific action has been requested we use default action
         if (empty($request_action)) {
-            $action = $this->default_action;
+            $action = $this->_default_action;
         } else {
             $action = $request_action;
         }
@@ -145,7 +132,7 @@ abstract class PHPFrame_ActionController
             if (!PHPFrame::Session()->isAuth()) {
                 $this->setRedirect('index.php?controller=login');
             } else {
-                $this->sysevents->setSummary('Permission denied.');
+                $this->raiseWarning('Permission denied.');
             }
         }
         
@@ -162,12 +149,69 @@ abstract class PHPFrame_ActionController
      */
     public function getSuccess() 
     {
-        return $this->success;
+        return $this->_success;
     }
     
     /**
-     * Cancel
+     * Raise error
      * 
+     * @param string $msg
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
+     */
+    protected function raiseError($msg)
+    {
+        $this->_success = false;
+        $this->notifyEvent($msg, PHPFrame_Subject::EVENT_TYPE_ERROR);
+    }
+    
+    /**
+     * Raise warning
+     * 
+     * @param string $msg
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
+     */
+    protected function raiseWarning($msg)
+    {
+        $this->_success = false;
+        $this->notifyEvent($msg, PHPFrame_Subject::EVENT_TYPE_WARNING);
+    }
+    
+    /**
+     * Notify success
+     * 
+     * @param string $msg
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
+     */
+    protected function notifySuccess($msg="")
+    {
+        $this->_success = true;
+        $this->notifyEvent($msg, PHPFrame_Subject::EVENT_TYPE_SUCCESS);
+    }
+    
+    /**
+     * Notify info
+     * 
+     * @param string $msg
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
+     */
+    protected function notifyInfo($msg)
+    {
+        $this->notifyEvent($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
+    }
+    
+    /**
      * Cancel and set redirect to index.
      * 
      * @access protected
@@ -180,8 +224,6 @@ abstract class PHPFrame_ActionController
     }
     
     /**
-     * Set redirection url
-     * 
      * Set the redirection URL.
      *
      * @param string $url The URL we want to redirect to when we call 
@@ -193,12 +235,10 @@ abstract class PHPFrame_ActionController
      */
     protected function setRedirect($url) 
     {
-        $this->redirect_url = $url;
+        $this->_redirect_url = $url;
     }
     
     /**
-     * Redirect
-     * 
      * Redirect browser to redirect URL.
      * 
      * @access protected
@@ -217,8 +257,8 @@ abstract class PHPFrame_ActionController
         }
         
         // Delegate redirection to client object if it is of the right type
-        if (!empty($this->redirect_url)) {
-            $redirect_url = $this->redirect_url;
+        if (!empty($this->_redirect_url)) {
+            $redirect_url = $this->_redirect_url;
             
             if (isset(self::$_instances[get_class($this)])) {
                 unset(self::$_instances[get_class($this)]);
@@ -229,9 +269,7 @@ abstract class PHPFrame_ActionController
     }
     
     /**
-     * Get model
-     * 
-     * Gets a named model within the component.
+     * Get a named model
      *
      * @param string $name The model name. If empty the view name is used as default.
      * @param array  $args An array containing arguments to be passed to the Model's 
@@ -247,11 +285,9 @@ abstract class PHPFrame_ActionController
     }
     
     /**
-     * Get view
-     * 
-     * Get a named view within the component.
+     * Get a named view
      *
-     * @param string $name   The name of the view to create.
+     * @param string $name The name of the view to create.
      * 
      * @access protected
      * @return object

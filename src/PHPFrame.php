@@ -146,7 +146,6 @@ class PHPFrame
         // Load core PHPFrame classes
         if (preg_match('/^PHPFrame_([a-zA-Z0-9]+)/', $class_name, $matches)) {
             $file_path = $matches[1].".php";
-            //echo get_include_path()."\n".$file_path; exit;
             @include $file_path;
             return;
         }
@@ -403,17 +402,31 @@ class PHPFrame
             set_include_path($subpackage_path.PATH_SEPARATOR.get_include_path());
         }
         
+        // Initialise app config
+        $config = self::Config();
+        
         // Load language files
         self::_loadLanguage();
         
         // Initialise phpFame's error and exception handlers.
-        PHPFrame_ExceptionHandler::init();
+        $exception_handler = PHPFrame_ExceptionHandler::instance();
         
-        // Initialise app config
-        self::Config();
+        // Attach logger observer to exception handler
+        $exception_handler->attach(PHPFrame_Logger::instance());
+        
+        // Attach informer observer to excpetion handler if informer is enabled
+        if ($config->get("debug.informer_level") > 0) {
+            // Create informer
+            $recipients = explode(",", $config->get("debug.informer_recipients"));
+            $mailer     = new PHPFrame_Mailer();
+            $informer   = new PHPFrame_Informer($recipients, $mailer);
+            
+            // Attach informer to exception handler
+            $exception_handler->attach($informer);
+        }
         
         // Set timezone
-        date_default_timezone_set(self::Config()->get("timezone"));
+        date_default_timezone_set($config->get("timezone"));
         
         // Set run level to 1, framework is ready to go!!!
         self::$_run_level = 1;

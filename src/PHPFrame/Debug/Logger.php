@@ -95,12 +95,13 @@ class PHPFrame_Logger extends PHPFrame_Observer
      * @return void
      * @since  1.0
      */
-    protected function doUpdate(SplSubject $subject)
+    protected function doUpdate(PHPFrame_Subject $subject)
     {
-        if ($subject instanceof PHPFrame_Database) {
-            
-        } else {
-            
+        list($msg, $type) = $subject->getLastEvent();
+        
+        $log_level = PHPFrame::Config()->get("debug.log_level");
+        if ($type <= $log_level) {
+            self::write($msg);
         }
     }
     

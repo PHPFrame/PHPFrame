@@ -14,9 +14,9 @@
     
     <!-- Release info -->
     <property name="api.version" value="1.0" />
-    <property name="api.stability" value="alpha" />
-    <property name="release.version" value="0.0.5" />
-    <property name="release.stability" value="alpha" />
+    <property name="api.stability" value="beta" />
+    <property name="release.version" value="0.0.6" />
+    <property name="release.stability" value="beta" />
     <property name="notes" value="No notes for now..." />
     
     <!-- Lead/Author -->

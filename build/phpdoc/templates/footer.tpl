@@ -24,7 +24,7 @@
     
     <ul>
         <li>
-        <div>Alpha release scheduled for the end of September</div>
+        <div>Beta release scheduled for the end of September</div>
         <div class="posted_date">Sat, 29 Aug 2009</div>
         <div class="posted_by">Posted by: Luis Montero</div>
 

@@ -31,12 +31,12 @@ class AppController extends PHPFrame_ActionController
             );
             
             $msg = "App created successfully";
-            $this->sysevents->setSummary($msg, "success");
+            $this->notifySuccess($msg);
             
         } catch (Exception $e) {
             $msg = "Could NOT create new app";
-            $this->sysevents->setSummary($msg, "error");
-            $this->sysevents->addEventLog($e->getMessage(), "error");
+            $this->raiseError($msg);
+            $this->raiseError($e->getMessage());
         }
         
         $this->getView()->display();
@@ -49,12 +49,12 @@ class AppController extends PHPFrame_ActionController
             $model->update();
             
             $msg = "App updated successfully";
-            $this->sysevents->setSummary($msg, "success");
+            $this->notifySuccess($msg);
             
         } catch (Exception $e) {
             $msg = "Error updating app";
-            $this->sysevents->setSummary($msg, "error");
-            $this->sysevents->addEventLog($e->getMessage(), "error");
+            $this->raiseError($msg);
+            $this->raiseError($e->getMessage());
         }
         
         $this->getView()->display();
@@ -67,12 +67,12 @@ class AppController extends PHPFrame_ActionController
             $model->remove();
             
             $msg = "App removed successfully";
-            $this->sysevents->setSummary($msg, "success");
+            $this->notifySuccess($msg);
             
         } catch (Exception $e) {
             $msg = "Error removing app";
-            $this->sysevents->setSummary($msg, "error");
-            $this->sysevents->addEventLog($e->getMessage(), "error");
+            $this->raiseError($msg);
+            $this->raiseError($e->getMessage());
         }
         
         $this->getView()->display();

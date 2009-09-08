@@ -22,7 +22,7 @@ class ExtController extends PHPFrame_ActionController
             $ext_installer->install($name, $type);
             
         } catch (Exception $e) {
-            $this->sysevents->setSummary($e->getMessage());
+            $this->raiseError($e->getMessage());
         }
         
         $this->getView()->display();

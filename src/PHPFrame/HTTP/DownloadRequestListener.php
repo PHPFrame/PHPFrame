@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/HTTP/Request/DownloadListener.php
+ * PHPFrame/HTTP/DownloadRequestListener.php
  * 
  * PHP version 5
  * 
@@ -15,7 +15,8 @@
  */
 
 /**
- * Download Listener Class
+ * This class extends the HTTP_Request_Listener class provided by the PEAR/HTTP 
+ * package.
  * 
  * @category   PHPFrame
  * @package    HTTP
@@ -23,44 +24,56 @@
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @uses       Console_ProgressBar
  * @since      1.0
  */
-class PHPFrame_HTTP_Request_DownloadListener extends HTTP_Request_Listener
+class PHPFrame_HTTP_DownloadRequestListener extends HTTP_Request_Listener
 {
    /**
     * Handle for the target file
+    * 
     * @var int
     */
     private $_fp;
-
    /**
     * Console_ProgressBar intance used to display the indicator
+    * 
     * @var object
     */
     private $_bar;
-
    /**
     * Name of the target file
+    * 
     * @var string
     */
     private $_target;
-
    /**
     * Number of bytes received so far
+    * 
     * @var int
     */
     private $_size = 0;
-
+    
+    /**
+     * Constructor
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function __construct()
     {
         parent::__construct();
-        //$this->HTTP_Request_Listener();
     }
 
    /**
     * Opens the target file
     * @param string Target file name
+    * 
     * @throws PEAR_Error
+    * @access public
+    * @return void
+    * @since  1.0
     */
     public function setTarget($target)
     {
@@ -70,29 +83,29 @@ class PHPFrame_HTTP_Request_DownloadListener extends HTTP_Request_Listener
             PEAR::raiseError("Cannot open '{$target}'");
         }
     }
-
-    public function update($subject, $event, $data = null)
+    
+    /**
+     * Handle update event updates
+     * 
+     * @param $subject
+     * @param $event
+     * @param $data
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function update($subject, $event, $data=null)
     {
         switch ($event) {
-            case 'sentRequest': 
-                //var_dump($subject->_url->path); exit;
-                //$this->_target = basename($subject->_url->path);
-                break;
-
             case 'gotHeaders':
-//                if (isset($data['content-disposition']) &&
-//                    preg_match('/filename="([^"]+)"/', $data['content-disposition'], $matches)) {
-//                    $this->setTarget(basename($matches[1]));
-//                } else {
-//                    $this->setTarget($this->_target);
-//                }
-                
                 $this->_bar = new Console_ProgressBar(
-                    '* ' . $subject->_url->path . ' %fraction% KB [%bar%] %percent%', 
+                    '* '.$subject->_url->path.' %fraction% KB [%bar%] %percent%', 
                     '=>', 
                     '-', 
                     79, 
-                    (isset($data['content-length'])? round($data['content-length'] / 1024): 100)
+                    (isset($data['content-length']) ? 
+                        round($data['content-length'] / 1024) : 100)
                 );
                 
                 $this->_size = 0;
@@ -108,12 +121,13 @@ class PHPFrame_HTTP_Request_DownloadListener extends HTTP_Request_Listener
                 fclose($this->_fp);
                 break;
 
+            case 'sentRequest': 
             case 'connect':
             case 'disconnect':
                 break;
 
             default:
                 PEAR::raiseError("Unhandled event '{$event}'");
-        } // switch
+        }
     }
 }

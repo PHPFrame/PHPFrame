@@ -79,7 +79,7 @@
    <file baseinstalldir="/" name="PHPFrame/Ext/ThemeInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FileSystem/FileInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FileSystem/FileObject.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/HTTP/Request/DownloadListener.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/HTTP/DownloadRequestListener.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Lang/en-GB.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />

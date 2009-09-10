@@ -63,10 +63,8 @@ class AppTemplate
     private function _fetchSource($template="Full", $allow_non_empty_dir=false)
     {
         // check that the directory is empty
-        if (
-            !$allow_non_empty_dir 
-            && !PHPFrame_Filesystem::isEmptyDir($this->_install_dir)
-        ) {
+        $is_empty_dir = PHPFrame_Filesystem::isEmptyDir($this->_install_dir);
+        if (!$allow_non_empty_dir && !$is_empty_dir) {
             $msg = "Target directory is not empty.";
             $msg .= "\nUse \"phpframe app new_app app_name=MyApp ";
             $msg .= "allow_non_empty_dir=true\" to force install";
@@ -89,7 +87,7 @@ class AppTemplate
         echo "Attempting to download ".$url."...\n";
         
         // Create the download listener
-        $download = new PHPFrame_HTTP_DownloadRequestListener();
+        $download = new PHPFrame_DownloadRequestListener();
         $download->setTarget($target);
         
         // Create the http request

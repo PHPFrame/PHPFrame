@@ -27,7 +27,7 @@
  * @uses       Console_ProgressBar
  * @since      1.0
  */
-class PHPFrame_HTTP_DownloadRequestListener extends HTTP_Request_Listener
+class PHPFrame_DownloadRequestListener extends HTTP_Request_Listener
 {
    /**
     * Handle for the target file

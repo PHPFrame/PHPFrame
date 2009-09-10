@@ -229,8 +229,24 @@ class PHPFrame_Config implements IteratorAggregate
      * @since  1.0
      */
     public function bind(array $array)
-    {   
+    {
         foreach ($array as $key=>$value) {
+            // Replace section separator "_" with "."
+            // This hack is needed because HTTP post vars have them automatically replaced
+            foreach ($this->getSections() as $section) {
+                $filtered_key = preg_replace(
+                    '/('.$section.'_)/i', 
+                    $section.".", 
+                    $key, 
+                    -1, 
+                    $count
+                );
+                
+                if ($count > 0) {
+                    $key = $filtered_key;
+                }
+            }
+            
             if ($this->keyExists($key)) {
                 $this->set($key, $value);
             }

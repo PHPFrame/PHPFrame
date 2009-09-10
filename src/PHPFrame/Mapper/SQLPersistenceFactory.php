@@ -48,7 +48,7 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
      */
     public function getAssembler()
     {
-        return new PHPFrame_SQLDomainObjectAssembler($this);
+        return new PHPFrame_SQLPersistentObjectAssembler($this);
     }
     
     /**

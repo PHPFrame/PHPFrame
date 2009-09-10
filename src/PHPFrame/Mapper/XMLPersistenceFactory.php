@@ -54,7 +54,7 @@ class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
      */
     public function getAssembler()
     {
-        return new PHPFrame_XMLDomainObjectAssembler($this, $this->_path);
+        return new PHPFrame_XMLPersistentObjectAssembler($this, $this->_path);
     }
     
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Mapper/XMLDomainObjectAssembler.php
+ * PHPFrame/Mapper/XMLPersistentObjectAssembler.php
  * 
  * PHP version 5
  * 
@@ -24,7 +24,7 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_XMLDomainObjectAssembler extends PHPFrame_PersistentObjectAssembler
+class PHPFrame_XMLPersistentObjectAssembler extends PHPFrame_PersistentObjectAssembler
 {
     private $_path_info = null;
     private $_file_info = null;

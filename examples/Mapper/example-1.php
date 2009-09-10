@@ -1,7 +1,7 @@
 <?php
 include_once "PHPFrame.php";
 
-class MyDomainObject extends PHPFrame_PersistentObject
+class MyPersistentObject extends PHPFrame_PersistentObject
 {
     protected $first_field, $second_field, $third_field;
     
@@ -36,7 +36,7 @@ class MyDomainObject extends PHPFrame_PersistentObject
     }
 }
 
-$my_domain_object = new MyDomainObject(array(
+$my_domain_object = new MyPersistentObject(array(
     "first_field"=>"Blah blah", 
     "second_field"=>"Another value"
 ));

@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Mapper/SQLDomainObjectAssembler.php
+ * PHPFrame/Mapper/SQLPersistentObjectAssembler.php
  * 
  * PHP version 5
  * 
@@ -24,7 +24,7 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_SQLDomainObjectAssembler extends PHPFrame_PersistentObjectAssembler
+class PHPFrame_SQLPersistentObjectAssembler extends PHPFrame_PersistentObjectAssembler
 {
     /**
      * Constructor

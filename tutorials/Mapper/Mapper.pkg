@@ -68,12 +68,12 @@
 
 
 <refsect1 id="{@id extending-domainobject}">
-    <title>Extending the DomainObject class</title>
+    <title>Extending the PersistentObject class</title>
     
     <para>
     Domain objects are designed so that they can be easily mapped using the mapper 
     package, so in order to make use of the mappig tools you will need to make your 
-    "persistent objects" extend the DomainObject base class.
+    "persistent objects" extend the PersistentObject base class.
     </para>
     
     <para>
@@ -84,7 +84,7 @@
     </para>
     
     <example>
-        <title>Custom DomainObject example</title>
+        <title>Custom PersistentObject example</title>
         <para></para>
         <programlisting>{@example Mapper/example-1.php 3}</programlisting>
         <screen>
@@ -103,7 +103,7 @@ Array
     </example>
     
     <example>
-        <title>The built-in User object is a DomainObject</title>
+        <title>The built-in User object is a PersistentObject</title>
         <para></para>
         <programlisting>{@example Mapper/example-2.php 3}</programlisting>
         <screen>
@@ -147,7 +147,7 @@ Array
     <example>
         <title>Custom Mapper example</title>
         <para>
-        In this example we define a Customer class that extends DomainObject and 
+        In this example we define a Customer class that extends PersistentObject and 
         then write a specialised mapper to map this class to a database table called 
         "#__customers". 
         </para>

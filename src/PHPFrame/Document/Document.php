@@ -39,31 +39,31 @@ abstract class PHPFrame_Document
      * 
      * @var string
      */
-    protected $qualified_name=null;
+    protected $qualified_name = null;
     /**
      * Document mime type
      *
      * @var string
      */
-    protected $mime_type=null;
+    protected $mime_type = null;
     /**
      * Contains the character encoding string
      *
      * @var string
      */
-    protected $charset='UTF-8';
+    protected $charset = 'UTF-8';
     /**
      * The document title
      * 
      * @var string
      */
-    protected $title=null;
+    protected $title = null;
     /**
      * The document body
      * 
      * @var string
      */
-    protected $body=null;
+    protected $body = null;
     
     /**
      * Constructor
@@ -88,10 +88,7 @@ abstract class PHPFrame_Document
      * @return string
      * @since  1.0
      */
-    public function __toString()
-    {
-        return $this->toString();
-    }
+    abstract public function __toString();
     
     /**
      * Set the document title
@@ -198,13 +195,4 @@ abstract class PHPFrame_Document
      * @since  1.0
      */
     abstract public function renderRowCollection(PHPFrame_DatabaseRowCollection $collection);
-    
-    /**
-     * Covert object to string
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    abstract public function toString();
 }

@@ -45,12 +45,37 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
         $this->_events = array();
     }
     
+    /**
+     * Magic method invoked when Sysevents object is used as string
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
         $str = "";
         
         foreach ($this->_events as $event) {
-            $str .= strtoupper($event[1]).": ".$event[0]."\n";
+            switch ($event[1]) {
+                case PHPFrame_Subject::EVENT_TYPE_ERROR :
+                    $event_type = PHPFrame_Lang::EVENT_TYPE_ERROR;
+                    break;
+                case PHPFrame_Subject::EVENT_TYPE_WARNING :
+                    $event_type = PHPFrame_Lang::EVENT_TYPE_WARNING;
+                    break;
+                case PHPFrame_Subject::EVENT_TYPE_NOTICE :
+                    $event_type = PHPFrame_Lang::EVENT_TYPE_NOTICE;
+                    break;
+                case PHPFrame_Subject::EVENT_TYPE_INFO :
+                    $event_type = PHPFrame_Lang::EVENT_TYPE_INFO;
+                    break;
+                case PHPFrame_Subject::EVENT_TYPE_SUCCESS :
+                    $event_type = PHPFrame_Lang::EVENT_TYPE_SUCCESS;
+                    break;
+            }
+            
+            $str .= strtoupper($event_type).": ".$event[0]."\n";
         }
         
         return $str;

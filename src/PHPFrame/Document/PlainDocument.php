@@ -30,7 +30,7 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
      * 
      * @var string
      */
-    protected $qualified_name="plain";
+    protected $qualified_name = "plain";
     
     /**
      * Constructor
@@ -45,12 +45,32 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
         parent::__construct($mime, $charset);
     }
     
+    /**
+     * Covert object to string
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function __toString()
+    {
+        $str = "";
+        
+        if ($this->title) {
+            $str .= $this->title."\n\n";
+        }
+        
+        $str .= $this->body;
+        
+        return $str;
+    }
+    
     public function render(PHPFrame_View $view)
     {
         parent::render($view);
         
-        $sysevents = PHPFrame::Session()->getSysevents();
-        $this->body = $sysevents->asString()."\n\n".$this->body;
+        $sysevents   = PHPFrame::Session()->getSysevents();
+        $this->body  = (string) $sysevents."\n\n".$this->body;
     }
     
     /**
@@ -64,29 +84,8 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
      */
     public function renderRowCollection(PHPFrame_DatabaseRowCollection $collection)
     {
-        $str = "(RowCollection) \n";
-        
+        $str  = "(RowCollection) \n";
         $str .= (string) $collection;
-        
-        return $str;
-    }
-    
-    /**
-     * Covert object to string
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function toString()
-    {
-        $str = "";
-        
-        if ($this->title) {
-            $str .= $this->title."\n\n";
-        }
-        
-        $str .= $this->body;
         
         return $str;
     }

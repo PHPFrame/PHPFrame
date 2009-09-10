@@ -78,6 +78,28 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $this->_pathway = new PHPFrame_Pathway();
     }
     
+    /**
+     * Convert object to string
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function __toString()
+    {
+        // Add title tag in head node 
+        $head_node = $this->dom->getElementsByTagName("head")->item(0);
+        $this->addNode($head_node, "title", null, $this->getTitle());
+        
+        // Render DOM Document as HTML string
+        $html = $this->dom->saveHTML();
+        
+        // Add body
+        $html = str_replace("{content}", $this->body, $html);
+        
+        return $html;
+    }
+    
     public function setBody($str)
     {
         $this->body = (string) $str;
@@ -369,28 +391,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $html .= ' of '.$collection->getPages();
         
         $html .= "</div>";
-        
-        return $html;
-    }
-    
-    /**
-     * Convert object to string
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function toString()
-    {
-        // Add title tag in head node 
-        $head_node = $this->dom->getElementsByTagName("head")->item(0);
-        $this->addNode($head_node, "title", null, $this->getTitle());
-        
-        // Render DOM Document as HTML string
-        $html = $this->dom->saveHTML();
-        
-        // Add body
-        $html = str_replace("{content}", $this->body, $html);
         
         return $html;
     }

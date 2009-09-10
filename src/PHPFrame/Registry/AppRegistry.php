@@ -20,7 +20,7 @@
  * The application registry is accessed from the PHPFrame facade class as follows:
  * 
  * <code>
- * $session = PHPFrame::AppRegistry();
+ * $app_registry = PHPFrame::AppRegistry();
  * </code>
  * 
  * @category PHPFrame

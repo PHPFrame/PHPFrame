@@ -89,7 +89,7 @@ class AppTemplate
         echo "Attempting to download ".$url."...\n";
         
         // Create the download listener
-        $download = new PHPFrame_HTTP_Request_DownloadListener();
+        $download = new PHPFrame_HTTP_DownloadRequestListener();
         $download->setTarget($target);
         
         // Create the http request

@@ -193,18 +193,37 @@ class PHPFrame_Response
             echo $this->_document->getBody();    
         }
         
-        if (PHPFrame::Config()->get("debug.enable") == 1) {
-            if (PHPFrame::Session()->getClientName() != "cli") {
-                echo "<pre>";
+        // Handle profiler
+        $profiler_enable  = PHPFrame::Config()->get("debug.profiler_enable");
+        $profiler_display = PHPFrame::Config()->get("debug.profiler_display");
+        $profiler_outdir  = PHPFrame::Config()->get("debug.profiler_outdir");
+        
+        if ($profiler_enable) {
+            $profiler = PHPFrame_Profiler::instance();
+            
+            // Add final milestone
+            $profiler->addMilestone();
+            
+            // Get profiler output by casting object to string
+            $profiler_out = (string) $profiler;
+            
+            // Display output if set in config
+            if ($profiler_display) {
+                if (PHPFrame::Session()->getClientName() != "cli") {
+                    echo "<pre>";
+                }
+                
+                // Display output
+                echo "Profiler Output:\n\n";
+                echo $profiler_out;
             }
             
-            PHPFrame_Profiler::instance()->addMilestone();
-            
-            echo "Profiler Milestones:\n\n";
-            echo PHPFrame_Profiler::instance();
-            
-            //echo "\n\nBacktrace:\n\n";
-            //debug_print_backtrace();
+            // Dump profiler output to file is outdir is specified in config
+            if (!empty($profiler_outdir)) {
+                $profiler_outfile = $profiler_outdir.DS.time().".ppo";
+                $file_obj = new PHPFrame_FileObject($profiler_outfile, "w");
+                $file_obj->fwrite($profiler_out);
+            }
         }
         
         // Exit setting status to 0, 

@@ -45,7 +45,7 @@ class PHPFrame_Logger extends PHPFrame_Observer
         if (defined("PHPFRAME_TMP_DIR")) {
             $log_dir = PHPFRAME_TMP_DIR;
         } else {
-            $log_dir = PEAR_Config::singleton()->get('data_dir');
+            $log_dir  = PEAR_Config::singleton()->get('data_dir');
             $log_dir .= DS."PHPFrame";
         }
         

@@ -200,7 +200,7 @@ class PHPFrame_Config implements IteratorAggregate
      *
      * This method returns the current instance allowing for fluent syntax
      *
-     * @param string $key   The config key we want to set (ie: debug.enable)
+     * @param string $key   The config key we want to set (ie: debug.log_level)
      * @param array  $value The new value for the config key
      *
      * @access public

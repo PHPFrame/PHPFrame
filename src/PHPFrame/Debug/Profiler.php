@@ -146,7 +146,7 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
      */
     public function addMilestone() 
     {
-        if (!PHPFrame::Config()->get("debug.enable")) {
+        if (!PHPFrame::Config()->get("debug.profiler_enable")) {
             return;
         }
         

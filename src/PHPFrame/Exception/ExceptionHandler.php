@@ -141,8 +141,8 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
         $str .= $exception->getTraceAsString();
         
         // Display the exception details if debugging is enabled
-        $debug = PHPFrame::Config()->get("debug.enable");
-        if ($debug == 1) {
+        $display_exceptions = PHPFrame::Config()->get("debug.display_exceptions");
+        if ($display_exceptions) {
             echo '<pre>'.$str.'</pre>';
         }
         

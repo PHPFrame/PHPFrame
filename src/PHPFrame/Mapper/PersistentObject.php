@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Mapper/DomainObject.php
+ * PHPFrame/Mapper/PersistentObject.php
  * 
  * PHP version 5
  * 
@@ -14,19 +14,19 @@
  */
 
 /**
- * The Domain Object class is an abstract class that needs to be extended by objects 
+ * The Persistent Object class is an abstract class that needs to be extended by objects 
  * that you want to use with the Mapper package.
  * 
  * To see an example of how to extend this class have a look at {@link PHPFrame_User}.
  * 
- * Domain objects implement the IteratorAggregate interface, which means that they 
+ * Persistent Objects implement the IteratorAggregate interface, which means that they 
  * can be iterated using the foreach construct and easily converted to an array by 
  * using PHPs iterator_to_array() function.
  * 
  * For example:
  * 
  * <code>
- * // Create a new user object (this object extends domain object)
+ * // Create a new user object (this object extends Persistent Object)
  * $user = new PHPFrame_User(array("username"=>"lupo"));
  * // Print the user oject as an array
  * print_r(iterator_to_array($user));
@@ -66,7 +66,7 @@
  * @uses     IteratorAggregate
  * @since    1.0
  */
-abstract class PHPFrame_DomainObject extends PHPFrame_Object
+abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     implements IteratorAggregate
 {
     /**
@@ -113,7 +113,7 @@ abstract class PHPFrame_DomainObject extends PHPFrame_Object
     }
     
     /**
-     * Magic method to handle the cloning of domain objects
+     * Magic method to handle the cloning of Persistent Objects
      * 
      * @access public
      * @return void

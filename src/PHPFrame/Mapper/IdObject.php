@@ -17,7 +17,7 @@
 /**
  * Identity Object abstract class
  * 
- * This class encapsulates the selection of domain objects when using a mapper.
+ * This class encapsulates the selection of persistent objects when using a mapper.
  * 
  * @category PHPFrame
  * @package  Mapper

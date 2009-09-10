@@ -28,13 +28,13 @@ class PHPFrame_Permissions
     /**
      * A mapper object used to store and retrieve access level list
      *
-     * @var PHPFrame_DomainObjectCollection
+     * @var PHPFrame_PersistentObjectCollection
      */
     private $_mapper;
     /**
      * A collection object holding access level list
      *
-     * @var PHPFrame_DomainObjectCollection
+     * @var PHPFrame_PersistentObjectCollection
      */
     private $_acl;
     

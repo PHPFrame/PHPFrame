@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-abstract class PHPFrame_ExtInfo extends PHPFrame_DomainObject
+abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
 {
     /**
      * The name of the addon

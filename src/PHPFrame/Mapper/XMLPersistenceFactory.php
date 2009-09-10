@@ -49,7 +49,7 @@ class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
      * Get object assembler
      * 
      * @access public
-     * @return PHPFrame_DomainObjectAssembler
+     * @return PHPFrame_PersistentObjectAssembler
      * @since  1.0
      */
     public function getAssembler()

@@ -1,5 +1,5 @@
 <?php if (isset($data["customers"]) 
-          && $data["customers"] instanceof PHPFrame_DomainObjectCollection) : ?>
+          && $data["customers"] instanceof PHPFrame_PersistentObjectCollection) : ?>
 <table>
 <tr>
     <th>First name:</th>

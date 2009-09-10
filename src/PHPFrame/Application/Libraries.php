@@ -28,13 +28,13 @@ class PHPFrame_Libraries
     /**
      * A mapper object used to store and retrieve libraries info
      *
-     * @var PHPFrame_DomainObjectCollection
+     * @var PHPFrame_PersistentObjectCollection
      */
     private $_mapper;
     /**
      * A collection object holding libraries info
      *
-     * @var PHPFrame_DomainObjectCollection
+     * @var PHPFrame_PersistentObjectCollection
      */
     private $_libs;
     

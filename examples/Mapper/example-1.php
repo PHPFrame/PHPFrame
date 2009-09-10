@@ -1,7 +1,7 @@
 <?php
 include_once "PHPFrame.php";
 
-class MyDomainObject extends PHPFrame_DomainObject
+class MyDomainObject extends PHPFrame_PersistentObject
 {
     protected $first_field, $second_field, $third_field;
     

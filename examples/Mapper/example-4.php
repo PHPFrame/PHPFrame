@@ -11,7 +11,7 @@ $mapper = new PHPFrame_Mapper(
     DS."tmp".DS."domain.objects"
 );
 
-// Instantiate domain object
+// Instantiate persistent object
 $acl = new PHPFrame_ACL(array(
     "groupid"=>1, 
     "controller"=>"dummy", 

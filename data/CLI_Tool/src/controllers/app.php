@@ -16,8 +16,8 @@ class AppController extends PHPFrame_ActionController
     
     public function new_app($app_name, $template=null, $allow_non_empty_dir=false)
     {
-        $app_name = (string) trim($app_name);
-        $allow_non_empty_dir = (bool) trim($allow_non_empty_dir);
+        $app_name = trim((string) $app_name);
+        $allow_non_empty_dir = (bool) $allow_non_empty_dir;
         
         try {
             // Get model and pass install dir to constructor

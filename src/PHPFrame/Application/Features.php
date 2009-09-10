@@ -28,13 +28,13 @@ class PHPFrame_Features
     /**
      * A mapper object used to store and retrieve feature data
      *
-     * @var PHPFrame_DomainObjectCollection
+     * @var PHPFrame_PersistentObjectCollection
      */
     private $_mapper;
     /**
      * A collection object holding data about installed features
      *
-     * @var PHPFrame_DomainObjectCollection
+     * @var PHPFrame_PersistentObjectCollection
      */
     private $_features;
     

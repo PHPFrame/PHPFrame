@@ -18,7 +18,7 @@
  * subpackage.
  * 
  * This class should be extended to provide more specialised mappers for common 
- * domain objects that require mapping. See the UsersMapper class in the user 
+ * persistent objects that require mapping. See the UsersMapper class in the user 
  * feature for an example. 
  * 
  * @category PHPFrame
@@ -94,12 +94,12 @@ class PHPFrame_Mapper
     }
     
     /**
-     * Find a domain object using an IdObject
+     * Find a persistent object using an IdObject
      * 
      * @param PHPFrame_IdObject|int $id_obj
      * 
      * @access public
-     * @return PHPFrame_DomainObject
+     * @return PHPFrame_PersistentObject
      * @since  1.0
      */
     public function findOne($id_obj)
@@ -108,12 +108,12 @@ class PHPFrame_Mapper
     }
     
     /**
-     * Find a collection of domain objects using an IdObject
+     * Find a collection of persistent objects using an IdObject
      * 
      * @param PHPFrame_IdObject $id_obj
      * 
      * @access public
-     * @return PHPFrame_DomainObjectCollection
+     * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
     public function find(PHPFrame_IdObject $id_obj=null)
@@ -122,29 +122,29 @@ class PHPFrame_Mapper
     }
     
     /**
-     * Persist domain object
+     * Persist persistent object
      * 
-     * @param PHPFrame_DomainObject $obj
+     * @param PHPFrame_PersistentObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function insert(PHPFrame_DomainObject $obj)
+    public function insert(PHPFrame_PersistentObject $obj)
     {
         return $this->_factory->getAssembler()->insert($obj);
     }
     
     /**
-     * Delete domain object from persisted media (db or file)
+     * Delete persistent object from persisted media (db or file)
      * 
-     * @param PHPFrame_DomainObject $obj
+     * @param PHPFrame_PersistentObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function delete(PHPFrame_DomainObject $obj)
+    public function delete(PHPFrame_PersistentObject $obj)
     {
         return $this->_factory->getAssembler()->delete($obj);
     }

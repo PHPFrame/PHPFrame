@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Mapper/DomainObjectCollection.php
+ * PHPFrame/Mapper/PersistentObjectCollection.php
  * 
  * PHP version 5
  * 
@@ -14,7 +14,7 @@
  */
 
 /**
- * Collection Class
+ * Persistent Object Collection Class
  * 
  * @category PHPFrame
  * @package  Mapper
@@ -23,16 +23,16 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_DomainObjectCollection implements Iterator, Countable
+class PHPFrame_PersistentObjectCollection implements Iterator, Countable
 {
     /**
      * A domain factory object used to create objects in collection
      * 
-     * @var PHPFrame_DomainObjectFactory
+     * @var PHPFrame_PersistentObjectFactory
      */
     private $_obj_fact;
     /**
-     * Raw array used to generate domain objects
+     * Raw array used to generate persistent objects
      * 
      * @var array
      */
@@ -60,7 +60,7 @@ class PHPFrame_DomainObjectCollection implements Iterator, Countable
      * Constructor
      * 
      * @param array                               $raw
-     * @param PHPFrame_DomainObjectFactory $obj_factory
+     * @param PHPFrame_PersistentObjectFactory $obj_factory
      * 
      * @access public
      * @return void
@@ -68,7 +68,7 @@ class PHPFrame_DomainObjectCollection implements Iterator, Countable
      */
     public function __construct(
         array $raw=null, 
-        PHPFrame_DomainObjectFactory $obj_factory=null
+        PHPFrame_PersistentObjectFactory $obj_factory=null
     ) {
         if (!is_null($raw) && !is_null($obj_factory)) {
             // If the raw array is only one level of depth we assume it is 
@@ -88,12 +88,12 @@ class PHPFrame_DomainObjectCollection implements Iterator, Countable
     }
     
     /**
-     * Get domain object at given key
+     * Get persistent object at given key
      * 
      * @param string $key
      * 
      * @access public
-     * @return PHPFrame_DomainObject
+     * @return PHPFrame_PersistentObject
      * @since  1.0
      */
     public function getElement($key)
@@ -113,15 +113,15 @@ class PHPFrame_DomainObjectCollection implements Iterator, Countable
     }
     
     /**
-     * Add domain object to the collection
+     * Add persistent object to the collection
      * 
-     * @param PHPFrame_DomainObject $obj
+     * @param PHPFrame_PersistentObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function addElement(PHPFrame_DomainObject $obj)
+    public function addElement(PHPFrame_PersistentObject $obj)
     {
         if (in_array($obj, $this->_objects)) {
             return;
@@ -131,15 +131,15 @@ class PHPFrame_DomainObjectCollection implements Iterator, Countable
     }
     
     /**
-     * Remove domain object from the collection
+     * Remove persistent object from the collection
      * 
-     * @param PHPFrame_DomainObject $obj
+     * @param PHPFrame_PersistentObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function removeElement(PHPFrame_DomainObject $obj)
+    public function removeElement(PHPFrame_PersistentObject $obj)
     {
         if (!in_array($obj, $this->_objects)) {
             return;

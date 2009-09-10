@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Mapper/DomainObjectFactory.php
+ * PHPFrame/Mapper/PersistentObjectFactory.php
  * 
  * PHP version 5
  * 
@@ -14,7 +14,7 @@
  */
 
 /**
- * DomainObjectFactory Class
+ * Persistent Object Factory Class
  * 
  * @category PHPFrame
  * @package  Mapper
@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_DomainObjectFactory
+class PHPFrame_PersistentObjectFactory
 {
     /**
      * Constructor
@@ -40,12 +40,12 @@ class PHPFrame_DomainObjectFactory
     }
     
     /**
-     * Create domain object
+     * Create persistent object
      * 
      * @param array $array
      * 
      * @access public
-     * @return PHPFrame_DomainObject
+     * @return PHPFrame_PersistentObject
      * @since  1.0
      */
     public function createObject(array $array)
@@ -53,7 +53,7 @@ class PHPFrame_DomainObjectFactory
         $class_name = $this->_target_class;
         
         $reflectionObj = new ReflectionClass($class_name);
-        if (!$reflectionObj->isSubclassOf("PHPFrame_DomainObject")) {
+        if (!$reflectionObj->isSubclassOf("PHPFrame_PersistentObject")) {
             $msg = "Domain Object '".$class_name."' not supported.";
             throw new RuntimeException($msg);
         }

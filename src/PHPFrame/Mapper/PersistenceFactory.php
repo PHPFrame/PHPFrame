@@ -99,24 +99,24 @@ abstract class PHPFrame_PersistenceFactory
      * Get DomainObjectFactory
      * 
      * @access public
-     * @return PHPFrame_DomainObjectFactory
+     * @return PHPFrame_PersistentObjectFactory
      * @since  1.0
      */
     public function getDomainObjectFactory()
     {
-        return new PHPFrame_DomainObjectFactory($this->_target_class);
+        return new PHPFrame_PersistentObjectFactory($this->_target_class);
     }
     
     /**
      * Get Collection
      * 
      * @access public
-     * @return PHPFrame_DomainObjectCollection
+     * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
     public function getCollection(array $raw=null)
     {
-        return new PHPFrame_DomainObjectCollection($raw, $this->getDomainObjectFactory());
+        return new PHPFrame_PersistentObjectCollection($raw, $this->getDomainObjectFactory());
     }
     
     /**
@@ -147,7 +147,7 @@ abstract class PHPFrame_PersistenceFactory
      * Get object assembler
      * 
      * @access public
-     * @return PHPFrame_DomainObjectAssembler
+     * @return PHPFrame_PersistentObjectAssembler
      * @since  1.0
      */
     abstract public function getAssembler();

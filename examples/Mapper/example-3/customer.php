@@ -1,5 +1,5 @@
 <?php
-class Customer extends PHPFrame_DomainObject
+class Customer extends PHPFrame_PersistentObject
 {
     protected $first_name, $last_name, $email;
     

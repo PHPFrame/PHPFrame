@@ -15,8 +15,8 @@
     </para>
     
     <para>
-    Mappers are designed to be used with "domain objects" that descend from the 
-    {@link PHPFrame_DomainObject} class. You will normally be creating 
+    Mappers are designed to be used with "persistent objects" that descend from the 
+    {@link PHPFrame_PersistentObject} class. You will normally be creating 
     your app models by extending this class, making it really easy to persist 
     these objects.
     </para>
@@ -34,22 +34,22 @@
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_DomainObject}
+        {@link PHPFrame_PersistentObject}
         </para>
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_DomainObjectCollection}
+        {@link PHPFrame_PersistentObjectCollection}
         </para>
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_DomainObjectAssembler}
+        {@link PHPFrame_PersistentObjectAssembler}
         </para>
     </listitem>
     <listitem>
         <para>
-        {@link PHPFrame_DomainObjectFactory}
+        {@link PHPFrame_PersistentObjectFactory}
         </para>
     </listitem>
     <listitem>
@@ -73,7 +73,7 @@
     <para>
     Domain objects are designed so that they can be easily mapped using the mapper 
     package, so in order to make use of the mappig tools you will need to make your 
-    "domain objects" extend the DomainObject base class.
+    "persistent objects" extend the DomainObject base class.
     </para>
     
     <para>
@@ -139,7 +139,7 @@ Array
     <title>Extending the Mapper</title>
     
     <para>
-    When working with your own domain objects you will often find it useful to 
+    When working with your own persistent objects you will often find it useful to 
     create your own specialised mappers by extending the {@link PHPFrame_Mapper}
     class.
     </para>
@@ -192,7 +192,7 @@ Array
         </para>
         
         <note>
-        If no database connection is available the domain objects will be 
+        If no database connection is available the persistent objects will be 
         automatically stored in var/domain.objects/#__customers.xml.
         </note>
     </example>
@@ -204,10 +204,10 @@ Array
     <title>Examples</title>
     
     <example>
-        <title>Find a domain object using the a generic mapper</title>
+        <title>Find a persistent object using the a generic mapper</title>
         <para>
         In this example we create an instance of PHPFrame_ACL, which 
-        extends PHPFrame_DomainObject, so that we can use it with the 
+        extends PHPFrame_PersistentObject, so that we can use it with the 
         mapper.
         </para>
         <programlisting>{@example Mapper/example-4.php 3}</programlisting>

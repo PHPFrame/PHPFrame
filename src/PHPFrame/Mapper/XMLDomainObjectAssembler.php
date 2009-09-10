@@ -24,7 +24,7 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_XMLDomainObjectAssembler extends PHPFrame_DomainObjectAssembler
+class PHPFrame_XMLDomainObjectAssembler extends PHPFrame_PersistentObjectAssembler
 {
     private $_path_info = null;
     private $_file_info = null;
@@ -43,7 +43,7 @@ class PHPFrame_XMLDomainObjectAssembler extends PHPFrame_DomainObjectAssembler
         parent::__construct($factory);
         
         if (!defined("PHPFRAME_VAR_DIR") && is_null($path)) {
-            $msg = "No path has been defined to store XML domain objects. ";
+            $msg = "No path has been defined to store XML persistent objects. ";
             $msg .= "If you are trying to use the Mapper package outside of an ";
             $msg .= "MVC app you can manually set the PHPFRAME_VAR_DIR constant ";
             $msg .= "before you instantiate the mapper objects.";
@@ -77,12 +77,12 @@ class PHPFrame_XMLDomainObjectAssembler extends PHPFrame_DomainObjectAssembler
     }
     
     /**
-     * Find a domain object using an IdObject
+     * Find a persistent object using an IdObject
      * 
      * @param PHPFrame_IdObject $id_obj
      * 
      * @access public
-     * @return PHPFrame_DomainObject
+     * @return PHPFrame_PersistentObject
      * @since  1.0
      */
     public function findOne($id_obj)
@@ -111,12 +111,12 @@ class PHPFrame_XMLDomainObjectAssembler extends PHPFrame_DomainObjectAssembler
     }
     
     /**
-     * Find a collection of domain objects using an IdObject
+     * Find a collection of persistent objects using an IdObject
      * 
      * @param PHPFrame_IdObject|int $id_obj
      * 
      * @access public
-     * @return PHPFrame_DomainObjectCollection
+     * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
     public function find(PHPFrame_IdObject $id_obj=null)
@@ -144,15 +144,15 @@ class PHPFrame_XMLDomainObjectAssembler extends PHPFrame_DomainObjectAssembler
     }
     
     /**
-     * Persist domain object
+     * Persist persistent object
      * 
-     * @param PHPFrame_DomainObject $obj
+     * @param PHPFrame_PersistentObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function insert(PHPFrame_DomainObject $obj)
+    public function insert(PHPFrame_PersistentObject $obj)
     {
         // Get current collection
         $collection = $this->find();
@@ -185,15 +185,15 @@ class PHPFrame_XMLDomainObjectAssembler extends PHPFrame_DomainObjectAssembler
     }
     
     /**
-     * Delete domain object from the database
+     * Delete persistent object from the database
      * 
-     * @param PHPFrame_DomainObject $obj
+     * @param PHPFrame_PersistentObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function delete(PHPFrame_DomainObject $obj)
+    public function delete(PHPFrame_PersistentObject $obj)
     {
         throw new RuntimeException("Method not implemented...");
     }
@@ -201,13 +201,13 @@ class PHPFrame_XMLDomainObjectAssembler extends PHPFrame_DomainObjectAssembler
     /**
      * Serialise collection as an XML string
      * 
-     * @param PHPFrame_DomainObjectCollection $collection
+     * @param PHPFrame_PersistentObjectCollection $collection
      * 
      * @access private
      * @return string
      * @since  1.0
      */
-    private function _serializeCollection(PHPFrame_DomainObjectCollection $collection)
+    private function _serializeCollection(PHPFrame_PersistentObjectCollection $collection)
     {
         $options = array(
             "indent"    => "    ",

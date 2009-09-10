@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_User extends PHPFrame_DomainObject
+class PHPFrame_User extends PHPFrame_PersistentObject
 {
     /**
      * The group id

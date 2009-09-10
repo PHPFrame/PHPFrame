@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Mapper/DomainObjectAssembler.php
+ * PHPFrame/Mapper/PersistentObjectAssembler.php
  * 
  * PHP version 5
  * 
@@ -14,7 +14,7 @@
  */
 
 /**
- * DomainObjectAssembler Class
+ * Persistent Object Assembler Class
  * 
  * This is an abstract class that will need to be extended by all i
  * 
@@ -25,7 +25,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-abstract class PHPFrame_DomainObjectAssembler
+abstract class PHPFrame_PersistentObjectAssembler
 {
     /**
      * Reference to the factory object to use
@@ -49,46 +49,46 @@ abstract class PHPFrame_DomainObjectAssembler
     }
     
     /**
-     * Find a domain object using an IdObject or numeric id
+     * Find a persistent object using an IdObject or numeric id
      * 
      * @param PHPFrame_IdObject|int $id_obj
      * 
      * @access public
-     * @return PHPFrame_DomainObject
+     * @return PHPFrame_PersistentObject
      * @since  1.0
      */
     abstract public function findOne($id_obj);
     
     /**
-     * Find a collection of domain objects using an IdObject
+     * Find a collection of persistent objects using an IdObject
      * 
      * @param PHPFrame_IdObject $id_obj
      * 
      * @access public
-     * @return PHPFrame_DomainObjectCollection
+     * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
     abstract public function find(PHPFrame_IdObject $id_obj=null);
     
     /**
-     * Persist domain object
+     * Persist persistent object
      * 
-     * @param PHPFrame_DomainObject $obj
+     * @param PHPFrame_PersistentObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    abstract public function insert(PHPFrame_DomainObject $obj);
+    abstract public function insert(PHPFrame_PersistentObject $obj);
     
     /**
-     * Delete domain object
+     * Delete persistent object
      * 
-     * @param PHPFrame_DomainObject $obj
+     * @param PHPFrame_PersistentObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    abstract public function delete(PHPFrame_DomainObject $obj);
+    abstract public function delete(PHPFrame_PersistentObject $obj);
 }

@@ -223,6 +223,10 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setId($int)
     {
+        if (empty($int)) {
+            return;
+        }
+        
         $int = PHPFrame_Filter::validateInt($int);
         
         $this->id = $int;

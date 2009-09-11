@@ -680,8 +680,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
                 continue;
             }
             
-            if ($key == "_params" || $key == "_openid_urls"
-            ) {
+            if ($key == "_params" || $key == "_openid_urls") {
                 $value = serialize($value);
             }
             

@@ -44,7 +44,7 @@ class PHPFrame_HTMLUI
      */
     public static function selectOption($value, $label) 
     {
-        $option = new PHPFrame_Object();
+        $option = new stdClass();
         $option->value = $value;
         $option->label = $label;
         

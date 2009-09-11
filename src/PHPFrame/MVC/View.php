@@ -131,7 +131,7 @@ class PHPFrame_View
      * Get the view's pathway object
      * 
      * @access public
-     * @return PHPFrame_Pathway
+     * @return PHPFrame_Document
      * @since  1.0
      */
     public function getDocument()

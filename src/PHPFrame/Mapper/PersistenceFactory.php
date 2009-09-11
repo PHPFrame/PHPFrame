@@ -114,9 +114,20 @@ abstract class PHPFrame_PersistenceFactory
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
-    public function getCollection(array $raw=null)
+    public function getCollection(
+        array $raw=null, 
+        $total=null, 
+        $limit=-1, 
+        $limitstart=0
+    )
     {
-        return new PHPFrame_PersistentObjectCollection($raw, $this->getPersistentObjectFactory());
+        return new PHPFrame_PersistentObjectCollection(
+            $raw, 
+            $this->getPersistentObjectFactory(),
+            $total=null, 
+            $limit=-1, 
+            $limitstart=0
+        );
     }
     
     /**

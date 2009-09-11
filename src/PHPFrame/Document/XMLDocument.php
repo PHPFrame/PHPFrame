@@ -186,13 +186,13 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     /**
      * Method used to render Row Collections in this document
      * 
-     * @param PHPFrame_DatabaseRowCollection
+     * @param PHPFrame_Collection
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function renderRowCollection(PHPFrame_DatabaseRowCollection $collection)
+    public function renderCollection(PHPFrame_Collection $collection)
     {
         $str = "FIX ME!!!: ".get_class($this)."::renderRowCollection().";
         

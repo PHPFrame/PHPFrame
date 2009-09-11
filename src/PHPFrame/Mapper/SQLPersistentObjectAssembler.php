@@ -95,8 +95,29 @@ class PHPFrame_SQLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
         $db  = PHPFrame::DB();
         $raw = $db->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
         
+        // Get total number of entries without taking limits into account
+        // This is used to build pagination for the collection objects
+        $sql  = "SELECT COUNT(id) FROM ".$this->factory->getTableName();
+        if ($id_obj->getJoinsSQL()) {
+            $sql .= "\n".$id_obj->getJoinsSQL();
+        }
+        if ($id_obj->getWhereSQL()) {
+            $sql .= "\n".$id_obj->getWhereSQL();
+        }
+        if ($id_obj->getGroupBySQL()) {
+            $sql .= "\n".$id_obj->getGroupBySQL();
+        }
+        
+        $superset_total = $db->fetchColumn($sql, $id_obj->getParams());
+
+        
         // Create collectioj object
-        return $this->factory->getCollection($raw);
+        return $this->factory->getCollection(
+            $raw, 
+            $superset_total, 
+            $id_obj->getLimit(), 
+            $id_obj->getLimitstart()
+        );
     }
     
     /**

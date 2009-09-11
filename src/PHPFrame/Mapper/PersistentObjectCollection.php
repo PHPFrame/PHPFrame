@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_PersistentObjectCollection implements Iterator, Countable
+class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
 {
     /**
      * A domain factory object used to create objects in collection
@@ -38,11 +38,18 @@ class PHPFrame_PersistentObjectCollection implements Iterator, Countable
      */
     private $_raw;
     /**
-     * The total number of elements in the collection
+     * The total number of elements in the collection (this will normally be a subset 
+     * determined by pagination parameters)
      * 
      * @var int
      */
-    private $_total;
+    private $_total_subset;
+    /**
+     * The total number of elements in the storage media
+     * 
+     * @var int
+     */
+    private $_total_superset;
     /**
      * Internal array pointer
      * 
@@ -68,7 +75,10 @@ class PHPFrame_PersistentObjectCollection implements Iterator, Countable
      */
     public function __construct(
         array $raw=null, 
-        PHPFrame_PersistentObjectFactory $obj_factory=null
+        PHPFrame_PersistentObjectFactory $obj_factory=null,
+        $total=null, 
+        $limit=-1, 
+        $limitstart=0
     ) {
         if (!is_null($raw) && !is_null($obj_factory)) {
             // If the raw array is only one level of depth we assume it is 
@@ -81,10 +91,18 @@ class PHPFrame_PersistentObjectCollection implements Iterator, Countable
             }
             
             $this->_raw = $raw;
-            $this->_total = count($raw);
+            $this->_total_subset = count($raw);
         }
         
-        $this->_obj_fact = $obj_factory;
+        $this->_obj_fact   = $obj_factory;
+        $this->_limit      = (int) $limit;
+        $this->_limitstart = (int) $limitstart;
+        
+        if (!is_null($total)) {
+            $this->_total_superset = (int) $total;
+        } else {
+            $this->_total_superset = $this->_total_subset;
+        }
     }
     
     /**
@@ -127,7 +145,7 @@ class PHPFrame_PersistentObjectCollection implements Iterator, Countable
             return;
         }
         
-        $this->_objects[$this->_total++] = $obj;
+        $this->_objects[$this->_total_subset++] = $obj;
     }
     
     /**
@@ -147,6 +165,21 @@ class PHPFrame_PersistentObjectCollection implements Iterator, Countable
         
         $key = array_keys($this->_objects, $obj);
         unset($this->_objects[$key]);
+    }
+    
+    public function getLimit()
+    {
+        return 1;
+    }
+    
+    public function getLimitstart()
+    {
+        return 0;
+    }
+    
+    public function getTotal()
+    {
+        return 1;
     }
     
     /**
@@ -211,6 +244,6 @@ class PHPFrame_PersistentObjectCollection implements Iterator, Countable
     
     public function count()
     {
-        return $this->_total;
+        return $this->_total_subset;
     }
 }

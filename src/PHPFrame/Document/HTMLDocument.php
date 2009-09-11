@@ -206,16 +206,16 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     }
     
     /**
-     * Method used to render Row Collections in HTML format
+     * Method used to render Collections in HTML format
      * 
-     * @param PHPFrame_DatabaseRowCollection
+     * @param PHPFrame_Collection $collection
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function renderRowCollection(
-        PHPFrame_DatabaseRowCollection $collection, 
+    public function renderCollection(
+        PHPFrame_Collection $collection, 
         $headings=null
     ) {
         // Build table to display row data
@@ -254,16 +254,18 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     }
     
     /**
-     * Render HTML filter for row collection
+     * Render HTML filter for collections
      * 
      * This method builds an HTML string with UI filtering elements to be used with
      * row collection objects.
+     * 
+     * @param PHPFrame_Collection $collection
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function renderRowCollectionFilter(PHPFrame_DatabaseRowCollection $collection)
+    public function renderCollectionFilter(PHPFrame_Collection $collection)
     {
         $html = '<div class="row_collection_filter">';
         
@@ -287,7 +289,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // Print subset info
         $html .= '<div class="subset_info">';
         $html .= ($collection->getLimitstart()+1);
-        $html .= ' - '.($collection->getLimitstart() + $collection->countRows());
+        $html .= ' - '.($collection->getLimitstart() + count($collection));
         $html .= ' of '.$collection->getTotal();
         $html .= '</div>';
         
@@ -318,16 +320,16 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     }
     
     /**
-     * Render HTML pagination for collection oject
+     * Render HTML pagination for collection object
      * 
-     * @param PHPFrame_DatabaseRowCollection $collection The collection object for
-     *                                                    which to create the pagination.
+     * @param PHPFrame_Collection $collection The collection object for
+     *                                         which to create the pagination.
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function renderPagination(PHPFrame_DatabaseRowCollection $collection)
+    public function renderPagination(PHPFrame_Collection $collection)
     {
         $html = '';
         

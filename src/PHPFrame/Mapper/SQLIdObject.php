@@ -430,27 +430,27 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      */
     public function getSQL($limit=true)
     {
-        $sql  = $this->_getSelectSQL();
-        $sql .= "\n".$this->_getFromSQL();
+        $sql  = $this->getSelectSQL();
+        $sql .= "\n".$this->getFromSQL();
         
-        if ($this->_getJoinsSQL()) {
-            $sql .= "\n".$this->_getJoinsSQL();
+        if ($this->getJoinsSQL()) {
+            $sql .= "\n".$this->getJoinsSQL();
         }
         
-        if ($this->_getWhereSQL()) {
-            $sql .= "\n".$this->_getWhereSQL();
+        if ($this->getWhereSQL()) {
+            $sql .= "\n".$this->getWhereSQL();
         }
         
-        if ($this->_getGroupBySQL()) {
-            $sql .= "\n".$this->_getGroupBySQL();
+        if ($this->getGroupBySQL()) {
+            $sql .= "\n".$this->getGroupBySQL();
         }
         
-        if ($this->_getOrderBySQL()) {
-            $sql .= "\n".$this->_getOrderBySQL();
+        if ($this->getOrderBySQL()) {
+            $sql .= "\n".$this->getOrderBySQL();
         }
         
-        if ($this->_getLimitSQL() && $limit) {
-            $sql .= "\n".$this->_getLimitSQL();
+        if ($this->getLimitSQL() && $limit) {
+            $sql .= "\n".$this->getLimitSQL();
         }
         
         return $sql;
@@ -548,11 +548,11 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get SELECT SQL
      * 
-     * @access private
+     * @access public
      * @return string
      * @since  1.0
      */
-    private function _getSelectSQL()
+    public function getSelectSQL()
     {
         if (count($this->_select) < 1) {
             $exception_msg = "Can not build query. No fields have been selected.";
@@ -581,11 +581,11 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get FROM SQL
      * 
-     * @access private
+     * @access public
      * @return string
      * @since  1.0
      */
-    private function _getFromSQL()
+    public function getFromSQL()
     {
         if (empty($this->_from)) {
             $exception_msg = "Can not build query. No table to select from.";
@@ -605,11 +605,11 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * 
      * Get JOIN SQL
      * 
-     * @access private
+     * @access public
      * @return string
      * @since  1.0
      */
-    private function _getJoinsSQL()
+    public function getJoinsSQL()
     {
         $sql = "";
         
@@ -625,11 +625,11 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get WHERE SQL
      * 
-     * @access private
+     * @access public
      * @return string
      * @since  1.0
      */
-    private function _getWhereSQL()
+    public function getWhereSQL()
     {
         $sql = "";
         
@@ -652,11 +652,11 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get GROUP BY SQL
      * 
-     * @access private
+     * @access public
      * @return string
      * @since  1.0
      */
-    private function _getGroupBySQL()
+    public function getGroupBySQL()
     {
         $sql = "";
         
@@ -670,11 +670,11 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get ORDER BY SQL statement
      * 
-     * @access private
+     * @access public
      * @return string
      * @since  1.0
      */
-    private function _getOrderBySQL() 
+    public function getOrderBySQL() 
     {
         $sql = "";
         
@@ -689,11 +689,11 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get LIMIT SQL statement
      * 
-     * @access private
+     * @access public
      * @return string
      * @since  1.0
      */
-    private function _getLimitSQL() 
+    public function getLimitSQL() 
     {
         $sql = "";
         

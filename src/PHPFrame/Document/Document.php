@@ -173,8 +173,8 @@ abstract class PHPFrame_Document
         foreach ($view->getData() as $key=>$value) {
             $str .= $key.": ";
             
-            if ($value instanceof PHPFrame_DatabaseRowCollection) {
-                $str .= $this->renderRowCollection($value);
+            if ($value instanceof PHPFrame_Collection) {
+                $str .= $this->renderCollection($value);
             } else {
                 $str .= (string) $value;
             }
@@ -186,13 +186,13 @@ abstract class PHPFrame_Document
     }
     
     /**
-     * Method used to render Row Collections in this document
+     * Method used to render Collections in this document
      * 
-     * @param PHPFrame_DatabaseRowCollection
+     * @param PHPFrame_Collection
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    abstract public function renderRowCollection(PHPFrame_DatabaseRowCollection $collection);
+    abstract public function renderCollection(PHPFrame_Collection $collection);
 }

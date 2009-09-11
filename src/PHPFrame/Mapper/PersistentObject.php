@@ -76,17 +76,41 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     protected $id=null;
     /**
-     * Date the object was first stored (in MySQL Datetime format)
+     * UNIX timestamp of the object's last access date
      * 
      * @var string
      */
-    protected $created=null;
+    protected $atime=null;
     /**
-     * Last modified datetime (in MySQL Datetime format)
+     * UNIX timestamp of the object's creation date
      * 
      * @var string
      */
-    protected $modified=null;
+    protected $ctime=null;
+    /**
+     * UNIX timestamp of the object's last modification date
+     * 
+     * @var string
+     */
+    protected $mtime=null;
+    /**
+     * User ID of object owner/creator
+     * 
+     * @var string
+     */
+    protected $owner=null;
+    /**
+     * Group ID of object
+     * 
+     * @var string
+     */
+    protected $group=null;
+    /**
+     * UNIX style permissions based on owner and group
+     * 
+     * @var string
+     */
+    protected $perms=null;
     /**
      * Boolean indicating whether the object is dirty (has changed since it was 
      * last stored).
@@ -205,61 +229,90 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     }
     
     /**
-     * Get created datetime
+     * Get accessed timestamp
      * 
      * @access public
-     * @return string
+     * @return int
      * @since  1.0
      */
-    public function getCreated()
+    public function getATime()
     {
-        return $this->created;
+        return $this->atime;
     }
     
     /**
-     * Set created datetime
+     * Set accessed timestamp
      * 
-     * @param string $str
+     * @param int $int
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setCreated($str)
+    public function setATime($int)
     {
-        $str = PHPFrame_Filter::validateDateTime($str);
+        $int = PHPFrame_Filter::validateInt($int);
         
         // Set property
-        $this->created = $str;
+        $this->atime = $int;
     }
     
     /**
-     * Get last modified datetime
+     * Get created timestamp
      * 
      * @access public
-     * @return string
+     * @return int
      * @since  1.0
      */
-    public function getModified()
+    public function getCTime()
     {
-        return $this->modified;
+        return $this->ctime;
     }
     
     /**
-     * Set last modified datetime
+     * Set created timestamp
      * 
-     * @param string $str
+     * @param int $int
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setModified($str)
+    public function setCTime($int)
     {
-        $str = PHPFrame_Filter::validateDateTime($str);
+        $int = PHPFrame_Filter::validateInt($int);
         
         // Set property
-        $this->modified = $str;
+        $this->ctime = $int;
+    }
+    
+    /**
+     * Get last modified timestamp
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public function getMTime()
+    {
+        return $this->mtime;
+    }
+    
+    /**
+     * Set last modified timestamp
+     * 
+     * @param int $int
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setMTime($int)
+    {
+        $int = PHPFrame_Filter::validateInt($int);
+        
+        // Set property
+        $this->mtime = $int;
     }
     
     /**

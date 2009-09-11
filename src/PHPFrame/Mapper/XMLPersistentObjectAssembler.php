@@ -158,12 +158,12 @@ class PHPFrame_XMLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
         $collection = $this->find();
         
         // Update modified time
-        $obj->setModified(date("Y-m-d H:i:s"));
+        $obj->setMTime(time());
         
         // Prepare new elements (insert)
         if ($obj->getId() <= 0) {
             $obj->setId($this->_getNewId());
-            $obj->setCreated(date("Y-m-d H:i:s"));
+            $obj->setCTime(time());
             
             // Add new element to collection
             $collection->addElement($obj);

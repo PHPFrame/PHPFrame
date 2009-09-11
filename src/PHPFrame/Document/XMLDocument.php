@@ -70,7 +70,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      */
     public function __toString()
     {
-        return $this->dom->saveXML().$this->body;
+        return $this->indent($this->dom->saveXML().$this->body);
     }
     
     /**

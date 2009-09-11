@@ -92,7 +92,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $this->addNode($head_node, "title", null, $this->getTitle());
         
         // Render DOM Document as HTML string
-        $html = $this->dom->saveHTML();
+        $html = $this->indent($this->dom->saveHTML());
         
         // Add body
         $html = str_replace("{content}", $this->body, $html);

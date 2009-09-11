@@ -122,3 +122,4 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
      * @since  1.0
      */
     public function getTableName() {}
+}

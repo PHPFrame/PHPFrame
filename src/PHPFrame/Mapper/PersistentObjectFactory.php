@@ -36,7 +36,7 @@ class PHPFrame_PersistentObjectFactory
      */
     public function __construct($target_class)
     {
-        $this->_target_class = (string) trim($target_class);
+        $this->_target_class = trim((string) $target_class);
     }
     
     /**

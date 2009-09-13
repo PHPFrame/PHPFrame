@@ -110,6 +110,11 @@ abstract class PHPFrame_PersistenceFactory
     /**
      * Get Collection
      * 
+     * @param array $raw
+     * @param int   $total
+     * @param int   $limit
+     * @param int   $limitstart
+     * 
      * @access public
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
@@ -124,9 +129,9 @@ abstract class PHPFrame_PersistenceFactory
         return new PHPFrame_PersistentObjectCollection(
             $raw, 
             $this->getPersistentObjectFactory(),
-            $total=null, 
-            $limit=-1, 
-            $limitstart=0
+            $total, 
+            $limit, 
+            $limitstart
         );
     }
     

@@ -38,8 +38,8 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
      */
     private $_raw;
     /**
-     * The total number of elements in the collection (this will normally be a subset 
-     * determined by pagination parameters)
+     * The total number of elements in the collection (this will normally be a  
+     * subset determined by pagination parameters)
      * 
      * @var int
      */
@@ -55,19 +55,22 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
      * 
      * @var int
      */
-    private $_pointer=0;
+    private $_pointer = 0;
     /**
      * Storage array used to manage the collection's objects
      * 
      * @var array;
      */
-    private $_objects=array();
+    private $_objects = array();
     
     /**
      * Constructor
      * 
-     * @param array                               $raw
+     * @param array                            $raw
      * @param PHPFrame_PersistentObjectFactory $obj_factory
+     * @param int   $total
+     * @param int   $limit
+     * @param int   $limitstart
      * 
      * @access public
      * @return void
@@ -82,15 +85,15 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     ) {
         if (!is_null($raw) && !is_null($obj_factory)) {
             // If the raw array is only one level of depth we assume it is 
-            // only one element and we wrap it in an array to make is a collection 
-            // of a single entry
+            // only one element and we wrap it in an array to make is a  
+            // collection of a single entry
             $array_obj = new PHPFrame_Array($raw);
             
             if ($array_obj->depth() == 1) {
                 $raw = array($raw);
             }
             
-            $this->_raw = $raw;
+            $this->_raw          = $raw;
             $this->_total_subset = count($raw);
         }
         
@@ -125,7 +128,10 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
         }
         
         if (isset($this->_raw[$key])) {
-            $this->_objects[$key] = $this->_obj_fact->createObject($this->_raw[$key]);
+            $this->_objects[$key] = $this->_obj_fact->createObject(
+                $this->_raw[$key]
+            );
+            
             return $this->_objects[$key];
         }
     }

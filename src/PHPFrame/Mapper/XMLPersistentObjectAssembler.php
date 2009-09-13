@@ -24,7 +24,8 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_XMLPersistentObjectAssembler extends PHPFrame_PersistentObjectAssembler
+class PHPFrame_XMLPersistentObjectAssembler 
+    extends PHPFrame_PersistentObjectAssembler
 {
     private $_path_info = null;
     private $_file_info = null;
@@ -43,10 +44,10 @@ class PHPFrame_XMLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
         parent::__construct($factory);
         
         if (!defined("PHPFRAME_VAR_DIR") && is_null($path)) {
-            $msg = "No path has been defined to store XML persistent objects. ";
-            $msg .= "If you are trying to use the Mapper package outside of an ";
-            $msg .= "MVC app you can manually set the PHPFRAME_VAR_DIR constant ";
-            $msg .= "before you instantiate the mapper objects.";
+            $msg = "No path has been defined to store XML persistent objects.";
+            $msg .= " If you are trying to use the Mapper package outside of";
+            $msg .= " an MVC app you can manually set the PHPFRAME_VAR_DIR";
+            $msg .= " constant before you instantiate the mapper objects.";
             throw new RuntimeException($msg);
             
         }
@@ -94,14 +95,15 @@ class PHPFrame_XMLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
             $table_name = $this->_factory->getTableName();
             
             // Create new IdObject
-            $id_obj = new PHPFrame_IdObject(array("select"=>"*", "from"=>$table_name));
+            $options = array("select"=>"*", "from"=>$table_name);
+            $id_obj = new PHPFrame_IdObject($options);
             $id_obj->where("id", "=", ":id")->params(":id", $id);
         }
         
         if (!$id_obj instanceof PHPFrame_IdObject) {
             $msg = "Wrong argument type. ";
-            $msg .= get_class($this)."::findOne() expected only argument to be of type ";
-            $msg .= "PHPFrame_IdObject or integer.";
+            $msg .= get_class($this)."::findOne() expected only argument to be";
+            $msg .= " of type PHPFrame_IdObject or integer.";
             throw new RuntimeException($msg);
         }
         
@@ -207,7 +209,9 @@ class PHPFrame_XMLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
      * @return string
      * @since  1.0
      */
-    private function _serializeCollection(PHPFrame_PersistentObjectCollection $collection)
+    private function _serializeCollection(
+        PHPFrame_PersistentObjectCollection $collection
+    )
     {
         $options = array(
             "indent"    => "    ",

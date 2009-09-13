@@ -38,6 +38,18 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
      */
     private $_raw;
     /**
+     * Limit of entries per page
+     * 
+     * @var int
+     */
+    private $_limit;
+    /**
+     * Position at which the current page starts
+     * 
+     * @var int
+     */
+    private $_limitstart;
+    /**
      * The total number of elements in the collection (this will normally be a  
      * subset determined by pagination parameters)
      * 

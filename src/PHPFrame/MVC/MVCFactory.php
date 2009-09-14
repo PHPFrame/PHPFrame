@@ -96,11 +96,12 @@ class PHPFrame_MVCFactory
      * 
      * @param string $controller_name
      * 
+     * @static
      * @access public
      * @return PHPFrame_ActionController
      * @since  1.0
      */
-    public function getActionController($controller_name)
+    public static function getActionController($controller_name)
     {
         // Create reflection object for named controller
         $controller_class = ucfirst($controller_name)."Controller";
@@ -122,6 +123,8 @@ class PHPFrame_MVCFactory
      * @param array  $args       An array with arguments to be passed to the
      *                           model's constructor if needed.
      * 
+     * @static
+     * @access public
      * @return object
      * @since  1.0
      */

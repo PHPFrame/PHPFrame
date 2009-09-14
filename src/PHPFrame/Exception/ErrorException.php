@@ -57,11 +57,10 @@ class PHPFrame_ErrorException extends Exception
     public function __construct($message, $code, $file, $line, $context=null) 
     {
         $this->_context = $context;
+        $this->file     = $file;
+        $this->line     = $line;
         
         // Invoke parent
         parent::__construct($message, $code);
-        
-        $this->file = $file;
-        $this->line = $line;
     }
 }

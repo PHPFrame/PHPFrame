@@ -128,8 +128,6 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      * @access public
      * @return void
      * @since  1.0
-     * @todo   This method needs to decide what to do with the uncaught exceptions.
-     *         Right now it simply outputs some basic info.
      */
     public static function handleException($exception) 
     {
@@ -141,7 +139,8 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
         $str .= $exception->getTraceAsString();
         
         // Display the exception details if debugging is enabled
-        $display_exceptions = PHPFrame::Config()->get("debug.display_exceptions");
+        $config = PHPFrame::Config();
+        $display_exceptions = $config->get("debug.display_exceptions");
         if ($display_exceptions) {
             echo '<pre>'.$str.'</pre>';
         }

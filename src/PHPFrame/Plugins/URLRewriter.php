@@ -1,11 +1,11 @@
 <?php
 /**
- * PHPFrame/Utils/Rewrite.php
+ * PHPFrame/Utils/URLRewriter.php
  * 
  * PHP version 5
  * 
  * @category  PHPFrame
- * @package   Utils
+ * @package   Plugins
  * @author    Luis Montero <luis.montero@e-noise.com>
  * @copyright 2009 E-noise.com Limited
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
@@ -14,16 +14,16 @@
  */
 
 /**
- * Rewrite Class
+ * URLRewriter Class
  * 
  * @category PHPFrame
- * @package  Utils
+ * @package  Plugins
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Rewrite
+class PHPFrame_URLRewriter extends PHPFrame_Plugin
 {
     /**
      * Rewrite the request
@@ -33,7 +33,7 @@ class PHPFrame_Rewrite
      * @return void
      * @since  1.0
      */
-    public static function rewriteRequest() 
+    public function routeStartup() 
     {
         // If there is no request uri (ie: we are on the command line) we do not rewrite
         if (!isset($_SERVER['REQUEST_URI'])) {

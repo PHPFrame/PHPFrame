@@ -14,14 +14,15 @@
  */
 
 /**
- * The Persistent Object class is an abstract class that needs to be extended by objects 
- * that you want to use with the Mapper package.
+ * The Persistent Object class is an abstract class that needs to be extended by 
+ * objects that you want to use with the Mapper package.
  * 
- * To see an example of how to extend this class have a look at {@link PHPFrame_User}.
+ * To see an example of how to extend this class have a look at 
+ * {@link PHPFrame_User}.
  * 
- * Persistent Objects implement the IteratorAggregate interface, which means that they 
- * can be iterated using the foreach construct and easily converted to an array by 
- * using PHPs iterator_to_array() function.
+ * Persistent Objects implement the IteratorAggregate interface, which means 
+ * that they can be iterated using the foreach construct and easily converted to 
+ * an array by using PHPs iterator_to_array() function.
  * 
  * For example:
  * 
@@ -78,46 +79,46 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * UNIX timestamp of the object's last access date
      * 
-     * @var string
+     * @var int
      */
     protected $atime=null;
     /**
      * UNIX timestamp of the object's creation date
      * 
-     * @var string
+     * @var int
      */
     protected $ctime=null;
     /**
      * UNIX timestamp of the object's last modification date
      * 
-     * @var string
+     * @var int
      */
     protected $mtime=null;
     /**
      * User ID of object owner/creator
      * 
-     * @var string
+     * @var int
      */
     protected $owner=null;
     /**
      * Group ID of object
      * 
-     * @var string
+     * @var int
      */
     protected $group=null;
     /**
      * UNIX style permissions based on owner and group
      * 
-     * @var string
+     * @var int
      */
     protected $perms=null;
     /**
-     * Boolean indicating whether the object is dirty (has changed since it was 
-     * last stored).
+     * Serialised string respresenting clean state. This is used to check if the
+     * current state is "dirty" if it has changed since last marked clean.
      * 
-     * @var bool
+     * @var string
      */
-    private $_dirty=false;
+    private $_clean_state;
     
     /**
      * Constructor
@@ -134,6 +135,8 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         if (!is_null($options)) {
             $this->bind($options);
         }
+        
+        $this->markClean();
     }
     
     /**
@@ -145,16 +148,17 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function __clone()
     {
-        $this->id = null;
-        $this->created = null;
-        $this->modified = null;
+        $this->id    = null;
+        $this->atime = null;
+        $this->ctime = null;
+        $this->mtime = null;
     }
     
     /**
      * Get iterator
      * 
-     * This method implements the IteratorAggregate interface and thus makes domain  
-     * objects traversable, hooking to the foreach construct.
+     * This method implements the IteratorAggregate interface and thus makes 
+     * domain objects traversable, hooking to the foreach construct.
      * 
      * @access public
      * @return ArrayIterator
@@ -191,6 +195,13 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
             if ($reflectionObj->hasMethod($setter_name)) {
                 // Get reflection method for setter
                 $setter_method = $reflectionObj->getMethod($setter_name);
+                
+                // Get parameters and ignore if parameter is array and the 
+                // value is not
+                $params = $setter_method->getParameters();
+                if ($params[0]->isArray() && !is_array($value)) {
+                    continue;
+                }
                 
                 // Invoke setter if it takes only one required argument
                 if ($setter_method->getNumberOfRequiredParameters() == 1) {
@@ -255,6 +266,10 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setATime($int)
     {
+        if (empty($int)) {
+            return;
+        }
+        
         $int = PHPFrame_Filter::validateInt($int);
         
         // Set property
@@ -320,23 +335,100 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     }
     
     /**
+     * Get owner
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+    
+    /**
+     * Set owner
+     * 
+     * @param int $int
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setOwner($int)
+    {
+        $int = PHPFrame_Filter::validateInt($int);
+        
+        // Set property
+        $this->owner = $int;
+    }
+    
+    /**
+     * Get group ownership
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+    
+    /**
+     * Set group ownership
+     * 
+     * @param int $int
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setGroup($int)
+    {
+        $int = PHPFrame_Filter::validateInt($int);
+        
+        // Set property
+        $this->group = $int;
+    }
+    
+    /**
+     * Get permissions
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public function getPerms()
+    {
+        return $this->perms;
+    }
+    
+    /**
+     * Set permissions
+     * 
+     * @param int $int
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setPerms($int)
+    {
+        $int = PHPFrame_Filter::validateInt($int);
+        
+        // Set property
+        $this->perms = $int;
+    }
+    
+    /**
      * Mark object as clean
      * 
      * @return void
      */
     public function markClean()
     {
-        $this->_dirty = false;
-    }
-    
-    /**
-     * Mark object as dirty
-     * 
-     * @return void
-     */
-    public function markDirty()
-    {
-        $this->_dirty = false;
+        $this->_clean_state = serialize($this->toArray());
     }
     
     /**
@@ -347,7 +439,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function isDirty()
     {
-        return $this->_dirty;
+        return !($this->_clean_state == serialize($this->toArray()));
     }
     
     /**
@@ -363,7 +455,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $props_array = get_object_vars($this);
         
         foreach ($props_array as $key=>$value) {
-            if ($key != "_dirty") {
+            if ($key != "_clean_state") {
                 $array[$key] = $value;
             }
         }

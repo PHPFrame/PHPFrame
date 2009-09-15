@@ -14,7 +14,7 @@
  */
 
 /**
- * Addon Info Abstract Class
+ * Extension Info Abstract Class
  * 
  * @category PHPFrame
  * @package  Ext
@@ -96,7 +96,7 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      * 
      * @var array
      */
-    protected $dependencies;
+    protected $dependencies = array();
     /**
      * Package contents
      * 

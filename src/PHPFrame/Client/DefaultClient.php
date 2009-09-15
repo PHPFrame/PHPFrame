@@ -15,7 +15,8 @@
  */
 
 /**
- * Client used by default (PC HTTP browsers or anything for which no helper exists)
+ * Client used by default (PC HTTP browsers or anything for which no helper 
+ * exists)
  * 
  * @category PHPFrame
  * @package  Client
@@ -32,8 +33,8 @@ class PHPFrame_DefaultClient implements PHPFrame_IClient
      * 
      * @static
      * @access public
-     * @return PHPFrame_IClient|boolean Object instance of this class if correct
-     *                                         helper for client or false otherwise.
+     * @return PHPFrame_IClient|boolean Instance of this class if correct
+     *                                  helper for client or false otherwise.
      */
     public static function detect() 
     {
@@ -67,8 +68,8 @@ class PHPFrame_DefaultClient implements PHPFrame_IClient
             
         // Process incoming request arrays and store filtered data in class
         $request['request'] = $inputfilter->process($_REQUEST);
-        $request['get'] = $inputfilter->process($_GET);
-        $request['post'] = $inputfilter->process($_POST);
+        $request['get']     = $inputfilter->process($_GET);
+        $request['post']    = $inputfilter->process($_POST);
             
         // Once the superglobal request arrays are processed we unset them
         // to prevent them being used from here on
@@ -80,9 +81,9 @@ class PHPFrame_DefaultClient implements PHPFrame_IClient
     /**
      * Prepare response
      * 
-     * This method is invoked by the front controller before invoking the requested
-     * action in the action controller. It gives the client an opportunity to do 
-     * something before the component is executed.
+     * This method is invoked by the front controller before invoking the 
+     * requested action in the action controller. It gives the client an 
+     * opportunity to do something before the component is executed.
      * 
      * @param PHPFrame_Response $response The response object to prepare.
      * 
@@ -101,7 +102,7 @@ class PHPFrame_DefaultClient implements PHPFrame_IClient
         $url = trim((string) $url);
         
         if ($url) {
-            $url = PHPFrame_Rewrite::rewriteURL($url);
+            $url = PHPFrame_URLRewriter::rewriteURL($url);
             header("Location: ".$url);
             exit;
         }

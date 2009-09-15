@@ -123,10 +123,6 @@ class PHPFrame_XMLPersistentObjectAssembler
      */
     public function find(PHPFrame_IdObject $id_obj=null)
     {
-//        if (is_null($id_obj)) {
-//            $id_obj = $this->factory->getIdObject();
-//        }
-        
         // Get raw data as array from XML
         $serialiser = new XML_Unserializer();
         
@@ -135,10 +131,13 @@ class PHPFrame_XMLPersistentObjectAssembler
         if ($serialiser->unserialize($this->_file_info->getRealPath(), true)) {
             $raw_tmp = $serialiser->getUnserializedData();
             if (!$raw_tmp instanceof PEAR_Error) {
-                
                 $raw = $raw_tmp[$this->factory->getTargetClass()];
-                
             }
+        }
+        
+        $raw_array_obj = new PHPFrame_Array($raw);
+        if ($raw_array_obj->isAssoc()) {
+            $raw = array($raw);
         }
         
         // Create collection object
@@ -245,6 +244,7 @@ class PHPFrame_XMLPersistentObjectAssembler
         $newid = 0;
         
         $collection = $this->find();
+        
         foreach ($collection as $item) {
             if ($item->getId() > $newid) {
                 $newid = $item->getId();

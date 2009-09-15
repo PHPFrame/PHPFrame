@@ -23,21 +23,8 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Features
+class PHPFrame_Features extends PHPFrame_Extensions
 {
-    /**
-     * A mapper object used to store and retrieve feature data
-     *
-     * @var PHPFrame_PersistentObjectCollection
-     */
-    private $_mapper;
-    /**
-     * A collection object holding data about installed features
-     *
-     * @var PHPFrame_PersistentObjectCollection
-     */
-    private $_features;
-    
     /**
      * Construct
      * 
@@ -47,16 +34,7 @@ class PHPFrame_Features
      */
     public function __construct() 
     {
-        // Get installed features from file
-        $this->_mapper = new PHPFrame_Mapper(
-            "PHPFrame_FeatureInfo", 
-            "features", 
-            PHPFrame_Mapper::STORAGE_XML, 
-            false, 
-            PHPFRAME_CONFIG_DIR
-        );
-        
-        $this->_features = $this->_mapper->find();
+        parent::__construct("PHPFrame_FeatureInfo", "features");
     }
     
     public function install($name)
@@ -67,58 +45,5 @@ class PHPFrame_Features
     public function uninstall($name)
     {
         
-    }
-    
-    /**
-     * Get feature info by name
-     * 
-     * @param string $name The feature name.
-     * 
-     * @access public
-     * @return array
-     * @since  1.0
-     */
-    public function getInfo($name) 
-    {
-        foreach ($this->_features as $feature) {
-            if ($feature->getName() == $name) {
-                return $feature;
-            }
-        }
-        
-        $msg = "Feature '".$name."' is not installed";
-        throw new RuntimeException($msg);
-    }
-    
-    /**
-     * This methods tests whether the specified feature is installed and enabled.
-     *
-     * @param string $name The feature name to check (ie: dashboard, user, 
-     *                     projects, ...)
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    public function isEnabled($name) 
-    {
-        foreach ($this->_features as $feature) {
-            if ($feature->getName() == $name && $feature->isEnabled()) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    public function isInstalled($name)
-    {
-        foreach ($this->_features as $feature) {
-            if ($feature->getName() == $name && $feature->isInstalled()) {
-                return true;
-            }
-        }
-        
-        return false;
     }
 }

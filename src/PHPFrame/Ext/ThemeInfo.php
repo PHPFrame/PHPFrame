@@ -15,7 +15,7 @@
  */
 
 /**
- * Addons Theme Class
+ * ThemeInfo Class
  * 
  * @category PHPFrame
  * @package  Ext

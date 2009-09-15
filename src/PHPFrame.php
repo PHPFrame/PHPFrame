@@ -99,6 +99,7 @@ class PHPFrame
         "Mail",
         "Mapper",
         "MVC",
+        "Plugins",
         "Registry",
         "VersionControl",
         "UI",
@@ -473,14 +474,14 @@ class PHPFrame
         // Set profiler milestone
         PHPFrame_Profiler::instance()->addMilestone();
         
+        if (self::$_run_level >= 3) {
+            return;
+        }
+        
         if (!PHPFrame::Config()->get("db.enable")) {
             $msg  = "Tried to mount DB persistence but it is not enabled in ";
             $msg .= "etc/phpframe.ini";
             throw new LogicException($msg);
-        }
-        
-        if (self::$_run_level >= 3) {
-            return;
         }
         
         if (self::$_run_level < 2) {

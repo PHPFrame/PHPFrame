@@ -71,7 +71,7 @@ class PHPFrame_RPCDocument extends PHPFrame_XMLDocument
      * @access public
      * @return void
      * @since  1.0
-     * @todo It is very important to check path used for require_once call for security.
+     * @todo   It is very important to check path used for require_once call for security.
      */
     public function render(PHPFrame_View $view, $apply_theme=null) 
     {

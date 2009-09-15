@@ -14,8 +14,8 @@
  */
 
 /**
- * The FrontController's main objective is to initialise the framework 
- * and execute the requested controller action. 
+ * The FrontController's main responsibility is to run the MVC app and provide 
+ * hooks for plugins.
  * 
  * @category PHPFrame
  * @package  Application
@@ -27,7 +27,15 @@
  * @internal
  */
 class PHPFrame_FrontController
-{   
+{
+    /**
+     * An instance of PluginHandler that the front controller will use to 
+     * provide hooks for plugins.
+     * 
+     * @var PHPFrame_PluginHandler
+     */
+    private $_plugin_handler;
+    
     /**
      * Constructor
      * 
@@ -40,11 +48,25 @@ class PHPFrame_FrontController
         // Set profiler milestone
         PHPFrame_Profiler::instance()->addMilestone();
         
-        // Rewrite Request URI
-        PHPFrame_Rewrite::rewriteRequest();
+        // Acquire instance of Plugin Handler
+        $this->_plugin_handler = new PHPFrame_PluginHandler();
+        
+        // Register installed plugins with plugin handler
+        foreach (PHPFrame::AppRegistry()->getPlugins() as $plugin) {
+            if ($plugin->isEnabled()) {
+                $plugin_name = $plugin->getName();
+                $this->_plugin_handler->registerPlugin(new $plugin_name());
+            }
+        }
+        
+        // Invoke route startup hook
+        $this->_plugin_handler->handle("routeStartup");
         
         // Initialise request
         $request = PHPFrame::Request();
+        
+        // Invoke route shutdown hook
+        $this->_plugin_handler->handle("routeShutdown");
     }
     
     /**
@@ -56,6 +78,10 @@ class PHPFrame_FrontController
      *         PHPFrame_RequestRegistry, PHPFrame_MVCFactory, 
      *         PHPFrame_ActionController
      * @since  1.0
+     * @todo   Dispatch loop is not reallu looping at the moment as 
+     *         $controller->execute(); directly delegates to redirect or send 
+     *         a response. This needs some refactoring to accomodate the plugin
+     *         hooks.
      */
     public function run() 
     {
@@ -64,21 +90,33 @@ class PHPFrame_FrontController
         // Prepare response using client
         $client->prepareResponse(PHPFrame::Response());
         
-        // Get requested controller name
-        $controller_name = PHPFrame::Request()->getControllerName();
-        
         /**
          * Register MVC autoload function
          */
         spl_autoload_register(array("PHPFrame_MVCFactory", "__autoload"));
-
-        // Create the action controller
-        $controller = PHPFrame_MVCFactory::getActionController($controller_name);
         
-        // Attach observers to the action controller
-        $controller->attach(PHPFrame::Session()->getSysevents());
+        $this->_plugin_handler->handle("dispatchLoopStartup");
         
-        // Execute the action in the given controller
-        $controller->execute();
+        $dispatched = false;
+        
+        while (!$dispatched) {
+            $this->_plugin_handler->handle("preDispatch");
+            
+            // Get requested controller name
+            $controller_name = PHPFrame::Request()->getControllerName();
+    
+            // Create the action controller
+            $controller = PHPFrame_MVCFactory::getActionController($controller_name);
+            
+            // Attach observers to the action controller
+            $controller->attach(PHPFrame::Session()->getSysevents());
+            
+            // Execute the action in the given controller
+            $controller->execute();
+            
+            $this->_plugin_handler->handle("postDispatch");
+        }
+        
+        $this->_plugin_handler->handle("dispatchLoopShutdown");
     }
 }

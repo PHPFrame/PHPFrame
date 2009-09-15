@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Application/Libraries.php
+ * PHPFrame/Application/Themes.php
  * 
  * PHP version 5
  * 
@@ -14,7 +14,7 @@
  */
 
 /**
- * Application Libraries Class
+ * Application Themes Class
  * 
  * @category PHPFrame
  * @package  Application
@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Libraries extends PHPFrame_Extensions
+class PHPFrame_Themes extends PHPFrame_Extensions
 {
     /**
      * Constructor
@@ -34,6 +34,6 @@ class PHPFrame_Libraries extends PHPFrame_Extensions
      */
     public function __construct() 
     {
-        parent::__construct("PHPFrame_LibInfo", "lib");
+        parent::__construct("PHPFrame_ThemeInfo", "themes");
     }
 }

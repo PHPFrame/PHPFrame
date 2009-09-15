@@ -35,13 +35,16 @@
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" name="PHPFrame/Application/ACL.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Application/Extensions.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Features.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/FrontController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Libraries.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Pathway.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Permissions.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Application/Plugins.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Response.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Sysevents.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Application/Themes.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Array.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Collection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Number.php" role="php" />
@@ -77,6 +80,9 @@
    <file baseinstalldir="/" name="PHPFrame/Ext/ExtInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/FeatureInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/LibInfo.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Ext/Plugin.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Ext/PluginHandler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Ext/PluginInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/ThemeInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FileSystem/FileInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FileSystem/FileObject.php" role="php" />
@@ -100,6 +106,7 @@
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/MVCFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/View.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Plugins/URLRewriter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/AppRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Registry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/RequestRegistry.php" role="php" />
@@ -116,7 +123,6 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/Filesystem.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Filter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Image.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Utils/Rewrite.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/URI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/vCard.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/VersionControl/GITVersionControl.php" role="php" />

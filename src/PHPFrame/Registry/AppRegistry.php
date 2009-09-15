@@ -17,7 +17,8 @@
  * The Application Registry class produces a singleton object that provides 
  * an application wide scope to be shared by all requests and sessions. 
  * 
- * The application registry is accessed from the PHPFrame facade class as follows:
+ * The application registry is accessed from the PHPFrame facade class as 
+ * follows:
  * 
  * <code>
  * $app_registry = PHPFrame::AppRegistry();
@@ -59,7 +60,12 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
      * 
      * @var array
      */
-    private $_readonly = array("permissions", "features", "libraries");
+    private $_readonly = array(
+        "permissions", 
+        "features", 
+        "libraries", 
+        "plugins"
+    );
     /**
      * An array to store application registry data set on runtime
      * 
@@ -77,9 +83,9 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
     /**
      * Constructor
      * 
-     * The constructor is declared "protected" to make sure that this class can only
-     * be instantiated using the static method getInstance(), serving up always the 
-     * same instance that the class stores statically.
+     * The constructor is declared "protected" to make sure that this class can 
+     * only be instantiated using the static method getInstance(), serving up 
+     * always the same instance that the class stores statically.
      * 
      * Yes, you have guessed right, this class is a "singleton".
      * 
@@ -92,10 +98,10 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
         if (!defined("PHPFRAME_TMP_DIR")) {
             $msg  = "Application registry could not be initialised. ";
             $msg .= "PHPFRAME_TMP_DIR constant has not been defined. ";
-            $msg .= "Please make sure that you use the application registry from ";
-            $msg .= "an application context. Your app will need to define the ";
-            $msg .= "PHPFRAME_TMP_DIR constant with a valid path to the directory ";
-            $msg .= "where store the app registry's cache.";
+            $msg .= "Please make sure that you use the application registry ";
+            $msg .= "from an application context. Your app will need to ";
+            $msg .= "define the PHPFRAME_TMP_DIR constant with a valid path ";
+            $msg .= "to the directory where store the app registry's cache.";
             throw new LogicException($msg);
         }
         
@@ -111,14 +117,10 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
             $this->_data      = unserialize($serialized_array);
         } else {
             // Rebuild app registry
-            $permissions = new PHPFrame_Permissions();
-            $libs        = new PHPFrame_Libraries();
-            $features    = new PHPFrame_Features();
-            
-            // Store objects in App Regsitry
-            $this->set("permissions", $permissions);
-            $this->set("libraries", $libs);
-            $this->set("features", $features); 
+            $this->set("permissions", new PHPFrame_Permissions());
+            $this->set("libraries", new PHPFrame_Libraries());
+            $this->set("features", new PHPFrame_Features());
+            $this->set("plugins", new PHPFrame_Plugins());
         }
     }
     
@@ -126,8 +128,8 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
      * Destructor
      * 
      * The destructor method will be called as soon as all references to a 
-     * particular object are removed or when the object is explicitly destroyed or 
-     * in any order in shutdown sequence.
+     * particular object are removed or when the object is explicitly destroyed 
+     * or in any order in shutdown sequence.
      * 
      * @access public
      * @return void
@@ -271,6 +273,18 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
     public function getLibraries() 
     {
         return $this->_data['libraries'];
+    }
+    
+    /**
+     * Get Plugins
+     * 
+     * @access public
+     * @return PHPFrame_Features
+     * @since  1.0
+     */
+    public function getPlugins() 
+    {
+        return $this->_data['plugins'];
     }
     
     /**

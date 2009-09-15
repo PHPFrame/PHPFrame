@@ -24,8 +24,7 @@
  * @see      SplFileInfo, PHPFrame_FileObject
  * @since    1.0
  */
-class PHPFrame_FileInfo 
-    extends SplFileInfo 
+class PHPFrame_FileInfo extends SplFileInfo 
     implements Iterator, ArrayAccess, Countable
 {
     /**
@@ -70,7 +69,7 @@ class PHPFrame_FileInfo
         if (!is_file($file_name) && !is_dir($file_name)) {
             $msg = "Can not get file info for file ";
             $msg .= $file_name.". File doesn't exist.";
-            throw new Exception($msg);
+            throw new RuntimeException($msg);
         }
         
         parent::__construct($file_name);

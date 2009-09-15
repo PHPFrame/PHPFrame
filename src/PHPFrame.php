@@ -473,6 +473,12 @@ class PHPFrame
         // Set profiler milestone
         PHPFrame_Profiler::instance()->addMilestone();
         
+        if (!PHPFrame::Config()->get("db.enable")) {
+            $msg  = "Tried to mount DB persistence but it is not enabled in ";
+            $msg .= "etc/phpframe.ini";
+            throw new LogicException($msg);
+        }
+        
         if (self::$_run_level >= 3) {
             return;
         }
@@ -482,15 +488,13 @@ class PHPFrame
         }
         
         // Initialise Database
-        try {
-            $db = self::DB();
-            if ($db instanceof PHPFrame_Database) {
-                // Set run level to 3 to indicate that 
-                // persistance layer is mounted...
-                self::$_run_level = 3;
-            }
-        } catch (Exception $e) {
-           PHPFrame_Logger::write("Could not create database object");
+        $db = self::DB();
+        if ($db instanceof PHPFrame_Database) {
+            // Set run level to 3 to indicate that 
+            // persistance layer is mounted...
+            self::$_run_level = 3;
+        } else {
+            throw new RuntimeException("Could not create database object");
         }
     }
     

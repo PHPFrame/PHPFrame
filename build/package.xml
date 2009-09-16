@@ -241,6 +241,12 @@ insalling the PEAR package. If you want to continue type "yes".
    <extension>
     <name>imap</name>
    </extension>
+   <extension>
+    <name>pdo</name>
+   </extension>
+   <extension>
+    <name>pdo_sqlite</name>
+   </extension>
   </required>
   <optional>
    <package>
@@ -253,9 +259,6 @@ insalling the PEAR package. If you want to continue type "yes".
     <channel>pear.phing.info</channel>
     <min>2.3.3</min>
    </package>
-   <extension>
-    <name>pdo</name>
-   </extension>
    <extension>
     <name>pdo_mysql</name>
    </extension>

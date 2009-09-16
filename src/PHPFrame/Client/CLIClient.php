@@ -32,9 +32,8 @@ class PHPFrame_CLIClient implements PHPFrame_IClient
      * 
      * @static
      * @access public
-     * @return PHPFrame_IClient|boolean Object instance of this class 
-     *                                         if correct helper for client 
-     *                                         or false otherwise.
+     * @return PHPFrame_IClient|boolean Instance of this class if correct helper
+     *                                  for client or FALSE otherwise.
      * @since  1.0
      */
     public static function detect() 
@@ -127,33 +126,46 @@ class PHPFrame_CLIClient implements PHPFrame_IClient
         $parser->addArgument(
             'params', 
             array(
-                'multiple' => true,
-                'description' => 'List of request parameters separated by spaces',
-                'optional'    => true
+                'multiple'=>true,
+                'description'=>'List of request parameters separated by spaces',
+                'optional'=>true
             )
         );
         
         try {
-            // Create request array to be used for return
-            $request = array();
-            
             // Parse input options
             $result = $parser->parse();
             
-            // Get params array if isset
-            if (isset($result->args['params'])) {
-                $params = $result->args['params'];
-                unset($result->args['params']);
-                foreach ($params as $param) {
-                    parse_str($param, $param_pair);
-                    // Store param in request array
-                    $request = array_merge($request, $param_pair);
-                }
+            $request->setControllerName($result->args["controller"]);
+            $request->setAction($result->args["action"]);
+            
+            global $argv;
+            $request->setScriptName($argv[0]);
+            
+            $request->setRequestTime(time());
+            $request->setQuiet($result->options["quiet"]);
+            $request->setMethod("CLI");
+            
+            $request->setOutfile($result->options["outfile"]);
+            
+            if ($result->options["infile"]) {
+                $infile = new PHPFrame_FileObject($result->options["infile"]);
+        
+                $request->attachFile("infile", array(
+                    "tmp_name"=>$infile->getPath(),
+                    "name"=>$infile->getFilename(),
+                    "size"=>$infile->getSize(),
+                    "type"=>$infile->getType(),
+                    "error"=>null
+                ));
             }
             
-            $request = array_merge($result->options, $result->args, $request);
-            
-            return array("request" => $request);
+            foreach ($result->args["params"] as $param) {
+                parse_str($param, $param_pair);
+                foreach ($param_pair as $param_key=>$param_value) {
+                    $request->setParam($param_key, $param_value);
+                }
+            }
             
         } catch (Exception $e) {
             $parser->displayError($e->getMessage());

@@ -8,7 +8,7 @@ class AppController extends PHPFrame_ActionController
         if (is_null($install_dir)) {
             $this->_install_dir = getcwd();
         } else {
-            $this->_install_dir = (string) trim($install_dir);
+            $this->_install_dir = trim((string) $install_dir);
         }
         
         parent::__construct("new_app");
@@ -16,7 +16,7 @@ class AppController extends PHPFrame_ActionController
     
     public function new_app($app_name, $template=null, $allow_non_empty_dir=false)
     {
-        $app_name = trim((string) $app_name);
+        $app_name            = trim((string) $app_name);
         $allow_non_empty_dir = (bool) $allow_non_empty_dir;
         
         try {

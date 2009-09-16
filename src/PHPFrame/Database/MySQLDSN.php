@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Database/DSN/MySQL.php
+ * PHPFrame/Database/MySQLDSN.php
  * 
  * PHP version 5
  * 
@@ -17,8 +17,6 @@
 /**
  * Concrete MySQL DSN (Database Source Name) class
  * 
- * This class deals with the connection(s) to the database(s).
- * 
  * @category PHPFrame
  * @package  Database
  * @author   Luis Montero <luis.montero@e-noise.com>
@@ -29,43 +27,25 @@
 class PHPFrame_MySQLDSN extends PHPFrame_DSN
 {
     /**
-     * The MySQL server host name
-     * 
-     * @var string
-     */
-    private $_db_host=null;
-    /**
-     * The MySQL database name
-     * 
-     * @var string
-     */
-    private $_db_name=null;
-    /**
-     * Unix socket
-     * 
-     * @var string
-     */
-    private $_unix_socket=null;
-    
-    /**
      * Constructor
      * 
      * @param string $db_host     The MySQL server host name
      * @param string $db_name     The MySQL database name
      * @param string $unix_socket Path to unix socket
      * 
+     * @access public
      * @return void
      * @since  1.0
      */
     public function __construct($db_host, $db_name, $unix_socket=null) 
     {
-        $this->_db_host = $db_host;
-        $this->_db_name = $db_name;
+        $this->array["db_host"] = $db_host;
+        $this->array["db_name"] = $db_name;
         
         if (!is_null($unix_socket)) {
-            $this->_unix_socket = (string) $unix_socket;
+            $this->array["unix_socket"] = (string) $unix_socket;
         } else {
-            $this->_unix_socket = ini_get('mysql.default_socket');
+            $this->array["unix_socket"] = ini_get('mysql.default_socket');
         }
         
         parent::__construct("mysql");
@@ -74,35 +54,20 @@ class PHPFrame_MySQLDSN extends PHPFrame_DSN
     /**
      * Convert object to string
      * 
+     * @access public
      * @return string
-     * @since 1.0
+     * @since  1.0
      */
-    public function toString()
+    public function __toString()
     {
-        $str = $this->db_driver.":";
-        $str .= "host=".$this->_db_host.";";
-        $str .= "dbname=".$this->_db_name;
+        $str = $this->array["db_driver"].":";
+        $str .= "host=".$this->array["db_host"].";";
+        $str .= "dbname=".$this->array["db_name"];
         
-        if (!is_null($this->_unix_socket)) {
-            $str .= ";unix_socket=".$this->_unix_socket;
+        if (!isset($this->array["unix_socket"])) {
+            $str .= ";unix_socket=".$this->array["unix_socket"];
         }
         
         return $str;
-    }
-    
-    /**
-     * Convert object to array
-     * 
-     * @return array
-     * @since 1.0
-     */
-    public function toArray() 
-    {
-        $array = array();
-        $array['db.driver'] = $this->db.driver;
-        $array['db_host'] = $this->_db_host;
-        $array['db_name'] = $this->_db_name;
-        
-        return $array;
     }
 }

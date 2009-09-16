@@ -227,7 +227,7 @@ class PHPFrame_Database extends PHPFrame_Subject
         $db_user=null, 
         $db_pass=null
     ) {
-        $key = $dsn->toString();
+        $key = (string) $dsn;
         if (!is_null($db_user)) {
             $key .= ";user=".$db_user;
         }

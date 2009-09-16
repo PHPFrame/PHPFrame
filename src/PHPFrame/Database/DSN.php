@@ -17,8 +17,6 @@
 /**
  * Abstract DSN (Database Source Name) class
  * 
- * This class deals with the connection(s) to the database(s).
- * 
  * @category PHPFrame
  * @package  Database
  * @author   Luis Montero <luis.montero@e-noise.com>
@@ -27,52 +25,38 @@
  * @since    1.0
  * @abstract
  */
-abstract class PHPFrame_DSN
+abstract class PHPFrame_DSN extends ArrayObject
 {
     /**
-     * A string identifying the database driver
+     * Internal array holding data
      * 
-     * @var string
+     * @var array
      */
-    protected $db_driver="";
+    protected $array=array();
     
     /**
      * Constructor
      * 
      * @param string $db.driver A string identifying the database driver. Possible 
      *                          values are: mysql, pgsql, OCI, ODBC, ...
-     *                          
-     * @since 1.0    
+     * 
+     * @access public
+     * @return void
+     * @since  1.0    
      */
     public function __construct($db_driver) 
     {
-        $this->db_driver = $db_driver;
-    }
-    
-    /**
-     * Magic method used when DSN object is used as a string
-     * 
-     * @return string
-     * @since 1.0
-     */
-    public function __toString() 
-    {
-        return $this->toString();
+        $this->array["db_driver"] = trim((string) $db_driver);
+        
+        parent::__construct($this->array);
     }
     
     /**
      * Convert object to string
      * 
+     * @access public
      * @return string
-     * @since 1.0
+     * @since  1.0
      */
-    abstract public function toString();
-    
-    /**
-     * Convert object to array
-     * 
-     * @return array
-     * @since 1.0
-     */
-    abstract public function toArray();
+    abstract public function __toString();
 }

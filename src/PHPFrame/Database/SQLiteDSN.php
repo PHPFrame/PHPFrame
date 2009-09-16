@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Database/DSN/SQLite.php
+ * PHPFrame/Database/SQLiteDSN.php
  * 
  * PHP version 5
  * 
@@ -15,9 +15,7 @@
  */
 
 /**
- * Concrete Oracle DSN (Database Source Name) class
- * 
- * This class deals with the connection(s) to the database(s).
+ * Concrete SQLite (Database Source Name) class
  * 
  * @category PHPFrame
  * @package  Database
@@ -31,35 +29,30 @@ class PHPFrame_SQLiteDSN extends PHPFrame_DSN
     /**
      * Constructor
      * 
+     * @param string $filename Absolute path to the sqlite3 db file
+     * 
+     * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct() 
+    public function __construct($filename) 
     {
-        // ...
-        $exception_msg = "Oops... This database DSN has not been implemented yet.";
-        throw new RuntimeException($exception_msg);
+        $this->array["filename"] = trim((string) $filename);
+        
+        parent::__construct("sqlite");
     }
     
     /**
      * Convert object to string
      * 
+     * @access public
      * @return string
-     * @since 1.0
+     * @since  1.0
      */
-    public function toString()
+    public function __toString()
     {
-        // ...
-    }
-    
-    /**
-     * Convert object to array
-     * 
-     * @return array
-     * @since 1.0
-     */
-    public function toArray() 
-    {
-        // ...
+        $str = $this->array["db_driver"].":".$this->array["filename"];
+        
+        return $str;
     }
 }

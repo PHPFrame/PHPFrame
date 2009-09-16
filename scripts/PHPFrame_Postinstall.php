@@ -51,41 +51,55 @@ class PHPFrame_Postinstall_postinstall
     /**
      * Initialise
      * 
-     * @param PEAR_Config         $config               The current configuration used for 
-     *                                                  installation.
-     * @param PEAR_PackageFile_v2 $self                 The package.xml contents as abstracted 
-     *                                                  by this object.
-     * @param string|null         $lastInstalledVersion The last version of this package 
-     *                                                  that was installed. This is a very 
-     *                                                  important parameter, as it is the 
-     *                                                  only way to determine whether a 
-     *                                                  package is being installed from 
-     *                                                  scratch, or upgraded from a previous 
-     *                                                  version. Using this parameter, it is 
-     *                                                  possible to determine what incremental 
-     *                                                  changes, if any, need to be performed.
+     * @param PEAR_Config         $config               The current config used  
+     *                                                  for installation.
+     * @param PEAR_PackageFile_v2 $self                 The package.xml contents 
+     *                                                  as abstracted by this 
+     *                                                  object.
+     * @param string|null         $lastInstalledVersion The last version of this  
+     *                                                  package that was 
+     *                                                  installed. This is a 
+     *                                                  very important parameter 
+     *                                                  as it is the only way to 
+     *                                                  determine whether a 
+     *                                                  package is being 
+     *                                                  installed from scratch, 
+     *                                                  or upgraded from a 
+     *                                                  previous version. Using 
+     *                                                  this parameter, it is 
+     *                                                  possible to determine 
+     *                                                  what incremental changes 
+     *                                                  need to be performed,
+     *                                                  if any.
      * 
      * @access public
      * @return bool Returns TRUE on success or FALSE on failure
      * @since  1.0
      */
-    public function init(PEAR_Config $config, PEAR_PackageFile_v2 $self, $lastInstalledVersion=null)
+    public function init(
+        PEAR_Config $config, 
+        PEAR_PackageFile_v2 $self, 
+        $lastInstalledVersion=null
+    )
     {
         // Include PHPFrame framework
         require_once "PHPFrame.php";
         
         if (!class_exists('PHPFrame')) {
-            $this->_output("Missing PHPFrame. Please check your PEAR installation.");
+            $this->_output("Could not load PHPFrame class.");
             return false;
         }
         
         $this->_install_dir = PEAR_Config::singleton()->get("php_dir");
-        $this->_data_dir = PEAR_Config::singleton()->get("data_dir");
-        $this->_data_dir .= DS."PHPFrame";
+        $this->_data_dir    = PEAR_Config::singleton()->get("data_dir");
+        $this->_data_dir   .= DS."PHPFrame";
+        $this->_clitool_dir = $this->_data_dir.DS."CLI_Tool";
         
         $msg = "\nPHPFrame Post Installation Script";
         $msg .= "\n--------------------------------\n";
-        $msg .= "\nInstallation directory: ".$this->_install_dir."\n";
+        $msg .= "\nPHPFrame installation directory: ".$this->_install_dir."\n";
+        $msg .= "\nPHPFrame data directory: ".$this->_install_dir."\n";
+        $msg .= "\nPHPFrame CLI Tool directory: ".$this->_clitool_dir."\n";
         
         echo $msg;
         
@@ -95,16 +109,20 @@ class PHPFrame_Postinstall_postinstall
     /**
      * Run
      * 
-     * @param array  $infoArray    if $paramGroupId is _undoOnError, then $infoArray will 
-     *                             contain a list of successfully completed parameter group 
-     *                             sections. This can be used to restore any system changes 
-     *                             made by the installation script. Otherwise, $infoArray 
-     *                             contains the results of the user input from the most 
+     * @param array  $infoArray    if $paramGroupId is _undoOnError, then 
+     *                             $infoArray will contain a list of 
+     *                             successfully completed parameter group 
+     *                             sections. This can be used to restore any 
+     *                             system changes made by the installation 
+     *                             script. Otherwise, $infoArray contains the 
+     *                             results of the user input from the most 
      *                             recent <paramgroup> section.
-     * @param string $paramGroupId This variable either contains _undoOnError or the contents 
-     *                             of the most recent <paramgroup>'s <id> tag. Note that 
-     *                             paramgroup id cannot begin with an underscore (_), and 
-     *                             so _undoOnError can only be triggered by the PEAR installer.
+     * @param string $paramGroupId This variable either contains _undoOnError or 
+     *                             the contents of the most recent <paramgroup> 
+     *                             <id> tag. Note that paramgroup id cannot 
+     *                             begin with an underscore (_), and so 
+     *                             _undoOnError can only be triggered by the 
+     *                             PEAR installer.
      * 
      * @access public
      * @return void
@@ -117,46 +135,71 @@ class PHPFrame_Postinstall_postinstall
             return false;
         }
         
-        $log_path = $this->_data_dir;
-        if (!$this->_createLogFile($log_path)) {
-            $this->_output("Error creating log file...");
+        if (
+            !$this->_createLogFile($this->_data_dir)
+            || !$this->_createCLIToolEtc()
+            || !$this->_createCLIToolTmp()
+            || !$this->_createCLIToolVar()
+        ) {
             $this->_output("Installation failed...");
             return false;
         }
         
-        $cli_tool_tmp_path = $this->_data_dir.DS."CLI_Tool".DS."tmp";
-        if (!$this->_createLogFile($cli_tool_tmp_path)) {
+        // If we got here installation succeded
+        $this->_output("PHPFrame postinstall completed successfully...");
+        return true;
+    }
+    
+    private function _createCLIToolEtc()
+    {
+        $etc_dir = $this->_clitool_dir.DS."etc";
+        PHPFrame_Filesystem::ensureWritableDir($etc_dir);
+        
+        // Create empty config xml files
+        $cmd  = "touch ".$etc_dir.DS."acl.xml ";
+        $cmd .= $etc_dir.DS."lib.xml ".$etc_dir.DS."features.xml";
+        $exec = new PHPFrame_Exec($cmd);
+        $this->_output($exec->getOutput());
+        if ($exec->getReturnVar() > 0) {
+            $msg = "Failed to create empty config xml files in (";
+            $msg .= $etc_dir.")...";
+            $this->_output($msg);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private function _createCLIToolTmp()
+    {
+        $tmp_dir = $this->_clitool_dir.DS."tmp";
+        PHPFrame_Filesystem::ensureWritableDir($tmp_dir);
+        
+        if (!$this->_createLogFile($tmp_dir)) {
             $this->_output("Error creating log file for CLI tool...");
             $this->_output("Installation failed...");
             return false;
         }
         
         // Make tmp directory for CLI tool world writable
-        $cmd = "chmod 777 ".$cli_tool_tmp_path;
+        $cmd = "chmod 777 ".$tmp_dir;
         $exec = new PHPFrame_Exec($cmd);
         $this->_output($exec->getOutput());
         if ($exec->getReturnVar() > 0) {
             $msg = "Failed to make world writable var directory for CLI tool (";
-            $msg .= $cli_tool_tmp_path.")...";
+            $msg .= $tmp_dir.")...";
             $this->_output($msg);
             return false;
         }
         
-        // Create empty config xml files
-        $cli_tool_etc_path = $this->_data_dir.DS."CLI_Tool".DS."etc";
-        $cmd  = "touch ".$cli_tool_etc_path.DS."acl.xml ";
-        $cmd .= $cli_tool_etc_path.DS."lib.xml ".$cli_tool_etc_path.DS."features.xml";
-        $exec = new PHPFrame_Exec($cmd);
-        $this->_output($exec->getOutput());
-        if ($exec->getReturnVar() > 0) {
-            $msg = "Failed to create empty config xml files in (";
-            $msg .= $cli_tool_etc_path.")...";
-            $this->_output($msg);
-            return false;
-        }
+        return true;
+    }
+    
+    private function _createCLIToolVar()
+    {
+        $var_dir = $this->_clitool_dir.DS."var";
+        PHPFrame_Filesystem::ensureWritableDir($var_dir);
         
-        // If we got here installation succeded
-        $this->_output("PHPFrame postinstall completed successfully...");
         return true;
     }
     
@@ -171,22 +214,20 @@ class PHPFrame_Postinstall_postinstall
      */
     private function _createLogFile($path)
     {
-        PHPFrame_Filesystem::ensureWritableDir($path);
-        
-        $log_file = $path.DS."log";
-        $cmd = "touch ".$log_file;
+        $log  = $path.DS."log";
+        $cmd  = "touch ".$log;
         $exec = new PHPFrame_Exec($cmd);
         $this->_output($exec->getOutput());
         if ($exec->getReturnVar() > 0) {
-            $this->_output("Failed to touch new log file (".$log_file.")...");
+            $this->_output("Failed to touch new log file (".$log.")...");
             return false;
         }
         
-        $cmd = "chmod 666 ".$log_file;
+        $cmd  = "chmod 666 ".$log;
         $exec = new PHPFrame_Exec($cmd);
         $this->_output($exec->getOutput());
         if ($exec->getReturnVar() > 0) {
-            $this->_output("Failed to make log file writable (".$log_file.")...");
+            $this->_output("Failed to make log file writable (".$log.")...");
             return false;
         }
         

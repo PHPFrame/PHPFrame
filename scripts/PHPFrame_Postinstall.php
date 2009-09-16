@@ -192,6 +192,20 @@ class PHPFrame_Postinstall_postinstall
             return false;
         }
         
+        // Clear app cache if it exists
+        $app_reg_cache = $tmp_dir.DS."cache".DS."application.registry";
+        if (is_file($app_reg_cache)) {
+            $cmd = "rm ".$app_reg_cache;
+            $exec = new PHPFrame_Exec($cmd);
+            $this->_output($exec->getOutput());
+            if ($exec->getReturnVar() > 0) {
+                $msg = "Failed to clear cached application registry (";
+                $msg .= $app_reg_cache.")...";
+                $this->_output($msg);
+                return false;
+            }
+        }
+        
         return true;
     }
     

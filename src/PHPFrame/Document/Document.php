@@ -166,7 +166,7 @@ abstract class PHPFrame_Document
      * @return void
      * @since  1.0
      */
-    public function render(PHPFrame_View $view)
+    public function renderView(PHPFrame_View $view)
     {
         $str = "";
         

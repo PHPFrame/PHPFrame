@@ -42,18 +42,6 @@ class PHPFrame_View
      * @var array
      */
     protected $_data = array();
-    /**
-     * A pathway object for this view
-     * 
-     * @var PHPFrame_Pathway
-     */
-    protected $_pathway = null;
-    /**
-     * A reference to the document used to render this view
-     * 
-     * @var PHPFrame_Document
-     */
-    protected $_document = null;
     
     /**
      * Constructor
@@ -67,13 +55,6 @@ class PHPFrame_View
     public function __construct($name) 
     {
         $this->_name = trim((string) $name);
-        
-        // Acquire pathway object
-        $this->_pathway = new PHPFrame_Pathway();
-        
-        // Get reference to the document used to render the view
-        // This document is stored in the response object
-        $this->_document = PHPFrame::Response()->getDocument();
     }
     
     /**
@@ -116,30 +97,6 @@ class PHPFrame_View
     }
     
     /**
-     * Get the view's pathway object
-     * 
-     * @access public
-     * @return PHPFrame_Pathway
-     * @since  1.0
-     */
-    public function getPathway()
-    {
-        return $this->_pathway;
-    }
-    
-    /**
-     * Get the view's pathway object
-     * 
-     * @access public
-     * @return PHPFrame_Document
-     * @since  1.0
-     */
-    public function getDocument()
-    {
-        return $this->_document;
-    }
-    
-    /**
      * Display the view
      * 
      * This method loads the template layer of the view.
@@ -153,9 +110,6 @@ class PHPFrame_View
         // Set profiler milestone
         PHPFrame_Profiler::instance()->addMilestone();
         
-        // Delegate rendering to response object
-        // The response object will render the view object 
-        // depending on the document typ
-        PHPFrame::Response()->render($this);
+        $document = PHPFrame::Response()->getDocument()->renderView($this);
     }
 }

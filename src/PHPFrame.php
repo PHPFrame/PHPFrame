@@ -478,18 +478,26 @@ class PHPFrame
             return;
         }
         
-        if (!PHPFrame::Config()->get("db.enable")) {
-            $msg  = "Tried to mount DB persistence but it is not enabled in ";
-            $msg .= "etc/phpframe.ini";
-            throw new LogicException($msg);
-        }
-        
         if (self::$_run_level < 2) {
             self::Env();
         }
         
+        // Fall back to SQLite embedded db if no db enabled in etc/phpframe.ini
+        // Otherwise we pass a null dsn to use config settings
+        if (!PHPFrame::Config()->get("db.enable")) {
+            $msg  = "Tried to mount DB persistence but it is not enabled in ";
+            $msg .= "etc/phpframe.ini. Falling back to embedded SQLite3 ";
+            $msg .= "database";
+            $sysevents = PHPFrame::Session()->getSysevents();
+            $sysevents->append($msg, PHPFrame_Subject::EVENT_TYPE_NOTICE);
+            
+            $dsn = new PHPFrame_SQLiteDSN(PHPFRAME_VAR_DIR.DS."data.db");
+        } else {
+            $dsn = null;
+        }
+        
         // Initialise Database
-        $db = self::DB();
+        $db = self::DB($dsn);
         if ($db instanceof PHPFrame_Database) {
             // Set run level to 3 to indicate that 
             // persistance layer is mounted...

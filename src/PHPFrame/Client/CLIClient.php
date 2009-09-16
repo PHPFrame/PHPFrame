@@ -67,7 +67,7 @@ class PHPFrame_CLIClient implements PHPFrame_IClient
      * @return array  Unified Request Array
      * @since  1.0
      */
-    public function populateRequest() 
+    public function populateRequest(PHPFrame_RequestRegistry $request) 
     {
         // create the parser
         $parser = new Console_CommandLine(array(
@@ -155,8 +155,8 @@ class PHPFrame_CLIClient implements PHPFrame_IClient
             
             return array("request" => $request);
             
-        } catch (Exception $exc) {
-            $parser->displayError($exc->getMessage());
+        } catch (Exception $e) {
+            $parser->displayError($e->getMessage());
             exit;
         }
     }
@@ -189,7 +189,7 @@ class PHPFrame_CLIClient implements PHPFrame_IClient
         $session->setUser($user);
         
         // Automatically set session token in request so that forms will be allowed
-        PHPFrame::Request()->set($session->getToken(), 1);
+        PHPFrame::Request()->setParam($session->getToken(), 1);
         
         // Set document as response content
         $response->setDocument(new PHPFrame_PlainDocument());
@@ -210,7 +210,7 @@ class PHPFrame_CLIClient implements PHPFrame_IClient
             foreach ($params as $key=>$value) {
                 $_REQUEST[$key] = $value;
                 $_GET[$key] = $value;
-                PHPFrame::Request()->set($key, $value);
+                PHPFrame::Request()->setParam($key, $value);
             }
         }
         

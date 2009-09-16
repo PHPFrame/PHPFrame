@@ -65,7 +65,7 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
         return $str;
     }
     
-    public function render(PHPFrame_View $view)
+    public function renderView(PHPFrame_View $view)
     {
         parent::render($view);
         

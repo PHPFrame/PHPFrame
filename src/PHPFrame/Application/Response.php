@@ -14,7 +14,7 @@
  */
 
 /**
- * Response Class
+ * This class encapsulates an HTTP response
  * 
  * @category PHPFrame
  * @package  Application
@@ -25,6 +25,17 @@
  */
 class PHPFrame_Response
 {
+    const STATUS_OK                    = 200;
+    const STATUS_MOVED_PERMANENTLY     = 301;
+    const STATUS_FOUND                 = 302;
+    const STATUS_SEE_OTHER             = 303;
+    const STATUS_BAD_REQUEST           = 400;
+    const STATUS_UNAUTHORIZED          = 401;
+    const STATUS_FORBIDDEN             = 403;
+    const STATUS_NOT_FOUND             = 404;
+    const STATUS_INTERNAL_SERVER_ERROR = 500;
+    const STATUS_NOT_IMPLEMENTED       = 501;
+    
     /**
      * Instance of itself
      * 
@@ -32,38 +43,93 @@ class PHPFrame_Response
      */
     private static $_instance = null;
     /**
-     * HTTP Response code
+     * HTTP Response status code
      * 
      * @var int
      */
-    private $_code = null;
+    private $_code = self::STATUS_OK;
     /**
      * An array containing the raw headers
      * 
      * @var array
      */
-    private $_header = array();
+    private $_headers = array(
+        "X-Powered-By"=>null,
+        "Expires"=>null,
+        "Cache-Control"=>null,
+        "Pragma"=>null,
+        "Status"=>null,
+        "Content-Language"=>null,
+        "Content-Type"=>null
+    );
     /**
-     * The document object used by this response
+     * The document object used to render response
      * 
      * @var PHPFrame_Document
      */
     private $_document = null;
+    /**
+     * A pathway object for this view
+     * 
+     * @var PHPFrame_Pathway
+     */
+    private $_pathway = null;
     
     /**
      * Constructor
      * 
+     * @access private
      * @return void
+     * @since  1.0
      */
     private function __construct()
     {
-        // ...
+        foreach (headers_list() as $header) {
+            if (preg_match('/^([a-zA-Z-]+):(.*)$/', $header, $matches)) {
+                $this->setHeader($matches[1], trim($matches[2]));
+            }
+        }
+        
+        $this->setStatusCode(200);
+        
+        $x_powered_by  = $this->getHeader("X-Powered-By");
+        $x_powered_by .= " PHPFrame/".PHPFrame::RELEASE_VERSION;
+        $this->setHeader("X-Powered-By", $x_powered_by);
+        
+        $config = PHPFrame::Config();
+        $this->setHeader("Content-Language", $config->get("default_lang"));
+        
+        // Acquire pathway object
+        $this->_pathway = new PHPFrame_Pathway();
+    }
+    
+    /**
+     * Convert object to string
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function __toString()
+    {
+        $str = "";
+        
+        foreach ($this->getHeaders() as $key=>$value) {
+            $str .= ucwords($key).": ".$value."\n";
+        }
+        
+        $str .= "\n".$this->getBody();
+        
+        return $str;
     }
     
     /**
      * Get instance
      * 
+     * @static
+     * @access public
      * @return PHPFrame_Response
+     * @since  1.0
      */
     public static function getInstance()
     {
@@ -75,21 +141,70 @@ class PHPFrame_Response
     }
     
     /**
-     * Set response content.
+     * Set the HTTP response status code
      * 
-     * @param PHPFrame_Document $document
+     * @param int $int The status code
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setDocument(PHPFrame_Document $document) 
+    public function setStatusCode($int)
     {
-        $this->_document = $document;
+        $array = array(200, 301, 302, 303, 400, 401, 403, 404, 500, 501);
+        
+        if (!in_array($int, $array)) {
+            $msg  = "HTTP response status code not valid. Valid codes are: ";
+            $msg .= "'".implode("','", $array)."'.";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $this->_code = $int;
+        
+        $this->setHeader("Status", $this->_code);
+    }
+    
+    public function getHeaders()
+    {
+        return $this->_headers;
+    }
+    
+    public function getHeader($key)
+    {
+        if (!isset($this->_headers[$key])) {
+            return null;
+        }
+        
+        return $this->_headers[$key];
     }
     
     /**
-     * Get response content
+     * Set header line
+     * 
+     * @param string $key   The header key
+     * @param string $value The header value
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setHeader($key, $value) 
+    {
+        $this->_headers[$key] = $value;
+    }
+    
+    public function getBody()
+    {
+        return (string) $this->getDocument();
+    }
+    
+    public function appendBody($str)
+    {
+        
+    }
+    
+    /**
+     * Get the document object used as the response body
      * 
      * @access public
      * @return PHPFrame_Document
@@ -101,133 +216,48 @@ class PHPFrame_Response
     }
     
     /**
-     * Set header line
+     * Set the document object used as the response body
      * 
-     * @param string $line The header line
+     * @param PHPFrame_Document $document
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setHeader($line) 
+    public function setDocument(PHPFrame_Document $document) 
     {
-        $this->_header[] = $line;
+        $this->_document = $document;
+        
+        $this->setHeader("Content-Type", $this->_document->getMimeType());
     }
     
     /**
-     * Set the document title held by this response.
-     * 
-     * @param string $str The title string
+     * Get the view's pathway object
      * 
      * @access public
-     * @return void
+     * @return PHPFrame_Pathway
      * @since  1.0
      */
-    public function setTitle($str)
+    public function getPathway()
     {
-        $this->_document->setTitle($str);
+        return $this->_pathway;
     }
-    
-    /**
-     * Append string to the document title
-     * 
-     * @param string $str The string to append.
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function appendTitle($str)
-    {
-        $this->_document->appendTitle($str);
-    }
-    
-    /**
-     * Render view and store in document's body
-     * 
-     * This method is invoked by the views and renders the ouput data in the
-     * document specific format.
-     * 
-     * @param PHPFrame_View $view The view object to process.
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-     public function render(PHPFrame_View $view)
-     {
-         PHPFrame_Profiler::instance()->addMilestone();
-         
-         $tmpl = PHPFrame::Request()->get("tmpl", "");
-         if ($tmpl == "component") {
-             $apply_theme = false;
-         } else {
-             $apply_theme = true;
-         }
-         
-         $this->_document->render($view, $apply_theme);
-         
-         $this->send($apply_theme);
-     }
      
     /**
-     * Send response back to client
-     * 
-     * @param bool $apply_theme Boolean to insicate whether we want to apply the overall 
-     *                          theme or not.
+     * Send HTTP response to client
      *                                       
      * @access public
      * @return void
      * @since  1.0
      */
-    public function send($apply_theme=true) 
+    public function send() 
     {
-        foreach ($this->_header as $line) {
+        // Send headers
+        foreach ($this->_headers as $line) {
             header($line);
         }
         
         // Print response content (the document object)
-        if ($apply_theme) {
-            echo $this->_document;
-        } else {
-            echo $this->_document->getBody();    
-        }
-        
-        // Handle profiler
-        $profiler_enable  = PHPFrame::Config()->get("debug.profiler_enable");
-        $profiler_display = PHPFrame::Config()->get("debug.profiler_display");
-        $profiler_outdir  = PHPFrame::Config()->get("debug.profiler_outdir");
-        
-        if ($profiler_enable) {
-            $profiler = PHPFrame_Profiler::instance();
-            
-            // Add final milestone
-            $profiler->addMilestone();
-            
-            // Get profiler output by casting object to string
-            $profiler_out = (string) $profiler;
-            
-            // Display output if set in config
-            if ($profiler_display) {
-                if (PHPFrame::Session()->getClientName() != "cli") {
-                    echo "<pre>";
-                }
-                
-                // Display output
-                echo "Profiler Output:\n\n";
-                echo $profiler_out;
-            }
-            
-            // Dump profiler output to file is outdir is specified in config
-            if (!empty($profiler_outdir)) {
-                $profiler_outfile = $profiler_outdir.DS.time().".ppo";
-                $file_obj = new PHPFrame_FileObject($profiler_outfile, "w");
-                $file_obj->fwrite($profiler_out);
-            }
-        }
-        
-        // Exit setting status to 0, 
-        // which indicates that program terminated successfully 
-        exit(0);
+        echo $this->getBody();
     }
 }

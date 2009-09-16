@@ -43,17 +43,11 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
      */
     private static $_instance = null;
     /**
-     * Path to the cache directory in filesystem
+     * PHPFrame_FileObject object representing the cache file on disk
      * 
-     * @var string
+     * @var PHPFrame_FileObject
      */
-    private $_path = null;
-    /**
-     * Path to the cache file name in filesystem
-     * 
-     * @var string
-     */
-    private $_cache_file = null;
+    private $_file_obj = null;
     /**
      * Array containing keys that should be treated as readonly as far as client
      * code is concerned
@@ -105,17 +99,18 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
             throw new LogicException($msg);
         }
         
-        $path = PHPFRAME_TMP_DIR.DS."cache";
-        
-        // Set path to cache file
-        $this->_path       = $path;
-        $this->_cache_file = "application.registry";
+        $cache_file = PHPFRAME_TMP_DIR.DS."cache".DS."application.registry";
         
         // Read data from cache
-        if (is_file($this->getFilePath())) {
-            $serialized_array = file_get_contents($this->getFilePath());
-            $this->_data      = unserialize($serialized_array);
+        if (is_file($cache_file)) {
+            // Open cache file in read/write mode
+            $this->_file_obj = new PHPFrame_FileObject($cache_file, "r+");
+            // Load data from cache file
+            $this->_data = unserialize($this->_file_obj->getFileContents());
         } else {
+            // Open cache file in write mode
+            $this->_file_obj = new PHPFrame_FileObject($cache_file, "w");
+            
             // Rebuild app registry
             $this->set("permissions", new PHPFrame_Permissions());
             $this->set("libraries", new PHPFrame_Libraries());
@@ -138,24 +133,8 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
     public function __destruct()
     {
         if ($this->isDirty()) {
-            try {
-                // Write data to file
-                $this->_writeToFile();
-            } catch (Exception $e) {
-                trigger_error($e->getMessage());
-                exit;
-            }
+            $this->_file_obj->fwrite(serialize($this->_data));
         }
-    }
-    
-    public function __sleep()
-    {
-        $this->_dirty = null;
-    }
-    
-    public function __wakeup()
-    {
-        $this->_dirty = false;
     }
     
     /**
@@ -163,7 +142,7 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
      * 
      * @static
      * @access public
-     * @return PHPFrame_Registry
+     * @return PHPFrame_AppRegistry
      * @since  1.0
      */
     public static function getInstance() 
@@ -173,6 +152,18 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
         }
         
         return self::$_instance;
+    }
+    
+    /**
+     * Implementation of IteratorAggregate interface
+     * 
+     * @access public
+     * @return ArrayIterator
+     * @since  1.0
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->_data);
     }
     
     /**
@@ -225,18 +216,6 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
         
         // Mark data as dirty
         $this->markDirty();
-    }
-    
-    /**
-     * Get full path to cache file
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function getFilePath()
-    {
-        return $this->_path.DS.$this->_cache_file;
     }
     
     /**
@@ -309,22 +288,5 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
     public function isDirty()
     {
         return $this->_dirty;
-    }
-    
-    /**
-     * Write application registry to file
-     * 
-     * @access private
-     * @return void
-     * @since  1.0
-     */
-    private function _writeToFile()
-    {
-        // Ensure that cache dir is writable
-        PHPFrame_Filesystem::ensureWritableDir($this->_path);
-        
-        // Store data in cache file
-        $data = serialize($this->_data);
-        PHPFrame_Filesystem::write($this->getFilePath(), $data);
     }
 }

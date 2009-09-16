@@ -356,7 +356,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
                 $default_value = null;
             }
             
-            $request_param = PHPFrame::Request()->get(
+            $request_param = PHPFrame::Request()->getParam(
                 $param->getName(), 
                 $default_value
             );

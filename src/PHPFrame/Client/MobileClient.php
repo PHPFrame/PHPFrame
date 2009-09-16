@@ -82,7 +82,7 @@ class PHPFrame_MobileClient implements PHPFrame_IClient
      * @access    public
      * @return    array    Unified Request Array
      */
-    public function populateRequest() 
+    public function populateRequest(PHPFrame_RequestRegistry $request) 
     {
     
         $request = array();

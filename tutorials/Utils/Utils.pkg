@@ -53,7 +53,7 @@
         
         <listitem>
         <para>
-        {@link PHPFrame_Image}
+        {@link PHPFrame_ImageProcessor}
         </para>
         </listitem>
         

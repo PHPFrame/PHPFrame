@@ -183,6 +183,11 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
         return self::$_instance;
     }
+    
+    public function getIterator()
+    {
+        return new ArrayIterator($_SESSION);
+    }
 
     /**
      * Get a session variable
@@ -448,7 +453,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     public function checkToken()
     {
-        $request_token = PHPFrame::Request()->get($this->getToken(), '');
+        $request_token = PHPFrame::Request()->getParam($this->getToken(), '');
 
         if ($request_token == 1) {
             return true;

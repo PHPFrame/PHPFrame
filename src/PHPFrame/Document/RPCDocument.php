@@ -73,7 +73,7 @@ class PHPFrame_RPCDocument extends PHPFrame_XMLDocument
      * @since  1.0
      * @todo   It is very important to check path used for require_once call for security.
      */
-    public function render(PHPFrame_View $view, $apply_theme=null) 
+    public function renderView(PHPFrame_View $view, $apply_theme=null) 
     {
         $events = PHPFrame::Session()->getSysevents()->asArray();
         

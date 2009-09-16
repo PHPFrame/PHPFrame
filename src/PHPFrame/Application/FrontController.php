@@ -59,11 +59,16 @@ class PHPFrame_FrontController
             }
         }
         
-        // Invoke route startup hook
+        // Invoke route startup hook before request object is initialised
         $this->_plugin_handler->handle("routeStartup");
         
         // Initialise request
         $request = PHPFrame::Request();
+        
+        // Get instance of client from session
+        $client = PHPFrame::Session()->getClient();
+        // Prepare response using client
+        $client->prepareResponse(PHPFrame::Response());
         
         // Invoke route shutdown hook
         $this->_plugin_handler->handle("routeShutdown");
@@ -85,26 +90,33 @@ class PHPFrame_FrontController
      */
     public function run() 
     {
-        // Get instance of client from session
-        $client = PHPFrame::Session()->getClient();
-        // Prepare response using client
-        $client->prepareResponse(PHPFrame::Response());
-        
         /**
          * Register MVC autoload function
          */
         spl_autoload_register(array("PHPFrame_MVCFactory", "__autoload"));
         
+        // Invoke dispatchLoopStartup hook
         $this->_plugin_handler->handle("dispatchLoopStartup");
         
-        $dispatched = false;
+        $request = PHPFrame::Request();
+        //print_r(PHPFrame::Request()); exit;
         
-        while (!$dispatched) {
+        while (!$request->isDispatched()) {
+            // Set request as dispatched
+            $request->setDispatched(true);
+            
+            // Invoke preDispatch hook for every iteration of the dispatch loop
             $this->_plugin_handler->handle("preDispatch");
             
+            // If any plugin set dispatched to false we start a new iteration
+            if (!$request->isDispatched()) {
+                $request->setDispatched(true);
+                continue;
+            }
+            
             // Get requested controller name
-            $controller_name = PHPFrame::Request()->getControllerName();
-    
+            $controller_name = $request->getControllerName();
+            
             // Create the action controller
             $controller = PHPFrame_MVCFactory::getActionController($controller_name);
             
@@ -114,9 +126,62 @@ class PHPFrame_FrontController
             // Execute the action in the given controller
             $controller->execute();
             
+            // Invoke postDispatch hook for every iteration of the dispatch loop
             $this->_plugin_handler->handle("postDispatch");
         }
         
+        // Invoke dispatchLoopShutdown hook
         $this->_plugin_handler->handle("dispatchLoopShutdown");
+        
+        $response = PHPFrame::Response();
+        
+        // If not in quiet mode, send response back to the client
+        if (!$request->isQuiet()) {
+            PHPFrame::Response()->send();
+        }
+        
+        // If outfile is defined we write the response to file
+        $outfile = $request->getOutfile();
+        if (!empty($outfile)) {
+            $file_obj = new PHPFrame_FileObject($outfile, "w");
+            $file_obj->fwrite((string) PHPFrame::Response());
+        }
+        
+        // Handle profiler
+        $profiler_enable  = PHPFrame::Config()->get("debug.profiler_enable");
+        $profiler_display = PHPFrame::Config()->get("debug.profiler_display");
+        $profiler_outdir  = PHPFrame::Config()->get("debug.profiler_outdir");
+        
+        if ($profiler_enable) {
+            $profiler = PHPFrame_Profiler::instance();
+            
+            // Add final milestone
+            $profiler->addMilestone();
+            
+            // Get profiler output by casting object to string
+            $profiler_out = (string) $profiler;
+            
+            // Display output if set in config
+            if ($profiler_display) {
+                if (PHPFrame::Session()->getClientName() != "cli") {
+                    echo "<pre>";
+                }
+                
+                // Display output
+                echo "Profiler Output:\n\n";
+                echo $profiler_out;
+            }
+            
+            // Dump profiler output to file is outdir is specified in config
+            if (!empty($profiler_outdir)) {
+                $profiler_outfile = $profiler_outdir.DS.time().".ppo";
+                $file_obj = new PHPFrame_FileObject($profiler_outfile, "w");
+                $file_obj->fwrite($profiler_out);
+            }
+        }
+        
+        // Exit setting status to 0, 
+        // which indicates that program terminated successfully
+        exit(0);
     }
 }

@@ -35,6 +35,7 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
      */
     public function routeStartup() 
     {
+        
         // If there is no request uri (ie: we are on the command line) we do not rewrite
         if (!isset($_SERVER['REQUEST_URI'])) {
             return;
@@ -56,8 +57,6 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
                 // If app is in web root we simply remove preceding slash
                 $params = substr($_SERVER['REQUEST_URI'], 1);
             }
-            
-            //preg_match('/^([a-zA-Z]+)\/?([a-zA-Z_]+)?\/?.*$/', $params, $matches);
             
             // Get component name using regex
             preg_match('/^([a-zA-Z]+)/', $params, $controller_matches);

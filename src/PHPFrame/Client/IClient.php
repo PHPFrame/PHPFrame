@@ -63,7 +63,7 @@ interface PHPFrame_IClient
      * @return array  Unified Request Array
      * @since  1.0
      */
-    public function populateRequest();
+    public function populateRequest(PHPFrame_RequestRegistry $request);
     
     /**
      * Prepare response

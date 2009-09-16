@@ -14,10 +14,11 @@
  */
 
 /**
- * This class encapsulates access to the request arrays and provides input filtering.
+ * This class encapsulates access to the request arrays and provides input 
+ * filtering.
  * 
- * The request class is responsible for processing the incoming request according to 
- * the current session's client.
+ * The request class is responsible for processing the incoming request 
+ * according to the current session's client.
  * 
  * The request object is accessed from the PHPFrame facade class as follows:
  * 
@@ -56,7 +57,28 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
      * 
      * @var array
      */
-    private $_array = array();
+    private $_array = array(
+        "controller"=>null,
+        "action"=>null,
+        "params"=>array(),
+        "headers"=>array(),
+        "remote_addr"=>null,
+        "method"=>null,
+        "query_string"=>null,
+        "request_uri"=>null,
+        "script_name"=>null,
+        "request_time"=>null,
+        "files"=>array(),
+        "outfile"=>null,
+        "quiet"=>false,
+        "ajax"=>false
+    );
+    /**
+     * Flag indicating whether the request has been dispatched
+     * 
+     * @var bool
+     */
+    private $_dispatched = false;
     
     /**
      * Constructor
@@ -75,12 +97,23 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
         // Note that we dont use PHPFrame::Session() as the globale
         // run level might not yet have been set to 2 (env initialised)
         $session = PHPFrame_SessionRegistry::getInstance();
-        $this->_array = $session->getClient()->populateRequest();
+        $session->getClient()->populateRequest($this);
         
-        //add other globals
-        $this->_array['files']  = $_FILES;
-        $this->_array['env']    = $_ENV;
-        $this->_array['server'] = $_SERVER;
+        // If no controller has been set we use de default value provided in 
+        // etc/phpframe.ini
+        if (
+            !isset($this->_array['controller']) 
+            || empty($this->_array['controller'])
+        )
+        {
+            $def_controller = PHPFrame::Config()->get("default_controller");
+            $this->setControllerName($def_controller);
+        }
+    }
+    
+    public function __toString()
+    {
+        return print_r($this, true);
     }
     
     /**
@@ -100,79 +133,9 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
         return self::$_instance;
     }
     
-    /**
-     * Get a request variable
-     * 
-     * @param string $key
-     * @param mixed  $default_value
-     * 
-     * @access public
-     * @return mixed
-     * @since  1.0
-     */
-    public function get($key, $default_value=null) 
+    public function getIterator()
     {
-        if (!isset($this->_array['request'][$key]) && !is_null($default_value)) {
-            $this->_array['request'][$key] = $default_value;
-        }
-        
-        // Return null if index is not defined
-        if (!isset($this->_array['request'][$key])) {
-            return null;
-        }
-        
-        return $this->_array['request'][$key];
-    }
-    
-    /**
-     * Set a request variable
-     * 
-     * @param string $key
-     * @param mixed  $value
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function set($key, $value) 
-    {
-        $this->_array['request'][$key] = self::$_inputfilter->process($value);
-    }
-    
-    /**
-     * Get request headers
-     * 
-     * @access public
-     * @return array
-     * @since  1.0
-     */
-    public function getHeaders()
-    {
-        $headers = array();
-        
-        if (isset($this->_array['server']) && is_array($this->_array['server'])) {
-            foreach ($this->_array['server'] as $k => $v) {
-                if (substr($k, 0, 5) == "HTTP_") {
-                    $k = str_replace('_', ' ', substr($k, 5));
-                    $k = str_replace(' ', '-', ucwords(strtolower($k)));
-                    $headers[$k] = $v;
-                }
-            }
-        }
-        
-        return $headers;
-    }
-    
-    /**
-     * Get request/post array from URA
-     * 
-     * @access public
-     * @return array
-     * @since  1.0
-     */
-    public function getPost() 
-    {
-        return $this->_array['request'];
+        return new ArrayIterator($this->_array);
     }
     
     /**
@@ -184,12 +147,7 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
      */
     public function getControllerName() 
     {
-        // If controller has not been set we return the default value
-        if (empty($this->_array['request']['controller'])) {
-            $this->_array['request']['controller'] = PHPFrame::Config()->get("default_controller");
-        }
-        
-        return $this->_array['request']['controller'];
+        return $this->_array['controller'];
     }
     
     /**
@@ -203,7 +161,7 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
      */
     public function setControllerName($value) 
     {
-        $this->set('controller', $value);
+        $this->_array['controller'] = $value;
     }
     
     /**
@@ -215,7 +173,7 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
      */
     public function getAction() 
     {   
-        return $this->get('action');
+        return $this->_array['action'];
     }
     
     /**
@@ -230,7 +188,200 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
     public function setAction($value) 
     {
         // Filter value before assigning to variable
-        $this->_array['request']['action'] = self::$_inputfilter->process($value);
+        $this->_array['action'] = self::$_inputfilter->process($value);
+    }
+    
+    /**
+     * Get request/post array
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getParams() 
+    {
+        return $this->_array['params'];
+    }
+    
+    /**
+     * Get a request variable
+     * 
+     * @param string $key
+     * @param mixed  $def_value
+     * 
+     * @access public
+     * @return mixed
+     * @since  1.0
+     */
+    public function getParam($key, $def_value=null) 
+    {
+        if (!isset($this->_array['params'][$key]) && !is_null($def_value)) {
+            $this->_array['params'][$key] = $def_value;
+        }
+        
+        // Return null if index is not defined
+        if (!isset($this->_array['params'][$key])) {
+            return null;
+        }
+        
+        return $this->_array['params'][$key];
+    }
+    
+    /**
+     * Set a request variable
+     * 
+     * @param string $key
+     * @param mixed  $value
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setParam($key, $value) 
+    {
+        $this->_array['params'][$key] = self::$_inputfilter->process($value);
+    }
+    
+    /**
+     * Get request headers
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getHeaders()
+    {
+        return $this->_array["headers"];
+    }
+    
+    public function setHeader($key, $value)
+    {
+        $this->_array["headers"][$key] = $value;
+    }
+    
+    public function getMethod()
+    {
+        return $this->_array['method'];
+    }
+    
+    public function setMethod($str)
+    {
+        $this->_array['method'] = $str;
+    }
+    
+    public function isPost()
+    {
+        return ($this->_array['method'] == "POST");
+    }
+    
+    public function isGet()
+    {
+        return ($this->_array['method'] == "GET");
+    }
+    
+    public function attachFile($key, array $array)
+    {
+        $this->_array["files"][$key] = $array;
+    }
+    
+    public function dettachFile($key)
+    {
+        unset($this->_array["files"][$key]);
+    }
+    
+    public function getFiles()
+    {
+        return $this->_array["files"];
+    }
+    
+    public function getRemoteAddr()
+    {
+        return $this->_array["remote_addr"];
+    }
+    
+    public function setRemoteAddr($str)
+    {
+        $this->_array["remote_addr"] = $str;
+    }
+    
+    public function getRequestURI()
+    {
+        return $this->_array["request_uri"];
+    }
+    
+    public function setRequestURI($str)
+    {
+        $this->_array["request_uri"] = $str;
+    }
+    
+    public function getScriptName()
+    {
+        return $this->_array["script_name"];
+    }
+    
+    public function setScriptName($str)
+    {
+        $this->_array["script_name"] = $str;
+    }
+    
+    public function getQueryString()
+    {
+        return $this->_array["query_string"];
+    }
+    
+    public function setQueryString($str)
+    {
+        $this->_array["query_string"] = $str;
+    }
+    
+    public function getRequestTime()
+    {
+        return $this->_array["request_time"];
+    }
+    
+    public function setRequestTime($str)
+    {
+        $this->_array["request_time"] = $str;
+    }
+    
+    public function getOutfile()
+    {
+        return $this->_array["outfile"];
+    }
+    
+    public function setOutfile($str)
+    {
+         $this->_array["outfile"] = $str;
+    }
+    
+    public function isQuiet()
+    {
+        return $this->_array["quiet"];
+    }
+    
+    public function setQuiet($bool)
+    {
+        $this->_array["quiet"] = (bool) $bool;
+    }
+    
+    public function isAJAX()
+    {
+        return $this->_array["ajax"];
+    }
+    
+    public function setAJAX($bool)
+    {
+        $this->_array["ajax"] = (bool) $bool;
+    }
+    
+    public function isDispatched()
+    {
+        return $this->_dispatched;
+    }
+    
+    public function setDispatched($bool)
+    {
+        $this->_dispatched = (bool) $bool;
     }
     
     /**
@@ -242,6 +393,7 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
      */
     public function destroy() 
     {
-        $this->_array = array();
+        $this->_array      = array();
+        $this->_dispatched = false;
     }
 }

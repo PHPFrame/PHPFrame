@@ -32,15 +32,12 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      * @var string
      */
     protected $qualified_name = "html";
-    /**
-     * Pathway object
-     * 
-     * @var PHPFrame_Pathway
-     */
-    private $_pathway = null;
     
     /**
      * Constructor
+     * 
+     * @param string $mime    [Optional]
+     * @param string $charset [Optional]
      * 
      * @access public
      * @return void
@@ -54,9 +51,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         
         // Acquire DOM object of HTML type
         $imp = new DOMImplementation;
-        $this->dom = $imp->createDocument(null, 
-                                           $this->qualified_name, 
-                                           $this->getDocType()); 
+        $this->dom = $imp->createDocument(
+            null,
+            $this->qualified_name,
+            $this->getDocType()
+        ); 
         
         // Get root node
         $html_node = $this->dom->getElementsByTagName("html")->item(0);
@@ -68,7 +67,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         
         // Add meta tags
         $this->addMetaTag("generator", "PHPFrame");
-        $this->addMetaTag(null, $this->mime_type."; charset=".$this->charset, "Content-Type");
+        $this->addMetaTag(
+            null, 
+            $this->mime_type."; charset=".$this->charset,
+            "Content-Type"
+        );
         
         // Add base url
         $uri = new PHPFrame_URI();
@@ -87,6 +90,10 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     public function __toString()
     {
+        if (!PHPFrame::Request()->isAJAX()) {
+            $this->_applyTheme();
+        }
+        
         // Add title tag in head node 
         $head_node = $this->dom->getElementsByTagName("head")->item(0);
         $this->addNode($head_node, "title", null, $this->getTitle());
@@ -100,11 +107,29 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         return $html;
     }
     
+    /**
+     * Set the HTML body
+     * 
+     * @param sring $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function setBody($str)
     {
         $this->body = (string) $str;
     }
     
+    /**
+     * Get the HTML body
+     * 
+     * @param sring $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function getBody()
     {
         return $this->body;
@@ -113,19 +138,13 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Render view and store in document's body
      * 
-     * This method is invoked by the views and renders the ouput data in the
-     * document specific format.
-     * 
-     * @param PHPFrame_View $view        The view object to process.
-     * @param bool              $apply_theme Boolean to insicate whether we want to apply 
-     *                                       the overall theme or not.
+     * @param PHPFrame_View $view The view object to process.
      * 
      * @access public
      * @return void
      * @since  1.0
-     * @todo It is very important to check path used for require_once call for security.
      */
-    public function render(PHPFrame_View $view, $apply_theme=true) 
+    public function renderView(PHPFrame_View $view) 
     {
         $tmpl_path = PHPFRAME_INSTALL_DIR.DS."src";
         $tmpl_path .= DS."views".DS.$view->getName().".php";
@@ -144,18 +163,17 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         } else {
             throw new RuntimeException("Layout template file ".$tmpl_path." not found.");
         }
-        
-        if ($apply_theme) {
-            $this->_applyTheme($view);
-        } else {
-            // we dont need to wrap the controller output in the overall template
-            // so we just prepend the sytem events and return
-            $sys_events = $this->renderPartial('sysevents');
-            $this->body = $sys_events.$this->body;
-            return;
-        }
     }
     
+    /**
+     * Render a partial view
+     * 
+     * @param string $name
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function renderPartial($name)
     {
         $name = (string) trim($name);
@@ -256,8 +274,8 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Render HTML filter for collections
      * 
-     * This method builds an HTML string with UI filtering elements to be used with
-     * row collection objects.
+     * This method builds an HTML string with UI filtering elements to be used 
+     * with row collection objects.
      * 
      * @param PHPFrame_Collection $collection
      * 
@@ -307,7 +325,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
                   </script>';
         
         $html .= '<form action="index.php" id="listsearchform" name="listsearchform" method="post">';
-        $html .= '<input type="text" name="search" id="search" value="'.PHPFrame::Request()->get('search').'">';
+        $html .= '<input type="text" name="search" id="search" value="'.PHPFrame::Request()->getParam('search').'">';
         $html .= '<button type="button" class="button" onclick="submit_filter(false);">Search</button>';
         $html .= '<button type="button" class="button" onclick="submit_filter(true);">Reset</button>';
         $html .= '<input type="hidden" name="component" value="'.PHPFrame::Request()->getControllerName().'" />';
@@ -412,9 +430,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
             $publicId = "-//W3C//DTD HTML 4.01//EN";
             $systemId = "http://www.w3.org/TR/html4/strict.dtd";
             $imp = new DOMImplementation;
-            $this->doctype = $imp->createDocumentType($this->qualified_name, 
-                                                                    $publicId, 
-                                                                    $systemId);
+            $this->doctype = $imp->createDocumentType(
+                $this->qualified_name,
+                $publicId,
+                $systemId
+            );
         }
         
         return $this->doctype;
@@ -424,21 +444,23 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      * Add meta tag
      * 
      * @param string $name       This attribute identifies a property name. This 
-     *                           specification does not list legal values for this 
-     *                           attribute.
-     * @param string $content    This attribute specifies a property's value. This 
-     *                           specification does not list legal values for this 
-     *                           attribute.
-     * @param string $http_equiv This attribute may be used in place of the name attribute. 
-     *                           HTTP servers use this attribute to gather information for 
-     *                           HTTP response message headers.
+     *                           specification does not list legal values for  
+     *                           this attribute.
+     * @param string $content    This attribute specifies a property's value.  
+     *                           This specification does not list legal values 
+     *                           for this attribute.
+     * @param string $http_equiv This attribute may be used in place of the name 
+     *                           attribute. HTTP servers use this attribute to 
+     *                           gather information for HTTP response message 
+     *                           headers.
      * 
+     * @access public
      * @return void
      * @since  1.0
      * @todo   This method should check whether the meta tag has already been 
      *         added to avoid printing the same meta tag twice.
      */
-    function addMetaTag($name, $content, $http_equiv=null) 
+    public function addMetaTag($name, $content, $http_equiv=null) 
     {
         // Get head node
         $head_node = $this->dom->getElementsByTagName("head")->item(0);
@@ -466,12 +488,13 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      * @param string $src  The relative or absolute URL to the script source.
      * @param string $type The script type. Default is text/javascript.
      * 
+     * @access public
      * @return void
      * @since  1.0
      * @todo   This method should check whether the script has already been 
      *         added to avoid loading the same script twice.
      */
-    function addScript($src, $type='text/javascript') 
+    public function addScript($src, $type='text/javascript') 
     {
         // Make source absolute URL
         $this->_makeAbsolute($src);
@@ -509,19 +532,17 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Apply theme
      * 
-     * @param PHPFrame_View $view The view object to process.
-     * 
      * @access private
      * @return void
      * @since  1.0
      */
-    private function _applyTheme(PHPFrame_View $view) 
+    private function _applyTheme() 
     {
         // Add theme stylesheets
         $this->addStyleSheet("themes/".PHPFrame::Config()->get("theme")."/css/styles.css");
         
         // make pathway available in local scope
-        $pathway = $view->getPathway();
+        $pathway = PHPFrame::Response()->getPathway();
         
         $component_output = $this->body;
         
@@ -529,8 +550,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $controller = PHPFrame::Request()->getControllerName();
         if ($controller == "login") {
             $template_filename = 'login.php';
-        }
-        else {
+        } else {
             $template_filename = 'index.php';
         }
         

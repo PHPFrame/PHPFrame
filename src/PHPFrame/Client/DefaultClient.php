@@ -59,23 +59,58 @@ class PHPFrame_DefaultClient implements PHPFrame_IClient
      * @access public
      * @return array  Unified Request Array
      */
-    public function populateRequest() 
+    public function populateRequest(PHPFrame_RequestRegistry $request) 
     {
-        $request = array();
-        
         // Get an instance of PHP Input filter
         $inputfilter = new InputFilter();
             
         // Process incoming request arrays and store filtered data in class
-        $request['request'] = $inputfilter->process($_REQUEST);
-        $request['get']     = $inputfilter->process($_GET);
-        $request['post']    = $inputfilter->process($_POST);
-            
+        $filtered_request = $inputfilter->process($_REQUEST);
+        
+        // Populate request params
+        foreach ($filtered_request as $key=>$value) {
+            if ($key == "controller") {
+                $request->setControllerName($value);
+            } elseif ($key == "action") {
+                $request->setAction($value);
+            } elseif ($key == "ajax") {
+                $request->setAJAX($value);
+            } else {
+                $request->setParam($key, $value);
+            }
+        }
+        
+        foreach ($_SERVER as $key=>$value) {
+            if (substr($key, 0, 5) == "HTTP_") {
+                $key = str_replace('_', ' ', substr($key, 5));
+                $key = str_replace(' ', '-', ucwords(strtolower($key)));
+                $request->setHeader($key, $value);
+            } elseif ($key == "REQUEST_METHOD") {
+                $request->setMethod($value);
+            } elseif ($key == "REMOTE_ADDR") {
+                $request->setRemoteAddr($value);
+            } elseif ($key == "REQUEST_URI") {
+                $request->setRequestURI($value);
+            } elseif ($key == "SCRIPT_NAME") {
+                $request->setScriptName($value);
+            } elseif ($key == "QUERY_STRING") {
+                $request->setQueryString($value);
+            } elseif ($key == "REQUEST_TIME") {
+                $request->setRequestTime($value);
+            }
+        }
+        
+        foreach ($_FILES as $key=>$value) {
+            if (is_array($value) && !empty($value["name"])) {
+                $request->attachFile($key, $value);
+            }
+        }
+        
         // Once the superglobal request arrays are processed we unset them
         // to prevent them being used from here on
-        unset($_REQUEST, $_GET, $_POST);
+        unset($_REQUEST, $_GET, $_POST, $_SERVER, $_FILES);
         
-        return $request;
+        return;
     }
     
     /**

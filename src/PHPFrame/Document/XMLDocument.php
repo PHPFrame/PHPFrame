@@ -181,7 +181,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      * @return void
      * @since  1.0
      */
-    public function render(PHPFrame_View $view){}
+    public function renderView(PHPFrame_View $view){}
     
     /**
      * Method used to render Row Collections in this document

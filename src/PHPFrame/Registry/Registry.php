@@ -24,7 +24,7 @@
  * @since    1.0
  * @abstract
  */
-abstract class PHPFrame_Registry
+abstract class PHPFrame_Registry implements IteratorAggregate
 {
     /**
      * Constructor
@@ -34,28 +34,4 @@ abstract class PHPFrame_Registry
      * @since  1.0
      */
     abstract protected function __construct();
-    
-    /**
-     * Get a registry variable
-     * 
-     * @param string $key
-     * @param mixed  $default_value
-     * 
-     * @access public
-     * @return mixed
-     * @since  1.0
-     */
-    abstract public function get($key, $default_value=null);
-    
-    /**
-     * Set a registry variable
-     * 
-     * @param string $key
-     * @param mixed  $value
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    abstract public function set($key, $value);
 }

@@ -57,32 +57,34 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
         $str = "";
         
         if ($this->title) {
-            $str .= $this->title."\n\n";
+            $str .= $this->title."\n";
         }
         
-        $str .= $this->body;
+        $sysevents = (string) PHPFrame::Session()->getSysevents();
+        if (!empty($sysevents)) {
+            $str .= "\n".$sysevents."\n";
+        }
+        
+        $str .= "\n".$this->body;
         
         return $str;
     }
     
     public function renderView(PHPFrame_View $view)
     {
-        parent::render($view);
-        
-        $sysevents   = PHPFrame::Session()->getSysevents();
-        $this->body  = (string) $sysevents."\n\n".$this->body;
+        parent::renderView($view);
     }
     
     /**
-     * Method used to render Row Collections in this document
+     * Method used to render Collections in this document
      * 
-     * @param PHPFrame_DatabaseRowCollection
+     * @param PHPFrame_Collection
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function renderRowCollection(PHPFrame_DatabaseRowCollection $collection)
+    public function renderCollection(PHPFrame_Collection $collection)
     {
         $str  = "(RowCollection) \n";
         $str .= (string) $collection;

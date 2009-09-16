@@ -99,7 +99,6 @@ class PHPFrame_FrontController
         $this->_plugin_handler->handle("dispatchLoopStartup");
         
         $request = PHPFrame::Request();
-        //print_r(PHPFrame::Request()); exit;
         
         while (!$request->isDispatched()) {
             // Set request as dispatched

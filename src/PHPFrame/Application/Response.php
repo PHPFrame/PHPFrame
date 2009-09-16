@@ -190,6 +190,11 @@ class PHPFrame_Response
      */
     public function setHeader($key, $value) 
     {
+        if (headers_sent()) {
+            $msg = "Cannot modify header information - headers already sent";
+            throw new LogicException($msg);
+        }
+        
         $this->_headers[$key] = $value;
     }
     
@@ -253,8 +258,10 @@ class PHPFrame_Response
     public function send() 
     {
         // Send headers
-        foreach ($this->_headers as $line) {
-            header($line);
+        if (!headers_sent()) {
+            foreach ($this->_headers as $line) {
+                header($line);
+            }
         }
         
         // Print response content (the document object)

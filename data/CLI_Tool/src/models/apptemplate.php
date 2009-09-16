@@ -15,7 +15,11 @@ class AppTemplate
         $this->_preferred_state   = $config->get("sources.preferred_state");
     }
     
-    public function install(array $config, $template=null, $allow_non_empty_dir=false)
+    public function install(
+        array $config, 
+        $template=null, 
+        $allow_non_empty_dir=false
+    )
     {
         if (!isset($config["app_name"]) || empty($config["app_name"])) {
             $msg = "App name is required";
@@ -48,9 +52,9 @@ class AppTemplate
     {
         $cmd = "rm -rf ".$this->_install_dir.DS."*";
         
-        $msg = "Removing app...\n";
-        $msg .= "Using command \"".$cmd."\"...\n";
-        echo $msg;
+        $msg .= "Removing app. Using command \"".$cmd."\"...";
+        PHPFrame::Session()->getSysevents()
+                           ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         $exec = new PHPFrame_Exec($cmd);
         
@@ -65,14 +69,14 @@ class AppTemplate
         // check that the directory is empty
         $is_empty_dir = PHPFrame_Filesystem::isEmptyDir($this->_install_dir);
         if (!$allow_non_empty_dir && !$is_empty_dir) {
-            $msg = "Target directory is not empty.";
-            $msg .= "\nUse \"phpframe app new_app app_name=MyApp ";
+            $msg = "Target directory is not empty. ";
+            $msg .= "Use \"phpframe app new_app app_name=MyApp ";
             $msg .= "allow_non_empty_dir=true\" to force install";
             throw new RuntimeException($msg);
         }
         
-        //TODO: before we download we should check whether local files exists for
-        // current version
+        //TODO: before we download we should check whether local files exists
+        // for current version
         
         // download package from preferred mirror
         $file_name     = "PHPFrame_AppTemplate-Full-0.0.1.tgz";
@@ -84,7 +88,9 @@ class AppTemplate
         // Make sure we can write in download directory
         PHPFrame_Filesystem::ensureWritableDir($download_tmp);
         
-        echo "Attempting to download ".$url."...\n";
+        $msg = "Attempting to download ".$url."...";
+        PHPFrame::Session()->getSysevents()
+                           ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         // Create the download listener
         $download = new PHPFrame_DownloadRequestListener();
@@ -102,7 +108,9 @@ class AppTemplate
             throw new RuntimeException($msg);
         }
         
-        echo "\nExtracting archive...\n";
+        $msg = "Extracting archive...";
+        PHPFrame::Session()->getSysevents()
+                           ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         // Extract archive in install dir
         $archive = new Archive_Tar($target, "gz");
@@ -117,7 +125,9 @@ class AppTemplate
             throw new InvalidArgumentException($msg);
         }
         
-        echo "Creating configuration file...\n";
+        $msg = "Creating configuration file...";
+        PHPFrame::Session()->getSysevents()
+                           ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         // Instanciate new config object
         $dist_config_ini = PEAR_Config::singleton()->get("data_dir");
@@ -146,7 +156,9 @@ class AppTemplate
         $source .= DS."PHPFrame".DS."DummyController.php";
         $target = $this->_install_dir.DS."src".DS."controllers".DS."dummy.php";
         
-        echo "Creating dummy controller...\n";
+        $msg = "Creating dummy controller...";
+        PHPFrame::Session()->getSysevents()
+                           ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         if (!copy($source, $target)) {
             $msg = "Failed to create dummy controller.";

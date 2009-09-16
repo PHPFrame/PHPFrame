@@ -142,7 +142,11 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
         $config = PHPFrame::Config();
         $display_exceptions = $config->get("debug.display_exceptions");
         if ($display_exceptions) {
-            echo '<pre>'.$str.'</pre>';
+            if (PHPFrame::Session()->getClientName() == "default") {
+                $str = '<pre>'.$str;
+            }
+            
+            echo $str;
         }
         
         // Notify event to observers

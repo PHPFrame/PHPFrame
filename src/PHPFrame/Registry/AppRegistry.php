@@ -99,7 +99,11 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
             throw new LogicException($msg);
         }
         
-        $cache_file = PHPFRAME_TMP_DIR.DS."cache".DS."application.registry";
+        $cache_dir = PHPFRAME_TMP_DIR.DS."cache";
+        
+        PHPFrame_Filesystem::ensureWritableDir($cache_dir);
+        
+        $cache_file = $cache_dir.DS."application.registry";
         
         // Read data from cache
         if (is_file($cache_file)) {

@@ -98,8 +98,8 @@ class PHPFrame_Postinstall_postinstall
         $msg = "\nPHPFrame Post Installation Script";
         $msg .= "\n--------------------------------\n";
         $msg .= "\nPHPFrame installation directory: ".$this->_install_dir."\n";
-        $msg .= "\nPHPFrame data directory: ".$this->_install_dir."\n";
-        $msg .= "\nPHPFrame CLI Tool directory: ".$this->_clitool_dir."\n";
+        $msg .= "PHPFrame data directory: ".$this->_data_dir."\n";
+        $msg .= "PHPFrame CLI Tool directory: ".$this->_clitool_dir."\n";
         
         echo $msg;
         

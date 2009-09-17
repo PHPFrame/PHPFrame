@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * Class to manipulate with vCard information, according vCard v2.1 and vCard v3.0.
  * References: http://www.imc.org/pdi/

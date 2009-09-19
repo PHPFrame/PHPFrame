@@ -76,9 +76,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // Add base url
         $uri = new PHPFrame_URI();
         $this->addNode($head_node, "base", array("href"=>$uri->getBase()));
-        
-        // Acquire a pathway object used by this document
-        $this->_pathway = new PHPFrame_Pathway();
     }
     
     /**

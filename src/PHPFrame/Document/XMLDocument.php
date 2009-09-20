@@ -26,12 +26,6 @@
 class PHPFrame_XMLDocument extends PHPFrame_Document
 {
     /**
-     * The qualified name of the document type to create. 
-     * 
-     * @var string
-     */
-    protected $qualified_name = "xml";
-    /**
      * DOM Document Type object
      * 
      * @var DOMDocumentType
@@ -58,7 +52,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
         parent::__construct($mime, $charset);
         
         // Acquire DOM object of HTML type
-        $this->dom = new DOMDocument("1.0", $this->charset); 
+        $this->dom = new DOMDocument("1.0", $this->getCharset()); 
     }
     
     /**
@@ -70,7 +64,12 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      */
     public function __toString()
     {
-        return $this->indent($this->dom->saveXML().$this->body);
+        return $this->indent($this->dom->saveXML().$this->getBody());
+    }
+    
+    public function getDOM()
+    {
+        return $this->dom;
     }
     
     /**
@@ -170,84 +169,52 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     }
     
     /**
-     * Render view and store in document's body
+     * This method is used to turn inline XML into human-readable text
      * 
-     * This method is invoked by the views and renders the ouput data in the
-     * document specific format.
+     * @param string $str The XML as string.
      * 
-     * @param PHPFrame_View $view The view object to process.
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function renderView(PHPFrame_View $view){}
-    
-    /**
-     * Method used to render Row Collections in this document
-     * 
-     * @param PHPFrame_Collection
-     * 
-     * @access public
+     * @access protected
      * @return string
      * @since  1.0
      */
-    public function renderCollection(PHPFrame_Collection $collection)
+    protected function indent($str)
     {
-        $str = "FIX ME!!!: ".get_class($this)."::renderRowCollection().";
-        
-        return $str;
-    }
-    
-    /**
-     * Indent
-     * 
-     * This method is used to turn inline XML into human-readable text
-     * 
-     * @param string $response The XML as string.
-     * 
-     * @return string $response Human readable XML.
-     * 
-     * @access protected
-     * @since  1.0
-     */
-    protected function indent($response)
-    {
-        $return_array = explode('>',$response);
+        $return_array = explode('>', $str);
         $depth        = -1;
         
-        for($i = 0; $i < count($return_array) - 1; $i++) {
-            if(strpos($return_array[$i],"\n")!==false){
+        for ($i = 0; $i < count($return_array) - 1; $i++) {
+            if(strpos($return_array[$i], "\n")!==false) {
                 $return_array[$i] = trim($return_array[$i]);
             }
                     
             $end_tag = strpos($return_array[$i], "</");
             
-            if($end_tag!==false) {
+            if ($end_tag !== false) {
                 if ($end_tag != 0) {
-                    $return_array[$i] = $this->padding($depth) . $return_array[$i];
+                    $return_array[$i] = $this->padding($depth).$return_array[$i];
                     $depth--; 
-                    $return_array[$i] = str_replace("</","\r\n".$this->padding($depth)."</",$return_array[$i]);
+                    $return_array[$i] = str_replace(
+                        "</",
+                        "\r\n".$this->padding($depth)."</",$return_array[$i]
+                    );
                 } else {
                     $depth--;
-                    $return_array[$i] = $this->padding($depth) . $return_array[$i];
+                    $return_array[$i] = $this->padding($depth).$return_array[$i];
                 }
+                
                 $depth--;
             } else {
-                $return_array[$i] = $this->padding($depth) . $return_array[$i];
+                $return_array[$i] = $this->padding($depth).$return_array[$i];
             }
             
-            $return_array[$i] = $return_array[$i] . ">\r\n";
+            $return_array[$i] = $return_array[$i].">\r\n";
             $depth++;
         }
         
-        $response = implode($return_array);
-        return $response;
+        return implode($return_array);
     }
     
     /**
-     * Padding
-     * 
      * This generates padding with specified depth
      * 
      * @param int $depth
@@ -260,7 +227,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     {
         $padding = '';
         
-        for ($tabs = 0; $tabs < $depth; $tabs++) {
+        for ($tabs=0; $tabs<$depth; $tabs++) {
             $padding .= '  ';
         }
         

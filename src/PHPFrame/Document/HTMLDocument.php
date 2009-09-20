@@ -26,12 +26,9 @@
  */
 class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
 {
-    /**
-     * The qualified name of the document type to create. 
-     * 
-     * @var string
-     */
-    protected $qualified_name = "html";
+    private $_meta_tags = array();
+    private $_scripts = array();
+    private $_style_sheets = array();
     
     /**
      * Constructor
@@ -53,7 +50,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $imp = new DOMImplementation;
         $this->dom = $imp->createDocument(
             null,
-            $this->qualified_name,
+            "html",
             $this->getDocType()
         ); 
         
@@ -69,7 +66,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $this->addMetaTag("generator", "PHPFrame");
         $this->addMetaTag(
             null, 
-            $this->mime_type."; charset=".$this->charset,
+            $this->getMimeType()."; charset=".$this->getCharset(),
             "Content-Type"
         );
         
@@ -87,329 +84,43 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     public function __toString()
     {
-        if (!PHPFrame::Request()->isAJAX()) {
-            $this->_applyTheme();
-        }
-        
         // Add title tag in head node 
         $head_node = $this->dom->getElementsByTagName("head")->item(0);
         $this->addNode($head_node, "title", null, $this->getTitle());
         
+        // Add meta tags
+        foreach ($this->_meta_tags as $meta_tag) {
+            $meta_node = $this->addNode($head_node, "meta");
+            
+            // Add name attribute if any
+            if (!is_null($meta_tag["name"])) {
+                $this->addNodeAttr($meta_node, "name", $meta_tag["name"]);
+            }
+            // Add http_equiv attribute if any
+            if (!is_null($meta_tag["http_equiv"])) {
+                $this->addNodeAttr($meta_node, "http_equiv", $meta_tag["http_equiv"]);
+            }
+            
+            // Add content attribute
+            $this->addNodeAttr($meta_node, "content", $meta_tag["content"]);
+        }
+        
+        // Add scripts
+        foreach ($this->_scripts as $script_attr) {
+            // Create script tag node
+            $this->addNode($head_node, "script", $script_attr);
+        }
+        
+        // Add styles
+        foreach ($this->_style_sheets as $style_sheet_attr) {
+            $this->addNode($head_node, "link", $style_sheet_attr);
+        }
+        
         // Render DOM Document as HTML string
         $html = $this->indent($this->dom->saveHTML());
         
-        // Add body
-        $html = str_replace("{content}", $this->body, $html);
-        
-        return $html;
-    }
-    
-    /**
-     * Set the HTML body
-     * 
-     * @param sring $str
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function setBody($str)
-    {
-        $this->body = (string) $str;
-    }
-    
-    /**
-     * Get the HTML body
-     * 
-     * @param sring $str
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-    
-    /**
-     * Render view and store in document's body
-     * 
-     * @param PHPFrame_View $view The view object to process.
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function renderView(PHPFrame_View $view) 
-    {
-        $tmpl_path = PHPFRAME_INSTALL_DIR.DS."src";
-        $tmpl_path .= DS."views".DS.$view->getName().".php";
-        
-        if (is_file($tmpl_path)) {
-            // Start buffering
-            ob_start();
-            // set view data as local array
-            $data = $view->getData();
-            // Include template file
-            require_once $tmpl_path;
-            // save buffer in body property
-            $this->body = ob_get_contents();
-            // clean output buffer
-            ob_end_clean();
-        } else {
-            throw new RuntimeException("Layout template file ".$tmpl_path." not found.");
-        }
-    }
-    
-    /**
-     * Render a partial view
-     * 
-     * @param string $name
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function renderPartial($name)
-    {
-        $name = (string) trim($name);
-        $path = PHPFRAME_INSTALL_DIR.DS."src".DS."views";
-        $path .= DS."partials".DS.$name;
-        
-        if (!is_file($path)) {
-            $path .= ".php";
-            if (!is_file($path)) {
-                //$msg = "Could not load partial ".$path;
-                //throw new RuntimeException($msg);
-                return "";
-            }
-        }
-        
-        // Start buffering
-        ob_start();
-        // Include partial file
-        require_once $path;
-        // save buffer in body property
-        $partial = ob_get_contents();
-        // clean output buffer
-        ob_end_clean();
-        
-        return $partial;
-    }
-    
-    public function renderPathway(PHPFrame_Pathway $pathway)
-    {
-        $array = $pathway->toArray();
-        
-        $html = '<div class="pathway">';
-        for ($i=0; $i<count($array); $i++) {
-            if ($i>0) {
-                $html .= ' &gt;&gt; ';
-            }
-            $html .= '<span class="pathway_item">';
-            if (!empty($array[$i]['url']) && $i < (count($array))-1) {
-                $html .= '<a href="'.$array[$i]['url'].'">'.$array[$i]['title'].'</a>';
-            } else {
-                $html .= $array[$i]['title'];
-            }
-            $html .= '</span>';
-        }
-        $html .= '</div>';
-        
-        return $html;
-    }
-    
-    /**
-     * Method used to render Collections in HTML format
-     * 
-     * @param PHPFrame_Collection $collection
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function renderCollection(
-        PHPFrame_Collection $collection, 
-        $headings=null
-    ) {
-        // Build table to display row data
-        $html = "<table class=\"data_list\" width=\"100%\">\n";
-        
-        // Prepare heading array
-        if (!is_null($headings) && !is_array($headings)) {
-            $msg = "Wrong data type.";
-            $msg .= "Headings must be passed as an array.";
-            throw new RuntimeException($msg);
-        } elseif (is_null($headings)) {
-            // If no specified headings we get keys from collection
-            $headings = $collection->getKeys();
-        }
-        
-        // Print headings
-        $html .= "<thead>\n<tr>\n";
-        foreach ($headings as $heading) {
-            $html .= "<th>".$heading."</th>\n";
-        }
-        $html .= "</tr>\n</thead>\n";
-        
-        // Print tbody
-        $html .= "<tbody>\n";
-        foreach ($collection as $row) {
-            $html .= "<tr>\n";
-            foreach ($row->getKeys() as $key) {
-                $html .= "<td>".$row->$key."</td>\n";
-            }
-            $html .= "</tr>\n";
-        }
-        $html .= "</tbody>\n";
-        $html .= "</table>";
-        
-        return $html;
-    }
-    
-    /**
-     * Render HTML filter for collections
-     * 
-     * This method builds an HTML string with UI filtering elements to be used 
-     * with row collection objects.
-     * 
-     * @param PHPFrame_Collection $collection
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function renderCollectionFilter(PHPFrame_Collection $collection)
-    {
-        $html = '<div class="row_collection_filter">';
-        
-        // Print form to select limit per page
-        $html .= '<div class="subset_limit">';
-        $html .= '<form name="limitform" id="limitform" method="post">';
-        $html .= 'Display Num: ';
-        $html .= '<select name="limit" onchange="document.forms[\'limitform\'].submit();">';
-        for ($i=25; $i<=100; $i+=25) {
-            $html .= '<option value="'.$i.'"';
-            if ($collection->getLimit() == $i) {
-                $html .= ' selected';
-            }
-            $html .= '>'.$i.'</option>';
-        }
-        $html .= '<option value="-1">-- All --</option>';
-        $html .= '</select>';
-        $html .= '</form>';
-        $html .= '</div>';
-        
-        // Print subset info
-        $html .= '<div class="subset_info">';
-        $html .= ($collection->getLimitstart()+1);
-        $html .= ' - '.($collection->getLimitstart() + count($collection));
-        $html .= ' of '.$collection->getTotal();
-        $html .= '</div>';
-        
-        // Print search box
-        $html .= '<script language="javascript" type="text/javascript">
-                    function submit_filter(reset) {
-                        var form = document.forms["listsearchform"];
-                        
-                        if (reset){
-                            form.search.value = "";
-                        }
-                        
-                        form.submit();
-                    }
-                  </script>';
-        
-        $html .= '<form action="index.php" id="listsearchform" name="listsearchform" method="post">';
-        $html .= '<input type="text" name="search" id="search" value="'.PHPFrame::Request()->getParam('search').'">';
-        $html .= '<button type="button" class="button" onclick="submit_filter(false);">Search</button>';
-        $html .= '<button type="button" class="button" onclick="submit_filter(true);">Reset</button>';
-        $html .= '<input type="hidden" name="component" value="'.PHPFrame::Request()->getControllerName().'" />';
-        $html .= '<input type="hidden" name="action" value="'.PHPFrame::Request()->getAction().'" />';
-        $html .= '</form>';
-        
-        $html .= '</div>';
-         
-        return $html;
-    }
-    
-    /**
-     * Render HTML pagination for collection object
-     * 
-     * @param PHPFrame_Collection $collection The collection object for
-     *                                         which to create the pagination.
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function renderPagination(PHPFrame_Collection $collection)
-    {
-        $html = '';
-        
-        if ($collection->getPages() <= 1) {
-            return $html;
-        }
-        
-        $html .= '<div class="pagination">';
-        
-        // Print list with prev, next and so on...
-        $href = 'index.php?controller='.PHPFrame::Request()->getControllerName();
-        $href .= '&amp;action='.PHPFrame::Request()->getAction();
-        $href .= '&amp;limit='.$collection->getLimit();
-        
-        $html .= '<ul>';
-        // Start link
-        $html .= '<li>';
-        if ($collection->getCurrentPage() != 1) {
-            $html .= '<a href="'.$href.'&amp;limitstart=0">Start</a>';
-        } else {
-            $html .= 'Start';
-        }
-        $html .= '</li>';
-        // Prev link
-        $html .= '<li>';
-        if ($collection->getCurrentPage() != 1) {
-            $html .= '<a href="'.$href.'&amp;limitstart='.(($collection->getCurrentPage()-2) * $collection->getLimit()).'">Prev</a>';
-        } else {
-            $html .= 'Prev';
-        }
-        $html .= '</li>';
-        // Page numbers
-        for ($j=0; $j<$collection->getPages(); $j++) {
-            $html .= '<li>';
-            if ($collection->getCurrentPage() != ($j+1)) {
-                $html .= '<a href="'.$href.'&amp;limitstart='.($collection->getLimit() * $j).'">'.($j+1).'</a>';    
-            } else {
-                $html .= ($j+1);
-            }
-            $html .= '</li>';
-        }
-        // Next link
-        $html .= '<li>';
-        if ($collection->getCurrentPage() != $collection->getPages()) {
-            $html .= '<a href="'.$href.'&amp;limitstart='.($collection->getCurrentPage() * $collection->getLimit()).'">Next</a>';    
-        } else {
-            $html .= 'Next';
-        }
-        // End link
-        $html .= '<li>';
-        if ($collection->getCurrentPage() != $collection->getPages()) {
-            $html .= '<a href="'.$href.'&amp;limitstart='.(($collection->getPages()-1) * $collection->getLimit()).'">End</a>';    
-        } else {
-            $html .= 'End';
-        }
-        $html .= '</li>';
-        $html .= '</ul>';
-        
-        // Print page info
-        $html .= 'Page '.$collection->getCurrentPage();
-        $html .= ' of '.$collection->getPages();
-        
-        $html .= "</div>";
-        
-        return $html;
+        // Add body and return
+        return str_replace("{content}", $this->getBody(), $html);
     }
     
     /**
@@ -428,7 +139,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
             $systemId = "http://www.w3.org/TR/html4/strict.dtd";
             $imp = new DOMImplementation;
             $this->doctype = $imp->createDocumentType(
-                $this->qualified_name,
+                "html",
                 $publicId,
                 $systemId
             );
@@ -459,22 +170,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     public function addMetaTag($name, $content, $http_equiv=null) 
     {
-        // Get head node
-        $head_node = $this->dom->getElementsByTagName("head")->item(0);
-        
-        // Creare meta tag node
-        $meta_node = $this->addNode($head_node, "meta");
-        
-        // Add name attribute if any
-        if (!is_null($name)) {
-            $this->addNodeAttr($meta_node, "name", $name);
-        }
-        // Add http_equiv attribute if any
-        if (!is_null($http_equiv)) {
-            $this->addNodeAttr($meta_node, "http_equiv", $http_equiv);
-        }
-        // Add content attribute
-        $this->addNodeAttr($meta_node, "content", $content);
+        $this->_meta_tags[] = array(
+            "name"       => $name, 
+            "content"    => $content, 
+            "http_equiv" => $http_equiv
+        );
     }
     
     /**
@@ -496,11 +196,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // Make source absolute URL
         $this->_makeAbsolute($src);
         
-        // Get head node
-        $head_node = $this->dom->getElementsByTagName("head")->item(0);
-        
-        // Create script tag node
-        $this->addNode($head_node, "script", array("type"=>$type, "src"=>$src));
+        $this->_scripts[] = array("src"=>$src, "type"=>$type);
     }
     
     /**
@@ -518,12 +214,33 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // Make source absolute URL
         $this->_makeAbsolute($href);
         
-        // Get head node
-        $head_node = $this->dom->getElementsByTagName("head")->item(0);
+        $this->_style_sheets[] = array(
+            "rel"  => "stylesheet", 
+            "href" => $href, 
+            "type" => $type
+        );
+    }
+    
+    /**
+     * Set the document body (overrides inherited method)
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setBody($str, $apply_theme=true)
+    {
+        parent::setBody($str);
         
-        // Create script tag node
-        $attrs = array("rel"=>"stylesheet", "href"=>$href, "type"=>$type);
-        $this->addNode($head_node, "link", $attrs);
+        if (
+            $apply_theme 
+            && PHPFrame::getRunLevel() > 1 
+            && !PHPFrame::Request()->isAJAX()
+        ) {
+            $this->_applyTheme();
+        }
     }
     
     /**
@@ -541,7 +258,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // make pathway available in local scope
         $pathway = PHPFrame::Response()->getPathway();
         
-        $component_output = $this->body;
+        $component_output = $this->getBody();
         
         // Set file name to load depending on session auth
         $controller = PHPFrame::Request()->getControllerName();
@@ -557,7 +274,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         ob_start();
         require_once $template_path.DS.$template_filename;
         // save buffer in body
-        $this->body = ob_get_contents();
+        parent::setBody(ob_get_contents());
         // clean output buffer
         ob_end_clean();
     }

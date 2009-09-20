@@ -28,20 +28,20 @@
  * @see      PHPFrame_ActionController
  * @since    1.0
  */
-class PHPFrame_View
+class PHPFrame_View implements IteratorAggregate
 {
     /**
      * The view name
      * 
      * @var string
      */
-    protected $_name = null;
+    private $_name = null;
     /**
      * Data array for view
      * 
      * @var array
      */
-    protected $_data = array();
+    private $_data = array();
     
     /**
      * Constructor
@@ -55,6 +55,30 @@ class PHPFrame_View
     public function __construct($name) 
     {
         $this->_name = trim((string) $name);
+    }
+    
+    /**
+     * Convert view to string
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function __toString()
+    {
+        return print_r($this->_data, true);
+    }
+    
+    /**
+     * Implementation of IteratorAggregate interface
+     * 
+     * @access public
+     * @return ArrayIterator
+     * @since  1.0
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->_data);
     }
     
     /**
@@ -110,6 +134,8 @@ class PHPFrame_View
         // Set profiler milestone
         PHPFrame_Profiler::instance()->addMilestone();
         
-        $document = PHPFrame::Response()->getDocument()->renderView($this);
+        $renderer = PHPFrame::Response()->getRenderer();
+        $document = PHPFrame::Response()->getDocument();
+        $document->setBody($renderer->render($this));
     }
 }

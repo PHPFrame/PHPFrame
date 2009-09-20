@@ -205,6 +205,9 @@ class PHPFrame_CLIClient implements PHPFrame_IClient
         
         // Set document as response content
         $response->setDocument(new PHPFrame_PlainDocument());
+        
+        // Set response renderer
+        $response->setRenderer(new PHPFrame_PlainRenderer());
     }
     
     public function redirect($url)

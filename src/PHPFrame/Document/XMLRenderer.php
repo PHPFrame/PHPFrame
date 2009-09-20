@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Document/PlainDocument.php
+ * PHPFrame/Document/XMLRenderer.php
  * 
  * PHP version 5
  * 
@@ -14,49 +14,44 @@
  */
 
 /**
- * XML Document Class
+ * XML renderer class
  * 
  * @category PHPFrame
  * @package  Document
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @see      PHPFrame_IRenderer
  * @since    1.0
  */
-class PHPFrame_PlainDocument extends PHPFrame_Document
+class PHPFrame_XMLRenderer implements PHPFrame_IRenderer
 {
     /**
-     * Constructor
+     * Render view and store in document's body
+     * 
+     * This method is invoked by the views and renders the ouput data in the
+     * document specific format.
+     * 
+     * @param PHPFrame_View $view The view object to process.
      * 
      * @access public
      * @return void
-     * @since  1.0 
+     * @since  1.0
      */
-    public function __construct($mime="text/plain", $charset=null) 
-    {
-        // Call parent's constructor to set mime type
-        parent::__construct($mime, $charset);
-    }
+    public function renderView(PHPFrame_View $view) {}
     
     /**
-     * Convert object to string
+     * Method used to render Row Collections in this document
+     * 
+     * @param PHPFrame_Collection
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function __toString()
+    public function renderCollection(PHPFrame_Collection $collection)
     {
-        $str = "";
-        
-        if ($this->getTitle()) {
-            $str .= $this->getTitle()."\n";
-            for ($i=0; $i<strlen($this->getTitle()); $i++) {
-                $str .= "-";
-            }
-        }
-        
-        $str .= "\n\n".$this->getBody();
+        $str = "FIX ME!!!: ".get_class($this)."::renderRowCollection().";
         
         return $str;
     }

@@ -25,6 +25,9 @@
  */
 class PHPFrame_Response
 {
+    /*
+     * HTTP response status codes
+     */
     const STATUS_OK                    = 200;
     const STATUS_MOVED_PERMANENTLY     = 301;
     const STATUS_FOUND                 = 302;
@@ -74,6 +77,12 @@ class PHPFrame_Response
      * @var PHPFrame_Pathway
      */
     private $_pathway = null;
+    /**
+     * Instance of PHPFrame_IRenderer used to render 
+     * 
+     * @var PHPFrame_IRenderer
+     */
+    private $_renderer = null;
     
     /**
      * Constructor
@@ -118,7 +127,7 @@ class PHPFrame_Response
             $str .= ucwords($key).": ".$value."\n";
         }
         
-        $str .= "\n".$this->getBody();
+        $str .= "\n".$this->getDocument();
         
         return $str;
     }
@@ -198,16 +207,6 @@ class PHPFrame_Response
         $this->_headers[$key] = $value;
     }
     
-    public function getBody()
-    {
-        return (string) $this->getDocument();
-    }
-    
-    public function appendBody($str)
-    {
-        
-    }
-    
     /**
      * Get the document object used as the response body
      * 
@@ -234,6 +233,32 @@ class PHPFrame_Response
         $this->_document = $document;
         
         $this->setHeader("Content-Type", $this->_document->getMimeType());
+    }
+    
+    /**
+     * Get the renderer object
+     * 
+     * @access public
+     * @return PHPFrame_IRenderer
+     * @since  1.0
+     */
+    public function getRenderer()
+    {
+        return $this->_renderer;
+    }
+    
+    /**
+     * Set the renderer object
+     * 
+     * @param PHPFrame_IRenderer $renderer
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setRenderer(PHPFrame_IRenderer $renderer) 
+    {
+        $this->_renderer = $renderer;
     }
     
     /**
@@ -265,6 +290,6 @@ class PHPFrame_Response
         }
         
         // Print response content (the document object)
-        echo $this->getBody();
+        echo (string) $this->getDocument();
     }
 }

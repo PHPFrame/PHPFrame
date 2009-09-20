@@ -136,14 +136,14 @@ class PHPFrame_FrontController
         
         // If not in quiet mode, send response back to the client
         if (!$request->isQuiet()) {
-            PHPFrame::Response()->send();
+            $response->send();
         }
         
         // If outfile is defined we write the response to file
         $outfile = $request->getOutfile();
         if (!empty($outfile)) {
             $file_obj = new PHPFrame_FileObject($outfile, "w");
-            $file_obj->fwrite((string) PHPFrame::Response());
+            $file_obj->fwrite((string) $response);
         }
         
         // Handle profiler

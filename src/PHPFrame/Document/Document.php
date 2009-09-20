@@ -14,15 +14,14 @@
  */
 
 /**
- * Document Class
- * 
  * This is an abstract class that all "Document" objects extend.
  * 
- * PHPFrame provides 3 implementations of this abstract class:
+ * PHPFrame provides 4 implementations of this abstract class:
  * 
- * - HTML
- * - XML
  * - Plaintext
+ * - XML
+ * - HTML (specialised XML document for HTML responses).
+ * - RPC (specialised XML document used for XML-RPC responses.)
  * 
  * @category PHPFrame
  * @package  Document
@@ -32,38 +31,32 @@
  * @since    1.0
  * @abstract
  */
-abstract class PHPFrame_Document
+abstract class PHPFrame_Document implements IteratorAggregate
 {
-    /**
-     * The qualified name of the document type to create. 
-     * 
-     * @var string
-     */
-    protected $qualified_name = null;
     /**
      * Document mime type
      *
      * @var string
      */
-    protected $mime_type = null;
+    private $_mime_type = null;
     /**
      * Contains the character encoding string
      *
      * @var string
      */
-    protected $charset = 'UTF-8';
+    private $_charset = 'UTF-8';
     /**
      * The document title
      * 
      * @var string
      */
-    protected $title = null;
+    private $_title = null;
     /**
      * The document body
      * 
      * @var string
      */
-    protected $body = null;
+    private $_body = null;
     
     /**
      * Constructor
@@ -74,10 +67,10 @@ abstract class PHPFrame_Document
      */
     public function __construct($mime, $charset=null) 
     {
-        $this->mime_type = (string) $mime;
+        $this->_mime_type = (string) $mime;
         
         if (!is_null($charset)) {
-            $this->charset = (string) $charset;
+            $this->_charset = (string) $charset;
         }
     }
     
@@ -91,43 +84,22 @@ abstract class PHPFrame_Document
     abstract public function __toString();
     
     /**
-     * Set the document title
-     * 
-     * @param string $str The string to set as document title.
+     * Implementation of the IteratorAggregate interface.
      * 
      * @access public
-     * @return void
+     * @return Iterator
      * @since  1.0
      */
-    public function setTitle($str)
+    public function getIterator()
     {
-        $this->title = (string) $str;
-    }
-    
-    /**
-     * Append string to the document title
-     * 
-     * @param string $str The string to append.
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function appendTitle($str)
-    {
-        $this->title .= $str;
-    }
-    
-    /**
-     * Get the document title
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function getTitle()
-    {
-        return $this->title;
+        $array = array(
+            "mime_type" => $this->getMimeType(),
+            "charset"   => $this->getCharset(),
+            "title"     => $this->getTitle(),
+            "body"      => $this->getBody()
+        );
+        
+        return new ArrayIterator($array);
     }
     
     /**
@@ -139,7 +111,7 @@ abstract class PHPFrame_Document
      */
     public function getCharset()
     {
-        return $this->charset;
+        return $this->_charset;
     }
     
     /**
@@ -151,48 +123,96 @@ abstract class PHPFrame_Document
      */
     public function getMimeType()
     {
-        return $this->mime_type;
+        return $this->_mime_type;
     }
     
     /**
-     * Render view and store in document's body
-     * 
-     * This method is invoked by the views and renders the ouput data in the
-     * document specific format.
-     * 
-     * @param PHPFrame_View $view The view object to process.
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function renderView(PHPFrame_View $view)
-    {
-        $str = "";
-        
-        foreach ($view->getData() as $key=>$value) {
-            $str .= $key.": ";
-            
-            if ($value instanceof PHPFrame_Collection) {
-                $str .= $this->renderCollection($value);
-            } else {
-                $str .= (string) $value;
-            }
-            
-            $str .= "\n\n";
-        }
-        
-        $this->body = $str;
-    }
-    
-    /**
-     * Method used to render Collections in this document
-     * 
-     * @param PHPFrame_Collection
+     * Get the document _title
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    abstract public function renderCollection(PHPFrame_Collection $collection);
+    public function getTitle()
+    {
+        return $this->_title;
+    }
+    
+    /**
+     * Set the document _title
+     * 
+     * @param string $str The string to set as document _title.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setTitle($str)
+    {
+        $this->_title = (string) $str;
+    }
+    
+    /**
+     * Append string to the document _title
+     * 
+     * @param string $str The string to append.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function appendTitle($str)
+    {
+        $this->_title .= $str;
+    }
+    
+    /**
+     * Get the document body
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getBody()
+    {
+        return $this->_body;
+    }
+    
+    /**
+     * Set the document body
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setBody($str)
+    {
+        $this->_body = (string) $str;
+    }
+    
+    /**
+     * Append string to the document body
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function appendBody($str)
+    {
+        $this->_body .= (string) $str;
+    }
+    
+    /**
+     * Prepend string to the document body
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function prependBody($str)
+    {
+        $this->_body = (string) $str.$this->getBody();
+    }
 }

@@ -106,7 +106,21 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
      * @return string
      * @since  1.0
      */
-    public static function rewriteURL($url, $xhtml=true) 
+    public function dispatchLoopShutdown() 
+    {
+        $response_body = PHPFrame::Response()->getDocument()->getBody();
+        $uri           = new PHPFrame_URI();
+        
+        $patterns[]     = '/"index.php\?controller=([a-zA-Z]+)&action=([a-zA-Z]+)(&)?/';
+        $replacements[] = '"'.$uri->getBase().'${1}/${2}?';
+        $patterns[]     = '/"index.php\?controller=([a-zA-Z]+)(&)?/';
+        $replacements[] = '"'.$uri->getBase().'${1}${2}';
+        
+        $processed_body = preg_replace($patterns, $replacements, $response_body);
+        PHPFrame::Response()->getDocument()->setBody($processed_body, false);
+    }
+    
+    public static function rewriteURL($url, $xhtml=true)
     {
         $uri = new PHPFrame_URI();
         

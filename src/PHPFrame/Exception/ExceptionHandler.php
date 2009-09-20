@@ -142,7 +142,8 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
         $config = PHPFrame::Config();
         $display_exceptions = $config->get("debug.display_exceptions");
         if ($display_exceptions) {
-            if (PHPFrame::Session()->getClientName() == "default") {
+            $response_doc = PHPFrame::Response()->getDocument();
+            if ($response_doc instanceof PHPFrame_HTMLDocument) {
                 $str = '<pre>'.$str;
             }
             

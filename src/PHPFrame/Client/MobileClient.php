@@ -117,7 +117,11 @@ class PHPFrame_MobileClient implements PHPFrame_IClient
      */
     public function prepareResponse(PHPFrame_Response $response)
     {
-        //...
+        // Set document as response content
+        $response->setDocument(new PHPFrame_HTMLDocument());
+        
+        // Set response renderer
+        $response->setRenderer(new PHPFrame_HTMLRenderer());
     }
     
     public function redirect($url)

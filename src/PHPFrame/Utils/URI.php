@@ -218,7 +218,8 @@ class PHPFrame_URI
      */
     public function __toString() 
     {
-        $str = $this->getBase().$this->_filename.".".$this->_extension;
+        $str  = $this->getBase();
+        $str .= $this->_filename.".".$this->_extension;
         if (is_array($this->_query) && count($this->_query) > 0) {
             $str .= "?";
             $i=0;

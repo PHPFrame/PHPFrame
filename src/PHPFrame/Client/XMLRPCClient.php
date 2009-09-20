@@ -118,7 +118,11 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
             exit;
         }
         
-        $response->setDocument(new PHPFrame_RPCDocument());        
+        // Set document as response content
+        $response->setDocument(new PHPFrame_RPCDocument());
+        
+        // Set response renderer
+        $response->setRenderer(new PHPFrame_RPCRenderer());     
     }
     
     public function redirect($url)

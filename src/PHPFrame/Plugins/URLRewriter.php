@@ -111,7 +111,7 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
         $response_body = PHPFrame::Response()->getDocument()->getBody();
         $uri           = new PHPFrame_URI();
         
-        $patterns[]     = '/"index.php\?controller=([a-zA-Z]+)&action=([a-zA-Z]+)(&)?/';
+        $patterns[]     = '/"index.php\?controller=([a-zA-Z]+)&action=([a-zA-Z_]+)(&)?/';
         $replacements[] = '"'.$uri->getBase().'${1}/${2}?';
         $patterns[]     = '/"index.php\?controller=([a-zA-Z]+)(&)?/';
         $replacements[] = '"'.$uri->getBase().'${1}${2}';

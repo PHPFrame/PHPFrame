@@ -302,6 +302,10 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setATime($int)
     {
+        if (empty($int)) {
+            $int = 0;
+        }
+        
         $this->atime = $this->validate("atime", $int);
     }
     

@@ -23,7 +23,16 @@ class AppController extends PHPFrame_ActionController
         parent::__construct("new_app");
     }
     
-    public function new_app($app_name, $template=null, $allow_non_empty_dir=false)
+    public function new_app(
+        $app_name, 
+        $db_driver="SQLite",
+        $db_name="data.db",
+        $db_host=null,
+        $db_user=null,
+        $db_pass=null,
+        $template=null, 
+        $allow_non_empty_dir=false
+    )
     {
         $app_name            = trim((string) $app_name);
         $allow_non_empty_dir = (bool) $allow_non_empty_dir;
@@ -34,7 +43,14 @@ class AppController extends PHPFrame_ActionController
             
             // Install new app
             $model->install(
-                array("app_name"=>$app_name), 
+                array(
+                    "app_name"  => $app_name,
+                    "db.driver" => $db_driver,
+                    "db.name"   => $db_name,
+                    "db.host"   => $db_host,
+                    "db.user"   => $db_user,
+                    "db.pass"   => $db_pass
+                ), 
                 $template, 
                 $allow_non_empty_dir
             );

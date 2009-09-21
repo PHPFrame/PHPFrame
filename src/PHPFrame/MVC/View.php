@@ -66,7 +66,13 @@ class PHPFrame_View implements IteratorAggregate
      */
     public function __toString()
     {
-        return print_r($this->_data, true);
+        $str = "";
+        
+        foreach ($this->_data as $data) {
+            $str .= print_r($data, true)."\n";
+        }
+        
+        return $str;
     }
     
     /**
@@ -136,6 +142,7 @@ class PHPFrame_View implements IteratorAggregate
         
         $renderer = PHPFrame::Response()->getRenderer();
         $document = PHPFrame::Response()->getDocument();
+        
         $document->setBody($renderer->render($this));
     }
 }

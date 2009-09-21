@@ -28,6 +28,17 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
 {
     public function render($value)
     {
+        if (
+            is_null($value)
+            || (is_string($value) && empty($value))
+            || (is_array($value) && count($value) == 0
+            || ($value instanceof Countable) && count($value) == 0)
+        ) {
+            return;
+        } elseif ($value instanceof PHPFrame_View) {
+            $value = $this->renderView($value);
+        }
+        
         return strip_tags(trim((string) $value));
     }
     
@@ -49,16 +60,10 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
         
         foreach ($view->getData() as $key=>$value) {
             $str .= $key.": ";
-            
-            if ($value instanceof PHPFrame_Collection) {
-                $str .= $this->renderCollection($value);
-            } else {
-                $str .= (string) $value;
-            }
-            
+            $str .= (string) $value;
             $str .= "\n\n";
         }
         
-        $this->body = $str;
+        return $str;
     }
 }

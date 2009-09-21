@@ -18,25 +18,38 @@ class ConfigController extends PHPFrame_ActionController
     
     public function list_all()
     {
-        foreach ($this->_config->toArray() as $key=>$value) {
-            echo $key.": ".$value['value']."\n";
-        }
+        $str = (string) $this->_config;
+        
+        $view = $this->getView();
+        $view->addData("config", $str);
+        $view->display();
     }
     
     public function get($key)
     {
-        $key = (string) trim($key);
+        $key = trim((string) $key);
         
-        echo $key.": ".$this->_config->get($key)."\n";
+        $view = $this->getView();
+        $view->addData($key, $this->_config->get($key));
+        $view->display();
     }
     
     public function set($key, $value)
     {
-        $key = (string) trim($key);
-        $value = (string) trim($value);
+        $key   = trim((string) $key);
+        $value = trim((string) $value);
         
-        $this->_config->set($key, $value);
+        try {
+            $this->_config->set($key, $value);
+            $this->_config->store();
+            
+            $this->notifySuccess("Config param updated");
+        } catch (Exception $e) {
+            $this->raiseError("An error ocurred while saving config");
+        }
         
-        echo "New value is: ".$value."\n";
+        $view = $this->getView();
+        $view->addData($key, $this->_config->get($key));
+        $view->display();
     }
 }

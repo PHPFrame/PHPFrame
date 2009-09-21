@@ -131,6 +131,8 @@ class PHPFrame_SQLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
+        $obj->validateAll();
+        
         if ($obj->getId() <= 0) {
             $obj->setCTime(time());
             $build_query_method = "_buildInsertQuery";
@@ -140,8 +142,9 @@ class PHPFrame_SQLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
         
         $obj->setMTime(time());
         
-        $sql    = $this->$build_query_method($obj->toArray());
-        $params = $this->_buildQueryParams($obj->toArray());
+        $sql    = $this->$build_query_method(iterator_to_array($obj));
+        $params = $this->_buildQueryParams(iterator_to_array($obj));
+        
         PHPFrame::DB()->query($sql, $params);
         
         if ($obj->getId() <= 0) {

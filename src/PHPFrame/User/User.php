@@ -135,6 +135,22 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function __construct(array $options=null)
     {
+        $this->addFilter("groupid", "int");
+        $this->addFilter("username","varchar", 20, 3, false, null, '/^[a-zA-Z\.]{3,20}$/');
+        $this->addFilter("password", "varchar", 100, 6, false, null, '/^.{6,100}$/');
+        $this->addFilter("firstname", "varchar", 50, 1, false, null, '/^[a-zA-Z \.\-]{1,50}$/');
+        $this->addFilter("lastname", "varchar", 50, 1, false, null, '/^[a-zA-Z \.\-]{1,50}$/');
+        $this->addFilter("email", "varchar", 100, 7, false, null, 'email');
+        $this->addFilter("photo", "varchar", 128, 1, false, "default.png");
+        $this->addFilter("notifications", "enum", array(0,1), null, null, 1);
+        $this->addFilter("show_email", "enum", array(0,1), null, null, 0);
+        $this->addFilter("block", "enum", array(0,1), null, null, 0);
+        $this->addFilter("last_visit", "int", null, null, true);
+        $this->addFilter("activation", "varchar", 100, null, true);
+        $this->addFilter("params", "text", null, null, true);
+        $this->addFilter("deleted", "int", null, null, true);
+        $this->addFilter("openid_urls", "text", null, null, true);
+        
         // If we are passed a vCard object we deal with this first
         if (
             isset($options['vcard'])
@@ -174,9 +190,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setGroupId($int)
     {
-        $int = PHPFrame_Filter::validateInt($int);
-        
-        $this->_groupid = $int; 
+        $this->_groupid = $this->validate("groupid", $int);
     }
     
     /**
@@ -202,9 +216,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setUserName($str)
     {
-        $str = PHPFrame_Filter::validateRegExp($str, '/^[a-zA-Z\.]{3,20}$/');
-        
-        $this->_username = $str; 
+        $this->_username = $this->validate("username", $str);
     }
     
     /**
@@ -230,10 +242,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setPassword($str)
     {
-        $str = PHPFrame_Filter::validateRegExp($str, '/^.{6,100}$/');
-        
-        // Set password to encrypted string
-        $this->_password = $str;
+        $this->_password = $this->validate("password", $str);
     }
     
     /**
@@ -247,7 +256,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function encryptPassword($str)
     {
-        $str = PHPFrame_Filter::validateRegExp($str, '/^.{6,100}$/');
+        $str = $this->validate("password", $str);
         
         // Get random 32 char salt
         $salt = PHPFrame_Crypt::genRandomPassword(32);
@@ -281,7 +290,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setFirstName($str)
     {
-        $str = PHPFrame_Filter::validateRegExp($str, '/^[a-zA-Z \.\-]{1,50}$/');
+        $str = $this->validate("firstname", $str);
         
         // Set first name in vCard object making sure we dont overwrite last name)
         $this->_vcard->setName($this->getLastName(), $str, null, null, null);
@@ -313,7 +322,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setLastName($str)
     {
-        $str = PHPFrame_Filter::validateRegExp($str, '/^[a-zA-Z \.\-]{1,50}$/');
+        $str = $this->validate("lastname", $str);
         
         // Set last name in vCard object making sure we dont overwrite first name)
         $this->_vcard->setName($str, $this->getFirstName(), null, null, null);
@@ -345,7 +354,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setEmail($str)
     {
-        $str = PHPFrame_Filter::validateEmail($str);
+        $str = $this->validate("email", $str);
         
         // Set last name in vCard object making sure we dont overwrite first name)
         $this->_vcard->setEmail($str);
@@ -377,7 +386,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setPhoto($str)
     {
-        $str = PHPFrame_Filter::validateDefault($str);
+        $str = $this->validate("photo", $str);
         
         // Set last name in vCard object making sure we dont overwrite first name)
         $this->_vcard->setPhoto($str);
@@ -409,6 +418,8 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setNotifications($bool)
     {
+        $bool = $this->validate("notifications", $bool);
+        
         // Set local property
         $this->_notifications = (bool) $bool;
     }
@@ -436,6 +447,8 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setShowEmail($bool)
     {
+        $bool = $this->validate("show_email", $bool);
+        
         // Set property
         $this->_show_email = (bool) $bool;
     }
@@ -463,15 +476,17 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setBlock($bool)
     {
+        $bool = $this->validate("block", $bool);
+        
         // Set property
         $this->_block = (bool) $bool;
     }
     
     /**
-     * Get last visit datetime
+     * Get last visit timestamp
      * 
      * @access public
-     * @return string
+     * @return int
      * @since  1.0
      */
     public function getLastVisit()
@@ -482,18 +497,15 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set last visit datetime
      * 
-     * @param string $str
+     * @param int $int
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setLastVisit($str)
+    public function setLastVisit($int)
     {
-        $str = PHPFrame_Filter::validateDateTime($str);
-        
-        // Set property
-        $this->_last_visit = $str;
+        $this->_last_visit = $this->validate("last_visit", $int);
     }
     
     /**
@@ -519,10 +531,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setActivation($str)
     {
-        $str = PHPFrame_Filter::validateDefault($str);
-        
-        // Set property
-        $this->_activation = $str;
+        $this->_activation = $this->validate("activation", $str);
     }
     
     /**
@@ -548,17 +557,14 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setParams($str)
     {
-        $str = PHPFrame_Filter::validateDefault($str);
-        
-        // Set property
-        $this->_params = $str;
+        $this->_params = $this->validate("params", $str);
     }
     
     /**
-     * Get deleted datetime
+     * Get deleted timestamp
      * 
      * @access public
-     * @return string
+     * @return int
      * @since  1.0
      */
     public function getDeleted()
@@ -569,18 +575,19 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set deleted datetime
      * 
-     * @param string $str
+     * @param int $int
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setDeleted($str)
+    public function setDeleted($int)
     {
-        $str = PHPFrame_Filter::validateDateTime($str);
+        if (empty($int)) {
+            return;
+        }
         
-        // Set property
-        $this->_deleted = $str;
+        $this->_deleted = $this->validate("deleted", $int);
     }
     
     /**
@@ -634,7 +641,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function addOpenidUrl($str)
     {
-        $str = PHPFrame_Filter::validateURL($str);
+        $str = $this->validate("openid_urls", $str);
         
         if (!in_array($str, $this->_openid_urls)) {
             $this->_openid_urls[] = $str;
@@ -652,7 +659,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function removeOpenidUrl($str)
     {
-        $str = PHPFrame_Filter::validateURL($str);
+        $str = $this->validate("openid_urls", $str);
         
         foreach ($this->_openid_urls as $url) {
             if ($str != $url) {
@@ -670,7 +677,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * @return array
      * @since  1.0
      */
-    public function toArray()
+    public function getIterator()
     {
         $properties = get_object_vars($this);
         
@@ -692,7 +699,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
             $array[$key] = $value;
         }
         
-        return $array;
+        return new ArrayIterator($array);
     }
     
     /**

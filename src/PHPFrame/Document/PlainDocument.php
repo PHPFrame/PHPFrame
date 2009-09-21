@@ -56,7 +56,12 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
             }
         }
         
-        $str .= "\n\n".$this->getBody();
+        if (PHPFrame::getRunLevel() > 1) {
+            $str .= "\n\n";
+            $str .= (string) PHPFrame::Session()->getSysevents();
+        }
+        
+        $str .= "\n\n".$this->getBody()."\n";
         
         return $str;
     }

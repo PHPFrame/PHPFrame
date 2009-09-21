@@ -338,7 +338,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
             $msg  = get_class($this)." does NOT support an action called '";
             $msg .= $action."'. ".get_class($this)." supports the following ";
             $msg .= "actions: '".implode("','", $supported_methods)."'.";
-            throw new BadMethodCallException($msg);
+            throw new BadMethodCallException($msg, 501);
         }
         
         if (!$reflection_method->isPublic()) {
@@ -366,7 +366,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
                 if (is_null($request_param)) {
                     $msg  = "Required argument '".$param->getName()."' not passed ";
                     $msg .= "to ".get_class($this)."::".$action."().";
-                    throw new BadMethodCallException($msg);
+                    throw new BadMethodCallException($msg, 400);
                 }
             }
             

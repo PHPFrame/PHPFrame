@@ -173,7 +173,7 @@ class PHPFrame_XMLPersistentObjectAssembler
         } else {
             foreach ($collection as $item) {
                 if ($item->getId() == $obj->getId()) {
-                    $item = $obj->toArray();
+                    $item = iterator_to_array($obj);
                 }
             }
         }

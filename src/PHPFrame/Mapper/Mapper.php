@@ -104,7 +104,17 @@ class PHPFrame_Mapper
      */
     public function findOne($id_obj)
     {
-        return $this->_factory->getAssembler()->findOne($id_obj);
+        $obj = $this->_factory->getAssembler()->findOne($id_obj);
+        
+        if (
+            PHPFrame::getRunLevel() > 1 
+            && $obj instanceof PHPFrame_PersistentObject
+            && !$obj->canRead(PHPFrame::Session()->getUser())
+        ) {
+            throw new PHPFrame_AccessDeniedException();
+        }
+        
+        return $obj;
     }
     
     /**
@@ -118,7 +128,18 @@ class PHPFrame_Mapper
      */
     public function find(PHPFrame_IdObject $id_obj=null)
     {
-        return $this->_factory->getAssembler()->find($id_obj);
+        $collection = $this->_factory->getAssembler()->find($id_obj);
+        
+        foreach ($collection as $obj) {
+            if (
+                PHPFrame::getRunLevel() > 1 
+                && !$obj->canRead(PHPFrame::Session()->getUser())
+            ) {
+                throw new PHPFrame_AccessDeniedException();
+            }
+        }
+        
+        return $collection;
     }
     
     /**
@@ -132,6 +153,13 @@ class PHPFrame_Mapper
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
+        if (
+            PHPFrame::getRunLevel() > 1 
+            && !$obj->canWrite(PHPFrame::Session()->getUser())
+        ) {
+            throw new PHPFrame_AccessDeniedException();
+        }
+        
         return $this->_factory->getAssembler()->insert($obj);
     }
     
@@ -146,6 +174,13 @@ class PHPFrame_Mapper
      */
     public function delete(PHPFrame_PersistentObject $obj)
     {
+        if (
+            PHPFrame::getRunLevel() > 1 
+            && !$obj->canWrite(PHPFrame::Session()->getUser())
+        ) {
+            throw new PHPFrame_AccessDeniedException();
+        }
+        
         return $this->_factory->getAssembler()->delete($obj);
     }
     

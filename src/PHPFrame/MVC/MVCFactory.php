@@ -54,12 +54,11 @@ class PHPFrame_MVCFactory
         $super_classes = array("Controller", "Helper", "Lang");
         foreach ($super_classes as $super_class) {
             if (preg_match('/'.$super_class.'$/', $class_name)) {
+                // Set base path for objects of given superclass
+                $file_path .= strtolower($super_class);
                 break;
             }
         }
-        
-        // Set base path for objects of given superclass
-        $file_path .= strtolower($super_class);
         
         // Append lang dir for lang classes
         if ($super_class == "Lang") {
@@ -88,6 +87,30 @@ class PHPFrame_MVCFactory
         if (is_file($file_path)) {
             @include $file_path;
             return;
+        }
+        
+        // Autoload models
+        $models_dir   = PHPFRAME_INSTALL_DIR.DS."src".DS."models";
+        $dir_iterator = new RecursiveDirectoryIterator($models_dir);
+        $filter       = array("php");
+        $iterator     = new RecursiveIteratorIterator(
+            $dir_iterator, 
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        
+        foreach ($iterator as $file) {
+            //echo $file->getRealPath(); continue;
+            if (in_array(end(explode('.', $file->getFileName())), $filter)) {
+                $file_name_without_ext = substr(
+                    $file->getFileName(), 
+                    0, 
+                    strpos($file->getFileName(), ".")
+                );
+                
+                if (strtolower($class_name) == $file_name_without_ext) {
+                    require_once $file->getRealPath();
+                }
+            }
         }
     }
     
@@ -133,15 +156,6 @@ class PHPFrame_MVCFactory
         $model_name = trim((string) $model_name);
         $array      = explode("/", $model_name);
         $class_name = end($array);
-        
-        if (!class_exists($class_name)) {
-            $file_name  = PHPFRAME_INSTALL_DIR.DS."src".DS."models";
-            $file_name .= DS.strtolower($model_name).".php";
-            
-            if (is_file($file_name)) {
-                @include $file_name;
-            }
-        }
         
         // make a reflection object
         $reflectionObj = new ReflectionClass($class_name);

@@ -29,15 +29,21 @@ class PHPFrame_SQLiteDSN extends PHPFrame_DSN
     /**
      * Constructor
      * 
-     * @param string $filename Absolute path to the sqlite3 db file
+     * @param array $options db_name (Absolute path to the sqlite3 db file).
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($filename) 
+    public function __construct($options) 
     {
-        $this->array["filename"] = trim((string) $filename);
+        if (!isset($options["db_name"])) {
+            $msg  = "db_name option is ";
+            $msg .= "required by SQLite DSN";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $this->array["db_name"] = trim((string) $options["db_name"]);
         
         parent::__construct("sqlite");
     }
@@ -51,7 +57,7 @@ class PHPFrame_SQLiteDSN extends PHPFrame_DSN
      */
     public function __toString()
     {
-        $str = $this->array["db_driver"].":".$this->array["filename"];
+        $str = $this->array["db_driver"].":".$this->array["db_name"];
         
         return $str;
     }

@@ -113,6 +113,18 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     protected $perms=null;
     /**
+     * List of known types for fields
+     * 
+     * @var array
+     */
+    private $_field_types = array("int", "varchar", "enum", "text");
+    /**
+     * An array containig filters used to validate data in each field
+     *  
+     * @var array
+     */
+    private $_filters = array();
+    /**
      * Serialised string respresenting clean state. This is used to check if the
      * current state is "dirty" if it has changed since last marked clean.
      * 
@@ -131,6 +143,19 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function __construct(array $options=null)
     {
+        $this->addFilter("id",    "int", null, null, false);
+        $this->addFilter("atime", "int", null, null, false, 0);
+        $this->addFilter("ctime", "int", null, null, false, time());
+        $this->addFilter("mtime", "int", null, null, false, time());
+        $this->addFilter("owner", "int", null, null, false, 1);
+        $this->addFilter("group", "int", null, null, false, 1);
+        $this->addFilter("perms", "int", null, null, false, 664);
+        
+        if (PHPFrame::getRunLevel() > 1 && PHPFrame::Session()->isAuth()) {
+            $this->setOwner(PHPFrame::Session()->getUserId());
+            $this->setGroup(PHPFrame::Session()->getGroupId());
+        }
+        
         // Process options argument if passed
         if (!is_null($options)) {
             $this->bind($options);
@@ -166,7 +191,20 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->toArray());
+        $props_array = get_object_vars($this);
+        $array       = array();
+        
+        foreach ($props_array as $key=>$value) {
+            if (
+                $key != "_field_types" 
+                && $key != "_filters" 
+                && $key != "_clean_state"
+            ) {
+                $array[$key] = $value;
+            }
+        }
+        
+        return new ArrayIterator($array);
     } 
     
     /**
@@ -238,9 +276,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
             return;
         }
         
-        $int = PHPFrame_Filter::validateInt($int);
-        
-        $this->id = $int;
+        $this->id = $this->validate("id", $int);
     }
     
     /**
@@ -266,14 +302,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setATime($int)
     {
-        if (empty($int)) {
-            return;
-        }
-        
-        $int = PHPFrame_Filter::validateInt($int);
-        
-        // Set property
-        $this->atime = $int;
+        $this->atime = $this->validate("atime", $int);
     }
     
     /**
@@ -299,10 +328,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setCTime($int)
     {
-        $int = PHPFrame_Filter::validateInt($int);
-        
-        // Set property
-        $this->ctime = $int;
+        $this->ctime = $this->validate("ctime", $int);
     }
     
     /**
@@ -328,10 +354,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setMTime($int)
     {
-        $int = PHPFrame_Filter::validateInt($int);
-        
-        // Set property
-        $this->mtime = $int;
+        $this->mtime = $this->validate("mtime", $int);
     }
     
     /**
@@ -357,10 +380,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setOwner($int)
     {
-        $int = PHPFrame_Filter::validateInt($int);
-        
-        // Set property
-        $this->owner = $int;
+        $this->owner = $this->validate("owner", $int);
     }
     
     /**
@@ -386,10 +406,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setGroup($int)
     {
-        $int = PHPFrame_Filter::validateInt($int);
-        
-        // Set property
-        $this->group = $int;
+        $this->group = $this->validate("group", $int);
     }
     
     /**
@@ -415,10 +432,21 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setPerms($int)
     {
-        $int = PHPFrame_Filter::validateInt($int);
+        $this->perms = $this->validate("perms", $int);
+    }
+    
+    public function getFilters()
+    {
+        return $this->_filters;
+    }
+    
+    public function getFilter($key)
+    {
+        if (!isset($this->_filters[$key])) {
+            return null;
+        }
         
-        // Set property
-        $this->perms = $int;
+        return $this->_filters[$key];
     }
     
     /**
@@ -428,7 +456,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function markClean()
     {
-        $this->_clean_state = serialize($this->toArray());
+        $this->_clean_state = serialize(iterator_to_array($this));
     }
     
     /**
@@ -439,27 +467,180 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function isDirty()
     {
-        return !($this->_clean_state == serialize($this->toArray()));
+        return !($this->_clean_state == serialize(iterator_to_array($this)));
     }
     
-    /**
-     * Get object as array
-     * 
-     * @access protected
-     * @return array
-     * @since  1.0
-     */
-    protected function toArray()
+    public function isValid()
     {
-        $array = array();
-        $props_array = get_object_vars($this);
+        foreach (iterator_to_array($this) as $key=>$value) {
+            $filter = $this->getFilter($key);
+            if (is_null($filter)) {
+                $msg  = "No filter has been defined for '".$key."' in ";
+                $msg .= get_class($this).". Use \$this->addFilter() to define ";
+                $msg .= "the filter from within the ".get_class($this);
+                $msg .= " class.";
+                throw new LogicException($msg);
+            }
+            
+            switch ($filter["type"]) {
+                case "int" :
+                    $value = PHPFrame_Filter::validateInt($value);
+                    break;
+            }
+        }
+    }
+    
+    protected function addFilter(
+        $field, 
+        $type, 
+        $max_length=null, 
+        $min_length=null, 
+        $allow_null=false,
+        $def_value=null,
+        $regex=null
+    )
+    {
+        if (!in_array($type, $this->_field_types)) {
+            $msg  = "Argument \$type must be one of the following values: ";
+            $msg .= "'".implode("', '",$this->_field_types)."'. Passed value: ";
+            $msg .= "'".$type."'.";
+            throw new DomainException($msg);
+        }
         
-        foreach ($props_array as $key=>$value) {
-            if ($key != "_clean_state") {
-                $array[$key] = $value;
+        if ($type == "varchar" && empty($max_length)) {
+            $msg  = "Argument \$max_length can not be empty if argument \$type";
+            $msg .= " is 'varchar'.";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        if ($type == "enum" && !is_array($max_length)) {
+            $msg  = "Argument \$max_length must be an array if argument \$type";
+            $msg .= " is 'enum'.";
+            throw new InvalidArgumentException($msg);
+        } elseif ($type != "enum") {
+            $max_length = (int) $max_length;
+        }
+        
+        $this->_filters[$field] = array(
+            "type"       => (string) $type,
+            "max_length" => $max_length,
+            "min_length" => (int)    $min_length,
+            "allow_null" => (bool)   $allow_null,
+            "def_value"  => $def_value,
+            "regex"      => (string) $regex
+        );
+    }
+    
+    protected function validate($field, $value)
+    {
+        $filter = $this->getFilter($field);
+        
+        if ($field == "id" && is_null($value)) {
+            return;
+        }
+        
+        if (
+            is_null($value) 
+            && isset($filter["def_value"]) 
+            && !is_null($filter["def_value"])
+        ) {
+            $value = $filter["def_value"];
+        }
+        
+        if (
+            is_null($value) 
+            && isset($filter["allow_null"]) 
+            && !$filter["allow_null"]
+        ) {
+            $msg  = "Field '".$field."' can not be null. Null passed and no ";
+            $msg .= "default value has been defined in filter.";
+            throw new RuntimeException($msg);
+        }
+        
+        if (is_array($filter) && isset($filter["type"])) {
+            switch ($filter["type"]) {
+                case "int" : 
+                    $value = PHPFrame_Filter::validateInt($value);
+                    break;
+                case "varchar" : 
+                    $pattern = '/^.{'.$filter["min_length"].','.$filter["max_length"].'}$/';
+                    $value = PHPFrame_Filter::validateRegExp($value, $pattern);
+                    break;
+                case "enum" :
+                    $value = PHPFrame_Filter::validateEnum($value, $filter["max_length"]);
+                    break; 
+                case "text" :
+                    $value = PHPFrame_Filter::validateDefault($value);
+                    break;
             }
         }
         
-        return $array;
+        if (isset($filter["regex"]) && !empty($filter["regex"])) {
+            switch ($filter["regex"]) {
+                case "email" :
+                    $value = PHPFrame_Filter::validateEmail($value);
+                    break;
+                case "url" :
+                    $value = PHPFrame_Filter::validateURL($value);
+                    break;
+                case "ip" :
+                    $value = PHPFrame_Filter::validateIP($value);
+                    break;
+                default :
+                    $value = PHPFrame_Filter::validateRegExp($value, $filter["regex"]);
+                    break;
+            }
+        }
+        
+        return $value;
+    }
+    
+    public function validateAll()
+    {
+        foreach ($this as $key=>$value) {
+            $setter = "set".str_replace("_", "", $key);
+            $this->$setter($this->validate($key, $value));
+        }
+    }
+    
+    public function canRead(PHPFrame_user $user)
+    {
+        return $this->_checkPerms($user, 4);
+    }
+    
+    public function canWrite(PHPFrame_user $user)
+    {
+        return $this->_checkPerms($user, 6);
+    }
+    
+    private function _checkPerms(PHPFrame_user $user, $access_level)
+    {
+        preg_match('/^(\d)(\d)(\d)$/', $this->getPerms(), $matches);
+        $owner_access = $matches[1];
+        $group_access = $matches[2];
+        $world_access = $matches[3];
+        
+        // Check user access
+        if ($world_access >= $access_level) {
+            return true;
+        }
+        
+        // Check user access
+        if (
+            $user->getId() == $this->getOwner() 
+            && $owner_access >= $access_level
+        ) {
+            return true;
+        }
+        
+        // Check group access
+        if (
+            $user->getGroupId() == $this->getGroup() 
+            && $group_access >= $access_level
+        ) {
+            return true;
+        }
+        
+        return false;
     }
 }

@@ -28,7 +28,7 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
 {
     public function render($value)
     {
-        return (string) $value;
+        return strip_tags(trim((string) $value));
     }
     
     /**

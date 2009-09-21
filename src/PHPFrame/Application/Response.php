@@ -284,8 +284,10 @@ class PHPFrame_Response
     {
         // Send headers
         if (!headers_sent()) {
-            foreach ($this->_headers as $line) {
-                header($line);
+            header("HTTP/1.1 ".$this->_code);
+            
+            foreach ($this->_headers as $key=>$value) {
+                header($key.": ".$value);
             }
         }
         

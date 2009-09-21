@@ -78,6 +78,13 @@
    <file baseinstalldir="/" name="PHPFrame/Document/RPCRenderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/XMLDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/XMLRenderer.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Documentor/AppDoc.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Documentor/ClassDoc.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Documentor/ControllerDoc.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Documentor/MethodDoc.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Documentor/ParamDoc.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Documentor/PropertyDoc.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Exception/AccessDeniedException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/DatabaseException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/ErrorException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/ExceptionHandler.php" role="php" />
@@ -96,19 +103,20 @@
    <file baseinstalldir="/" name="PHPFrame/Lang/en-GB.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/IdObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/Mapper.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/ObjectRelationalToolbox.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectCollection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectFactory.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/IdObject.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/Mapper.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistentObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistenceFactory.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistentObjectAssembler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistentObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistenceFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistentObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/MVCFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/View.php" role="php" />
@@ -120,7 +128,9 @@
    <file baseinstalldir="/" name="PHPFrame/UI/CLIUI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/HTMLUI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/IUI.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/User/Group.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/OpenID.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/User/Organisation.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/User.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/UserHelper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Crypt.php" role="php" />
@@ -140,6 +150,7 @@
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/app.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/config.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/ext.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/controllers/scaffold.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/lang/en-GB/global.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/models/apptemplate.php" role="data" />
    

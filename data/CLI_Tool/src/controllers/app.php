@@ -3,6 +3,15 @@ class AppController extends PHPFrame_ActionController
 {
     private $_install_dir=null;
     
+    /**
+     * Constructor
+     * 
+     * @param string $install_dir
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function __construct($install_dir=null)
     {
         if (is_null($install_dir)) {

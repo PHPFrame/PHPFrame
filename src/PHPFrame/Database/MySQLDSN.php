@@ -29,21 +29,27 @@ class PHPFrame_MySQLDSN extends PHPFrame_DSN
     /**
      * Constructor
      * 
-     * @param string $db_host     The MySQL server host name
-     * @param string $db_name     The MySQL database name
-     * @param string $unix_socket Path to unix socket
+     * @param array $options db_host (The MySQL server host name), db_name 
+     *                       (The MySQL database name), $unix_socket (Path to 
+     *                       unix socket).
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($db_host, $db_name, $unix_socket=null) 
+    public function __construct(array $options=null) 
     {
-        $this->array["db_host"] = $db_host;
-        $this->array["db_name"] = $db_name;
+        if (!isset($options["db_host"]) || !isset($options["db_name"])) {
+            $msg  = "Both db_host and db_name options are ";
+            $msg .= "required by MySQL DSN";
+            throw new InvalidArgumentException($msg);
+        }
         
-        if (!is_null($unix_socket)) {
-            $this->array["unix_socket"] = (string) $unix_socket;
+        $this->array["db_host"] = $options["db_host"];
+        $this->array["db_name"] = $options["db_name"];
+        
+        if (isset($options["unix_socket"])) {
+            $this->array["unix_socket"] = (string) $options["unix_socket"];
         } else {
             $this->array["unix_socket"] = ini_get('mysql.default_socket');
         }

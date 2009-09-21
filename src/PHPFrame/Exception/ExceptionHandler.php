@@ -147,7 +147,14 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
                 $str = '<pre>'.$str;
             }
             
-            echo $str;
+            $status_code = $exception->getCode();
+            if (!empty($status_code) && $status_code > 0) {
+                PHPFrame::Response()->setStatusCode($status_code);
+            } else {
+                PHPFrame::Response()->setStatusCode(500);
+            }
+            PHPFrame::Response()->getDocument()->setBody($str, false);
+            PHPFrame::Response()->send();
         }
         
         // Notify event to observers

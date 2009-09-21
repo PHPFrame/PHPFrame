@@ -37,7 +37,7 @@ abstract class PHPFrame_DSN extends ArrayObject
     /**
      * Constructor
      * 
-     * @param string $db.driver A string identifying the database driver. Possible 
+     * @param string $db_driver A string identifying the database driver. Possible 
      *                          values are: mysql, pgsql, OCI, ODBC, ...
      * 
      * @access public

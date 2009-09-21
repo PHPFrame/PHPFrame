@@ -91,6 +91,7 @@ class PHPFrame
         "Database", 
         "Debug", 
         "Document",
+        "Documentor",
         "Exception",
         "Ext",
         "FileSystem",
@@ -362,10 +363,17 @@ class PHPFrame
             $dsn_concrete_class = "PHPFrame_";
             $dsn_concrete_class .= PHPFrame::Config()->get("db.driver")."DSN";
             
-            $dsn = new $dsn_concrete_class(
-                PHPFrame::Config()->get("db.host"), 
-                PHPFrame::Config()->get("db.name")
-            );
+            if ($dsn_concrete_class == "PHPFrame_SQLiteDSN") {
+                $db_name     = PHPFRAME_VAR_DIR.DS;
+                $db_name    .= PHPFrame::Config()->get("db.name");
+            } else {
+                $db_name = PHPFrame::Config()->get("db.name");
+            }
+            
+            $dsn = new $dsn_concrete_class(array(
+                "db_host" => PHPFrame::Config()->get("db.host"), 
+                "db_name" => $db_name
+            ));
         } elseif (!$dsn instanceof PHPFrame_DSN) {
             $msg = "Argument \$dsn must be instance of PHPFrame_DSN.";
             throw new InvalidArgumentException($msg);
@@ -491,7 +499,8 @@ class PHPFrame
             $sysevents = PHPFrame::Session()->getSysevents();
             $sysevents->append($msg, PHPFrame_Subject::EVENT_TYPE_NOTICE);
             
-            $dsn = new PHPFrame_SQLiteDSN(PHPFRAME_VAR_DIR.DS."data.db");
+            $dsn_options = array("db_name"=>PHPFRAME_VAR_DIR.DS."data.db");
+            $dsn = new PHPFrame_SQLiteDSN($dsn_options);
         } else {
             $dsn = null;
         }

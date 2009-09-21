@@ -35,14 +35,16 @@ class PHPFrame_Filter
      * 
      * @staticvar array
      */
-    private static $_types=array("default", 
-                                 "int", 
-                                 "boolean", 
-                                 "float", 
-                                 "regexp", 
-                                 "url", 
-                                 "email", 
-                                 "ip");
+    private static $_types = array(
+        "default", 
+        "int", 
+        "boolean", 
+        "float", 
+        "regexp", 
+        "url", 
+        "email", 
+        "ip"
+    );
     
     /**
      * Validate data stored in variable
@@ -75,7 +77,8 @@ class PHPFrame_Filter
         $type='default', 
         $options=null, 
         $exceptions=true
-    ) {
+    )
+    {
         // Make sure type is string and make lower case
         $type = (string) strtolower($type);
         // Check if filter type is supported
@@ -319,5 +322,16 @@ class PHPFrame_Filter
     {
         $pattern = '/^([0-9]{4})-([0-1][0-9])-([0-3][0-9]) ([0-2][0-9]):([0-6][0-9]):([0-6][0-9])$/';
         return self::validateRegExp($datetime, $pattern, $exceptions);
+    }
+    
+    public static function validateEnum($value, array $array)
+    {
+        if (!in_array($value, $array)) {
+            $msg  = "Enum validation fail. Allowed values are '";
+            $msg .= implode("', '", $array)."' and '".$value."' was passed.";
+            throw new DomainException($msg);
+        }
+        
+        return $value;
     }
 }

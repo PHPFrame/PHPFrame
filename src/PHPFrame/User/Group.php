@@ -17,6 +17,6 @@ class PHPFrame_Group extends PHPFrame_PersistentObject
     
     public function setName($str)
     {
-        $this->name = (string) $str;
+        $this->name = $this->validate("name", $str);
     }
 }

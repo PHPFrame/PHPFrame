@@ -164,7 +164,7 @@ class PHPFrame_HTMLUI
             // Dynamically add an HTML element at the end of the body to show the dialog
             $("body").append('<div style="position: absolute" id="dialog_<?php echo $uid; ?>"></div>');
             // Add the loading div inside the newly created dialog box
-            $("#dialog_<?php echo $uid; ?>").html('<div class="loading"></div>');
+            $("#dialog_<?php echo $uid; ?>").html('<div class="loading">Loading...</div>');
             
             // Add dialog beaviour to new dialog box
             $("#dialog_<?php echo $uid; ?>").dialog({
@@ -183,7 +183,7 @@ class PHPFrame_HTMLUI
                             <?php if (!empty($ajax_container)) : ?>
                             var ajax_container = $("<?php echo $ajax_container; ?>");
                             // Add the loading div inside the ajax container
-                            ajax_container.html('<div class="loading"></div>');
+                            ajax_container.html('<div class="loading">Loading...</div>');
                             // bind form using 'ajaxForm'
                             form.ajaxForm({ target: ajax_container });
                             <?php endif; ?>
@@ -210,7 +210,7 @@ class PHPFrame_HTMLUI
                 $(this).show();
             })
             .bind("ajaxComplete", function() {
-                   $(this).hide();
+                $(this).hide();
             });
             <?php endif; ?>
 
@@ -309,7 +309,7 @@ class PHPFrame_HTMLUI
                         <?php if (!empty($ajax_container)) : ?>
                         // Add the loading div inside the ajax container
                         $("#"+confirm_response_container_id_<?php echo $uid; ?>).html('<div class="loading"></div>');
-                        $("#"+confirm_response_container_id_<?php echo $uid; ?>).load(confirm_href_<?php echo $uid; ?> + '&tmpl=component');
+                        $("#"+confirm_response_container_id_<?php echo $uid; ?>).load(confirm_href_<?php echo $uid; ?> + '&ajax=1');
                         <?php else : ?>
                         window.location = confirm_href_<?php echo $uid; ?>;
                         <?php endif; ?>
@@ -336,7 +336,7 @@ class PHPFrame_HTMLUI
                 // Prevent element's default onclick
                 e.preventDefault();
         
-                // Get href from current link and add tmpl var
+                // Get href from current link
                 confirm_href_<?php echo $uid; ?> = $(this).attr("href");
                 confirm_title_<?php echo $uid; ?> = $(this).attr("title");
                 
@@ -542,7 +542,7 @@ class PHPFrame_HTMLUI
         
         $token = PHPFrame_Crypt::getToken();
         $data[$token] = '1';
-        $data['tmpl'] = 'component';
+        $data['ajax'] = '1';
         
         $uid = uniqid();
         ?>

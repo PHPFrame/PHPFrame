@@ -115,7 +115,7 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
      * @return void
      * @since  1.0
      */
-    public function append($msg, $type=self::INFO)
+    public function append($msg, $type=PHPFrame_Subject::EVENT_TYPE_INFO)
     {
         $this->_events[] = array($msg, $type);
     }

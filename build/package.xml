@@ -128,6 +128,7 @@
    <file baseinstalldir="/" name="PHPFrame/UI/CLIUI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/HTMLUI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/IUI.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/User/APIUser.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/Group.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/OpenID.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/Organisation.php" role="php" />

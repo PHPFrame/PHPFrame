@@ -153,6 +153,11 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
             } else {
                 PHPFrame::Response()->setStatusCode(500);
             }
+            
+            if (!$response_doc instanceof PHPFrame_Document) {
+                PHPFrame::Response()->setDocument(new PHPFrame_PlainDocument());
+            }
+            
             PHPFrame::Response()->getDocument()->setBody($str, false);
             PHPFrame::Response()->send();
         }

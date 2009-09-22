@@ -80,16 +80,17 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
      */
     public function renderPartial($name)
     {
-        $name = (string) trim($name);
+        $name = trim((string) $name);
         $path = PHPFRAME_INSTALL_DIR.DS."src".DS."views";
         $path .= DS."partials".DS.$name;
         
         if (!is_file($path)) {
             $path .= ".php";
             if (!is_file($path)) {
-                //$msg = "Could not load partial ".$path;
+                $msg = "Could not load partial ".$path;
                 //throw new RuntimeException($msg);
-                return "";
+                //return "";
+                return;
             }
         }
         

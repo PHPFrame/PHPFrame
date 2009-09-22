@@ -142,10 +142,10 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $this->addFilter("lastname", "varchar", 50, 1, false, null, '/^[a-zA-Z \.\-]{1,50}$/');
         $this->addFilter("email", "varchar", 100, 7, false, null, 'email');
         $this->addFilter("photo", "varchar", 128, 1, false, "default.png");
-        $this->addFilter("notifications", "enum", array(0,1), null, null, 1);
-        $this->addFilter("show_email", "enum", array(0,1), null, null, 0);
-        $this->addFilter("block", "enum", array(0,1), null, null, 0);
-        $this->addFilter("last_visit", "int", null, null, true);
+        $this->addFilter("notifications", "enum", array(0,1), null, false, 1);
+        $this->addFilter("show_email", "enum", array(0,1), null, false, 0);
+        $this->addFilter("block", "enum", array(0,1), null, false, 0);
+        $this->addFilter("last_visit", "int", null, null, false, 0);
         $this->addFilter("activation", "varchar", 100, null, true);
         $this->addFilter("params", "text", null, null, true);
         $this->addFilter("deleted", "int", null, null, true);

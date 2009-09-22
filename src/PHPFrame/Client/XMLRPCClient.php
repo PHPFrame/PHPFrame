@@ -33,8 +33,8 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
      * 
      * @static
      * @access public
-     * @return PHPFrame_IClient|boolean Object instance of this class if 
-     *                                         correct helper for client or FALSE 
+     * @return PHPFrame_IClient|boolean Object instance of this class if correct 
+     *                                         helper for client or FALSE 
      *                                         otherwise.
      * @since  1.0
      */
@@ -87,17 +87,38 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
     {
         global $HTTP_RAW_POST_DATA;
         
-        $params = $this->_parseXMLRPC($HTTP_RAW_POST_DATA);
+        $this->_parseXMLRPC($HTTP_RAW_POST_DATA, $request);
         
-        return $params;
+        $request->setRequestTime(time());
+        $request->setQuiet(false);
+        
+        foreach ($_SERVER as $key=>$value) {
+            if (substr($key, 0, 5) == "HTTP_") {
+                $key = str_replace('_', ' ', substr($key, 5));
+                $key = str_replace(' ', '-', ucwords(strtolower($key)));
+                $request->setHeader($key, $value);
+            } elseif ($key == "REQUEST_METHOD") {
+                $request->setMethod($value);
+            } elseif ($key == "REMOTE_ADDR") {
+                $request->setRemoteAddr($value);
+            } elseif ($key == "REQUEST_URI") {
+                $request->setRequestURI($value);
+            } elseif ($key == "SCRIPT_NAME") {
+                $request->setScriptName($value);
+            } elseif ($key == "QUERY_STRING") {
+                $request->setQueryString($value);
+            } elseif ($key == "REQUEST_TIME") {
+                $request->setRequestTime($value);
+            }
+        }
     }
     
     /**
      * Prepare response
      * 
-     * This method is invoked by the front controller before invoking the requested
-     * action in the action controller. It gives the client an opportunity to do 
-     * something before the component is executed.
+     * This method is invoked by the front controller before invoking the 
+     * requested action in the action controller. It gives the client an 
+     * opportunity to do something before the controller is executed.
      * 
      * @param PHPFrame_Response $response The response object to prepare.
      * 
@@ -155,7 +176,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
      * @param string $xml A string containing the XML call.
      * @return array A nice asociative array with all the data.
      */
-    private function _parseXMLRPC($xml) 
+    private function _parseXMLRPC($xml, PHPFrame_RequestRegistry $request) 
     {
         $array = array();
         
@@ -167,16 +188,16 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
         $query = "//methodCall/methodName";
         $query_result = $domXPath->query($query);
         $methodName = $query_result->item(0)->nodeValue;
-        //look for 'component.action' format 
+        //look for 'controller.action' format 
         preg_match('/^([a-zA-Z]+)(\.([a-zA-Z_]+))?$/', $methodName, $matches);
         
         //matches?
         if (count($matches) > 0) {
-            //first match is component
-            $array['request']['component'] = 'com_'.$matches[1];
+            //first match is controller
+            $request->setControllerName($matches[1]);
             //third match is action (if it exists) 
             if (count($matches) > 2) {
-                $array['request']['action'] = $matches[3];    
+                $request->setAction($matches[3]);   
             }
         }
         
@@ -189,33 +210,33 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
             && $query_result->item(0)->hasChildNodes()
         ) {
             $parameters = array();
-            foreach($query_result as $parameter){
+            foreach($query_result as $parameter) {
                 $parameters[] = $this->_parseXMLRPCRecurse($domXPath, $parameter);
             }
-            try{
-                //check if component action request is valid:
+            try {
+                //check if controller action request is valid:
                 $paramMap = $this->_getComponentActionParameterMapping(
-                    $array['request']['component'], 
-                    $array['request']['action'], 
+                    $matches[1], 
+                    $matches[3], 
                     $parameters
                 );
-            } catch (PHPFrame_XMLRPCException $e){
+            } catch (PHPFrame_XMLRPCException $e) {
                 echo $e->getXMLRPCFault();
                 exit;
             }
-            foreach($paramMap as $key=>$value){
-                $array['request'][$key] = $value;
+            
+            foreach ($paramMap as $key=>$value) {
+                $request->setParam($key, $value);
             }
-        }
-        else{
-            try{
-                //check if component action request is valid:
+        } else {
+            try {
+                //check if controller action request is valid:
                 $paramMap = $this->_getComponentActionParameterMapping(
-                    $array['request']['component'], 
-                    $array['request']['action'], 
+                    $matches[1], 
+                    $matches[3], 
                     array()
                 );
-            } catch (PHPFrame_XMLRPCException $e){
+            } catch (PHPFrame_XMLRPCException $e) {
                 echo $e->getXMLRPCFault();
                 exit;
             }
@@ -228,12 +249,12 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
      * Parses an xml-rpc value node and returns the correct data type.
      *
      * @access private
-     * @param object $domXPath    The DOMXPath object used for parsing the XML. This object 
-     *                             is created in _parseXMLResponse().
+     * @param object $domXPath    The DOMXPath object used for parsing the XML. 
+     *                            This object is created in _parseXMLResponse().
      * @param DOMNode $node The value DOMNode to parse
-     * @return various if the given node is a scalar value, the scalar value is returned, 
-     * if the node is a struct, an associative array with key value pairs is returned, 
-     * if the node is an array 
+     * @return various if the given node is a scalar value, the scalar value is 
+     * returned, if the node is a struct, an associative array with key value 
+     * pairs is returned, if the node is an array 
      */
      private function _parseXMLRPCRecurse($domXPath, $node) {
          if (!(($node instanceof DOMNode) && $node->nodeName=='value')) {
@@ -277,27 +298,31 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
     
     /**
      * Returns an associative array mapping the given parameters for a 
-     * component action, first checking if the call is valid.
-     * This method first checks if the component is valid, then 
+     * controller action, first checking if the call is valid.
+     * This method first checks if the controller is valid, then 
      * continues to check if the action name is valid and finally, 
      * whether the parameters are valid. If all the checks pass, an 
      * associative array mapping the real controller action parameters names 
      * to the user specified parameters.
      * 
-     * @param string $component The name of the component
-     * @param string $action The name of the action to check on the component
+     * @param string $controller The name of the controller
+     * @param string $action The name of the action to check on the controller
      * @param array $params The indexed array of parameters required for the 
-     * component action
+     * controller action
      * @return mixed either an array containing paramter mapping or void 
-     * with thrown PHPFrame_XMLRPCException if component, action or parameters are invalid
+     * with thrown PHPFrame_XMLRPCException if controller, action or parameters 
+     * are invalid
      */
-    private function _getComponentActionParameterMapping($component, $action, $params)
+    private function _getComponentActionParameterMapping(
+        $controller, 
+        $action, 
+        $params
+    )
     {
-        $component = substr($component, 4);
-        $reflectionClass = $this->_getComponentClass($component);
+        $reflectionClass = $this->_getControllerClass($controller);
         if (!$reflectionClass) {
             throw new PHPFrame_XMLRPCException(
-                'No such component exists: '.$component, 
+                'No such controller exists: '.$controller, 
                 PHPFrame_XMLRPCException::INVALID_COMPONENT
             );
             return;
@@ -305,7 +330,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
         
         if (!$reflectionClass->hasMethod($action)) {
             throw new PHPFrame_XMLRPCException(
-                'No such action: '.$action.' exists in component: '.$component, 
+                'No such action: '.$action.' exists in controller: '.$controller, 
                 PHPFrame_XMLRPCException::INVALID_ACTION
             );
             return;
@@ -314,7 +339,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
         $actionMethod = $reflectionClass->getMethod($action);
         if (!$actionMethod->isPublic()) {
             throw new PHPFrame_XMLRPCException(
-                'Action: '.$action.' is inaccessible in component: '.$component, 
+                'Action: '.$action.' is inaccessible in controller: '.$controller, 
                 PHPFrame_XMLRPCException::INVALID_ACTION
             );
             return;
@@ -325,13 +350,13 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
         $minReqParams = $actionMethod->getNumberOfRequiredParameters();
         if (count($params) > $numParams) {
             throw new PHPFrame_XMLRPCException(
-                'Too many parameters for action: '.$action.' in component: '.$component, 
+                'Too many parameters for action: '.$action.' in controller: '.$controller, 
                 PHPFrame_XMLRPCException::INVALID_NUMBER_PARAMETERS
             );
             return;
         } elseif (count($params) < $minReqParams) {
             throw new PHPFrame_XMLRPCException(
-                'Too few parameters for action: '.$action.' in component: '.$component,
+                'Too few parameters for action: '.$action.' in controller: '.$controller,
                 PHPFrame_XMLRPCException::INVALID_NUMBER_PARAMETERS
             );
         }
@@ -345,8 +370,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
                 if (
                     $reflectionParam->isArray() 
                     && !is_array($params[$paramPosition])
-                )
-                {
+                ) {
                     $msg  = 'Parameter type mis-match for parameter '.$paramPosition;
                     $msg .= ', expected an array, got primitive type';
                     throw new PHPFrame_XMLRPCException(
@@ -366,8 +390,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
                     !$reflectionParam->isArray() 
                     && empty($class) 
                     && is_array($params[$paramPosition])
-                )
-                {
+                ) {
                     $msg  = 'Parameter type mis-match for parameter '.$paramPosition;
                     $msg .= ', expected a primitive, got a struct/array';
                     throw new PHPFrame_XMLRPCException(
@@ -388,21 +411,21 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
     }
     
     /**
-     * Gets the specified component controller class if it exists. 
-     * This returns the ReflectionClass object if there is an instantiable controller 
-     * class for the specified component.
+     * Gets the specified controller controller class if it exists. 
+     * This returns the ReflectionClass object if there is an instantiable 
+     * controller class for the specified controller.
      * 
-     * @param $component
-     * @return mixed ReflectionClass if a component with this name exists, 
+     * @param $controller
+     * @return mixed ReflectionClass if a controller with this name exists, 
      * FALSE otherwise
      */
-    private function _getComponentClass($component)
+    private function _getControllerClass($controller)
     {
-        $class_name = $component."Controller";
+        $class_name = ucfirst($controller)."Controller";
         
         // make a reflection object
         try{
-        $reflectionObj = new ReflectionClass($class_name);
+            $reflectionObj = new ReflectionClass($class_name);
         } catch (Exception $e){
             return FALSE;
         }
@@ -520,7 +543,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
         
         // Get API user's key
         try {
-            $sql     = "SELECT `key` FROM #__api_clients ";
+            $sql     = "SELECT `key` FROM #__api_users ";
             $sql    .= " WHERE user = '".$x_api_user."'";
             $params  = array(":user"=>$x_api_user);
             $api_key = PHPFrame::DB()->fetchColumn($sql, $params);
@@ -531,7 +554,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
                 // Login the user as group API
                 $user = new PHPFrame_User();
                 $user->setId(2);
-                $user->setGroupId(5);
+                $user->setGroupId(4);
                 $user->setUserName("api");
                 $user->setFirstName('API');
                 $user->setLastName('User');
@@ -540,7 +563,8 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
                 $session = PHPFrame::Session();
                 $session->setUser($user);
                 
-                // Automatically set session token in request so that forms will be allowed
+                // Automatically set session token in request so that forms will 
+                // be allowed
                 PHPFrame::Request()->setParam($session->getToken(), 1);
                 
                 return;
@@ -559,25 +583,25 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
     }
     
     /**
-     * Checks whether the XMLRPC client is able to perform the requested action, throws 
-     * a <code>PHPFrame_XMLRPCException</code> with fault code <code>INVALID_PERMISSIONS</code> 
-     * if not authorized.
+     * Checks whether the XMLRPC client is able to perform the requested action, 
+     * throws a <code>PHPFrame_XMLRPCException</code> with fault code 
+     * <code>INVALID_PERMISSIONS</code> if not authorized.
      * 
-     * @return void or throws PHPFrame_XMLRPCException if XMLRPC client is not authorized 
-     * to perform the requested action
+     * @return void or throws PHPFrame_XMLRPCException if XMLRPC client is not 
+     *         authorized to perform the requested action
      */
     private function _checkAPIPermisssions()
     {
         // Check permissions before we execute
-        $component   = PHPFrame::Request()->getComponentName();
+        $controller  = PHPFrame::Request()->getControllerName();
         $action      = PHPFrame::Request()->getAction();
         $groupid     = PHPFrame::Session()->getGroupId();
         $permissions = PHPFrame::AppRegistry()->getPermissions();
         
-        if ($permissions->authorise($component, $action, $groupid) !== true) {
-            $msg  = "Insufficient XMLRPC API permissions to perform action. XMLRPC ";
-            $msg .= "client is not allowed to ";
-            $msg .= "perform the action: $action on component: $component.";
+        if ($permissions->authorise($controller, $action, $groupid) !== true) {
+            $msg  = "Insufficient XMLRPC API permissions to perform action. ";
+            $msg .= "XMLRPC client is not allowed to ";
+            $msg .= "perform the action: $action on controller: $controller.";
             throw new PHPFrame_XMLRPCException(
                 $msg, 
                 PHPFrame_XMLRPCException::INVALID_PERMISSIONS

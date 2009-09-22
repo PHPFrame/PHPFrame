@@ -154,6 +154,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         if (PHPFrame::getRunLevel() > 1 && PHPFrame::Session()->isAuth()) {
             $this->setOwner(PHPFrame::Session()->getUserId());
             $this->setGroup(PHPFrame::Session()->getGroupId());
+            $this->setPerms(664);
         }
         
         // Process options argument if passed
@@ -439,11 +440,27 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $this->perms = $this->validate("perms", $int);
     }
     
+    /**
+     * Get array with all filters
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
     public function getFilters()
     {
         return $this->_filters;
     }
     
+    /**
+     * Get filter for a given field
+     * 
+     * @param string $key The field name
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
     public function getFilter($key)
     {
         if (!isset($this->_filters[$key])) {
@@ -456,7 +473,9 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Mark object as clean
      * 
+     * @access public
      * @return void
+     * @since  1.0
      */
     public function markClean()
     {
@@ -467,33 +486,30 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * Is object dirty? If it is it means that it has changed since it was last 
      * persisted.
      * 
-     * @return void
+     * @access public
+     * @return bool
+     * @since  1.0
      */
     public function isDirty()
     {
         return !($this->_clean_state == serialize(iterator_to_array($this)));
     }
     
-    public function isValid()
-    {
-        foreach (iterator_to_array($this) as $key=>$value) {
-            $filter = $this->getFilter($key);
-            if (is_null($filter)) {
-                $msg  = "No filter has been defined for '".$key."' in ";
-                $msg .= get_class($this).". Use \$this->addFilter() to define ";
-                $msg .= "the filter from within the ".get_class($this);
-                $msg .= " class.";
-                throw new LogicException($msg);
-            }
-            
-            switch ($filter["type"]) {
-                case "int" :
-                    $value = PHPFrame_Filter::validateInt($value);
-                    break;
-            }
-        }
-    }
-    
+    /**
+     * Add a field filter
+     *  
+     * @param string    $field
+     * @param string    $type
+     * @param int|array $max_length
+     * @param int       $min_length
+     * @param bool      $allow_null
+     * @param mixed     $def_value
+     * @param string    $regex
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
+     */
     protected function addFilter(
         $field, 
         $type, 
@@ -535,6 +551,16 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         );
     }
     
+    /**
+     * Validate a value for a given field
+     * 
+     * @param string $field
+     * @param mixed  $value
+     * 
+     * @access protected
+     * @return mixed
+     * @since  1.0
+     */
     protected function validate($field, $value)
     {
         $filter = $this->getFilter($field);
@@ -559,6 +585,8 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
             $msg  = "Field '".$field."' can not be null. Null passed and no ";
             $msg .= "default value has been defined in filter.";
             throw new RuntimeException($msg);
+        } elseif (is_null($value)  && $filter["allow_null"]) {
+            return $value;
         }
         
         if (is_array($filter) && isset($filter["type"])) {
@@ -599,6 +627,13 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         return $value;
     }
     
+    /**
+     * Validate all fields in object
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function validateAll()
     {
         foreach ($this as $key=>$value) {
@@ -607,16 +642,44 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         }
     }
     
+    /**
+     * Can user read this object?
+     * 
+     * @param PHPFrame_user $user
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
     public function canRead(PHPFrame_user $user)
     {
         return $this->_checkPerms($user, 4);
     }
     
+    /**
+     * Can user write this object?
+     * 
+     * @param PHPFrame_user $user
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
     public function canWrite(PHPFrame_user $user)
     {
         return $this->_checkPerms($user, 6);
     }
     
+    /**
+     * Check permissions
+     * 
+     * @param PHPFrame_user $user
+     * @param int           $access_level
+     * 
+     * @access private
+     * @return bool
+     * @since  1.0
+     */
     private function _checkPerms(PHPFrame_user $user, $access_level)
     {
         preg_match('/^(\d)(\d)(\d)$/', $this->getPerms(), $matches);

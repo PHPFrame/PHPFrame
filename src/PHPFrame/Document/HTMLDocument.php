@@ -232,15 +232,18 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     public function setBody($str, $apply_theme=true)
     {
-        parent::setBody($str);
-        
         if (
             $apply_theme 
             && PHPFrame::getRunLevel() > 1 
             && !PHPFrame::Request()->isAJAX()
         ) {
-            $this->_applyTheme();
+            $str = $this->_applyTheme($str);
+        } else {
+            $sysevents = PHPFrame::Response()->getRenderer()->renderPartial("sysevents");
+            $str = $sysevents.$str;
         }
+        
+        parent::setBody($str);
     }
     
     /**
@@ -250,7 +253,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      * @return void
      * @since  1.0
      */
-    private function _applyTheme() 
+    private function _applyTheme($str) 
     {
         // Add theme stylesheets
         $this->addStyleSheet("themes/".PHPFrame::Config()->get("theme")."/css/styles.css");
@@ -258,7 +261,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // make pathway available in local scope
         $pathway = PHPFrame::Response()->getPathway();
         
-        $component_output = $this->getBody();
+        $component_output = $str;
         
         // Set file name to load depending on session auth
         $controller = PHPFrame::Request()->getControllerName();
@@ -274,9 +277,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         ob_start();
         require_once $template_path.DS.$template_filename;
         // save buffer in body
-        parent::setBody(ob_get_contents());
+        $str = ob_get_contents();
         // clean output buffer
         ob_end_clean();
+        
+        return $str;
     }
     
     /**

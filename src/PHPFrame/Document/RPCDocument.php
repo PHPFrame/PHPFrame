@@ -52,6 +52,9 @@ class PHPFrame_RPCDocument extends PHPFrame_XMLDocument
      */
     public function __toString()
     {
-        return $this->indent($this->dom->saveXML());
+        // Commented out indentation as it was making some of the parsing fail
+        // in the client clients 
+        //return $this->indent($this->dom->saveXML());
+        return $this->dom->saveXML();
     }
 }

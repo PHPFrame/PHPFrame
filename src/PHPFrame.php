@@ -534,6 +534,11 @@ class PHPFrame
             self::Mount();
         }
         
+        /**
+         * Register MVC autoload function
+         */
+        spl_autoload_register(array("PHPFrame_MVCFactory", "__autoload"));
+        
         $frontcontroller = new PHPFrame_FrontController();
         $frontcontroller->run();
     }

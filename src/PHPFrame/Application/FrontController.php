@@ -90,11 +90,6 @@ class PHPFrame_FrontController
      */
     public function run() 
     {
-        /**
-         * Register MVC autoload function
-         */
-        spl_autoload_register(array("PHPFrame_MVCFactory", "__autoload"));
-        
         // Invoke dispatchLoopStartup hook
         $this->_plugin_handler->handle("dispatchLoopStartup");
         

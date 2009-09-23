@@ -32,6 +32,13 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     private $_groupid=0;
     /**
+     * Text label for groupid. This is not stored in the users db table and is 
+     * instead retrieved by joining with the groups table.
+     * 
+     * @var string
+     */
+    private $_groupname=null;
+    /**
      * Username
      * 
      * @var string
@@ -191,6 +198,32 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     public function setGroupId($int)
     {
         $this->_groupid = $this->validate("groupid", $int);
+    }
+    
+    /**
+     * Get groupname
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getGroupName()
+    {
+        return $this->_groupname;
+    }
+    
+    /**
+     * Set groupname
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setGroupName($str)
+    {
+        $this->_groupname = trim((string) $str);
     }
     
     /**
@@ -683,7 +716,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         
         foreach ($properties as $key=>$value) {
             // Ignore vCard object when rendering as array
-            if ($key == "_vcard") {
+            if ($key == "_vcard" || $key == "_groupname") {
                 continue;
             }
             
@@ -700,27 +733,5 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         }
         
         return new ArrayIterator($array);
-    }
-    
-    /**
-     * Is email address already registered?
-     * 
-     * @param string $email The email address to check
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    private function _emailExists($email) 
-    {
-        $sql = "SELECT id FROM #__users ";
-        $sql .= " WHERE email = ':email' ";
-        $sql .= " AND (deleted = '0000-00-00 00:00:00' OR deleted IS NULL) ";
-        //echo str_replace("#_", "eo", $query); exit;
-        //TODO: FIx me!!
-        
-        $id = PHPFrame::DB()->fetchColumn($sql, array(":email"=>$email));
-        
-        return ($id > 0);
     }
 }

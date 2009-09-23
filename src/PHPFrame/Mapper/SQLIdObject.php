@@ -253,22 +253,22 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
         $join       = trim((string) $join);
         $join_array = explode(" ON ", $join);
         
-        $array = array();
+        preg_match('/^(JOIN|INNER JOIN|OUTER JOIN|LEFT JOIN|RIGHT JOIN)\s+(.*)$/', $join_array[0], $matches);
+        if (is_array($matches) && count($matches) == 3) {
+            $array["type"]       = $matches[1];
+            $array["table_name"] = $matches[2];
+        } elseif(count($matches) == 4) {
+            $array["table_alias"] = $matches[2];
+        } else {
+            throw new LogicException("SQL join clause not recognised");
+        }
         
-        $array["table_alias"] = substr($join_array[0], (strrpos($join_array[0], " ")+1));
-        $join_type_and_table  = substr($join_array[0], 0, strrpos($join_array[0], " "));
-        
-        // Validate input type and set internal property
-        $pattern = "/^([a-zA-Z]*[ ]{0,1}JOIN) ([a-zA-Z_ \#\.\(\)]+)/";
-        preg_match($pattern, $join_type_and_table, $matches);
-        
-        $array["type"]       = $matches[1];
-        $array["table_name"] = $matches[2];
-        
-        $pattern = "/([a-zA-Z]+\.[a-zA-Z_]+) (=) ([a-zA-Z]+\.[a-zA-Z_]+)/";
-        preg_match($pattern, $join_array[1], $matches);
-        
-        $array["on"] = array($matches[1], $matches[2], $matches[3]);
+        preg_match('/^(.+)\s+(=|<>|<|>|<=|>=)\s+(.+)$/', $join_array[1], $matches);
+        if (is_array($matches) && count($matches) > 3) {
+            $array["on"] = array($matches[1], $matches[2], $matches[3]);
+        } else {
+            throw new LogicException("SQL join clause not recognised");
+        }
         
         $this->_join[] = $array;
         
@@ -614,9 +614,11 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
         $sql = "";
         
         foreach ($this->_join as $join) {
-            $sql .= " ".$join["type"]." ".$join["table_name"];
-            $sql .= " ".$join["table_alias"]." ON ";
-            $sql .= $join["on"][0]." ".$join["on"][1]." ".$join["on"][2];
+            $sql .= " ".$join["type"]." ".$join["table_name"]." ";
+            if (isset($join["table_alias"])) {
+                $sql .= $join["table_alias"]." ";
+            }
+            $sql .= "ON ".$join["on"][0]." ".$join["on"][1]." ".$join["on"][2];
         }
         
         return $sql;

@@ -94,10 +94,11 @@ class PHPFrame_SQLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
         // Get raw data as array from db
         $db  = PHPFrame::DB();
         $raw = $db->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
-        
+        //print_r($id_obj->getTableName()); exit;
         // Get total number of entries without taking limits into account
         // This is used to build pagination for the collection objects
-        $sql  = "SELECT COUNT(id) FROM ".$this->factory->getTableName();
+        $sql  = "SELECT COUNT(".$this->factory->getTableName().".id) ";
+        $sql .= "FROM ".$this->factory->getTableName();
         if ($id_obj->getJoinsSQL()) {
             $sql .= "\n".$id_obj->getJoinsSQL();
         }

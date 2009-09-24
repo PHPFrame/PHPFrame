@@ -15,7 +15,7 @@
 
 class PHPFrame_Lang
 {
-    // environment > request
+    // environment > session
     const SESSION_ERROR_NO_CLIENT_DETECTED="ERROR: No client could be found!";
     
     // application > sysevents

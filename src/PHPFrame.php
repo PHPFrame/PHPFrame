@@ -490,6 +490,13 @@ class PHPFrame
             self::Env();
         }
         
+        if (!defined("PHPFRAME_VAR_DIR")) {
+            $msg  = "No 'var' directory has been defined for your app. ";
+            $msg .= "Please make sure to that your app defines the ";
+            $msg .= "PHPFRAME_VAR_DIR constant before mounting.";
+            throw new LogicException($msg);
+        }
+        
         // Fall back to SQLite embedded db if no db enabled in etc/phpframe.ini
         // Otherwise we pass a null dsn to use config settings
         if (!PHPFrame::Config()->get("db.enable")) {

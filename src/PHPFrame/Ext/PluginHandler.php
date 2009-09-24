@@ -11,7 +11,6 @@
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @ignore
  */
 
 /**

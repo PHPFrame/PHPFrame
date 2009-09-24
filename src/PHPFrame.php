@@ -573,20 +573,6 @@ class PHPFrame
      */
     private static function _loadLanguage()
     {
-        // load the application language file if any
-        if (defined("PHPFRAME_INSTALL_DIR")) {
-            $lang_file = PHPFRAME_INSTALL_DIR.DS."src".DS."lang".DS;
-            $lang_file .= PHPFrame::Config()->get("default_lang").DS;
-            $lang_file .= "global.php";
-            
-            if (file_exists($lang_file)) {
-                require $lang_file;
-            } else {
-                $msg = 'Could not find language file ('.$lang_file.')';
-                throw new RuntimeException($msg);
-            }
-        }
-        
         // Include the PHPFrame framework's language file
         $lang_file = "PHPFrame".DS."Lang";
         $lang_file .= DS.PHPFrame::Config()->get("default_lang").".php";

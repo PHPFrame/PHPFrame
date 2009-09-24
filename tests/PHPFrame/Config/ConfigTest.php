@@ -1,5 +1,7 @@
 <?php
-require_once "PHPFrame.php";
+$src_dir = str_replace(DIRECTORY_SEPARATOR."tests".DIRECTORY_SEPARATOR."PHPFrame".DIRECTORY_SEPARATOR."Config", "", dirname(__FILE__));
+$src_dir .= DIRECTORY_SEPARATOR."src";
+require_once $src_dir.DIRECTORY_SEPARATOR."PHPFrame.php";
 
 class testPHPFrame_Config extends PHPUnit_Framework_TestCase
 {

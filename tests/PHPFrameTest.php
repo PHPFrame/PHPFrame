@@ -1,5 +1,7 @@
 <?php
-require_once "PHPFrame.php";
+$src_dir = str_replace(DIRECTORY_SEPARATOR."tests", "", dirname(__FILE__));
+$src_dir .= DIRECTORY_SEPARATOR."src";
+require_once $src_dir.DIRECTORY_SEPARATOR."PHPFrame.php";
 
 // Set constant with app specific path to tmp directory
 define("PHPFRAME_TMP_DIR", dirname(__FILE__).DIRECTORY_SEPARATOR."tmp");

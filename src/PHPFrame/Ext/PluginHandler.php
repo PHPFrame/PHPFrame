@@ -15,6 +15,21 @@ class PHPFrame_PluginHandler
     public function __construct()
     {
         $this->_plugins = new SplObjectStorage();
+        
+        $plugins_path  = PHPFRAME_INSTALL_DIR;
+        $plugins_path .= DIRECTORY_SEPARATOR."src";
+        $plugins_path .= DIRECTORY_SEPARATOR."plugins";
+        set_include_path($plugins_path.PATH_SEPARATOR.get_include_path());
+        
+        /**
+         * Register MVC autoload function
+         */
+        spl_autoload_register(array("PHPFrame_PluginHandler", "__autoload"));
+    }
+    
+    public static function __autoload($class_name)
+    {
+        require strtolower(trim($class_name)).".php";
     }
     
     public function registerPlugin(PHPFrame_Plugin $plugin)

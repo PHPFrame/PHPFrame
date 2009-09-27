@@ -27,7 +27,7 @@
  * @uses       Console_ProgressBar
  * @since      1.0
  */
-class PHPFrame_DownloadRequestListener extends HTTP_Request_Listener
+class PHPFrame_DownloadRequestListener implements SplObserver 
 {
    /**
     * Handle for the target file
@@ -42,11 +42,17 @@ class PHPFrame_DownloadRequestListener extends HTTP_Request_Listener
     */
     private $_bar;
    /**
+    * Path to download directory
+    * 
+    * @var string
+    */
+    private $_download_dir = null;
+    /**
     * Name of the target file
     * 
     * @var string
     */
-    private $_target;
+    private $_filename = null;
    /**
     * Number of bytes received so far
     * 
@@ -63,71 +69,118 @@ class PHPFrame_DownloadRequestListener extends HTTP_Request_Listener
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->_download_dir = getcwd();
     }
 
    /**
-    * Opens the target file
-    * @param string Target file name
+    * Set target file name
     * 
-    * @throws PEAR_Error
+    * @param string $str Target file name
+    * 
     * @access public
     * @return void
     * @since  1.0
     */
-    public function setTarget($target)
+    public function setFileName($str)
     {
-        $this->_target = $target;
-        $this->_fp = @fopen($target, 'wb');
-        if (!$this->_fp) {
-            PEAR::raiseError("Cannot open '{$target}'");
-        }
+        $this->_filename = (string) $str;
+    }
+    
+   /**
+    * Set path to download directory
+    * 
+    * @param string $str Path to download directory
+    * 
+    * @access public
+    * @return void
+    * @since  1.0
+    */
+    public function setDownloadDir($str)
+    {
+        $this->_download_dir = (string) $str;
     }
     
     /**
      * Handle update event updates
      * 
-     * @param $subject
-     * @param $event
-     * @param $data
+     * @param SplSubject $subject
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function update($subject, $event, $data=null)
+    public function update(SplSubject $subject)
     {
-        switch ($event) {
-            case 'gotHeaders':
-                $this->_bar = new Console_ProgressBar(
-                    '* '.$subject->_url->path.' %fraction% KB [%bar%] %percent%', 
+        $event = $subject->getLastEvent();
+        
+        switch ($event["name"]) {
+            case "receivedHeaders" :
+                // Try to get file name from headers
+                $response     = $event["data"];
+                $content_disp = $response->getHeader("content-disposition");
+                if (!empty($content_disp)) {
+                    preg_match('/filename="(.*)"/', $content_disp, $matches);
+                    if (isset($matches[1])) {
+                        $this->setFileName($matches[1]);
+                    }
+                }
+                
+                // If status is not OK we return (important for redirects)
+                if ($response->getStatus() != 200) {
+                    return;
+                }
+                
+                // If no target has been specified so far we use URLs file name
+                if (empty($this->_filename)) {
+                    $url           = $subject->getURL();
+                    $this->_filename = end(explode("/", $url->getPath()));
+                    if (empty($this->_filename)) {
+                        $this->_filename = $url->getHost();
+                    }
+                }
+                
+                $this->_fp = @fopen($this->_download_dir.DS.$this->_filename, 'wb');
+                if (!$this->_fp) {
+                    $msg  = "Cannot open '".$this->_download_dir.DS;
+                    $msg .= $this->_filename."'";
+                    throw new RuntimeException($msg);
+                }
+                
+                $content_length = $response->getHeader("content-length");
+                $this->_bar     = new Console_ProgressBar(
+                    '* '.$this->_filename.' %fraction% KB [%bar%] %percent%', 
                     '=>', 
                     '-', 
                     79, 
-                    (isset($data['content-length']) ? 
-                        round($data['content-length'] / 1024) : 100)
+                    (
+                    isset($content_length) 
+                        ?  round($content_length / 1024) 
+                        : 100
+                    )
                 );
                 
                 $this->_size = 0;
                 break;
 
-            case 'tick':
-                $this->_size += strlen($data);
+            case "receivedBodyPart" :
+                $this->_size += strlen($event["data"]);
                 $this->_bar->update(round($this->_size / 1024));
-                fwrite($this->_fp, $data);
+                fwrite($this->_fp, $event["data"]);
                 break;
 
-            case 'gotBody':
+            case "receivedBody" :
                 fclose($this->_fp);
                 break;
 
-            case 'sentRequest': 
-            case 'connect':
-            case 'disconnect':
+            case "sentHeaders" : 
+            case "sentBodyPart" :
+            case "connect" :
+            case "disconnect" :
                 break;
 
             default:
-                PEAR::raiseError("Unhandled event '{$event}'");
+                $msg = "Unhandled event '".$subject->getLastEvent()."'";
+                throw new RuntimeException($msg);
         }
     }
 }

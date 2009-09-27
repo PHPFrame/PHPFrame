@@ -100,6 +100,8 @@
    <file baseinstalldir="/" name="PHPFrame/FileSystem/FileObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/FileSystem/Filesystem.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/DownloadRequestListener.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/HTTP/FeedReader.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/HTTP/HTTPRequest.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Lang/en-GB.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />
@@ -136,7 +138,6 @@
    <file baseinstalldir="/" name="PHPFrame/User/UserHelper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Crypt.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Exec.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Utils/FeedReader.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Filter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/ImageProcessor.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/URI.php" role="php" />

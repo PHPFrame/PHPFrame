@@ -36,7 +36,8 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
     public function routeStartup() 
     {
         
-        // If there is no request uri (ie: we are on the command line) we do not rewrite
+        // If there is no request uri (ie: we are on the command line) we do 
+        // not rewrite
         if (!isset($_SERVER['REQUEST_URI'])) {
             return;
         }

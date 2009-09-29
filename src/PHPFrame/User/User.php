@@ -582,15 +582,28 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set params
      * 
-     * @param string $str
+     * @param string|array $params Either a serialised string or an array
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setParams($str)
+    public function setParams($params)
     {
-        $this->_params = $this->validate("params", $str);
+        if (is_string($params)) {
+            $params = unserialize($params);
+            if (!is_array($params)) {
+                $params = array();
+            }
+        }
+        
+        if (!is_array($params)) {
+            $msg  = "Argument \$params must be either a serialised string or ";
+            $msg .= "an array";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $this->_params = $params;
     }
     
     /**

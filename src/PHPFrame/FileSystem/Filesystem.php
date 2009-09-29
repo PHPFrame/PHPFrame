@@ -26,6 +26,17 @@
  */
 class PHPFrame_Filesystem
 {
+    /**
+     * Touch a file
+     * 
+     * @param string $filename
+     * 
+     * @static
+     * @access public
+     * @return void
+     * @throws RuntimeException if touch fails
+     * @since  1.0
+     */
     public static function touch($filename)
     {
         if (!touch($filename)) {
@@ -34,10 +45,94 @@ class PHPFrame_Filesystem
         }
     }
     
-    public static function cp($origin, $destination, $recursive=false) {}
-    public static function mv($origin, $destination) {}
-    public static function ls($dir) {}
-    public static function rm($file) {}
+    /**
+     * Copy file
+     * 
+     * @param string $source
+     * @param string $dest
+     * @param bool   $recursive
+     * 
+     * @static
+     * @access public
+     * @return void
+     * @throws RuntimeException if copy fails
+     * @since  1.0
+     * @todo   handle recursive copy
+     */
+    public static function cp($source, $dest, $recursive=false)
+    {
+        if (is_dir($source) && !$recursive) {
+            $msg  = $source." is a directory. To copy directories pass third ";
+            $msg .= " argument 'recursive' with a value of TRUE."; 
+            throw new LogicException($msg);
+        } elseif (is_dir($source) && $recursive) {
+            $dir_it = new RecursiveDirectoryIterator($source);
+            //print_r($dir_it);
+            echo "FIX ME!! Im in ".__FILE__." line ".__LINE__;
+            exit;
+        } else {
+            $array = explode(DS, $dest);
+            array_pop($array);
+            $dest_dir = implode(DS, $array);
+            PHPFrame_Filesystem::ensureWritableDir($dest_dir);
+            if (!copy($source, $dest)) {
+                $msg = "Could not copy '".$source."' to '".$dest."'";
+                throw new RuntimeException($msg);
+            }
+        }
+    }
+    
+    /**
+     * Move/rename file
+     * 
+     * @param string $origin
+     * @param string $destination
+     * 
+     * @static
+     * @access public
+     * @return void
+     * @throws RuntimeException if move fails
+     * @since  1.0
+     * @todo   method not implemented
+     */
+    public static function mv($origin, $destination)
+    {
+        echo "FIX ME!! Im in ".__FILE__." line ".__LINE__;
+    }
+    
+    /**
+     * Remove file
+     * 
+     * @param string $file
+     * 
+     * @static
+     * @access public
+     * @return void
+     * @throws RuntimeException if move fails
+     * @since  1.0
+     * @todo   method not implemented
+     */
+    public static function rm($file)
+    {
+        echo "FIX ME!! Im in ".__FILE__." line ".__LINE__;
+    }
+    
+    /**
+     * List directory contents
+     * 
+     * @param string $dir
+     * 
+     * @static
+     * @access public
+     * @return Iterator
+     * @throws RuntimeException if move fails
+     * @since  1.0
+     * @todo   method not implemented
+     */
+    public static function ls($dir)
+    {
+        echo "FIX ME!! Im in ".__FILE__." line ".__LINE__;
+    }
     
     /**
      * Ensure that directory is writable

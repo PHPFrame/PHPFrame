@@ -66,7 +66,7 @@ class PHPFrame_DatabaseException extends RuntimeException
              $this->_driver_msg = $error_info[2];
         }
         
-        $msg .= " SQLSTATE: ". $this->_sqlstate;
+        $msg .= "\nSQLSTATE: ". $this->_sqlstate;
         $msg .= "\nDriver code: ".$this->_driver_code;
         $msg .= "\nDriver message: ".$this->_driver_msg;
         

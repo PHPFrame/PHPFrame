@@ -32,6 +32,8 @@ class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
      * Constructor
      * 
      * @param string $target_class
+     * @param string $table_name
+     * @param string $path         [Optional]
      * 
      * @access public
      * @return void

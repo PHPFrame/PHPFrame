@@ -26,17 +26,32 @@
  */
 class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
 {
+    private $_db;
+    
     /**
      * Constructor
      * 
-     * @param string $target_class
+     * @param string            $target_class
+     * @param string            $table_name
+     * @param PHPFrame_Database $db           [Optional]
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($target_class, $table_name) {
+    public function __construct(
+        $target_class, 
+        $table_name, 
+        PHPFrame_Database $db=null
+    )
+    {
         parent::__construct($target_class, $table_name);
+        
+        if ($db instanceof PHPFrame_Database) {
+            $this->_db = $db;
+        } else {
+            $this->_db = PHPFrame::DB();
+        }
     }
     
     /**
@@ -63,5 +78,10 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
         $options = array("select"=>"*", "from"=>$this->getTableName());
         
         return new PHPFrame_SQLIdObject($options);
+    }
+    
+    public function getDB()
+    {
+        return $this->_db;
     }
 }

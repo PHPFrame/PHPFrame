@@ -130,8 +130,13 @@ class PHPFrame_XMLPersistentObjectAssembler
         
         if ($serialiser->unserialize($this->_file_info->getRealPath(), true)) {
             $raw_tmp = $serialiser->getUnserializedData();
+            
             if (!$raw_tmp instanceof PEAR_Error) {
-                $raw = $raw_tmp[$this->factory->getTargetClass()];
+                if (key_exists($this->factory->getTargetClass(), $raw_tmp)) {
+                    $raw = $raw_tmp[$this->factory->getTargetClass()];
+                } else {
+                    $raw = $raw_tmp;
+                }
             }
         }
         
@@ -212,24 +217,13 @@ class PHPFrame_XMLPersistentObjectAssembler
         PHPFrame_PersistentObjectCollection $collection
     )
     {
-        $options = array(
-            "indent"    => "    ",
-            "rootName"=> "collection",
-            "defaultTagName"=> $this->factory->getTargetClass()
-        );
-        
-        // Flatten collectio object to array
+        // Flatten collection object to array
         $array = array();
-        
         foreach ($collection as $item) {
-            $array[] = iterator_to_array($item);
+            $array[get_class($item)][] = iterator_to_array($item);
         }
         
-        $serialiser = new XML_Serializer($options);
-        $serialiser->serialize($array);
-        $serialised = $serialiser->getSerializedData();
-        
-        return $serialised;
+        return PHPFrame_XMLSerialiser::serialise($array, "collection");
     }
     
     /**

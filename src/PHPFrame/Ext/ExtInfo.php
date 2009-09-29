@@ -96,25 +96,13 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      * 
      * @var array
      */
-    protected $dependencies = array();
+    protected $dependencies = array("required"=>array(), "optional"=>array());
     /**
      * Package contents
      * 
      * @var array
      */
     protected $contents = array();
-    /**
-     * Array containing list of installation scripts
-     * 
-     * @var array
-     */
-    protected $install = array();
-    /**
-     * Array containing list of uninstallation scripts
-     * 
-     * @var array
-     */
-    protected $uninstall = array();
     /**
      * Boolean indicating whether addon is enabled
      * 
@@ -411,9 +399,9 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      * @return void
      * @since  1.0
      */
-    public function addContent(array $array)
+    public function setContents(array $array)
     {
-        $this->contents[] = $array;
+        $this->contents = $array;
     }
     
     /**

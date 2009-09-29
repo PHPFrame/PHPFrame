@@ -1,7 +1,9 @@
 <?php
 class ExtController extends PHPFrame_ActionController
 {
+    private $_ext_types=array("feature", "theme", "plugin", "lib");
     private $_install_dir=null;
+    private $_config=null;
     
     public function __construct($install_dir=null)
     {
@@ -11,15 +13,23 @@ class ExtController extends PHPFrame_ActionController
             $this->_install_dir = (string) trim($install_dir);
         }
         
+        $config_path   = $this->_install_dir.DS."etc".DS."phpframe.ini";
+        $this->_config = PHPFrame_Config::instance($config_path);
+        
         parent::__construct("install");
     }
     
-    public function install($name, $type=null)
+    public function install($package)
     {
-        $ext_installer = $this->getModel("ExtInstaller", array($this->_install_dir));
+        $package = trim($package);
         
         try {
-            $ext_installer->install($name, $type);
+            $ext_installer = $this->getModel(
+                "ExtInstaller", 
+                array($this->_install_dir)
+            );
+            
+            $ext_installer->install($package);
             
         } catch (Exception $e) {
             $this->raiseError($e->getMessage());
@@ -28,22 +38,48 @@ class ExtController extends PHPFrame_ActionController
         $this->getView()->display();
     }
     
-    public function upgrade($name, $type=self::EXT_FEATURE)
+    public function upgrade($package)
     {
         echo "This should upgrade a given extension";
     }
     
-    public function remove($name, $type=self::EXT_FEATURE)
+    public function remove($package, $ext_type="feature")
     {
-        echo "This should remove a given extension";
+        if (!in_array($ext_type, $this->_ext_types)) {
+            $msg  = "Extension type not recognised. Argument ext_type must be ";
+            $msg .= "one of the following values: '";
+            $msg .= implode("','", $this->_ext_types)."'.";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $mapper = new PHPFrame_Mapper(
+            "PHPFrame_".ucfirst($ext_type)."Info",
+            $ext_type."s",
+            PHPFrame_Mapper::STORAGE_XML,
+            false,
+            $this->_install_dir.DS."etc"
+        );
+        
+        foreach ($mapper->find() as $ext) {
+            if ($ext->getName() == $package) {
+                break;
+            }
+        }
+        
+        print_r($ext);
+        
+        // Remove files
+        
+        // Run uninstall script
+        
     }
     
-    public function list_installed()
+    public function list_installed($ext_type)
     {
         echo "This should show a list of installed extensions";
     }
     
-    public function list_available()
+    public function list_available($ext_type, $server=null)
     {
         echo "This should show a list of available extensions";
     }

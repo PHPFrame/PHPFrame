@@ -24,7 +24,8 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_SQLPersistentObjectAssembler extends PHPFrame_PersistentObjectAssembler
+class PHPFrame_SQLPersistentObjectAssembler 
+    extends PHPFrame_PersistentObjectAssembler
 {
     /**
      * Constructor
@@ -92,7 +93,7 @@ class PHPFrame_SQLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
         }
         
         // Get raw data as array from db
-        $db  = PHPFrame::DB();
+        $db  = $this->factory->getDB();
         $raw = $db->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
         //print_r($id_obj->getTableName()); exit;
         // Get total number of entries without taking limits into account
@@ -145,11 +146,12 @@ class PHPFrame_SQLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
         
         $sql    = $this->$build_query_method(iterator_to_array($obj));
         $params = $this->_buildQueryParams(iterator_to_array($obj));
+        $db     = $this->factory->getDB();
         
-        PHPFrame::DB()->query($sql, $params);
+        $db->query($sql, $params);
         
         if ($obj->getId() <= 0) {
-            $obj->setId(PHPFrame::DB()->lastInsertId());
+            $obj->setId($db->lastInsertId());
         }
         
         $obj->markClean();
@@ -170,7 +172,7 @@ class PHPFrame_SQLPersistentObjectAssembler extends PHPFrame_PersistentObjectAss
         $sql   .= " WHERE id = :id";
         $params = array(":id"=>$obj->getId());
         
-        PHPFrame::DB()->query($sql, $params);
+        $this->factory->getDB()->query($sql, $params);
     }
     
     /**

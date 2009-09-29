@@ -94,7 +94,8 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
         $total=null, 
         $limit=-1, 
         $limitstart=0
-    ) {
+    )
+    {
         if (!is_null($raw) && !is_null($obj_factory)) {
             // If the raw array is only one level of depth we assume it is 
             // only one element and we wrap it in an array to make is a  

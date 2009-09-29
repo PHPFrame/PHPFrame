@@ -76,7 +76,8 @@ abstract class PHPFrame_PersistenceFactory
         $table_name, 
         $storage=self::STORAGE_SQL, 
         $try_alternative_storage=true
-    ) {
+    )
+    {
         switch ($storage) {
             case self::STORAGE_SQL :
                 $class_name = "PHPFrame_SQLPersistenceFactory";

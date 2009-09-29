@@ -26,33 +26,8 @@
  */
 class PHPFrame_XMLRenderer implements PHPFrame_IRenderer
 {
-    /**
-     * Render view and store in document's body
-     * 
-     * This method is invoked by the views and renders the ouput data in the
-     * document specific format.
-     * 
-     * @param PHPFrame_View $view The view object to process.
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function renderView(PHPFrame_View $view) {}
-    
-    /**
-     * Method used to render Row Collections in this document
-     * 
-     * @param PHPFrame_Collection
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function renderCollection(PHPFrame_Collection $collection)
+    public function render($value)
     {
-        $str = "FIX ME!!!: ".get_class($this)."::renderRowCollection().";
-        
-        return $str;
+        return PHPFrame_XMLSerialiser::serialise($value);
     }
 }

@@ -124,7 +124,10 @@ class PHPFrame
      * @return void
      * @since  1.0
      */
-    private function __construct() {}
+    private function __construct()
+    {
+        //...
+    }
     
     /**
      * Autoload magic method
@@ -182,12 +185,12 @@ class PHPFrame
             @include $file_path;
             return;
         } elseif ($class_name == "PHPMailer") {
-            $file_path = PEAR_Config::singleton()->get("data_dir"); 
+            $file_path  = PEAR_Config::singleton()->get("data_dir"); 
             $file_path .= DS."PHPFrame".DS."lib".DS."phpmailer".DS."phpmailer.php";
             @include $file_path;
             return;
         } elseif ($class_name == "VCARD") {
-            $file_path = PEAR_Config::singleton()->get("data_dir"); 
+            $file_path  = PEAR_Config::singleton()->get("data_dir"); 
             $file_path .= DS."PHPFrame".DS."lib".DS."vcard".DS."vcardclass.inc";
             @include $file_path;
             return;
@@ -334,19 +337,19 @@ class PHPFrame
     /**
      * Get database object
      * 
-     * @param PHPFrame_DSN $dsn An object of type PHPFrame_DSN 
-     *                                   used to get DB connection. This parameter 
-     *                                   is optional. If omitted a new DSN object 
-     *                                   will be created using the database
-     *                                   details provided by the config class. 
-     * @param string $db_user            If we specify a DSN object we might also 
-     *                                   need to provide a db user in order to 
-     *                                   connect to the database server.
-     * @param string $db_pass            When both a DSN object and a db user have 
-     *                                   been passed we might also need to provide 
-     *                                   a password for the db connection.
-     * @param PHPFrame_Config $config    A config object to use instead of the 
-     *                                   previous.
+     * @param PHPFrame_DSN    $dsn     An object of type PHPFrame_DSN 
+     *                                 used to get DB connection. This parameter 
+     *                                 is optional. If omitted a new DSN object 
+     *                                 will be created using the database
+     *                                 details provided by the config class. 
+     * @param string          $db_user If we specify a DSN object we might also 
+     *                                 need to provide a db user in order to 
+     *                                 connect to the database server.
+     * @param string          $db_pass When both a DSN object and a db user have 
+     *                                 been passed we might also need to provide 
+     *                                 a password for the db connection.
+     * @param PHPFrame_Config $config  A config object to use instead of the 
+     *                                 previous.
      * 
      * @static
      * @access public
@@ -360,7 +363,7 @@ class PHPFrame
     ) {
         // Set DSN using details from config object
         if (is_null($dsn)) {
-            $dsn_concrete_class = "PHPFrame_";
+            $dsn_concrete_class  = "PHPFrame_";
             $dsn_concrete_class .= PHPFrame::Config()->get("db.driver")."DSN";
             
             if ($dsn_concrete_class == "PHPFrame_SQLiteDSN") {
@@ -507,7 +510,7 @@ class PHPFrame
             $sysevents->append($msg, PHPFrame_Subject::EVENT_TYPE_NOTICE);
             
             $dsn_options = array("db_name"=>PHPFRAME_VAR_DIR.DS."data.db");
-            $dsn = new PHPFrame_SQLiteDSN($dsn_options);
+            $dsn         = new PHPFrame_SQLiteDSN($dsn_options);
         } else {
             $dsn = null;
         }
@@ -574,7 +577,7 @@ class PHPFrame
     private static function _loadLanguage()
     {
         // Include the PHPFrame framework's language file
-        $lang_file = "PHPFrame".DS."Lang";
+        $lang_file  = "PHPFrame".DS."Lang";
         $lang_file .= DS.PHPFrame::Config()->get("default_lang").".php";
         
         if (!(require $lang_file)) {

@@ -31,22 +31,20 @@ class PHPFrame_String
      * 
      * @var string
      */
-    private $_str="";
+    private $_str;
     
     /**
      * Constructor
      * 
-     * @param string $str
+     * @param string $str The string the object will represent.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($str=null)
+    public function __construct($str)
     {
-        if (!is_null($str)) {
-             $this->_str = trim((string) $str);
-        }
+        $this->_str = trim((string) $str);
     }
     
     /**
@@ -124,14 +122,15 @@ class PHPFrame_String
     /**
      * Format a string for html output.
      * 
-     * @param bool $javascript_safe A boolean used to indicate whether we should
-     *                              make the string safe for javascript.
+     * @param bool $javascript_safe [Optional] A boolean used to indicate 
+     *                              whether we should make the string safe for 
+     *                              javascript.
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function html($javascript_safe=false) 
+    public function html($javascript_safe=false)
     {
         return htmlspecialchars($this->_str);
     }
@@ -139,15 +138,16 @@ class PHPFrame_String
     /**
      * Limit string to a set number of characters
      * 
-     * @param int    $max_chars         The number of characters we want to limit to.
-     * @param bool   $add_trailing_dots Boolean to indicate whether we want to add
-     *                                  trailing dots or not. Default is TRUE.
+     * @param int  $max_chars         Number of characters we want to limit to.
+     * @param bool $add_trailing_dots [Optional] Boolean to indicate whether we 
+     *                                want to add trailing dots or not. Default 
+     *                                is TRUE.
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function limitChars($max_chars, $add_trailing_dots=true) 
+    public function limitChars($max_chars, $add_trailing_dots=true)
     {
         $str = $this->_str;
         
@@ -155,7 +155,7 @@ class PHPFrame_String
             $str = substr($str, 0, $max_chars);
             if ($add_trailing_dots === true) {
                 // Remove another 4 chars to replace with dots
-                $str = substr($str, 0, (strlen($str)-4));
+                $str  = substr($str, 0, (strlen($str)-4));
                 $str .= " ...";
             }
         }
@@ -166,22 +166,25 @@ class PHPFrame_String
     /**
      * Limit the number of words.
      * 
-     * @param int    $max_chars         The number of characters we want to limit to.
-     * @param bool   $add_trailing_dots Boolean to indicate whether we want to add
-     *                                  trailing dots or not. Default is TRUE.
+     * @param int  $max_chars         Number of characters we want to limit to
+     * @param bool $add_trailing_dots [Optional] Boolean to indicate whether we
+     *                                want to add trailing dots or not. Default 
+     *                                is TRUE.
      * 
      * @access public
      * @return string
      * @since  1.0
      */
-    public function limitWords($max_chars, $add_trailing_dots=true) 
+    public function limitWords($max_chars, $add_trailing_dots=true)
     {
         $str = $this->_str;
         
         if (strlen($str) > $max_chars) {
             $str = substr($str, 0, $max_chars);
             $str = substr($str, 0, strrpos($str, " "));
-            if ($add_trailing_dots === true) $str .= " ...";
+            if ($add_trailing_dots === true) {
+                $str .= " ...";
+            }
         }
         
         return $str;
@@ -193,9 +196,10 @@ class PHPFrame_String
      * If the string is shorter than the specified length it is padded with spaces
      * on the left side to fit length.
      * 
-     * @param int    $length            The length we want to format the string to.
-     * @param bool   $add_trailing_dots Boolean to indicate whether we want to add
-     *                                  trailing dots or not. Default is TRUE.
+     * @param int  $length            Length we want to format the string to.
+     * @param bool $add_trailing_dots [Optional] Boolean to indicate whether we 
+     *                                want to add trailing dots or not. Default 
+     *                                is TRUE.
      * 
      * @access public
      * @return string
@@ -204,7 +208,7 @@ class PHPFrame_String
     public function fixLength($length, $add_trailing_dots=true)
     {
         // Cast input params to strict types
-        $length = (int) $length;
+        $length            = (int) $length;
         $add_trailing_dots = (bool) $add_trailing_dots;
         
         $str = $this->_str;
@@ -214,7 +218,7 @@ class PHPFrame_String
             $str = substr($str, 0, ($length-1));
             // Add trailing dots if necessary
             if ($add_trailing_dots) {
-                $str = substr($str, 0, ($length-4));
+                $str  = substr($str, 0, ($length-4));
                 $str .= "...";
             }
         } else {

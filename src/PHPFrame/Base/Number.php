@@ -28,7 +28,7 @@ class PHPFrame_Number
     /**
      * Format bytes to human readable.
      * 
-     * @param int $int The int we want to format.
+     * @param int $int The integer we want to format.
      * 
      * @access public
      * @return string
@@ -37,11 +37,11 @@ class PHPFrame_Number
     public static function bytes($int) 
     {
         $unim = array("B","KB","MB","GB","TB","PB");
-        $c = 0;
+        $c    = 0;
         while ($int>=1024) {
             $c++;
             $int = $int/1024;
         }
-        return number_format($int,($c ? 2 : 0),",",".")." ".$unim[$c];
+        return number_format($int, ($c ? 2 : 0), ",", ".")." ".$unim[$c];
     }
 }

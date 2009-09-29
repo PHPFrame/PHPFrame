@@ -14,8 +14,6 @@
  */
 
 /**
- * Standard Object Class
- * 
  * This class provides a standard object with some useful generic methods.
  * 
  * @category PHPFrame
@@ -101,7 +99,7 @@ abstract class PHPFrame_Object
         
         if ($reflectionObj->hasMethod($accessor_name)) {
             $accessor_method = $reflectionObj->getMethod($accessor_name);
-            $param_count = $accessor_method->getNumberOfParameters();
+            $param_count     = $accessor_method->getNumberOfParameters();
             if ($accessor_method->isPublic() && $param_count === 0) {
                 return $this->$accessor_name();
             }
@@ -185,13 +183,13 @@ abstract class PHPFrame_Object
         $str = "";
         
         $reflectionObj = new ReflectionClass($this);
-        $properties = $reflectionObj->getProperties();
+        $properties    = $reflectionObj->getProperties();
         
         foreach ($properties as $property) {
             if ($property->isPublic() || $property->isProtected()) {
-                $property_name = $property->getName();
+                $property_name  = $property->getName();
                 $property_value = $this->$property_name;
-                $str .= $property_name." => ".$property_value."\n";
+                $str           .= $property_name." => ".$property_value."\n";
             }
         }
         

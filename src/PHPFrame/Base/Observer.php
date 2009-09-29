@@ -15,8 +15,6 @@
  */
 
 /**
- * Observer class
- * 
  * This class provides an abstract implementation of the SplObserver interface.
  * 
  * This class is designed to work together with the PHPFrame_Subject class.
@@ -34,7 +32,7 @@ abstract class PHPFrame_Observer implements SplObserver
     /**
      * Update 
      * 
-     * @param PHPFrame_Subject $subject Instance of the subject issuing the update
+     * @param PHPFrame_Subject $subject Instance of subject notifying the update
      * 
      * @access public
      * @return void
@@ -46,7 +44,11 @@ abstract class PHPFrame_Observer implements SplObserver
     }
     
     /**
+     * Template method
      * 
+     * @param PHPFrame_Subject $subject Instance of subject notifying the update
+     * 
+     * @abstract
      * @access protected
      * @return void
      * @since  1.0

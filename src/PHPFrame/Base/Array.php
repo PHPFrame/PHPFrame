@@ -39,12 +39,12 @@ class PHPFrame_Array extends ArrayObject
      * 
      * @var array
      */
-    private $_array=array();
+    private $_array = array();
     
     /**
      * Constructor
      * 
-     * @param array $array
+     * @param array $array [Optional] The array the object will represent.
      * 
      * @access public
      * @return void
@@ -78,18 +78,19 @@ class PHPFrame_Array extends ArrayObject
      * @return bool
      * @since  1.0
      */
-    public function isAssoc() {
-        return (is_array($this->_array) 
-                && 0 !== count(array_diff_key(
-                    $this->_array, 
-                    array_keys(array_keys($this->_array))
-                )));
+    public function isAssoc()
+    {
+        $keys_keys  = array_keys(array_keys($this->_array));
+        $diff_count = count(array_diff_key($this->_array, $keys_keys));
+        
+        return (is_array($this->_array) && 0 !== $diff_count);
     }
     
     /**
      * Get array depth
      * 
-     * @param array $array
+     * @param array $array [Optional] The array to calculate the depth for. If
+     *                     not passed the internal array is used.
      * 
      * @access public
      * @return int

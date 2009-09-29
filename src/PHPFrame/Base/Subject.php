@@ -40,7 +40,7 @@ abstract class PHPFrame_Subject implements SplSubject
      *  
      * @var SplObjectStorage
      */
-    private $_obs=null;
+    private $_obs = null;
     /**
      * A simple array holding the last raised event (error, success, info, ...)
      * 
@@ -60,6 +60,16 @@ abstract class PHPFrame_Subject implements SplSubject
         return $this->_last_event;
     }
     
+    /**
+     * Notify event to observers
+     * 
+     * @param string $msg  The event message
+     * @param int    $type The event type. See class constants.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function notifyEvent($msg, $type=self::EVENT_TYPE_INFO)
     {
         $msg = trim((string) $msg);

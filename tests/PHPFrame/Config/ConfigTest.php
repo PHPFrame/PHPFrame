@@ -1,9 +1,9 @@
 <?php
-$rel_path   = DIRECTORY_SEPARATOR."PHPFrame";
-$rel_path  .= DIRECTORY_SEPARATOR."Config";
-$tests_path = str_replace($rel_path, "", dirname(__FILE__));
-require $tests_path.DIRECTORY_SEPARATOR."TestHelper.php";
-TestHelper::initFramework();
+$path_array = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
+$path_array = array_splice($path_array, 0, (count($path_array)-3));
+$PHPFrame   = implode(DIRECTORY_SEPARATOR, $path_array).DIRECTORY_SEPARATOR;
+$PHPFrame  .= "src".DIRECTORY_SEPARATOR."PHPFrame.php";
+require $PHPFrame;
 
 class testPHPFrame_Config extends PHPUnit_Framework_TestCase
 {

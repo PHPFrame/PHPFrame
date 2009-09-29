@@ -7,7 +7,8 @@
     
     <fileset dir="${project.basedir}/tests" id="testfiles">
     	<include name="PHPFrameTest.php"/>
-        <include name="PHPFrame/Utils/XMLSerialiserTest.php"/>
+        <include name="PHPFrame/Config/ConfigTest.php"/>
+    	<include name="PHPFrame/Utils/XMLSerialiserTest.php"/>
     </fileset>
     
     <property name="build.dir" value="${project.basedir}/build"/>

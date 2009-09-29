@@ -337,17 +337,17 @@ class PHPFrame
     /**
      * Get database object
      * 
-     * @param PHPFrame_DSN    $dsn     An object of type PHPFrame_DSN 
-     *                                 used to get DB connection. This parameter 
-     *                                 is optional. If omitted a new DSN object 
-     *                                 will be created using the database
-     *                                 details provided by the config class. 
-     * @param string          $db_user If we specify a DSN object we might also 
-     *                                 need to provide a db user in order to 
-     *                                 connect to the database server.
-     * @param string          $db_pass When both a DSN object and a db user have 
-     *                                 been passed we might also need to provide 
-     *                                 a password for the db connection.
+     * @param PHPFrame_DSN $dsn     An object of type PHPFrame_DSN 
+     *                              used to get DB connection. This parameter 
+     *                              is optional. If omitted a new DSN object 
+     *                              will be created using the database
+     *                              details provided by the config class. 
+     * @param string       $db_user If we specify a DSN object we might also 
+     *                              need to provide a db user in order to 
+     *                              connect to the database server.
+     * @param string       $db_pass When both a DSN object and a db user have 
+     *                              been passed we might also need to provide 
+     *                              a password for the db connection.
      * 
      * @static
      * @access public
@@ -502,14 +502,11 @@ class PHPFrame
         // Fall back to SQLite embedded db if no db enabled in etc/phpframe.ini
         // Otherwise we pass a null dsn to use config settings
         if (!PHPFrame::Config()->get("db.enable")) {
-            $msg  = "Tried to mount DB persistence but it is not enabled in ";
-            $msg .= "etc/phpframe.ini. Falling back to embedded SQLite3 ";
-            $msg .= "database";
-            
-            PHPFrame::Session()->getSysevents()->append(
-                $msg, 
-                PHPFrame_Subject::EVENT_TYPE_NOTICE
-            );
+            $msg       = "Tried to mount DB persistence but it is not enabled ";
+            $msg      .= "in etc/phpframe.ini. Falling back to embedded ";
+            $msg      .= "SQLite3 database";
+            $sysevents = PHPFrame::Session()->getSysevents();
+            $sysevents->append($msg, PHPFrame_Subject::EVENT_TYPE_NOTICE);
             
             $dsn_options = array("db_name"=>PHPFRAME_VAR_DIR.DS."data.db");
             $dsn         = new PHPFrame_SQLiteDSN($dsn_options);
@@ -538,7 +535,7 @@ class PHPFrame
      * @return void
      * @since  1.0
      */
-    public static function Fire() 
+    public static function Fire()
     {
         // If persistance has not been mounted yet we do so before we
         // run the front controller

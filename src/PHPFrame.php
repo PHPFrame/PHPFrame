@@ -247,8 +247,8 @@ class PHPFrame
         // If we are in an app we use the app's config
         if (defined("PHPFRAME_CONFIG_DIR")) {
             $config_dir = PHPFRAME_CONFIG_DIR;
-        // Otherwise we use the system wide default config
         } else {
+            // Otherwise we use the system wide default config
             $config_dir  = PEAR_Config::singleton()->get("data_dir");
             $config_dir .= DS."PHPFrame".DS."etc";
         }
@@ -348,8 +348,6 @@ class PHPFrame
      * @param string          $db_pass When both a DSN object and a db user have 
      *                                 been passed we might also need to provide 
      *                                 a password for the db connection.
-     * @param PHPFrame_Config $config  A config object to use instead of the 
-     *                                 previous.
      * 
      * @static
      * @access public
@@ -360,15 +358,16 @@ class PHPFrame
         PHPFrame_DSN $dsn=null,
         $db_user=null,
         $db_pass=null
-    ) {
+    )
+    {
         // Set DSN using details from config object
         if (is_null($dsn)) {
             $dsn_concrete_class  = "PHPFrame_";
             $dsn_concrete_class .= PHPFrame::Config()->get("db.driver")."DSN";
             
             if ($dsn_concrete_class == "PHPFrame_SQLiteDSN") {
-                $db_name     = PHPFRAME_VAR_DIR.DS;
-                $db_name    .= PHPFrame::Config()->get("db.name");
+                $db_name  = PHPFRAME_VAR_DIR.DS;
+                $db_name .= PHPFrame::Config()->get("db.name");
             } else {
                 $db_name = PHPFrame::Config()->get("db.name");
             }
@@ -506,8 +505,11 @@ class PHPFrame
             $msg  = "Tried to mount DB persistence but it is not enabled in ";
             $msg .= "etc/phpframe.ini. Falling back to embedded SQLite3 ";
             $msg .= "database";
-            $sysevents = PHPFrame::Session()->getSysevents();
-            $sysevents->append($msg, PHPFrame_Subject::EVENT_TYPE_NOTICE);
+            
+            PHPFrame::Session()->getSysevents()->append(
+                $msg, 
+                PHPFrame_Subject::EVENT_TYPE_NOTICE
+            );
             
             $dsn_options = array("db_name"=>PHPFRAME_VAR_DIR.DS."data.db");
             $dsn         = new PHPFrame_SQLiteDSN($dsn_options);
@@ -580,7 +582,7 @@ class PHPFrame
         $lang_file  = "PHPFrame".DS."Lang";
         $lang_file .= DS.PHPFrame::Config()->get("default_lang").".php";
         
-        if (!(require $lang_file)) {
+        if (!(include $lang_file)) {
             $msg = 'Could not find language file ('.$lang_file.')';
             throw new RuntimeException($msg);
         }

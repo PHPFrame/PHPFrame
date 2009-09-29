@@ -29,7 +29,7 @@
     <target name="phpcs">
         <exec 
             command="phpcs --report=checkstyle --standard=PEAR src" 
-            dir="${project.basedir}/src" 
+            dir="${project.basedir}" 
             output="${report.dir}/phpcs.xml" />
     </target>
   

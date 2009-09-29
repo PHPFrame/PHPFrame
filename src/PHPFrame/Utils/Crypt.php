@@ -33,12 +33,13 @@ class PHPFrame_Crypt
     /**
      * Provides a secure hash based on a seed
      * 
-     * @access    public
-     * @param    string    Seed string
-     * @return    string
-     * @since    1.0
+     * @param string $seed Seed string
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
      */
-    static function getHash($seed) 
+    public static function getHash($seed) 
     {
         return md5(PHPFrame::Config()->get("SECRET").$seed);
     }
@@ -46,26 +47,28 @@ class PHPFrame_Crypt
     /**
      * Formats a password using the current encryption.
      *
-     * @access    public
-     * @param    string    $plaintext    The plaintext password to encrypt.
-     * @param    string    $salt        The salt to use to encrypt the password. []
-     *                                If not present, a new salt will be
-     *                                generated.
-     * @param    string    $encryption    The kind of pasword encryption to use.
-     *                                Defaults to md5-hex.
-     * @param    boolean    $show_encrypt  Some password systems prepend the kind of
-     *                                encryption to the crypted password ({SHA},
-     *                                etc). Defaults to false.
-     *
-     * @return string  The encrypted password.
-     * @since    1.0
+     * 
+     * @param string $plaintext    The plaintext password to encrypt.
+     * @param string $salt         The salt to use to encrypt the password.
+     *                             If not present, a new salt will be
+     *                             generated.
+     * @param string $encryption   The kind of pasword encryption to use.
+     *                             Defaults to md5-hex.
+     * @param bool   $show_encrypt Some password systems prepend the kind of
+     *                             encryption to the crypted password ({SHA},
+     *                             etc). Defaults to false.
+     * 
+     * @access public
+     * @return string The encrypted password.
+     * @since  1.0
      */
-    static function getCryptedPassword(
+    public static function getCryptedPassword(
         $plaintext, 
         $salt = '', 
         $encryption = 'md5-hex', 
         $show_encrypt = false
-    ) {
+    )
+    {
         // Get the salt to use.
         $salt = PHPFrame_Crypt::getSalt($encryption, $salt, $plaintext);
 
@@ -147,19 +150,20 @@ class PHPFrame_Crypt
      * of an existing password, or for encryption types that use the plaintext
      * in the generation of the salt.
      *
-     * @access public
-     * @param string $encryption  The kind of pasword encryption to use.
-     *                            Defaults to md5-hex.
-     * @param string $seed        The seed to get the salt from (probably a
-     *                            previously generated password). Defaults to
-     *                            generating a new seed.
-     * @param string $plaintext   The plaintext password that we're generating
-     *                            a salt for. Defaults to none.
+     * 
+     * @param string $encryption The kind of pasword encryption to use.
+     *                           Defaults to md5-hex.
+     * @param string $seed       The seed to get the salt from (probably a
+     *                           previously generated password). Defaults to
+     *                           generating a new seed.
+     * @param string $plaintext  The plaintext password that we're generating
+     *                           a salt for. Defaults to none.
      *
-     * @return string  The generated or extracted salt.
-     * @since    1.0
+     * @access public
+     * @return string The generated or extracted salt.
+     * @since  1.0
      */
-    static function getSalt($encryption='md5-hex', $seed='', $plaintext='') 
+    public static function getSalt($encryption='md5-hex', $seed='', $plaintext='') 
     {
         // Encrypt the password.
         switch ($encryption) {
@@ -233,13 +237,14 @@ class PHPFrame_Crypt
 
     /**
      * Generate a random password
-     *
-     * @access    public
-     * @param    int        $length    Length of the password to generate
-     * @return    string            Random Password
-     * @since    1.0
+     * 
+     * @param int $length Length of the password to generate
+     * 
+     * @access public
+     * @return string Random Password
+     * @since  1.0
      */
-    static function genRandomPassword($length=8) 
+    public static function genRandomPassword($length=8) 
     {
         $salt = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         $len = strlen($salt);
@@ -260,11 +265,12 @@ class PHPFrame_Crypt
     /**
      * Converts to allowed 64 characters for APRMD5 passwords.
      *
-     * @access    private
-     * @param    string    $value
-     * @param    integer    $count
-     * @return    string  $value converted to the 64 MD5 characters.
-     * @since    1.0
+     * @param string $value
+     * @param int    $count
+     * 
+     * @access private
+     * @return string Value converted to the 64 MD5 characters.
+     * @since  1.0
      */
     private function _toAPRMD5($value, $count) 
     {
@@ -282,11 +288,12 @@ class PHPFrame_Crypt
 
     /**
      * Converts hexadecimal string to binary data.
-     *
-     * @access    private
-     * @param    string    $hex  Hex data.
-     * @return    string  Binary data.
-     * @since    1.0
+     * 
+     * @param string $hex Hex data.
+     * 
+     * @access private
+     * @return string  Binary data.
+     * @since  1.0
      */
     private function _bin($hex) 
     {

@@ -6,13 +6,13 @@
     </fileset>
     
     <fileset dir="${project.basedir}/tests" id="testfiles">
-    	<include name="PHPFrameTest.php"/>
-        <include name="PHPFrame/Config/ConfigTest.php"/>
-    	<include name="PHPFrame/Utils/XMLSerialiserTest.php"/>
+    	<include name="PHPFrameTest.php" />
+        <include name="PHPFrame/Config/ConfigTest.php" />
+    	<include name="PHPFrame/Utils/XMLSerialiserTest.php" />
     </fileset>
     
-    <property name="build.dir" value="${project.basedir}/build"/>
-    <property name="report.dir" value="${build.dir}/report"/>
+    <property name="build.dir" value="${project.basedir}/build" />
+    <property name="report.dir" value="${build.dir}/report" />
   
     <!-- This target checks for PHP syntax errors in all source files
     <target name="checkphp">
@@ -29,7 +29,7 @@
     <target name="phpcs">
         <exec 
             command="phpcs --report=checkstyle --standard=PEAR src" 
-            dir="${project.basedir}" 
+            dir="${project.basedir}/src" 
             output="${report.dir}/phpcs.xml" />
     </target>
   
@@ -43,7 +43,7 @@
     
     <!-- Prepare directories -->
     <target name="prepare">
-        <mkdir dir="${report.dir}"/>
+        <mkdir dir="${report.dir}" />
     </target>
     
     <!-- Run PHPUnit tests -->
@@ -52,7 +52,7 @@
             <batchtest>
                 <fileset refid="testfiles" />
             </batchtest>
-            <formatter type="xml" todir="${report.dir}" outfile="logfile.xml"/>
+            <formatter type="xml" todir="${report.dir}" outfile="logfile.xml" />
         </phpunit>
     </target>
     
@@ -66,6 +66,6 @@
     </target>
     
     <!-- Build project -->
-    <target name="build" depends="prepare,test" />
+    <target name="build" depends="prepare, test, phpcs" />
 
 </project>

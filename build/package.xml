@@ -224,6 +224,11 @@ insalling the PEAR package. If you want to continue type "yes".
        <min>0.20.0</min>
    </package>
    <package>
+       <name>XML_Beautifier</name>
+       <channel>pear.php.net</channel>
+       <min>1.2.0</min>
+   </package>
+   <package>
        <name>Console_CommandLine</name>
        <channel>pear.php.net</channel>
        <min>1.1.0</min>

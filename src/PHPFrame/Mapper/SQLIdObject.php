@@ -230,7 +230,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
         }
         
         // Validate input type and set internal property
-        if (!preg_match("/^[a-zA-Z_\#\.]+$/", $table)) {
+        if (is_string($table) && !preg_match("/^[a-zA-Z_\#\.]+$/", $table)) {
             $msg = "Argument \$table contains ilegal characters";
             throw new InvalidArgumentException($msg);
         }

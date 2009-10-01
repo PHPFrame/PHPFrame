@@ -98,8 +98,14 @@ class PHPFrame_SQLPersistentObjectAssembler
         //print_r($id_obj->getTableName()); exit;
         // Get total number of entries without taking limits into account
         // This is used to build pagination for the collection objects
-        $sql  = "SELECT COUNT(".$this->factory->getTableName().".id) ";
-        $sql .= "FROM ".$this->factory->getTableName();
+        $sql_from = $id_obj->getFromSQL();
+        $table_name = $this->factory->getTableName();
+        //check if they aliased the table name
+        if (strpos($sql_from, ' AS ') !== false){
+            $table_name = substr($sql_from, strpos($sql_from, ' AS ')+4);
+        }
+        $sql  = "SELECT COUNT(".$table_name.".id) ";
+        $sql .= "\n".$id_obj->getFromSQL();
         if ($id_obj->getJoinsSQL()) {
             $sql .= "\n".$id_obj->getJoinsSQL();
         }

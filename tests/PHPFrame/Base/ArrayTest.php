@@ -17,44 +17,59 @@ class PHPFrame_ArrayTest extends PHPUnit_Framework_TestCase
         //...
     }
     
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
     public function test_constructFailureBool()
     {
-        $array_obj = new PHPFrame_Array(true);
+        try {
+            $array_obj = new PHPFrame_Array(true);
+        } catch (PHPUnit_Framework_Error $e) {
+            return;
+        }
+        
+        $this->fail('An expected exception has not been raised.');
     }
     
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
     public function test_constructFailureInt()
     {
-        $array_obj = new PHPFrame_Array(1);
+        try {
+            $array_obj = new PHPFrame_Array(1);
+        } catch (PHPUnit_Framework_Error $e) {
+            return;
+        }
+        
+        $this->fail('An expected exception has not been raised.');
     }
     
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
     public function test_constructFailureFloat()
     {
-        $array_obj = new PHPFrame_Array(1.3);
+        try {
+            $array_obj = new PHPFrame_Array(1.3);
+        } catch (PHPUnit_Framework_Error $e) {
+            return;
+        }
+        
+        $this->fail('An expected exception has not been raised.');
     }
     
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
     public function test_constructFailureString()
     {
-        $array_obj = new PHPFrame_Array("some string");
+        try {
+            $array_obj = new PHPFrame_Array("some string");
+        } catch (PHPUnit_Framework_Error $e) {
+            return;
+        }
+        
+        $this->fail('An expected exception has not been raised.');
     }
     
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
     public function test_constructFailureObject()
     {
-        $array_obj = new PHPFrame_Array(new stdClass());
+        try {
+            $array_obj = new PHPFrame_Array(new stdClass());
+        } catch (PHPUnit_Framework_Error $e) {
+            return;
+        }
+        
+        $this->fail('An expected exception has not been raised.');
     }
     
     public function test_constructNull()

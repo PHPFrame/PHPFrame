@@ -32,6 +32,12 @@ class PHPFrame_Validator
      */
     private $_filters = array();
     /**
+     * Array containing names of fields that allow null value
+     * 
+     * @var array
+     */
+    private $_allow_null_fields = array();
+    /**
      * The original values
      * 
      * @var array
@@ -79,12 +85,17 @@ class PHPFrame_Validator
      * 
      * @param string          $field_name
      * @param PHPFrame_Filter $filter
+     * @param bool            $allow_null
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setFilter($field_name, PHPFrame_Filter $filter)
+    public function setFilter(
+        $field_name, 
+        PHPFrame_Filter $filter, 
+        $allow_null=false
+    )
     {
         if (!is_string($field_name) || strlen($field_name) < 1) {
             $msg  = get_class($this)."::setFilter() expects argument ";
@@ -94,6 +105,10 @@ class PHPFrame_Validator
         }
         
         $this->_filters[$field_name] = $filter;
+        
+        if ($allow_null) {
+            $this->_allow_null_fields[]  = $field_name;
+        }
     }
     
     /**
@@ -181,6 +196,14 @@ class PHPFrame_Validator
         if (!isset($this->_filters[$field_name])) {
             $msg  = "No filter has been set for field '".$field_name."'.";
             throw new UnexpectedValueException($msg);
+        }
+        
+        if (
+            in_array($field_name, $this->_allow_null_fields) 
+            && is_null($value)
+        ) {
+            $this->_filtered_values[$field_name] = null;
+            return true;
         }
         
         $filter = $this->_filters[$field_name];

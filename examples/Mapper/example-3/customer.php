@@ -30,6 +30,6 @@ class Customer extends PHPFrame_PersistentObject
     
     public function setEmail($value)
     {
-        $this->email = PHPFrame_Filter::validateEmail($value);
+        $this->email = $value;
     }
 }

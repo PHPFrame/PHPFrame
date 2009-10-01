@@ -157,7 +157,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         // Set key with default value in internal array
         $this->fields[$name] = $def_value;
         // Store filter in validator
-        $this->_getValidator()->setFilter($name, $filter);
+        $this->_getValidator()->setFilter($name, $filter, $allow_null);
     }
     
     /**

@@ -25,7 +25,7 @@
  */
 class PHPFrame_EmailFilter extends PHPFrame_StringFilter
 {
-	/**
+    /**
      * Constructor
      * 
      * Optionas are inherited from parent PHPFrame_StringFilter
@@ -60,12 +60,12 @@ class PHPFrame_EmailFilter extends PHPFrame_StringFilter
      */
     public function process($value)
     {
-    	$value = parent::process($value);
-    	
+        $value = parent::process($value);
+        
         // Delegate to filter_var function
         $value = filter_var($value, FILTER_VALIDATE_EMAIL);
         if ($value === false) {
-        	$msg  = "Failed to validate value '".gettype($value)."(".$value;
+            $msg  = "Failed to validate value '".gettype($value)."(".$value;
             $msg .= ")' with filter ".get_class($this);
             $this->fail($msg);
         }

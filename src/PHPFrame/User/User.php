@@ -25,7 +25,7 @@
  */
 class PHPFrame_User extends PHPFrame_PersistentObject
 {
-	private $_groupname;
+    private $_groupname;
     /**
      * vCard object used to store user details 
      * 
@@ -44,99 +44,99 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function __construct(array $options=null)
     {
-    	// before we construct the parentwe add the necessary fields
-    	$this->addField(
-    	   "groupid", 
-    	   null, 
-    	   false, 
-    	   new PHPFrame_IntFilter()
-    	);
-    	$this->addField(
-    	   "username", 
-    	   null, 
-    	   false, 
-    	   new PHPFrame_RegexpFilter(array("regexp"=>'/^[a-zA-Z\.]{3,20}$/'))
-    	);
-    	$this->addField(
-    	   "password", 
-    	   null, 
-    	   false, 
-    	   new PHPFrame_RegexpFilter(array("regexp"=>'/^.{6,100}$/'))
-    	);
-    	$this->addField(
-    	   "firstname", 
-    	   null, 
-    	   false, 
-    	   new PHPFrame_StringFilter(array("min_length"=>1, "max_length"=>50))
-    	);
-    	$this->addField(
-    	   "lastname", 
-    	   null, 
-    	   false, 
-    	   new PHPFrame_StringFilter(array("min_length"=>1, "max_length"=>50))
-    	);
-    	$this->addField(
-    	   "email", 
-    	   null, 
-    	   false, 
-    	   new PHPFrame_EmailFilter()
-    	);
-    	$this->addField(
-    	   "photo", 
-    	   "default.png", 
-    	   false, 
-    	   new PHPFrame_StringFilter(array("min_length"=>5, "max_length"=>128))
+        // before we construct the parentwe add the necessary fields
+        $this->addField(
+           "groupid", 
+           null, 
+           false, 
+           new PHPFrame_IntFilter()
         );
-    	$this->addField(
-    	   "notifications", 
-    	   true, 
-    	   false, 
-    	   new PHPFrame_BoolFilter()
-    	);
-    	$this->addField(
-    	   "show_email", 
-    	   false, 
-    	   false, 
-    	   new PHPFrame_BoolFilter()
-    	);
-    	$this->addField(
-    	   "block", 
-    	   false, 
-    	   false, 
-    	   new PHPFrame_BoolFilter()
-    	);
-    	$this->addField(
-    	   "last_visit", 
-    	   null, 
-    	   true, 
-    	   new PHPFrame_IntFilter()
-    	);
-    	$this->addField(
-    	   "activation", 
-    	   null, 
-    	   true, 
-    	   new PHPFrame_StringFilter(array("min_length"=>100, "max_length"=>100))
-    	);
-    	$this->addField(
-    	   "params", 
-    	   array(), 
-    	   true, 
-    	   new PHPFrame_StringFilter()
-    	);
-    	$this->addField(
-    	   "deleted", 
-    	   null, 
-    	   true, 
-    	   new PHPFrame_IntFilter()
-    	);
-    	$this->addField(
-    	   "openid_urls", 
-    	   null, 
-    	   true, 
-    	   new PHPFrame_StringFilter()
-    	);
-    	
-    	// If we are passed a vCard object we deal with this first
+        $this->addField(
+           "username", 
+           null, 
+           false, 
+           new PHPFrame_RegexpFilter(array("regexp"=>'/^[a-zA-Z\.]{3,20}$/'))
+        );
+        $this->addField(
+           "password", 
+           null, 
+           false, 
+           new PHPFrame_RegexpFilter(array("regexp"=>'/^.{6,100}$/'))
+        );
+        $this->addField(
+           "firstname", 
+           null, 
+           false, 
+           new PHPFrame_StringFilter(array("min_length"=>1, "max_length"=>50))
+        );
+        $this->addField(
+           "lastname", 
+           null, 
+           false, 
+           new PHPFrame_StringFilter(array("min_length"=>1, "max_length"=>50))
+        );
+        $this->addField(
+           "email", 
+           null, 
+           false, 
+           new PHPFrame_EmailFilter()
+        );
+        $this->addField(
+           "photo", 
+           "default.png", 
+           false, 
+           new PHPFrame_StringFilter(array("min_length"=>5, "max_length"=>128))
+        );
+        $this->addField(
+           "notifications", 
+           true, 
+           false, 
+           new PHPFrame_BoolFilter()
+        );
+        $this->addField(
+           "show_email", 
+           false, 
+           false, 
+           new PHPFrame_BoolFilter()
+        );
+        $this->addField(
+           "block", 
+           false, 
+           false, 
+           new PHPFrame_BoolFilter()
+        );
+        $this->addField(
+           "last_visit", 
+           null, 
+           true, 
+           new PHPFrame_IntFilter()
+        );
+        $this->addField(
+           "activation", 
+           null, 
+           true, 
+           new PHPFrame_StringFilter(array("min_length"=>100, "max_length"=>100))
+        );
+        $this->addField(
+           "params", 
+           array(), 
+           true, 
+           new PHPFrame_StringFilter()
+        );
+        $this->addField(
+           "deleted", 
+           null, 
+           true, 
+           new PHPFrame_IntFilter()
+        );
+        $this->addField(
+           "openid_urls", 
+           null, 
+           true, 
+           new PHPFrame_StringFilter()
+        );
+        
+        // If we are passed a vCard object we deal with this first
         if (
             isset($options['vcard'])
             && $options['vcard'] instanceof PHPFrame_vCard
@@ -703,8 +703,8 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getIterator()
     {
-    	$array = array();
-    	
+        $array = array();
+        
         foreach ($this->fields as $key=>$value) {
             if (
                 ($key == "params" || $key == "openid_urls") 

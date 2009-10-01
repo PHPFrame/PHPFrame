@@ -21,11 +21,11 @@ class PHPFrame_UserTest extends PHPUnit_Framework_TestCase
     
     public function test_validateAll()
     {
-    	$this->_user->validateAll();
+        $this->_user->validateAll();
     }
     
     public function test_getIterator()
     {
-    	$array = iterator_to_array($this->_user);
+        $array = iterator_to_array($this->_user);
     }
 }

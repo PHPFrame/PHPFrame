@@ -42,9 +42,9 @@ class PHPFrame_BoolFilter extends PHPFrame_Filter
      */
     public function __construct(array $options=null)
     {
-    	$this->registerOption("null_on_failure", true);
-    	$this->registerOption("strict", false);
-    	
+        $this->registerOption("null_on_failure", true);
+        $this->registerOption("strict", false);
+        
         parent::__construct($options);
     }
     
@@ -97,9 +97,9 @@ class PHPFrame_BoolFilter extends PHPFrame_Filter
      */
     public function process($value)
     {
-    	$null_on_failure = $this->getOption("null_on_failure");
-    	
-    	// Check primitive type if in strict mode
+        $null_on_failure = $this->getOption("null_on_failure");
+        
+        // Check primitive type if in strict mode
         if ($this->getOption("strict") && !is_bool($value)) {
             $msg  = "Value is not of type bool and ".get_class($this)." is ";
             $msg .= "set to strict mode.";
@@ -113,12 +113,12 @@ class PHPFrame_BoolFilter extends PHPFrame_Filter
             || is_object($value) 
             || is_resource($value)
         ) {
-        	if (is_object($value) || is_resource($value)) {
-        	   $value_as_string = gettype($value);
-        	} else {
-        	   $value_as_string = (string) $value;
-        	}
-        	
+            if (is_object($value) || is_resource($value)) {
+               $value_as_string = gettype($value);
+            } else {
+               $value_as_string = (string) $value;
+            }
+            
             $msg  = "Argument \$value in ".get_class($this)."::process() can ";
             $msg .= "only be of type 'bool', 'int' or 'string' and value ";
             $msg .= "'".$value_as_string."' of type '".gettype($value);

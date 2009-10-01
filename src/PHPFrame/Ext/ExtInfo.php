@@ -126,9 +126,9 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     
     public function getIterator()
     {
-    	$properties = get_object_vars($this);
-    	
-    	return new ArrayIterator(array_merge($this->fields, $properties));
+        $properties = get_object_vars($this);
+        
+        return new ArrayIterator(array_merge($this->fields, $properties));
     }
     
     /**

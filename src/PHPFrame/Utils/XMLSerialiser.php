@@ -72,7 +72,7 @@ class PHPFrame_XMLSerialiser
         }
         
         if (is_null($value)) {
-        	return "NULL";
+            return "NULL";
         }
         
         return (string) $value;

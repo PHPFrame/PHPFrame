@@ -25,13 +25,13 @@
  */
 class PHPFrame_Validator
 {
-	/**
+    /**
      * An array used to store field names and their filters
      * 
      * @var array
      */
-	private $_filters = array();
-	/**
+    private $_filters = array();
+    /**
      * The original values
      * 
      * @var array
@@ -43,25 +43,25 @@ class PHPFrame_Validator
      * @var array
      */
     private $_filtered_values = array();
-	/**
-	 * Array used to store messages
-	 * 
-	 * @var array
-	 */
-	private $_messages = array();
-	/**
-	 * Boolean indicating whether we want validator to throw exceptions
-	 * 
-	 * @var bool
-	 */
-	private $_throw_exceptions = false;
-	/**
-	 * Default exception class used when not specified by filter
-	 * 
-	 * @var string
-	 */
+    /**
+     * Array used to store messages
+     * 
+     * @var array
+     */
+    private $_messages = array();
+    /**
+     * Boolean indicating whether we want validator to throw exceptions
+     * 
+     * @var bool
+     */
+    private $_throw_exceptions = false;
+    /**
+     * Default exception class used when not specified by filter
+     * 
+     * @var string
+     */
     private $_exception_class = "Exception";
-	
+    
     /**
      * Constructor
      * 
@@ -69,34 +69,34 @@ class PHPFrame_Validator
      * @return void
      * @since  1.0
      */
-	public function __construct()
-	{
-		//...
-	}
-	
-	/**
-	 * Set a filter for a given field name in the validator
-	 * 
-	 * @param string          $field_name
-	 * @param PHPFrame_Filter $filter
-	 * 
-	 * @access public
+    public function __construct()
+    {
+        //...
+    }
+    
+    /**
+     * Set a filter for a given field name in the validator
+     * 
+     * @param string          $field_name
+     * @param PHPFrame_Filter $filter
+     * 
+     * @access public
      * @return void
      * @since  1.0
-	 */
-	public function setFilter($field_name, PHPFrame_Filter $filter)
-	{
-	    if (!is_string($field_name) || strlen($field_name) < 1) {
+     */
+    public function setFilter($field_name, PHPFrame_Filter $filter)
+    {
+        if (!is_string($field_name) || strlen($field_name) < 1) {
             $msg  = get_class($this)."::setFilter() expects argument ";
             $msg .= "\$name to be of type string and not empty and got value ";
             $msg .= "'".$field_name."' of type ".gettype($field_name);
             throw new InvalidArgumentException($msg);
         }
         
-		$this->_filters[$field_name] = $filter;
-	}
-	
-	/**
+        $this->_filters[$field_name] = $filter;
+    }
+    
+    /**
      * Get filter for a given field in the validator
      * 
      * @param string $field_name
@@ -118,7 +118,7 @@ class PHPFrame_Validator
         
         return $this->_filters[$field_name];
     }
-	
+    
     /**
      * Set whether or not the validator should throw exceptions
      * 
@@ -170,16 +170,16 @@ class PHPFrame_Validator
      */
     public function isValid($value)
     {
-    	$this->_original_value  = $value;
-    	
-    	if (!$this->sanitise($this->getOriginalValue())) {
-    	    return false;
-    	}
-    	
+        $this->_original_value  = $value;
+        
+        if (!$this->sanitise($this->getOriginalValue())) {
+            return false;
+        }
+        
         if (!$this->filter($this->getSanitisedValue())) {
             return false;
         }
-    	
+        
         return true;
     }
     
@@ -202,13 +202,13 @@ class PHPFrame_Validator
             throw new InvalidArgumentException($msg);
         }
         
-    	if (!isset($this->_filters[$field_name])) {
-    		$msg  = "No filter has been set for field '".$field_name."'.";
+        if (!isset($this->_filters[$field_name])) {
+            $msg  = "No filter has been set for field '".$field_name."'.";
             throw new UnexpectedValueException($msg);
-    	}
-    	
-    	$filter = $this->_filters[$field_name];
-    	
+        }
+        
+        $filter = $this->_filters[$field_name];
+        
         if ($filter instanceof PHPFrame_BoolFilter) {
             $null_on_failure = $filter->getOption("null_on_failure");
         } else {
@@ -242,13 +242,13 @@ class PHPFrame_Validator
      * @return mixed The filtered array or FALSE on failure
      * @since  1.0
      */
-	public function validateAll(array $assoc)
-	{
-	    
+    public function validateAll(array $assoc)
+    {
+        
         
         return true;
-	}
-	
+    }
+    
     /**
      * Get original value
      * 
@@ -276,29 +276,29 @@ class PHPFrame_Validator
     {
         return $this->_filtered_values[$field_name];
     }
-	
-	/**
-	 * Get messages array
-	 * 
-	 * @access public
-	 * @return array
-	 * @since  1.0
-	 */
-	public function getMessages()
-	{
-		return $this->_messages;
-	}
-	
-	/**
-	 * Notify failure
-	 * 
-	 * @param string $str             The failure message
-	 * @param string $exception_class [Optional] Specialised exception class
-	 * 
-	 * @access public
+    
+    /**
+     * Get messages array
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getMessages()
+    {
+        return $this->_messages;
+    }
+    
+    /**
+     * Notify failure
+     * 
+     * @param string $str             The failure message
+     * @param string $exception_class [Optional] Specialised exception class
+     * 
+     * @access public
      * @return void
      * @since  1.0
-	 */
+     */
     protected function fail($str, $exception_class=null)
     {
         if (!is_string($str)) {

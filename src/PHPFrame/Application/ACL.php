@@ -68,7 +68,7 @@ class PHPFrame_ACL extends PHPFrame_PersistentObject
     
     public function setGroupId($int)
     {
-    	$this->fields["groupid"] = $this->validate("groupid", $int);
+        $this->fields["groupid"] = $this->validate("groupid", $int);
     }
     
     public function getController()
@@ -78,7 +78,7 @@ class PHPFrame_ACL extends PHPFrame_PersistentObject
     
     public function setController($str)
     {
-    	$this->fields["controller"] = $this->validate("controller", $str);
+        $this->fields["controller"] = $this->validate("controller", $str);
     }
     
     public function getAction()

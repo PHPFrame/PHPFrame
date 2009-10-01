@@ -25,7 +25,7 @@
  */
 class PHPFrame_IPFilter extends PHPFrame_Filter
 {
-	/**
+    /**
      * Constructor
      * 
      * @param array $options [Optional] An associative array with the filter 
@@ -43,11 +43,11 @@ class PHPFrame_IPFilter extends PHPFrame_Filter
      */
     public function __construct(array $options=null)
     {
-    	$this->registerOption("ipv4", false);
-    	$this->registerOption("ipv6", false);
-    	$this->registerOption("no_priv_range", false);
-    	$this->registerOption("no_res_range", false);
-    	
+        $this->registerOption("ipv4", false);
+        $this->registerOption("ipv6", false);
+        $this->registerOption("no_priv_range", false);
+        $this->registerOption("no_res_range", false);
+        
         parent::__construct($options);
     }
     
@@ -77,7 +77,7 @@ class PHPFrame_IPFilter extends PHPFrame_Filter
      */
     public function setIpv6($bool)
     {
-    	$this->setOption("ipv6", (bool) $bool);
+        $this->setOption("ipv6", (bool) $bool);
     }
     
     /**
@@ -95,7 +95,7 @@ class PHPFrame_IPFilter extends PHPFrame_Filter
      */
     public function setNoPrivRange($bool)
     {
-    	$this->setOption("no_priv_range", (bool) $bool);
+        $this->setOption("no_priv_range", (bool) $bool);
     }
     
     /**
@@ -115,7 +115,7 @@ class PHPFrame_IPFilter extends PHPFrame_Filter
      */
     public function setNoResRange($bool)
     {
-    	$this->setOption("no_res_range", (bool) $bool);
+        $this->setOption("no_res_range", (bool) $bool);
     }
     
     /**
@@ -128,9 +128,9 @@ class PHPFrame_IPFilter extends PHPFrame_Filter
      * @see    src/PHPFrame/Filter/PHPFrame_Filter#process($value)
      * @since  1.0
      */
-	public function process($value)
-	{
-	    // Always check primitive type is string
+    public function process($value)
+    {
+        // Always check primitive type is string
         if (!is_string($value)) {
             if (is_object($value) || is_resource($value)) {
                $value_as_string = gettype($value);
@@ -145,7 +145,7 @@ class PHPFrame_IPFilter extends PHPFrame_Filter
             return false;
         }
         
-		// Delegate to filter_var function
+        // Delegate to filter_var function
         // Set flags for filter_var()
         $flags = null;
         if ($this->getOption("ipv4")) {
@@ -157,7 +157,7 @@ class PHPFrame_IPFilter extends PHPFrame_Filter
         if ($this->getOption("no_priv_range")) {
             $flags = $flags|FILTER_FLAG_NO_PRIV_RANGE;
         }
-	    if ($this->getOption("no_res_range")) {
+        if ($this->getOption("no_res_range")) {
             $flags = $flags|FILTER_FLAG_NO_RES_RANGE;
         }
      
@@ -169,5 +169,5 @@ class PHPFrame_IPFilter extends PHPFrame_Filter
         }
         
         return $filtered_value;
-	}
+    }
 }

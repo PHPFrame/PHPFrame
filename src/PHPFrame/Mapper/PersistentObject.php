@@ -101,16 +101,16 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function __construct(array $options=null)
     {
-    	// Add the base fields
-    	$this->addField("id",    null,   true,  new PHPFrame_IntFilter());
-    	$this->addField("atime", null,   true,  new PHPFrame_IntFilter());
-    	$this->addField("ctime", time(), true,  new PHPFrame_IntFilter());
-    	$this->addField("mtime", time(), true,  new PHPFrame_IntFilter());
-    	$this->addField("owner", 1,      false, new PHPFrame_IntFilter());
-    	$this->addField("group", 1,      false, new PHPFrame_IntFilter());
-    	$this->addField("perms", 664,    false, new PHPFrame_IntFilter());
+        // Add the base fields
+        $this->addField("id",    null,   true,  new PHPFrame_IntFilter());
+        $this->addField("atime", null,   true,  new PHPFrame_IntFilter());
+        $this->addField("ctime", time(), true,  new PHPFrame_IntFilter());
+        $this->addField("mtime", time(), true,  new PHPFrame_IntFilter());
+        $this->addField("owner", 1,      false, new PHPFrame_IntFilter());
+        $this->addField("group", 1,      false, new PHPFrame_IntFilter());
+        $this->addField("perms", 664,    false, new PHPFrame_IntFilter());
         
-    	// Set object ownership to current user if applicable
+        // Set object ownership to current user if applicable
         if (PHPFrame::getRunLevel() > 1 && PHPFrame::Session()->isAuth()) {
             $this->setOwner(PHPFrame::Session()->getUserId());
             $this->setGroup(PHPFrame::Session()->getGroupId());
@@ -147,17 +147,17 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         PHPFrame_Filter $filter=null
     )
     {
-    	if (!is_string($name) || strlen($name) < 1) {
+        if (!is_string($name) || strlen($name) < 1) {
             $msg  = get_class($this)."::addField() expects argument ";
             $msg .= "\$name to be of type string and not empty and got value ";
             $msg .= "'".$name."' of type ".gettype($name);
             throw new InvalidArgumentException($msg);
-    	}
-    	
-    	// Set key with default value in internal array
-    	$this->fields[$name] = $def_value;
-    	// Store filter in validator
-    	$this->_getValidator()->setFilter($name, $filter);
+        }
+        
+        // Set key with default value in internal array
+        $this->fields[$name] = $def_value;
+        // Store filter in validator
+        $this->_getValidator()->setFilter($name, $filter);
     }
     
     /**
@@ -172,17 +172,17 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     protected function validate($field_name, $value)
     {
-    	if (!$this->_getValidator()->validate($field_name, $value)) {
-    		$last_message = end($this->_getValidator()->getMessages());
-    		if (isset($last_message[1]) && class_exists($last_message[1])) {
-    			$exception_class = $last_message[1];
-    		} else {
-    			$exception_class = "Exception";
-    		}
+        if (!$this->_getValidator()->validate($field_name, $value)) {
+            $last_message = end($this->_getValidator()->getMessages());
+            if (isset($last_message[1]) && class_exists($last_message[1])) {
+                $exception_class = $last_message[1];
+            } else {
+                $exception_class = "Exception";
+            }
             throw new $exception_class($last_message[0]);
-    	}
-    	
-    	return $this->_getValidator()->getFilteredValue($field_name);
+        }
+        
+        return $this->_getValidator()->getFilteredValue($field_name);
     }
     
     /**
@@ -390,7 +390,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setCTime($int)
     {
-    	$this->fields["ctime"] = $this->validate("ctime", $int);
+        $this->fields["ctime"] = $this->validate("ctime", $int);
     }
     
     /**
@@ -416,7 +416,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setMTime($int)
     {
-    	$this->fields["mtime"] = $this->validate("mtime", $int);
+        $this->fields["mtime"] = $this->validate("mtime", $int);
     }
     
     /**
@@ -442,7 +442,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setOwner($int)
     {
-    	$this->fields["owner"] = $this->validate("owner", $int);
+        $this->fields["owner"] = $this->validate("owner", $int);
     }
     
     /**
@@ -468,7 +468,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setGroup($int)
     {
-    	$this->fields["group"] = $this->validate("group", $int);
+        $this->fields["group"] = $this->validate("group", $int);
     }
     
     /**
@@ -494,7 +494,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setPerms($int)
     {
-    	$this->fields["perms"] = $this->validate("perms", $int);
+        $this->fields["perms"] = $this->validate("perms", $int);
     }
     
     private function _getValidator()

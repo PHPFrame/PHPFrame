@@ -97,9 +97,9 @@
 <ul>
 {section name=packagelist loop=$packageindex}
     <li>
-	    <a href="{$subdir}{$packageindex[packagelist].link}">
-	        {$packageindex[packagelist].title}
-	    </a>
+        <a href="{$subdir}{$packageindex[packagelist].link}">
+            {$packageindex[packagelist].title}
+        </a>
     </li>
 {/section}
 </ul>

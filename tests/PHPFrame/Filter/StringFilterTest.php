@@ -7,8 +7,8 @@ require_once $PHPFrame;
 
 class PHPFrame_StringFilterTest extends PHPUnit_Framework_TestCase
 {
-	private $_filter;
-	
+    private $_filter;
+    
     public function setUp()
     {
         $this->_filter = new PHPFrame_StringFilter();
@@ -21,7 +21,7 @@ class PHPFrame_StringFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_constructWithOptions()
     {
-    	$filter_options = array("min_length"=>6, "max_length"=>10, "strict"=>true);
+        $filter_options = array("min_length"=>6, "max_length"=>10, "strict"=>true);
         $filter         = new PHPFrame_StringFilter($filter_options);
         
         $this->assertEquals(6, $filter->getOption("min_length"));
@@ -32,8 +32,8 @@ class PHPFrame_StringFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_getOption()
     {
-    	// Check that filter has default options
-    	$this->assertEquals(0, $this->_filter->getOption("min_length"));
+        // Check that filter has default options
+        $this->assertEquals(0, $this->_filter->getOption("min_length"));
         $this->assertEquals(-1, $this->_filter->getOption("max_length"));
         $this->assertEquals(false, $this->_filter->getOption("truncate"));
         $this->assertEquals(false, $this->_filter->getOption("strict"));
@@ -41,7 +41,7 @@ class PHPFrame_StringFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_getOptions()
     {
-    	$this->assertArrayHasKey("min_length", $this->_filter->getOptions());
+        $this->assertArrayHasKey("min_length", $this->_filter->getOptions());
         $this->assertArrayHasKey("max_length", $this->_filter->getOptions());
         $this->assertArrayHasKey("truncate", $this->_filter->getOptions());
         $this->assertArrayHasKey("strict", $this->_filter->getOptions());
@@ -49,8 +49,8 @@ class PHPFrame_StringFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_setMinLength()
     {
-    	$this->_filter->setMinLength(3);
-    	$this->assertEquals(3, $this->_filter->getOption("min_length"));
+        $this->_filter->setMinLength(3);
+        $this->assertEquals(3, $this->_filter->getOption("min_length"));
     }
     
     public function test_setMaxLength()
@@ -131,7 +131,7 @@ class PHPFrame_StringFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processMaxLength()
     {
-    	$this->_filter->setMaxLength(12);
+        $this->_filter->setMaxLength(12);
         
         $result   = $this->_filter->process("not too long");
         $messages = $this->_filter->getMessages();
@@ -160,7 +160,7 @@ class PHPFrame_StringFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processTruncate()
     {
-    	$this->_filter->setMaxLength(10);
+        $this->_filter->setMaxLength(10);
         $this->_filter->setTruncate(true);
         
         $result   = $this->_filter->process("too long perhaps?");

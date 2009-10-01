@@ -3,7 +3,7 @@ class PHPFrame_APIUser extends PHPFrame_PersistentObject
 {
     public function __construct(array $options=null)
     {
-    	$this->addField(
+        $this->addField(
            "user", 
            null, 
            false,  

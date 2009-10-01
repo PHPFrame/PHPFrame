@@ -25,7 +25,7 @@
  */
 class PHPFrame_RegexpFilter extends PHPFrame_StringFilter
 {
-	/**
+    /**
      * Constructor
      * 
      * @param array $options [Optional] An associative array with the filter 
@@ -44,8 +44,8 @@ class PHPFrame_RegexpFilter extends PHPFrame_StringFilter
      */
     public function __construct(array $options=null)
     {
-    	$this->registerOption("regexp", "/^.*/");
-    	
+        $this->registerOption("regexp", "/^.*/");
+        
         parent::__construct($options);
     }
     
@@ -60,7 +60,7 @@ class PHPFrame_RegexpFilter extends PHPFrame_StringFilter
      */
     public function setRegexp($str)
     {
-    	$this->setOption("regexp", (string) $str);
+        $this->setOption("regexp", (string) $str);
     }
     
     /**
@@ -75,12 +75,12 @@ class PHPFrame_RegexpFilter extends PHPFrame_StringFilter
      */
     public function process($value)
     {
-    	// Process with parent first
-    	$parent_value = parent::process($value);
-    	if ($parent_value === false) {
-    	   return false;
-    	}
-    	
+        // Process with parent first
+        $parent_value = parent::process($value);
+        if ($parent_value === false) {
+           return false;
+        }
+        
         // Delegate to filter_var function
         $options        = array("regexp"=>$this->getOption("regexp"));
         $options        = array("options"=>$options);

@@ -55,8 +55,8 @@ class PHPFrame_IPFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processIpv4()
     {
-    	$this->_filter->setIpv4(true);
-    	
+        $this->_filter->setIpv4(true);
+        
         $values = array("1.1.1.1", "192.168.0.1", "79.170.43.196", "239.255.255.255");
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
@@ -72,8 +72,8 @@ class PHPFrame_IPFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processIpv4Failure()
     {
-    	$this->_filter->setIpv4(true);
-    	
+        $this->_filter->setIpv4(true);
+        
         $values = array("2001:0db8:85a3:08d3:1319:8a2e:0370:7334", "", "1.1.x");
         for ($i=0; $i<count($values); $i++) {
             $result   = $this->_filter->process($values[$i]);
@@ -215,7 +215,7 @@ class PHPFrame_IPFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processIpv4AndNoResRangeFailure()
     {
-    	$this->_filter->setIpv4(true);
+        $this->_filter->setIpv4(true);
         $this->_filter->setNoResRange(true);
         
         $values = array(

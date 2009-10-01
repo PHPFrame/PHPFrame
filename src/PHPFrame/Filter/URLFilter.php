@@ -25,7 +25,7 @@
  */
 class PHPFrame_URLFilter extends PHPFrame_Filter
 {
-	/**
+    /**
      * Constructor
      * 
      * @param array $options [Optional] An associative array with the filter 
@@ -41,9 +41,9 @@ class PHPFrame_URLFilter extends PHPFrame_Filter
      */
     public function __construct(array $options=null)
     {
-    	$this->registerOption("path_required", false);
-    	$this->registerOption("query_required", false);
-    	
+        $this->registerOption("path_required", false);
+        $this->registerOption("query_required", false);
+        
         parent::__construct($options);
     }
     

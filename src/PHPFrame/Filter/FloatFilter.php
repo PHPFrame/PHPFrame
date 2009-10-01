@@ -25,10 +25,10 @@
  */
 class PHPFrame_FloatFilter extends PHPFrame_Filter
 {
-	/**
-	 * Constructor
-	 * 
-	 * @param array $options [Optional] An associative array with the filter 
+    /**
+     * Constructor
+     * 
+     * @param array $options [Optional] An associative array with the filter 
      *                                  options. The FloatFilter supports the 
      *                                  following options:
      *                                  
@@ -43,11 +43,11 @@ class PHPFrame_FloatFilter extends PHPFrame_Filter
      * @access public
      * @return void
      * @since  1.0
-	 */
+     */
     public function __construct(array $options=null)
     {
-    	$this->registerOption("decimal", ".");
-    	$this->registerOption("allow_thousand", false);
+        $this->registerOption("decimal", ".");
+        $this->registerOption("allow_thousand", false);
         $this->registerOption("strict", false);
         
         parent::__construct($options);
@@ -68,7 +68,7 @@ class PHPFrame_FloatFilter extends PHPFrame_Filter
      */
     public function setDecimal($str)
     {
-    	$this->setOption("decimal", substr((string) $str, 0, 1));
+        $this->setOption("decimal", substr((string) $str, 0, 1));
     }
     
     /**

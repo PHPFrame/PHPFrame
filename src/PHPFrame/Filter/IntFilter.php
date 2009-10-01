@@ -25,7 +25,7 @@
  */
 class PHPFrame_IntFilter extends PHPFrame_Filter
 {
-	/**
+    /**
      * Constructor
      * 
      * @param array $options [Optional] An associative array with the filter 
@@ -48,7 +48,7 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      */
     public function __construct(array $options=null)
     {
-    	$this->registerOption("min_range", false);
+        $this->registerOption("min_range", false);
         $this->registerOption("max_range", false);
         $this->registerOption("allow_octal", false);
         $this->registerOption("allow_hex", false);
@@ -96,7 +96,7 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      */
     public function setAllowOctal($bool)
     {
-    	$this->setOption("allow_octal", (bool) $bool);
+        $this->setOption("allow_octal", (bool) $bool);
     }
     
     /**
@@ -110,7 +110,7 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      */
     public function setAllowHex($bool)
     {
-    	$this->setOption("allow_hex", (bool) $bool);
+        $this->setOption("allow_hex", (bool) $bool);
     }
     
     /**

@@ -50,8 +50,8 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processRange()
     {
-    	$this->_filter->setMinRange(-5);
-    	$this->_filter->setMaxRange(10);
+        $this->_filter->setMinRange(-5);
+        $this->_filter->setMaxRange(10);
         $values = array(1, 2, -5, "8", "-4");
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
@@ -83,7 +83,7 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processHex()
     {
-    	$this->_filter->setAllowHex(true);
+        $this->_filter->setAllowHex(true);
         $values = array("0x00000001", "0xFFFFFF", "0xF0F0F0", "0xAA", "1", 1, -98, 0771);
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);

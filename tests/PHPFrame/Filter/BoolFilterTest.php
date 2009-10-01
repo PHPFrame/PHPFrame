@@ -21,18 +21,18 @@ class PHPFrame_BoolFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_process()
     {
-    	$true_values = array(true, 1, 0x00000001, "1", "true", "on", "yes");
-    	foreach ($true_values as $true_value) {
-    	    $result   = $this->_filter->process($true_value);
-	        $messages = $this->_filter->getMessages();
-	        
-	        $this->assertFalse($result === false);
-	        $this->assertType("bool", $result);
-	        $this->assertEquals(true, $result);
-	        $this->assertType("array", $messages);
-	        $this->assertTrue((count($messages) == 0));
-    	}
-    	
+        $true_values = array(true, 1, 0x00000001, "1", "true", "on", "yes");
+        foreach ($true_values as $true_value) {
+            $result   = $this->_filter->process($true_value);
+            $messages = $this->_filter->getMessages();
+            
+            $this->assertFalse($result === false);
+            $this->assertType("bool", $result);
+            $this->assertEquals(true, $result);
+            $this->assertType("array", $messages);
+            $this->assertTrue((count($messages) == 0));
+        }
+        
         $false_values = array(false, 0, "0", "false", "off", "no", "");
         foreach ($false_values as $false_value) {
             $result   = $this->_filter->process($false_value);
@@ -62,7 +62,7 @@ class PHPFrame_BoolFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processStrictFailure()
     {
-    	$this->_filter->setStrict(true);
+        $this->_filter->setStrict(true);
         $bad_values = array(1, 123, 3.14, "0", "true", "a string", array(1,2,3), new stdClass());
         for ($i=0; $i<count($bad_values); $i++) {
             $result   = $this->_filter->process($bad_values[$i]);

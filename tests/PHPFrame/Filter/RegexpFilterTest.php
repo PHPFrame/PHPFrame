@@ -50,7 +50,7 @@ class PHPFrame_RegexpFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processMatch()
     {
-    	// Match strings that contain "art" 
+        // Match strings that contain "art" 
         $this->_filter->setRegexp("/art/");
         $values = array("art", "fart", "martin", "articulate", "artichoke");
         foreach ($values as $value) {
@@ -67,8 +67,8 @@ class PHPFrame_RegexpFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processMatchFailure()
     {
-    	// Match strings that contain "art" 
-    	$this->_filter->setRegexp("/art/");
+        // Match strings that contain "art" 
+        $this->_filter->setRegexp("/art/");
         $values = array("no", "", "blah", array(), new stdClass());
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
@@ -83,7 +83,7 @@ class PHPFrame_RegexpFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processMinLength()
     {
-    	// string has to be of minimum 3 chars and contain "art"
+        // string has to be of minimum 3 chars and contain "art"
         $this->_filter->setMinLength(3);
         $this->_filter->setRegexp("/art/");
         
@@ -100,20 +100,20 @@ class PHPFrame_RegexpFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processMinLengthFailure()
     {
-    	// string has to be of minimum 3 chars and contain "art"
+        // string has to be of minimum 3 chars and contain "art"
         $this->_filter->setMinLength(3);
         $this->_filter->setRegexp("/art/");
         
         $values = array("a", "won't match");
         for ($i=0; $i<count($values); $i++) {
             $result   = $this->_filter->process($values[$i]);
-	        $messages = $this->_filter->getMessages();
-	        
-	        $this->assertFalse($result);
-	        $this->assertType("bool", $result);
-	        $this->assertType("array", $messages);
-	        $this->assertTrue((count($messages) == ($i+1)));
-	        $this->assertTrue(isset($messages[$i][0]));
+            $messages = $this->_filter->getMessages();
+            
+            $this->assertFalse($result);
+            $this->assertType("bool", $result);
+            $this->assertType("array", $messages);
+            $this->assertTrue((count($messages) == ($i+1)));
+            $this->assertTrue(isset($messages[$i][0]));
         }
     }
     
@@ -141,13 +141,13 @@ class PHPFrame_RegexpFilterTest extends PHPUnit_Framework_TestCase
         $values = array("too long perhaps?", "no good");
         for ($i=0; $i<count($values); $i++) {
             $result   = $this->_filter->process($values[$i]);
-	        $messages = $this->_filter->getMessages();
-	        
-	        $this->assertFalse($result);
-	        $this->assertType("bool", $result);
-	        $this->assertType("array", $messages);
-	        $this->assertTrue((count($messages) == ($i+1)));
-	        $this->assertTrue(isset($messages[$i][0]));
+            $messages = $this->_filter->getMessages();
+            
+            $this->assertFalse($result);
+            $this->assertType("bool", $result);
+            $this->assertType("array", $messages);
+            $this->assertTrue((count($messages) == ($i+1)));
+            $this->assertTrue(isset($messages[$i][0]));
         }
     }
     

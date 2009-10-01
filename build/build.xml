@@ -6,12 +6,12 @@
     </fileset>
     
     <fileset dir="${project.basedir}/tests" id="testfiles">
-    	<include name="PHPFrameTest.php" />
+        <include name="PHPFrameTest.php" />
         <include name="PHPFrame/Base/**" />
-    	<include name="PHPFrame/Config/**" />
-    	<include name="PHPFrame/Filter/**" />
-    	<include name="PHPFrame/User/**" />
-    	<include name="PHPFrame/Utils/**" />
+        <include name="PHPFrame/Config/**" />
+        <include name="PHPFrame/Filter/**" />
+        <include name="PHPFrame/User/**" />
+        <include name="PHPFrame/Utils/**" />
     </fileset>
     
     <property name="build.dir" value="${project.basedir}/build" />

@@ -25,111 +25,13 @@
  */
 class PHPFrame_User extends PHPFrame_PersistentObject
 {
-    /**
-     * The group id
-     * 
-     * @var int
-     */
-    private $_groupid=0;
-    /**
-     * Text label for groupid. This is not stored in the users db table and is 
-     * instead retrieved by joining with the groups table.
-     * 
-     * @var string
-     */
-    private $_groupname=null;
-    /**
-     * Username
-     * 
-     * @var string
-     */
-    private $_username=null;
-    /**
-     * Password
-     * 
-     * @var string
-     */
-    private $_password=null;
-    /**
-     * First name
-     * 
-     * @var string
-     */
-    private $_firstname=null;
-    /**
-     * Last name
-     * 
-     * @var string
-     */
-    private $_lastname=null;
-    /**
-     * Email
-     * 
-     * @var string
-     */
-    private $_email=null;
-    /**
-     * Photo
-     * 
-     * @var string
-     */
-    private $_photo=null;
-    /**
-     * Flag to indicate whether user will reveive email notifications
-     * 
-     * @var bool
-     */
-    private $_notifications=true;
-    /**
-     * Flag to indicate whether user's email will be shown in front-end
-     * 
-     * @var bool
-     */
-    private $_show_email=true;
-    /**
-     * Flag to indicate whether the user account has been blocked by an admin
-     * 
-     * @var bool
-     */
-    private $_block=false;
-    /**
-     * Date the user last visited the app (in MySQL Datetime format)
-     * 
-     * @var string
-     */
-    private $_last_visit=null;
-    /**
-     * Activation key
-     * 
-     * @var string
-     */
-    private $_activation=null;
-    /**
-     * User params
-     * 
-     * @var array
-     */
-    private $_params=array();
-    /**
-     * Date the user was deleted (in MySQL Datetime format)
-     * 
-     * This field is empty for all active users
-     * 
-     * @var string
-     */
-    private $_deleted=null;
+	private $_groupname;
     /**
      * vCard object used to store user details 
      * 
      * @var PHPFrame_vCard
      */
     private $_vcard=null;
-    /**
-     * An array containig openid urls linked to this user
-     * 
-     * @var array
-     */
-    private $_openid_urls=array();
     
     /**
      * Constructor
@@ -142,23 +44,99 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function __construct(array $options=null)
     {
-        $this->addFilter("groupid", "int");
-        $this->addFilter("username","varchar", 20, 3, false, null, '/^[a-zA-Z\.]{3,20}$/');
-        $this->addFilter("password", "varchar", 100, 6, false, null, '/^.{6,100}$/');
-        $this->addFilter("firstname", "varchar", 50, 1, false, null, '/^[a-zA-Z \.\-]{1,50}$/');
-        $this->addFilter("lastname", "varchar", 50, 1, false, null, '/^[a-zA-Z \.\-]{1,50}$/');
-        $this->addFilter("email", "varchar", 100, 7, false, null, 'email');
-        $this->addFilter("photo", "varchar", 128, 1, false, "default.png");
-        $this->addFilter("notifications", "enum", array(0,1), null, false, 1);
-        $this->addFilter("show_email", "enum", array(0,1), null, false, 0);
-        $this->addFilter("block", "enum", array(0,1), null, false, 0);
-        $this->addFilter("last_visit", "int", null, null, false, 0);
-        $this->addFilter("activation", "varchar", 100, null, true);
-        $this->addFilter("params", "text", null, null, true);
-        $this->addFilter("deleted", "int", null, null, true);
-        $this->addFilter("openid_urls", "text", null, null, true);
-        
-        // If we are passed a vCard object we deal with this first
+    	// before we construct the parentwe add the necessary fields
+    	$this->addField(
+    	   "groupid", 
+    	   null, 
+    	   false, 
+    	   new PHPFrame_IntFilter()
+    	);
+    	$this->addField(
+    	   "username", 
+    	   null, 
+    	   false, 
+    	   new PHPFrame_RegexpFilter(array("regexp"=>'/^[a-zA-Z\.]{3,20}$/'))
+    	);
+    	$this->addField(
+    	   "password", 
+    	   null, 
+    	   false, 
+    	   new PHPFrame_RegexpFilter(array("regexp"=>'/^.{6,100}$/'))
+    	);
+    	$this->addField(
+    	   "firstname", 
+    	   null, 
+    	   false, 
+    	   new PHPFrame_StringFilter(array("min_length"=>1, "max_length"=>50))
+    	);
+    	$this->addField(
+    	   "lastname", 
+    	   null, 
+    	   false, 
+    	   new PHPFrame_StringFilter(array("min_length"=>1, "max_length"=>50))
+    	);
+    	$this->addField(
+    	   "email", 
+    	   null, 
+    	   false, 
+    	   new PHPFrame_EmailFilter()
+    	);
+    	$this->addField(
+    	   "photo", 
+    	   "default.png", 
+    	   false, 
+    	   new PHPFrame_StringFilter(array("min_length"=>5, "max_length"=>128))
+        );
+    	$this->addField(
+    	   "notifications", 
+    	   true, 
+    	   false, 
+    	   new PHPFrame_BoolFilter()
+    	);
+    	$this->addField(
+    	   "show_email", 
+    	   false, 
+    	   false, 
+    	   new PHPFrame_BoolFilter()
+    	);
+    	$this->addField(
+    	   "block", 
+    	   false, 
+    	   false, 
+    	   new PHPFrame_BoolFilter()
+    	);
+    	$this->addField(
+    	   "last_visit", 
+    	   null, 
+    	   true, 
+    	   new PHPFrame_IntFilter()
+    	);
+    	$this->addField(
+    	   "activation", 
+    	   null, 
+    	   true, 
+    	   new PHPFrame_StringFilter(array("min_length"=>100, "max_length"=>100))
+    	);
+    	$this->addField(
+    	   "params", 
+    	   array(), 
+    	   true, 
+    	   new PHPFrame_StringFilter()
+    	);
+    	$this->addField(
+    	   "deleted", 
+    	   null, 
+    	   true, 
+    	   new PHPFrame_IntFilter()
+    	);
+    	$this->addField(
+    	   "openid_urls", 
+    	   null, 
+    	   true, 
+    	   new PHPFrame_StringFilter()
+    	);
+    	
+    	// If we are passed a vCard object we deal with this first
         if (
             isset($options['vcard'])
             && $options['vcard'] instanceof PHPFrame_vCard
@@ -183,7 +161,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getGroupId()
     {
-        return $this->_groupid;
+        return $this->fields["groupid"];
     }
     
     /**
@@ -197,7 +175,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setGroupId($int)
     {
-        $this->_groupid = $this->validate("groupid", $int);
+        $this->fields["groupid"] = $this->validate("groupid", $int);
     }
     
     /**
@@ -235,7 +213,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getUserName()
     {
-        return $this->_username;
+        return $this->fields["username"];
     }
     
     /**
@@ -249,7 +227,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setUserName($str)
     {
-        $this->_username = $this->validate("username", $str);
+        $this->fields["username"] = $this->validate("username", $str);
     }
     
     /**
@@ -261,7 +239,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getPassword()
     {
-        return $this->_password;
+        return $this->fields["password"];
     }
     
     /**
@@ -275,7 +253,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setPassword($str)
     {
-        $this->_password = $this->validate("password", $str);
+        $this->fields["password"] = $this->validate("password", $str);
     }
     
     /**
@@ -329,7 +307,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $this->_vcard->setName($this->getLastName(), $str, null, null, null);
         
         // Set property
-        $this->_firstname = $str;
+        $this->fields["firstname"] = $str;
     }
     
     /**
@@ -361,7 +339,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $this->_vcard->setName($str, $this->getFirstName(), null, null, null);
         
         // Set property
-        $this->_lastname = $str;
+        $this->fields["lastname"] = $str;
     }
     
     /**
@@ -373,7 +351,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getEmail()
     {
-        return $this->_email;
+        return $this->fields["email"];
     }
 
     /**
@@ -393,7 +371,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $this->_vcard->setEmail($str);
         
         // Set property
-        $this->_email = $str;
+        $this->fields["email"] = $str;
     }
     
     /**
@@ -405,7 +383,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getPhoto()
     {
-        return $this->_photo;
+        return $this->fields["photo"];
     }
     
     /**
@@ -425,7 +403,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $this->_vcard->setPhoto($str);
         
         // Set property
-        $this->_photo = $str;
+        $this->fields["photo"] = $str;
     }
     
     /**
@@ -437,7 +415,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getNotifications()
     {
-        return $this->_notifications;
+        return $this->fields["notifications"];
     }
     
     /**
@@ -454,7 +432,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $bool = $this->validate("notifications", $bool);
         
         // Set local property
-        $this->_notifications = (bool) $bool;
+        $this->fields["notifications"] = (bool) $bool;
     }
     
     /**
@@ -466,7 +444,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getShowEmail()
     {
-        return $this->_show_email;
+        return $this->fields["show_email"];
     }
     
     /**
@@ -483,7 +461,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $bool = $this->validate("show_email", $bool);
         
         // Set property
-        $this->_show_email = (bool) $bool;
+        $this->fields["show_email"] = (bool) $bool;
     }
     
     /**
@@ -495,7 +473,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getBlock()
     {
-        return $this->_block;
+        return $this->fields["block"];
     }
     
     /**
@@ -512,7 +490,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $bool = $this->validate("block", $bool);
         
         // Set property
-        $this->_block = (bool) $bool;
+        $this->fields["block"] = (bool) $bool;
     }
     
     /**
@@ -524,7 +502,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getLastVisit()
     {
-        return $this->_last_visit;
+        return $this->fields["last_visit"];
     }
     
     /**
@@ -538,7 +516,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setLastVisit($int)
     {
-        $this->_last_visit = $this->validate("last_visit", $int);
+        $this->fields["last_visit"] = $this->validate("last_visit", $int);
     }
     
     /**
@@ -550,7 +528,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getActivation()
     {
-        return $this->_activation;
+        return $this->fields["activation"];
     }
     
     /**
@@ -564,7 +542,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setActivation($str)
     {
-        $this->_activation = $this->validate("activation", $str);
+        $this->fields["activation"] = $this->validate("activation", $str);
     }
     
     /**
@@ -576,7 +554,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getParams()
     {
-        return $this->_params;
+        return $this->fields["params"];
     }
     
     /**
@@ -603,7 +581,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
             throw new InvalidArgumentException($msg);
         }
         
-        $this->_params = $params;
+        $this->fields["params"] = $params;
     }
     
     /**
@@ -615,7 +593,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getDeleted()
     {
-        return $this->_deleted;
+        return $this->fields["deleted"];
     }
     
     /**
@@ -633,7 +611,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
             return;
         }
         
-        $this->_deleted = $this->validate("deleted", $int);
+        $this->fields["deleted"] = $this->validate("deleted", $int);
     }
     
     /**
@@ -673,7 +651,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getOpenidUrls()
     {
-        return $this->_openid_urls;
+        return $this->fields["openid_urls"];
     }
     
     /**
@@ -689,8 +667,8 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     {
         $str = $this->validate("openid_urls", $str);
         
-        if (!in_array($str, $this->_openid_urls)) {
-            $this->_openid_urls[] = $str;
+        if (!in_array($str, $this->fields["openid_urls"])) {
+            $this->fields["openid_urls"][] = $str;
         }
     }
     
@@ -707,13 +685,13 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     {
         $str = $this->validate("openid_urls", $str);
         
-        foreach ($this->_openid_urls as $url) {
+        foreach ($this->fields["openid_urls"] as $url) {
             if ($str != $url) {
                 $array[] = $url;
             }
         }
         
-        $this->_openid_urls = $array;
+        $this->fields["openid_urls"] = $array;
     }
     
     /**
@@ -725,21 +703,14 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function getIterator()
     {
-        $properties = get_object_vars($this);
-        
-        foreach ($properties as $key=>$value) {
-            // Ignore vCard object when rendering as array
-            if ($key == "_vcard" || $key == "_groupname") {
-                continue;
-            }
-            
-            if ($key == "_params" || $key == "_openid_urls") {
+    	$array = array();
+    	
+        foreach ($this->fields as $key=>$value) {
+            if (
+                ($key == "params" || $key == "openid_urls") 
+                && count($value) > 0
+            ) {
                 $value = serialize($value);
-            }
-            
-            // Remove preceding slash if needed
-            if (preg_match('/^_/', $key)) {
-                $key = substr($key, 1);
             }
             
             $array[$key] = $value;

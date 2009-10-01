@@ -31,43 +31,73 @@ class PHPFrame_ACL extends PHPFrame_PersistentObject
     protected $action;
     protected $value;
     
+    public function __construct(array $options=null)
+    {
+        $this->addField(
+           "groupid", 
+           null, 
+           false,  
+           new PHPFrame_IntFilter()
+        );
+        $this->addField(
+           "controller", 
+           null, 
+           false,  
+           new PHPFrame_RegexpFilter(array("regexp"=>"/^[a-zA-Z]{1,50}$/"))
+        );
+        $this->addField(
+           "action", 
+           "*", 
+           false,  
+           new PHPFrame_RegexpFilter(array("regexp"=>"/^[a-zA-Z]{1,50}$/"))
+        );
+        $this->addField(
+           "value", 
+           "own", 
+           false,  
+           new PHPFrame_RegexpFilter(array("regexp"=>"/^(own|all)$/"))
+        );
+        
+        parent::__construct($options);
+    }
+    
     public function getGroupId()
     {
-        return $this->groupid;
+        return $this->fields["groupid"];
     }
     
     public function setGroupId($int)
     {
-        $this->groupid = (int) $int;
+    	$this->fields["groupid"] = $this->validate("groupid", $int);
     }
     
     public function getController()
     {
-        return $this->controller;
+        return $this->fields["controller"];
     }
     
     public function setController($str)
     {
-        $this->controller = (string) $str;
+    	$this->fields["controller"] = $this->validate("controller", $str);
     }
     
     public function getAction()
     {
-        return $this->action;
+        return $this->fields["action"];
     }
     
     public function setAction($str)
     {
-        $this->action = $str;
+        $this->fields["action"] = $this->validate("action", $str);
     }
     
     public function getValue()
     {
-        return $this->value;
+        return $this->fields["value"];
     }
     
     public function setValue($str)
     {
-        $this->value = $str;
+        $this->fields["value"] = $this->validate("value", $str);
     }
 }

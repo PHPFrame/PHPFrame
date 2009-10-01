@@ -5,7 +5,7 @@ $PHPFrame   = implode(DIRECTORY_SEPARATOR, $path_array).DIRECTORY_SEPARATOR;
 $PHPFrame  .= "src".DIRECTORY_SEPARATOR."PHPFrame.php";
 require_once $PHPFrame;
 
-class testPHPFrame_Array extends PHPUnit_Framework_TestCase
+class PHPFrame_ArrayTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {

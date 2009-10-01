@@ -2,7 +2,7 @@
 //require "TestHelper.php";
 //TestHelper::initFramework();
 
-class testPHPFrame extends PHPUnit_Framework_TestCase
+class PHPFrameTest extends PHPUnit_Framework_TestCase
 {
     function setUp()
     {

@@ -5,7 +5,7 @@ $PHPFrame   = implode(DIRECTORY_SEPARATOR, $path_array).DIRECTORY_SEPARATOR;
 $PHPFrame  .= "src".DIRECTORY_SEPARATOR."PHPFrame.php";
 require_once $PHPFrame;
 
-class testPHPFrame_XMLSerialiser extends PHPUnit_Framework_TestCase
+class PHPFrame_XMLSerialiserTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {

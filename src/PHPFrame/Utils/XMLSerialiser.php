@@ -71,6 +71,10 @@ class PHPFrame_XMLSerialiser
             return self::_serialiseArray($value);
         }
         
+        if (is_null($value)) {
+        	return "NULL";
+        }
+        
         return (string) $value;
     }
     
@@ -145,6 +149,10 @@ class PHPFrame_XMLSerialiser
             }
         } else {
             $value = (string) $node;
+        }
+        
+        if ($value == "NULL") {
+            return null;
         }
         
         return $value;

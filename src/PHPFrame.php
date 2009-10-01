@@ -95,6 +95,7 @@ class PHPFrame
         "Exception",
         "Ext",
         "FileSystem",
+        "Filter",
         "HTTP",
         "Lang",
         "Mail",

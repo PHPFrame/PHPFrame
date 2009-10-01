@@ -71,59 +71,17 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     implements IteratorAggregate
 {
     /**
-     * The object id
-     * 
-     * @var int
-     */
-    protected $id=null;
-    /**
-     * UNIX timestamp of the object's last access date
-     * 
-     * @var int
-     */
-    protected $atime=null;
-    /**
-     * UNIX timestamp of the object's creation date
-     * 
-     * @var int
-     */
-    protected $ctime=null;
-    /**
-     * UNIX timestamp of the object's last modification date
-     * 
-     * @var int
-     */
-    protected $mtime=null;
-    /**
-     * User ID of object owner/creator
-     * 
-     * @var int
-     */
-    protected $owner=null;
-    /**
-     * Group ID of object
-     * 
-     * @var int
-     */
-    protected $group=null;
-    /**
-     * UNIX style permissions based on owner and group
-     * 
-     * @var int
-     */
-    protected $perms=null;
-    /**
-     * List of known types for fields
+     * Internal array to store fields data
      * 
      * @var array
      */
-    private $_field_types = array("int", "varchar", "enum", "text");
+    protected $fields = array();
     /**
-     * An array containig filters used to validate data in each field
+     * An validator object used to validate fields
      *  
-     * @var array
+     * @var PHPFrame_Validator
      */
-    private $_filters = array();
+    private $_validator;
     /**
      * Serialised string respresenting clean state. This is used to check if the
      * current state is "dirty" if it has changed since last marked clean.
@@ -143,14 +101,16 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function __construct(array $options=null)
     {
-        $this->addFilter("id",    "int", null, null, false);
-        $this->addFilter("atime", "int", null, null, false, 0);
-        $this->addFilter("ctime", "int", null, null, false, time());
-        $this->addFilter("mtime", "int", null, null, false, time());
-        $this->addFilter("owner", "int", null, null, false, 1);
-        $this->addFilter("group", "int", null, null, false, 1);
-        $this->addFilter("perms", "int", null, null, false, 664);
+    	// Add the base fields
+    	$this->addField("id",    null,   true,  new PHPFrame_IntFilter());
+    	$this->addField("atime", null,   true,  new PHPFrame_IntFilter());
+    	$this->addField("ctime", time(), true,  new PHPFrame_IntFilter());
+    	$this->addField("mtime", time(), true,  new PHPFrame_IntFilter());
+    	$this->addField("owner", 1,      false, new PHPFrame_IntFilter());
+    	$this->addField("group", 1,      false, new PHPFrame_IntFilter());
+    	$this->addField("perms", 664,    false, new PHPFrame_IntFilter());
         
+    	// Set object ownership to current user if applicable
         if (PHPFrame::getRunLevel() > 1 && PHPFrame::Session()->isAuth()) {
             $this->setOwner(PHPFrame::Session()->getUserId());
             $this->setGroup(PHPFrame::Session()->getGroupId());
@@ -174,10 +134,120 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function __clone()
     {
-        $this->id    = null;
-        $this->atime = null;
-        $this->ctime = null;
-        $this->mtime = null;
+        $this->fields["id"]    = null;
+        $this->fields["atime"] = null;
+        $this->fields["ctime"] = null;
+        $this->fields["mtime"] = null;
+    }
+    
+    protected function addField(
+        $name, 
+        $def_value=null, 
+        $allow_null=true, 
+        PHPFrame_Filter $filter=null
+    )
+    {
+    	if (!is_string($name) || strlen($name) < 1) {
+            $msg  = get_class($this)."::addField() expects argument ";
+            $msg .= "\$name to be of type string and not empty and got value ";
+            $msg .= "'".$name."' of type ".gettype($name);
+            throw new InvalidArgumentException($msg);
+    	}
+    	
+    	// Set key with default value in internal array
+    	$this->fields[$name] = $def_value;
+    	// Store filter in validator
+    	$this->_getValidator()->setFilter($name, $filter);
+    }
+    
+    /**
+     * Validate value for a given field using validator
+     * 
+     * @param string $field_name
+     * @param mixed  $value
+     * 
+     * @access protected
+     * @return void
+     * @since  1.0
+     */
+    protected function validate($field_name, $value)
+    {
+    	if (!$this->_getValidator()->validate($field_name, $value)) {
+    		$last_message = end($this->_getValidator()->getMessages());
+    		if (isset($last_message[1]) && class_exists($last_message[1])) {
+    			$exception_class = $last_message[1];
+    		} else {
+    			$exception_class = "Exception";
+    		}
+            throw new $exception_class($last_message[0]);
+    	}
+    	
+    	return $this->_getValidator()->getFilteredValue($field_name);
+    }
+    
+    /**
+     * Validate all fields in object
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function isValid()
+    {
+        return $this->_getValidator()->isValid();
+    }
+    
+    /**
+     * Mark object as clean
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function markClean()
+    {
+        $this->_clean_state = serialize(iterator_to_array($this));
+    }
+    
+    /**
+     * Is object dirty? If it is it means that it has changed since it was last 
+     * persisted.
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function isDirty()
+    {
+        return !($this->_clean_state == serialize(iterator_to_array($this)));
+    }
+    
+    /**
+     * Can user read this object?
+     * 
+     * @param PHPFrame_user $user
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function canRead(PHPFrame_user $user)
+    {
+        return $this->_checkPerms($user, 4);
+    }
+    
+    /**
+     * Can user write this object?
+     * 
+     * @param PHPFrame_user $user
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function canWrite(PHPFrame_user $user)
+    {
+        return $this->_checkPerms($user, 6);
     }
     
     /**
@@ -192,20 +262,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function getIterator()
     {
-        $props_array = get_object_vars($this);
-        $array       = array();
-        
-        foreach ($props_array as $key=>$value) {
-            if (
-                $key != "_field_types" 
-                && $key != "_filters" 
-                && $key != "_clean_state"
-            ) {
-                $array[$key] = $value;
-            }
-        }
-        
-        return new ArrayIterator($array);
+        return new ArrayIterator($this->fields);
     } 
     
     /**
@@ -259,7 +316,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function getId()
     {
-        return $this->id;   
+        return $this->fields["id"];   
     }
     
     /**
@@ -277,7 +334,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
             return;
         }
         
-        $this->id = $this->validate("id", $int);
+        $this->fields["id"] = $this->validate("id", $int);
     }
     
     /**
@@ -289,7 +346,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function getATime()
     {
-        return $this->atime;
+        return $this->fields["atime"];
     }
     
     /**
@@ -307,7 +364,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
             $int = 0;
         }
         
-        $this->atime = $this->validate("atime", $int);
+        $this->fields["atime"] = $this->validate("atime", $int);
     }
     
     /**
@@ -319,7 +376,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function getCTime()
     {
-        return $this->ctime;
+        return $this->fields["ctime"];
     }
     
     /**
@@ -333,7 +390,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setCTime($int)
     {
-        $this->ctime = $this->validate("ctime", $int);
+    	$this->fields["ctime"] = $this->validate("ctime", $int);
     }
     
     /**
@@ -345,7 +402,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function getMTime()
     {
-        return $this->mtime;
+        return $this->fields["mtime"];
     }
     
     /**
@@ -359,7 +416,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setMTime($int)
     {
-        $this->mtime = $this->validate("mtime", $int);
+    	$this->fields["mtime"] = $this->validate("mtime", $int);
     }
     
     /**
@@ -371,7 +428,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function getOwner()
     {
-        return $this->owner;
+        return $this->fields["owner"];
     }
     
     /**
@@ -385,7 +442,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setOwner($int)
     {
-        $this->owner = $this->validate("owner", $int);
+    	$this->fields["owner"] = $this->validate("owner", $int);
     }
     
     /**
@@ -397,7 +454,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function getGroup()
     {
-        return $this->group;
+        return $this->fields["group"];
     }
     
     /**
@@ -411,7 +468,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setGroup($int)
     {
-        $this->group = $this->validate("group", $int);
+    	$this->fields["group"] = $this->validate("group", $int);
     }
     
     /**
@@ -423,7 +480,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function getPerms()
     {
-        return $this->perms;
+        return $this->fields["perms"];
     }
     
     /**
@@ -437,237 +494,16 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function setPerms($int)
     {
-        $this->perms = $this->validate("perms", $int);
+    	$this->fields["perms"] = $this->validate("perms", $int);
     }
     
-    /**
-     * Get array with all filters
-     * 
-     * @access public
-     * @return array
-     * @since  1.0
-     */
-    public function getFilters()
+    private function _getValidator()
     {
-        return $this->_filters;
-    }
-    
-    /**
-     * Get filter for a given field
-     * 
-     * @param string $key The field name
-     * 
-     * @access public
-     * @return array
-     * @since  1.0
-     */
-    public function getFilter($key)
-    {
-        if (!isset($this->_filters[$key])) {
-            return null;
+        if (!$this->_validator instanceof PHPFrame_Validator) {
+            $this->_validator = new PHPFrame_Validator();
         }
         
-        return $this->_filters[$key];
-    }
-    
-    /**
-     * Mark object as clean
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function markClean()
-    {
-        $this->_clean_state = serialize(iterator_to_array($this));
-    }
-    
-    /**
-     * Is object dirty? If it is it means that it has changed since it was last 
-     * persisted.
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    public function isDirty()
-    {
-        return !($this->_clean_state == serialize(iterator_to_array($this)));
-    }
-    
-    /**
-     * Add a field filter
-     *  
-     * @param string    $field
-     * @param string    $type
-     * @param int|array $max_length
-     * @param int       $min_length
-     * @param bool      $allow_null
-     * @param mixed     $def_value
-     * @param string    $regex
-     * 
-     * @access protected
-     * @return void
-     * @since  1.0
-     */
-    protected function addFilter(
-        $field, 
-        $type, 
-        $max_length=null, 
-        $min_length=null, 
-        $allow_null=false,
-        $def_value=null,
-        $regex=null
-    )
-    {
-        if (!in_array($type, $this->_field_types)) {
-            $msg  = "Argument \$type must be one of the following values: ";
-            $msg .= "'".implode("', '",$this->_field_types)."'. Passed value: ";
-            $msg .= "'".$type."'.";
-            throw new DomainException($msg);
-        }
-        
-        if ($type == "varchar" && empty($max_length)) {
-            $msg  = "Argument \$max_length can not be empty if argument \$type";
-            $msg .= " is 'varchar'.";
-            throw new InvalidArgumentException($msg);
-        }
-        
-        if ($type == "enum" && !is_array($max_length)) {
-            $msg  = "Argument \$max_length must be an array if argument \$type";
-            $msg .= " is 'enum'.";
-            throw new InvalidArgumentException($msg);
-        } elseif ($type != "enum") {
-            $max_length = (int) $max_length;
-        }
-        
-        $this->_filters[$field] = array(
-            "type"       => (string) $type,
-            "max_length" => $max_length,
-            "min_length" => (int)    $min_length,
-            "allow_null" => (bool)   $allow_null,
-            "def_value"  => $def_value,
-            "regex"      => (string) $regex
-        );
-    }
-    
-    /**
-     * Validate a value for a given field
-     * 
-     * @param string $field
-     * @param mixed  $value
-     * 
-     * @access protected
-     * @return mixed
-     * @since  1.0
-     */
-    protected function validate($field, $value)
-    {
-        $filter = $this->getFilter($field);
-        
-        if ($field == "id" && is_null($value)) {
-            return;
-        }
-        
-        if (
-            is_null($value) 
-            && isset($filter["def_value"]) 
-            && !is_null($filter["def_value"])
-        ) {
-            $value = $filter["def_value"];
-        }
-        
-        if (
-            is_null($value) 
-            && isset($filter["allow_null"]) 
-            && !$filter["allow_null"]
-        ) {
-            $msg  = "Field '".$field."' can not be null. Null passed and no ";
-            $msg .= "default value has been defined in filter.";
-            throw new RuntimeException($msg);
-        } elseif (is_null($value)  && $filter["allow_null"]) {
-            return $value;
-        }
-        
-        if (is_array($filter) && isset($filter["type"])) {
-            switch ($filter["type"]) {
-                case "int" : 
-                    $value = PHPFrame_Filter::validateInt($value);
-                    break;
-                case "varchar" : 
-                    $pattern = '/^.{'.$filter["min_length"].','.$filter["max_length"].'}$/';
-                    $value = PHPFrame_Filter::validateRegExp($value, $pattern);
-                    break;
-                case "enum" :
-                    $value = PHPFrame_Filter::validateEnum($value, $filter["max_length"]);
-                    break; 
-                case "text" :
-                    $value = PHPFrame_Filter::validateDefault($value);
-                    break;
-            }
-        }
-        
-        if (isset($filter["regex"]) && !empty($filter["regex"])) {
-            switch ($filter["regex"]) {
-                case "email" :
-                    $value = PHPFrame_Filter::validateEmail($value);
-                    break;
-                case "url" :
-                    $value = PHPFrame_Filter::validateURL($value);
-                    break;
-                case "ip" :
-                    $value = PHPFrame_Filter::validateIP($value);
-                    break;
-                default :
-                    $value = PHPFrame_Filter::validateRegExp($value, $filter["regex"]);
-                    break;
-            }
-        }
-        
-        return $value;
-    }
-    
-    /**
-     * Validate all fields in object
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function validateAll()
-    {
-        foreach ($this as $key=>$value) {
-            $setter = "set".str_replace("_", "", $key);
-            $this->$setter($this->validate($key, $value));
-        }
-    }
-    
-    /**
-     * Can user read this object?
-     * 
-     * @param PHPFrame_user $user
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    public function canRead(PHPFrame_user $user)
-    {
-        return $this->_checkPerms($user, 4);
-    }
-    
-    /**
-     * Can user write this object?
-     * 
-     * @param PHPFrame_user $user
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    public function canWrite(PHPFrame_user $user)
-    {
-        return $this->_checkPerms($user, 6);
+        return $this->_validator;
     }
     
     /**

@@ -1,22 +1,26 @@
 <?php
 class PHPFrame_Group extends PHPFrame_PersistentObject
 {
-    protected $name;
-    
     public function __construct(array $options=null)
     {
-        $this->addFilter("name", "varchar", 50);
-        
-        parent::__construct($options);
+    	// Create the filter for the group name
+    	$filter = new PHPFrame_StringFilter(array(
+    	   "min_length"=>3, 
+    	   "max_length"=>50
+    	));
+    	// Add the field in the PersistentObject
+    	$this->addField("name", null, false,  $filter);
+    	
+    	parent::__construct($options);
     }
     
     public function getName()
     {
-        return $this->name;
+        return $this->fields["name"];
     }
     
     public function setName($str)
     {
-        $this->name = $this->validate("name", $str);
+    	$this->fields["name"] = $this->validate("name", $str);
     }
 }

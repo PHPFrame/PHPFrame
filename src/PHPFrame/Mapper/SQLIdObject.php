@@ -169,10 +169,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function select($fields)
     {
         // Validate input type and set internal property
-        $pattern = "/^[a-zA-Z_ \.\*\(\)\#]+$/";
-        $fields = PHPFrame_Filter::validateRegExp($fields, $pattern);
-        
-        if (is_string($fields)) {
+        if (!is_array($fields)) {
             $fields = array($fields);
         }
         
@@ -233,8 +230,12 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
         }
         
         // Validate input type and set internal property
-        $pattern = "/^[a-zA-Z_\#\.]+$/";
-        $this->_from = PHPFrame_Filter::validateRegExp($table, $pattern);
+        if (!preg_match("/^[a-zA-Z_\#\.]+$/", $table)) {
+            $msg = "Argument \$table contains ilegal characters";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $this->_from = $table;
         
         return $this;
     }
@@ -289,13 +290,17 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function where($left, $operator, $right)
     {
         // Validate input types and set internal property
-        $pattern = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:]+$/";
-        $left    = PHPFrame_Filter::validateRegExp($left, $pattern);
-        $right   = PHPFrame_Filter::validateRegExp($right, $pattern);
-        
-        // Validate operators
-        $pattern  = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN)$/";
-        $operator = PHPFrame_Filter::validateRegExp($operator, $pattern);
+        $pattern1 = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:]+$/";
+        $pattern2  = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN)$/";
+        if (
+            !preg_match($pattern1, $left)
+            || !preg_match($pattern1, $right)
+            || !preg_match($pattern2, $operator)
+        ) {
+            $msg  = "Arguments passed to ".get_class($this)."::where() ";
+            $msg .= "contain illegal characters.";
+            throw new InvalidArgumentException($msg);
+        }
         
         $this->_where[] = array($left, $operator, $right);
         
@@ -314,8 +319,12 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function groupby($column)
     {
         // Validate input type and set internal property
-        $pattern        = "/^[a-zA-Z_ \#\.]+$/";
-        $this->_groupby = PHPFrame_Filter::validateRegExp($column, $pattern);
+        if (!preg_match("/^[a-zA-Z_ \#\.]+$/", $column)) {
+            $msg = "Argument \$column contains ilegal characters";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $this->_groupby = $column;
         
         return $this;
     }
@@ -333,8 +342,12 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function orderby($column, $direction=null)
     {
         // Validate input type and set internal property
-        $pattern        = "/^[a-zA-Z_\#\.]+$/";
-        $this->_orderby = PHPFrame_Filter::validateRegExp($column, $pattern);
+        if (!preg_match("/^[a-zA-Z_\#\.]+$/", $column)) {
+            $msg = "Argument \$column contains ilegal characters";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $this->_orderby = $column;
         
         if (!is_null($direction)) {
             $this->orderdir($direction);
@@ -356,8 +369,12 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function orderdir($direction)
     {
         // Validate input type and set internal property
-        $pattern         = "/^(ASC|DESC)$/i";
-        $this->_orderdir = PHPFrame_Filter::validateRegExp($direction, $pattern);
+        if (!preg_match("/^(ASC|DESC)$/i", $direction)) {
+            $msg = "Argument \$direction contains ilegal characters";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $this->_orderdir = $direction;
         
         return $this;
     }
@@ -375,7 +392,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function limit($limit, $limitstart=null)
     {
         // Validate input type and set internal property 
-        $this->_limit = PHPFrame_Filter::validateInt($limit);
+        $this->_limit = (int) $limit;
         
         if (!is_null($limitstart)) {
             $this->limitstart($limitstart);
@@ -396,7 +413,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function limitstart($limitstart)
     {
         // Validate input type and set internal property 
-        $this->_limitstart = PHPFrame_Filter::validateInt($limitstart);
+        $this->_limitstart = (int) $limitstart;
  
         return $this;
     }

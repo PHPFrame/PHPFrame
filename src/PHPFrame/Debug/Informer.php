@@ -49,7 +49,8 @@ class PHPFrame_Informer extends PHPFrame_Observer
         $this->_mailer = new PHPFrame_Mailer();
         
         foreach ($recipients as $recipient) {
-            $this->_mailer->AddAddress(PHPFrame_Filter::validateEmail($recipient));
+            $recipient = filter_var($recipient, FILTER_VALIDATE_EMAIL);
+            $this->_mailer->AddAddress($recipient);
         }
     }
     

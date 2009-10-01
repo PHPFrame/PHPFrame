@@ -186,15 +186,20 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     }
     
     /**
-     * Validate all fields in object
+     * Validate all fields and throw exception on failure
+     * 
+     * @param array $assoc An associative array containing the field names and 
+     *                     the values to process.
      * 
      * @access public
-     * @return void
+     * @return mixed The filtered array or FALSE on failure
      * @since  1.0
      */
-    public function isValid()
+    public function validateAll()
     {
-        return $this->_getValidator()->isValid();
+        $this->_getValidator()->throwExceptions(true);
+        
+        return $this->_getValidator()->validateAll(iterator_to_array($this));
     }
     
     /**

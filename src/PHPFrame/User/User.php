@@ -115,7 +115,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
            "activation", 
            null, 
            true, 
-           new PHPFrame_StringFilter(array("min_length"=>100, "max_length"=>100))
+           new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>100))
         );
         $this->addField(
            "params", 
@@ -125,7 +125,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         );
         $this->addField(
            "deleted", 
-           null, 
+           0, 
            true, 
            new PHPFrame_IntFilter()
         );
@@ -568,11 +568,12 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function setParams($params)
     {
-        if (is_string($params)) {
+        if (is_string($params) && !empty($params)) {
             $params = unserialize($params);
-            if (!is_array($params)) {
+        }
+        
+        if (!is_array($params)) {
                 $params = array();
-            }
         }
         
         if (!is_array($params)) {
@@ -706,11 +707,12 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $array = array();
         
         foreach ($this->fields as $key=>$value) {
-            if (
-                ($key == "params" || $key == "openid_urls") 
-                && count($value) > 0
-            ) {
-                $value = serialize($value);
+            if (($key == "params" || $key == "openid_urls")) {
+                if (is_array($value) && count($value) > 0) {
+                    $value = serialize($value);
+                } else {
+                    $value = "";
+                }
             }
             
             $array[$key] = $value;

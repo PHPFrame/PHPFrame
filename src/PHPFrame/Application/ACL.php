@@ -49,7 +49,7 @@ class PHPFrame_ACL extends PHPFrame_PersistentObject
            "action", 
            "*", 
            false,  
-           new PHPFrame_RegexpFilter(array("regexp"=>"/^[a-zA-Z]{1,50}$/"))
+           new PHPFrame_RegexpFilter(array("regexp"=>"/^[a-zA-Z\*]{1,50}$/"))
         );
         $this->addField(
            "value", 

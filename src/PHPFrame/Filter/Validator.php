@@ -160,30 +160,6 @@ class PHPFrame_Validator
     }
     
     /**
-     * Check whether a givan value is valid with the current validator state
-     * 
-     * @param mixed $value The value to validate
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    public function isValid($value)
-    {
-        $this->_original_value  = $value;
-        
-        if (!$this->sanitise($this->getOriginalValue())) {
-            return false;
-        }
-        
-        if (!$this->filter($this->getSanitisedValue())) {
-            return false;
-        }
-        
-        return true;
-    }
-    
-    /**
      * Validate a value for a single field in validator
      * 
      * @param string $field_name
@@ -244,9 +220,51 @@ class PHPFrame_Validator
      */
     public function validateAll(array $assoc)
     {
+        $array_obj = new PHPFrame_Array($assoc);
+        if (!$array_obj->isAssoc()) {
+            $msg  = get_class($this)."::validateAll() expected argument assoc ";
+            $msg .= "to be of an associative array and got a numerically ";
+            $msg .= "indexed one.";
+            throw new InvalidArgumentException($msg);
+        }
         
+        $this->_original_values = $assoc;
+        $this->_filtered_values = array();
         
-        return true;
+        foreach ($assoc as $key=>$value) {
+            if (
+                array_key_exists($key, $this->_filters)
+                && !$this->validate($key, $value)
+            ) {
+                return false;
+            }
+        }
+        
+        return $this->getFilteredValues();
+    }
+    
+    /**
+     * Get original values array
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getOriginalValues()
+    {
+        return $this->_original_values;
+    }
+    
+    /**
+     * Get filtered values array
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getFilteredValues()
+    {
+        return $this->_filtered_values;
     }
     
     /**

@@ -132,7 +132,9 @@ class PHPFrame_Crypt
                     if ($j == 16) {
                         $j = 5;
                     }
-                    $p[] = PHPFrame_Crypt::_toAPRMD5((ord($binary[$i]) << 16) | (ord($binary[$k]) << 8) | (ord($binary[$j])), 5);
+                    $p[] = PHPFrame_Crypt::_toAPRMD5((ord($binary[$i]) << 16) 
+                           | (ord($binary[$k]) << 8) 
+                           | (ord($binary[$j])), 5);
                 }
 
                 return '$apr1$'.$salt.'$'.implode('', $p).PHPFrame_Crypt::_toAPRMD5(ord($binary[11]), 3);

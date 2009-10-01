@@ -35,7 +35,7 @@ class PHPFrame_EmailFilterTest extends PHPUnit_Framework_TestCase
     
     public function test_processFailure()
     {
-        $values = array(true, -3, 3.14, "me.domain.com", "you", "me@gmail", array(), new stdClass());
+        $values = array(true, -3, 3.14, "me.domain.com", "you", "me@gmail.%&", array(), new stdClass());
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();

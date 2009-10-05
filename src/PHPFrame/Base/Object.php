@@ -26,60 +26,6 @@
 abstract class PHPFrame_Object
 {
     /**
-     * __call() is triggered when invoking inaccessible methods in an object context. 
-     * 
-     * @param string $name
-     * @param array  $arguments
-     * 
-     * @access public
-     * @return mixed
-     * @since  1.0
-     */
-    public function __call($name, array $arguments)
-    {
-        
-    }
-    
-    /**
-     * __callStatic() is triggered when invoking inaccessible methods in a static context.
-     * 
-     * @param string $name
-     * @param array  $arguments
-     * 
-     * @access public
-     * @return mixed
-     * @since  1.0
-     */
-    public function __callstatic($name, array $arguments)
-    {
-        
-    }
-    
-    /**
-     * Clone
-     * 
-     * @access public
-     * @return PHPFrame_Object
-     * @since  1.0
-     */
-    public function __clone()
-    {
-        
-    }
-    
-    /**
-     * Destructor
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function __destruct()
-    {
-        
-    }
-    
-    /**
      * __get() is utilized for reading data from inaccessible members. 
      * 
      * @param string $name
@@ -113,20 +59,6 @@ abstract class PHPFrame_Object
         // If we havent been able to get a value yet we throw an exception
         $msg = "Property '".$name."' doesn't exist in class ".get_class($this);
         throw new LogicException($msg);
-    }
-    
-    /**
-     * __isset() is triggered by calling isset() or empty()  on inaccessible members. 
-     * 
-     * @param string $name
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    public function __isset($name)
-    {
-        
     }
     
     /**
@@ -194,19 +126,5 @@ abstract class PHPFrame_Object
         }
         
         return $str;
-    }
-    
-    /**
-     * __unset() is invoked when unset() is used on inaccessible members. 
-     * 
-     * @param string $name
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function __unset($name)
-    {
-        
     }
 }

@@ -32,10 +32,10 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      *                                  options. The FloatFilter supports the 
      *                                  following options:
      *                                  
-     *                                  - min_range (int|FALSE). Default value 
-     *                                    is FALSE. If FALSE min_range is ignored
-     *                                  - max_range (int|FALSE). Default value is
-     *                                    FALSE. If FALSE max_range is ignored
+     *                                  - min_range (int). Default value 
+     *                                    is -2147483648. (4 byte signed int)
+     *                                  - max_range (int). Default value is
+     *                                    2147483648. (4 byte signed int)
      *                                  - allow_octal (bool). Default value is 
      *                                    FALSE
      *                                  - allow_hex (bool). Default value is 
@@ -48,8 +48,8 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      */
     public function __construct(array $options=null)
     {
-        $this->registerOption("min_range", false);
-        $this->registerOption("max_range", false);
+        $this->registerOption("min_range", -2147483648);
+        $this->registerOption("max_range", 2147483647);
         $this->registerOption("allow_octal", false);
         $this->registerOption("allow_hex", false);
         $this->registerOption("strict", false);
@@ -175,12 +175,9 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
         // Delegate to filter_var function
         // First we build options array for filter_var()
         $options = array();
-        if ($this->getOption("min_range") !== false) {
-            $options["min_range"] = $this->getOption("min_range");
-        }
-        if ($this->getOption("max_range") !== false) {
-            $options["max_range"] = $this->getOption("max_range");
-        }
+        $options["min_range"] = $this->getOption("min_range");
+        $options["max_range"] = $this->getOption("max_range");
+        
         // Set flags for filter_var()
         $flags = null;
         if ($this->getOption("allow_octal") && $this->getOption("allow_hex")) {
@@ -193,7 +190,9 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
             $flags = FILTER_FLAG_ALLOW_HEX;
         }
         // Pack options and flags into a single array
-        $options = array("options"=>$options, "flags"=>$flags);
+        if (!is_null($flags)) {
+            $options = array("options"=>$options, "flags"=>$flags);
+        }
         
         $filtered_value = filter_var($value, FILTER_VALIDATE_INT, $options);
         if ($filtered_value === false) {

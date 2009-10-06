@@ -191,6 +191,8 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Check whether a given field allows null value
      * 
+     * @param string $field_name
+     * 
      * @access public
      * @return bool
      * @since  1.0

@@ -135,6 +135,32 @@ class PHPFrame_Validator
     }
     
     /**
+     * Get filters
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getFilters()
+    {
+        return $this->_filters;
+    }
+    
+    /**
+     * Check whether a given field allows null value
+     * 
+     * @param string $field_name
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function allowsNull($field_name)
+    {
+        return (in_array($field_name, $this->_allow_null_fields));
+    }
+    
+    /**
      * Set whether or not the validator should throw exceptions
      * 
      * @param bool $bool

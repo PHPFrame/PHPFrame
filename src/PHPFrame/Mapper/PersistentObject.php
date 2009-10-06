@@ -140,6 +140,18 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $this->fields["mtime"] = null;
     }
     
+    /**
+     * Add a field in persistent object (stored in internal array)
+     * 
+     * @param string          $name
+     * @param mixed           $def_value
+     * @param bool            $allow_null
+     * @param PHPFrame_Filter $filter
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     protected function addField(
         $name, 
         $def_value=null, 
@@ -154,10 +166,38 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
             throw new InvalidArgumentException($msg);
         }
         
+        if (is_null($filter)) {
+            $filter = new PHPFrame_StringFilter();
+        }
+        
         // Set key with default value in internal array
         $this->fields[$name] = $def_value;
         // Store filter in validator
         $this->_getValidator()->setFilter($name, $filter, $allow_null);
+    }
+    
+    /**
+     * Get filters
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getFilters()
+    {
+        return $this->_getValidator()->getFilters();
+    }
+    
+    /**
+     * Check whether a given field allows null value
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function allowsNull($field_name)
+    {
+        return $this->_getValidator()->allowsNull($field_name);
     }
     
     /**

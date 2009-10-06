@@ -119,6 +119,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         // If no specific action has been requested we use default action
         if (empty($request_action)) {
             $action = $this->_default_action;
+            PHPFrame::Request()->setAction($action);
         } else {
             $action = $request_action;
         }

@@ -37,47 +37,53 @@
 
 <div style="clear: both;"></div>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
-    $("a.ajax-feed-trigger").click(
-        function(e) {
-            e.preventDefault();
-            $('#content').empty();
-            $('#content').attr("class", "content");
-            var href  = $(this).attr("href");
-            var title = $(this).attr("title")
-            $.jGFeed(
-                href,
-                function(feeds) {
-                    // Check for errors
-                    if (!feeds) {
-                        // there was an error
-                        return false;
-                    }
-                    $("#content").append('<h2>'+title+'</h2>');
-                    // do whatever you want with feeds here
-                    for (var i=0; i<feeds.entries.length; i++) {
-                        var entry = feeds.entries[i];
-                        // Add entry to html
-                        //console.log(entry);
-                        
-                        var html = '<div>';
-                        html += '<h3><a href="'+entry.link+'">'+entry.title+'</a></h3>';
-                        html += '<div>'+entry.publishedDate+'</div>';
-                        html += '<div>'+entry.author+'</div>';
-                        html += '<div>'+entry.content+'</div>';
-                        html += '</div>';
-                        
-                        $("#content").append(html);
-                    }
-                    $('#content').show();
-                },
-                10
-            );
-        }
-    );
+    // Override default click event for ajax-feed-trigger links
+    $("a.ajax-feed-trigger").click(function(e) {
+        e.preventDefault();
+        $('#content').empty();
+        $('#content').attr("class", "content loading");
+        var href  = $(this).attr("href");
+        var title = $(this).attr("title")
+        $.jGFeed(
+            href,
+            function(feeds) {
+                // Check for errors
+                if (!feeds) {
+                    // there was an error
+                    $("#content").append("Error fetching feed.");
+                    return false;
+                }
+                
+                $('#content').attr("class", "content");
+                $("#content").append('<h2>'+title+'</h2>');
 
-});
+                // Proces feeds
+                for (var i=0; i<feeds.entries.length; i++) {
+                    var entry = feeds.entries[i];
+                    
+                    //console.log(entry);
+                    // Build HTML string for entry
+                    var html = '<div class="ajax-feed-item">';
+                    html += '<h3><a href="'+entry.link+'">';
+                    html += entry.title+'</a></h3>';
+                    html += '<div class="ajax-feed-date">';
+                    html += entry.publishedDate+'</div>';
+                    html += '<div class="ajax-feed-author">';
+                    html += entry.author+'</div>';
+                    html += '<div class="ajax-feed-content">';
+                    html += entry.content+'</div>';
+                    html += '</div>';
+                    
+                    $("#content").append(html);
+                }
+                $('#content').show();
+            },
+            10
+        ); // End jGFeed
+    }); // End a.ajax-feed-trigger click event
+}); 
 </script>
 
 <!-- ******************** start #topmenu ******************** -->
@@ -85,7 +91,7 @@ $(document).ready(function() {
 
 <ul>
     <li>
-        <a href="content/index">Home</a>
+        <a href="/">Home</a>
     </li>
     <li>
         <a href="content/download">Download</a>
@@ -106,6 +112,7 @@ $(document).ready(function() {
 
 </div>
 <!-- ******************** end #topmenu ******************** -->
+
 
 
 </div>

@@ -119,7 +119,7 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
     {
         // Try to use default cache dir if not set
         if (is_null($this->_cache_dir) && defined("PHPFRAME_TMP_DIR")) {
-            $this->_cache_dir = PHPFRAME_TMP_DIR.DS."cache".DS."http_request";
+            $this->setCacheDir(PHPFRAME_TMP_DIR.DS."cache".DS."http_request");
         } else {
             $msg  = get_class($this)." could not determine the path to the";
             $msg .= " cache directory";

@@ -5,7 +5,7 @@
 <meta http_equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="http://www.phpframe.org/themes/phpframe.org/css/styles.css" type="text/css">
 <script type="text/javascript" src="http://www.phpframe.org/lib/jquery/js/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="http://www.phpframe.org/lib/jquery/js/jquery-ui-1.7.custom.min.js"></script>
+<script type="text/javascript" src="http://www.phpframe.org/lib/jquery/plugins/jGFeed/jquery.jgfeed-min.js"></script>
 <script type="text/javascript" src="http://www.phpframe.org/themes/phpframe.org/js/twitter.js"></script>
 </head>
 <body>
@@ -37,32 +37,76 @@
 
 <div style="clear: both;"></div>
 
+<script>
+$(document).ready(function() {
+    $("a.ajax-feed-trigger").click(
+        function(e) {
+            e.preventDefault();
+            $('#content').empty();
+            $('#content').attr("class", "content");
+            var href  = $(this).attr("href");
+            var title = $(this).attr("title")
+            $.jGFeed(
+                href,
+                function(feeds) {
+                    // Check for errors
+                    if (!feeds) {
+                        // there was an error
+                        return false;
+                    }
+                    $("#content").append('<h2>'+title+'</h2>');
+                    // do whatever you want with feeds here
+                    for (var i=0; i<feeds.entries.length; i++) {
+                        var entry = feeds.entries[i];
+                        // Add entry to html
+                        //console.log(entry);
+                        
+                        var html = '<div>';
+                        html += '<h3><a href="'+entry.link+'">'+entry.title+'</a></h3>';
+                        html += '<div>'+entry.publishedDate+'</div>';
+                        html += '<div>'+entry.author+'</div>';
+                        html += '<div>'+entry.content+'</div>';
+                        html += '</div>';
+                        
+                        $("#content").append(html);
+                    }
+                    $('#content').show();
+                },
+                10
+            );
+        }
+    );
+
+});
+</script>
+
 <!-- ******************** start #topmenu ******************** -->
 <div id="topmenu">
 
 <ul>
     <li>
-        <a href="http://www.phpframe.org/content/index">Home</a>
+        <a href="content/index">Home</a>
     </li>
     <li>
-        <a href="http://www.phpframe.org/content/download">Download</a>
+        <a href="content/download">Download</a>
     </li>
     <li>
         <a href="http://www.phpframe.org/doc/api">Documentation</a>
     </li>
     <li>
-        <a href="http://www.phpframe.org/content/tutorials">Tutorials</a>
+        <a href="content/tutorials">Tutorials</a>
     </li>
     <li>
-        <a href="http://www.phpframe.org/content/tracker">Bug tracker</a>
+        <a class="ajax-feed-trigger" title="Bug tracker" href="http://code.google.com/feeds/p/phpframe/issueupdates/basic">Bug tracker</a>
     </li>
     <li>
-        <a href="http://www.phpframe.org/content/discussion">Discussion</a>
+        <a class="ajax-feed-trigger" title="Developers discussion group" href="http://groups.google.com/group/phpframe-dev/feed/rss_v2_0_msgs.xml">Discussion</a>
     </li>
 </ul>
 
 </div>
 <!-- ******************** end #topmenu ******************** -->
+
 
 </div>
 <!-- ******************** end #header ******************** -->

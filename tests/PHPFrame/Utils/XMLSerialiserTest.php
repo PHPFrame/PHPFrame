@@ -140,9 +140,11 @@ class PHPFrame_XMLSerialiserTest extends PHPUnit_Framework_TestCase
                 )
             )
         ));
-        $ext->addContent(array("path"=>"src/controllers/users.php", "role"=>"php"));
-        $ext->addContent(array("path"=>"src/controllers/users.php", "role"=>"php"));
-        $ext->addContent(array("path"=>"src/models/users.php", "role"=>"php"));
+        $ext->setContents(array(
+            array("path"=>"src/controllers/users.php", "role"=>"php"),
+            array("path"=>"src/controllers/users.php", "role"=>"php"),
+            array("path"=>"src/models/users.php", "role"=>"php")
+        ));
         
         $ext->validateAll();
         

@@ -189,10 +189,11 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
         if ($this->getOption("allow_hex")) {
             $flags = FILTER_FLAG_ALLOW_HEX;
         }
+        
         // Pack options and flags into a single array
-        if (!is_null($flags)) {
+        //if (!is_null($flags)) {
             $options = array("options"=>$options, "flags"=>$flags);
-        }
+        //}
         
         $filtered_value = filter_var($value, FILTER_VALIDATE_INT, $options);
         if ($filtered_value === false) {

@@ -25,6 +25,11 @@
  */
 class PHPFrame_User extends PHPFrame_PersistentObject
 {
+    /**
+     * String representation of the groupid.
+     * 
+     * @var string
+     */
     private $_groupname;
     /**
      * vCard object used to store user details 
@@ -47,13 +52,13 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         // before we construct the parentwe add the necessary fields
         $this->addField(
            "groupid", 
-           null, 
+           0, 
            false, 
            new PHPFrame_IntFilter()
         );
         $this->addField(
            "username", 
-           null, 
+           "guest", 
            false, 
            new PHPFrame_RegexpFilter(array("regexp"=>'/^[a-zA-Z\.]{3,20}$/'))
         );

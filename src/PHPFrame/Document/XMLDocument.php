@@ -64,7 +64,12 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      */
     public function __toString()
     {
-        return $this->indent($this->dom->saveXML().$this->getBody());
+        $str            = $this->dom->saveXML();
+        $str           .= $this->getBody();
+        
+        $xml_beautifier = new XML_Beautifier();
+        return $xml_beautifier->formatString($str);
+        //return $this->indent($this->dom->saveXML().$this->getBody());
     }
     
     public function getDOM()
@@ -176,6 +181,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      * @access protected
      * @return string
      * @since  1.0
+     * @deprecated This function is now replaced with XML_Beautifier
      */
     protected function indent($str)
     {
@@ -222,6 +228,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      * @access protected
      * @return string
      * @since  1.0
+     * @deprecated This function is now replaced with XML_Beautifier
      */
     protected function padding($depth)
     {

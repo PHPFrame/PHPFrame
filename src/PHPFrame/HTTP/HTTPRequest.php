@@ -28,6 +28,25 @@
 class PHPFrame_HTTPRequest extends HTTP_Request2
 {
     /**
+     * Response object
+     * 
+     * @var HTTP_Request2_Response
+     */
+    private $_response;
+    /**
+     * Cache time in seconds
+     * 
+     * @var int
+     */
+    private $_cache = 0;
+    /**
+     * Full path to cache directory
+     * 
+     * @var string
+     */
+    private $_cache_dir = null;
+    
+    /**
      * 
      * @param string|Net_Url2 $url    [Optional]
      * @param string          $method [Optional]
@@ -47,6 +66,70 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
     }
     
     /**
+     * Set cache time. Set to 0 to disable.
+     * 
+     * @param int $int The cache time in seconds.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setCacheTime($int)
+    {
+        $this->_cache = (int) $int;
+    }
+    
+    /**
+     * Get cache time in seconds. 0 means off.
+     * 
+     * @access public
+     * @return int
+     * @since  1.0
+     */
+    public function getCacheTime()
+    {
+        return $this->_cache;
+    }
+    
+    /**
+     * Set cache directory.
+     * 
+     * @param string $str Full path to the cache directory.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setCacheDir($str)
+    {
+        $this->_cache_dir = (string) $str;
+        
+        // Make sure the directory is writable
+        PHPFrame_Filesystem::ensureWritableDir($this->_cache_dir);
+    }
+    
+    /**
+     * Get cache directory
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
+    public function getCacheDir()
+    {
+        // Try to use default cache dir if not set
+        if (is_null($this->_cache_dir) && defined("PHPFRAME_TMP_DIR")) {
+            $this->_cache_dir = PHPFRAME_TMP_DIR.DS."cache".DS."http_request";
+        } else {
+            $msg  = get_class($this)." could not determine the path to the";
+            $msg .= " cache directory";
+            throw new RuntimeException($msg);
+        }
+        
+        return $this->_cache_dir;
+    }
+    
+    /**
      * Send HTTP request
      * 
      * @access public
@@ -55,7 +138,32 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
      */
     public function send()
     {
-        $this->_response = parent::send();
+        // If cache is turned on
+        if ($this->getCacheTime() > 0) {
+            $cache_file_name  = $this->getCacheDir();
+            $cache_file_name .= DS.md5($this->getUrl()->getURL());
+            if (is_file($cache_file_name)) {
+                $cache_file = new PHPFrame_FileObject($cache_file_name, "r+");
+                if ((time() - $cache_file->getMTime()) < $this->getCacheTime()) {
+                    $serialised = base64_decode($cache_file->getFileContents());
+                    // Fetch from cache file
+                    $this->_response = unserialize($serialised);
+                }
+            } else {
+                $cache_file = new PHPFrame_FileObject($cache_file_name, "w");
+            }
+        }
+        
+        // If no response has been loaded from cache we get the it via HTTP
+        if (!$this->_response instanceof HTTP_Request2_Response) {
+            $this->_response = parent::send();
+            
+            // If cache is turned on we store the fetched data
+            if ($this->getCacheTime() > 0) {
+                $cache_file->rewind();
+                $cache_file->fwrite(base64_encode(serialize($this->_response)));
+            }
+        }
         
         // If we get a redirect status we send a new request
         $response_status = $this->_response->getStatus();

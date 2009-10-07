@@ -25,34 +25,88 @@
  */
 class PHPFrame_FeedReader
 {
+    /**
+     * The feed URL
+     * 
+     * @var string
+     */
     private $_url;
+    /**
+     * XML string
+     * 
+     * @var string
+     */
     private $_xml;
+    /**
+     * DOM object
+     * 
+     * @var DOMDocument
+     */
     private $_dom;
     private $_updated;
     private $_id;
     private $_title;
     private $_link_self;
     private $_link_alternate;
-    private $_entries=array();
+    /**
+     * Array containing the feed items
+     * 
+     * @var array
+     */
+    private $_entries = array();
     
-    public function __construct($url)
+    /**
+     * Constructor
+     * 
+     * @param string $url       The feed url.
+     * @param int    $cache     Cache time in seconds.
+     * @param string $cache_dir Full path to the cache directory.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function __construct($url, $cache=0, $cache_dir=null)
     {
-        $this->_url = trim((string) $url);
+        $this->_url   = trim((string) $url);
+        $this->_cache = (int) $cache;
+        $this->_xml   = $this->_fetchFeed($cache, $cache_dir);
         
-        $this->_fetchFeed();
+        // Parse xml (acquired either from HTTP request or cache)
         $this->_parseXML();
     }
     
+    /**
+     * Get the feed URL
+     * 
+     * @access public
+     * @return string
+     * @access 1.0
+     */
     public function getURL()
     {
         return $this->_url;
     }
     
+    /**
+     * Get XML string
+     * 
+     * @access public
+     * @return string
+     * @access 1.0
+     */
     public function getXML()
     {
         return $this->_xml;
     }
     
+    /**
+     * Get DOM object
+     * 
+     * @access public
+     * @return DOMDocument
+     * @access 1.0
+     */
     public function getDOM()
     {
         return $this->_dom;
@@ -83,22 +137,51 @@ class PHPFrame_FeedReader
         return $this->_link_alternate;
     }
     
+    /**
+     * Get feed items/entries
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
     public function getEntries()
     {
         return $this->_entries;
     }
     
-    private function _fetchFeed()
+    /**
+     * Fetch feed using HTTP request
+     * 
+     * @param int    $cache     Cache time in seconds.
+     * @param string $cache_dir Full path to the cache directory.
+     * 
+     * @access private
+     * @return string The HTTP request body containing the XML string
+     * @since  1.0
+     */
+    private function _fetchFeed($cache=0, $cache_dir=null)
     {
-        if (!class_exists("HTTP_Request2")) {
-            include "HTTP/Request2.php";
+        // Create HTTP request
+        $http_req = new PHPFrame_HTTPRequest($this->_url);
+        $http_req->setCacheTime($cache);
+        if (!is_null($cache_dir)) {
+            $http_req->setCacheDir($cache_dir);
         }
-
-        $http_req      = new HTTP_Request2($this->_url);
+        
+        // Send HTTP request and capture HTTP response
         $http_response = $http_req->send();
-        $this->_xml    = $http_response->getBody();
+        
+        // Return the response body (string)
+        return $http_response->getBody();
     }
     
+    /**
+     * Parse XML string stored in internal property
+     * 
+     * @access private
+     * @return void
+     * @since  1.0
+     */
     private function _parseXML()
     {
         $this->_dom = new DOMDocument;
@@ -129,16 +212,19 @@ class PHPFrame_FeedReader
         foreach ($entries_nodes as $entries_node) {
             $array = array();
             
-            $array["updated"] = $entries_node->getElementsByTagName("updated")->item(0)->nodeValue;
-            $array["id"]      = $entries_node->getElementsByTagName("id")->item(0)->nodeValue;
+            $array["updated"] = $entries_node->getElementsByTagName("updated")
+                                             ->item(0)->nodeValue;
+            $array["id"]      = $entries_node->getElementsByTagName("id")
+                                             ->item(0)->nodeValue;
             
             $array["link"]    = $entries_node->getElementsByTagName("link")
-                                              ->item(0)
-                                              ->attributes
-                                              ->getNamedItem("href")
-                                              ->value;
+                                             ->item(0)
+                                             ->attributes
+                                             ->getNamedItem("href")
+                                             ->value;
             
-            $array["title"]   = $entries_node->getElementsByTagName("title")->item(0)->nodeValue;
+            $array["title"]   = $entries_node->getElementsByTagName("title")
+                                             ->item(0)->nodeValue;
             
             $array["author"]  = $entries_node->getElementsByTagName("author")
                                              ->item(0)
@@ -146,7 +232,8 @@ class PHPFrame_FeedReader
             
             $array["author"] = trim($array["author"]);
             
-            $array["content"] = $entries_node->getElementsByTagName("content")->item(0)->nodeValue;
+            $array["content"] = $entries_node->getElementsByTagName("content")
+                                             ->item(0)->nodeValue;
             
             $this->_entries[] = $array;
         }

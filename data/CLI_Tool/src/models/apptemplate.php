@@ -83,7 +83,6 @@ class AppTemplate
         $url           = $this->_preferred_mirror."/".$file_name;
         $download_tmp  = PHPFrame_Filesystem::getSystemTempDir();
         $download_tmp .= DS."PHPFrame".DS."download";
-        $target        = $download_tmp.DS.$file_name;
         
         // Make sure we can write in download directory
         PHPFrame_Filesystem::ensureWritableDir($download_tmp);
@@ -94,17 +93,18 @@ class AppTemplate
         
         // Create the download listener
         $download = new PHPFrame_DownloadRequestListener();
-        $download->setTarget($target);
+        $download->setDownloadDir($download_tmp);
+        $download->setFileName($file_name);
         
         // Create the http request
-        $req = new HTTP_Request($url);
+        $req = new HTTP_Request2($url);
         $req->attach($download);
-        @$req->sendRequest(false);
+        $response = $req->send();
         
         // If response is not OK we throw exception
-        if ($req->getResponseCode() != 200) {
+        if ($response->getStatus() != 200) {
             $msg  = "Error downloading package. ";
-            $msg .= "Reason: ".$req->getResponseReason();
+            $msg .= "Reason: ".$response->getReasonPhrase();
             throw new RuntimeException($msg);
         }
         
@@ -113,7 +113,7 @@ class AppTemplate
                            ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         // Extract archive in install dir
-        $archive = new Archive_Tar($target, "gz");
+        $archive = new Archive_Tar($download_tmp.DS.$file_name, "gz");
         $archive->extract($this->_install_dir);
     }
     

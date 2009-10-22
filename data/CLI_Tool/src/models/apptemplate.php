@@ -51,8 +51,7 @@ class AppTemplate
     public function remove()
     {
         $cmd = "rm -rf ".$this->_install_dir.DS."*";
-        
-        $msg .= "Removing app. Using command \"".$cmd."\"...";
+        $msg = "Removing app. Using command \"".$cmd."\"...";
         PHPFrame::Session()->getSysevents()
                            ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
@@ -91,15 +90,9 @@ class AppTemplate
         PHPFrame::Session()->getSysevents()
                            ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
-        // Create the download listener
-        $download = new PHPFrame_DownloadRequestListener();
-        $download->setDownloadDir($download_tmp);
-        $download->setFileName($file_name);
-        
         // Create the http request
-        $req = new HTTP_Request2($url);
-        $req->attach($download);
-        $response = $req->send();
+        $request  = new PHPFrame_HTTPRequest($url);
+        $response = $request->download($download_tmp, $file_name);
         
         // If response is not OK we throw exception
         if ($response->getStatus() != 200) {

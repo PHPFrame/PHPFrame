@@ -81,7 +81,7 @@ class PHPFrame_FeedReader
      * 
      * @access public
      * @return string
-     * @access 1.0
+     * @since  1.0
      */
     public function getURL()
     {
@@ -93,7 +93,7 @@ class PHPFrame_FeedReader
      * 
      * @access public
      * @return string
-     * @access 1.0
+     * @since  1.0
      */
     public function getXML()
     {
@@ -105,7 +105,7 @@ class PHPFrame_FeedReader
      * 
      * @access public
      * @return DOMDocument
-     * @access 1.0
+     * @since  1.0
      */
     public function getDOM()
     {

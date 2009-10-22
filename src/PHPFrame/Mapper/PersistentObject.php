@@ -57,7 +57,7 @@
  *  [created] =>
  *  [modified] => 
  *  )
- * <pre>
+ * </pre>
  * 
  * @category PHPFrame
  * @package  Mapper

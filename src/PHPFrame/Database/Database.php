@@ -264,6 +264,18 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     }
     
     /**
+     * Get the PDO object
+     * 
+     * @access protected
+     * @return PDO
+     * @since  1.0
+     */
+    protected function getPDO()
+    {
+        return $this->_pdo;
+    }
+    
+    /**
      * Get the database tables
      * 
      * @access public

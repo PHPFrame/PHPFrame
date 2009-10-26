@@ -89,7 +89,6 @@ class PHPFrame_ObjectRelationalToolbox
         }
         $sql .= "\nPRIMARY KEY (`id`)";
         $sql .= "\n)  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci\n";
-        echo $sql; exit;
         $db->query($sql);
     }
     

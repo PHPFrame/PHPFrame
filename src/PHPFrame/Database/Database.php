@@ -15,12 +15,12 @@
  */
 
 /**
- * Database class
+ * Abstract Database class
  * 
  * This class deals with the connection(s) to the database(s).
  * 
- * The database class serves singleton objects for each connection, determined by 
- * the dsn and db user credentials.
+ * The database class serves singleton objects for each connection, determined 
+ * by the dsn and db user credentials.
  * 
  * This class also extends PHPFrame_Subject allowing observer objects to 
  * subscribe for updates.
@@ -32,8 +32,9 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @see      PHPFrame_Subject
  * @since    1.0
+ * @abstract
  */
-class PHPFrame_Database extends PHPFrame_Subject
+abstract class PHPFrame_Database extends PHPFrame_Subject
 {
     /**
      * Return query() result as single primitive value
@@ -115,15 +116,9 @@ class PHPFrame_Database extends PHPFrame_Subject
      */
     private static $_instances=array();
     /**
-     * A string used as key in the instances array for current object
+     * DSN used for the database connection
      * 
      * @var string
-     */
-    private $_key=null;
-    /**
-     * DSN object used for the database connection
-     * 
-     * @var PHPFrame_DSN
      */
     private $_dsn=null;
     /**
@@ -150,38 +145,29 @@ class PHPFrame_Database extends PHPFrame_Subject
      * @var PDOStatement
      */
     private $_stmt=null;
-    /**
-     * An array containing data about the tables in this database and their fields
-     * 
-     * @var array
-     */
-    private $_structure=array();
     
     /**
      * Constructor
      * 
      * The constructor connects to the MySQL server and selects the database.
      * 
-     * @param PHPFrame_DSN $dsn     A Database Source Name object.
-     * @param string                $db_user The database user name if any.
-     * @param string                $db_pass The database password if any.
+     * @param string $dsn     A database source name
+     * @param string $db_user The database user name if any.
+     * @param string $db_pass The database password if any.
      * 
      * @access private
      * @return void
      * @since  1.0
      */
-    private function __construct(
-        PHPFrame_DSN $dsn, 
-        $db_user=null, 
-        $db_pass=null
-    ) {
+    private function __construct($dsn, $db_user=null, $db_pass=null)
+    {
         // Set internal properties
         $this->_dsn     = $dsn;
         $this->_db_user = $db_user;
         $this->_db_pass = $db_pass;
         
         // Connect to database server
-        $this->_connect();
+        $this->connect();
     }
     
     /**
@@ -210,66 +196,92 @@ class PHPFrame_Database extends PHPFrame_Subject
     public function __wakeup()
     {   
         // Re-connect to database server
-        $this->_connect();
+        $this->connect();
     }
     
     /**
      * Get Instance
      * 
-     * @param PHPFrame_DSN $dsn     A Database Source Name object.
-     * @param string                $db_user The database user name if any.
-     * @param string                $db_pass The database password if any.
+     * @param string $dsn     A database source name.
+     * @param string $db_user The database user name if any.
+     * @param string $db_pass The database password if any.
      * 
      * @return PHPFrame_Database
      */
-    public static function getInstance(
-        PHPFrame_DSN $dsn, 
-        $db_user=null, 
-        $db_pass=null
-    ) {
-        $key = (string) $dsn;
+    public static function getInstance($dsn, $db_user=null, $db_pass=null)
+    {
+        $dsn = trim((string) $dsn);
+        
         if (!is_null($db_user)) {
-            $key .= ";user=".$db_user;
+            $key = $dsn.";user=".$db_user;
+        }
+        
+        if (preg_match('/^(mysql|sqlite)/i', $dsn, $matches)) {
+        	$driver = strtolower($matches[1]);
+            switch ($driver) {
+            	case "sqlite" : 
+            		$concrete_class = "PHPFrame_SQLiteDatabase";
+            		break;
+            	case "mysql" : 
+            		$concrete_class = "PHPFrame_MySQLDatabase";
+                    break;
+            }
+        } else {
+        	$msg = "Database driver not recognised.";
+            throw new PHPFrame_DatabaseException($msg);
         }
         
         if (!isset(self::$_instances[$key])) {
-            self::$_instances[$key] = new self($dsn, $db_user, $db_pass);
-            self::$_instances[$key]->_key = $key;
+            self::$_instances[$key] = new $concrete_class(
+                $dsn, 
+                $db_user, 
+                $db_pass
+            );
         }
         
         return self::$_instances[$key];
     }
     
     /**
-     * Get the database structure
+     * Create PDO object to represent db connection
      * 
-     * @param string $table_name Optional parameter to specify a given table.
-     *                           If omitted the whole db structure is returned.
+     * @access protected
+     * @return void
+     * @since  1.0
+     */
+    protected function connect()
+    {
+        try {
+            // Acquire PDO object
+            $this->_pdo = new PDO(
+                $this->_dsn, 
+                $this->_db_user, 
+                $this->_db_pass
+            );
+        } catch (PDOException $e) {
+            throw new PHPFrame_DatabaseException($e->getMessage());
+        }  
+    }
+    
+    /**
+     * Get the database tables
      * 
      * @access public
      * @return array
      * @since  1.0
      */
-    public function getStructure($table_name=null)
-    {
-        // Replace table prefix with config value
-        $table_name = str_replace('#__', PHPFrame::Config()->get("db.prefix"), $table_name);
-        
-        if (!is_array($this->_structure) || count($this->_structure) < 1) {
-            $this->_fetchStructure();
-        }
-        
-        if (!is_null($table_name)) {
-            if (!isset($this->_structure[$table_name])) {
-                $msg = "Cound not get table structure";
-                throw new PHPFrame_DatabaseException($msg);
-            }
-            
-            return $this->_structure[$table_name];
-        }
-        
-        return $this->_structure;
-    }
+    abstract public function getTables();
+    
+    /**
+     * Get the columns of a given table
+     * 
+     * @param string $table_name
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    abstract public function getColumns($table_name);
     
     /**
      * Get the PDOStatement object
@@ -284,7 +296,8 @@ class PHPFrame_Database extends PHPFrame_Subject
     }
     
     /**
-     * Executes an SQL statement, returning a result set as a PDOStatement object 
+     * Executes an SQL statement, returning a result set as a PDOStatement 
+     * object. 
      * 
      * @param string $sql        The SQL statement to run 
      * @param array  $params     An array with the query parameters if any
@@ -294,7 +307,7 @@ class PHPFrame_Database extends PHPFrame_Subject
      * @return mixed
      * @since  1.0
      */
-    public function query($sql, $params=array(), $fetch_mode=self::FETCH_STMT) 
+    public function query($sql, $params=array(), $fetch_mode=self::FETCH_STMT)
     {
         // Replace table prefix with config value
         $sql = str_replace('#__', PHPFrame::Config()->get("db.prefix"), $sql);
@@ -356,7 +369,10 @@ class PHPFrame_Database extends PHPFrame_Subject
             }
         }
         catch (PDOException $e) {
-            throw new PHPFrame_DatabaseException('Query failed', $this->_stmt);
+            throw new PHPFrame_DatabaseException(
+                'Query failed', 
+                $this->getStatement()
+            );
         }
         catch (PHPFrame_DatabaseException $e) {
             throw $e;
@@ -366,11 +382,11 @@ class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Prepares a statement for execution and returns a statement object
      * 
-     * @param string $statement This must be a valid SQL statement for the target 
-     *                          database server.
-     * @param array  $options   This array holds one or more key=>value pairs to 
-     *                          set attribute values for the PDOStatement object 
-     *                          that this method returns.
+     * @param string $statement This must be a valid SQL statement for the 
+     *                          target database server.
+     * @param array  $options   This array holds one or more key=>value pairs 
+     *                          to set attribute values for the PDOStatement 
+     *                          object that this method returns.
      * 
      * @access public
      * @return PDOStatement
@@ -378,7 +394,8 @@ class PHPFrame_Database extends PHPFrame_Subject
      */
     public function prepare($statement, $options=array())
     {
-        $statement = str_replace('#__', PHPFrame::Config()->get("db.prefix"), $statement);
+    	$db_prefix = PHPFrame::Config()->get("db.prefix");
+        $statement = str_replace('#__', $db_prefix, $statement);
         
         return $this->_pdo->prepare($statement, $options);
     }
@@ -568,55 +585,26 @@ class PHPFrame_Database extends PHPFrame_Subject
     }
     
     /**
-     * Create PDO object to represent db connection
+     * Is this instance of type SQLite?
      * 
-     * @access private
-     * @return void
+     * @access public
+     * @return bool
      * @since  1.0
      */
-    private function _connect() {
-        try {
-            // Acquire PDO object
-            $this->_pdo = new PDO($this->_dsn, $this->_db_user, $this->_db_pass);
-            if ($this->_dsn instanceof PHPFrame_MySQLDSN){
-                $this->_pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-            }
-        }
-        catch (PDOException $e) {
-            throw new PHPFrame_DatabaseException($e->getMessage());
-        }  
+    public function isSQLite()
+    {
+    	return ($this instanceof PHPFrame_SQLiteDatabase);
     }
     
     /**
-     * Fetch table structures from database
+     * Is this instance of type MySQL?
      * 
-     * @access private
-     * @return void
+     * @access public
+     * @return bool
      * @since  1.0
      */
-    private function _fetchStructure()
+    public function isMySQL()
     {
-        // First we check whether the data is already cached in the app registry
-        $app_registry = PHPFrame::AppRegistry();
-        $structure = $app_registry->get('database.structure.'.$this->_key);
-        
-        // Load structure from db if not in application registry already
-        if (!isset($structure) || !is_array($structure)) {
-            // Get list of all tables in database
-            $sql = "show tables";
-            $tables = $this->fetchColumnList($sql);
-            
-            // Loop through every table and read structure
-            foreach ($tables as $table_name) {
-                // Store structure in array uning table name as key
-                $sql = "SHOW COLUMNS FROM `".$table_name."`";
-                $structure[$table_name] = $this->fetchAssocList($sql);
-            }
-            
-            // Store data in app registry
-            $app_registry->set('database.structure'.$this->_key, $structure);
-        }
-        
-        $this->_structure = $structure;
+    	return ($this instanceof PHPFrame_MySQLDatabase);
     }
 }

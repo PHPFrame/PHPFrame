@@ -338,53 +338,44 @@ class PHPFrame
     /**
      * Get database object
      * 
-     * @param PHPFrame_DSN $dsn     An object of type PHPFrame_DSN 
-     *                              used to get DB connection. This parameter 
-     *                              is optional. If omitted a new DSN object 
-     *                              will be created using the database
-     *                              details provided by the config class. 
-     * @param string       $db_user If we specify a DSN object we might also 
-     *                              need to provide a db user in order to 
-     *                              connect to the database server.
-     * @param string       $db_pass When both a DSN object and a db user have 
-     *                              been passed we might also need to provide 
-     *                              a password for the db connection.
+     * @param string $dsn     A DSN string used to get DB connection. This  
+     *                        parameter is optional. If omitted a new string 
+     *                        will be created using the database
+     *                        details provided by the config class. 
+     * @param string $db_user If we specify a DSN object we might also 
+     *                        need to provide a db user in order to 
+     *                        connect to the database server.
+     * @param string $db_pass When both a DSN object and a db user have 
+     *                        been passed we might also need to provide 
+     *                        a password for the db connection.
      * 
      * @static
      * @access public
      * @return PHPFrame_Database
      * @since  1.0
      */
-    public static function DB(
-        PHPFrame_DSN $dsn=null,
-        $db_user=null,
-        $db_pass=null
-    )
+    public static function DB($dsn=null, $db_user=null, $db_pass=null)
     {
         // Set DSN using details from config object
         if (is_null($dsn)) {
-            $dsn_concrete_class  = "PHPFrame_";
-            $dsn_concrete_class .= PHPFrame::Config()->get("db.driver")."DSN";
+        	$db_driver   = strtolower(PHPFrame::Config()->get("db.driver"));
+            $unix_socket = PHPFrame::Config()->get("db.unix_socket");
             
-            if ($dsn_concrete_class == "PHPFrame_SQLiteDSN") {
+            if ($db_driver == "sqlite") {
                 $db_name  = PHPFRAME_VAR_DIR.DS;
                 $db_name .= PHPFrame::Config()->get("db.name");
             } else {
                 $db_name = PHPFrame::Config()->get("db.name");
+	            if (empty($unix_socket)) {
+	                $unix_socket = ini_get('mysql.default_socket');
+	            }
             }
             
-            $dsn = new $dsn_concrete_class(array(
-                "db_host" => PHPFrame::Config()->get("db.host"), 
-                "db_name" => $db_name
-            ));
-        } elseif (!$dsn instanceof PHPFrame_DSN) {
-            $msg = "Argument \$dsn must be instance of PHPFrame_DSN.";
-            throw new InvalidArgumentException($msg);
-        }
-        
-        if (!$dsn instanceof PHPFrame_DSN) {
-            $msg = "Could not acquire DSN object to instantiate DB object.";
-            throw new RuntimeException($msg);
+            $dsn  = $db_driver.":host=".PHPFrame::Config()->get("db.host");
+            $dsn .= ";dbname=".$db_name;
+            if (!empty($unix_socket)) {
+                $dsn .= ";unix_socket=".$unix_socket;
+            }
         }
         
         if (is_null($db_user)) {

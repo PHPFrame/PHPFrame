@@ -48,22 +48,20 @@ class PHPFrame_DatabaseException extends RuntimeException
     /**
      * Constructor
      * 
-     * @param string       $msg       The error message.
-     * @param PDOStatement $statement 
+     * @param string       $msg  The error message.
+     * @param PDOStatement $stmt 
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct(
-        $msg=null, 
-        PDOStatement $stmt=null
-    ) {
+    public function __construct($msg=null, PDOStatement $stmt=null)
+    {
         if ($stmt instanceof PDOStatement) {
-             $error_info = $stmt->errorInfo();
-             $this->_sqlstate = $error_info[0];
+             $error_info         = $stmt->errorInfo();
+             $this->_sqlstate    = $error_info[0];
              $this->_driver_code = $error_info[1];
-             $this->_driver_msg = $error_info[2];
+             $this->_driver_msg  = $error_info[2];
         }
         
         $msg .= "\nSQLSTATE: ". $this->_sqlstate;

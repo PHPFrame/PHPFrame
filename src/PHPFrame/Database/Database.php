@@ -213,7 +213,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
         $dsn = trim((string) $dsn);
         
         if (!is_null($db_user)) {
-            $key = $dsn.";user=".$db_user;
+            $dsn .= ";user=".$db_user;
         }
         
         if (preg_match('/^(mysql|sqlite)/i', $dsn, $matches)) {
@@ -231,15 +231,15 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
             throw new PHPFrame_DatabaseException($msg);
         }
         
-        if (!isset(self::$_instances[$key])) {
-            self::$_instances[$key] = new $concrete_class(
+        if (!isset(self::$_instances[$dsn])) {
+            self::$_instances[$dsn] = new $concrete_class(
                 $dsn, 
                 $db_user, 
                 $db_pass
             );
         }
         
-        return self::$_instances[$key];
+        return self::$_instances[$dsn];
     }
     
     /**

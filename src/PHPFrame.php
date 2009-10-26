@@ -359,20 +359,24 @@ class PHPFrame
         // Set DSN using details from config object
         if (is_null($dsn)) {
         	$db_driver   = strtolower(PHPFrame::Config()->get("db.driver"));
+        	$db_host     = PHPFrame::Config()->get("db.host");
+        	$db_name     = PHPFrame::Config()->get("db.name");
             $unix_socket = PHPFrame::Config()->get("db.unix_socket");
             
             if ($db_driver == "sqlite") {
-                $db_name  = PHPFRAME_VAR_DIR.DS;
-                $db_name .= PHPFrame::Config()->get("db.name");
+                $db_name  = PHPFRAME_VAR_DIR.DS.$db_name;
             } else {
-                $db_name = PHPFrame::Config()->get("db.name");
+                $db_name = "dbname=".$db_name;
 	            if (empty($unix_socket)) {
 	                $unix_socket = ini_get('mysql.default_socket');
 	            }
             }
             
-            $dsn  = $db_driver.":host=".PHPFrame::Config()->get("db.host");
-            $dsn .= ";dbname=".$db_name;
+            $dsn  = $db_driver.":";
+            if (!empty($db_host)) {
+                $dsn .= "host=".$db_host.";";
+            }
+            $dsn .= $db_name;
             if (!empty($unix_socket)) {
                 $dsn .= ";unix_socket=".$unix_socket;
             }

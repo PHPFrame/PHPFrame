@@ -60,13 +60,21 @@ class PHPFrame_User extends PHPFrame_PersistentObject
            "username", 
            "guest", 
            false, 
-           new PHPFrame_RegexpFilter(array("regexp"=>'/^[a-zA-Z\.]{3,20}$/'))
+           new PHPFrame_RegexpFilter(array(
+               "regexp"=>'/^[a-zA-Z\.]{3,20}$/', 
+               "min_length"=>3, 
+               "max_length"=>20
+           ))
         );
         $this->addField(
            "password", 
            null, 
            false, 
-           new PHPFrame_RegexpFilter(array("regexp"=>'/^.{6,100}$/'))
+           new PHPFrame_RegexpFilter(array(
+               "regexp"=>'/^.{6,100}$/',
+               "min_length"=>6, 
+               "max_length"=>100
+           ))
         );
         $this->addField(
            "firstname", 
@@ -84,7 +92,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
            "email", 
            null, 
            false, 
-           new PHPFrame_EmailFilter()
+           new PHPFrame_EmailFilter(array("min_length"=>7, "max_length"=>100))
         );
         $this->addField(
            "photo", 

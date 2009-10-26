@@ -58,12 +58,13 @@
    <file baseinstalldir="/" name="PHPFrame/Client/XMLRPCClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Config/Config.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/Database.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/DatabaseColumn.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseField.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseRow.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseRowCollection.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DSN.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/MySQLDSN.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/SQLiteDSN.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/DatabaseTable.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/MySQLDatabase.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/SQLiteDatabase.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Informer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Logger.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Profiler.php" role="php" />

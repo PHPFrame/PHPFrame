@@ -62,6 +62,48 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
         }
     }
     
+    public function createTable(PHPFrame_DatabaseTable $table)
+    {
+        $sql = "CREATE TABLE `".$table->getName()."` (\n";
+        
+        foreach ($table->getColumns() as $col) {
+            $sql .= "`".$col->getName()."`";
+            $sql .= " ".$col->getType();
+            
+            if (!$col->getNull()) {
+                $sql .= " NOT NULL";
+            }
+            
+            if (!is_null($col->getDefault())) {
+                $sql .= " DEFAULT '".$col->getDefault()."'";
+            }
+            
+            if (!is_null($col->getExtra())) {
+                $sql .= " ".$col->getExtra();
+            }
+            
+            $sql .= ",\n";
+        }
+        
+        $sql .= ") DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci\n";
+        
+        print_r($this->query($sql));
+        exit;
+    }
+    
+    public function dropTable(PHPFrame_DatabaseTable $table)
+    {
+        $sql = "DROP TABLE IF EXISTS `".$table->getName()."`";
+        
+        // Run SQL query
+        $this->query($sql);
+    }
+    
+    public function alterTable(PHPFrame_DatabaseTable $table)
+    {
+        
+    }
+    
     /**
      * Get the columns of a given table
      * 

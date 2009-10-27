@@ -212,7 +212,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     {
         $dsn = trim((string) $dsn);
         
-        if (!is_null($db_user)) {
+        if (!empty($db_user)) {
             $dsn .= ";user=".$db_user;
         }
         
@@ -283,6 +283,12 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * @since  1.0
      */
     abstract public function getTables();
+    
+    abstract public function createTable(PHPFrame_DatabaseTable $table);
+    
+    abstract public function dropTable(PHPFrame_DatabaseTable $table);
+    
+    abstract public function alterTable(PHPFrame_DatabaseTable $table);
     
     /**
      * Get the columns of a given table

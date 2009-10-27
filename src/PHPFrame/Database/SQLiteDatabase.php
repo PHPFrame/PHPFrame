@@ -27,25 +27,6 @@
  */
 class PHPFrame_SQLiteDatabase extends PHPFrame_Database
 {
-	/**
-     * Executes an SQL statement, returning a result set as a PDOStatement object 
-     * 
-     * @param string $sql        The SQL statement to run 
-     * @param array  $params     An array with the query parameters if any
-     * @param int    $fetch_mode Mode in which to fetch the query result
-     * 
-     * @access public
-     * @return mixed
-     * @since  1.0
-     */
-    public function query($sql, $params=array(), $fetch_mode=self::FETCH_STMT)
-    {
-    	$pattern = '/(\s|\.|\(|,)`?(id)`?(\s|\.|\)|,)/';
-    	$sql     = preg_replace($pattern, '$1row$2$3', $sql);
-    	
-    	parent::query($sql, $params, $fetch_mode);
-    }
-    
     /**
      * Get database tables
      * 
@@ -58,16 +39,70 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         // Get list of all tables in database
         $sql = "SELECT tbl_name FROM sqlite_master WHERE type = 'table'";
         
-        $tables = array();
-        foreach ($this->fetchColumnList($sql) as $table) {
-            $tables[] = new PHPFrame_DatabaseTable($this, $table);
+        $tbl_names = $this->fetchColumnList($sql);
+        $tbl_objs  = array();
+        
+        if (is_array($tbl_names) && count($tbl_names) > 0) {
+	        foreach ($tbl_names as $tbl_name) {
+	            $tbl_objs[] = new PHPFrame_DatabaseTable($this, $tbl_name);
+	        }
         }
         
-        return $tables;
+        return $tbl_objs;
+    }
+    
+    public function createTable(PHPFrame_DatabaseTable $table)
+    {
+    	$sql = "CREATE TABLE `".$table->getName()."` (";
+    	
+    	$i=0;
+    	foreach ($table->getColumns() as $col) {
+    		$sql .= ($i>0) ? ",\n" : "\n";
+    	    $sql .= "`".$col->getName()."`";
+    	    $sql .= " ".$col->getType();
+    	    
+    	    if (
+    	       $col->getType() == PHPFrame_DatabaseColumn::TYPE_INT
+    	       && 
+    	       $col->getExtra() == PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT
+    	    ) {
+    	        $sql .= " PRIMARY KEY ASC";
+    	    } else {
+	    	    if (!$col->getNull()) {
+	                $sql .= " NOT NULL";
+	            }
+	            
+	            if (!is_null($col->getDefault())) {
+	                $sql .= " DEFAULT '".$col->getDefault()."'";
+	            }
+    	    }
+            
+    	    $i++;
+    	}
+    	
+    	$sql .= "\n)\n";
+    	
+    	// Run SQL query
+    	$this->query($sql);
+    }
+    
+    public function dropTable(PHPFrame_DatabaseTable $table)
+    {
+        $sql = "DROP TABLE IF EXISTS `".$table->getName()."`";
+        
+        // Run SQL query
+        $this->query($sql);
+    }
+    
+    public function alterTable(PHPFrame_DatabaseTable $table)
+    {
+    	
     }
     
     /**
-     * Get the columns of a given table
+     * Get the columns of a given table.
+     * 
+     * If table doesn't exists it returns an empty array.
      * 
      * @param string $table_name
      * 
@@ -84,6 +119,11 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         
         $sql     = $this->fetchColumn($sql, $params);
         
+        // If query returns null we return an empty array
+        if (!$sql) {
+            return array();
+        }
+        
         $pattern = '/CREATE\s+TABLE\s+`?'.$table_name.'`?\s+\(\s((.|\s)*)\s\)/i';
         preg_match($pattern, $sql, $matches);
         
@@ -95,43 +135,49 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         $lines = explode(",", $matches[1]);
         foreach ($lines as $line) {
         	$line = trim($line);
-        	preg_match_all('/([\w]+)/i', $line, $matches);
+        	preg_match_all('/([\w]+)/i', $line, $token_matches);
         	
-        	for ($i=0; $i<count($matches); $i++) {
-        		$tokens         = $matches[$i];
-        		$col            = array();
-        		$col["name"]    = $tokens[0];
-        		$col["type"]    = $tokens[1];
-        		$col["default"] = null;
-        		$col["null"]    = true;
-        		
-        		for ($j=2; $j<count($tokens); $j++) {
-        		    if ($tokens[$j] == "DEFAULT") {
-        		        $col["default"] = $tokens[++$j];
-        		    } elseif ($tokens[$j] == "NOT") {
-	        		    if ($tokens[++$j] == "NULL") {
-	                        $col["null"] = false;
-	                    }
-        		    }
-        		}
-        		
-        	    $array[] = $col;
-        	    
-        	    // skip odd rows
-        	    $i++;
+        	$tokens         = $token_matches[0];
+        	$col            = array();
+        	$col["name"]    = $tokens[0];
+        	$col["type"]    = $tokens[1];
+        	$col["default"] = null;
+        	$col["null"]    = true;
+        	$col["key"]     = null;
+        	$col["extra"]   = null;
+        	
+        	for ($j=2; $j<count($tokens); $j++) {
+        	    if ($tokens[$j] == "DEFAULT") {
+        	        $col["default"] = $tokens[++$j];
+        	    } elseif ($tokens[$j] == "NOT") {
+        		    if ($tokens[++$j] == "NULL") {
+                        $col["null"] = false;
+                    }
+                } elseif ($tokens[$j] == "PRIMARY") {
+                	$col["key"]   = PHPFrame_DatabaseColumn::KEY_PRIMARY;
+                    $col["extra"] = PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT;
+        	    }
         	}
+        	
+            $array[] = $col;
         }
-        
-        //print_r($array); exit;
         
         $columns = array();
         
         foreach ($array as $col) {
             $obj = new PHPFrame_DatabaseColumn();
             $obj->setName($col["name"]);
-            $obj->setType($col["type"]);
+            try {
+                $obj->setType($col["type"]);
+            } catch (Exception $e) {
+                $obj->setType(PHPFrame_DatabaseColumn::TYPE_TEXT);
+            }
             $obj->setDefault($col["default"]);
             $obj->setNull($col["null"]);
+            if (!is_null($col["extra"])) {
+                $obj->setKey($col["key"]);
+                $obj->setExtra($col["extra"]);
+            }
             
             $columns[] = $obj;
         }

@@ -59,7 +59,6 @@
    <file baseinstalldir="/" name="PHPFrame/Config/Config.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/Database.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseColumn.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Database/DatabaseField.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseRow.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseRowCollection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseTable.php" role="php" />

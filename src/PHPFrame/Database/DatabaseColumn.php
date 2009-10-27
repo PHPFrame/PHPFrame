@@ -20,11 +20,16 @@ class PHPFrame_DatabaseColumn implements IteratorAggregate
 	const TYPE_ENUM           = "enum";
 	const TYPE_BINARY         = "binary";
 	const EXTRA_AUTOINCREMENT = "auto_increment";
+	const KEY_PRIMARY         = "PRI";
+	const KEY_UNIQUE          = "UNI";
+	const KEY_MULTIPLE        = "MUL";
 	
 	private $_name, $_type, $_null, $_key, $_default, $_extra, $_reflection_obj;
 	
 	public function __construct(array $options=null)
 	{
+		$this->_reflection_obj = new ReflectionClass($this);
+		
 		if (!is_null($options)) {
 		    foreach ($options as $key=>$value) {
 		        $setter = "set".ucwords(str_replace("_", " ", $key));
@@ -35,8 +40,6 @@ class PHPFrame_DatabaseColumn implements IteratorAggregate
 		        }
 		    }
 		}
-		
-		$this->_reflection_obj = new ReflectionClass($this);
 	}
 	
 	public function getIterator()

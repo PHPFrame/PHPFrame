@@ -26,7 +26,13 @@ class PHPFrame_ObjectRelationalToolbox
         $drop=false
     )
     {
-        $table_name = (is_null($table_name)) ? strtolower(get_class($obj)) : $table_name;
+    	if (is_null($table_name)) {
+    	    $table_name = strtolower(get_class($obj));
+    	}
+    	
+    	$table = new PHPFrame_DatabaseTable($db, $table_name);
+    	print_r($table); exit;
+    	
         $fields     = array_keys(iterator_to_array($obj));
         $filters    = $obj->getFilters();
         

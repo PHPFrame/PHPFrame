@@ -338,56 +338,78 @@ class PHPFrame
     /**
      * Get database object
      * 
-     * @param string $dsn     A DSN string used to get DB connection. This  
-     *                        parameter is optional. If omitted a new string 
-     *                        will be created using the database
-     *                        details provided by the config class. 
-     * @param string $db_user If we specify a DSN object we might also 
-     *                        need to provide a db user in order to 
-     *                        connect to the database server.
-     * @param string $db_pass When both a DSN object and a db user have 
-     *                        been passed we might also need to provide 
-     *                        a password for the db connection.
+     * @param array $options [Optional] An associative array containing the  
+     *                       following options: 
+     *                         - db.driver (required)
+     *                         - db.name (required)
+     *                         - db.host
+     *                         - db.user
+     *                         - db.pass
+     *                         - db.mysql_unix_socket
+     *                       This parameter is optional. If omitted options
+     *                       will be loaded from etc/phpframe.ini.
      * 
      * @static
      * @access public
      * @return PHPFrame_Database
      * @since  1.0
      */
-    public static function DB($dsn=null, $db_user=null, $db_pass=null)
+    public static function DB(array $options=null)
     {
-        // Set DSN using details from config object
-        if (is_null($dsn)) {
-        	$db_driver   = strtolower(PHPFrame::Config()->get("db.driver"));
-        	$db_host     = PHPFrame::Config()->get("db.host");
-        	$db_name     = PHPFrame::Config()->get("db.name");
-            $unix_socket = PHPFrame::Config()->get("db.unix_socket");
-            
-            if ($db_driver == "sqlite") {
-                $db_name  = PHPFRAME_VAR_DIR.DS.$db_name;
+    	if (is_null($options)) {
+    		$it = new RegexIterator(
+    		    new IteratorIterator(PHPFrame::Config()), 
+    		    '/^db\./', 
+    		    RegexIterator::MATCH, 
+    		    RegexIterator::USE_KEY
+    		);
+    	    $options = iterator_to_array($it);
+    	}
+    	
+    	if (
+    	   !array_key_exists("db.driver", $options) 
+    	   || !array_key_exists("db.name", $options)
+    	) {
+    	    $msg  = "If options array is provided db.driver and db.name  are ";
+    	    $msg .= "required";
+    	    throw new InvalidArgumentException($msg);
+    	}
+    	
+    	$dsn = strtolower($options["db.driver"]);
+    	if ($dsn == "sqlite") {
+    		$dsn .= ":";
+    		if (!preg_match('/^\//', $options["db.name"])) {
+    		    $dsn .= PHPFRAME_VAR_DIR.DS;
+    		}
+    	    $dsn .= $options["db.name"];
+    	} elseif ($dsn == "mysql") {
+    		$dsn .= ":dbname=".$options["db.name"];
+    	    if (isset($options["db.host"]) && !empty($options["db.host"])) {
+                $dsn .= ";host=".$options["db.host"].";";
+            }
+    	    if (
+    	        isset($options["db.mysql_unix_socket"]) 
+    	        && !empty($options["db.mysql_unix_socket"])
+    	    ) {
+                $dsn = ";unix_socket=".$options["db.mysql_unix_socket"];
             } else {
-                $db_name = "dbname=".$db_name;
-	            if (empty($unix_socket)) {
-	                $unix_socket = ini_get('mysql.default_socket');
-	            }
+                $dsn = ";unix_socket=".ini_get('mysql.default_socket');
             }
-            
-            $dsn  = $db_driver.":";
-            if (!empty($db_host)) {
-                $dsn .= "host=".$db_host.";";
-            }
-            $dsn .= $db_name;
-            if (!empty($unix_socket)) {
-                $dsn .= ";unix_socket=".$unix_socket;
-            }
+    	} else {
+    	    $msg = "Database driver not supported.";
+    	    throw new Exception($msg);
+    	}
+        
+        if (isset($options["db.user"]) && !empty($options["db.user"])) {
+            $db_user = $options["db.user"];
+        } else {
+            $db_user = null;
         }
         
-        if (is_null($db_user)) {
-            $db_user = PHPFrame::Config()->get("db.user");
-        }
-        
-        if (is_null($db_pass)) {
-            $db_pass = PHPFrame::Config()->get("db.pass");
+        if (isset($options["db.pass"]) && !empty($options["db.pass"])) {
+            $db_pass = $options["db.pass"];
+        } else {
+            $db_pass = null;
         }
         
         return PHPFrame_Database::getInstance($dsn, $db_user, $db_pass);

@@ -391,9 +391,9 @@ class PHPFrame
                 isset($options["db.mysql_unix_socket"]) 
                 && !empty($options["db.mysql_unix_socket"])
             ) {
-                $dsn = ";unix_socket=".$options["db.mysql_unix_socket"];
+                $dsn .= ";unix_socket=".$options["db.mysql_unix_socket"];
             } else {
-                $dsn = ";unix_socket=".ini_get('mysql.default_socket');
+                $dsn .= ";unix_socket=".ini_get('mysql.default_socket');
             }
         } else {
             $msg = "Database driver not supported.";

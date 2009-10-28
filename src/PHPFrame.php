@@ -356,49 +356,49 @@ class PHPFrame
      */
     public static function DB(array $options=null)
     {
-    	if (is_null($options)) {
-    		$it = new RegexIterator(
-    		    new IteratorIterator(PHPFrame::Config()), 
-    		    '/^db\./', 
-    		    RegexIterator::MATCH, 
-    		    RegexIterator::USE_KEY
-    		);
-    	    $options = iterator_to_array($it);
-    	}
-    	
-    	if (
-    	   !array_key_exists("db.driver", $options) 
-    	   || !array_key_exists("db.name", $options)
-    	) {
-    	    $msg  = "If options array is provided db.driver and db.name  are ";
-    	    $msg .= "required";
-    	    throw new InvalidArgumentException($msg);
-    	}
-    	
-    	$dsn = strtolower($options["db.driver"]);
-    	if ($dsn == "sqlite") {
-    		$dsn .= ":";
-    		if (!preg_match('/^\//', $options["db.name"])) {
-    		    $dsn .= PHPFRAME_VAR_DIR.DS;
-    		}
-    	    $dsn .= $options["db.name"];
-    	} elseif ($dsn == "mysql") {
-    		$dsn .= ":dbname=".$options["db.name"];
-    	    if (isset($options["db.host"]) && !empty($options["db.host"])) {
+        if (is_null($options)) {
+            $it = new RegexIterator(
+                new IteratorIterator(PHPFrame::Config()), 
+                '/^db\./', 
+                RegexIterator::MATCH, 
+                RegexIterator::USE_KEY
+            );
+            $options = iterator_to_array($it);
+        }
+        
+        if (
+           !array_key_exists("db.driver", $options) 
+           || !array_key_exists("db.name", $options)
+        ) {
+            $msg  = "If options array is provided db.driver and db.name  are ";
+            $msg .= "required";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $dsn = strtolower($options["db.driver"]);
+        if ($dsn == "sqlite") {
+            $dsn .= ":";
+            if (!preg_match('/^\//', $options["db.name"])) {
+                $dsn .= PHPFRAME_VAR_DIR.DS;
+            }
+            $dsn .= $options["db.name"];
+        } elseif ($dsn == "mysql") {
+            $dsn .= ":dbname=".$options["db.name"];
+            if (isset($options["db.host"]) && !empty($options["db.host"])) {
                 $dsn .= ";host=".$options["db.host"].";";
             }
-    	    if (
-    	        isset($options["db.mysql_unix_socket"]) 
-    	        && !empty($options["db.mysql_unix_socket"])
-    	    ) {
+            if (
+                isset($options["db.mysql_unix_socket"]) 
+                && !empty($options["db.mysql_unix_socket"])
+            ) {
                 $dsn = ";unix_socket=".$options["db.mysql_unix_socket"];
             } else {
                 $dsn = ";unix_socket=".ini_get('mysql.default_socket');
             }
-    	} else {
-    	    $msg = "Database driver not supported.";
-    	    throw new Exception($msg);
-    	}
+        } else {
+            $msg = "Database driver not supported.";
+            throw new Exception($msg);
+        }
         
         if (isset($options["db.user"]) && !empty($options["db.user"])) {
             $db_user = $options["db.user"];

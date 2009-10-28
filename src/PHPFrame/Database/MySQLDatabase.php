@@ -27,7 +27,7 @@
  */
 class PHPFrame_MySQLDatabase extends PHPFrame_Database
 {
-	/**
+    /**
      * Create PDO object to represent db connection. This class override's the 
      * parent's connect method in order to set MySQL specific attributes.
      * 
@@ -35,13 +35,13 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
      * @return void
      * @since  1.0
      */
-	protected function connect()
-	{
-		parent::connect();
-		
+    protected function connect()
+    {
+        parent::connect();
+        
         $this->getPDO()->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-	}
-	
+    }
+    
     /**
      * Get database tables
      * 
@@ -115,6 +115,6 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
      */
     public function getColumns($table_name)
     {
-    	
+        
     }
 }

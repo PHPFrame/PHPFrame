@@ -703,22 +703,22 @@ class PHPFrame_HTMLUI
         $maxlength=null
     )
     {
-    	$str  = '<input type="'.$type.'" name="'.$name.'"';
-    	$str .= ' value="'.$value.'"';
-    	
+        $str  = '<input type="'.$type.'" name="'.$name.'"';
+        $str .= ' value="'.$value.'"';
+        
         if (!is_null($size)) {
             $str .= ' size="'.$size.'"';
         }
         
-    	if (!is_null($maxlength)) {
-    	    $str .= ' maxlength="'.$maxlength.'"';
-    	} elseif (!is_null($size)) {
-    	    $str .= ' maxlength="'.$size.'"';
-    	}
-    	
-    	$str .= " />\n";
-    	
-    	return $str;
+        if (!is_null($maxlength)) {
+            $str .= ' maxlength="'.$maxlength.'"';
+        } elseif (!is_null($size)) {
+            $str .= ' maxlength="'.$size.'"';
+        }
+        
+        $str .= " />\n";
+        
+        return $str;
     }
     
     public static function textarea(
@@ -749,16 +749,16 @@ class PHPFrame_HTMLUI
         $value=null
     )
     {
-    	$str = "";
-    	
-    	foreach ($options as $k=>$v) {
-    	    $str .= $k." <input type=\"radio\" name=\"".$name."\"";
+        $str = "";
+        
+        foreach ($options as $k=>$v) {
+            $str .= $k." <input type=\"radio\" name=\"".$name."\"";
             $str .= " value=\"".$v."\"";
             if ($v == $value) {
                 $str .= " checked";
             }
             $str .= " />";
-    	}
+        }
         
         return $str;
     }
@@ -769,15 +769,15 @@ class PHPFrame_HTMLUI
         $value=null
     )
     {
-    	$str  = "<select name=\"".$name."\">";
-    	
-    	foreach ($options as $option) {
-    	    $str .= "<option value=\"".$option."\">".$option."</option>";
-    	}
-    	
-    	$str .= "</select>";
-    	
-    	return $str;
+        $str  = "<select name=\"".$name."\">";
+        
+        foreach ($options as $option) {
+            $str .= "<option value=\"".$option."\">".$option."</option>";
+        }
+        
+        $str .= "</select>";
+        
+        return $str;
     }
     
     public static function tableObjectToForm(
@@ -785,7 +785,7 @@ class PHPFrame_HTMLUI
         $action
     )
     {
-    	
+        
     }
     
     public static function persistentObjectToForm(
@@ -793,80 +793,80 @@ class PHPFrame_HTMLUI
         $action
     )
     {
-    	$str = "<form action=\"".$action."\">\n";
-    	
-    	$filters = $obj->getFilters();
-    	$values  = iterator_to_array($obj);
-    	
-    	foreach ($filters as $key=>$value) {
-    		$ignore = array(
-    		  "id", 
-    		  "atime", 
-    		  "ctime", 
-    		  "mtime", 
-    		  "owner", 
-    		  "group", 
-    		  "perms"
-    		);
-    		
-    		if (in_array($key, $ignore)) {
-    		    continue;
-    		}
-    		
-    		$str .= "<div>\n";
-    		$str .= $key.': ';
-    		
-    		if ($value instanceof PHPFrame_BoolFilter) {
+        $str = "<form action=\"".$action."\">\n";
+        
+        $filters = $obj->getFilters();
+        $values  = iterator_to_array($obj);
+        
+        foreach ($filters as $key=>$value) {
+            $ignore = array(
+              "id", 
+              "atime", 
+              "ctime", 
+              "mtime", 
+              "owner", 
+              "group", 
+              "perms"
+            );
+            
+            if (in_array($key, $ignore)) {
+                continue;
+            }
+            
+            $str .= "<div>\n";
+            $str .= $key.': ';
+            
+            if ($value instanceof PHPFrame_BoolFilter) {
 
-    			$str .= self::radio(
+                $str .= self::radio(
                     $key, 
                     array("Yes"=>1, "No"=>0), 
                     $values[$key]
                 );
                 
-    		} elseif ($value instanceof PHPFrame_IntFilter) {
-    		    
-    			$max_range = $value->getOption("max_range");
+            } elseif ($value instanceof PHPFrame_IntFilter) {
+                
+                $max_range = $value->getOption("max_range");
                 $min_range = $value->getOption("min_range");
                     
-    			if ($max_range <= 0) {
+                if ($max_range <= 0) {
                     $max_range = null;
                 } else {
                     $max_length = (strlen($max_range) > strlen($min_range)) 
                                   ? (strlen($max_range)+1) 
                                   : (strlen($min_range)+1);
                 }
-    			
-    			$str .= self::input($key, $values[$key], "text", $max_length);
+                
+                $str .= self::input($key, $values[$key], "text", $max_length);
                 
             } elseif ($value instanceof PHPFrame_FloatFilter) {
-            	
+                
                 $str .= self::input($key, $values[$key], "text");
             
             } elseif ($value instanceof PHPFrame_StringFilter) {
-            	
-            	$max_length = $value->getOption("max_length");
-            	
-            	if ($max_length <= 0) {
-            	    $str .= self::textarea($key, $values[$key]);
-            	} else {
-            	    $str .= self::input($key, $values[$key], "text", $max_length);
-            	}
+                
+                $max_length = $value->getOption("max_length");
+                
+                if ($max_length <= 0) {
+                    $str .= self::textarea($key, $values[$key]);
+                } else {
+                    $str .= self::input($key, $values[$key], "text", $max_length);
+                }
                 
             } elseif ($value instanceof PHPFrame_EnumFilter) {
                 
-            	$enums = $this->getOption('enums');
+                $enums = $this->getOption('enums');
                 $str  .= self::select($key, $enums, $values[$key]);
             
             }
-    		
-    	    $str .= "</div>\n";
-    	}
-    	
-    	$str .= "<input type=\"submit\" />\n";
-    	$str .= "</form>\n";
-    	
-    	return $str;
+            
+            $str .= "</div>\n";
+        }
+        
+        $str .= "<input type=\"submit\" />\n";
+        $str .= "</form>\n";
+        
+        return $str;
     }
     
     /**

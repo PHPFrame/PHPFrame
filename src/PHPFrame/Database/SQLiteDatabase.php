@@ -43,9 +43,9 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         $tbl_objs  = array();
         
         if (is_array($tbl_names) && count($tbl_names) > 0) {
-	        foreach ($tbl_names as $tbl_name) {
-	            $tbl_objs[] = new PHPFrame_DatabaseTable($this, $tbl_name);
-	        }
+            foreach ($tbl_names as $tbl_name) {
+                $tbl_objs[] = new PHPFrame_DatabaseTable($this, $tbl_name);
+            }
         }
         
         return $tbl_objs;
@@ -53,37 +53,37 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
     
     public function createTable(PHPFrame_DatabaseTable $table)
     {
-    	$sql = "CREATE TABLE `".$table->getName()."` (";
-    	
-    	$i=0;
-    	foreach ($table->getColumns() as $col) {
-    		$sql .= ($i>0) ? ",\n" : "\n";
-    	    $sql .= "`".$col->getName()."`";
-    	    $sql .= " ".$col->getType();
-    	    
-    	    if (
-    	       $col->getType() == PHPFrame_DatabaseColumn::TYPE_INT
-    	       && 
-    	       $col->getExtra() == PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT
-    	    ) {
-    	        $sql .= " PRIMARY KEY ASC";
-    	    } else {
-	    	    if (!$col->getNull()) {
-	                $sql .= " NOT NULL";
-	            }
-	            
-	            if (!is_null($col->getDefault())) {
-	                $sql .= " DEFAULT '".$col->getDefault()."'";
-	            }
-    	    }
+        $sql = "CREATE TABLE `".$table->getName()."` (";
+        
+        $i=0;
+        foreach ($table->getColumns() as $col) {
+            $sql .= ($i>0) ? ",\n" : "\n";
+            $sql .= "`".$col->getName()."`";
+            $sql .= " ".$col->getType();
             
-    	    $i++;
-    	}
-    	
-    	$sql .= "\n)\n";
-    	
-    	// Run SQL query
-    	$this->query($sql);
+            if (
+               $col->getType() == PHPFrame_DatabaseColumn::TYPE_INT
+               && 
+               $col->getExtra() == PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT
+            ) {
+                $sql .= " PRIMARY KEY ASC";
+            } else {
+                if (!$col->getNull()) {
+                    $sql .= " NOT NULL";
+                }
+                
+                if (!is_null($col->getDefault())) {
+                    $sql .= " DEFAULT '".$col->getDefault()."'";
+                }
+            }
+            
+            $i++;
+        }
+        
+        $sql .= "\n)\n";
+        
+        // Run SQL query
+        $this->query($sql);
     }
     
     public function dropTable(PHPFrame_DatabaseTable $table)
@@ -96,7 +96,7 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
     
     public function alterTable(PHPFrame_DatabaseTable $table)
     {
-    	
+        
     }
     
     /**
@@ -128,37 +128,37 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         preg_match($pattern, $sql, $matches);
         
         if (!isset($matches[1])) {
-        	$msg = "Could not read column information from database";
-        	throw new RuntimeException($msg);
+            $msg = "Could not read column information from database";
+            throw new RuntimeException($msg);
         }
         
         $lines = explode(",", $matches[1]);
         foreach ($lines as $line) {
-        	$line = trim($line);
-        	preg_match_all('/([\w]+)/i', $line, $token_matches);
-        	
-        	$tokens         = $token_matches[0];
-        	$col            = array();
-        	$col["name"]    = $tokens[0];
-        	$col["type"]    = $tokens[1];
-        	$col["default"] = null;
-        	$col["null"]    = true;
-        	$col["key"]     = null;
-        	$col["extra"]   = null;
-        	
-        	for ($j=2; $j<count($tokens); $j++) {
-        	    if ($tokens[$j] == "DEFAULT") {
-        	        $col["default"] = $tokens[++$j];
-        	    } elseif ($tokens[$j] == "NOT") {
-        		    if ($tokens[++$j] == "NULL") {
+            $line = trim($line);
+            preg_match_all('/([\w]+)/i', $line, $token_matches);
+            
+            $tokens         = $token_matches[0];
+            $col            = array();
+            $col["name"]    = $tokens[0];
+            $col["type"]    = $tokens[1];
+            $col["default"] = null;
+            $col["null"]    = true;
+            $col["key"]     = null;
+            $col["extra"]   = null;
+            
+            for ($j=2; $j<count($tokens); $j++) {
+                if ($tokens[$j] == "DEFAULT") {
+                    $col["default"] = $tokens[++$j];
+                } elseif ($tokens[$j] == "NOT") {
+                    if ($tokens[++$j] == "NULL") {
                         $col["null"] = false;
                     }
                 } elseif ($tokens[$j] == "PRIMARY") {
-                	$col["key"]   = PHPFrame_DatabaseColumn::KEY_PRIMARY;
+                    $col["key"]   = PHPFrame_DatabaseColumn::KEY_PRIMARY;
                     $col["extra"] = PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT;
-        	    }
-        	}
-        	
+                }
+            }
+            
             $array[] = $col;
         }
         

@@ -97,16 +97,16 @@ class PHPFrame_SQLPersistentObjectAssembler
         $raw = $db->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
         
         if ($db instanceof PHPFrame_SQLiteDatabase && is_array($raw)) {
-        	$sqlite_raw = array();
+            $sqlite_raw = array();
             foreach ($raw as $array) {
-            	foreach ($array as $key=>$value) {
-	            	if ($key == "rowid") {
-	                    $array["id"] = $value;
-	                    unset($array["rowid"]);
-	                }
-            	}
-            	
-            	$sqlite_raw[] = $array;
+                foreach ($array as $key=>$value) {
+                    if ($key == "rowid") {
+                        $array["id"] = $value;
+                        unset($array["rowid"]);
+                    }
+                }
+                
+                $sqlite_raw[] = $array;
             }
             
             $raw[] = $sqlite_raw;

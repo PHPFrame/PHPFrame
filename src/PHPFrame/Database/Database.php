@@ -217,17 +217,17 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
         }
         
         if (preg_match('/^(mysql|sqlite)/i', $dsn, $matches)) {
-        	$driver = strtolower($matches[1]);
+            $driver = strtolower($matches[1]);
             switch ($driver) {
-            	case "sqlite" : 
-            		$concrete_class = "PHPFrame_SQLiteDatabase";
-            		break;
-            	case "mysql" : 
-            		$concrete_class = "PHPFrame_MySQLDatabase";
+                case "sqlite" : 
+                    $concrete_class = "PHPFrame_SQLiteDatabase";
+                    break;
+                case "mysql" : 
+                    $concrete_class = "PHPFrame_MySQLDatabase";
                     break;
             }
         } else {
-        	$msg = "Database driver not recognised.";
+            $msg = "Database driver not recognised.";
             throw new PHPFrame_DatabaseException($msg);
         }
         
@@ -412,7 +412,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      */
     public function prepare($statement, $options=array())
     {
-    	$db_prefix = PHPFrame::Config()->get("db.prefix");
+        $db_prefix = PHPFrame::Config()->get("db.prefix");
         $statement = str_replace('#__', $db_prefix, $statement);
         
         return $this->_pdo->prepare($statement, $options);
@@ -611,7 +611,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      */
     public function isSQLite()
     {
-    	return ($this instanceof PHPFrame_SQLiteDatabase);
+        return ($this instanceof PHPFrame_SQLiteDatabase);
     }
     
     /**
@@ -623,6 +623,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      */
     public function isMySQL()
     {
-    	return ($this instanceof PHPFrame_MySQLDatabase);
+        return ($this instanceof PHPFrame_MySQLDatabase);
     }
 }

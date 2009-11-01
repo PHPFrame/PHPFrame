@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Base/StdObject.php
+ * PHPFrame/Base/Object.php
  * 
  * PHP version 5
  * 
@@ -14,7 +14,8 @@
  */
 
 /**
- * This class provides a standard object with some useful generic methods.
+ * The base "Object" class provides a standard object with added functionality
+ * for stricter type checking and some other useful methods.
  * 
  * @category PHPFrame
  * @package  Base
@@ -23,108 +24,167 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-abstract class PHPFrame_Object
+class PHPFrame_Object
 {
-    /**
-     * __get() is utilized for reading data from inaccessible members. 
+	const SCALAR_TYPE_BOOL     = "bool";
+	const SCALAR_TYPE_INT      = "int";
+	const SCALAR_TYPE_FLOAT    = "float";
+	const SCALAR_TYPE_STRING   = "string";
+	const SCALAR_TYPE_RESOURCE = "resource";
+	const SCALAR_TYPE_NULL     = "null";
+	
+	private $_reflector = null;
+	
+	/**
+	 * The __get() magic method is automatically invoked when an undefined 
+	 * property is accessed.
+	 * 
+	 * @param string $prop_name
+	 * 
+	 * @access public
+	 * @return void
+	 * @throws LogicException
+	 * @since  1.0
+	 */
+	public function __get($prop_name)
+	{
+		$msg  = "Property '".$prop_name."' does not exist in class '";
+		$msg .= get_class($this)."'.";
+		throw new LogicException($msg);
+	}
+	
+	/**
+     * The __set() magic method is automatically invoked when an undefined 
+     * property is set.
      * 
-     * @param string $name
-     * 
-     * @access public
-     * @return mixed
-     * @since  1.0
-     */
-    public function __get($name)
-    {
-        // Check for accessor method following coding standards
-        $reflectionObj = new ReflectionClass($this);
-        
-        // Build string with getter name
-        $accessor_name = "get".ucwords(str_replace("_", " ", $name));
-        $accessor_name = str_replace(" ", "", $accessor_name);
-        
-        if ($reflectionObj->hasMethod($accessor_name)) {
-            $accessor_method = $reflectionObj->getMethod($accessor_name);
-            $param_count     = $accessor_method->getNumberOfParameters();
-            if ($accessor_method->isPublic() && $param_count === 0) {
-                return $this->$accessor_name();
-            }
-        }
-        
-        // Check for property with given name
-        if (property_exists($this, $name)) {
-            return $this->$name;
-        }
-        
-        // If we havent been able to get a value yet we throw an exception
-        $msg = "Property '".$name."' doesn't exist in class ".get_class($this);
-        throw new LogicException($msg);
-    }
-    
-    /**
-     * __set() is run when writing data to inaccessible members. 
-     * 
-     * @param string $name
-     * @param mixed  $value
+     * @param string $prop_name
+     * @param mixed  $prop_value
      * 
      * @access public
      * @return void
+     * @throws LogicException
      * @since  1.0
      */
-    public function __set($name, $value)
-    {
-        $msg = "Property does not exist";
+	public function __set($prop_name, $prop_value)
+	{
+		$msg  = "Property '".$prop_name."' does not exist in class '";
+        $msg .= get_class($this)."'.";
         throw new LogicException($msg);
+	}
+	
+	/**
+	 * Get instance of ReflectionClass for this object.
+	 * 
+	 * @access public
+	 * @return ReflectionClass
+	 * @since  1.0
+	 */
+    public function getReflector()
+    {
+    	if (is_null($this->_reflector)) {
+    	    $this->_reflector = new ReflectionClass($this);
+    	}
+    	
+        return $this->_reflector;
     }
     
     /**
-     * This static method is called for classes exported by var_export() since PHP 5.1.0.
-     *  
-     * The only parameter of this method is an array containing exported properties in 
-     * the form array('property' => value, ...).
+     * Enforce scalar types.
      * 
-     * @param array $properties
-     * 
-     * @access public
-     * @return PHPFrame_Object
+     * @access protected
+     * @return void
+     * @throws LogicException|InvalidArgumentException
      * @since  1.0
      */
-    public static function __set_state(array $properties)
+    protected function enforceArgumentTypes()
     {
-        $obj = new self;
-        
-        foreach ($properties as $key=>$value) {
-            $obj->$key = $value;
-        }
-        
-        return $obj;
+    	$call     = debug_backtrace();
+    	$function = $call[1]["function"];
+    	$class    = $call[1]["class"];
+    	$args     = $call[1]["args"];
+    	
+    	$reflection_method = $this->getReflector()->getMethod($function);
+    	$docblock          = $reflection_method->getDocComment();
+    	$params            = array();
+    	$i                 = 0;
+    	
+    	foreach ($reflection_method->getParameters() as $param) {
+    		$pattern = '/@param\s+(\w+)\s+\$'.$param->getName().'/';
+    		preg_match($pattern, $docblock, $matches);
+    		
+    		if (!isset($matches[1])) {
+    		    $msg  = "No type defined for argument ".$param->getName();
+    		    $msg .= " in docblock comment.";
+    		    throw new LogicException($msg);
+    		}
+    		
+	    	if (
+	    	    in_array($matches[1], $this->_getScalarTypes()) 
+	    	    &&
+	    	    !call_user_func("is_".$matches[1], $args[$i])
+	    	) {
+	            $msg  = "Argument '".$param->getName()."' in ".$class."::";
+	            $msg .= $function."() must be of type '".$matches[1]."' and ";
+	            $msg .= "value of type '".gettype($args[$i])."' was passed.";
+	            throw new InvalidArgumentException($msg);
+	        }
+	        
+            $i++;
+    	}
     }
     
     /**
-     * The __toString method allows a class to decide how it will react when it is 
-     * converted to a string.
+     * Check whether a given value is of the type specified in docblock 
+     * comment.
      * 
-     * This method only shows public and protected properties.
+     * @param mixed $value
      * 
-     * @access public
-     * @return string
+     * @access protected
+     * @return void
+     * @throws LogicException|RuntimeException
      * @since  1.0
      */
-    public function __toString()
+    protected function enforceReturnType($value)
     {
-        $str = "";
-        
-        $reflectionObj = new ReflectionClass($this);
-        $properties    = $reflectionObj->getProperties();
-        
-        foreach ($properties as $property) {
-            if ($property->isPublic() || $property->isProtected()) {
-                $property_name  = $property->getName();
-                $property_value = $this->$property_name;
-                $str           .= $property_name." => ".$property_value."\n";
-            }
+    	$call              = debug_backtrace();
+    	$function          = $call[1]["function"];
+        $class             = $call[1]["class"];
+    	$reflection_method = $this->getReflector()->getMethod($function);
+    	$docblock          = $reflection_method->getDocComment();
+    	
+    	preg_match('/@return\s+(\w+)\s/', $docblock, $matches);
+    	
+        if (!isset($matches[1])) {
+            $msg  = "No return type defined for ".$class."::".$function."()";
+            $msg .= " in docblock comment.";
+            throw new LogicException($msg);
         }
         
-        return $str;
+        $passed_type = gettype($value);
+        if ($passed_type != $matches[1]) {
+            $msg  = "Return type not valid. ".get_class($this)."::".$function;
+            $msg .= "() must return type '".$matches[1]."' and checked ";
+            $msg .= "return value was of type '".$passed_type."'.";
+            throw new RuntimeException($msg);
+        }
+    }
+    
+    /**
+     * Get array with scalar types as defined in class constants.
+     * 
+     * @access private
+     * @return array
+     * @since  1.0
+     */
+    private function _getScalarTypes()
+    {
+    	return array(
+            self::SCALAR_TYPE_BOOL,
+            self::SCALAR_TYPE_FLOAT,
+            self::SCALAR_TYPE_INT,
+            self::SCALAR_TYPE_NULL,
+            self::SCALAR_TYPE_RESOURCE,
+            self::SCALAR_TYPE_STRING
+        );
     }
 }

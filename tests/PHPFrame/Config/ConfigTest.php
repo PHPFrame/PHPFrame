@@ -11,7 +11,9 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->_config = PHPFrame::Config();
+    	$config_file   = PEAR_Config::singleton()->get("data_dir");
+    	$config_file  .= DS."PHPFrame".DS."etc".DS."phpframe.ini";
+        $this->_config = new PHPFrame_Config($config_file);
     }
     
     public function tearDown()

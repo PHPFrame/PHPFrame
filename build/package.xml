@@ -35,6 +35,7 @@
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" name="PHPFrame/Application/ACL.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Application/Application.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Extensions.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Features.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/FrontController.php" role="php" />
@@ -67,6 +68,8 @@
    <file baseinstalldir="/" name="PHPFrame/Debug/Informer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Logger.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Profiler.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Debug/SQLiteLogger.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Debug/TextLogger.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/Document.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/HTMLDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/HTMLRenderer.php" role="php" />

@@ -27,73 +27,50 @@
  * @see      PHPFrame_Observer
  * @since    1.0
  */
-class PHPFrame_Logger extends PHPFrame_Observer
+abstract class PHPFrame_Logger extends PHPFrame_Observer 
+    implements IteratorAggregate
 {
-    private static $_instance = null;
-    private $_log_file_info = null;
-    private $_log_file_obj = null;
-    
-    /**
-     * Constructor
-     * 
-     * @access private
-     * @return void
-     * @since  1.0
-     */
-    private function __construct()
+	private $_file_name, $_log_level;
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param string $file_name
+	 * @param int    $log_level
+	 * 
+	 * @access public
+	 * @return void
+	 * @since  1.0
+	 */
+    public function __construct($file_name, $log_level=0)
     {
-        if (defined("PHPFRAME_TMP_DIR")) {
-            $log_dir = PHPFRAME_TMP_DIR;
-        } else {
-            $log_dir  = PEAR_Config::singleton()->get('data_dir');
-            $log_dir .= DS."PHPFrame";
-        }
-        
-        $log_file = $log_dir.DS."log";
-        
-        // If log file doesn't exist we try to create it
-        if (!is_file($log_file) && !@touch($log_file)) {
-            $msg = "Could not create log ";
-            $msg .= "file (".$log_file."). ";
-            $msg .= "Please check file permissions. Error triggered ";
-            trigger_error($msg, E_USER_ERROR);
-        }
-        
-        // Instantiate file info object for log file
-        $this->_log_file_info = new PHPFrame_FileInfo($log_file);
-        
-        if (!$this->_log_file_info->isWritable()) {
-            $msg = "Could not write log. ";
-            $msg .= "File ".$log_file." is not writable. ";
-            $msg .= "Please check file permissions. ";
-            trigger_error($msg, E_USER_ERROR);
-        }
+    	if (!is_string($file_name)) {
+    	    $msg  = "Argument \$file_name in ".get_class($this)."::";
+    	    $msg .= __FUNCTION__."() must be of type 'string' and value of ";
+    	    $msg .= "type '".gettype($file_name)."' was passed.";
+    	    throw new InvalidArgumentException($msg);
+    	}
+    	
+    	$this->_file_name = $file_name;
+    	$this->_log_level = $log_level;
     }
     
     /**
-     * Get singleton instance of Logger
+     * Implementation of IteratorAggregate interface
      * 
      * @access public
-     * @return PHPFrame_Logger
+     * @return Iterator
      * @since  1.0
      */
-    public static function instance()
-    {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new self;
-        }
-        
-        return self::$_instance;
-    }
+    abstract public function getIterator();
     
     /**
-     * Handle observed objects updates
+     * Handle updated issued by observed subjects
      * 
-     * @param PHPFrame_Subject $subject The subject issuing the update
-     * 
-     * @access protected
+     * @access public
      * @return void
      * @since  1.0
+     * @see    PHPFrame_Observer::doUpdate()
      */
     protected function doUpdate(PHPFrame_Subject $subject)
     {
@@ -106,37 +83,13 @@ class PHPFrame_Logger extends PHPFrame_Observer
     }
     
     /**
-     * Write string to log file
+     * Write to log
      * 
-     * @param string|array $msg The string to append to log file
+     * @param string $str
      * 
-     * @static
      * @access public
      * @return void
      * @since  1.0
      */
-    public static function write($msg) 
-    {
-        // Implode msg to string if array given
-        if (is_array($msg)) {
-            $msg = implode("\n", $msg);
-        }
-        
-        // Add log separator
-        $info = "\n---\n";
-        
-        // Add date and time
-        $info .= "[".date("Y-m-d H:i:s")."] ";
-        
-        // Add IP address if available
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            $info .= "[ip:".$_SERVER['REMOTE_ADDR']."] ";
-        } else {
-            $info .= "[cli] ";
-        }
-        
-        // Write log to filesystem using PHPFrame's utility class
-        $log_file_obj = self::instance()->_log_file_info->openFile("a");
-        $log_file_obj->fwrite($info.$msg);
-    }
+    abstract public function write($str);
 }

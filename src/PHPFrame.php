@@ -114,6 +114,7 @@ class PHPFrame
      * @var int
      */
     private static $_run_level = 0;
+    private static $_app;
     
     /**
      * Constructor
@@ -127,7 +128,7 @@ class PHPFrame
      */
     private function __construct()
     {
-        //...
+        
     }
     
     /**
@@ -180,7 +181,7 @@ class PHPFrame
         
         // Load core libraries
         if ($class_name == "InputFilter") {
-            $file_path  = PEAR_Config::singleton()->get("data_dir"); 
+            $file_path  = PEAR_Config::singleton()->get("data_dir");
             $file_path .= DS."PHPFrame".DS."lib".DS."phpinputfilter".DS;
             $file_path .= "inputfilter.php";
             @include $file_path;
@@ -195,23 +196,6 @@ class PHPFrame
             $file_path .= DS."PHPFrame".DS."lib".DS."vcard".DS."vcardclass.inc";
             @include $file_path;
             return;
-        }
-        
-        // Load custom libraries (if we are in an app)
-        if (defined("PHPFRAME_CONFIG_DIR")) {
-            $libraries = PHPFrame::AppRegistry()->getLibraries();
-            
-            foreach ($libraries as $lib) {
-                if ($lib->getName() == $class_name) {
-                    $file_path = PHPFRAME_INSTALL_DIR.DS."lib".DS.$lib->getPath();
-                    
-                    // require the file if it exists
-                    if (is_file($file_path)) {
-                        @include $file_path;
-                        return;
-                    }
-                }
-            }
         }
     }
     
@@ -233,30 +217,6 @@ class PHPFrame
         $str .= "\nCopyright (c) 2008-2009 E-noise.com Limited";
         
         return $str;
-    }
-    
-    /**
-     * Get global configuration object
-     * 
-     * @static
-     * @access public
-     * @return PHPFrame_Config
-     * @since  1.0
-     */
-    public static function Config()
-    {
-        // If we are in an app we use the app's config
-        if (defined("PHPFRAME_CONFIG_DIR")) {
-            $config_dir = PHPFRAME_CONFIG_DIR;
-        } else {
-            // Otherwise we use the system wide default config
-            $config_dir  = PEAR_Config::singleton()->get("data_dir");
-            $config_dir .= DS."PHPFrame".DS."etc";
-        }
-        
-        $config_file = $config_dir.DS."phpframe.ini";
-        
-        return PHPFrame_Config::instance($config_file);
     }
     
     /**
@@ -431,37 +391,19 @@ class PHPFrame
             set_include_path($subpackage_path.PATH_SEPARATOR.get_include_path());
         }
         
-        // Set profiler milestone
-        PHPFrame_Profiler::instance()->addMilestone();
-        
-        // Initialise app config
-        $config = self::Config();
-        
         // Load language files
-        self::_loadLanguage();
+        //self::_loadLanguage();
         
-        // Initialise phpFame's error and exception handlers.
-        $exception_handler = PHPFrame_ExceptionHandler::instance();
-        
-        // Attach logger observer to exception handler
-        $exception_handler->attach(PHPFrame_Logger::instance());
-        
-        // Attach informer observer to excpetion handler if informer is enabled
-        if ($config->get("debug.informer_level") > 0) {
-            // Create informer
-            $recipients = explode(",", $config->get("debug.informer_recipients"));
-            $mailer     = new PHPFrame_Mailer();
-            $informer   = new PHPFrame_Informer($recipients, $mailer);
-            
-            // Attach informer to exception handler
-            $exception_handler->attach($informer);
-        }
-        
-        // Set timezone
-        date_default_timezone_set($config->get("timezone"));
+        // Initialise PHPFrame's error and exception handlers.
+        PHPFrame_ExceptionHandler::instance();
         
         // Set run level to 1, framework is ready to go!!!
         self::$_run_level = 1;
+    }
+    
+    public static function setApplication(PHPFrame_Application $app)
+    {
+        self::$_app = $app;
     }
     
     /**

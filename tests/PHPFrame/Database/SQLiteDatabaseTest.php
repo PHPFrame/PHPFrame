@@ -11,7 +11,7 @@ class PHPFrame_SQLiteDatabaseTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-    	$dsn       = "sqlite:".dirname(__FILE__).DS."data.db";
+        $dsn       = "sqlite:".dirname(__FILE__).DS."data.db";
         $this->_db = PHPFrame_Database::getInstance($dsn);
     }
     

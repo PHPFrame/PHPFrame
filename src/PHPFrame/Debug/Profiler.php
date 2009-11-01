@@ -16,10 +16,7 @@
 /**
  * The profiler class offers functionality to measure app performance based on a 
  * number of "milestones" added by client code. By default there are a few points 
- * defined in the PHPFrame core (PHPFrame::Boot(), PHPFrame::Mount(), 
- * PHPFrame::Env(), PHPFrame_FrontController::__construct(), 
- * PHPFrame_ActionController::__construct(), PHPFrame_View::display() and  
- * PHPFrame_Response::render()).
+ * defined in the PHPFrame core.
  * 
  * @category PHPFrame
  * @package  Debug
@@ -31,13 +28,6 @@
 class PHPFrame_Profiler implements IteratorAggregate, Countable
 {
     /**
-     * Reference to single instance of itself
-     * 
-     * @var PHPFrame_Profiler
-     */
-    private static $_instance = null;
-    
-    /**
      * An array containing user defined execution milestones
      * 
      * @var array
@@ -47,15 +37,11 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
     /**
      * Constructor
      * 
-     * The private constructor ensures this class can only be instantiated using 
-     * the {@link PHPFrame_Profiler::instance()} method and thus implementing the 
-     * singleton pattern. 
-     * 
-     * @access private
+     * @access public
      * @return void
      * @since  1.0
      */
-    private function __construct()
+    public function __construct()
     {
         $this->addMilestone();
     }
@@ -93,22 +79,6 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
         $str .= " msec\n";
         
         return $str;
-    } 
-    
-    /**
-     * Get singleton instance
-     * 
-     * @access public
-     * @return PHPFrame_Profiler
-     * @since  1.0
-     */
-    public static function instance()
-    {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new self;
-        }
-        
-        return self::$_instance;
     }
     
     /**
@@ -146,10 +116,6 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
      */
     public function addMilestone() 
     {
-        if (!PHPFrame::Config()->get("debug.profiler_enable")) {
-            return;
-        }
-        
         $stack = array();
         
         // Filter out profiler's calls from the backtrace

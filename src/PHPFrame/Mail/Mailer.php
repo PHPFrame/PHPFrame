@@ -31,27 +31,44 @@ class PHPFrame_Mailer extends PHPMailer
     /**
      * Constructor
      * 
-     * Initialise some PHPMailer default values
+     * @param string $mailer
+     * @param string $host
+     * @param int    $port
+     * @param bool   $auth
+     * @param string $user
+     * @param string $pass
+     * @param string $fromaddress
+     * @param string $fromname
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct() 
+    public function __construct(
+        $mailer="mail", 
+        $host="localhost", 
+        $port="25", 
+        $auth=false, 
+        $user=null, 
+        $pass=null, 
+        $fromaddress=null, 
+        $fromname=null
+    ) 
     {
-        $this->Mailer   = PHPFrame::Config()->get("smtp.mailer");
-        $this->Host     = PHPFrame::Config()->get("smtp.host");
-        $this->Port     = PHPFrame::Config()->get("smtp.port");
-        $this->SMTPAuth = PHPFrame::Config()->get("smtp.auth");
-        $this->Username = PHPFrame::Config()->get("smtp.user");
-        $this->Password = PHPFrame::Config()->get("smtp.pass");
-        $this->From     = PHPFrame::Config()->get("smtp.fromaddress");
-        $this->FromName = PHPFrame::Config()->get("smtp.fromname");
+        
+        $this->Mailer   = $mailer;
+        $this->Host     = $host;
+        $this->Port     = $port;
+        $this->SMTPAuth = $auth;
+        $this->Username = $user;
+        $this->Password = $pass;
+        $this->From     = $fromaddress;
+        $this->FromName = $fromname;
         
         // Sets the hostname to use in Message-Id and Received headers and as 
         // default HELO string. If empty, the value returned by SERVER_NAME is used 
         // or 'localhost.localdomain'.
-        $this->Hostname = PHPFrame::Config()->get("smtp.host");
+        $this->Hostname = $host;
     }
     
     /**

@@ -37,16 +37,17 @@ class PHPFrame_Informer extends PHPFrame_Observer
     /**
      * Constructor
      * 
-     * @param array $recipients An arra containing email addresses of the recipients 
-     *                          of this informer.
+     * @param PHPFrame_Mailer $mailer
+     * @param array           $recipients An array containing email addresses 
+     *                                    of the recipients of this informer.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct(array $recipients)
+    public function __construct(PHPFrame_Mailer $mailer, array $recipients)
     {
-        $this->_mailer = new PHPFrame_Mailer();
+        $this->_mailer = $mailer;
         
         foreach ($recipients as $recipient) {
             $recipient = filter_var($recipient, FILTER_VALIDATE_EMAIL);

@@ -55,12 +55,6 @@
 class PHPFrame_Config implements IteratorAggregate
 {
     /**
-     * Array holding instances of this class
-     * 
-     * @var array
-     */
-    private static $_instances = array();
-    /**
      * Full path to ini file with data
      * 
      * @var string
@@ -75,19 +69,16 @@ class PHPFrame_Config implements IteratorAggregate
     
     /**
      * Constructor
-     * 
-     * Private constructor ensures singleton pattern. Use the instance() method 
-     * to get an instance of this class.
      *
      * @param string $path Full path to ini file with data
      *
-     * @access private
+     * @access public
      * @return void
      * @since  1.0
      */
-    private function __construct($path)
+    public function __construct($path)
     {
-        $this->_path = trim((string) $path);
+    	$this->_path = trim((string) $path);
         
         // Fetch data from file
         $this->_fetchData();
@@ -152,26 +143,6 @@ class PHPFrame_Config implements IteratorAggregate
         }
         
         return new RecursiveArrayIterator($array);
-    }
-    
-    /**
-     * Get singleton instance of config class for a given path
-     * 
-     * @param string $path
-     * 
-     * @access public
-     * @return PHPFrame_Config
-     * @since  1.0
-     */
-    public static function instance($path)
-    {
-        $path = (string) trim($path);
-        
-        if (!isset(self::$_instances[$path])) {
-            self::$_instances[$path] = new self($path);
-        }
-        
-        return self::$_instances[$path];
     }
     
     /**

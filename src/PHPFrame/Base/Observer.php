@@ -27,7 +27,7 @@
  * @see      PHPFrame_Subject
  * @since    1.0
  */
-abstract class PHPFrame_Observer implements SplObserver
+abstract class PHPFrame_Observer extends PHPFrame_Object implements SplObserver
 {
     /**
      * Update 

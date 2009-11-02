@@ -136,6 +136,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
                 $node_value instanceof PHPFrame_User 
                 || $node_value instanceof PHPFrame_Collection
                 || $node_value instanceof PHPFrame_PersistentObject 
+                || $node_value instanceof SPLObjectStorage
             ) {
                 $node_value = iterator_to_array($node_value);
             }

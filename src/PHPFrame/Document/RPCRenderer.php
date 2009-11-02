@@ -132,12 +132,9 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
         if (!is_null($node_value)) {
             $parent_node = $doc->addNode($parent_node, $node_name);
             
-            if (
-                $node_value instanceof PHPFrame_User 
-                || $node_value instanceof PHPFrame_Collection
-                || $node_value instanceof PHPFrame_PersistentObject 
-                || $node_value instanceof SPLObjectStorage
-            ) {
+            if ($node_value instanceof PHPFrame_RPCObject) {
+                $node_value = $node_value->getRPCFields();
+            } else if ($node_value instanceof Traversable) {
                 $node_value = iterator_to_array($node_value);
             }
             

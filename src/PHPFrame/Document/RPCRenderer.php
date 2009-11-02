@@ -129,7 +129,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     {
         $doc = PHPFrame::Response()->getDocument();
         
-        if (!empty($node_value)) {
+        if (!is_null($node_value)) {
             $parent_node = $doc->addNode($parent_node, $node_name);
             
             if (

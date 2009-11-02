@@ -21,14 +21,4 @@ class PHPFrameTest extends PHPUnit_Framework_TestCase
     {
     	$this->assertType("string", PHPFrame::Version());
     }
-    
-    function test_setApplication()
-    {
-    	$install_dir  = PEAR_Config::singleton()->get("data_dir").DS;
-    	$install_dir .= "PHPFrame".DS."CLI_Tool";
-    	$app = new PHPFrame_Application(array("install_dir"=>$install_dir));
-    	print_r($app);
-    	exit;
-        $this->assertType("string", PHPFrame::Version());
-    }
 }

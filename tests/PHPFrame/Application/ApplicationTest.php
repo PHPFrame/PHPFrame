@@ -11,8 +11,8 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-    	$options = array("install_dir"=>"/home/lupo/Desktop/newapp");
-        $this->_app = new PHPFrame_Application($options);
+    	//$options    = array("install_dir"=>"/home/lupo/Desktop/newapp");
+        //$this->_app = new PHPFrame_Application($options);
     }
     
     public function tearDown()
@@ -22,7 +22,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
     
     public function test_a()
     {
-        print_r($this->_app);
-        exit;
+//        print_r($this->_app);
+//        exit;
     }
 }

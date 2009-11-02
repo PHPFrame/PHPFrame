@@ -7,13 +7,18 @@ require_once $PHPFrame;
 
 class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
 {
-    private $_config;
+    private $_config_file, $_config;
+    
+    public function __construct()
+    {
+    	$this->_config_file  = PEAR_Config::singleton()->get("data_dir");
+        $this->_config_file .= DS."PHPFrame".DS."etc".DS."phpframe.ini";
+    }
     
     public function setUp()
     {
-    	$config_file   = PEAR_Config::singleton()->get("data_dir");
-    	$config_file  .= DS."PHPFrame".DS."etc".DS."phpframe.ini";
-        $this->_config = new PHPFrame_Config($config_file);
+    	
+        $this->_config = new PHPFrame_Config($this->_config_file);
     }
     
     public function tearDown()
@@ -38,12 +43,12 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
     
     public function test_get()
     {
-        
+        //...
     }
     
     public function test_set()
     {
-        
+        //...
     }
     
     public function test_bind()

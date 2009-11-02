@@ -41,130 +41,146 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * 
      * @var int
      */
-    const FETCH_COLUMN=0;
+    const FETCH_COLUMN = 0;
     /**
      * Return query() result as list of single primitive values
      * 
      * @var int
      */
-    const FETCH_COLUMN_LIST=1;
+    const FETCH_COLUMN_LIST = 1;
     /**
      * Return query() result as numerically indexed array
      * 
      * @var int
      */
-    const FETCH_ARRAY=2;
+    const FETCH_ARRAY = 2;
     /**
      * Return query() result as a list of numerically indexed arrays
      * 
      * @var int
      */
-    const FETCH_ARRAY_LIST=3;
+    const FETCH_ARRAY_LIST = 3;
     /**
      * Return query() result as associative array
      * 
      * @var int
      */
-    const FETCH_ASSOC=4;
+    const FETCH_ASSOC = 4;
     /**
      * Return query() result as a list of associative arrays
      * 
      * @var int
      */
-    const FETCH_ASSOC_LIST=5;
+    const FETCH_ASSOC_LIST = 5;
     /**
      * Return query() result as object
      * 
      * @var int
      */
-    const FETCH_OBJ=6;
+    const FETCH_OBJ = 6;
     /**
      * Return query() result as a list of objects
      * 
      * @var int
      */
-    const FETCH_OBJ_LIST=7;
+    const FETCH_OBJ_LIST = 7;
     /**
      * Return query() result as number of rows returned
      * 
      * @var int
      */
-    const FETCH_NUM_ROWS=8;
+    const FETCH_NUM_ROWS = 8;
     /**
      * Return query() result as number of records affected
      * 
      * @var int
      */
-    const FETCH_AFFECTED_ROWS=9;
+    const FETCH_AFFECTED_ROWS = 9;
     /**
      * Return query() result as last insert id
      * 
      * @var int
      */
-    const FETCH_LAST_INSERTID=10;
+    const FETCH_LAST_INSERTID = 10;
     /**
      * Return PDOStatement object from query() method
      * 
      * @var int
      */
-    const FETCH_STMT=11;
+    const FETCH_STMT = 11;
     
     /**
      * An array holding instances of this class
      * 
      * @var array containing objects of type PHPFrame_Database
      */
-    private static $_instances=array();
+    private static $_instances = array();
     /**
      * DSN used for the database connection
      * 
      * @var string
      */
-    private $_dsn=null;
+    private $_dsn = null;
     /**
      * Database user if any
      * 
      * @var string
      */
-    private $_db_user=null;
+    private $_db_user = null;
     /**
      * Database password if any
      * 
      * @var string
      */
-    private $_db_pass=null;
+    private $_db_pass = null;
     /**
      * A PDO object that represents the connection to the database server.
      * 
      * @var PDO
      */
-    private $_pdo=null;
+    private $_pdo = null;
     /**
      * A reference to the PDOStatement object from the last query
      * 
      * @var PDOStatement
      */
-    private $_stmt=null;
+    private $_stmt = null;
+    /**
+     * Table prefix
+     * 
+     * @var string
+     */
+    private $_tbl_prefix = "";
     
     /**
      * Constructor
      * 
      * The constructor connects to the MySQL server and selects the database.
      * 
-     * @param string $dsn     A database source name
-     * @param string $db_user The database user name if any.
-     * @param string $db_pass The database password if any.
+     * @param string $dsn        A database source name
+     * @param string $db_user    [Optional] The database user name if any.
+     * @param string $db_pass    [Optional] The database password if any.
+     * @param string $tbl_prefix [Optional] Table prefix.
      * 
      * @access private
      * @return void
      * @since  1.0
      */
-    private function __construct($dsn, $db_user=null, $db_pass=null)
+    private function __construct(
+        $dsn, 
+        $db_user=null, 
+        $db_pass=null, 
+        $tbl_prefix=null
+    )
     {
         // Set internal properties
         $this->_dsn     = $dsn;
         $this->_db_user = $db_user;
         $this->_db_pass = $db_pass;
+        
+        if (!is_null($tbl_prefix)) {
+            $this->_tbl_prefix = trim((string) $tbl_prefix);
+        }
         
         // Connect to database server
         $this->connect();
@@ -202,13 +218,19 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Get Instance
      * 
-     * @param string $dsn     A database source name.
-     * @param string $db_user The database user name if any.
-     * @param string $db_pass The database password if any.
+     * @param string $dsn        A database source name.
+     * @param string $db_user    [Optional] The database user name if any.
+     * @param string $db_pass    [Optional] The database password if any.
+     * @param string $tbl_prefix [Optional] Table prefix.
      * 
      * @return PHPFrame_Database
      */
-    public static function getInstance($dsn, $db_user=null, $db_pass=null)
+    public static function getInstance(
+        $dsn, 
+        $db_user=null, 
+        $db_pass=null, 
+        $tbl_prefix=null
+    )
     {
         $dsn = trim((string) $dsn);
         
@@ -235,7 +257,8 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
             self::$_instances[$dsn] = new $concrete_class(
                 $dsn, 
                 $db_user, 
-                $db_pass
+                $db_pass,
+                $tbl_prefix
             );
         }
         
@@ -328,7 +351,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     public function query($sql, $params=array(), $fetch_mode=self::FETCH_STMT)
     {
         // Replace table prefix with config value
-        $sql = str_replace('#__', PHPFrame::Config()->get("db.prefix"), $sql);
+        $sql = str_replace('#__', $this->_tbl_prefix, $sql);
         
         // Run SQL query
         try {
@@ -412,8 +435,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      */
     public function prepare($statement, $options=array())
     {
-        $db_prefix = PHPFrame::Config()->get("db.prefix");
-        $statement = str_replace('#__', $db_prefix, $statement);
+        $statement = str_replace('#__', $this->_tbl_prefix, $statement);
         
         return $this->_pdo->prepare($statement, $options);
     }

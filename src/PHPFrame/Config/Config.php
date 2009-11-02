@@ -202,8 +202,8 @@ class PHPFrame_Config implements IteratorAggregate
     public function bind(array $array)
     {
         foreach ($array as $key=>$value) {
-            // Replace section separator "_" with "."
-            // This hack is needed because HTTP post vars have them automatically replaced
+            // Replace section separator "_" with "." This hack is needed 
+            // because HTTP post vars have them automatically replaced
             foreach ($this->getSections() as $section) {
                 $filtered_key = preg_replace(
                     '/('.$section.'_)/i', 
@@ -263,10 +263,10 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Ensure a given key exists in internal array
+     * Ensure a given key exists in internal array.
      * 
-     * @param string $key
-     * @param bool   $ensure If set to TRUE method will trigger error
+     * @param string $str    A string with the key we want to check.
+     * @param bool   $ensure If set to TRUE method will trigger error.
      * 
      * @access public
      * @return bool
@@ -333,6 +333,8 @@ class PHPFrame_Config implements IteratorAggregate
     
     /**
      * Parse key string into section and key
+     * 
+     * @param string $str
      * 
      * @access private
      * @return array

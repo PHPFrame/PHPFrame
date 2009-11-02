@@ -372,7 +372,18 @@ class PHPFrame
             $db_pass = null;
         }
         
-        return PHPFrame_Database::getInstance($dsn, $db_user, $db_pass);
+        if (isset($options["db.prefix"]) && !empty($options["db.prefix"])) {
+            $db_prefix = $options["db.prefix"];
+        } else {
+            $db_prefix = null;
+        }
+        
+        return PHPFrame_Database::getInstance(
+            $dsn, 
+            $db_user, 
+            $db_pass, 
+            $db_prefix
+        );
     }
     
     /**

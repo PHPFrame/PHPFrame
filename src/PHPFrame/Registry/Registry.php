@@ -26,12 +26,5 @@
  */
 abstract class PHPFrame_Registry implements IteratorAggregate
 {
-    /**
-     * Constructor
-     * 
-     * @access protected
-     * @return void
-     * @since  1.0
-     */
-    abstract protected function __construct();
+    
 }

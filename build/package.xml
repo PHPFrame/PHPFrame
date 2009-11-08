@@ -135,7 +135,7 @@
    <file baseinstalldir="/" name="PHPFrame/MVC/MVCFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/View.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Plugins/URLRewriter.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Registry/AppRegistry.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Registry/FileRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Registry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/RequestRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/SessionRegistry.php" role="php" />

@@ -78,7 +78,7 @@ class PHPFrame_Config implements IteratorAggregate
      */
     public function __construct($path)
     {
-    	$this->_path = trim((string) $path);
+        $this->_path = trim((string) $path);
         
         // Fetch data from file
         $this->_fetchData();

@@ -25,15 +25,5 @@
  */
 class PHPFrame_Plugins extends PHPFrame_Extensions
 {
-    /**
-     * Construct
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function __construct() 
-    {
-        parent::__construct("PHPFrame_PluginInfo", "plugins");
-    }
+
 }

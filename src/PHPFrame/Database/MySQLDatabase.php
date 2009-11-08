@@ -91,9 +91,9 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
         exit;
     }
     
-    public function dropTable(PHPFrame_DatabaseTable $table)
+    public function dropTable($tbl_name)
     {
-        $sql = "DROP TABLE IF EXISTS `".$table->getName()."`";
+        $sql = "DROP TABLE IF EXISTS `".$tbl_name."`";
         
         // Run SQL query
         $this->query($sql);

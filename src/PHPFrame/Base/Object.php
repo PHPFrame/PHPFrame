@@ -26,34 +26,34 @@
  */
 class PHPFrame_Object
 {
-	const SCALAR_TYPE_BOOL     = "bool";
-	const SCALAR_TYPE_INT      = "int";
-	const SCALAR_TYPE_FLOAT    = "float";
-	const SCALAR_TYPE_STRING   = "string";
-	const SCALAR_TYPE_RESOURCE = "resource";
-	const SCALAR_TYPE_NULL     = "null";
-	
-	private $_reflector = null;
-	
-	/**
-	 * The __get() magic method is automatically invoked when an undefined 
-	 * property is accessed.
-	 * 
-	 * @param string $prop_name
-	 * 
-	 * @access public
-	 * @return void
-	 * @throws LogicException
-	 * @since  1.0
-	 */
-	public function __get($prop_name)
-	{
-		$msg  = "Property '".$prop_name."' does not exist in class '";
-		$msg .= get_class($this)."'.";
-		throw new LogicException($msg);
-	}
-	
-	/**
+    const SCALAR_TYPE_BOOL     = "bool";
+    const SCALAR_TYPE_INT      = "int";
+    const SCALAR_TYPE_FLOAT    = "float";
+    const SCALAR_TYPE_STRING   = "string";
+    const SCALAR_TYPE_RESOURCE = "resource";
+    const SCALAR_TYPE_NULL     = "null";
+    
+    private $_reflector = null;
+    
+    /**
+     * The __get() magic method is automatically invoked when an undefined 
+     * property is accessed.
+     * 
+     * @param string $prop_name
+     * 
+     * @access public
+     * @return void
+     * @throws LogicException
+     * @since  1.0
+     */
+    public function __get($prop_name)
+    {
+        $msg  = "Property '".$prop_name."' does not exist in class '";
+        $msg .= get_class($this)."'.";
+        throw new LogicException($msg);
+    }
+    
+    /**
      * The __set() magic method is automatically invoked when an undefined 
      * property is set.
      * 
@@ -65,26 +65,26 @@ class PHPFrame_Object
      * @throws LogicException
      * @since  1.0
      */
-	public function __set($prop_name, $prop_value)
-	{
-		$msg  = "Property '".$prop_name."' does not exist in class '";
+    public function __set($prop_name, $prop_value)
+    {
+        $msg  = "Property '".$prop_name."' does not exist in class '";
         $msg .= get_class($this)."'.";
         throw new LogicException($msg);
-	}
-	
-	/**
-	 * Get instance of ReflectionClass for this object.
-	 * 
-	 * @access public
-	 * @return ReflectionClass
-	 * @since  1.0
-	 */
+    }
+    
+    /**
+     * Get instance of ReflectionClass for this object.
+     * 
+     * @access public
+     * @return ReflectionClass
+     * @since  1.0
+     */
     public function getReflector()
     {
-    	if (is_null($this->_reflector)) {
-    	    $this->_reflector = new ReflectionClass($this);
-    	}
-    	
+        if (is_null($this->_reflector)) {
+            $this->_reflector = new ReflectionClass($this);
+        }
+        
         return $this->_reflector;
     }
     
@@ -98,39 +98,39 @@ class PHPFrame_Object
      */
     protected function enforceArgumentTypes()
     {
-    	$call     = debug_backtrace();
-    	$function = $call[1]["function"];
-    	$class    = $call[1]["class"];
-    	$args     = $call[1]["args"];
-    	
-    	$reflection_method = $this->getReflector()->getMethod($function);
-    	$docblock          = $reflection_method->getDocComment();
-    	$params            = array();
-    	$i                 = 0;
-    	
-    	foreach ($reflection_method->getParameters() as $param) {
-    		$pattern = '/@param\s+(\w+)\s+\$'.$param->getName().'/';
-    		preg_match($pattern, $docblock, $matches);
-    		
-    		if (!isset($matches[1])) {
-    		    $msg  = "No type defined for argument ".$param->getName();
-    		    $msg .= " in docblock comment.";
-    		    throw new LogicException($msg);
-    		}
-    		
-	    	if (
-	    	    in_array($matches[1], $this->_getScalarTypes()) 
-	    	    &&
-	    	    !call_user_func("is_".$matches[1], $args[$i])
-	    	) {
-	            $msg  = "Argument '".$param->getName()."' in ".$class."::";
-	            $msg .= $function."() must be of type '".$matches[1]."' and ";
-	            $msg .= "value of type '".gettype($args[$i])."' was passed.";
-	            throw new InvalidArgumentException($msg);
-	        }
-	        
+        $call     = debug_backtrace();
+        $function = $call[1]["function"];
+        $class    = $call[1]["class"];
+        $args     = $call[1]["args"];
+        
+        $reflection_method = $this->getReflector()->getMethod($function);
+        $docblock          = $reflection_method->getDocComment();
+        $params            = array();
+        $i                 = 0;
+        
+        foreach ($reflection_method->getParameters() as $param) {
+            $pattern = '/@param\s+(\w+)\s+\$'.$param->getName().'/';
+            preg_match($pattern, $docblock, $matches);
+            
+            if (!isset($matches[1])) {
+                $msg  = "No type defined for argument ".$param->getName();
+                $msg .= " in docblock comment.";
+                throw new LogicException($msg);
+            }
+            
+            if (
+                in_array($matches[1], $this->_getScalarTypes()) 
+                &&
+                !call_user_func("is_".$matches[1], $args[$i])
+            ) {
+                $msg  = "Argument '".$param->getName()."' in ".$class."::";
+                $msg .= $function."() must be of type '".$matches[1]."' and ";
+                $msg .= "value of type '".gettype($args[$i])."' was passed.";
+                throw new InvalidArgumentException($msg);
+            }
+            
             $i++;
-    	}
+        }
     }
     
     /**
@@ -146,14 +146,14 @@ class PHPFrame_Object
      */
     protected function enforceReturnType($value)
     {
-    	$call              = debug_backtrace();
-    	$function          = $call[1]["function"];
+        $call              = debug_backtrace();
+        $function          = $call[1]["function"];
         $class             = $call[1]["class"];
-    	$reflection_method = $this->getReflector()->getMethod($function);
-    	$docblock          = $reflection_method->getDocComment();
-    	
-    	preg_match('/@return\s+(\w+)\s/', $docblock, $matches);
-    	
+        $reflection_method = $this->getReflector()->getMethod($function);
+        $docblock          = $reflection_method->getDocComment();
+        
+        preg_match('/@return\s+(\w+)\s/', $docblock, $matches);
+        
         if (!isset($matches[1])) {
             $msg  = "No return type defined for ".$class."::".$function."()";
             $msg .= " in docblock comment.";
@@ -178,7 +178,7 @@ class PHPFrame_Object
      */
     private function _getScalarTypes()
     {
-    	return array(
+        return array(
             self::SCALAR_TYPE_BOOL,
             self::SCALAR_TYPE_FLOAT,
             self::SCALAR_TYPE_INT,

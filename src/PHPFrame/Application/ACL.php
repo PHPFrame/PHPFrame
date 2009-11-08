@@ -26,11 +26,6 @@
  */
 class PHPFrame_ACL extends PHPFrame_PersistentObject
 {
-    protected $groupid;
-    protected $controller;
-    protected $action;
-    protected $value;
-    
     public function __construct(array $options=null)
     {
         $this->addField(
@@ -43,19 +38,31 @@ class PHPFrame_ACL extends PHPFrame_PersistentObject
            "controller", 
            null, 
            false,  
-           new PHPFrame_RegexpFilter(array("regexp"=>"/^[a-zA-Z]{1,50}$/"))
+           new PHPFrame_RegexpFilter(array(
+               "regexp"=>"/^[a-zA-Z]{1,50}$/", 
+               "min_length"=>1, 
+               "max_length"=>50
+           ))
         );
         $this->addField(
            "action", 
            "*", 
            false,  
-           new PHPFrame_RegexpFilter(array("regexp"=>"/^[a-zA-Z\*]{1,50}$/"))
+           new PHPFrame_RegexpFilter(array(
+               "regexp"=>"/^[a-zA-Z\*]{1,50}$/",
+               "min_length"=>1, 
+               "max_length"=>50
+           ))
         );
         $this->addField(
            "value", 
            "own", 
            false,  
-           new PHPFrame_RegexpFilter(array("regexp"=>"/^(own|all)$/"))
+           new PHPFrame_RegexpFilter(array(
+               "regexp"=>"/^(own|all)$/",
+               "min_length"=>3, 
+               "max_length"=>3
+           ))
         );
         
         parent::__construct($options);

@@ -7,25 +7,27 @@ require_once $PHPFrame;
 
 class PHPFrame_SQLiteDatabaseTest extends PHPUnit_Framework_TestCase
 {
-    private $_db;
+    private $_db_file, $_db;
     
     public function setUp()
     {
-        $dsn       = "sqlite:".dirname(__FILE__).DS."data.db";
-        $this->_db = PHPFrame_Database::getInstance($dsn);
+        $this->_db_file = dirname(__FILE__).DS."data.db";
+        $dsn            = "sqlite:".$this->_db_file;
+        $this->_db      = PHPFrame_Database::getInstance($dsn);
     }
     
     public function tearDown()
     {
-        //...
+    	// Delete database file
+        if (is_file($this->_db_file)) {
+            unlink($this->_db_file);
+        }
     }
     
     public function test_createTable()
     {
-        $table = new PHPFrame_DatabaseTable($this->_db, "tbl_1");
-        $this->_db->dropTable($table);
-        
-        $table = new PHPFrame_DatabaseTable($this->_db, "tbl_1");
+    	// Build table object
+    	$table = new PHPFrame_DatabaseTable($this->_db, "tbl_1");
         $table->addColumn(new PHPFrame_DatabaseColumn(array(
             "name"    => "id", 
             "type"    => PHPFrame_DatabaseColumn::TYPE_INT, 
@@ -41,17 +43,42 @@ class PHPFrame_SQLiteDatabaseTest extends PHPUnit_Framework_TestCase
             "default" => null
         )));
         
+        // Drop the table if it exists
+        if ($this->_db->hasTable($table->getName())) {
+            $this->_db->dropTable($table->getName());
+        }
         
+        // Create the db table
         $this->_db->createTable($table);
         
-        $table = new PHPFrame_DatabaseTable($this->_db, "tbl_1");
-        print_r(iterator_to_array($table->getColumns()));
+        $this->assertTrue($this->_db->hasTable($table->getName()));
     }
     
     public function test_getTables()
     {
-        foreach ($this->_db->getTables() as $table) {
-            print_r(iterator_to_array($table->getColumns()));
+    	$tables = $this->_db->getTables();
+    	$this->assertEquals(1, count($tables));
+    	
+        foreach ($tables as $table) {
+        	$cols = iterator_to_array($table->getColumns());
+        	$this->assertEquals(2, count($cols));
+            
+        	$this->assertType("PHPFrame_DatabaseColumn", $cols[0]);
+        	$this->assertType("PHPFrame_DatabaseColumn", $cols[1]);
+        	
+        	$this->assertEquals("id", $cols[0]->getName());
+        	$this->assertEquals(PHPFrame_DatabaseColumn::TYPE_INT, $cols[0]->getType());
+        	$this->assertEquals(PHPFrame_DatabaseColumn::KEY_PRIMARY, $cols[0]->getKey());
+        	$this->assertEquals(PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT, $cols[0]->getExtra());
+        	$this->assertEquals(false, $cols[0]->getNull());
+        	$this->assertEquals(null, $cols[0]->getDefault());
+        	
+        	$this->assertEquals("name", $cols[1]->getName());
+            $this->assertEquals(PHPFrame_DatabaseColumn::TYPE_VARCHAR, $cols[1]->getType());
+            $this->assertEquals(null, $cols[1]->getKey());
+            $this->assertEquals(null, $cols[1]->getExtra());
+            $this->assertEquals(false, $cols[1]->getNull());
+            $this->assertEquals(null, $cols[1]->getDefault());
         }
     }
 }

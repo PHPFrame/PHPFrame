@@ -96,22 +96,6 @@ class PHPFrame_SQLPersistentObjectAssembler
         $db  = $this->factory->getDB();
         $raw = $db->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
         
-        if ($db instanceof PHPFrame_SQLiteDatabase && is_array($raw)) {
-            $sqlite_raw = array();
-            foreach ($raw as $array) {
-                foreach ($array as $key=>$value) {
-                    if ($key == "rowid") {
-                        $array["id"] = $value;
-                        unset($array["rowid"]);
-                    }
-                }
-                
-                $sqlite_raw[] = $array;
-            }
-            
-            $raw[] = $sqlite_raw;
-        }
-        
         // Get total number of entries without taking limits into account
         // This is used to build pagination for the collection objects
         $sql_from   = $id_obj->getFromSQL();
@@ -133,7 +117,6 @@ class PHPFrame_SQLPersistentObjectAssembler
         }
         
         $superset_total = $db->fetchColumn($sql, $id_obj->getParams());
-
         
         // Create collectioj object
         return $this->factory->getCollection(

@@ -80,7 +80,7 @@ class PHPFrame_XMLPersistentObjectAssembler
     /**
      * Find a persistent object using an IdObject
      * 
-     * @param PHPFrame_IdObject $id_obj
+     * @param PHPFrame_IdObject|int $id_obj
      * 
      * @access public
      * @return PHPFrame_PersistentObject
@@ -91,31 +91,28 @@ class PHPFrame_XMLPersistentObjectAssembler
         if (is_int($id_obj)) {
             $id = $id_obj;
             
-            // Get table name
-            $table_name = $this->_factory->getTableName();
+        } elseif ($id_obj instanceof PHPFrame_IdObject) {
+            $msg = "XMLIdObject not implemented!!!.";
+            throw new RuntimeException($msg);
             
-            // Create new IdObject
-            $options = array("select"=>"*", "from"=>$table_name);
-            $id_obj = new PHPFrame_IdObject($options);
-            $id_obj->where("id", "=", ":id")->params(":id", $id);
-        }
-        
-        if (!$id_obj instanceof PHPFrame_IdObject) {
-            $msg = "Wrong argument type. ";
+        } else {
+        	$msg = "Wrong argument type. ";
             $msg .= get_class($this)."::findOne() expected only argument to be";
             $msg .= " of type PHPFrame_IdObject or integer.";
-            throw new RuntimeException($msg);
+            throw new InvalidArgumentException($msg);
         }
         
-        $collection = $this->find($id_obj);
-        
-        return $collection->getElement(0);
+        foreach ($this->find() as $obj) {
+        	if ($obj->getId() == $id) {
+        		return $obj;
+        	}
+        }
     }
     
     /**
      * Find a collection of persistent objects using an IdObject
      * 
-     * @param PHPFrame_IdObject|int $id_obj
+     * @param PHPFrame_IdObject $id_obj
      * 
      * @access public
      * @return PHPFrame_PersistentObjectCollection
@@ -123,21 +120,19 @@ class PHPFrame_XMLPersistentObjectAssembler
      */
     public function find(PHPFrame_IdObject $id_obj=null)
     {
-        // Get raw data as array from XML
-        $serialiser = new XML_Unserializer();
-        
+        $file_contents = file_get_contents($this->_file_info->getRealPath());
+        if (!empty($file_contents)) {
+        	$raw_tmp = PHPFrame_XMLSerialiser::unserialise($file_contents);
+        } else {
+        	$raw_tmp = array();
+        }
+    	
         $raw = array();
         
-        if ($serialiser->unserialize($this->_file_info->getRealPath(), true)) {
-            $raw_tmp = $serialiser->getUnserializedData();
-            
-            if (!$raw_tmp instanceof PEAR_Error) {
-                if (key_exists($this->factory->getTargetClass(), $raw_tmp)) {
-                    $raw = $raw_tmp[$this->factory->getTargetClass()];
-                } else {
-                    $raw = $raw_tmp;
-                }
-            }
+        if (key_exists($this->factory->getTargetClass(), $raw_tmp)) {
+            $raw = $raw_tmp[$this->factory->getTargetClass()];
+        } else {
+            $raw = $raw_tmp;
         }
         
         $raw_array_obj = new PHPFrame_Array($raw);
@@ -160,6 +155,8 @@ class PHPFrame_XMLPersistentObjectAssembler
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
+    	$obj->validateAll();
+    	
         // Get current collection
         $collection = $this->find();
         
@@ -201,7 +198,15 @@ class PHPFrame_XMLPersistentObjectAssembler
      */
     public function delete(PHPFrame_PersistentObject $obj)
     {
-        throw new RuntimeException("Method not implemented...");
+        // Get current collection
+        $collection = $this->find();
+        $collection->removeElement($obj);
+        
+        // Open the file in "write" mode
+        $file_obj = $this->_file_info->openFile("w");
+        $file_obj->fwrite($this->_serializeCollection($collection));
+        
+        $obj->markClean();
     }
     
     /**

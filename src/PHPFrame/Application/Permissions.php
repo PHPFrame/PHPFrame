@@ -41,29 +41,18 @@ class PHPFrame_Permissions
     /**
      * Constructor
      * 
+     * @param PHPFrame_Mapper $mapper Mapper object used to persist the ACL 
+     *                                objects.
+     * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct() 
+    public function __construct(PHPFrame_Mapper $mapper) 
     {
-        if (!defined("PHPFRAME_CONFIG_DIR")) {
-            $msg  = "Could not initialise permissions. It looks like you are ";
-            $msg .= "trying to instantiate the permissions object outside of an ";
-            $msg .= "application context. Application specific constant ";
-            $msg .= "PHPFRAME_CONFIG_DIR has not been defined.";
-            throw new LogicException($msg);
-        }
-        
-        // Get ACL from file
-        $this->_mapper = new PHPFrame_Mapper(
-            "PHPFrame_ACL", 
-            "acl", 
-            PHPFrame_Mapper::STORAGE_XML, 
-            false, 
-            PHPFRAME_CONFIG_DIR
-        );
-        
+    	$this->_mapper = $mapper;
+    	
+        // Get ACL using mapper
         $this->_acl = $this->_mapper->find();
     }
     

@@ -32,9 +32,6 @@
  */
 class PHPFrame_Mapper
 {
-    const STORAGE_SQL = 0x00000001;
-    const STORAGE_XML = 0x00000002;
-    
     /**
      * Persistence Factory object used for the current mapper
      * 
@@ -45,11 +42,15 @@ class PHPFrame_Mapper
     /**
      * Constructor
      * 
-     * @param string $target_class
-     * @param string $table_name
-     * @param int    $storage
-     * @param bool   $try_alternative_storage
-     * @param string $path
+     * @param string                   $target_class
+     * @param PHPFrame_Database|string $db_or_path   Either a Database object 
+     *                                               or path to directory for 
+     *                                               XML storage. File name 
+     *                                               will be table_name.xml, 
+     *                                               where "table_name" is 
+     *                                               either the supplied table 
+     *                                               name or the target class.
+     * @param string                   $table_name   [Optional]
      * 
      * @access public
      * @return void
@@ -57,41 +58,24 @@ class PHPFrame_Mapper
      */
     public function __construct(
         $target_class, 
-        $table_name=null, 
-        $storage=self::STORAGE_SQL, 
-        $try_alternative_storage=true,
-        $path=null
+        $db_or_path, 
+        $table_name=null
     )
     {
-        // Check if DB feature is enabled before allowing its use
-        // We need this in order to implement fallback to XML storage
-        $db_enable = (bool) PHPFrame::Config()->get("db.enable");
+    	if ($db_or_path instanceof PHPFrame_Database) {
+    		$factory_class = "PHPFrame_SQLPersistenceFactory";
+    	} elseif (is_string($db_or_path)) {
+    		$factory_class = "PHPFrame_XMLPersistenceFactory";
+    	} else {
+    	    $msg = "Storage mechanism not supported by mapper.";
+            throw new LogicException($msg);
+    	}
         
-        if ($storage == self::STORAGE_SQL && !$db_enable) {
-            if ($try_alternative_storage) {
-                $storage = self::STORAGE_XML;
-            } else {
-                $msg = "SQL Persistance is not enabled and fallback to XML ";
-                $msg .= "storage was explicitly disabled in constructor.";
-                throw new LogicException($msg);
-            }
-        }
-        
-        switch ($storage) {
-            case self::STORAGE_SQL :
-                $class_name = "PHPFrame_SQLPersistenceFactory";
-                break;
-            
-            case self::STORAGE_XML :
-                $class_name = "PHPFrame_XMLPersistenceFactory";
-                break;
-            
-            default :
-                $msg = "Storage mechanism not supported";
-                throw new LogicException($msg);
-        }
-        
-        $this->_factory = new $class_name($target_class, $table_name, $path);
+        $this->_factory = new $factory_class(
+            $target_class, 
+            $table_name, 
+            $db_or_path
+        );
     }
     
     /**
@@ -195,5 +179,29 @@ class PHPFrame_Mapper
     public function getIdObject()
     {
         return $this->_factory->getIdObject();
+    }
+    
+    /**
+     * Is the mapper using SQL persistance?
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function isSQL()
+    {
+    	return ($this->_factory instanceof PHPFrame_SQLPersistenceFactory);
+    }
+    
+    /**
+     * Is the mapper using XML persistance?
+     * 
+     * @access public
+     * @return bool
+     * @since  1.0
+     */
+    public function isXML()
+    {
+    	return ($this->_factory instanceof PHPFrame_XMLPersistenceFactory);
     }
 }

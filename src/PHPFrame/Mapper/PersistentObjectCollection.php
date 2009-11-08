@@ -178,27 +178,38 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
      */
     public function removeElement(PHPFrame_PersistentObject $obj)
     {
-        if (!in_array($obj, $this->_objects)) {
-            return;
+        if (in_array($obj, $this->_objects)) {
+            $key = array_keys($this->_objects, $obj);
+            unset($this->_objects[$key]);
         }
         
-        $key = array_keys($this->_objects, $obj);
-        unset($this->_objects[$key]);
+        $updated_raw = array();
+        foreach ($this->_raw as $raw_item) {
+        	if (isset($raw_item["id"]) && $raw_item["id"] == $obj->getId()) {
+        		continue;
+        	}
+        	
+        	$updated_raw[] = $raw_item;
+        }
+        
+        $this->_raw = $updated_raw;
+        $this->_total_subset--;
+        $this->_total_superset--;
     }
     
     public function getLimit()
     {
-        return 1;
+        return $this->_limit;
     }
     
     public function getLimitstart()
     {
-        return 0;
+        return $this->_limitstart;
     }
     
     public function getTotal()
     {
-        return 1;
+        return $this->_total_superset;
     }
     
     /**

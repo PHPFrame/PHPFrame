@@ -23,65 +23,53 @@
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
  */
-class PHPFrame_TextLog extends PHPFrame_Log
+class PHPFrame_TextLogger extends PHPFrame_Logger
 {
     private $_log_file_info = null;
-    private $_log_file_obj = null;
     
     /**
      * Constructor
      * 
-     * @access private
+     * @param string $file_name
+     * @param int    $log_level
+     * 
+     * @access public
      * @return void
      * @since  1.0
      */
-    private function __construct()
+    public function __construct($file_name, $log_level=-1)
     {
-        if (defined("PHPFRAME_TMP_DIR")) {
-            $log_dir = PHPFRAME_TMP_DIR;
-        } else {
-            $log_dir  = PEAR_Config::singleton()->get('data_dir');
-            $log_dir .= DS."PHPFrame";
-        }
-        
-        $log_file = $log_dir.DS."log";
+        parent::__construct($file_name, $log_level);
         
         // If log file doesn't exist we try to create it
-        if (!is_file($log_file) && !@touch($log_file)) {
+        if (!is_file($file_name) && !@touch($file_name)) {
             $msg = "Could not create log ";
-            $msg .= "file (".$log_file."). ";
-            $msg .= "Please check file permissions. Error triggered ";
+            $msg .= "file (".$file_name."). ";
+            $msg .= "Please check file permissions.";
             trigger_error($msg, E_USER_ERROR);
         }
         
         // Instantiate file info object for log file
-        $this->_log_file_info = new PHPFrame_FileInfo($log_file);
+        $this->_log_file_info = new PHPFrame_FileInfo($file_name);
         
         if (!$this->_log_file_info->isWritable()) {
-            $msg = "Could not write log. ";
-            $msg .= "File ".$log_file." is not writable. ";
+            $msg  = "Log file ".$file_name." is not writable. ";
             $msg .= "Please check file permissions. ";
             trigger_error($msg, E_USER_ERROR);
         }
     }
     
     /**
-     * Handle observed objects updates
+     * Implementation of IteratorAggregate interface
      * 
-     * @param PHPFrame_Subject $subject The subject issuing the update
-     * 
-     * @access protected
-     * @return void
+     * @access public
+     * @return Iterator
      * @since  1.0
+     * @todo   This method still needs to be implemented.
      */
-    protected function doUpdate(PHPFrame_Subject $subject)
+    public function getIterator()
     {
-        list($msg, $type) = $subject->getLastEvent();
-        
-        $log_level = PHPFrame::Config()->get("debug.log_level");
-        if ($type <= $log_level) {
-            self::write($msg);
-        }
+        return $this->_log_file_info->openFile("r");
     }
     
     /**
@@ -89,12 +77,11 @@ class PHPFrame_TextLog extends PHPFrame_Log
      * 
      * @param string|array $msg The string to append to log file
      * 
-     * @static
      * @access public
      * @return void
      * @since  1.0
      */
-    public static function write($msg) 
+    public function write($msg) 
     {
         // Implode msg to string if array given
         if (is_array($msg)) {
@@ -115,7 +102,7 @@ class PHPFrame_TextLog extends PHPFrame_Log
         }
         
         // Write log to filesystem using PHPFrame's utility class
-        $log_file_obj = self::instance()->_log_file_info->openFile("a");
+        $log_file_obj = $this->_log_file_info->openFile("a");
         $log_file_obj->fwrite($info.$msg);
     }
 }

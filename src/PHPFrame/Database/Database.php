@@ -298,6 +298,17 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
         return $this->_pdo;
     }
     
+    public function hasTable($tbl_name)
+    {
+    	foreach ($this->getTables() as $table) {
+    		if ($table->getName() == $tbl_name) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
+    
     /**
      * Get the database tables
      * 
@@ -307,10 +318,37 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      */
     abstract public function getTables();
     
+    /**
+     * Create database table for a given table object
+     * 
+     * @param PHPFrame_DatabaseTable $table
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     abstract public function createTable(PHPFrame_DatabaseTable $table);
     
-    abstract public function dropTable(PHPFrame_DatabaseTable $table);
+    /**
+     * Delete a named database table
+     * 
+     * @param string $tbl_name
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    abstract public function dropTable($tbl_name);
     
+    /**
+     * Alter a database table
+     * 
+     * @param PHPFrame_DatabaseTable $table
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     abstract public function alterTable(PHPFrame_DatabaseTable $table);
     
     /**

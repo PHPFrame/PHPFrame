@@ -41,7 +41,7 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
      */
     public function __construct($options=null)
     {
-        throw new RuntimeException("This class has not been implemented yet!");
+        throw new LogicException("This class has not been implemented yet!");
         
         parent::__construct($options);
     }

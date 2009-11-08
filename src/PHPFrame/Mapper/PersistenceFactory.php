@@ -49,7 +49,7 @@ abstract class PHPFrame_PersistenceFactory
      * @since  1.0
      */
     public function __construct($target_class, $table_name=null) {
-        $this->_target_class = (string) trim($target_class);
+        $this->_target_class = trim((string) $target_class);
         
         if (!is_null($table_name)) {
             $this->_table_name = trim((string) $table_name);

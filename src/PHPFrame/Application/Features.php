@@ -25,18 +25,6 @@
  */
 class PHPFrame_Features extends PHPFrame_Extensions
 {
-    /**
-     * Construct
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function __construct() 
-    {
-        parent::__construct("PHPFrame_FeatureInfo", "features");
-    }
-    
     public function install($name)
     {
         //$this->_mapper->insert(new PHPFrame_FeatureInfo());

@@ -33,7 +33,7 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
      * 
      * @param string            $target_class
      * @param string            $table_name
-     * @param PHPFrame_Database $db           [Optional]
+     * @param PHPFrame_Database $db           
      * 
      * @access public
      * @return void
@@ -42,16 +42,12 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
     public function __construct(
         $target_class, 
         $table_name, 
-        PHPFrame_Database $db=null
+        PHPFrame_Database $db
     )
     {
         parent::__construct($target_class, $table_name);
         
-        if ($db instanceof PHPFrame_Database) {
-            $this->_db = $db;
-        } else {
-            $this->_db = PHPFrame::DB();
-        }
+        $this->_db = $db;
     }
     
     /**

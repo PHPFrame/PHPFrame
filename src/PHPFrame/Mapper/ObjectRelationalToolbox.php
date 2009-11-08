@@ -1,7 +1,7 @@
 <?php
 class PHPFrame_ObjectRelationalToolbox
 {
-    /**
+	/**
      * Create a database table to store a given persistent object
      * 
      * @param PHPFrame_Database         $db
@@ -27,75 +27,63 @@ class PHPFrame_ObjectRelationalToolbox
     )
     {
         if (is_null($table_name)) {
-            $table_name = strtolower(get_class($obj));
+            $table_name = get_class($obj);
         }
         
         $table = new PHPFrame_DatabaseTable($db, $table_name);
-        print_r($table); exit;
         
-        $fields     = array_keys(iterator_to_array($obj));
-        $filters    = $obj->getFilters();
         
-        if ($drop) {
-            $sql = "DROP TABLE IF EXISTS `".$table_name."`";
-            $db->query($sql);
-        }
-        
-        $sql = "CREATE TABLE `".$table_name."` (";
-        
-        foreach ($fields as $field) {
-            $sql .= "\n`".$field."` ";
-            
-            if (array_key_exists($field, $filters)) {
-                $filter  = $filters[$field];
-                $options = $filter->getOptions();
-                
-                if ($filter instanceof PHPFrame_BoolFilter) {
-                    $sql .= "enum('0','1')";
-                } elseif ($filter instanceof PHPFrame_IntFilter) {
-                    $range = $options["max_range"] - $options["min_range"];
-                    if ($range <= 255) { // 1 byte int
-                        $sql .= "tinyint(4)";
-                    } elseif($range <= 65535) { // 2 byte int
-                        $sql .= "smallint(6)";
-                    } elseif($range <= 16777215) { // 3 byte int
-                        $sql .= "mediumint(9)";
-                    } elseif($range <= 4294967295) { // 4 byte int
-                        $sql .= "int(11)";
-                    } else { // 8 byte int
-                        $sql .= "bigint(21)";
-                    }
-                } elseif ($filter instanceof PHPFrame_FloatFilter) {
-                    $sql .= "float";
-                } elseif ($filter instanceof PHPFrame_EnumFilter) {
-                    $sql .= "enum('".implode("','". $option["enums"])."')";
-                } elseif ($filter instanceof PHPFrame_StringFilter) {
-                    if ($options["max_length"] > 0) {
-                        $sql .= "varchar(".$options["max_length"].")";
-                    } else {
-                        $sql .= "text";
-                    }
+        foreach ($obj->getFilters() as $key=>$filter) {
+        	$column = new PHPFrame_DatabaseColumn(array(
+        	    "name"=>$key, 
+        	    "type"=>PHPFrame_DatabaseColumn::TYPE_BLOB
+        	));
+        	
+        	$options = $filter->getOptions();
+        	
+            if ($filter instanceof PHPFrame_BoolFilter) {
+                $column->setType(PHPFrame_DatabaseColumn::TYPE_BOOL);
+            } elseif ($filter instanceof PHPFrame_IntFilter) {
+                $range = $options["max_range"] - $options["min_range"];
+                if ($range <= 255) { // 1 byte int
+                    $column->setType(PHPFrame_DatabaseColumn::TYPE_TINYINT);
+                } elseif($range <= 65535) { // 2 byte int
+                    $column->setType(PHPFrame_DatabaseColumn::TYPE_SMALLINT);
+                } elseif($range <= 16777215) { // 3 byte int
+                    $column->setType(PHPFrame_DatabaseColumn::TYPE_MEDIUMINT);
+                } elseif($range <= 4294967295) { // 4 byte int
+                    $column->setType(PHPFrame_DatabaseColumn::TYPE_INT);
+                } else { // 8 byte int
+                    $column->setType(PHPFrame_DatabaseColumn::TYPE_BIGINT);
+                }
+            } elseif ($filter instanceof PHPFrame_FloatFilter) {
+                $column->setType(PHPFrame_DatabaseColumn::TYPE_FLOAT);
+            } elseif ($filter instanceof PHPFrame_EnumFilter) {
+            	$column->setType(PHPFrame_DatabaseColumn::TYPE_ENUM);
+            } elseif ($filter instanceof PHPFrame_StringFilter) {
+                if ($options["max_length"] > 0) {
+                    $column->setType(PHPFrame_DatabaseColumn::TYPE_VARCHAR);
+                } else {
+                    $column->setType(PHPFrame_DatabaseColumn::TYPE_TEXT);
                 }
             }
             
-            if (!$obj->allowsNull($field)) {
-                $sql .= " NOT NULL";
-            }
+            $column->setNull($obj->allowsNull($key));
             
             $def_values = iterator_to_array($obj);
-            if (!is_null($def_values[$field])) {
-                $sql .= " DEFAULT '".$def_values[$field]."'";
+            if (!is_null($def_values[$key])) {
+                $column->setDefault($def_values[$key]);
             }
             
-            if ($field == "id") {
-                $sql .= " AUTO_INCREMENT";
+            if ($key == "id") {
+            	$column->setKey(PHPFrame_DatabaseColumn::KEY_PRIMARY);
+            	$column->setExtra(PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT);
             }
             
-            $sql .= ",";
+        	$table->addColumn($column);
         }
-        $sql .= "\nPRIMARY KEY (`id`)";
-        $sql .= "\n)  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci\n";
-        $db->query($sql);
+        
+        $db->createTable($table);
     }
     
     /**

@@ -59,15 +59,18 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         foreach ($table->getColumns() as $col) {
             $sql .= ($i>0) ? ",\n" : "\n";
             $sql .= "`".$col->getName()."`";
-            $sql .= " ".$col->getType();
+            //$sql .= " ".$col->getType();
             
             if (
                $col->getType() == PHPFrame_DatabaseColumn::TYPE_INT
                && 
                $col->getExtra() == PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT
             ) {
-                $sql .= " PRIMARY KEY ASC";
+                $sql .= " INTEGER PRIMARY KEY ASC";
+                
             } else {
+            	$sql .= " ".$col->getType();
+            	
                 if (!$col->getNull()) {
                     $sql .= " NOT NULL";
                 }
@@ -86,9 +89,9 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         $this->query($sql);
     }
     
-    public function dropTable(PHPFrame_DatabaseTable $table)
+    public function dropTable($tbl_name)
     {
-        $sql = "DROP TABLE IF EXISTS `".$table->getName()."`";
+        $sql = "DROP TABLE IF EXISTS `".$tbl_name."`";
         
         // Run SQL query
         $this->query($sql);
@@ -135,28 +138,30 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         $lines = explode(",", $matches[1]);
         foreach ($lines as $line) {
             $line = trim($line);
-            preg_match_all('/([\w]+)/i', $line, $token_matches);
+            $col  = array();
             
-            $tokens         = $token_matches[0];
-            $col            = array();
-            $col["name"]    = $tokens[0];
-            $col["type"]    = $tokens[1];
+            // Extract column name and type
+            preg_match('/`?([\w]+)`?\s+([\w]+)/i', $line, $matches);
+            $col["name"]    = $matches[1];
+            $col["type"]    = $matches[2];
+            
             $col["default"] = null;
             $col["null"]    = true;
             $col["key"]     = null;
             $col["extra"]   = null;
             
-            for ($j=2; $j<count($tokens); $j++) {
-                if ($tokens[$j] == "DEFAULT") {
-                    $col["default"] = $tokens[++$j];
-                } elseif ($tokens[$j] == "NOT") {
-                    if ($tokens[++$j] == "NULL") {
-                        $col["null"] = false;
-                    }
-                } elseif ($tokens[$j] == "PRIMARY") {
-                    $col["key"]   = PHPFrame_DatabaseColumn::KEY_PRIMARY;
-                    $col["extra"] = PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT;
-                }
+            preg_match('/DEFAULT\s\'(.*)\'/', $line, $matches);
+            if (isset($matches[1])) {
+            	$col["default"] = $matches[1];
+            }
+            
+            if (preg_match('/NOT NULL/', $line, $matches)) {
+            	$col["null"] = false;
+            }
+            
+            if (preg_match('/PRIMARY/', $line, $matches)) {
+                $col["key"]   = PHPFrame_DatabaseColumn::KEY_PRIMARY;
+                $col["extra"] = PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT;
             }
             
             $array[] = $col;
@@ -165,15 +170,23 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         $columns = array();
         
         foreach ($array as $col) {
-            $obj = new PHPFrame_DatabaseColumn();
-            $obj->setName($col["name"]);
+            $obj = new PHPFrame_DatabaseColumn(array("name"=>$col["name"]));
+            
             try {
+            	if ($col["type"] == "INTEGER") {
+            	    $col["type"] = "int";
+            	}
+            	
                 $obj->setType($col["type"]);
             } catch (Exception $e) {
                 $obj->setType(PHPFrame_DatabaseColumn::TYPE_TEXT);
             }
             $obj->setDefault($col["default"]);
-            $obj->setNull($col["null"]);
+            
+            if (empty($col["null"])) {
+            	$col["null"] = null;
+            }
+            
             if (!is_null($col["extra"])) {
                 $obj->setKey($col["key"]);
                 $obj->setExtra($col["extra"]);

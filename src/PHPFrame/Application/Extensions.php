@@ -41,20 +41,17 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
     /**
      * Construct
      * 
+     * @param PHPFrame_Mapper $mapper Mapper object used to persist the ACL 
+     *                                objects.
+     * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($info_class, $short_name) 
+    public function __construct(PHPFrame_Mapper $mapper) 
     {
         // Get installed features from file
-        $this->_mapper = new PHPFrame_Mapper(
-            $info_class, 
-            $short_name, 
-            PHPFrame_Mapper::STORAGE_XML, 
-            false, 
-            PHPFRAME_CONFIG_DIR
-        );
+        $this->_mapper = $mapper;
         
         $this->_extensions = $this->_mapper->find();
     }

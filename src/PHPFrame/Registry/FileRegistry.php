@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Registry/AppRegistry.php
+ * PHPFrame/Registry/FileRegistry.php
  * 
  * PHP version 5
  * 
@@ -14,15 +14,7 @@
  */
 
 /**
- * The Application Registry class produces a singleton object that provides 
- * an application wide scope to be shared by all requests and sessions. 
- * 
- * The application registry is accessed from the PHPFrame facade class as 
- * follows:
- * 
- * <code>
- * $app_registry = PHPFrame::AppRegistry();
- * </code>
+ * File based registry
  * 
  * @category PHPFrame
  * @package  Registry
@@ -34,32 +26,14 @@
  *           PHPFrame_Features, PHPFrame_Filesystem
  * @since    1.0
  */
-class PHPFrame_AppRegistry extends PHPFrame_Registry
+class PHPFrame_FileRegistry extends PHPFrame_Registry
 {
-    /**
-     * Instance of itself in order to implement the singleton pattern
-     * 
-     * @var object of type PHPFrame_AppRegistry
-     */
-    private static $_instance = null;
     /**
      * PHPFrame_FileObject object representing the cache file on disk
      * 
      * @var PHPFrame_FileObject
      */
     private $_file_obj = null;
-    /**
-     * Array containing keys that should be treated as readonly as far as client
-     * code is concerned
-     * 
-     * @var array
-     */
-    private $_readonly = array(
-        "permissions", 
-        "features", 
-        "libraries", 
-        "plugins"
-    );
     /**
      * An array to store application registry data set on runtime
      * 
@@ -77,34 +51,14 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
     /**
      * Constructor
      * 
-     * The constructor is declared "protected" to make sure that this class can 
-     * only be instantiated using the static method getInstance(), serving up 
-     * always the same instance that the class stores statically.
+     * @param string $cache_file
      * 
-     * Yes, you have guessed right, this class is a "singleton".
-     * 
-     * @access protected
+     * @access public
      * @return void
      * @since  1.0
      */
-    protected function __construct() 
+    public function __construct($cache_file) 
     {
-        if (!defined("PHPFRAME_TMP_DIR")) {
-            $msg  = "Application registry could not be initialised. ";
-            $msg .= "PHPFRAME_TMP_DIR constant has not been defined. ";
-            $msg .= "Please make sure that you use the application registry ";
-            $msg .= "from an application context. Your app will need to ";
-            $msg .= "define the PHPFRAME_TMP_DIR constant with a valid path ";
-            $msg .= "to the directory where store the app registry's cache.";
-            throw new LogicException($msg);
-        }
-        
-        $cache_dir = PHPFRAME_TMP_DIR.DS."cache";
-        
-        PHPFrame_Filesystem::ensureWritableDir($cache_dir);
-        
-        $cache_file = $cache_dir.DS."application.registry";
-        
         // Read data from cache
         if (is_file($cache_file)) {
             // Open cache file in read/write mode
@@ -114,12 +68,6 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
         } else {
             // Open cache file in write mode
             $this->_file_obj = new PHPFrame_FileObject($cache_file, "w");
-            
-            // Rebuild app registry
-            $this->set("permissions", new PHPFrame_Permissions());
-            $this->set("libraries", new PHPFrame_Libraries());
-            $this->set("features", new PHPFrame_Features());
-            $this->set("plugins", new PHPFrame_Plugins());
         }
     }
     
@@ -139,23 +87,6 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
         if ($this->isDirty()) {
             $this->_file_obj->fwrite(serialize($this->_data));
         }
-    }
-    
-    /**
-     * Get Instance
-     * 
-     * @static
-     * @access public
-     * @return PHPFrame_AppRegistry
-     * @since  1.0
-     */
-    public static function getInstance() 
-    {
-        if (!isset(self::$_instance)) {
-            self::$_instance = new self();
-        }
-        
-        return self::$_instance;
     }
     
     /**
@@ -210,64 +141,10 @@ class PHPFrame_AppRegistry extends PHPFrame_Registry
      */
     public function set($key, $value) 
     {
-        if (array_key_exists($key, $this->_readonly)) {
-            $msg = "Tried to set a read-only key (";
-            $msg .= $key.") in Application Registry.";
-            throw new RuntimeException($msg);
-        }
-        
         $this->_data[$key] = $value;
         
         // Mark data as dirty
         $this->markDirty();
-    }
-    
-    /**
-     * Get Permissions object
-     * 
-     * @access public
-     * @return PHPFrame_Permissions
-     * @since  1.0
-     */
-    public function getPermissions() 
-    {
-        return $this->_data['permissions'];
-    }
-    
-    /**
-     * Get Features
-     * 
-     * @access public
-     * @return PHPFrame_Features
-     * @since  1.0
-     */
-    public function getFeatures() 
-    {
-        return $this->_data['features'];
-    }
-    
-    /**
-     * Get Libraries
-     * 
-     * @access public
-     * @return PHPFrame_Libraries
-     * @since  1.0
-     */
-    public function getLibraries() 
-    {
-        return $this->_data['libraries'];
-    }
-    
-    /**
-     * Get Plugins
-     * 
-     * @access public
-     * @return PHPFrame_Features
-     * @since  1.0
-     */
-    public function getPlugins() 
-    {
-        return $this->_data['plugins'];
     }
     
     /**

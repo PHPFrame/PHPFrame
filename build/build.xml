@@ -60,14 +60,14 @@
             <batchtest>
                 <fileset refid="testfiles" />
             </batchtest>
-            <formatter type="xml" todir="${report.dir}" outfile="phpunit.xml" />
+            <formatter type="xml" todir="${report.dir}" outfile="logfile.xml" />
         </phpunit>
     </target>
     
     <!-- Generate build report -->
     <target name="generate-report">
         <phpunit2report 
-            infile="${report.dir}/phpunit.xml" 
+            infile="${report.dir}/logfile.xml" 
             styledir="resources/xsl" 
             todir="report" 
             format="noframes" />

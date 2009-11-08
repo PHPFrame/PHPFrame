@@ -64,6 +64,6 @@
     </target>
     
     <!-- Build project -->
-    <target name="build" depends="prepare, test, generate-report, phpcs" />
+    <target name="build" depends="prepare, test, phpcs" />
 
 </project>

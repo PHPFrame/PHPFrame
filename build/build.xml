@@ -56,12 +56,12 @@
     
     <!-- Run PHPUnit tests -->
     <target name="test">
-        <phpunit2 haltonfailure="true" printsummary="true">
+        <phpunit haltonfailure="true" printsummary="true" codecoverage="true">
             <batchtest>
                 <fileset refid="testfiles" />
             </batchtest>
             <formatter type="xml" todir="${report.dir}" outfile="phpunit.xml" />
-        </phpunit2>
+        </phpunit>
     </target>
     
     <!-- Generate build report -->

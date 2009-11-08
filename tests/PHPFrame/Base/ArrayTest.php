@@ -17,67 +17,6 @@ class PHPFrame_ArrayTest extends PHPUnit_Framework_TestCase
         //...
     }
     
-    public function test_constructFailureBool()
-    {
-        try {
-            $array_obj = new PHPFrame_Array(true);
-        } catch (PHPUnit_Framework_Error $e) {
-            return;
-        }
-        
-        $this->fail('An expected exception has not been raised.');
-    }
-    
-    public function test_constructFailureInt()
-    {
-        try {
-            $array_obj = new PHPFrame_Array(1);
-        } catch (PHPUnit_Framework_Error $e) {
-            return;
-        }
-        
-        $this->fail('An expected exception has not been raised.');
-    }
-    
-    public function test_constructFailureFloat()
-    {
-        try {
-            $array_obj = new PHPFrame_Array(1.3);
-        } catch (PHPUnit_Framework_Error $e) {
-            return;
-        }
-        
-        $this->fail('An expected exception has not been raised.');
-    }
-    
-    public function test_constructFailureString()
-    {
-        try {
-            $array_obj = new PHPFrame_Array("some string");
-        } catch (PHPUnit_Framework_Error $e) {
-            return;
-        }
-        
-        $this->fail('An expected exception has not been raised.');
-    }
-    
-    public function test_constructFailureObject()
-    {
-        try {
-            $array_obj = new PHPFrame_Array(new stdClass());
-        } catch (PHPUnit_Framework_Error $e) {
-            return;
-        }
-        
-        $this->fail('An expected exception has not been raised.');
-    }
-    
-    public function test_constructNull()
-    {
-        $array_obj = new PHPFrame_Array(null);
-        $this->assertType("PHPFrame_Array", $array_obj);
-    }
-    
     public function test_isAssoc()
     {
         $array_obj = new PHPFrame_Array(array(1,2,3));

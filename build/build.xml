@@ -46,7 +46,7 @@
     
     <!-- Run PHPUnit tests -->
     <target name="test">
-        <phpunit codecoverage="true" haltonfailure="true" printsummary="true">
+        <phpunit haltonfailure="true" printsummary="true">
             <batchtest>
                 <fileset refid="testfiles" />
             </batchtest>

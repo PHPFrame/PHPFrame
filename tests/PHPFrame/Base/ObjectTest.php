@@ -24,27 +24,27 @@ class PHPFrame_ObjectTest extends PHPUnit_Framework_TestCase
     public function test_getException()
     {
         $this->setExpectedException('LogicException');
-    	
+        
         $a = $this->_obj->some_prop;
     }
     
     public function test_set()
     {
-    	$this->setExpectedException('LogicException');
-    	
+        $this->setExpectedException('LogicException');
+        
         $this->_obj->some_prop = "some value";
     }
     
     public function test_getReflector()
     {
-    	$this->assertType("ReflectionClass", $this->_obj->getReflector());
+        $this->assertType("ReflectionClass", $this->_obj->getReflector());
     }
     
     public function test_enforceArgumentTypes()
     {
-    	$this->setExpectedException('LogicException');
-    	
-    	$this->_obj->foo("jhg", 1, true);
+        $this->setExpectedException('LogicException');
+        
+        $this->_obj->foo("jhg", 1, true);
     }
     
     public function test_enforceReturnType()

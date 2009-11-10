@@ -40,12 +40,6 @@ class PHPFrame_Response
     const STATUS_NOT_IMPLEMENTED       = 501;
     
     /**
-     * Instance of itself
-     * 
-     * @var PHPFrame_Response
-     */
-    private static $_instance = null;
-    /**
      * HTTP Response status code
      * 
      * @var int
@@ -87,11 +81,11 @@ class PHPFrame_Response
     /**
      * Constructor
      * 
-     * @access private
+     * @access public
      * @return void
      * @since  1.0
      */
-    private function __construct()
+    public function __construct()
     {
         foreach (headers_list() as $header) {
             if (preg_match('/^([a-zA-Z-]+):(.*)$/', $header, $matches)) {
@@ -104,9 +98,6 @@ class PHPFrame_Response
         $x_powered_by  = $this->getHeader("X-Powered-By");
         $x_powered_by .= " PHPFrame/".PHPFrame::RELEASE_VERSION;
         $this->setHeader("X-Powered-By", $x_powered_by);
-        
-        $config = PHPFrame::Config();
-        $this->setHeader("Content-Language", $config->get("default_lang"));
         
         // Acquire pathway object
         $this->_pathway = new PHPFrame_Pathway();
@@ -130,23 +121,6 @@ class PHPFrame_Response
         $str .= "\n".$this->getDocument();
         
         return $str;
-    }
-    
-    /**
-     * Get instance
-     * 
-     * @static
-     * @access public
-     * @return PHPFrame_Response
-     * @since  1.0
-     */
-    public static function getInstance()
-    {
-        if (!isset(self::$_instance)) {
-            self::$_instance = new self;
-        }
-        
-        return self::$_instance;
     }
     
     /**
@@ -199,11 +173,9 @@ class PHPFrame_Response
      */
     public function setHeader($key, $value) 
     {
-        if (headers_sent()) {
-            $msg = "Cannot modify header information - headers already sent";
-            throw new LogicException($msg);
-        }
-        
+    	$key   = trim((string) $key);
+    	$value = trim((string) $value);
+    	
         $this->_headers[$key] = $value;
     }
     

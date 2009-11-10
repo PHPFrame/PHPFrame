@@ -18,7 +18,7 @@ class PHPFrame_SQLiteDatabaseTest extends PHPUnit_Framework_TestCase
     
     public function tearDown()
     {
-    	// Delete database file
+        // Delete database file
         if (is_file($this->_db_file)) {
             unlink($this->_db_file);
         }
@@ -26,8 +26,8 @@ class PHPFrame_SQLiteDatabaseTest extends PHPUnit_Framework_TestCase
     
     public function test_createTable()
     {
-    	// Build table object
-    	$table = new PHPFrame_DatabaseTable($this->_db, "tbl_1");
+        // Build table object
+        $table = new PHPFrame_DatabaseTable($this->_db, "tbl_1");
         $table->addColumn(new PHPFrame_DatabaseColumn(array(
             "name"    => "id", 
             "type"    => PHPFrame_DatabaseColumn::TYPE_INT, 
@@ -56,24 +56,24 @@ class PHPFrame_SQLiteDatabaseTest extends PHPUnit_Framework_TestCase
     
     public function test_getTables()
     {
-    	$tables = $this->_db->getTables();
-    	$this->assertEquals(1, count($tables));
-    	
+        $tables = $this->_db->getTables();
+        $this->assertEquals(1, count($tables));
+        
         foreach ($tables as $table) {
-        	$cols = iterator_to_array($table->getColumns());
-        	$this->assertEquals(2, count($cols));
+            $cols = iterator_to_array($table->getColumns());
+            $this->assertEquals(2, count($cols));
             
-        	$this->assertType("PHPFrame_DatabaseColumn", $cols[0]);
-        	$this->assertType("PHPFrame_DatabaseColumn", $cols[1]);
-        	
-        	$this->assertEquals("id", $cols[0]->getName());
-        	$this->assertEquals(PHPFrame_DatabaseColumn::TYPE_INT, $cols[0]->getType());
-        	$this->assertEquals(PHPFrame_DatabaseColumn::KEY_PRIMARY, $cols[0]->getKey());
-        	$this->assertEquals(PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT, $cols[0]->getExtra());
-        	$this->assertEquals(false, $cols[0]->getNull());
-        	$this->assertEquals(null, $cols[0]->getDefault());
-        	
-        	$this->assertEquals("name", $cols[1]->getName());
+            $this->assertType("PHPFrame_DatabaseColumn", $cols[0]);
+            $this->assertType("PHPFrame_DatabaseColumn", $cols[1]);
+            
+            $this->assertEquals("id", $cols[0]->getName());
+            $this->assertEquals(PHPFrame_DatabaseColumn::TYPE_INT, $cols[0]->getType());
+            $this->assertEquals(PHPFrame_DatabaseColumn::KEY_PRIMARY, $cols[0]->getKey());
+            $this->assertEquals(PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT, $cols[0]->getExtra());
+            $this->assertEquals(false, $cols[0]->getNull());
+            $this->assertEquals(null, $cols[0]->getDefault());
+            
+            $this->assertEquals("name", $cols[1]->getName());
             $this->assertEquals(PHPFrame_DatabaseColumn::TYPE_VARCHAR, $cols[1]->getType());
             $this->assertEquals(null, $cols[1]->getKey());
             $this->assertEquals(null, $cols[1]->getExtra());

@@ -38,11 +38,11 @@
    <file baseinstalldir="/" name="PHPFrame/Application/Application.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Extensions.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Features.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Application/FrontController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Libraries.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Pathway.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Permissions.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Plugins.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Application/Request.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Response.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Sysevents.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Themes.php" role="php" />
@@ -53,8 +53,8 @@
    <file baseinstalldir="/" name="PHPFrame/Base/String.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Subject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/CLIClient.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Client/Client.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/DefaultClient.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Client/IClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/MobileClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/XMLRPCClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Config/Config.php" role="php" />

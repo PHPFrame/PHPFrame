@@ -109,12 +109,25 @@ class PHPFrame
         "Utils"
     );
     /**
-     * Run level
+     * Absolute path to PHPFrame src dir
      * 
-     * @var int
+     * @var string
      */
-    private static $_run_level = 0;
-    private static $_app;
+    private static $_src_dir;
+    /**
+     * Absolute path to PHPFrame data dir (normally a subdirectory inside PEARs 
+     * data dir).
+     * 
+     * @var string
+     */
+    private static $_data_dir;
+    /**
+     * Boolean indicating whether we are running in test mode. The mock session
+     * class will be used instead of a real session.
+     * 
+     * @var bool
+     */
+    private static $_test_mode = false;
     
     /**
      * Constructor
@@ -148,7 +161,7 @@ class PHPFrame
      */
     public static function __autoload($class_name)
     {
-        $file_path = "";
+    	$file_path = "";
         
         // Load core PHPFrame classes
         if (preg_match('/^PHPFrame_([a-zA-Z0-9]+)/', $class_name, $matches)) {
@@ -180,21 +193,19 @@ class PHPFrame
         }
         
         // Load core libraries
+        $lib_dir = self::$_data_dir.DS."lib";
+        
         if ($class_name == "InputFilter") {
-            $file_path  = PEAR_Config::singleton()->get("data_dir");
-            $file_path .= DS."PHPFrame".DS."lib".DS."phpinputfilter".DS;
-            $file_path .= "inputfilter.php";
-            @include $file_path;
+            $file_path = "phpinputfilter".DS."inputfilter.php";
+            include $lib_dir.DS.$file_path;
             return;
         } elseif ($class_name == "PHPMailer") {
-            $file_path  = PEAR_Config::singleton()->get("data_dir"); 
-            $file_path .= DS."PHPFrame".DS."lib".DS."phpmailer".DS."phpmailer.php";
-            @include $file_path;
+            $file_path = "phpmailer".DS."phpmailer.php";
+            include $lib_dir.DS.$file_path;
             return;
         } elseif ($class_name == "VCARD") {
-            $file_path  = PEAR_Config::singleton()->get("data_dir"); 
-            $file_path .= DS."PHPFrame".DS."lib".DS."vcard".DS."vcardclass.inc";
-            @include $file_path;
+            $file_path = "vcard".DS."vcardclass.inc";
+            include $lib_dir.DS.$file_path;
             return;
         }
     }
@@ -220,27 +231,6 @@ class PHPFrame
     }
     
     /**
-     * Get application registry
-     * 
-     * @static
-     * @access public
-     * @return PHPFrame_AppRegistry
-     * @since  1.0
-     */
-    public static function AppRegistry() 
-    {
-        if (self::getRunLevel() < 2) {
-            $msg  = "It looks like you are trying to access an app registry but no";
-            $msg .= " app has been initialised.";
-            $msg .= " Please call PHPFrame::Env() before trying to access the";
-            $msg .= " application registry.";
-            throw new LogicException($msg);
-        }
-        
-        return PHPFrame_AppRegistry::getInstance();
-    }
-    
-    /**
      * Get session object
      * 
      * @static
@@ -250,52 +240,12 @@ class PHPFrame
      */
     public static function Session() 
     {
-        if (self::getRunLevel() < 2) {
-            $msg  = "It looks like you are trying to access the session registry";
-            $msg .= " but no app has been initialised.";
-            $msg .= " Please call PHPFrame::Env() before trying to access the";
-            $msg .= " session registry.";
-            throw new LogicException($msg);
-        }
-        
+    	if (self::isTestMode()) {
+    	    return PHPFrame_MockSessionRegistry::getInstance();
+    	}
+    	
         return PHPFrame_SessionRegistry::getInstance();
     }
-    
-    /**
-     * Request Registry
-     * 
-     * @static
-     * @access public
-     * @return PHPFrame_RequestRegistry
-     * @since  1.0
-     */
-    public static function Request() 
-    {
-        if (self::getRunLevel() < 2) {
-            $msg  = "It looks like you are trying to access the request registry";
-            $msg .= " but no app has been initialised.";
-            $msg .= " Please call PHPFrame::Env() before trying to access the";
-            $msg .= " request registry.";
-            throw new LogicException($msg);
-        }
-        
-        return PHPFrame_RequestRegistry::getInstance();
-    }
-    
-    /**
-     * Get response object
-     * 
-     * @static
-     * @access public
-     * @return PHPFrame_Response
-     * @since  1.0
-     */
-    public static function Response()
-    {
-        return PHPFrame_Response::getInstance();
-    }
-    
-
     
     /**
      * Boot up the PHPFrame framework
@@ -307,166 +257,36 @@ class PHPFrame
      */
     public static function Boot()
     {
+    	// Set paths to source and data directories
+    	self::$_src_dir   = PEAR_Config::singleton()->get("php_dir");
+    	self::$_data_dir  = PEAR_Config::singleton()->get("data_dir");
+    	self::$_data_dir .= DS."PHPFrame";
+    	
         // Add core subpackages to include path
         foreach (self::$_subpackages as $subpackage) {
             $subpackage_path = dirname(__FILE__).DS."PHPFrame".DS.$subpackage;
-            set_include_path($subpackage_path.PATH_SEPARATOR.get_include_path());
+            $include_path    = $subpackage_path.PATH_SEPARATOR;
+            $include_path   .= get_include_path();
+            set_include_path($include_path);
         }
         
-        // Load language files
-        //self::_loadLanguage();
+        // Load language file
+        require "PHPFrame".DS."Lang".DS."en-GB.php";
         
         // Initialise PHPFrame's error and exception handlers.
         PHPFrame_ExceptionHandler::instance();
-        
-        // Set run level to 1, framework is ready to go!!!
-        self::$_run_level = 1;
     }
     
-    public static function setApplication(PHPFrame_Application $app)
+    public static function setTestMode($bool)
     {
-        self::$_app = $app;
+    	self::$_test_mode = (bool) $bool;
     }
     
-    /**
-     * Initialise environment, init app registry, session. Request registry is not 
-     * initialised here as this is done in the front controller.
-     * 
-     * @static
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public static function Env()
+    public static function isTestMode()
     {
-        // Set profiler milestone
-        PHPFrame_Profiler::instance()->addMilestone();
-        
-        // Initialise AppRegistry
-        PHPFrame_AppRegistry::getInstance();
-        
-        // Get/init session object
-        PHPFrame_SessionRegistry::getInstance();
-        
-        // Set run level to 2 to indicate that 
-        // environment layer is initialised...
-        self::$_run_level = 2;
-    }
-    
-    /**
-     * Mount persistance layer
-     * 
-     * @static
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public static function Mount()
-    {
-        // Set profiler milestone
-        PHPFrame_Profiler::instance()->addMilestone();
-        
-        if (self::$_run_level >= 3) {
-            return;
-        }
-        
-        if (self::$_run_level < 2) {
-            self::Env();
-        }
-        
-        if (!defined("PHPFRAME_VAR_DIR")) {
-            $msg  = "No 'var' directory has been defined for your app. ";
-            $msg .= "Please make sure to that your app defines the ";
-            $msg .= "PHPFRAME_VAR_DIR constant before mounting.";
-            throw new LogicException($msg);
-        }
-        
-        // Fall back to SQLite embedded db if no db enabled in etc/phpframe.ini
-        // Otherwise we pass a null dsn to use config settings
-        if (!PHPFrame::Config()->get("db.enable")) {
-            $msg       = "Tried to mount DB persistence but it is not enabled ";
-            $msg      .= "in etc/phpframe.ini. Falling back to embedded ";
-            $msg      .= "SQLite3 database";
-            $sysevents = PHPFrame::Session()->getSysevents();
-            $sysevents->append($msg, PHPFrame_Subject::EVENT_TYPE_NOTICE);
-            
-            $dsn_options = array("db_name"=>PHPFRAME_VAR_DIR.DS."data.db");
-            $dsn         = new PHPFrame_SQLiteDSN($dsn_options);
-        } else {
-            $dsn = null;
-        }
-        
-        // Initialise Database
-        $db = self::DB($dsn);
-        if ($db instanceof PHPFrame_Database) {
-            // Set run level to 3 to indicate that 
-            // persistance layer is mounted...
-            self::$_run_level = 3;
-        } else {
-            throw new RuntimeException("Could not create database object");
-        }
-    }
-    
-    /**
-     * Fire up the app
-     * 
-     * This method instantiates the front controller and runs it.
-     * 
-     * @static
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public static function Fire()
-    {
-        // If persistance has not been mounted yet we do so before we
-        // run the front controller
-        if (self::$_run_level < 2) {
-            self::Mount();
-        }
-        
-        /**
-         * Register MVC autoload function
-         */
-        spl_autoload_register(array("PHPFrame_MVCFactory", "__autoload"));
-        
-        $frontcontroller = new PHPFrame_FrontController();
-        $frontcontroller->run();
-    }
-    
-    /**
-     * Get current run level
-     * 
-     * @static
-     * @access public
-     * @return int
-     * @since  1.0
-     */
-    public static function getRunLevel()
-    {
-        return self::$_run_level;
-    }
-    
-    /**
-     * Load language files
-     * 
-     * @static
-     * @access private
-     * @return void
-     * @since  1.0
-     */
-    private static function _loadLanguage()
-    {
-        // Include the PHPFrame framework's language file
-        $lang_file  = "PHPFrame".DS."Lang";
-        $lang_file .= DS.PHPFrame::Config()->get("default_lang").".php";
-        
-        if (!(include $lang_file)) {
-            $msg = 'Could not find language file ('.$lang_file.')';
-            throw new RuntimeException($msg);
-        }
+    	return (bool) self::$_test_mode;
     }
 }
 
-// Boot up the PHPFrame!!!
+// Boot up the Framework!!!
 PHPFrame::Boot();

@@ -14,8 +14,7 @@
  */
 
 /**
- * This class wraps around PHPMailer and sets up the mailer using the SMTP details 
- * provided in main config (etc/phpframe.ini).
+ * This class wraps around PHPMailer
  * 
  * @category PHPFrame
  * @package  Mail
@@ -26,49 +25,56 @@
  */
 class PHPFrame_Mailer extends PHPMailer
 {
-    private $_messageid_sfx=null;
+    private $_messageid_sfx = null;
+    /**
+     * Options array
+     * 
+     * @var array
+     */
+    private $_options = array(
+        "mailer"      => "mail", 
+        "host"        => "localhost", 
+        "port"        => 25, 
+        "auth"        => false, 
+        "user"        => null, 
+        "pass"        => null, 
+        "fromaddress" => null, 
+        "fromname"    => null
+    );
     
     /**
      * Constructor
      * 
-     * @param string $mailer
-     * @param string $host
-     * @param int    $port
-     * @param bool   $auth
-     * @param string $user
-     * @param string $pass
-     * @param string $fromaddress
-     * @param string $fromname
+     * @param array $options [Optional] Options: mailer, host, port, auth, 
+     *                                  user, pass, fromaddress, fromname.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct(
-        $mailer="mail", 
-        $host="localhost", 
-        $port="25", 
-        $auth=false, 
-        $user=null, 
-        $pass=null, 
-        $fromaddress=null, 
-        $fromname=null
-    ) 
+    public function __construct(array $options=null)
     {
-        
-        $this->Mailer   = $mailer;
-        $this->Host     = $host;
-        $this->Port     = $port;
-        $this->SMTPAuth = $auth;
-        $this->Username = $user;
-        $this->Password = $pass;
-        $this->From     = $fromaddress;
-        $this->FromName = $fromname;
+    	if (!is_null($options)) {
+    		foreach ($options as $key=>$value) {
+    			if (array_key_exists($key, $this->_options)) {
+    				$this->_options[$key] = $value;
+    			}
+    		}
+    	}
+    	
+        $this->Mailer   = (string) $this->_options["mailer"];
+        $this->Host     = (string) $this->_options["host"];
+        $this->Port     = (int)    $this->_options["port"];
+        $this->SMTPAuth = (bool)   $this->_options["auth"];
+        $this->Username = (string) $this->_options["user"];
+        $this->Password = (string) $this->_options["pass"];
+        $this->From     = (string) $this->_options["fromaddress"];
+        $this->FromName = (string) $this->_options["fromname"];
         
         // Sets the hostname to use in Message-Id and Received headers and as 
         // default HELO string. If empty, the value returned by SERVER_NAME is used 
         // or 'localhost.localdomain'.
-        $this->Hostname = $host;
+        $this->Hostname = (string) $this->_options["host"];
     }
     
     /**
@@ -112,15 +118,15 @@ class PHPFrame_Mailer extends PHPMailer
      */
     public function CreateHeader() 
     {
-        $result = parent::CreateHeader();
+        $header = parent::CreateHeader();
         
         if (!is_null($this->_messageid_sfx)) {
             $pattern      = "/Message\-Id\: <([a-zA-Z0-9]+)@/i";
             $replacement  = "Message-Id: <$1-";
             $replacement .= base64_encode($this->_messageid_sfx)."@";
-            $result       = preg_replace($pattern, $replacement, $result);
+            $header       = preg_replace($pattern, $replacement, $header);
         }
         
-        return $result;
+        return $header;
     }
 }

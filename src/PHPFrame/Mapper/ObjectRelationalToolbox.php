@@ -1,7 +1,7 @@
 <?php
 class PHPFrame_ObjectRelationalToolbox
 {
-	/**
+    /**
      * Create a database table to store a given persistent object
      * 
      * @param PHPFrame_Database         $db
@@ -34,13 +34,13 @@ class PHPFrame_ObjectRelationalToolbox
         
         
         foreach ($obj->getFilters() as $key=>$filter) {
-        	$column = new PHPFrame_DatabaseColumn(array(
-        	    "name"=>$key, 
-        	    "type"=>PHPFrame_DatabaseColumn::TYPE_BLOB
-        	));
-        	
-        	$options = $filter->getOptions();
-        	
+            $column = new PHPFrame_DatabaseColumn(array(
+                "name"=>$key, 
+                "type"=>PHPFrame_DatabaseColumn::TYPE_BLOB
+            ));
+            
+            $options = $filter->getOptions();
+            
             if ($filter instanceof PHPFrame_BoolFilter) {
                 $column->setType(PHPFrame_DatabaseColumn::TYPE_BOOL);
             } elseif ($filter instanceof PHPFrame_IntFilter) {
@@ -59,7 +59,7 @@ class PHPFrame_ObjectRelationalToolbox
             } elseif ($filter instanceof PHPFrame_FloatFilter) {
                 $column->setType(PHPFrame_DatabaseColumn::TYPE_FLOAT);
             } elseif ($filter instanceof PHPFrame_EnumFilter) {
-            	$column->setType(PHPFrame_DatabaseColumn::TYPE_ENUM);
+                $column->setType(PHPFrame_DatabaseColumn::TYPE_ENUM);
             } elseif ($filter instanceof PHPFrame_StringFilter) {
                 if ($options["max_length"] > 0) {
                     $column->setType(PHPFrame_DatabaseColumn::TYPE_VARCHAR);
@@ -76,11 +76,11 @@ class PHPFrame_ObjectRelationalToolbox
             }
             
             if ($key == "id") {
-            	$column->setKey(PHPFrame_DatabaseColumn::KEY_PRIMARY);
-            	$column->setExtra(PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT);
+                $column->setKey(PHPFrame_DatabaseColumn::KEY_PRIMARY);
+                $column->setExtra(PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT);
             }
             
-        	$table->addColumn($column);
+            $table->addColumn($column);
         }
         
         $db->createTable($table);

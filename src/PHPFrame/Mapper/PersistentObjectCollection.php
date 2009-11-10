@@ -185,11 +185,11 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
         
         $updated_raw = array();
         foreach ($this->_raw as $raw_item) {
-        	if (isset($raw_item["id"]) && $raw_item["id"] == $obj->getId()) {
-        		continue;
-        	}
-        	
-        	$updated_raw[] = $raw_item;
+            if (isset($raw_item["id"]) && $raw_item["id"] == $obj->getId()) {
+                continue;
+            }
+            
+            $updated_raw[] = $raw_item;
         }
         
         $this->_raw = $updated_raw;

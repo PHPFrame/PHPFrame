@@ -34,28 +34,15 @@ class PHPFrame_XMLPersistentObjectAssembler
      * Constructor
      * 
      * @param PHPFrame_PersistenceFactory $factory
+     * @param string                      $path
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct(PHPFrame_PersistenceFactory $factory, $path=null)
+    public function __construct(PHPFrame_PersistenceFactory $factory, $path)
     {
         parent::__construct($factory);
-        
-        if (!defined("PHPFRAME_VAR_DIR") && is_null($path)) {
-            $msg = "No path has been defined to store XML persistent objects.";
-            $msg .= " If you are trying to use the Mapper package outside of";
-            $msg .= " an MVC app you can manually set the PHPFRAME_VAR_DIR";
-            $msg .= " constant before you instantiate the mapper objects.";
-            throw new RuntimeException($msg);
-            
-        }
-        
-        // If no path is specified we use default location
-        if (is_null($path)) {
-            $path = PHPFRAME_VAR_DIR.DS."domain.objects";
-        }
         
         // Make sure the directory is writable
         PHPFrame_Filesystem::ensureWritableDir($path);
@@ -96,16 +83,16 @@ class PHPFrame_XMLPersistentObjectAssembler
             throw new RuntimeException($msg);
             
         } else {
-        	$msg = "Wrong argument type. ";
+            $msg = "Wrong argument type. ";
             $msg .= get_class($this)."::findOne() expected only argument to be";
             $msg .= " of type PHPFrame_IdObject or integer.";
             throw new InvalidArgumentException($msg);
         }
         
         foreach ($this->find() as $obj) {
-        	if ($obj->getId() == $id) {
-        		return $obj;
-        	}
+            if ($obj->getId() == $id) {
+                return $obj;
+            }
         }
     }
     
@@ -122,11 +109,11 @@ class PHPFrame_XMLPersistentObjectAssembler
     {
         $file_contents = file_get_contents($this->_file_info->getRealPath());
         if (!empty($file_contents)) {
-        	$raw_tmp = PHPFrame_XMLSerialiser::unserialise($file_contents);
+            $raw_tmp = PHPFrame_XMLSerialiser::unserialise($file_contents);
         } else {
-        	$raw_tmp = array();
+            $raw_tmp = array();
         }
-    	
+        
         $raw = array();
         
         if (key_exists($this->factory->getTargetClass(), $raw_tmp)) {
@@ -155,8 +142,8 @@ class PHPFrame_XMLPersistentObjectAssembler
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
-    	$obj->validateAll();
-    	
+        $obj->validateAll();
+        
         // Get current collection
         $collection = $this->find();
         

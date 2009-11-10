@@ -8,15 +8,15 @@
  * version: 1.00 /09.20.2002
  *
  */
-if ( !defined("VCARDCLASS_INC") ) {
+if (!defined("VCARDCLASS_INC")) {
 
-    define("VCARDCLASS_INC",1);
+    define("VCARDCLASS_INC", 1);
 
     class VCARD {
         var $types = array();        // array vCard object
         var $lasterror_msg = "";     // last error message
-        var $lasterror_num = 0;        // last error number
-        var $mailer = "";             // specify MAILER property (ex. "StrongPost 2.0")
+        var $lasterror_num = 0;      // last error number
+        var $mailer = "";            // specify MAILER property (ex. "StrongPost 2.0")
 
         // initialization
         function VCARD($version = "2.1") {

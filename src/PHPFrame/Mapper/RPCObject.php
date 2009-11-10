@@ -41,12 +41,12 @@
  */
  interface PHPFrame_RPCObject
  {
- 	/**
- 	 * Gets the fields that should be used to represent the state of this 
- 	 * object when being sent via an XML-RPC request.
- 	 * 
- 	 * @return array an associative array containing the fields to be used to 
- 	 * represent this object
- 	 */
- 	public function getRPCFields();
+     /**
+      * Gets the fields that should be used to represent the state of this 
+      * object when being sent via an XML-RPC request.
+      * 
+      * @return array an associative array containing the fields to be used to 
+      * represent this object
+      */
+     public function getRPCFields();
  }

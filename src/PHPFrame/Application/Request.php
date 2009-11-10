@@ -1,11 +1,11 @@
 <?php
 /**
- * PHPFrame/Registry/RequestRegistry.php
+ * PHPFrame/Application/Request.php
  * 
  * PHP version 5
  * 
  * @category  PHPFrame
- * @package   Registry
+ * @package   Application
  * @author    Luis Montero <luis.montero@e-noise.com>
  * @copyright 2009 E-noise.com Limited
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
@@ -14,40 +14,19 @@
  */
 
 /**
- * This class encapsulates access to the request arrays and provides input 
- * filtering.
- * 
- * The request class is responsible for processing the incoming request 
- * according to the current session's client.
- * 
- * The request object is accessed from the PHPFrame facade class as follows:
- * 
- * <code>
- * $session = PHPFrame::Request();
- * </code>
- * 
- * @todo This class needs to be changed to use PHPFrame_Filter instead of
- *       phpinputfilter
+ * This class encapsulates a request made to a PHPFrame_Application
  *             
  * @category PHPFrame
- * @package  Registry
+ * @package  Application
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
- * @see      PHPFrame_Registry
- * @uses     InputFilter, PHPFrame, PHPFrame_SessionRegistry, PHPFrame_Config
  * @since    1.0
  */
-class PHPFrame_RequestRegistry extends PHPFrame_Registry
+class PHPFrame_Request implements IteratorAggregate
 {
     /**
-     * Instance of PHPInputFilter
-     * 
-     * @var object
-     */
-    private $_inputfilter = null;
-    /**
-     * A unification array of filtered global arrays
+     * Array holding request data
      * 
      * @var array
      */
@@ -77,56 +56,31 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
     public function __construct() 
     {
-        if (!isset(self::$_inputfilter)) {
-            self::$_inputfilter = new InputFilter();
-        }
         
-        // Populate request array using session's client
-        // Note that we dont use PHPFrame::Session() as the globale
-        // run level might not yet have been set to 2 (env initialised)
-        $session = PHPFrame_SessionRegistry::getInstance();
-        $session->getClient()->populateRequest($this);
-        
-        // If no controller has been set we use de default value provided in 
-        // etc/phpframe.ini
-        if (
-            !isset($this->_array['controller']) 
-            || empty($this->_array['controller'])
-        )
-        {
-            $def_controller = PHPFrame::Config()->get("default_controller");
-            $this->setControllerName($def_controller);
-        }
     }
     
+    /**
+     * Convert object to string
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
         return print_r($this, true);
     }
     
     /**
-     * Get Instance
+     * Implementation of IteratorAggregate interface
      * 
-     * @static
-     * @access public
-     * @return PHPFrame_Registry
+     * @return ArrayIterator
      * @since  1.0
      */
-    public static function getInstance() 
-    {
-        if (!isset(self::$_instance)) {
-            self::$_instance = new self;
-        }
-        
-        return self::$_instance;
-    }
-    
     public function getIterator()
     {
         return new ArrayIterator($this->_array);
@@ -135,7 +89,6 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
     /**
      * Get controller name
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -147,21 +100,25 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
     /**
      * Set controller name
      * 
-     * @param string $value The value to set the variable to.
+     * @param string $str The value to set the variable to.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    public function setControllerName($value) 
+    public function setControllerName($str) 
     {
-        $this->_array['controller'] = $value;
+    	$filter = new PHPFrame_RegexpFilter(array(
+    	    "regexp"     => '/^[a-z_]+$/', 
+            "min_length" => 1, 
+            "max_length" => 50
+    	));
+    	
+        $this->_array['controller'] = $filter->process($str);
     }
     
     /**
      * Get action name
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -173,22 +130,26 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
     /**
      * Set $_action.
      * 
-     * @param string $value The value to set the variable to.
+     * @param string $str The value to set the variable to.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    public function setAction($value) 
+    public function setAction($str) 
     {
         // Filter value before assigning to variable
-        $this->_array['action'] = self::$_inputfilter->process($value);
+        $filter = new PHPFrame_RegexpFilter(array(
+            "regexp"     => '/^[a-z_]+$/', 
+            "min_length" => 1, 
+            "max_length" => 50
+        ));
+        
+        $this->_array['action'] = $filter->process($str);
     }
     
     /**
      * Get request/post array
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -203,12 +164,13 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
      * @param string $key
      * @param mixed  $def_value
      * 
-     * @access public
      * @return mixed
      * @since  1.0
      */
     public function getParam($key, $def_value=null) 
     {
+    	$key = trim((string) $key);
+    	
         if (!isset($this->_array['params'][$key]) && !is_null($def_value)) {
             $this->_array['params'][$key] = $def_value;
         }
@@ -227,19 +189,19 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
      * @param string $key
      * @param mixed  $value
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
     public function setParam($key, $value) 
     {
-        $this->_array['params'][$key] = self::$_inputfilter->process($value);
+    	$key = trim((string) $key);
+        
+        $this->_array['params'][$key] = $value;
     }
     
     /**
      * Get request headers
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -248,8 +210,20 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
         return $this->_array["headers"];
     }
     
+    /**
+     * Set a request header
+     * 
+     * @param string $key
+     * @param string $value
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function setHeader($key, $value)
     {
+    	$key   = trim((string) $key);
+    	$value = trim((string) $value);
+    	
         $this->_array["headers"][$key] = $value;
     }
     
@@ -258,16 +232,43 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
         return $this->_array['method'];
     }
     
+    /**
+     * Set the request method
+     * 
+     * @param string $str Allowed values are "GET", "POST" and "CLI".
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function setMethod($str)
     {
-        $this->_array['method'] = $str;
+    	// Filter value before assigning to variable
+        $filter = new PHPFrame_RegexpFilter(array(
+            "regexp"     => '/^(GET|POST|CLI)$/', 
+            "min_length" => 3, 
+            "max_length" => 4
+        ));
+        
+        $this->_array['method'] = $filter->process($str);
     }
     
+    /**
+     * Is the request method POST?
+     * 
+     * @return bool
+     * @since  1.0
+     */
     public function isPost()
     {
         return ($this->_array['method'] == "POST");
     }
     
+    /**
+     * Is the request method GET?
+     * 
+     * @return bool
+     * @since  1.0
+     */
     public function isGet()
     {
         return ($this->_array['method'] == "GET");
@@ -283,111 +284,231 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
         unset($this->_array["files"][$key]);
     }
     
+    /**
+     * Get files attached to request
+     * 
+     * @return array
+     * @since  1.0
+     */
     public function getFiles()
     {
         return $this->_array["files"];
     }
     
+    /**
+     * Get remote address (IP)
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getRemoteAddr()
     {
         return $this->_array["remote_addr"];
     }
     
+    /**
+     * Set the request remote address (IP).
+     * 
+     * @param string $str
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function setRemoteAddr($str)
     {
         $this->_array["remote_addr"] = $str;
     }
     
+    /**
+     * Get request URI
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getRequestURI()
     {
         return $this->_array["request_uri"];
     }
     
+    /**
+     * Set the request URI
+     * 
+     * @param string $str
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function setRequestURI($str)
     {
         $this->_array["request_uri"] = $str;
     }
     
+    /**
+     * Get request script name
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getScriptName()
     {
         return $this->_array["script_name"];
     }
     
+    /**
+     * Set the request script name
+     * 
+     * @param string $str
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function setScriptName($str)
     {
         $this->_array["script_name"] = $str;
     }
     
+    /**
+     * Get request query string
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getQueryString()
     {
         return $this->_array["query_string"];
     }
     
+    /**
+     * Set the request query string
+     * 
+     * @param string $str
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function setQueryString($str)
     {
         $this->_array["query_string"] = $str;
     }
     
+    /**
+     * Get the request time (unix timestamp)
+     * 
+     * @return int
+     * @since  1.0
+     */
     public function getRequestTime()
     {
         return $this->_array["request_time"];
     }
     
-    public function setRequestTime($str)
+    /**
+     * Set the request time (unix timestamp)
+     * 
+     * @param int $int
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function setRequestTime($int)
     {
-        $this->_array["request_time"] = $str;
+        $this->_array["request_time"] = (int) $int;
     }
     
+    /**
+     * Get output file absolute path
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getOutfile()
     {
         return $this->_array["outfile"];
     }
     
+    /**
+     * Set absolute path for file to write output. If not set no output will 
+     * not be written to file, which is the normal behaviour.
+     * 
+     * @param string $str
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function setOutfile($str)
     {
-         $this->_array["outfile"] = $str;
+         $this->_array["outfile"] = (string) $str;
     }
     
+    /**
+     * Is Quiet request?
+     * 
+     * @return bool
+     * @since  1.0
+     */
     public function isQuiet()
     {
         return $this->_array["quiet"];
     }
     
+    /**
+     * Set whether the request should be handled in "quiet" mode (no output)
+     * 
+     * @param bool $bool
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function setQuiet($bool)
     {
         $this->_array["quiet"] = (bool) $bool;
     }
     
+    /**
+     * Is AJAX request?
+     * 
+     * @return bool
+     * @since  1.0
+     */
     public function isAJAX()
     {
         return $this->_array["ajax"];
     }
     
+    /**
+     * Set whether request is AJAX.
+     * 
+     * @param bool $bool
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function setAJAX($bool)
     {
         $this->_array["ajax"] = (bool) $bool;
     }
     
+    /**
+     * Has request already been dispatched?
+     * 
+     * @return bool
+     * @since  1.0
+     */
     public function isDispatched()
     {
         return $this->_dispatched;
     }
     
-    public function setDispatched($bool)
-    {
-        $this->_dispatched = (bool) $bool;
-    }
-    
     /**
-     * Destroy the request data
+     * Set dispatched flag
      * 
-     * @access public
+     * @param bool $bool
+     * 
      * @return void
      * @since  1.0
      */
-    public function destroy() 
+    public function setDispatched($bool)
     {
-        $this->_array      = array();
-        $this->_dispatched = false;
+        $this->_dispatched = (bool) $bool;
     }
 }

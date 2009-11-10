@@ -19,6 +19,6 @@ class PHPFrameTest extends PHPUnit_Framework_TestCase
     
     function test_Version()
     {
-    	$this->assertType("string", PHPFrame::Version());
+        $this->assertType("string", PHPFrame::Version());
     }
 }

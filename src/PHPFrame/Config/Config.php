@@ -18,20 +18,6 @@
  * In applications built using the provided application template this class is
  * used to manage the global configuration options stored in etc/phpframe.ini.
  * 
- * The global configuration stored in an app's etc/phpframe.ini file will normally 
- * be accessed using PHPFrame::Config(). Using this method in the main "facade" 
- * class makes it straight forward to acquire the right config object without 
- * having to specify the full path as an argument. 
- * 
- * Config objects can directly be instantiated using the PHPFrame_Config::instance() 
- * method to ensure that we create only one instance for each given path. This 
- * method is responsible for serving instances and only creating new ones if no 
- * instance exists for the given path and thus providing "singleton" config objects.
- * 
- * The singleton pattern is enforced by declaring a private constructor and 
- * therefore only making possible to instantiate the class via the instance() 
- * method. 
- * 
  * Config objects are traversable because this class implements the 
  * IteratorAggregate interface. This means that instances can be used as an array 
  * in foreach loops.
@@ -39,7 +25,9 @@
  * Iteration example:
  * 
  * <code>
- * foreach (PHPFrame::Config() as $key=>$value) {
+ * // this code would be inside a controller
+ * $config = $this->getApp()->getConfig();
+ * foreach ($config as $key=>$value) {
  *     echo $key.': '.$value;
  * }
  * </code>
@@ -234,6 +222,25 @@ class PHPFrame_Config implements IteratorAggregate
     public function getSections()
     {
         return array_keys($this->_data);
+    }
+    
+    /**
+     * Get section data as an associative array
+     * 
+     * @param string $str
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
+    public function getSection($section_name)
+    {
+    	if (!array_key_exists($section_name, $this->_data)) {
+    		$msg = "Section '".$section_name."' doesn't exist in config.";
+    		throw new RuntimeException($msg);
+    	}
+    	
+    	return $this->_data[$section_name];
     }
     
     /**

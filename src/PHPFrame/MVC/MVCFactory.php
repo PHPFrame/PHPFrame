@@ -37,84 +37,6 @@ class PHPFrame_MVCFactory
     private function __construct() {}
     
     /**
-     * Magic method to autoload MVC classes
-     * 
-     * This autoloader is registered in {@link PHPFrame_FrontController::run()}.
-     * 
-     * @param string $class_name
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public static function __autoload($class_name)
-    {
-        $file_path = PHPFRAME_INSTALL_DIR.DS."src".DS;
-        
-        $super_classes = array("Controller", "Helper", "Lang");
-        foreach ($super_classes as $super_class) {
-            if (preg_match('/'.$super_class.'$/', $class_name)) {
-                // Set base path for objects of given superclass
-                $file_path .= strtolower($super_class);
-                break;
-            }
-        }
-        
-        // Append lang dir for lang classes
-        if ($super_class == "Lang") {
-            $file_path .= DS.PHPFrame::Config()->get("default_lang");
-        // Append 's' to dir name except for all others
-        } else {
-            $file_path .= "s";
-            
-        }
-        
-        // Remove superclass name from class name
-        $class_name = str_replace($super_class, "", $class_name);
-            
-        // Build dir path by breaking camel case class name
-        $pattern = '/[A-Z]{1}[a-zA-Z0-9]+/';
-        $matches = array();
-        preg_match_all($pattern, ucfirst($class_name), $matches);
-        if (isset($matches[0]) && is_array($matches[0])) {
-            $file_path .= DS.strtolower(implode(DS, $matches[0]));
-        }
-    
-        // Append file extension
-        $file_path .= ".php";
-        
-        // require the file if it exists
-        if (is_file($file_path)) {
-            @include $file_path;
-            return;
-        }
-        
-        // Autoload models
-        $models_dir   = PHPFRAME_INSTALL_DIR.DS."src".DS."models";
-        $dir_iterator = new RecursiveDirectoryIterator($models_dir);
-        $filter       = array("php");
-        $iterator     = new RecursiveIteratorIterator(
-            $dir_iterator, 
-            RecursiveIteratorIterator::SELF_FIRST
-        );
-        
-        foreach ($iterator as $file) {
-            //echo $file->getRealPath(); continue;
-            if (in_array(end(explode('.', $file->getFileName())), $filter)) {
-                $file_name_without_ext = substr(
-                    $file->getFileName(), 
-                    0, 
-                    strpos($file->getFileName(), ".")
-                );
-                
-                if (strtolower($class_name) == $file_name_without_ext) {
-                    require_once $file->getRealPath();
-                }
-            }
-        }
-    }
-    
-    /**
      * Get a named action controller object
      * 
      * @param string $controller_name
@@ -136,7 +58,7 @@ class PHPFrame_MVCFactory
             throw new LogicException($msg);
         }
         
-        return PHPFrame_ActionController::getInstance($controller_name);
+        return $reflection_obj->newInstance();
     }
     
     /**

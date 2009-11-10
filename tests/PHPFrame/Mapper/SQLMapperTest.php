@@ -7,19 +7,21 @@ require_once $PHPFrame;
 
 class PHPFrame_SQLMapperTest extends PHPUnit_Framework_TestCase
 {
-	private $_target_class;
-	private $_db_file;
+    private $_target_class;
+    private $_db_file;
     private $_mapper;
     private $_obj;
     
     public function __construct()
     {
-    	$this->_target_class = "PHPFrame_ACL";
-    	$this->_db_file      = dirname(__FILE__).DS."test.sqlite";
+        $this->_target_class = "PHPFrame_ACL";
+        $this->_db_file      = dirname(__FILE__).DS."test.sqlite";
     }
     
     public function setUp()
     {
+    	PHPFrame::setTestMode(true);
+    	
         // Delete the db file if it already exists
         if (is_file($this->_db_file)) {
             unlink($this->_db_file);
@@ -35,7 +37,7 @@ class PHPFrame_SQLMapperTest extends PHPUnit_Framework_TestCase
         
         // Drop the table if it exists
         if ($db->hasTable($this->_target_class)) {
-        	$db->dropTable($this->_target_class);
+            $db->dropTable($this->_target_class);
         }
         
         // Create db table
@@ -48,8 +50,8 @@ class PHPFrame_SQLMapperTest extends PHPUnit_Framework_TestCase
     
     public function tearDown()
     {
-    	unset($this->_obj);
-    	unset($this->_mapper);
+        unset($this->_obj);
+        unset($this->_mapper);
     }
     
     public function test_insert()

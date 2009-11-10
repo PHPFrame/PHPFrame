@@ -25,7 +25,7 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_XMLRPCClient implements PHPFrame_IClient
+class PHPFrame_XMLRPCClient extends PHPFrame_Client
 {
     
     /**
@@ -33,7 +33,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
      * 
      * @static
      * @access public
-     * @return PHPFrame_IClient|boolean Object instance of this class if correct 
+     * @return PHPFrame_Client|boolean Object instance of this class if correct 
      *                                         helper for client or FALSE 
      *                                         otherwise.
      * @since  1.0
@@ -83,7 +83,7 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
      * @return array  Unified Request Array
      * @since  1.0
      */
-    public function populateRequest(PHPFrame_RequestRegistry $request) 
+    public function populateRequest(PHPFrame_Request $request) 
     {
         global $HTTP_RAW_POST_DATA;
         
@@ -146,6 +146,15 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
         $response->setRenderer(new PHPFrame_RPCRenderer());     
     }
     
+    /**
+     * Handle controller redirection
+     * 
+     * @param string $url
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
     public function redirect($url)
     {
         // Reset the request
@@ -258,8 +267,8 @@ class PHPFrame_XMLRPCClient implements PHPFrame_IClient
      */
      private function _parseXMLRPCRecurse($domXPath, $node) {
          if (!(($node instanceof DOMNode) && $node->nodeName=='value')) {
-             $msg  = "Invalid parameter type, nodes must be of type DOMNode and ";
-             $msg .= "must be a value node!";
+             $msg  = "Invalid parameter type, nodes must be of type DOMNode ";
+             $msg .= "and must be a value node!";
              throw new InvalidArgumentException($msg);
          }
          

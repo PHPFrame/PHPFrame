@@ -1,22 +1,14 @@
 <?php
 class ManController extends PHPFrame_ActionController
 {
-    private $_install_dir=null;
-    
-    public function __construct($install_dir=null)
+    public function __construct()
     {
-        if (is_null($install_dir)) {
-            $this->_install_dir = getcwd();
-        } else {
-            $this->_install_dir = (string) trim($install_dir);
-        }
-        
         parent::__construct("index");
     }
     
     public function index()
     {
-        $app_doc = new PHPFrame_AppDoc($this->_install_dir);
+        $app_doc = new PHPFrame_AppDoc($this->app()->getInstallDir());
         
         $str  = "To use the command line tool you will need to specify at ";
         $str .= "least a controller,\nand normally also an action and a number";
@@ -28,7 +20,7 @@ class ManController extends PHPFrame_ActionController
         $str .= "in the config\nfile.\n\n";
         $str .= (string) $app_doc;
         
-        PHPFrame::Response()->getDocument()->setTitle("Usage instructions");
-        PHPFrame::Response()->getDocument()->setBody($str);
+        $this->response()->getDocument()->setTitle("Usage instructions");
+        $this->response()->getDocument()->setBody($str);
     }
 }

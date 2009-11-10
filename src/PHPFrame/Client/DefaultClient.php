@@ -26,14 +26,14 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_DefaultClient implements PHPFrame_IClient
+class PHPFrame_DefaultClient extends PHPFrame_Client
 {
     /**
      * Check if this is the correct helper for the client being used
      * 
      * @static
      * @access public
-     * @return PHPFrame_IClient|boolean Instance of this class if correct
+     * @return PHPFrame_Client|boolean Instance of this class if correct
      *                                  helper for client or false otherwise.
      */
     public static function detect() 
@@ -59,7 +59,7 @@ class PHPFrame_DefaultClient implements PHPFrame_IClient
      * @access public
      * @return array  Unified Request Array
      */
-    public function populateRequest(PHPFrame_RequestRegistry $request) 
+    public function populateRequest(PHPFrame_Request $request) 
     {
         // Get an instance of PHP Input filter
         $inputfilter = new InputFilter();
@@ -133,16 +133,5 @@ class PHPFrame_DefaultClient implements PHPFrame_IClient
         
         // Set response renderer
         $response->setRenderer(new PHPFrame_HTMLRenderer());
-    }
-    
-    public function redirect($url)
-    {
-        $url = trim((string) $url);
-        
-        if ($url) {
-            $url = PHPFrame_URLRewriter::rewriteURL($url);
-            header("Location: ".$url);
-            exit;
-        }
     }
 }

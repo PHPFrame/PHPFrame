@@ -39,73 +39,63 @@ class PHPFrame_URI
      * 
      * ie: http, https, ftp, ...
      * 
-     * @access private
      * @var    string
      */
-    private $_scheme=null;
+    private $_scheme = null;
     /**
      * The part of the URI string containing the user if any
      * 
-     * @access private
      * @var    string
      */
-    private $_user=null;
+    private $_user = null;
     /**
      * The part of the URI string containing the user password if any
      * 
-     * @access private
      * @var    string
      */
-    private $_pass=null;
+    private $_pass = null;
     /**
      * The host name
      * 
-     * @access private
      * @var    string
      */
-    private $_host=null;
+    private $_host = null;
     /**
      * Port number
      * 
-     * @access private
      * @var    int
      */
-    private $_port=null;
+    private $_port = null;
     /**
      * The server directory
      * 
-     * @access private
      * @var    string
      */
-    private $_dirname=null;
+    private $_dirname = null;
     /**
      * The sript name / file name without the extension
      * 
-     * @access private
      * @var    string
      */
-    private $_filename=null;
+    private $_filename = null;
     /**
      * The file extension
      * 
-     * @access private
      * @var    string
      */
-    private $_extension=null;
+    private $_extension = null;
     /**
      * An array containing the query string's name/value pairs.
      * 
-     * @access private
      * @var    array
      */
-    private $_query=array();
+    private $_query = array();
     /**
      * The fragment part of the URI
      * 
-     * @access private
      * @var    string
      */
-    private $_fragment=null;
+    private $_fragment = null;
     
     /**
      * Constructor
@@ -126,56 +116,136 @@ class PHPFrame_URI
     {
         if (empty($uri)) {
             $uri = $this->_getRequestURI();
-        }
+        } else {
+            $uri = trim((string) $uri);
             
+            // Validate the uri string passed in the constructor
+            $filter = new PHPFrame_URLFilter();
+            if ($filter->process($uri) === false) {
+                $msg  = "Invalid URI argument passed to ";
+                $msg .= get_class($this)."::".__FUNCTION__."().";
+                throw new InvalidArgumentException($msg);
+            }
+        }
+        
         $this->_parseURI($uri);
     }
     
+    /**
+     * Get the URI scheme.
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function getScheme()
     {
         return $this->_scheme;
     }
     
+    /**
+     * Get the username specified in URI if any.
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function getUser()
     {
         return $this->_user;
     }
     
+    /**
+     * Get the password specified in URI if any.
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function getPass()
     {
         return $this->_pass;
     }
     
+    /**
+     * Get the host
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function getHost()
     {
         return $this->_host;
     }
     
+    /**
+     * Get the port
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function getPort()
     {
         return $this->_port;
     }
     
+    /**
+     * Get the directory name
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function getDirname()
     {
         return $this->_dirname;
     }
     
+    /**
+     * Get the file name
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function getFilename()
     {
         return $this->_filename;
     }
     
+    /**
+     * Get the file extension
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function getExtension()
     {
         return $this->_extension;
     }
     
+    /**
+     * Get the query params
+     * 
+     * @access public
+     * @return array
+     * @since  1.0
+     */
     public function getQuery()
     {
         return $this->_query;
     }
     
+    /**
+     * Get the fragment
+     * 
+     * @access public
+     * @return string
+     * @since  1.0
+     */
     public function getFragment()
     {
         return $this->_fragment;
@@ -245,6 +315,11 @@ class PHPFrame_URI
      */
     private function _getRequestURI() 
     {
+        // If client is command line we use hardcoded value from config
+        if (!isset($_SERVER['HTTP_HOST'])) {
+            return;
+        }
+        
         // Determine if the request was over SSL (HTTPS)
         if (isset($_SERVER['HTTPS']) 
             && !empty($_SERVER['HTTPS']) 
@@ -253,11 +328,6 @@ class PHPFrame_URI
         } 
         else {
             $scheme = 'http';
-        }
-        
-        // If client is command line we use hardcoded value from config
-        if (!isset($_SERVER['HTTP_HOST'])) {
-            return PHPFrame::Config()->get("base_url");
         }
         
         $uri = $scheme.'://'.$_SERVER['HTTP_HOST'];
@@ -283,8 +353,6 @@ class PHPFrame_URI
      */
     private function _parseURI($uri) 
     {
-        $uri = (string) trim($uri);
-        
         // If URI is empty there's nothing to parse so we return
         if (empty($uri)) {
             return;
@@ -294,15 +362,13 @@ class PHPFrame_URI
         $array = parse_url($uri);
         
         $this->_scheme = $array['scheme'];
-        $this->_host = $array['host'];
+        $this->_host   = $array['host'];
         
         if (array_key_exists('port', $array)) {
             $this->_port = $array['port'];    
-        }
-        elseif ($this->_scheme == 'http') {
+        } elseif ($this->_scheme == 'http') {
             $this->_port = 80;
-        }
-        elseif ($this->_scheme == 'https') {
+        } elseif ($this->_scheme == 'https') {
             $this->_port = 443;
         }
         
@@ -323,8 +389,7 @@ class PHPFrame_URI
             // If no file name is specified (path ends in forward slash)
             if (preg_match('/^(.*)\/$/', $array['path'], $matches)) {
                 $this->_dirname = $matches[1];
-            }
-            else {
+            } else {
                 $pathinfo = pathinfo($array['path']);
                 if (array_key_exists('dirname', $pathinfo)) {
                     $this->_dirname = $pathinfo['dirname'];

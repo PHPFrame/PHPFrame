@@ -69,8 +69,8 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
                 $sql .= " INTEGER PRIMARY KEY ASC";
                 
             } else {
-            	$sql .= " ".$col->getType();
-            	
+                $sql .= " ".$col->getType();
+                
                 if (!$col->getNull()) {
                     $sql .= " NOT NULL";
                 }
@@ -152,11 +152,11 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
             
             preg_match('/DEFAULT\s\'(.*)\'/', $line, $matches);
             if (isset($matches[1])) {
-            	$col["default"] = $matches[1];
+                $col["default"] = $matches[1];
             }
             
             if (preg_match('/NOT NULL/', $line, $matches)) {
-            	$col["null"] = false;
+                $col["null"] = false;
             }
             
             if (preg_match('/PRIMARY/', $line, $matches)) {
@@ -173,10 +173,10 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
             $obj = new PHPFrame_DatabaseColumn(array("name"=>$col["name"]));
             
             try {
-            	if ($col["type"] == "INTEGER") {
-            	    $col["type"] = "int";
-            	}
-            	
+                if ($col["type"] == "INTEGER") {
+                    $col["type"] = "int";
+                }
+                
                 $obj->setType($col["type"]);
             } catch (Exception $e) {
                 $obj->setType(PHPFrame_DatabaseColumn::TYPE_TEXT);
@@ -184,7 +184,7 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
             $obj->setDefault($col["default"]);
             
             if (empty($col["null"])) {
-            	$col["null"] = null;
+                $col["null"] = null;
             }
             
             if (!is_null($col["extra"])) {

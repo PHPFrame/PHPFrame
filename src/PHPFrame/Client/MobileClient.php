@@ -25,18 +25,18 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_MobileClient implements PHPFrame_IClient
+class PHPFrame_MobileClient extends PHPFrame_Client
 {
-    /**
+	/**
      * Check if this is the correct helper for the client being used
      * 
      * @static
-     * @access    public
-     * @return    PHPFrame_IClient|boolean    Object instance of this class if correct helper for client or false otherwise.
+     * @access public
+     * @return PHPFrame_Client|boolean Instance of this class if correct 
+     *                                  helper for client or false otherwise.
      */
     public static function detect() 
     {
-        
         if (isset($_SERVER["HTTP_X_WAP_PROFILE"])) {
             return new self;
         }
@@ -48,15 +48,26 @@ class PHPFrame_MobileClient implements PHPFrame_IClient
         }
         
         if (isset($_SERVER["HTTP_USER_AGENT"])) {
-        
-            if (preg_match("/Creative\ AutoUpdate/i",$_SERVER["HTTP_USER_AGENT"])) {
+            $user_agent = $_SERVER["HTTP_USER_AGENT"];
+            if (preg_match("/Creative\ AutoUpdate/i", $user_agent)) {
                 return new self;
             }
         
-            $uamatches = array("midp", "j2me", "avantg", "docomo", "novarra", "palmos", "palmsource", "240x320", "opwv", "chtml", "pda", "windows\ ce", "mmp\/", "blackberry", "mib\/", "symbian", "wireless", "nokia", "hand", "mobi", "phone", "cdm", "up\.b", "audio", "SIE\-", "SEC\-", "samsung", "HTC", "mot\-", "mitsu", "sagem", "sony", "alcatel", "lg", "erics", "vx", "NEC", "philips", "mmm", "xx", "panasonic", "sharp", "wap", "sch", "rover", "pocket", "benq", "java", "pt", "pg", "vox", "amoi", "bird", "compal", "kg", "voda", "sany", "kdd", "dbt", "sendo", "sgh", "gradi", "jb", "\d\d\di", "moto");
+            $uamatches = array(
+                "midp", "j2me", "avantg", "docomo", "novarra", "palmos", 
+                "palmsource", "240x320", "opwv", "chtml", "pda", "windows\ ce", 
+                "mmp\/", "blackberry", "mib\/", "symbian", "wireless", "nokia", 
+                "hand", "mobi", "phone", "cdm", "up\.b", "audio", "SIE\-", 
+                "SEC\-", "samsung", "HTC", "mot\-", "mitsu", "sagem", "sony", 
+                "alcatel", "lg", "erics", "vx", "NEC", "philips", "mmm", "xx", 
+                "panasonic", "sharp", "wap", "sch", "rover", "pocket", "benq", 
+                "java", "pt", "pg", "vox", "amoi", "bird", "compal", "kg", 
+                "voda", "sany", "kdd", "dbt", "sendo", "sgh", "gradi", "jb", 
+                "\d\d\di", "moto"
+            );
         
             foreach ($uamatches as $uastring) {
-                if (preg_match("/".$uastring."/i",$_SERVER["HTTP_USER_AGENT"])) {
+                if (preg_match("/".$uastring."/i", $user_agent)) {
                     return new self;
                 }
             }
@@ -82,7 +93,7 @@ class PHPFrame_MobileClient implements PHPFrame_IClient
      * @access    public
      * @return    array    Unified Request Array
      */
-    public function populateRequest(PHPFrame_RequestRegistry $request) 
+    public function populateRequest(PHPFrame_Request $request) 
     {
     
         $request = array();
@@ -92,8 +103,8 @@ class PHPFrame_MobileClient implements PHPFrame_IClient
             
         // Process incoming request arrays and store filtered data in class
         $request['request'] = $inputfilter->process($_REQUEST);
-        $request['get'] = $inputfilter->process($_GET);
-        $request['post'] = $inputfilter->process($_POST);
+        $request['get']     = $inputfilter->process($_GET);
+        $request['post']    = $inputfilter->process($_POST);
             
         // Once the superglobal request arrays are processed we unset them
         // to prevent them being used from here on
@@ -105,9 +116,9 @@ class PHPFrame_MobileClient implements PHPFrame_IClient
     /**
      * Prepare response
      * 
-     * This method is invoked by the front controller before invoking the requested
-     * action in the action controller. It gives the client an opportunity to do 
-     * something before the component is executed.
+     * This method is invoked by the front controller before invoking the 
+     * requested action in the action controller. It gives the client an 
+     * opportunity to do something before the component is executed.
      * 
      * @param PHPFrame_Response $response The response object to prepare.
      * 
@@ -122,13 +133,5 @@ class PHPFrame_MobileClient implements PHPFrame_IClient
         
         // Set response renderer
         $response->setRenderer(new PHPFrame_HTMLRenderer());
-    }
-    
-    public function redirect($url)
-    {
-        $url = (string) trim($url);
-        
-        header("Location: ".$url);
-        exit;
     }
 }

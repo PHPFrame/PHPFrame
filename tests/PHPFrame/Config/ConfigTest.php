@@ -11,13 +11,13 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
     
     public function __construct()
     {
-    	$this->_config_file  = PEAR_Config::singleton()->get("data_dir");
+        $this->_config_file  = PEAR_Config::singleton()->get("data_dir");
         $this->_config_file .= DS."PHPFrame".DS."etc".DS."phpframe.ini";
     }
     
     public function setUp()
     {
-    	
+        
         $this->_config = new PHPFrame_Config($this->_config_file);
     }
     
@@ -78,6 +78,21 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertContains("db", $sections);
         $this->assertContains("smtp", $sections);
         $this->assertContains("imap", $sections);
+    }
+    
+    public function test_getSection()
+    {
+        $section = $this->_config->getSection("smtp");
+        $this->assertType("array", $section);
+        
+        $this->assertArrayHasKey("mailer", $section);
+        $this->assertArrayHasKey("host", $section);
+        $this->assertArrayHasKey("port", $section);
+        $this->assertArrayHasKey("auth", $section);
+        $this->assertArrayHasKey("user", $section);
+        $this->assertArrayHasKey("pass", $section);
+        $this->assertArrayHasKey("fromaddress", $section);
+        $this->assertArrayHasKey("fromname", $section);
     }
     
     public function test_getKeys()

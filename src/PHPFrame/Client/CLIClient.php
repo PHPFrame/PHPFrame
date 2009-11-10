@@ -25,14 +25,14 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_CLIClient implements PHPFrame_IClient
+class PHPFrame_CLIClient extends PHPFrame_Client
 {
     /**
      * Check if this is the correct helper for the client being used
      * 
      * @static
      * @access public
-     * @return PHPFrame_IClient|boolean Instance of this class if correct helper
+     * @return PHPFrame_Client|boolean Instance of this class if correct helper
      *                                  for client or FALSE otherwise.
      * @since  1.0
      */
@@ -66,13 +66,25 @@ class PHPFrame_CLIClient implements PHPFrame_IClient
      * @return array  Unified Request Array
      * @since  1.0
      */
-    public function populateRequest(PHPFrame_RequestRegistry $request) 
+    public function populateRequest(PHPFrame_Request $request) 
     {
-        // create the parser
-        $parser = new Console_CommandLine(array(
-            'description' => PHPFrame::Config()->get("app_name"),
-            'version'     => PHPFrame::Config()->get("version")
-        ));
+    	// Automatically log in as system user
+        $user = new PHPFrame_User();
+        $user->setId(1);
+        $user->setGroupId(1);
+        $user->setUserName('system');
+        $user->setFirstName('System');
+        $user->setLastName('User');
+        
+        // Store user in session
+        $session = PHPFrame::Session();
+        $session->setUser($user);
+        
+        // Automatically set session token in request to allow forms
+        $request->setParam($session->getToken(), 1);
+        
+        // create the CLI parser
+        $parser = new Console_CommandLine();
         
         // add an option to delete original files after zipping
         $parser->addOption(
@@ -188,21 +200,6 @@ class PHPFrame_CLIClient implements PHPFrame_IClient
      */
     public function prepareResponse(PHPFrame_Response $response) 
     {
-        // Automatically log in as system user
-        $user = new PHPFrame_User();
-        $user->setId(1);
-        $user->setGroupId(1);
-        $user->setUserName('system');
-        $user->setFirstName('System');
-        $user->setLastName('User');
-        
-        // Store user in session
-        $session = PHPFrame::Session();
-        $session->setUser($user);
-        
-        // Automatically set session token in request so that forms will be allowed
-        PHPFrame::Request()->setParam($session->getToken(), 1);
-        
         // Set document as response content
         $response->setDocument(new PHPFrame_PlainDocument());
         

@@ -62,14 +62,14 @@ class PHPFrame_Mapper
         $table_name=null
     )
     {
-    	if ($db_or_path instanceof PHPFrame_Database) {
-    		$factory_class = "PHPFrame_SQLPersistenceFactory";
-    	} elseif (is_string($db_or_path)) {
-    		$factory_class = "PHPFrame_XMLPersistenceFactory";
-    	} else {
-    	    $msg = "Storage mechanism not supported by mapper.";
+        if ($db_or_path instanceof PHPFrame_Database) {
+            $factory_class = "PHPFrame_SQLPersistenceFactory";
+        } elseif (is_string($db_or_path)) {
+            $factory_class = "PHPFrame_XMLPersistenceFactory";
+        } else {
+            $msg = "Storage mechanism not supported by mapper.";
             throw new LogicException($msg);
-    	}
+        }
         
         $this->_factory = new $factory_class(
             $target_class, 
@@ -92,8 +92,7 @@ class PHPFrame_Mapper
         $obj = $this->_factory->getAssembler()->findOne($id_obj);
         
         if (
-            PHPFrame::getRunLevel() > 1 
-            && $obj instanceof PHPFrame_PersistentObject
+            $obj instanceof PHPFrame_PersistentObject
             && !$obj->canRead(PHPFrame::Session()->getUser())
         ) {
             throw new PHPFrame_AccessDeniedException();
@@ -116,11 +115,8 @@ class PHPFrame_Mapper
         $collection = $this->_factory->getAssembler()->find($id_obj);
         
         foreach ($collection as $obj) {
-            if (
-                PHPFrame::getRunLevel() > 1 
-                && !$obj->canRead(PHPFrame::Session()->getUser())
-            ) {
-                throw new PHPFrame_AccessDeniedException();
+            if (!$obj->canRead(PHPFrame::Session()->getUser())) {
+                throw new PHPFrame_AccessDeniedException("Access denied");
             }
         }
         
@@ -138,11 +134,8 @@ class PHPFrame_Mapper
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
-        if (
-            PHPFrame::getRunLevel() > 1 
-            && !$obj->canWrite(PHPFrame::Session()->getUser())
-        ) {
-            throw new PHPFrame_AccessDeniedException();
+        if (!$obj->canWrite(PHPFrame::Session()->getUser())) {
+            throw new PHPFrame_AccessDeniedException("Access to object denied!");
         }
         
         return $this->_factory->getAssembler()->insert($obj);
@@ -159,10 +152,7 @@ class PHPFrame_Mapper
      */
     public function delete(PHPFrame_PersistentObject $obj)
     {
-        if (
-            PHPFrame::getRunLevel() > 1 
-            && !$obj->canWrite(PHPFrame::Session()->getUser())
-        ) {
+        if (!$obj->canWrite(PHPFrame::Session()->getUser())) {
             throw new PHPFrame_AccessDeniedException();
         }
         
@@ -190,7 +180,7 @@ class PHPFrame_Mapper
      */
     public function isSQL()
     {
-    	return ($this->_factory instanceof PHPFrame_SQLPersistenceFactory);
+        return ($this->_factory instanceof PHPFrame_SQLPersistenceFactory);
     }
     
     /**
@@ -202,6 +192,6 @@ class PHPFrame_Mapper
      */
     public function isXML()
     {
-    	return ($this->_factory instanceof PHPFrame_XMLPersistenceFactory);
+        return ($this->_factory instanceof PHPFrame_XMLPersistenceFactory);
     }
 }

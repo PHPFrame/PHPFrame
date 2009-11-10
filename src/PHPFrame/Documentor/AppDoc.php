@@ -3,9 +3,9 @@ class PHPFrame_AppDoc implements IteratorAggregate
 {
     private $_controllers = array();
     
-    public function __construct()
+    public function __construct($install_dir)
     {
-        $controllers_dir = PHPFRAME_INSTALL_DIR.DS."src".DS."controllers";
+        $controllers_dir = $install_dir.DS."src".DS."controllers";
         $dir_iterator    = new RecursiveDirectoryIterator($controllers_dir);
         $it_iterator     = new RecursiveIteratorIterator($dir_iterator);
         

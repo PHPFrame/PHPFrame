@@ -31,6 +31,12 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      * @var PHPFrame_ExceptionHandler
      */
     private static $_instance = null;
+    /**
+     * Should exceptions be displayed?
+     * 
+     * @var bool
+     */
+    private $_display_exceptions = true;
     
     /**
      * We declare a private constructor to avoid instantiation from client code 
@@ -138,32 +144,39 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
         $str .= "Code: ".$exception->getCode()."\n";
         $str .= $exception->getTraceAsString();
         
-        // Display the exception details if debugging is enabled
-        $config = PHPFrame::Config();
-        $display_exceptions = $config->get("debug.display_exceptions");
-        if ($display_exceptions) {
-            $response_doc = PHPFrame::Response()->getDocument();
-            if ($response_doc instanceof PHPFrame_HTMLDocument) {
-                $str = '<pre>'.$str;
-            }
+        // Notify event to observers
+        self::instance()->notifyEvent($str, PHPFrame_Subject::EVENT_TYPE_ERROR);
+        
+        // Display the exception details if applicable
+        if (self::instance()->_display_exceptions) {
+        	$response = new PHPFrame_Response();
+            $response->setDocument(new PHPFrame_PlainDocument());
             
             $status_code = $exception->getCode();
             if (!empty($status_code) && $status_code > 0) {
-                PHPFrame::Response()->setStatusCode($status_code);
+                $response->setStatusCode($status_code);
             } else {
-                PHPFrame::Response()->setStatusCode(500);
+                $response->setStatusCode(500);
             }
             
-            if (!$response_doc instanceof PHPFrame_Document) {
-                PHPFrame::Response()->setDocument(new PHPFrame_PlainDocument());
-            }
-            
-            PHPFrame::Response()->getDocument()->setBody($str, false);
-            PHPFrame::Response()->send();
+            $response->getDocument()->setBody($str, false);
+            $response->send();
         }
         
-        // Notify event to observers
-        self::instance()->notifyEvent($str, PHPFrame_Subject::EVENT_TYPE_ERROR);
         exit;
+    }
+    
+    /**
+     * Set boolean to indicate whether or not exceptions should be displayed.
+     * 
+     * @param $bool
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public static function setDisplayExceptions($bool)
+    {
+    	self::instance()->_display_exceptions = (bool) $bool;
     }
 }

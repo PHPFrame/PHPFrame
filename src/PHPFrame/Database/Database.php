@@ -300,13 +300,13 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     
     public function hasTable($tbl_name)
     {
-    	foreach ($this->getTables() as $table) {
-    		if ($table->getName() == $tbl_name) {
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+        foreach ($this->getTables() as $table) {
+            if ($table->getName() == $tbl_name) {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     /**

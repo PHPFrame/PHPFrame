@@ -17,7 +17,7 @@
  * This class handles the plugin hooks and allows plugins to register to 
  * listen for the hook events.
  * 
- * This class is instantiated and used by the FrontController.
+ * This class is instantiated and used by the Application class.
  * 
  * @category PHPFrame
  * @package  Ext

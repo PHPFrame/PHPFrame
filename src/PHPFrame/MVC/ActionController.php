@@ -36,17 +36,17 @@
 abstract class PHPFrame_ActionController extends PHPFrame_Subject
 {
     /**
-     * Instances of its concrete children
-     * 
-     * @var array of objects of type PHPFrame_ActionController
-     */
-    private static $_instances = array();
-    /**
      * Default controller action
      * 
      * @var string
      */
     private $_default_action = null;
+    /**
+     * Reference to application object for which controller will execute action
+     * 
+     * @var PHPFrame_Application
+     */
+    private $_app;
     /**
      * A string containing a url to be redirected to. Leave empty for no redirection.
      *
@@ -67,67 +67,43 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * @param string $default_action A string with the default action for a 
      *                               concrete action controller.
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
-    protected function __construct($default_action) 
+    public function __construct($default_action) 
     {
         // Set default action property
         $this->_default_action = (string) $default_action;
-        
-        // Set profiler milestone
-        PHPFrame_Profiler::instance()->addMilestone();
-    }
-    
-    /**
-     * Get Instance
-     * 
-     * @param string $controller_name A string with the name of the concrete
-     *                                action controller.
-     * 
-     * @access public
-     * @return PHPFrame_ActionController
-     * @since  1.0
-     */
-    public static function getInstance($controller_name) 
-    {
-        $class_name = ucfirst($controller_name)."Controller";
-        
-        $is_set  = isset(self::$_instances[$class_name]);
-        $is_type = @(self::$_instances[$class_name] instanceof self);
-        
-        if (!$is_set || !$is_type) {
-            self::$_instances[$class_name] = new $class_name;
-        }
-        
-        return self::$_instances[$class_name];
     }
     
     /**
      * This method executes a given action (invokes a named member method).
-     *
+     * 
+     * @param PHPFrame_Application $app
+     * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function execute() 
+    public function execute(PHPFrame_Application $app) 
     {
+    	$this->_app = $app;
+    	
         // Get action from the request
-        $request_action = PHPFrame::Request()->getAction();
+        $request_action = $app->getRequest()->getAction();
         
         // If no specific action has been requested we use default action
         if (empty($request_action)) {
             $action = $this->_default_action;
-            PHPFrame::Request()->setAction($action);
+            $app->getRequest()->setAction($action);
         } else {
             $action = $request_action;
         }
         
         // Check permissions before we execute
-        $controller  = PHPFrame::Request()->getControllerName();
+        $controller  = $app->getRequest()->getControllerName();
+        $permissions = $app->getPermissions();
         $groupid     = PHPFrame::Session()->getGroupId();
-        $permissions = PHPFrame::AppRegistry()->getPermissions();
         
         if ($permissions->authorise($controller, $action, $groupid) === true) {
             // Invoke controller action
@@ -142,6 +118,47 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         
         // Redirect if set by the controller
         $this->redirect();
+    }
+    
+    /**
+     * Get reference to application object
+     * 
+     * @return PHPFrame_Application
+     * @since  1.0
+     */
+    protected function app()
+    {
+    	return $this->_app;
+    }
+    
+    protected function request()
+    {
+    	return $this->app()->getRequest();
+    }
+    
+    protected function response()
+    {
+    	return $this->app()->getResponse();
+    }
+    
+    protected function config()
+    {
+    	return $this->app()->getConfig();
+    }
+    
+    protected function db()
+    {
+    	return $this->app()->getDB();
+    }
+    
+    protected function logger()
+    {
+    	return $this->app()->getLogger();
+    }
+    
+    protected function session()
+    {
+    	return PHPFrame::Session();
     }
     
     /**
@@ -255,7 +272,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         $client = PHPFrame::Session()->getClient();
         
         // Check that we got the right type
-        if (!$client instanceof PHPFrame_IClient) {
+        if (!$client instanceof PHPFrame_Client) {
             $msg = "Action controller could not redirect using client object";
             throw new RuntimeException($msg);
         }
@@ -357,7 +374,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
                 $default_value = null;
             }
             
-            $request_param = PHPFrame::Request()->getParam(
+            $request_param = $this->app()->getRequest()->getParam(
                 $param->getName(), 
                 $default_value
             );
@@ -365,8 +382,8 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
             // Check that required parameters are included in request
             if (!$param->isDefaultValueAvailable()) {
                 if (is_null($request_param)) {
-                    $msg  = "Required argument '".$param->getName()."' not passed ";
-                    $msg .= "to ".get_class($this)."::".$action."().";
+                    $msg  = "Required argument '".$param->getName()."' not ";
+                    $msg .= "passed to ".get_class($this)."::".$action."().";
                     throw new BadMethodCallException($msg, 400);
                 }
             }

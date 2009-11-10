@@ -7,24 +7,26 @@ require_once $PHPFrame;
 
 class PHPFrame_XMLMapperTest extends PHPUnit_Framework_TestCase
 {
-	private $_mapper;
-	private $_target_class = "PHPFrame_ACL";
-	private $_obj;
-	
+    private $_mapper;
+    private $_target_class = "PHPFrame_ACL";
+    private $_obj;
+    
     public function setUp()
     {
+    	PHPFrame::setTestMode(true);
+        
     	// Delete the XML file if it already exists
-    	$xml_file = dirname(__FILE__).DS.$this->_target_class.".xml";
-    	if (is_file($xml_file)) {
-    		unlink($xml_file);
-    	}
-    	
-    	// Get mapper and persistent object fixtures
-    	$this->_mapper = new PHPFrame_Mapper($this->_target_class, dirname(__FILE__));
-    	$this->_obj    = new $this->_target_class(array(
-    	    "groupid"    => 1, 
-    	    "controller" => "dummy"
-    	));
+        $xml_file = dirname(__FILE__).DS.$this->_target_class.".xml";
+        if (is_file($xml_file)) {
+            unlink($xml_file);
+        }
+        
+        // Get mapper and persistent object fixtures
+        $this->_mapper = new PHPFrame_Mapper($this->_target_class, dirname(__FILE__));
+        $this->_obj    = new $this->_target_class(array(
+            "groupid"    => 1, 
+            "controller" => "dummy"
+        ));
     }
     
     public function tearDown()
@@ -40,28 +42,28 @@ class PHPFrame_XMLMapperTest extends PHPUnit_Framework_TestCase
     
     public function test_delete()
     {
-    	// Insert some objects
-    	$this->_mapper->insert($this->_obj);
-    	$this->_mapper->insert(clone $this->_obj);
-    	$this->_mapper->insert(clone $this->_obj);
-    	
-    	// Count stored objects and make sure we got three
-    	$count = count($this->_mapper->find());
-    	$this->assertEquals(3, $count);
-    	
-    	// Delete object
-    	$this->_mapper->delete($this->_obj);
-    	
-    	// Count objs again and now we should have two
-    	$count = count($this->_mapper->find());
-    	$this->assertEquals(2, $count);
+        // Insert some objects
+        $this->_mapper->insert($this->_obj);
+        $this->_mapper->insert(clone $this->_obj);
+        $this->_mapper->insert(clone $this->_obj);
+        
+        // Count stored objects and make sure we got three
+        $count = count($this->_mapper->find());
+        $this->assertEquals(3, $count);
+        
+        // Delete object
+        $this->_mapper->delete($this->_obj);
+        
+        // Count objs again and now we should have two
+        $count = count($this->_mapper->find());
+        $this->assertEquals(2, $count);
     }
     
     public function test_getIdObject()
     {
-    	$this->setExpectedException('LogicException');
-    	
-    	$this->assertType("PHPFrame_XMLIdObject", $this->_mapper->getIdObject());
+        $this->setExpectedException('LogicException');
+        
+        $this->assertType("PHPFrame_XMLIdObject", $this->_mapper->getIdObject());
     }
     
     public function test_find()

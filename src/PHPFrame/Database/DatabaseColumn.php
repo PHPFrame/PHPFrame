@@ -42,9 +42,9 @@ class PHPFrame_DatabaseColumn implements IteratorAggregate
         }
         
         if (is_null($this->_name)) {
-        	$msg  = "Option 'name' is required in ";
-        	$msg .= get_class($this)."::".__FUNCTION__."().";
-        	throw new InvalidArgumentException($msg);
+            $msg  = "Option 'name' is required in ";
+            $msg .= get_class($this)."::".__FUNCTION__."().";
+            throw new InvalidArgumentException($msg);
         }
     }
     

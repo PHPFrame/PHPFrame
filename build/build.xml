@@ -6,7 +6,7 @@
     </fileset>
     
     <fileset dir="${project.basedir}/tests" id="testfiles">
-    	<include name="**/*Test.php"/>
+        <include name="**/*Test.php"/>
     </fileset>
     
     <property name="build.dir" value="${project.basedir}/build" />

@@ -10,28 +10,14 @@
     <target name="prepare">
         <delete dir="${doc.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
         <mkdir dir="${doc.dir}"/>
-        
-        <delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
-        <mkdir dir="${tmp.dir}"/>
     </target>
     
     <!-- copy files to tmp dir for publishing -->
     <target name="copy">
-        <!-- copy src files -->
+        <!-- copy tutorials files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${project.basedir}">
-                <include name="examples/**" />
-                <include name="src/**" />
                 <include name="tutorials/**" />
-            </fileset>
-        </copy>
-        
-        <!-- copy info files -->
-        <copy todir="${tmp.dir}" overwrite="true">
-            <fileset dir="${project.basedir}">
-                <include name="CREDITS" />
-                <include name="LICENSE" />
-                <include name="README" />
             </fileset>
         </copy>
     </target>
@@ -43,7 +29,7 @@
                     -d ${tmp.dir} \
                     -t ${doc.dir} \
                     -ric README,LICENSE,CREDITS \
-                    -i examples/ \
+                    -i data/ examples/ scripts/ \
                     -s on \
                     -dn PHPFrame \
                     -o HTML:Smarty:PHP \

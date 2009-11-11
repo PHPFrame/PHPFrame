@@ -72,7 +72,7 @@
             </fileset>
         </copy>
         
-        <!-- copy script files -->
+        <!-- copy scripts files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${project.basedir}/scripts">
                 <include name="**" />

@@ -38,7 +38,7 @@
                     -d ${tmp.dir} \
                     -t ${doc.dir} \
                     -ric README,LICENSE,CREDITS \
-                    -i data/ examples/ scripts/ \
+                    -i examples/ \
                     -s on \
                     -dn PHPFrame \
                     -o HTML:Smarty:PHP \

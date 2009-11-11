@@ -250,6 +250,12 @@ class PHPFrame_Application
         }
     }
     
+    /**
+     * Get absolute path to installation directory
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getInstallDir()
     {
         return $this->_install_dir;
@@ -914,7 +920,7 @@ class PHPFrame_Application
                 echo $profiler_out;
             }
             
-            // Dump profiler output to file is outdir is specified in config
+            // Dump profiler output to file if outdir is specified in config
             if (!empty($profiler_outdir)) {
                 $profiler_outfile = $profiler_outdir.DS.time().".ppo";
                 $file_obj = new PHPFrame_FileObject($profiler_outfile, "w");

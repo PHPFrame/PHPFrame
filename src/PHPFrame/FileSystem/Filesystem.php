@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   FileSystem
  * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 E-noise.com Limited
+ * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -250,7 +250,7 @@ class PHPFrame_Filesystem
         
         // Check for special chars
         $special_chars = array(
-            '£','$','%','^','&','*','?','!','(',')','[',']','{','}',',','/','\\'
+            'ï¿½','$','%','^','&','*','?','!','(',')','[',']','{','}',',','/','\\'
         );
         foreach ($special_chars as $special_char) {
             $file_name = str_replace($special_char, '', $file_name);

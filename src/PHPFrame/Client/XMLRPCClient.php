@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   Client
  * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 E-noise.com Limited
+ * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -569,7 +569,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
                 $user->setLastName('User');
                 
                 // Store user in session
-                $session = PHPFrame::Session();
+                $session = PHPFrame::getSession();
                 $session->setUser($user);
                 
                 // Automatically set session token in request so that forms will 
@@ -604,7 +604,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         // Check permissions before we execute
         $controller  = PHPFrame::Request()->getControllerName();
         $action      = PHPFrame::Request()->getAction();
-        $groupid     = PHPFrame::Session()->getGroupId();
+        $groupid     = PHPFrame::getSession()->getGroupId();
         $permissions = PHPFrame::AppRegistry()->getPermissions();
         
         if ($permissions->authorise($controller, $action, $groupid) !== true) {

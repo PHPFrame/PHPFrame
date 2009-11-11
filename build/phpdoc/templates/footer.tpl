@@ -90,7 +90,7 @@
  | 
 <a href="http://www.phpframe.org/sitemap">Sitemap</a>
  | 
-Copyright &copy; 2009 E-noise.com Limited
+Copyright &copy; 2009 The PHPFrame Group
 
 </div>
 <!-- ******************** end #footer ******************** -->

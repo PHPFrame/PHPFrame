@@ -136,7 +136,7 @@ PHPFrame::Env();
 
 print_r(PHPFrame::AppRegistry());
 
-print_r(PHPFrame::Session());
+print_r(PHPFrame::getSession());
 
 print_r(PHPFrame::Request());
 ]]>

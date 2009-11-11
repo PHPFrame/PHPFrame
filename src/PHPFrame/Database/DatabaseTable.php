@@ -1,4 +1,29 @@
 <?php
+/**
+ * PHPFrame/Database/DatabaseTable.php
+ * 
+ * PHP version 5
+ * 
+ * @category  PHPFrame
+ * @package   Database
+ * @author    Luis Montero <luis.montero@e-noise.com>
+ * @copyright 2009 The PHPFrame Group
+ * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since     1.0
+ */
+
+/**
+ * Database Table Class
+ * 
+ * @category PHPFrame
+ * @package  Database
+ * @author   Luis Montero <luis.montero@e-noise.com>
+ * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @since    1.0
+ */
 class PHPFrame_DatabaseTable
 {
     private $_db, $_name, $_columns;

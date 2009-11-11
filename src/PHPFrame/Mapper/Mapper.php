@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   Mapper
  * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 E-noise.com Limited
+ * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -91,7 +91,7 @@ class PHPFrame_Mapper
         
         if (
             $obj instanceof PHPFrame_PersistentObject
-            && !$obj->canRead(PHPFrame::Session()->getUser())
+            && !$obj->canRead(PHPFrame::getSession()->getUser())
         ) {
             throw new PHPFrame_AccessDeniedException();
         }
@@ -113,7 +113,7 @@ class PHPFrame_Mapper
         $collection = $this->_factory->getAssembler()->find($id_obj);
         
         foreach ($collection as $obj) {
-            if (!$obj->canRead(PHPFrame::Session()->getUser())) {
+            if (!$obj->canRead(PHPFrame::getSession()->getUser())) {
                 throw new PHPFrame_AccessDeniedException("Access denied");
             }
         }
@@ -132,7 +132,7 @@ class PHPFrame_Mapper
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
-        if (!$obj->canWrite(PHPFrame::Session()->getUser())) {
+        if (!$obj->canWrite(PHPFrame::getSession()->getUser())) {
             throw new PHPFrame_AccessDeniedException("Access to object denied!");
         }
         
@@ -150,7 +150,7 @@ class PHPFrame_Mapper
      */
     public function delete(PHPFrame_PersistentObject $obj)
     {
-        if (!$obj->canWrite(PHPFrame::Session()->getUser())) {
+        if (!$obj->canWrite(PHPFrame::getSession()->getUser())) {
             throw new PHPFrame_AccessDeniedException();
         }
         

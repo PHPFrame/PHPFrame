@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   Mapper
  * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 E-noise.com Limited
+ * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -111,9 +111,9 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $this->addField("perms", 664,    false, new PHPFrame_IntFilter());
         
         // Set object ownership to current user if applicable
-//        if (PHPFrame::Session()->isAuth()) {
-//            $this->setOwner(PHPFrame::Session()->getUserId());
-//            $this->setGroup(PHPFrame::Session()->getGroupId());
+//        if (PHPFrame::getSession()->isAuth()) {
+//            $this->setOwner(PHPFrame::getSession()->getUserId());
+//            $this->setGroup(PHPFrame::getSession()->getGroupId());
 //            $this->setPerms(664);
 //        }
         

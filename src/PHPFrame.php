@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   PHPFrame
  * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 E-noise.com Limited
+ * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -213,14 +213,14 @@ class PHPFrame
      * @return string
      * @since  1.0
      */
-    public static function Version() 
+    public static function version() 
     {
         $str  = "PHPFrame ";
         $str .= self::RELEASE_VERSION." ".self::RELEASE_STABILITY;
         $str .= " (".self::BUILD_LABEL.": ".self::BUILD_DATE.") ";
         $str .= "\nAPI version: ";
         $str .= self::API_VERSION." ".self::API_STABILITY;
-        $str .= "\nCopyright (c) 2008-2009 E-noise.com Limited";
+        $str .= "\nCopyright (c) 2008-2009 The PHPFrame Group";
         
         return $str;
     }
@@ -233,7 +233,7 @@ class PHPFrame
      * @return PHPFrame_SessionRegistry
      * @since  1.0
      */
-    public static function Session() 
+    public static function getSession() 
     {
         if (self::isTestMode()) {
             return PHPFrame_MockSessionRegistry::getInstance();
@@ -250,7 +250,7 @@ class PHPFrame
      * @return void
      * @since  1.0
      */
-    public static function Boot()
+    public static function boot()
     {
         // Set paths to source and data directories
         self::$_src_dir   = PEAR_Config::singleton()->get("php_dir");
@@ -298,4 +298,4 @@ class PHPFrame
 }
 
 // Boot up the Framework!!!
-PHPFrame::Boot();
+PHPFrame::boot();

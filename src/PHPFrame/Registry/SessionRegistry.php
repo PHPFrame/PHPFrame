@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   Registry
  * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 E-noise.com Limited
+ * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -20,7 +20,7 @@
  * The session object is accessed from the PHPFrame facade class as follows:
  * 
  * <code>
- * $session = PHPFrame::Session();
+ * $session = PHPFrame::getSession();
  * </code>
  *
  * @category PHPFrame

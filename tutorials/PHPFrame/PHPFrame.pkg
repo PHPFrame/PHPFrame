@@ -20,17 +20,16 @@
     <title>The {@link PHPFrame} class</title>
     
     <para>
-    This class provides a number of static methods that serve as a simplified
-    interface or facade to PHPFrame's "global" objects, such as the registries 
-    ({@link PHPFrame::Request()}, {@link PHPFrame::Session()} and  
-    {@link PHPFrame::AppRegistry()}), the config ({@link PHPFrame::Config()}) 
-    and actions involving the state of the framework.
+    This class encapsulates information about the installed version of the 
+    framework.
     </para>
     
-    <link linkend="http://www.phpframe.org/uploads/content/Global-Objects.png">
-    <graphic fileref="http://www.phpframe.org/uploads/content/Global-Objects-min.png" />
-    </link>
-    
+    <para>
+    The PHPFrame class also provides access to the global Session object. The 
+    Session class will be refactored to be decoupled from the global scope. In 
+    the meantime the PHPFrame class has the PHPFrame::setTestMode() used to 
+    replace the "live" session with a mock session for unit testing.
+    </para>
 </refsect1>
 
 <refsect1 id="{@id examples}">
@@ -38,70 +37,15 @@
     
     <example>
         <title>
-        Accessing configuration information using {@link PHPFrame::Config()}
+        Accessing version information using {@link PHPFrame::version()}
         </title>
         <para>
-        PHPFrame::Config() returns the config object with the data as defined in 
-        etc/phpframe.ini. We can easily get configuration parameters from any scope 
-        in the application by using this method.
+        PHPFrame::version() returns a string with verbose info about the 
+        installed version of PHPFrame.
         </para>
         <programlisting>{@example PHPFrame/example-1.php 3}</programlisting>
-        
-        <screen>en-GB</screen>
-       
+        <screen>(Expected output)</screen>
     </example>
-    
-    <example>
-        <title>Accessing the registries</title>
-        <para>
-        In this example we first set the application environment. Then we get the 
-        permissions object from the AppRegistry as well as the group id of the 
-        current session's user.
-        </para>
-        <para>
-        With this data we can now easily check whether the current user is allowed 
-        to run a specific action in a given controller. Access levels are set up in 
-        an XML file stored in etc/acl.xml.
-        </para>
-        <programlisting>{@example PHPFrame/example-2.php 3}</programlisting>
-    </example>
-    
-    <example>
-        <title>Acquiring global database object</title>
-        <para>
-        In this example we get the global database object and run a query on a table 
-        called 'a_table'.
-        </para>
-        <para>
-        Note that we get the db object using {@link PHPFrame::DB()} without passing any 
-        argument, so the values defined in etc/phpframe/ini will be used. If you 
-        want to access different data sources to the one defined in the main config 
-        file of your app you can pass a DSN object {@link PHPFrame_DSN()} and 
-        optional username and password to {@link PHPFrame::DB()}; 
-        </para>
-        <programlisting>{@example PHPFrame/example-3.php 3}</programlisting>
-        <screen>
-<![CDATA[
-Array
-(
-    [0] => Array
-        (
-            [id] => 1
-            [name] => An entry
-        )
-
-    [1] => Array
-        (
-            [id] => 2
-            [name] => Another entry
-        )
-
-)
-]]>
-        </screen>
-       
-    </example>
-    
 </refsect1>
 
 </refentry>

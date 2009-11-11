@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   MVC
  * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 E-noise.com Limited
+ * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -103,13 +103,13 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         // Check permissions before we execute
         $controller  = $app->getRequest()->getControllerName();
         $permissions = $app->getPermissions();
-        $groupid     = PHPFrame::Session()->getGroupId();
+        $groupid     = PHPFrame::getSession()->getGroupId();
         
         if ($permissions->authorise($controller, $action, $groupid) === true) {
             // Invoke controller action
             $this->_invokeAction($action);
         } else {
-            if (!PHPFrame::Session()->isAuth()) {
+            if (!PHPFrame::getSession()->isAuth()) {
                 $this->setRedirect('index.php?controller=login');
             } else {
                 $this->raiseWarning('Permission denied.');
@@ -158,7 +158,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     
     protected function session()
     {
-        return PHPFrame::Session();
+        return PHPFrame::getSession();
     }
     
     /**
@@ -269,7 +269,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     protected function redirect() 
     {
         // Get client object from session
-        $client = PHPFrame::Session()->getClient();
+        $client = PHPFrame::getSession()->getClient();
         
         // Check that we got the right type
         if (!$client instanceof PHPFrame_Client) {

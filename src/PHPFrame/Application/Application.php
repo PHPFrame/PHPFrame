@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   Application
  * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 E-noise.com Limited
+ * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -570,7 +570,7 @@ class PHPFrame_Application
             $request = new PHPFrame_Request();
             
             // populate request using client
-            PHPFrame::Session()->getClient()->populateRequest($request);
+            PHPFrame::getSession()->getClient()->populateRequest($request);
             
             $this->setRequest($request);
         }
@@ -595,7 +595,7 @@ class PHPFrame_Application
             );
             
             // Prepare response using client
-            PHPFrame::Session()->getClient()->prepareResponse($response);
+            PHPFrame::getSession()->getClient()->prepareResponse($response);
             
             $this->setResponse($response);
         }
@@ -871,7 +871,7 @@ class PHPFrame_Application
             $controller = PHPFrame_MVCFactory::getActionController($controller_name);
             
             // Attach observers to the action controller
-            $controller->attach(PHPFrame::Session()->getSysevents());
+            $controller->attach(PHPFrame::getSession()->getSysevents());
             
             // Execute the action in the given controller
             $controller->execute($this);
@@ -911,7 +911,7 @@ class PHPFrame_Application
             
             // Display output if set in config
             if ($profiler_display) {
-                if (PHPFrame::Session()->getClientName() != "cli") {
+                if (PHPFrame::getSession()->getClientName() != "cli") {
                     echo "<pre>";
                 }
                 

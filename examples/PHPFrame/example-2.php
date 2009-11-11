@@ -8,7 +8,7 @@ PHPFrame::Env();
 
 // Get permissions object and current user's group id from registries
 $permissions = PHPFrame::AppRegistry()->getPermissions();
-$group_id    = PHPFrame::Session()->getGroupId();
+$group_id    = PHPFrame::getSession()->getGroupId();
 
 // Check whether current user is allowed to call an action called 'save' in a 
 // controller called 'content'

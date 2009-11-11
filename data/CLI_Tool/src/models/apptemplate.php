@@ -52,7 +52,7 @@ class AppTemplate
     {
         $cmd = "rm -rf ".$this->_install_dir.DS."*";
         $msg = "Removing app. Using command \"".$cmd."\"...";
-        PHPFrame::Session()->getSysevents()
+        PHPFrame::getSession()->getSysevents()
                            ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         $exec = new PHPFrame_Exec($cmd);
@@ -87,7 +87,7 @@ class AppTemplate
         PHPFrame_Filesystem::ensureWritableDir($download_tmp);
         
         $msg = "Attempting to download ".$url."...";
-        PHPFrame::Session()->getSysevents()
+        PHPFrame::getSession()->getSysevents()
                            ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         // Create the http request
@@ -102,7 +102,7 @@ class AppTemplate
         }
         
         $msg = "Extracting archive...";
-        PHPFrame::Session()->getSysevents()
+        PHPFrame::getSession()->getSysevents()
                            ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         // Extract archive in install dir
@@ -119,7 +119,7 @@ class AppTemplate
         }
         
         $msg = "Creating configuration file...";
-        PHPFrame::Session()->getSysevents()
+        PHPFrame::getSession()->getSysevents()
                            ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         // Instanciate new config object
@@ -150,7 +150,7 @@ class AppTemplate
         $target = $this->_install_dir.DS."src".DS."controllers".DS."dummy.php";
         
         $msg = "Creating dummy controller...";
-        PHPFrame::Session()->getSysevents()
+        PHPFrame::getSession()->getSysevents()
                            ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         if (!copy($source, $target)) {

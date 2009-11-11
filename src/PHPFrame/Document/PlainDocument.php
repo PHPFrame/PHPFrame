@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   Document
  * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 E-noise.com Limited
+ * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -57,8 +57,8 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
             $str .= "\n\n";
         }
         
-        if (count(PHPFrame::Session()->getSysevents()) > 0) {
-            $str .= (string) PHPFrame::Session()->getSysevents();
+        if (count(PHPFrame::getSession()->getSysevents()) > 0) {
+            $str .= (string) PHPFrame::getSession()->getSysevents();
             $str .= "\n";
         }
         

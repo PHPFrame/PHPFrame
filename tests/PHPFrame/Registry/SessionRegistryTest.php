@@ -13,7 +13,7 @@ class PHPFrame_SessionRegistryTest extends PHPUnit_Framework_TestCase
     {
         PHPFrame::setTestMode(true);
         
-        $this->_session = PHPFrame::Session();
+        $this->_session = PHPFrame::getSession();
     }
     
     public function tearDown()

@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   Registry
  * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 E-noise.com Limited
+ * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
@@ -88,7 +88,7 @@ class PHPFrame_RequestRegistry extends PHPFrame_Registry
         }
         
         // Populate request array using session's client
-        // Note that we dont use PHPFrame::Session() as the globale
+        // Note that we dont use PHPFrame::getSession() as the globale
         // run level might not yet have been set to 2 (env initialised)
         $session = PHPFrame_SessionRegistry::getInstance();
         $session->getClient()->populateRequest($this);

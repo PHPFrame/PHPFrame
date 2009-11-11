@@ -15,7 +15,7 @@
         <mkdir dir="${tmp.dir}"/>
     </target>
     
-    <!-- copy files to tmp dir for publishing -->
+    <!-- copy files to tmp doc dir for parsing documentation -->
     <target name="copy">
         <!-- copy files -->
         <copy todir="${tmp.dir}" overwrite="true">
@@ -27,6 +27,12 @@
             	<include name="CREDITS" />
             	<include name="LICENSE" />
             	<include name="README" />
+            </fileset>
+        </copy>
+    	<!-- copy tutorials files -->
+        <copy todir="${tmp.dir}" overwrite="true">
+            <fileset dir="${project.basedir}">
+                <include name="tutorials/**" />
             </fileset>
         </copy>
     </target>

@@ -9,7 +9,7 @@
  * @author    Luis Montero <luis.montero@e-noise.com>
  * @copyright 2009 E-noise.com Limited
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version   SVN: $Id: FeedReader.php 607 2009-09-07 02:29:29Z luis.montero@e-noise.com $
+ * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  */
 

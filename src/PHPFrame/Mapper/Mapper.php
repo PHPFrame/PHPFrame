@@ -27,8 +27,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
  * @since    1.0
- * @todo     XML storage needs to be replaced with SQLite3 as a save alternative to 
- *           a database server.
  */
 class PHPFrame_Mapper
 {

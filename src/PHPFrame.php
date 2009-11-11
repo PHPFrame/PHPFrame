@@ -25,13 +25,8 @@ define("DS", DIRECTORY_SEPARATOR);
 spl_autoload_register(array("PHPFrame", "__autoload"));
 
 /**
- * This class provides a number of static methods that serve as a simplified
- * interface or facade to PHPFrame's "global" objects, such as the registries 
- * ({@link PHPFrame::Request()}, {@link PHPFrame::Session()} and  
- * {@link PHPFrame::AppRegistry()}), the config ({@link PHPFrame::AppRegistry()}) 
- * and actions involving the state of the framework.
- * 
- * It also provides information about the installed PHPFrame version.
+ * This class encapsulates information about the installed version of the 
+ * framework.
  * 
  * @category PHPFrame
  * @package  PHPFrame
@@ -141,7 +136,7 @@ class PHPFrame
      */
     private function __construct()
     {
-        
+        //...
     }
     
     /**
@@ -277,11 +272,25 @@ class PHPFrame
         PHPFrame_ExceptionHandler::instance();
     }
     
+    /**
+     * Set the framework to run in test mode
+     * 
+     * @param bool $bool
+     * 
+     * @return void
+     * @since  1.0
+     */
     public static function setTestMode($bool)
     {
     	self::$_test_mode = (bool) $bool;
     }
     
+    /**
+     * Is PHPFrame running in test mode?
+     * 
+     * @return bool
+     * @since  1.0
+     */
     public static function isTestMode()
     {
     	return (bool) self::$_test_mode;

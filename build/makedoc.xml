@@ -4,20 +4,29 @@
     <property name="build.dir" value="${project.basedir}/build"/>
     <property name="report.dir" value="${build.dir}/report"/>
     <property name="doc.dir" value="${build.dir}/doc"/>
-    <property name="tmp.dir" value="${build.dir}/tmp"/>
+    <property name="tmp.dir" value="${build.dir}/tmp/doc"/>
     
     <!-- Prepare directories -->
     <target name="prepare">
         <delete dir="${doc.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
         <mkdir dir="${doc.dir}"/>
+        
+        <delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
+        <mkdir dir="${tmp.dir}"/>
     </target>
     
     <!-- copy files to tmp dir for publishing -->
     <target name="copy">
-        <!-- copy tutorials files -->
+        <!-- copy files -->
         <copy todir="${tmp.dir}" overwrite="true">
-            <fileset dir="${project.basedir}">
-                <include name="tutorials/**" />
+            <fileset dir="${build.dir}/tmp">
+                <include name="examples/**" />
+            	<include name="PHPFrame/**" />
+            	<include name="PHPFrame.php" />
+            	<include name="tutorials/**" />
+            	<include name="CREDITS" />
+            	<include name="LICENSE" />
+            	<include name="README" />
             </fileset>
         </copy>
     </target>

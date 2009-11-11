@@ -22,7 +22,7 @@
             <fileset dir="${project.basedir}">
                 <include name="src/PHPFrame.php" />
                 <!-- <include name="examples/**" /> -->
-                <!-- <include name="src/**" /> -->
+                <include name="src/**" />
                 <!-- <include name="tutorials/**" /> -->
             </fileset>
         </copy>
@@ -47,7 +47,7 @@
                     -i examples/ \
                     -s on \
                     -dn PHPFrame \
-                    -o HTML:Smarty:PHPFrame \
+                    -o HTML:Smarty:PHP \
                     -ti 'PHPFrame API Documentation'" 
             dir="${project.basedir}" 
             output="${report.dir}/phpdoc.log" />
@@ -62,6 +62,6 @@
             output="${report.dir}/rsync_doc.log" />
     </target>
     
-    <target name="build" depends="prepare, copy, apidoc, sync" />
+    <target name="build" depends="prepare, copy, apidoc" />
     
 </project>

@@ -62,6 +62,6 @@
             output="${report.dir}/rsync_doc.log" />
     </target>
     
-    <target name="build" depends="prepare, copy, apidoc" />
+    <target name="build" depends="prepare, copy, apidoc, sync" />
     
 </project>

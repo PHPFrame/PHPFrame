@@ -4,7 +4,7 @@
     <property name="build.dir" value="${project.basedir}/build"/>
     <property name="report.dir" value="${build.dir}/report"/>
     <property name="doc.dir" value="${build.dir}/doc"/>
-    <property name="tmp.dir" value="${build.dir}/tmp/doc"/>
+    <property name="tmp.dir" value="${build.dir}/tmp"/>
     
     <!-- Prepare directories -->
     <target name="prepare">

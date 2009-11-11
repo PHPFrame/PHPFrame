@@ -27,7 +27,7 @@
  */
 class PHPFrame_MobileClient extends PHPFrame_Client
 {
-	/**
+    /**
      * Check if this is the correct helper for the client being used
      * 
      * @static

@@ -68,7 +68,7 @@ class PHPFrame_CLIClient extends PHPFrame_Client
      */
     public function populateRequest(PHPFrame_Request $request) 
     {
-    	// Automatically log in as system user
+        // Automatically log in as system user
         $user = new PHPFrame_User();
         $user->setId(1);
         $user->setGroupId(1);

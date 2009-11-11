@@ -11,8 +11,8 @@ class PHPFrame_RequestTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-    	PHPFrame::setTestMode(true);
-    	
+        PHPFrame::setTestMode(true);
+        
         $this->_request = new PHPFrame_Request();
     }
     
@@ -23,9 +23,9 @@ class PHPFrame_RequestTest extends PHPUnit_Framework_TestCase
     
     public function test_()
     {
-    	// Populate request using the session client
-    	PHPFrame::Session()->getClient()->populateRequest($this->_request);
-    	
-    	$this->assertEquals("CLI", $this->_request->getMethod());
+        // Populate request using the session client
+        PHPFrame::Session()->getClient()->populateRequest($this->_request);
+        
+        $this->assertEquals("CLI", $this->_request->getMethod());
     }
 }

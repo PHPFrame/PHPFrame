@@ -173,9 +173,9 @@ class PHPFrame_Response
      */
     public function setHeader($key, $value) 
     {
-    	$key   = trim((string) $key);
-    	$value = trim((string) $value);
-    	
+        $key   = trim((string) $key);
+        $value = trim((string) $value);
+        
         $this->_headers[$key] = $value;
     }
     

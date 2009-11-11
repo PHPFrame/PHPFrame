@@ -108,7 +108,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     protected function __construct()
     {
-    	// Get path and domain to use for cookie
+        // Get path and domain to use for cookie
         $uri                  = new PHPFrame_URI();
         $this->_cookie_path   = $uri->getDirname()."/";
         $this->_cookie_domain = $uri->getHost();

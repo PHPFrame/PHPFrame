@@ -54,14 +54,14 @@ class PHPFrame_Mailer extends PHPMailer
      */
     public function __construct(array $options=null)
     {
-    	if (!is_null($options)) {
-    		foreach ($options as $key=>$value) {
-    			if (array_key_exists($key, $this->_options)) {
-    				$this->_options[$key] = $value;
-    			}
-    		}
-    	}
-    	
+        if (!is_null($options)) {
+            foreach ($options as $key=>$value) {
+                if (array_key_exists($key, $this->_options)) {
+                    $this->_options[$key] = $value;
+                }
+            }
+        }
+        
         $this->Mailer   = (string) $this->_options["mailer"];
         $this->Host     = (string) $this->_options["host"];
         $this->Port     = (int)    $this->_options["port"];

@@ -156,7 +156,7 @@ class PHPFrame
      */
     public static function __autoload($class_name)
     {
-    	$file_path = "";
+        $file_path = "";
         
         // Load core PHPFrame classes
         if (preg_match('/^PHPFrame_([a-zA-Z0-9]+)/', $class_name, $matches)) {
@@ -235,10 +235,10 @@ class PHPFrame
      */
     public static function Session() 
     {
-    	if (self::isTestMode()) {
-    	    return PHPFrame_MockSessionRegistry::getInstance();
-    	}
-    	
+        if (self::isTestMode()) {
+            return PHPFrame_MockSessionRegistry::getInstance();
+        }
+        
         return PHPFrame_SessionRegistry::getInstance();
     }
     
@@ -252,11 +252,11 @@ class PHPFrame
      */
     public static function Boot()
     {
-    	// Set paths to source and data directories
-    	self::$_src_dir   = PEAR_Config::singleton()->get("php_dir");
-    	self::$_data_dir  = PEAR_Config::singleton()->get("data_dir");
-    	self::$_data_dir .= DS."PHPFrame";
-    	
+        // Set paths to source and data directories
+        self::$_src_dir   = PEAR_Config::singleton()->get("php_dir");
+        self::$_data_dir  = PEAR_Config::singleton()->get("data_dir");
+        self::$_data_dir .= DS."PHPFrame";
+        
         // Add core subpackages to include path
         foreach (self::$_subpackages as $subpackage) {
             $subpackage_path = dirname(__FILE__).DS."PHPFrame".DS.$subpackage;
@@ -282,7 +282,7 @@ class PHPFrame
      */
     public static function setTestMode($bool)
     {
-    	self::$_test_mode = (bool) $bool;
+        self::$_test_mode = (bool) $bool;
     }
     
     /**
@@ -293,7 +293,7 @@ class PHPFrame
      */
     public static function isTestMode()
     {
-    	return (bool) self::$_test_mode;
+        return (bool) self::$_test_mode;
     }
 }
 

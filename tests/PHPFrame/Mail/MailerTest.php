@@ -23,14 +23,14 @@ class PHPFrame_MailerTest extends PHPUnit_Framework_TestCase
     
     public function test_messageIdSuffix()
     {
-    	$this->_mailer->setMessageIdSuffix("someid");
-    	
-    	$this->assertEquals("someid", $this->_mailer->getMessageIdSuffix());
-    	
-    	// Get header to check that suffix is added appended to the message id
-    	// and encoded to base64
-    	$header = $this->_mailer->CreateHeader();
-    	preg_match('/Message\-Id\: <.*\-(.*)@.*>/', $header, $matches);
-    	$this->assertEquals("someid", base64_decode($matches[1]));
+        $this->_mailer->setMessageIdSuffix("someid");
+        
+        $this->assertEquals("someid", $this->_mailer->getMessageIdSuffix());
+        
+        // Get header to check that suffix is added appended to the message id
+        // and encoded to base64
+        $header = $this->_mailer->CreateHeader();
+        preg_match('/Message\-Id\: <.*\-(.*)@.*>/', $header, $matches);
+        $this->assertEquals("someid", base64_decode($matches[1]));
     }
 }

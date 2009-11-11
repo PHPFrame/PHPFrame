@@ -20,8 +20,8 @@ class PHPFrame_SQLMapperTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-    	PHPFrame::setTestMode(true);
-    	
+        PHPFrame::setTestMode(true);
+        
         // Delete the db file if it already exists
         if (is_file($this->_db_file)) {
             unlink($this->_db_file);

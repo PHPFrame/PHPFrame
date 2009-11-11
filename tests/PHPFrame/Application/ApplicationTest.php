@@ -11,16 +11,16 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-    	PHPFrame::setTestMode(true);
-    	
-    	// Get application install dir (we use CLI Tool for tests)
-    	$pattern     = '/(.*)(\/|\\\)tests(\/|\\\)PHPFrame(\/|\\\)(.*)/';
+        PHPFrame::setTestMode(true);
+        
+        // Get application install dir (we use CLI Tool for tests)
+        $pattern     = '/(.*)(\/|\\\)tests(\/|\\\)PHPFrame(\/|\\\)(.*)/';
         $replacement = '$1$2data$3CLI_Tool';
         $install_dir = preg_replace($pattern, $replacement, __FILE__);
         
         // Delete app registry if it exists
         if (is_file($install_dir.DS."tmp".DS."cache".DS."app.reg")) {
-        	unlink($install_dir.DS."tmp".DS."cache".DS."app.reg");
+            unlink($install_dir.DS."tmp".DS."cache".DS."app.reg");
         }
         
         // Instantiate application
@@ -45,12 +45,12 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
     
     public function test_getMailer()
     {
-    	// Make sure mailer is enabled in config
-    	$this->_app->getConfig()->set("smtp.enable", true);
-    	
-    	$mailer      = $this->_app->getMailer();
-    	$smtp_config = $this->_app->getConfig()->getSection("smtp");
-    	
+        // Make sure mailer is enabled in config
+        $this->_app->getConfig()->set("smtp.enable", true);
+        
+        $mailer      = $this->_app->getMailer();
+        $smtp_config = $this->_app->getConfig()->getSection("smtp");
+        
         $this->assertType("PHPFrame_Mailer", $mailer);
         $this->assertEquals($smtp_config["mailer"], $mailer->Mailer);
         $this->assertEquals($smtp_config["host"], $mailer->Host);
@@ -75,7 +75,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
     
     public function test_getInformer()
     {
-    	// Make sure mailer is enabled in config
+        // Make sure mailer is enabled in config
         $this->_app->getConfig()->set("smtp.enable", true);
         
         $this->_app->getConfig()->set("debug.informer_level", 1);
@@ -84,8 +84,8 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
     
     public function test_getInformerMailerDisabled()
     {
-    	$this->setExpectedException("LogicException");
-    	
+        $this->setExpectedException("LogicException");
+        
         $this->_app->getConfig()->set("debug.informer_level", 1);
         $this->assertType("PHPFrame_Informer", $this->_app->getInformer());
     }
@@ -123,17 +123,17 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
     
     public function test_getRequest()
     {
-    	$this->assertType("PHPFrame_Request", $this->_app->getRequest());
-    	$this->assertEquals("CLI", $this->_app->getRequest()->getMethod());
+        $this->assertType("PHPFrame_Request", $this->_app->getRequest());
+        $this->assertEquals("CLI", $this->_app->getRequest()->getMethod());
     }
     
     public function test_getResponse()
     {
-    	$this->assertType("PHPFrame_Response", $this->_app->getResponse());
-    	
-    	// Check the response headers for the sake of testing
-    	$headers = $this->_app->getResponse()->getHeaders();
-    	
+        $this->assertType("PHPFrame_Response", $this->_app->getResponse());
+        
+        // Check the response headers for the sake of testing
+        $headers = $this->_app->getResponse()->getHeaders();
+        
         $this->assertType("array", $headers);
         $this->assertArrayHasKey("X-Powered-By", $headers);
         $this->assertArrayHasKey("Expires", $headers);
@@ -150,7 +150,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
     
     public function test_dispatch()
     {
-    	//$request = new PHPFrame_Request();
+        //$request = new PHPFrame_Request();
         //$this->_app->dispatch($request);
     }
 }

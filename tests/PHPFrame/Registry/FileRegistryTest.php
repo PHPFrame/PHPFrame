@@ -7,7 +7,7 @@ require_once $PHPFrame;
 
 class PHPFrame_FileRegistryTest extends PHPUnit_Framework_TestCase
 {
-	private $_cache_file, $_registry;
+    private $_cache_file, $_registry;
     
     public function setUp()
     {
@@ -35,38 +35,38 @@ class PHPFrame_FileRegistryTest extends PHPUnit_Framework_TestCase
     
     public function test_()
     {
-    	// Add a bool to registry
-    	$this->_registry->set("bool", true);
-    	
-    	// Add an int
-    	$this->_registry->set("int", 123);
-    	
-    	// Add a float
-    	$this->_registry->set("float", 3.14);
-    	
-    	// Add basic array
-    	$this->_registry->set("array", array(1,2,3));
-    	
-    	// Add multimensional array
-    	$array2 = array(1,2, array(3,4,"foo"=>"bar"));
-    	$this->_registry->set("array2", $array2);
-    	
-    	// Add an object 
-    	$obj = new stdClass();
-    	$obj->foo = 1;
-    	$obj->bar = "some string";
-    	$this->_registry->set("obj", $obj);
-    	
-    	// Unset the registry (the destructor should write the data to file)
-    	unset($this->_registry);
-    	
-    	// Get new instance of registry and data should now be read from file
-    	$this->_registry = new PHPFrame_FileRegistry($this->_cache_file);
-    	
-    	$this->assertType("bool", $this->_registry->get("bool"));
-    	$this->assertEquals(true, $this->_registry->get("bool"));
-    	
-    	$this->assertType("int", $this->_registry->get("int"));
+        // Add a bool to registry
+        $this->_registry->set("bool", true);
+        
+        // Add an int
+        $this->_registry->set("int", 123);
+        
+        // Add a float
+        $this->_registry->set("float", 3.14);
+        
+        // Add basic array
+        $this->_registry->set("array", array(1,2,3));
+        
+        // Add multimensional array
+        $array2 = array(1,2, array(3,4,"foo"=>"bar"));
+        $this->_registry->set("array2", $array2);
+        
+        // Add an object 
+        $obj = new stdClass();
+        $obj->foo = 1;
+        $obj->bar = "some string";
+        $this->_registry->set("obj", $obj);
+        
+        // Unset the registry (the destructor should write the data to file)
+        unset($this->_registry);
+        
+        // Get new instance of registry and data should now be read from file
+        $this->_registry = new PHPFrame_FileRegistry($this->_cache_file);
+        
+        $this->assertType("bool", $this->_registry->get("bool"));
+        $this->assertEquals(true, $this->_registry->get("bool"));
+        
+        $this->assertType("int", $this->_registry->get("int"));
         $this->assertEquals(123, $this->_registry->get("int"));
         
         $this->assertType("float", $this->_registry->get("float"));
@@ -90,7 +90,7 @@ class PHPFrame_FileRegistryTest extends PHPUnit_Framework_TestCase
         
         // Get new instance of registry and data should now be read from file
         $this->_registry = new PHPFrame_FileRegistry($this->_cache_file);
-    	
+        
         $this->assertType("string", $this->_registry->get("another var"));
         $this->assertEquals("blah blah", $this->_registry->get("another var"));
     }

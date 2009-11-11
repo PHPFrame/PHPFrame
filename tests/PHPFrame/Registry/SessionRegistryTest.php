@@ -11,8 +11,8 @@ class PHPFrame_SessionRegistryTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-    	PHPFrame::setTestMode(true);
-    	
+        PHPFrame::setTestMode(true);
+        
         $this->_session = PHPFrame::Session();
     }
     
@@ -28,6 +28,6 @@ class PHPFrame_SessionRegistryTest extends PHPUnit_Framework_TestCase
     
     public function test_getUser()
     {
-    	$this->assertType("PHPFrame_User", $this->_session->getUser());
+        $this->assertType("PHPFrame_User", $this->_session->getUser());
     }
 }

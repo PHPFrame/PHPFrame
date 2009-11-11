@@ -87,8 +87,8 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     public function execute(PHPFrame_Application $app) 
     {
-    	$this->_app = $app;
-    	
+        $this->_app = $app;
+        
         // Get action from the request
         $request_action = $app->getRequest()->getAction();
         
@@ -128,37 +128,37 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function app()
     {
-    	return $this->_app;
+        return $this->_app;
     }
     
     protected function request()
     {
-    	return $this->app()->getRequest();
+        return $this->app()->getRequest();
     }
     
     protected function response()
     {
-    	return $this->app()->getResponse();
+        return $this->app()->getResponse();
     }
     
     protected function config()
     {
-    	return $this->app()->getConfig();
+        return $this->app()->getConfig();
     }
     
     protected function db()
     {
-    	return $this->app()->getDB();
+        return $this->app()->getDB();
     }
     
     protected function logger()
     {
-    	return $this->app()->getLogger();
+        return $this->app()->getLogger();
     }
     
     protected function session()
     {
-    	return PHPFrame::Session();
+        return PHPFrame::Session();
     }
     
     /**

@@ -101,7 +101,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     public function __construct(array $options=null)
     {
-    	// Add the base fields
+        // Add the base fields
         $this->addField("id",    null,   true,  new PHPFrame_IntFilter());
         $this->addField("atime", null,   true,  new PHPFrame_IntFilter());
         $this->addField("ctime", time(), true,  new PHPFrame_IntFilter());
@@ -109,7 +109,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $this->addField("owner", 1,      false, new PHPFrame_IntFilter());
         $this->addField("group", 1,      false, new PHPFrame_IntFilter());
         $this->addField("perms", 664,    false, new PHPFrame_IntFilter());
-    	
+        
         // Set object ownership to current user if applicable
 //        if (PHPFrame::Session()->isAuth()) {
 //            $this->setOwner(PHPFrame::Session()->getUserId());

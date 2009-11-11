@@ -235,12 +235,12 @@ class PHPFrame_Config implements IteratorAggregate
      */
     public function getSection($section_name)
     {
-    	if (!array_key_exists($section_name, $this->_data)) {
-    		$msg = "Section '".$section_name."' doesn't exist in config.";
-    		throw new RuntimeException($msg);
-    	}
-    	
-    	return $this->_data[$section_name];
+        if (!array_key_exists($section_name, $this->_data)) {
+            $msg = "Section '".$section_name."' doesn't exist in config.";
+            throw new RuntimeException($msg);
+        }
+        
+        return $this->_data[$section_name];
     }
     
     /**

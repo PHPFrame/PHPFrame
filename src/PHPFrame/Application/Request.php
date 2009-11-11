@@ -107,12 +107,12 @@ class PHPFrame_Request implements IteratorAggregate
      */
     public function setControllerName($str) 
     {
-    	$filter = new PHPFrame_RegexpFilter(array(
-    	    "regexp"     => '/^[a-z_]+$/', 
+        $filter = new PHPFrame_RegexpFilter(array(
+            "regexp"     => '/^[a-z_]+$/', 
             "min_length" => 1, 
             "max_length" => 50
-    	));
-    	
+        ));
+        
         $this->_array['controller'] = $filter->process($str);
     }
     
@@ -169,8 +169,8 @@ class PHPFrame_Request implements IteratorAggregate
      */
     public function getParam($key, $def_value=null) 
     {
-    	$key = trim((string) $key);
-    	
+        $key = trim((string) $key);
+        
         if (!isset($this->_array['params'][$key]) && !is_null($def_value)) {
             $this->_array['params'][$key] = $def_value;
         }
@@ -194,7 +194,7 @@ class PHPFrame_Request implements IteratorAggregate
      */
     public function setParam($key, $value) 
     {
-    	$key = trim((string) $key);
+        $key = trim((string) $key);
         
         $this->_array['params'][$key] = $value;
     }
@@ -221,9 +221,9 @@ class PHPFrame_Request implements IteratorAggregate
      */
     public function setHeader($key, $value)
     {
-    	$key   = trim((string) $key);
-    	$value = trim((string) $value);
-    	
+        $key   = trim((string) $key);
+        $value = trim((string) $value);
+        
         $this->_array["headers"][$key] = $value;
     }
     
@@ -242,7 +242,7 @@ class PHPFrame_Request implements IteratorAggregate
      */
     public function setMethod($str)
     {
-    	// Filter value before assigning to variable
+        // Filter value before assigning to variable
         $filter = new PHPFrame_RegexpFilter(array(
             "regexp"     => '/^(GET|POST|CLI)$/', 
             "min_length" => 3, 

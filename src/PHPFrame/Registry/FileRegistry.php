@@ -59,8 +59,8 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
      */
     public function __construct($cache_file) 
     {
-    	$cache_file = trim((string) $cache_file);
-    	
+        $cache_file = trim((string) $cache_file);
+        
         // Read data from cache
         if (is_file($cache_file)) {
             // Open cache file in read/write mode
@@ -87,7 +87,7 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
     public function __destruct()
     {
         if ($this->isDirty()) {
-        	$this->_file_obj->rewind();
+            $this->_file_obj->rewind();
             $this->_file_obj->fwrite(serialize($this->_data));
         }
     }
@@ -116,8 +116,8 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
      */
     public function get($key, $default_value=null) 
     {
-    	$key = trim((string) $key);
-    	
+        $key = trim((string) $key);
+        
         // Set default value if appropriate
         if (!isset($this->_data[$key]) && !is_null($default_value)) {
             $this->_data[$key] = $default_value;
@@ -146,8 +146,8 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
      */
     public function set($key, $value) 
     {
-    	$key = trim((string) $key);
-    	
+        $key = trim((string) $key);
+        
         $this->_data[$key] = $value;
         
         // Mark data as dirty

@@ -32,11 +32,11 @@
  */
 class PHPFrame_Application
 {
-	/**
-	 * Absolute path to application in filesystem
-	 * 
-	 * @var string
-	 */
+    /**
+     * Absolute path to application in filesystem
+     * 
+     * @var string
+     */
     private $_install_dir;
     /**
      * Absolute path to "config" directory. By default this will be a 
@@ -252,7 +252,7 @@ class PHPFrame_Application
     
     public function getInstallDir()
     {
-    	return $this->_install_dir;
+        return $this->_install_dir;
     }
     
     /**
@@ -305,10 +305,10 @@ class PHPFrame_Application
             $mailer     = $this->getMailer();
             
             if (!$mailer instanceof PHPFrame_Mailer) {
-            	$msg  = "Can not create informer object. No mailer has been ";
-            	$msg .= "loaded in application. Please check the 'smtp' ";
-            	$msg .= "section in the config file.";
-            	throw new LogicException($msg);
+                $msg  = "Can not create informer object. No mailer has been ";
+                $msg .= "loaded in application. Please check the 'smtp' ";
+                $msg .= "section in the config file.";
+                throw new LogicException($msg);
             }
             
             $this->setInformer(new PHPFrame_Informer($mailer, $recipients));
@@ -450,13 +450,13 @@ class PHPFrame_Application
      */
     public function getMailer()
     {
-    	if (
+        if (
             is_null($this->getRegistry()->get("mailer"))
             &&
             $this->getConfig()->get("smtp.enable")
         ) {
             $options = $this->getConfig()->getSection("smtp");
-        	$mailer  = new PHPFrame_Mailer($options);
+            $mailer  = new PHPFrame_Mailer($options);
             $this->setMailer($mailer);
         }
         
@@ -559,7 +559,7 @@ class PHPFrame_Application
      */
     public function getRequest()
     {
-    	if (is_null($this->_request)) {
+        if (is_null($this->_request)) {
             // Create new request
             $request = new PHPFrame_Request();
             
@@ -580,17 +580,17 @@ class PHPFrame_Application
      */
     public function getResponse()
     {
-    	if (is_null($this->_response)) {
-    		// Create new response object
-    		$response = new PHPFrame_Response();
-    		$response->setHeader(
-    		    "Content-Language", 
-    		    $this->getConfig()->get("default_lang")
-    		);
-    		
-	        // Prepare response using client
-	        PHPFrame::Session()->getClient()->prepareResponse($response);
-	        
+        if (is_null($this->_response)) {
+            // Create new response object
+            $response = new PHPFrame_Response();
+            $response->setHeader(
+                "Content-Language", 
+                $this->getConfig()->get("default_lang")
+            );
+            
+            // Prepare response using client
+            PHPFrame::Session()->getClient()->prepareResponse($response);
+            
             $this->setResponse($response);
         }
         
@@ -776,7 +776,7 @@ class PHPFrame_Application
      */
     public function setRequest(PHPFrame_Request $request)
     {
-    	$this->_request = $request;
+        $this->_request = $request;
     }
     
     /**
@@ -789,7 +789,7 @@ class PHPFrame_Application
      */
     public function setResponse(PHPFrame_Response $response)
     {
-    	$this->_response = $response;
+        $this->_response = $response;
     }
     
     /**

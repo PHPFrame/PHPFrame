@@ -149,7 +149,7 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
         
         // Display the exception details if applicable
         if (self::instance()->_display_exceptions) {
-        	$response = new PHPFrame_Response();
+            $response = new PHPFrame_Response();
             $response->setDocument(new PHPFrame_PlainDocument());
             
             $status_code = $exception->getCode();
@@ -177,6 +177,6 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      */
     public static function setDisplayExceptions($bool)
     {
-    	self::instance()->_display_exceptions = (bool) $bool;
+        self::instance()->_display_exceptions = (bool) $bool;
     }
 }

@@ -14,19 +14,27 @@
  */
 
 /**
- * This class encapsulates an HTTP response
+ * This class encapsulates an HTTP response.
+ * 
+ * Response objects will use a "document" object descending from the abstract 
+ * {@link PHPFrame_Document} class in order to store data that will be sent as 
+ * a response. This document can be of different types: HTML, Plain, XML, ...
+ * 
+ * A "renderer" object of type {@link PHPFrame_IRenderer} is used to render 
+ * the response body.
  * 
  * @category PHPFrame
  * @package  Application
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @uses     PHPFrame_Document, PHPFrame_IRenderer, PHPFrame_Pathway
  * @since    1.0
  */
 class PHPFrame_Response
 {
     /*
-     * HTTP response status codes
+     * HTTP response status codes.
      */
     const STATUS_OK                    = 200;
     const STATUS_MOVED_PERMANENTLY     = 301;
@@ -40,13 +48,13 @@ class PHPFrame_Response
     const STATUS_NOT_IMPLEMENTED       = 501;
     
     /**
-     * HTTP Response status code
+     * HTTP Response status code.
      * 
      * @var int
      */
     private $_code = self::STATUS_OK;
     /**
-     * An array containing the raw headers
+     * An array containing the raw headers.
      * 
      * @var array
      */
@@ -60,31 +68,37 @@ class PHPFrame_Response
         "Content-Type"=>null
     );
     /**
-     * The document object used to render response
+     * The document object used to render response.
      * 
      * @var PHPFrame_Document
      */
     private $_document = null;
     /**
-     * Instance of PHPFrame_IRenderer used to render 
+     * Instance of PHPFrame_IRenderer used to render.
      * 
      * @var PHPFrame_IRenderer
      */
     private $_renderer = null;
     /**
-     * A pathway object for this view
+     * A pathway object for this view.
      * 
      * @var PHPFrame_Pathway
      */
     private $_pathway = null;
     
     /**
-     * Constructor
+     * Both arguments in the constructor are optional.
      * 
-     * @param PHPFrame_Document  $document Document object used to display the 
-     *                                     response.
-     * @param PHPFrame_IRenderer $renderer Renderer object used to render the 
-     *                                     response.
+     * If no "document" object is passed an object type PHPFrame_PlainDocument 
+     * will be used by default.
+     * 
+     * If no "renderer" object is passed an object type PHPFrame_PlainRenderer 
+     * will be used by default.
+     * 
+     * @param PHPFrame_Document  $document [Optional] Document object used to 
+     *                                     display the response.
+     * @param PHPFrame_IRenderer $renderer [Optional] Renderer object used to 
+     *                                     render the response.
      * 
      * @return void
      * @since  1.0

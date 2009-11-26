@@ -175,7 +175,6 @@ class PHPFrame_Application
      * 
      * @param string $class_name The name of the class to attempt loading.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

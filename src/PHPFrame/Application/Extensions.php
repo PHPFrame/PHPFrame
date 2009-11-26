@@ -26,25 +26,24 @@
 abstract class PHPFrame_Extensions implements IteratorAggregate
 {
     /**
-     * A mapper object used to store and retrieve extension data
+     * A mapper object used to store and retrieve extension data.
      *
      * @var PHPFrame_PersistentObjectCollection
      */
     private $_mapper;
     /**
-     * A collection object holding data about installed extensions
+     * A collection object holding data about installed extensions.
      *
      * @var PHPFrame_PersistentObjectCollection
      */
     private $_extensions;
     
     /**
-     * Construct
+     * Constructor.
      * 
      * @param PHPFrame_Mapper $mapper Mapper object used to persist the ACL 
      *                                objects.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -56,19 +55,15 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
         $this->_extensions = $this->_mapper->find();
     }
     
+    /**
+     * Implementation of IteratorAggregate interface.
+     * 
+     * @return Iterator
+     * @since  1.0
+     */
     public function getIterator()
     {
         return $this->_extensions;
-    }
-    
-    public function install($name)
-    {
-        //$this->_mapper->insert(new PHPFrame_FeatureInfo());
-    }
-    
-    public function uninstall($name)
-    {
-        
     }
     
     /**
@@ -76,7 +71,6 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
      * 
      * @param string $name The feature name.
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -93,13 +87,12 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
     }
     
     /**
-     * This methods tests whether the specified feature is installed and 
+     * This methods tests whether the specified extension is installed and 
      * enabled.
      *
-     * @param string $name The feature name to check (ie: dashboard, user, 
-     *                     projects, ...)
+     * @param string $name The extension name to check (ie: dashboard, user, 
+     *                     projects, ...).
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -114,6 +107,15 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
         return false;
     }
     
+    /**
+     * Check whether a given extension is installed.
+     * 
+     * @param string $name The extension name to check (ie: dashboard, user, 
+     *                     projects, ...).
+     *                     
+     * @return bool
+     * @since  1.0
+     */
     final public function isInstalled($name)
     {
         foreach ($this->_extensions as $extension) {

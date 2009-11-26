@@ -36,7 +36,6 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -48,7 +47,6 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
     /**
      * Magic method invoked when Sysevents object is used as string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -58,21 +56,21 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
         
         foreach ($this->_events as $event) {
             switch ($event[1]) {
-                case PHPFrame_Subject::EVENT_TYPE_ERROR :
-                    $event_type = PHPFrame_Lang::EVENT_TYPE_ERROR;
-                    break;
-                case PHPFrame_Subject::EVENT_TYPE_WARNING :
-                    $event_type = PHPFrame_Lang::EVENT_TYPE_WARNING;
-                    break;
-                case PHPFrame_Subject::EVENT_TYPE_NOTICE :
-                    $event_type = PHPFrame_Lang::EVENT_TYPE_NOTICE;
-                    break;
-                case PHPFrame_Subject::EVENT_TYPE_INFO :
-                    $event_type = PHPFrame_Lang::EVENT_TYPE_INFO;
-                    break;
-                case PHPFrame_Subject::EVENT_TYPE_SUCCESS :
-                    $event_type = PHPFrame_Lang::EVENT_TYPE_SUCCESS;
-                    break;
+            case PHPFrame_Subject::EVENT_TYPE_ERROR :
+                $event_type = PHPFrame_Lang::EVENT_TYPE_ERROR;
+                break;
+            case PHPFrame_Subject::EVENT_TYPE_WARNING :
+                $event_type = PHPFrame_Lang::EVENT_TYPE_WARNING;
+                break;
+            case PHPFrame_Subject::EVENT_TYPE_NOTICE :
+                $event_type = PHPFrame_Lang::EVENT_TYPE_NOTICE;
+                break;
+            case PHPFrame_Subject::EVENT_TYPE_INFO :
+                $event_type = PHPFrame_Lang::EVENT_TYPE_INFO;
+                break;
+            case PHPFrame_Subject::EVENT_TYPE_SUCCESS :
+                $event_type = PHPFrame_Lang::EVENT_TYPE_SUCCESS;
+                break;
             }
             
             $str .= strtoupper($event_type).": ".$event[0]."\n";
@@ -87,7 +85,6 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
      * Note that we reverse the order of the elements in order to iterate starting 
      * from the latest entry.
      * 
-     * @access public
      * @return Iterator
      * @since  1.0
      */
@@ -99,7 +96,6 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
     /**
      * Count elements in internal array
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -111,7 +107,10 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
     /**
      * Append a system event
      * 
-     * @access public
+     * @param string $msg  The message we want to append.
+     * @param int    $type The event type. See constants in 
+     *                     {@link PHPFrame_Subject} class.
+     * 
      * @return void
      * @since  1.0
      */
@@ -125,7 +124,6 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
      * 
      * This should be done after displaying the messages to the user.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -138,10 +136,10 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
     /**
      * Implementation of update method triggered by observed objects
      * 
-     * @see src/PHPFrame/Base/PHPFrame_Observer#doUpdate($subject)
+     * @param PHPFrame_Subject $subject Reference to the observed subject. 
      * 
-     * @access protected
      * @return void
+     * @see    PHPFrame_Observer::doUpdate()
      * @since  1.0
      */
     protected function doUpdate(PHPFrame_Subject $subject)

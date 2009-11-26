@@ -14,7 +14,7 @@
  */
 
 /**
- * This class encapsulates a request made to a PHPFrame_Application
+ * This class encapsulates a request made to a {@link PHPFrame_Application}.
  *             
  * @category PHPFrame
  * @package  Application
@@ -161,8 +161,10 @@ class PHPFrame_Request implements IteratorAggregate
     /**
      * Get a request variable
      * 
-     * @param string $key
-     * @param mixed  $def_value
+     * @param string $key       The param key.
+     * @param mixed  $def_value [Optional] If provided and no value has been 
+     *                          set for the given key yet it wil be set to this 
+     *                          value.
      * 
      * @return mixed
      * @since  1.0
@@ -186,8 +188,8 @@ class PHPFrame_Request implements IteratorAggregate
     /**
      * Set a request variable
      * 
-     * @param string $key
-     * @param mixed  $value
+     * @param string $key   The param key.
+     * @param mixed  $value The param value.
      * 
      * @return void
      * @since  1.0
@@ -213,8 +215,8 @@ class PHPFrame_Request implements IteratorAggregate
     /**
      * Set a request header
      * 
-     * @param string $key
-     * @param string $value
+     * @param string $key   The header name.
+     * @param string $value The header value.
      * 
      * @return void
      * @since  1.0
@@ -227,6 +229,12 @@ class PHPFrame_Request implements IteratorAggregate
         $this->_array["headers"][$key] = $value;
     }
     
+    /**
+     * Get request method. Either "GET", "POST" or "CLI".
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getMethod()
     {
         return $this->_array['method'];
@@ -274,11 +282,28 @@ class PHPFrame_Request implements IteratorAggregate
         return ($this->_array['method'] == "GET");
     }
     
+    /**
+     * Attach a file to the request.
+     * 
+     * @param string $key   Key used to store file.
+     * @param array  $array File data.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function attachFile($key, array $array)
     {
         $this->_array["files"][$key] = $array;
     }
     
+    /**
+     * Detach a file from the request.
+     * 
+     * @param string $key Key used to store file.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function dettachFile($key)
     {
         unset($this->_array["files"][$key]);
@@ -309,7 +334,7 @@ class PHPFrame_Request implements IteratorAggregate
     /**
      * Set the request remote address (IP).
      * 
-     * @param string $str
+     * @param string $str Requested IP address.
      * 
      * @return void
      * @since  1.0
@@ -333,7 +358,7 @@ class PHPFrame_Request implements IteratorAggregate
     /**
      * Set the request URI
      * 
-     * @param string $str
+     * @param string $str Requested URI.
      * 
      * @return void
      * @since  1.0
@@ -357,7 +382,7 @@ class PHPFrame_Request implements IteratorAggregate
     /**
      * Set the request script name
      * 
-     * @param string $str
+     * @param string $str The name of the requested script.
      * 
      * @return void
      * @since  1.0
@@ -381,7 +406,7 @@ class PHPFrame_Request implements IteratorAggregate
     /**
      * Set the request query string
      * 
-     * @param string $str
+     * @param string $str The query string.
      * 
      * @return void
      * @since  1.0
@@ -403,9 +428,9 @@ class PHPFrame_Request implements IteratorAggregate
     }
     
     /**
-     * Set the request time (unix timestamp)
+     * Set the request time.
      * 
-     * @param int $int
+     * @param int $int Unix timestamp.
      * 
      * @return void
      * @since  1.0
@@ -430,7 +455,7 @@ class PHPFrame_Request implements IteratorAggregate
      * Set absolute path for file to write output. If not set no output will 
      * not be written to file, which is the normal behaviour.
      * 
-     * @param string $str
+     * @param string $str Absolute path for file to write output.
      * 
      * @return void
      * @since  1.0
@@ -454,7 +479,7 @@ class PHPFrame_Request implements IteratorAggregate
     /**
      * Set whether the request should be handled in "quiet" mode (no output)
      * 
-     * @param bool $bool
+     * @param bool $bool TRUE or FALSE.
      * 
      * @return void
      * @since  1.0
@@ -478,7 +503,7 @@ class PHPFrame_Request implements IteratorAggregate
     /**
      * Set whether request is AJAX.
      * 
-     * @param bool $bool
+     * @param bool $bool TRUE or FALSE.
      * 
      * @return void
      * @since  1.0
@@ -502,7 +527,7 @@ class PHPFrame_Request implements IteratorAggregate
     /**
      * Set dispatched flag
      * 
-     * @param bool $bool
+     * @param bool $bool TRUE or FALSE.
      * 
      * @return void
      * @since  1.0

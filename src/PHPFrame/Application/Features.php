@@ -25,13 +25,5 @@
  */
 class PHPFrame_Features extends PHPFrame_Extensions
 {
-    public function install($name)
-    {
-        //$this->_mapper->insert(new PHPFrame_FeatureInfo());
-    }
     
-    public function uninstall($name)
-    {
-        
-    }
 }

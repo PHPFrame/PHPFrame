@@ -26,25 +26,24 @@
 class PHPFrame_Permissions
 {
     /**
-     * A mapper object used to store and retrieve access level list
+     * A mapper object used to store and retrieve access level list.
      *
      * @var PHPFrame_PersistentObjectCollection
      */
     private $_mapper;
     /**
-     * A collection object holding access level list
+     * A collection object holding access level list.
      *
      * @var PHPFrame_PersistentObjectCollection
      */
     private $_acl;
     
     /**
-     * Constructor
+     * Constructor.
      * 
      * @param PHPFrame_Mapper $mapper Mapper object used to persist the ACL 
      *                                objects.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -63,7 +62,6 @@ class PHPFrame_Permissions
      * @param string $action     The action we want to authorise
      * @param int    $groupid    The groupid of the user we want to authorise
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */

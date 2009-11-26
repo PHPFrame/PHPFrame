@@ -120,10 +120,8 @@ class PHPFrame_Application
             throw new InvalidArgumentException($msg);
         }
         
-        if (
-            !is_dir($options["install_dir"]) 
-            || 
-            !is_readable($options["install_dir"])
+        if (!is_dir($options["install_dir"]) 
+            || !is_readable($options["install_dir"])
         ) {
             $msg = "Could not read directory ".$options["install_dir"];
             throw new RuntimeException($msg);
@@ -145,10 +143,8 @@ class PHPFrame_Application
                 $this->$prop_name = $this->_install_dir.DS.$value;
             }
             
-            if (
-                (!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
-                ||
-                !is_writable($this->$prop_name)
+            if ((!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
+                || !is_writable($this->$prop_name)
             ) {
                 $msg = "Directory ".$this->$prop_name." is not writable.";
                 throw new RuntimeException($msg);
@@ -177,13 +173,13 @@ class PHPFrame_Application
      * 
      * This autoloader is registered in {@link PHPFrame_Application::dispatch()}.
      * 
-     * @param string $class_name
+     * @param string $class_name The name of the class to attempt loading.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __autoload($class_name)
+    public function autoload($class_name)
     {
         $file_path = $this->_install_dir.DS."src".DS;
         
@@ -200,8 +196,8 @@ class PHPFrame_Application
         // Append lang dir based on config for lang classes
         if ($super_class == "Lang") {
             $file_path .= DS.$this->getConfig()->get("default_lang");
-        // Append 's' to dir name except for all others
         } else {
+            // Append 's' to dir name except for all others
             $file_path .= "s";
         }
         
@@ -244,7 +240,7 @@ class PHPFrame_Application
                 );
                 
                 if (strtolower($class_name) == $file_name_without_ext) {
-                    require_once $file->getRealPath();
+                    include_once $file->getRealPath();
                 }
             }
         }
@@ -388,9 +384,8 @@ class PHPFrame_Application
             $options = $this->getConfig()->getSection("db");
         }
         
-        if (
-           !array_key_exists("driver", $options) 
-           || !array_key_exists("name", $options)
+        if (!array_key_exists("driver", $options) 
+            || !array_key_exists("name", $options)
         ) {
             $msg  = "If options array is provided 'driver' and 'name' are ";
             $msg .= "required";
@@ -409,8 +404,7 @@ class PHPFrame_Application
             if (isset($options["host"]) && !empty($options["host"])) {
                 $dsn .= ";host=".$options["host"].";";
             }
-            if (
-                isset($options["mysql_unix_socket"]) 
+            if (isset($options["mysql_unix_socket"]) 
                 && !empty($options["mysql_unix_socket"])
             ) {
                 $dsn .= ";unix_socket=".$options["mysql_unix_socket"];
@@ -456,10 +450,8 @@ class PHPFrame_Application
      */
     public function getMailer()
     {
-        if (
-            is_null($this->getRegistry()->get("mailer"))
-            &&
-            $this->getConfig()->get("smtp.enable")
+        if (is_null($this->getRegistry()->get("mailer"))
+            && $this->getConfig()->get("smtp.enable")
         ) {
             $options = $this->getConfig()->getSection("smtp");
             $mailer  = new PHPFrame_Mailer($options);
@@ -524,7 +516,7 @@ class PHPFrame_Application
         if (is_null($this->getRegistry()->get("features"))) {
             // Create mapper for PHPFrame_Features object
             $mapper = new PHPFrame_Mapper(
-                "PHPFrame_Features", 
+                "PHPFrame_FeatureInfo", 
                 $this->_config_dir, 
                 "features"
             );
@@ -546,7 +538,7 @@ class PHPFrame_Application
         if (is_null($this->getRegistry()->get("plugins"))) {
             // Create mapper for PHPFrame_Plugins object
             $mapper = new PHPFrame_Mapper(
-                "PHPFrame_Plugins", 
+                "PHPFrame_PluginInfo", 
                 $this->_config_dir, 
                 "plugins"
             );
@@ -606,7 +598,8 @@ class PHPFrame_Application
     /**
      * Set configuration object
      * 
-     * @param PHPFrame_Config $config
+     * @param PHPFrame_Config $config The new configuration object to use in 
+     *                                the application.
      * 
      * @return void
      * @since  1.0
@@ -626,7 +619,9 @@ class PHPFrame_Application
     /**
      * Set Registry object
      * 
-     * @param PHPFrame_FileRegistry $file_registry
+     * @param PHPFrame_FileRegistry $file_registry A file registry object used 
+     *                                             to cache application wide 
+     *                                             data to file.
      * 
      * @return void
      * @since  1.0
@@ -639,7 +634,7 @@ class PHPFrame_Application
     /**
      * Set Logger object
      * 
-     * @param PHPFrame_Logger $logger
+     * @param PHPFrame_Logger $logger Logger object to be used in application.
      * 
      * @return void
      * @since  1.0
@@ -655,7 +650,8 @@ class PHPFrame_Application
     /**
      * Set Informer object
      * 
-     * @param PHPFrame_Informer $informer
+     * @param PHPFrame_Informer $informer Informer object to be used in 
+     *                                    application.
      * 
      * @return void
      * @since  1.0
@@ -671,7 +667,8 @@ class PHPFrame_Application
     /**
      * Set Profiler object
      * 
-     * @param PHPFrame_Profiler $profiler
+     * @param PHPFrame_Profiler $profiler Profiler object to be used in 
+     *                                    application.
      * 
      * @return void
      * @since  1.0
@@ -684,7 +681,7 @@ class PHPFrame_Application
     /**
      * Set Database object
      * 
-     * @param PHPFrame_Database $db
+     * @param PHPFrame_Database $db Default database object for application.
      * 
      * @return void
      * @since  1.0
@@ -697,7 +694,7 @@ class PHPFrame_Application
     /**
      * Set Mailer object used for outgoing email
      * 
-     * @param PHPFrame_Mailer $mailer
+     * @param PHPFrame_Mailer $mailer Mailer object.
      * 
      * @return void
      * @since  1.0
@@ -710,7 +707,7 @@ class PHPFrame_Application
     /**
      * Set IMAP object used for incoming email
      * 
-     * @param PHPFrame_IMAP $imap
+     * @param PHPFrame_IMAP $imap IMAP object.
      * 
      * @return void
      * @since  1.0
@@ -723,7 +720,7 @@ class PHPFrame_Application
     /**
      * Set Permissions object
      * 
-     * @param PHPFrame_Permissions $permissions
+     * @param PHPFrame_Permissions $permissions Permissions object.
      * 
      * @return void
      * @since  1.0
@@ -736,7 +733,7 @@ class PHPFrame_Application
     /**
      * Set Features object
      * 
-     * @param PHPFrame_Features $features
+     * @param PHPFrame_Features $features Features object.
      * 
      * @return void
      * @since  1.0
@@ -749,7 +746,7 @@ class PHPFrame_Application
     /**
      * Set Plugins object
      * 
-     * @param PHPFrame_Plugins $plugins
+     * @param PHPFrame_Plugins $plugins Plugins object.
      * 
      * @return void
      * @since  1.0
@@ -762,7 +759,7 @@ class PHPFrame_Application
     /**
      * Set Libraries object
      * 
-     * @param PHPFrame_Libraries $libraries
+     * @param PHPFrame_Libraries $libraries Libraries object.
      * 
      * @return void
      * @since  1.0
@@ -775,7 +772,7 @@ class PHPFrame_Application
     /**
      * Set Request object
      * 
-     * @param PHPFrame_Request $request
+     * @param PHPFrame_Request $request Request object.
      * 
      * @return void
      * @since  1.0
@@ -788,7 +785,7 @@ class PHPFrame_Application
     /**
      * Set Response object
      * 
-     * @param PHPFrame_Response $response
+     * @param PHPFrame_Response $response Response object.
      * 
      * @return void
      * @since  1.0
@@ -813,7 +810,7 @@ class PHPFrame_Application
         /**
          * Register MVC autoload function
          */
-        spl_autoload_register(array($this, "__autoload"));
+        spl_autoload_register(array($this, "autoload"));
         
         // If no request is passed we try to use request object cached in app
         // or a new request is created using the session's client

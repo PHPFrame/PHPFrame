@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
  */
 
 /**
@@ -28,7 +28,7 @@
  * @package  MVC
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
  * @see      PHPFrame_View
  * @since    1.0
  * @abstract 
@@ -279,13 +279,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         
         // Delegate redirection to client object if it is of the right type
         if (!empty($this->_redirect_url)) {
-            $redirect_url = $this->_redirect_url;
-            
-            if (isset(self::$_instances[get_class($this)])) {
-                unset(self::$_instances[get_class($this)]);
-            }
-            
-            $client->redirect($redirect_url);
+            $client->redirect($this->_redirect_url);
         }
     }
     

@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
  */
 
 /**
@@ -21,12 +21,19 @@
  * @package  MVC
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
  * @see      PHPFrame_ActionController, PHPFrame_View
  * @since    1.0
  */
 class PHPFrame_MVCFactory
 {
+    /**
+     * Reference to application object
+     * 
+     * @var PHPFrame_Application
+     */
+    private static $_app;
+    
     /**
      * Constructor
      * 
@@ -53,8 +60,8 @@ class PHPFrame_MVCFactory
         $reflection_obj   = new ReflectionClass($controller_class);
         
         if (!$reflection_obj->isSubclassOf("PHPFrame_ActionController")) {
-            $msg  = "Action Controller not supported. ";
-            $msg .= $controller_class." does NOT extend PHPFrame_ActionController.";
+            $msg  = "Action Controller not supported. ".$controller_class;
+            $msg .= " does NOT extend PHPFrame_ActionController.";
             throw new LogicException($msg);
         }
         
@@ -95,7 +102,7 @@ class PHPFrame_MVCFactory
             }
             // No declared constructor, so we instantiate without args
             return new $class_name;
-        // If class is not instantiable we look for a method called "getInstance"
+        // If class is not instantiable we look for a "getInstance" method
         } elseif ($reflectionObj->hasMethod('getInstance')) {
             $get_instance = $reflectionObj->getMethod('getInstance');
             if ($get_instance->isPublic() && $get_instance->isStatic()) {
@@ -104,7 +111,7 @@ class PHPFrame_MVCFactory
             }
         }
         
-        // If we have not been able to return a model object we throw an exception
+        // If we have not been able to return a model we throw an exception
         $exception_msg = $model_name." not supported. ";
         $exception_msg .= "Could not get instance of ".$class_name;
         throw new RuntimeException($exception_msg);

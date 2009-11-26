@@ -21,15 +21,15 @@
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${build.dir}/tmp">
                 <include name="examples/**" />
-            	<include name="PHPFrame/**" />
-            	<include name="PHPFrame.php" />
-            	<include name="tutorials/**" />
-            	<include name="CREDITS" />
-            	<include name="LICENSE" />
-            	<include name="README" />
+                <include name="PHPFrame/**" />
+                <include name="PHPFrame.php" />
+                <include name="tutorials/**" />
+                <include name="CREDITS" />
+                <include name="LICENSE" />
+                <include name="README" />
             </fileset>
         </copy>
-    	<!-- copy tutorials files -->
+        <!-- copy tutorials files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${project.basedir}">
                 <include name="tutorials/**" />

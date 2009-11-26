@@ -10,21 +10,21 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
  */
 
 /**
  * This class is used to implement the MVC (Model/View/Controller) pattern.
  * 
  * Views are used to render the output of a controller into a form suitable for 
- * interaction, typically a user interface element. Multiple views can exist for 
- * a single controller for different purposes.
+ * interaction, typically a user interface element. Multiple views can exist 
+ * for a single controller for different purposes.
  * 
  * @category PHPFrame
  * @package  MVC
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/#svn/PHPFrame
+ * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
  * @see      PHPFrame_ActionController
  * @since    1.0
  */
@@ -42,25 +42,38 @@ class PHPFrame_View implements IteratorAggregate
      * @var array
      */
     private $_data = array();
+    /**
+     * Response object used to display the view
+     * 
+     * @var PHPFrame_Document
+     */
+    private $_response;
     
     /**
      * Constructor
      * 
-     * @param string $name   The view name
+     * @param string             $name     The view name
+     * @param PHPFrame_Document  $document Document object used to display the 
+     *                                     view 
+     * @param PHPFrame_IRenderer $renderer Renderer object used to render the 
+     *                                     view
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($name) 
-    {
-        $this->_name = trim((string) $name);
+    public function __construct(
+        $name, 
+        PHPFrame_Document $document, 
+        PHPFrame_IRenderer $renderer
+    ) {
+        $this->_name     = trim((string) $name);
+        $this->_document = $document;
+        $this->_renderer = $renderer;
     }
     
     /**
      * Convert view to string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -78,7 +91,6 @@ class PHPFrame_View implements IteratorAggregate
     /**
      * Implementation of IteratorAggregate interface
      * 
-     * @access public
      * @return ArrayIterator
      * @since  1.0
      */
@@ -90,7 +102,6 @@ class PHPFrame_View implements IteratorAggregate
     /**
      * Get view name
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -105,7 +116,6 @@ class PHPFrame_View implements IteratorAggregate
      * @param string $key   The name of the variable inside the view.
      * @param mixed  $value The variable we want to add to the view.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -117,7 +127,6 @@ class PHPFrame_View implements IteratorAggregate
     /**
      * Get view data
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -131,18 +140,11 @@ class PHPFrame_View implements IteratorAggregate
      * 
      * This method loads the template layer of the view.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
     public function display() 
     {
-        // Set profiler milestone
-        PHPFrame_Profiler::instance()->addMilestone();
-        
-        $renderer = PHPFrame::Response()->getRenderer();
-        $document = PHPFrame::Response()->getDocument();
-        
-        $document->setBody($renderer->render($this));
+        $this->_response->getDocument()->setBody($this->_response->getRenderer()->render($this));
     }
 }

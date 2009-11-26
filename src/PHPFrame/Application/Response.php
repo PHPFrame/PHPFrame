@@ -66,27 +66,48 @@ class PHPFrame_Response
      */
     private $_document = null;
     /**
-     * A pathway object for this view
-     * 
-     * @var PHPFrame_Pathway
-     */
-    private $_pathway = null;
-    /**
      * Instance of PHPFrame_IRenderer used to render 
      * 
      * @var PHPFrame_IRenderer
      */
     private $_renderer = null;
+    /**
+     * A pathway object for this view
+     * 
+     * @var PHPFrame_Pathway
+     */
+    private $_pathway = null;
     
     /**
      * Constructor
      * 
-     * @access public
+     * @param PHPFrame_Document  $document Document object used to display the 
+     *                                     response.
+     * @param PHPFrame_IRenderer $renderer Renderer object used to render the 
+     *                                     response.
+     * 
      * @return void
      * @since  1.0
      */
-    public function __construct()
-    {
+    public function __construct(
+        PHPFrame_Document $document=null, 
+        PHPFrame_IRenderer $renderer=null
+    ) {
+        // Set document object
+        if (is_null($document)) {
+            $this->_document = new PHPFrame_PlainDocument();
+        } else {
+            $this->_document = $document;
+        }
+        
+        // Set renderer object
+        if (is_null($renderer)) {
+            $this->_renderer = new PHPFrame_PlainRenderer();
+        } else {
+            $this->_renderer = $renderer;
+        }
+        
+        // Get global headers
         foreach (headers_list() as $header) {
             if (preg_match('/^([a-zA-Z-]+):(.*)$/', $header, $matches)) {
                 $this->setHeader($matches[1], trim($matches[2]));
@@ -106,7 +127,6 @@ class PHPFrame_Response
     /**
      * Convert object to string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -126,10 +146,11 @@ class PHPFrame_Response
     /**
      * Set the HTTP response status code
      * 
-     * @param int $int The status code
+     * @param int $int The status code. Allowed values are: 200, 301, 302, 303, 
+     *                 400, 401, 403, 404, 500 and 501
      * 
-     * @access public
      * @return void
+     * @throws InvalidArgumentException if supplied code is not allowed.
      * @since  1.0
      */
     public function setStatusCode($int)
@@ -147,11 +168,26 @@ class PHPFrame_Response
         $this->setHeader("Status", $this->_code);
     }
     
+    /**
+     * Get HTTP headers as an associative array
+     * 
+     * @return array
+     * @since  1.0
+     */
     public function getHeaders()
     {
         return $this->_headers;
     }
     
+    /**
+     * Get a given HTTP header by key
+     * 
+     * @param string $key The name of the HTTP header we want to get, "Status" 
+     *                    for example.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getHeader($key)
     {
         if (!isset($this->_headers[$key])) {
@@ -167,7 +203,6 @@ class PHPFrame_Response
      * @param string $key   The header key
      * @param string $value The header value
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -182,7 +217,6 @@ class PHPFrame_Response
     /**
      * Get the document object used as the response body
      * 
-     * @access public
      * @return PHPFrame_Document
      * @since  1.0
      */
@@ -194,9 +228,9 @@ class PHPFrame_Response
     /**
      * Set the document object used as the response body
      * 
-     * @param PHPFrame_Document $document
+     * @param PHPFrame_Document $document Document object used to display the 
+     *                                    response.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -210,7 +244,6 @@ class PHPFrame_Response
     /**
      * Get the renderer object
      * 
-     * @access public
      * @return PHPFrame_IRenderer
      * @since  1.0
      */
@@ -222,9 +255,9 @@ class PHPFrame_Response
     /**
      * Set the renderer object
      * 
-     * @param PHPFrame_IRenderer $renderer
+     * @param PHPFrame_IRenderer $renderer Renderer object used to display the 
+     *                                     response.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -236,7 +269,6 @@ class PHPFrame_Response
     /**
      * Get the view's pathway object
      * 
-     * @access public
      * @return PHPFrame_Pathway
      * @since  1.0
      */
@@ -247,8 +279,7 @@ class PHPFrame_Response
      
     /**
      * Send HTTP response to client
-     *                                       
-     * @access public
+     * 
      * @return void
      * @since  1.0
      */

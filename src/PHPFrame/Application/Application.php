@@ -815,6 +815,8 @@ class PHPFrame_Application
         // or a new request is created using the session's client
         if (is_null($request)) {
             $request = $this->getRequest();
+        } else {
+            $this->setRequest($request);
         }
         
         // If no controller has been set we use de default value provided in 
@@ -844,8 +846,6 @@ class PHPFrame_Application
         
         // Invoke dispatchLoopStartup hook
         $this->_plugin_handler->handle("dispatchLoopStartup");
-        
-        $request = $this->getRequest();
         
         while (!$request->isDispatched()) {
             // Set request as dispatched

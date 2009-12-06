@@ -1,4 +1,28 @@
 <?php
+/**
+ * data/CLITool/src/controllers/app.php
+ * 
+ * PHP version 5
+ * 
+ * @category  PHPFrame
+ * @package   PHPFrame_CLITool
+ * @author    Luis Montero <luis.montero@e-noise.com>
+ * @copyright 2009 The PHPFrame Group
+ * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ */
+
+/**
+ * App controller.
+ * 
+ * @category PHPFrame
+ * @package  PHPFrame_CLITool
+ * @author   Luis Montero <luis.montero@e-noise.com>
+ * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @since    1.0
+ */
 class AppController extends PHPFrame_ActionController
 {
     private $_install_dir=null;
@@ -8,7 +32,6 @@ class AppController extends PHPFrame_ActionController
      * 
      * @param string $install_dir
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -23,6 +46,21 @@ class AppController extends PHPFrame_ActionController
         parent::__construct("new_app");
     }
     
+    /**
+     * Create a new application
+     * 
+     * @param string $app_name
+     * @param string $db_driver
+     * @param string $db_name
+     * @param string $db_host
+     * @param string $db_user
+     * @param string $db_pass
+     * @param string $template
+     * @param string $allow_non_empty_dir
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function new_app(
         $app_name, 
         $db_driver="SQLite",
@@ -32,14 +70,17 @@ class AppController extends PHPFrame_ActionController
         $db_pass=null,
         $template=null, 
         $allow_non_empty_dir=false
-    )
-    {
+    ) {
         $app_name            = trim((string) $app_name);
         $allow_non_empty_dir = (bool) $allow_non_empty_dir;
         
         try {
             // Get model and pass install dir to constructor
-            $model = $this->getModel("AppTemplate", array($this->_install_dir));
+            $model = $this->getModel("AppTemplate", array(
+                $this->_install_dir, 
+                $this->config()->get("sources.preferred_mirror"),
+                $this->config()->get("sources.preferred_state")
+            ));
             
             // Install new app
             $model->install(
@@ -63,28 +104,15 @@ class AppController extends PHPFrame_ActionController
             $this->raiseError($msg);
             $this->raiseError($e->getMessage());
         }
-        
-        $this->getView()->display();
     }
     
-    public function update()
-    {
-        try {
-            $model = $this->getModel("AppTemplate", array($this->_install_dir));
-            $model->update();
-            
-            $msg = "App updated successfully";
-            $this->notifySuccess($msg);
-            
-        } catch (Exception $e) {
-            $msg = "Error updating app";
-            $this->raiseError($msg);
-            $this->raiseError($e->getMessage());
-        }
-        
-        $this->getView()->display();
-    }
-    
+    /**
+     * Remove application.
+     * 
+     * @return void
+     * @since  1.0
+     * @todo   Have to check for databases and other things to delete.
+     */
     public function remove()
     {
         try {
@@ -99,7 +127,5 @@ class AppController extends PHPFrame_ActionController
             $this->raiseError($msg);
             $this->raiseError($e->getMessage());
         }
-        
-        $this->getView()->display();
     }
 }

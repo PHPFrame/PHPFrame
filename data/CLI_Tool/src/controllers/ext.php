@@ -1,4 +1,28 @@
 <?php
+/**
+ * data/CLITool/src/controllers/ext.php
+ * 
+ * PHP version 5
+ * 
+ * @category  PHPFrame
+ * @package   PHPFrame_CLITool
+ * @author    Luis Montero <luis.montero@e-noise.com>
+ * @copyright 2009 The PHPFrame Group
+ * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ */
+
+/**
+ * Extensions controller.
+ * 
+ * @category PHPFrame
+ * @package  PHPFrame_CLITool
+ * @author   Luis Montero <luis.montero@e-noise.com>
+ * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @since    1.0
+ */
 class ExtController extends PHPFrame_ActionController
 {
     private $_ext_types=array("feature", "theme", "plugin", "lib");

@@ -1,26 +1,50 @@
 <?php
+/**
+ * data/CLITool/src/models/apptemplate.php
+ * 
+ * PHP version 5
+ * 
+ * @category  PHPFrame
+ * @package   PHPFrame_CLITool
+ * @author    Luis Montero <luis.montero@e-noise.com>
+ * @copyright 2009 The PHPFrame Group
+ * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ */
+
+/**
+ * Application Template manager class.
+ * 
+ * @category PHPFrame
+ * @package  PHPFrame_CLITool
+ * @author   Luis Montero <luis.montero@e-noise.com>
+ * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @since    1.0
+ */
 class AppTemplate
 {
     private $_install_dir = null;
     private $_preferred_mirror = null;
     private $_preferred_state = null;
     
-    public function __construct($install_dir)
-    {
-        $this->_install_dir = (string) trim($install_dir);
-        
-        $config = PHPFrame::Config();
-        $this->_preferred_mirror  = $config->get("sources.preferred_mirror");
+    public function __construct(
+        $install_dir, 
+        $preferred_mirror="http://dist.phpframe.org", 
+        $preferred_state="stable"
+    ) {
+        $this->_install_dir       = trim((string) $install_dir);
+        $this->_preferred_mirror  = trim((string) $preferred_mirror);
         $this->_preferred_mirror .= "/app_templates";
-        $this->_preferred_state   = $config->get("sources.preferred_state");
+        $this->_preferred_state   = trim((string) $preferred_state);
     }
     
     public function install(
         array $config, 
         $template=null, 
         $allow_non_empty_dir=false
-    )
-    {
+    ) {
         if (!isset($config["app_name"]) || empty($config["app_name"])) {
             $msg = "App name is required";
             throw new InvalidArgumentException($msg);
@@ -41,11 +65,6 @@ class AppTemplate
         //Create writable tmp and var folders for app
         PHPFrame_Filesystem::ensureWritableDir($this->_install_dir.DS."tmp");
         PHPFrame_Filesystem::ensureWritableDir($this->_install_dir.DS."var");
-    }
-    
-    public function update()
-    {
-        //...
     }
     
     public function remove()
@@ -78,7 +97,7 @@ class AppTemplate
         // for current version
         
         // download package from preferred mirror
-        $file_name     = "PHPFrame_AppTemplate-Full-0.0.1.tgz";
+        $file_name     = "PHPFrame_AppTemplate-1.0.tgz";
         $url           = $this->_preferred_mirror."/".$file_name;
         $download_tmp  = PHPFrame_Filesystem::getSystemTempDir();
         $download_tmp .= DS."PHPFrame".DS."download";
@@ -93,6 +112,8 @@ class AppTemplate
         // Create the http request
         $request  = new PHPFrame_HTTPRequest($url);
         $response = $request->download($download_tmp, $file_name);
+        
+        echo "\n";
         
         // If response is not OK we throw exception
         if ($response->getStatus() != 200) {
@@ -122,10 +143,10 @@ class AppTemplate
         PHPFrame::getSession()->getSysevents()
                            ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
-        // Instanciate new config object
+        // Instantiate new config object
         $dist_config_ini = PEAR_Config::singleton()->get("data_dir");
         $dist_config_ini .= DS."PHPFrame".DS."etc".DS."phpframe.ini";
-        $config = PHPFrame_Config::instance($dist_config_ini);
+        $config = new PHPFrame_Config($dist_config_ini);
         
         // Bind to array
         $config->bind($array);

@@ -828,7 +828,7 @@ class PHPFrame_Application
         foreach ($this->getPlugins() as $plugin) {
             if ($plugin->isEnabled()) {
                 $plugin_name = $plugin->getName();
-                $this->_plugin_handler->registerPlugin(new $plugin_name());
+                $this->_plugin_handler->registerPlugin(new $plugin_name($this));
             }
         }
         
@@ -883,6 +883,9 @@ class PHPFrame_Application
         
         $response = $this->getResponse();
         
+        // Invoke dispatchLoopShutdown hook
+        $this->_plugin_handler->handle("preApplyTheme");
+        
         // Apply theme if needed
         $document = $response->getDocument();
         if (
@@ -901,6 +904,9 @@ class PHPFrame_Application
             $sysevents = $response->getRenderer()->render($sysevents);
             $document->prependBody($sysevents);
         }
+        
+        // Invoke dispatchLoopShutdown hook
+        $this->_plugin_handler->handle("postApplyTheme");
         
         // If not in quiet mode, send response back to the client
         if (!$request->isQuiet()) {

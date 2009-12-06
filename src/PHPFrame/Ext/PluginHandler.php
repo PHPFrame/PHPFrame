@@ -52,7 +52,9 @@ class PHPFrame_PluginHandler
         "dispatchLoopStartup",
         "dispatchLoopShutdown",
         "preDispatch",
-        "postDispatch"
+        "postDispatch",
+        "preApplyTheme", 
+        "postApplyTheme"
     );
     /**
      * Reference to the application object.
@@ -140,7 +142,8 @@ class PHPFrame_PluginHandler
      * @param string $event The plugin handler supports the following events or 
      *                      hooks: routeStartup, routeShutdown, 
      *                      dispatchLoopStartup, dispatchLoopShutdown, 
-     *                      preDispatch, postDispatch
+     *                      preDispatch, postDispatch, preApplyTheme and 
+     *                      postApplyTheme.
      * 
      * @return void
      * @since  1.0
@@ -155,7 +158,7 @@ class PHPFrame_PluginHandler
         }
         
         foreach ($this->_plugins as $plugin) {
-            $plugin->$event($this->_app);
+            $plugin->$event();
         }
     }
 }

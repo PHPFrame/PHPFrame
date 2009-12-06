@@ -38,70 +38,108 @@
 abstract class PHPFrame_Plugin
 {
 	/**
-	 * This method is called BEFORE THE REQUEST IS ROUTED to a specific 
-	 * controller and action.
+     * Static reference to application object.
+     * 
+     * @var PHPFrame_Application
+     */
+    private static $_app;
+	
+	/**
+	 * Constructor
 	 * 
 	 * @param PHPFrame_Application $app Reference to application object.
 	 * 
 	 * @return void
+     * @since  1.0
+	 */
+	public function __construct(PHPFrame_Application $app)
+	{
+		self::$_app = $app;
+	}
+	
+	/**
+	 * Get reference to application object.
+	 * 
+	 * @return PHPFrame_Application
 	 * @since  1.0
 	 */
-    public function routeStartup(PHPFrame_Application $app) {}
+	protected function app()
+	{
+		return self::$_app;
+	}
+	
+	/**
+	 * This method is called BEFORE THE REQUEST IS ROUTED to a specific 
+	 * controller and action.
+	 * 
+	 * @return void
+	 * @since  1.0
+	 */
+    public function routeStartup() {}
     
     /**
      * This method is called AFTER THE REQUEST IS ROUTED to a specific 
      * controller and action.
      * 
-     * @param PHPFrame_Application $app Reference to application object.
-     * 
      * @return void
      * @since  1.0
      */
-    public function routeShutdown(PHPFrame_Application $app) {}
+    public function routeShutdown() {}
     
     /**
      * This method is called BEFORE THE DISPATCH LOOP is started. So it will 
      * only run once, regardless of whow many iterations through the dispatch 
      * loop.
      * 
-     * @param PHPFrame_Application $app Reference to application object.
-     * 
      * @return void
      * @since  1.0
      */
-    public function preDispatch(PHPFrame_Application $app) {}
+    public function preDispatch() {}
     
     /**
      * This method is called AFTER THE DISPATCH LOOP has finished iterating.  
      * It will only run once, regardless of whow many iterations through the 
      * dispatch loop.
      * 
-     * @param PHPFrame_Application $app Reference to application object.
-     * 
      * @return void
      * @since  1.0
      */
-    public function postDispatch(PHPFrame_Application $app) {}
+    public function postDispatch() {}
     
     /**
      * This method is called AT THE BEGINNING OF EVERY ITERATION OF THE 
      * DISPATCH LOOP. It will run once for every iteration of the loop.
      * 
-     * @param PHPFrame_Application $app Reference to application object.
-     * 
      * @return void
      * @since  1.0
      */
-    public function dispatchLoopStartup(PHPFrame_Application $app) {}
+    public function dispatchLoopStartup() {}
     
     /**
      * This method is called AT THE END OF EVERY ITERATION OF THE DISPATCH
      * LOOP. It will run once for every iteration of the loop.
      * 
-     * @param PHPFrame_Application $app Reference to application object.
+     * @return void
+     * @since  1.0
+     */
+    public function dispatchLoopShutdown() {}
+    
+    /**
+     * This method is called AFTER THE DISPATCH LOOP AND BEFORE THE THEME IS
+     * APPLIED TO THE RESPONSE BODY.
      * 
      * @return void
      * @since  1.0
      */
-    public function dispatchLoopShutdown(PHPFrame_Application $app) {}
+    public function preApplyTheme() {}
+    
+    /**
+     * This method is called AFTER THE THEME IS APPLIED TO THE RESPONSE BODY 
+     * and it is the last hook to be called before the application ends 
+     * execution.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function postApplyTheme() {}
 }

@@ -33,94 +33,104 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
      */
     public function routeStartup() 
     {
-        
+    	$request_uri = $this->app()->getRequest()->getRequestURI();
+    	$script_name = $this->app()->getRequest()->getScriptName();
+    	
         // If there is no request uri (ie: we are on the command line) we do 
         // not rewrite
-        if (!isset($_SERVER['REQUEST_URI'])) {
+        if (empty($request_uri)) {
             return;
         }
         
         // Get path to script
-        $path = substr($_SERVER['SCRIPT_NAME'], 0, (strrpos($_SERVER['SCRIPT_NAME'], '/')+1));
+        $path = substr($script_name, 0, (strrpos($script_name, '/')+1));
         
-        // If the script name doesnt appear in the request URI we need to rewrite
-        if (strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']) === false
-            && $_SERVER['REQUEST_URI'] != $path
-            && $_SERVER['REQUEST_URI'] != $path."index.php") {
+        // If script name doesnt appear in the request URI we need to rewrite
+        if (
+            strpos($request_uri, $script_name) === false
+            && $request_uri != $path
+            && $request_uri != $path."index.php"
+        ) {
             // Remove path from request uri. 
             // This gives us the component and action expressed as directories
             if ($path != "/") {
-                $params = str_replace($path, "", $_SERVER['REQUEST_URI']);
-            }
-            else {
+                $params = str_replace($path, "", $request_uri);
+            } else {
                 // If app is in web root we simply remove preceding slash
-                $params = substr($_SERVER['REQUEST_URI'], 1);
+                $params = substr($request_uri, 1);
             }
             
-            // Get component name using regex
-            preg_match('/^([a-zA-Z]+)/', $params, $controller_matches);
+            // Get component and action name using regex
+            preg_match('/^([a-zA-Z]+)\/([a-zA-Z_]+)?/', $params, $matches);
             
-            // Get action name using regex
-            preg_match('/^[a-zA-Z]+\/([a-zA-Z_]+)/', $params, $action_matches);
-            
-            if (isset($controller_matches[1]) && !empty($controller_matches[1])) {
-                $controller = $controller_matches[1];
-                if (isset($action_matches[1])) {
-                    $action = $action_matches[1];
+            if (isset($matches[1])) {
+                $this->app()->getRequest()->setControllerName($matches[1]);
+                
+                // Prepend component to query string
+                $rewritten_query_string = "controller=".$matches[1];
+                
+                if (isset($matches[2])) {
+                    $this->app()->getRequest()->setAction($matches[2]);
+                    
+                    // Prepend component and action to query string
+                    $rewritten_query_string .= "&action=".$matches[2];
+                
                 }
-
-                // Prepend component and action to query string
-                $rewritten_query_string = "controller=".$controller;
-                if (!empty($action)) $rewritten_query_string .= "&action=".$action;
+                
                 if (!empty($_SERVER['QUERY_STRING'])) {
                     $rewritten_query_string .= "&".$_SERVER['QUERY_STRING'];
                 }
+                
                 $_SERVER['QUERY_STRING'] = $rewritten_query_string;
                 
                 // Update request uri
                 $_SERVER['REQUEST_URI'] = $path."index.php?".$_SERVER['QUERY_STRING'];
                 
-                // Set vars in _REQUEST array
-                if (!empty($controller)) {
-                    $_REQUEST['controller'] = $controller;
-                    $_GET['controller'] = $controller;
-                }
-                if (!empty($action)) {
-                    $_REQUEST['action'] = $action;
-                    $_GET['action'] = $action;    
-                }
             }
         }
     }
     
     /**
-     * Rewrite URL after controllers have run in dispatch loop
-     * 
-     * @param PHPFrame_Request  $request      Reference to request object.
-     * @param PHPFrame_Response $response     Reference to response object.
+     * Rewrite URLs after controllers have run in dispatch loop and theme has 
+     * been applied.
      * 
      * @return string
      * @since  1.0
      */
-    public function dispatchLoopShutdown(
-        PHPFrame_Request $request, 
-        PHPFrame_Response $response
-    ) {
-        $response_body = $response->getDocument()->getBody();
-        $uri           = new PHPFrame_URI();
+    public function postApplyTheme()
+    {
+        // Get response body
+        $body     = $this->app()->getResponse()->getDocument()->getBody();
+        $base_url = $this->app()->getConfig()->get("base_url");
         
-        $patterns[]     = '/"index.php\?controller=([a-zA-Z]+)&action=([a-zA-Z_]+)(&)?/';
-        $replacements[] = '"'.$uri->getBase().'${1}/${2}?';
-        $patterns[]     = '/"index.php\?controller=([a-zA-Z]+)(&)?/';
-        $replacements[] = '"'.$uri->getBase().'${1}${2}';
+        // Build sub patterns
+        $controller = 'controller=([a-zA-Z]+)';
+        $action     = 'action=([a-zA-Z_]+)';
+        $amp        = '(&amp;|&)';
         
-        $processed_body = preg_replace($patterns, $replacements, $response_body);
-        $response->getDocument()->setBody($processed_body, false);
+        // Build patterns and replacements
+        $patterns[]     = '/"index.php\?'.$controller.$amp.$action.$amp.'/';
+        $replacements[] = '"'.$base_url.'${1}/${3}?';
+        
+        $patterns[]     = '/"index.php\?'.$controller.$amp.$action.'"/';
+        $replacements[] = '"'.$base_url.'${1}/${3}"';
+        
+        $patterns[]     = '/"index.php\?'.$controller.$amp.'/';
+        $replacements[] = '"'.$base_url.'${1}?';
+        
+        $patterns[]     = '/"index.php\?'.$controller.'"/';
+        $replacements[] = '"'.$base_url.'${1}"';
+        
+        // Replace the patterns in response body
+        $body = preg_replace($patterns, $replacements, $body);
+        
+        // Set the processed body back in the response
+        $this->app()->getResponse()->getDocument()->setBody($body);
     }
     
     public static function rewriteURL($url, $xhtml=true)
     {
-    	$uri = new PHPFrame_URI();
+    	$uri = new PHPFrame_URI(self::$_app->getConfig()->get("base_url"));
         
         if (!preg_match('/^http/i', $url)) {
             $url = $uri->getBase().$url;

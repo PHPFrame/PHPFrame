@@ -317,6 +317,20 @@ class PHPFrame_Response
     	    $this->getDocument()->setBody($value);
     	}
     }
+    
+    /**
+     * Set the document title
+     * 
+     * @param string $str The string to set as document title.
+     * 
+     * @access public
+     * @return void
+     * @since  1.0
+     */
+    public function setTitle($str)
+    {
+    	$this->getDocument()->setTitle($str);
+    }
      
     /**
      * Send HTTP response to client

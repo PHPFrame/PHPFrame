@@ -180,7 +180,7 @@ class PHPFrame_Application
      */
     public function autoload($class_name)
     {
-        $file_path = $this->_install_dir.DS."src".DS;
+        $file_path = $this->getInstallDir().DS."src".DS;
         
         // Autoload Controllers, Helpers and Language classes
         $super_classes = array("Controller", "Helper", "Lang");
@@ -828,7 +828,8 @@ class PHPFrame_Application
         }
         
         // Acquire instance of Plugin Handler
-        $this->_plugin_handler = new PHPFrame_PluginHandler();
+        $plugins_path = $this->getInstallDir().DS."src".DS."plugins";
+        $this->_plugin_handler = new PHPFrame_PluginHandler($plugins_path);
         
         // Register installed plugins with plugin handler
         foreach ($this->getPlugins() as $plugin) {

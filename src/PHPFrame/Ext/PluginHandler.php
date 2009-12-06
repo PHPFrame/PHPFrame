@@ -37,6 +37,12 @@ class PHPFrame_PluginHandler
      */
     private $_plugins = null;
     /**
+     * Absolute path to plugins directory.
+     * 
+     * @var string
+     */
+    private static $_plugins_path;
+    /**
      * An array defining the support events or hooks
      * 
      * @var array
@@ -53,19 +59,23 @@ class PHPFrame_PluginHandler
     /**
      * Constructor
      * 
+     * @param string $plugins_path Absolute path to plugins directory.
+     * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct()
+    public function __construct($plugins_path)
     {
+    	self::$_plugins_path = trim((string) $plugins_path);
+    	
         // Acquire instance of SplObjectStorage
         $this->_plugins = new SplObjectStorage();
         
         /**
          * Register plugins autoload function
          */
-        spl_autoload_register(array("PHPFrame_PluginHandler", "__autoload"));
+        spl_autoload_register(array($this, "autoload"));
     }
     
     /**
@@ -78,10 +88,10 @@ class PHPFrame_PluginHandler
      * @return void
      * @since  1.0
      */
-    public static function __autoload($class_name)
+    public static function autoload($class_name)
     {
-        $plugins_path  = PHPFRAME_INSTALL_DIR.DS."src".DS."plugins";
-        $file_name     = $plugins_path.DS.strtolower(trim($class_name)).".php";
+        $file_name  = self::$_plugins_path.DS;
+        $file_name .= strtolower(trim($class_name)).".php";
         
         if (is_file($file_name)) {
             require $file_name;

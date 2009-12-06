@@ -26,9 +26,31 @@
  */
 class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
 {
+	/**
+	 * An array containing meta tags.
+	 * 
+	 * @var array
+	 */
     private $_meta_tags = array();
+    /**
+     * An array containing scripts.
+     * 
+     * @var array
+     */
     private $_scripts = array();
+    /**
+     * An array containing style sheets.
+     * 
+     * @var array
+     */
     private $_style_sheets = array();
+    /**
+     * If set to TRUE object will only include contents of the body tag. This 
+     * is used for AJAX output.
+     * 
+     * @var bool
+     */
+    private $_body_only = false;
     
     /**
      * Constructor
@@ -82,6 +104,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     public function __toString()
     {
+    	// If "body only" mode we simply return the body
+    	if ($this->_body_only) {
+    	   return $this->getBody();
+    	}
+    	
         // Add title tag in head node 
         $head_node = $this->dom->getElementsByTagName("head")->item(0);
         $this->addNode($head_node, "title", null, $this->getTitle());
@@ -245,6 +272,20 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         ob_end_clean();
         
         $this->setBody($str);
+    }
+    
+    /**
+     * Set the "body only" flag. If set to TRUE object will only include 
+     * contents of the body tag. This is used for AJAX output.
+     * 
+     * @param bool $bool Whether or not to render as "body only".
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function setBodyOnly($bool)
+    {
+    	$this->_body_only = (bool) $bool;
     }
     
     /**

@@ -899,6 +899,11 @@ class PHPFrame_Application
         	$theme_path .= DS.$theme.DS."index.php";
             $document->applyTheme($theme_url, $theme_path, $response);
         } else {
+        	// Set "body only" mode for AJAX requests when HTML document
+        	if ($document instanceof PHPFrame_HTMLDocument) {
+        		$document->setBodyOnly(true);
+        	}
+        	
         	// Append system events when no theme
         	$sysevents = PHPFrame::getSession()->getSysevents();
             $sysevents = $response->getRenderer()->render($sysevents);

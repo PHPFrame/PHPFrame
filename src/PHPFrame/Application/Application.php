@@ -386,59 +386,19 @@ class PHPFrame_Application
         if (!array_key_exists("driver", $options) 
             || !array_key_exists("name", $options)
         ) {
-            $msg  = "If options array is provided 'driver' and 'name' are ";
-            $msg .= "required";
+            $msg  = "'driver' and 'name' are required in options array";
             throw new InvalidArgumentException($msg);
         }
         
-        $dsn = strtolower($options["driver"]);
-        if ($dsn == "sqlite") {
-            $dsn .= ":";
-            if (!preg_match('/^\//', $options["name"])) {
-                $dsn .= $this->_var_dir.DS;
-            }
-            $dsn .= $options["name"];
-        } elseif ($dsn == "mysql") {
-            $dsn .= ":dbname=".$options["name"];
-            if (isset($options["host"]) && !empty($options["host"])) {
-                $dsn .= ";host=".$options["host"].";";
-            }
-            if (isset($options["mysql_unix_socket"]) 
-                && !empty($options["mysql_unix_socket"])
-            ) {
-                $dsn .= ";unix_socket=".$options["mysql_unix_socket"];
-            } else {
-                $dsn .= ";unix_socket=".ini_get('mysql.default_socket');
-            }
-        } else {
-            $msg = "Database driver not supported.";
-            throw new Exception($msg);
+        // Make absolute path for sqlite db if relative given
+        if (
+            strtolower($options["driver"]) == "sqlite" 
+            && !preg_match('/^\//', $options["name"])
+        ) {
+            $options["name"] = $this->_var_dir.DS.$options["name"];
         }
         
-        if (isset($options["user"]) && !empty($options["user"])) {
-            $db_user = $options["user"];
-        } else {
-            $db_user = null;
-        }
-        
-        if (isset($options["pass"]) && !empty($options["pass"])) {
-            $db_pass = $options["pass"];
-        } else {
-            $db_pass = null;
-        }
-        
-        if (isset($options["prefix"]) && !empty($options["prefix"])) {
-            $db_prefix = $options["prefix"];
-        } else {
-            $db_prefix = null;
-        }
-        
-        return PHPFrame_Database::getInstance(
-            $dsn, 
-            $db_user, 
-            $db_pass, 
-            $db_prefix
-        );
+        return PHPFrame_DatabaseFactory::getDB($options);
     }
     
     /**

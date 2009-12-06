@@ -44,7 +44,7 @@ class ManController extends PHPFrame_ActionController
         $str .= "in the config\nfile.\n\n";
         $str .= (string) $app_doc;
         
-        $this->response()->getDocument()->setTitle("Usage instructions");
-        $this->response()->getDocument()->setBody($str);
+        $this->response()->setTitle("Usage instructions");
+        $this->response()->setBody($str);
     }
 }

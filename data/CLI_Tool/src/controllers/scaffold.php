@@ -25,6 +25,11 @@
  */
 class ScaffoldController extends PHPFrame_ActionController
 {
+	/**
+	 * Absolute path to installation directry.
+	 * 
+	 * @var string
+	 */
     private $_install_dir=null;
     
     /**
@@ -32,7 +37,6 @@ class ScaffoldController extends PHPFrame_ActionController
      * 
      * @param string $install_dir
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -50,7 +54,6 @@ class ScaffoldController extends PHPFrame_ActionController
     /**
      * Display controller's usage instructions
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -58,8 +61,8 @@ class ScaffoldController extends PHPFrame_ActionController
     {
         $doc = new PHPFrame_ControllerDoc(new ReflectionClass(get_class($this)));
         
-        PHPFrame::Response()->getDocument()->setTitle("Usage instructions");
-        PHPFrame::Response()->getDocument()->setBody((string) $doc);
+        $this->response()->setTitle("Usage instructions");
+        $this->response()->setBody((string) $doc);
     }
     
     /**
@@ -76,7 +79,6 @@ class ScaffoldController extends PHPFrame_ActionController
      * @param bool   $drop        [Optional] Default value is FALSE. When set 
      *                            to true existing table will be dropped.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -118,7 +120,7 @@ class ScaffoldController extends PHPFrame_ActionController
         
         // Get database options from config file
         $config_file = $this->_install_dir.DS."etc".DS."phpframe.ini";
-        $config      = PHPFrame_Config::instance($config_file);
+        $config      = new PHPFrame_Config($config_file);
         $options_it  = new RegexIterator(
             new IteratorIterator(PHPFrame::Config()), 
             '/^db\./', 
@@ -138,7 +140,7 @@ class ScaffoldController extends PHPFrame_ActionController
             $options["db.name"] = $var_dir.DS.$options["db.name"];
         }
         
-        $db = PHPFrame::DB($options);
+        $db = PHPFrame_DatabaseFactory::getDB($options);
         
         $or_toolbox = new PHPFrame_ObjectRelationalToolbox();
         
@@ -159,22 +161,38 @@ class ScaffoldController extends PHPFrame_ActionController
         $this->notifySuccess("Database table successfully created.");
     }
     
+    /**
+     * Create a persistent object class file based on a database table.
+     * 
+     * @return void
+     * @since  1.0
+     * @todo   Method needs implementation...
+     */
     public function create_persistent_object()
     {
         
     }
     
+    /**
+     * Create a files for a new feature...
+     * 
+     * @return void
+     * @since  1.0
+     * @todo   Method needs implementation...
+     */
     public function create_feature()
     {
         
     }
     
+    /**
+     * Create a template controller class.
+     * 
+     * @return void
+     * @since  1.0
+     * @todo   Method needs implementation...
+     */
     public function create_controller()
-    {
-        
-    }
-    
-    public function create_view()
     {
         
     }

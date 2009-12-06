@@ -11,7 +11,6 @@
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
  * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
- * @ignore
  */
 
 /**
@@ -35,7 +34,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
  * @since    1.0
- * @ignore
  */
 abstract class PHPFrame_Plugin
 {

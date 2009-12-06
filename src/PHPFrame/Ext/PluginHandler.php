@@ -25,7 +25,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
  * @since    1.0
- * @see      PHPFrame_FrontController
  */
 class PHPFrame_PluginHandler
 {

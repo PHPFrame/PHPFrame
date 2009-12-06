@@ -106,7 +106,7 @@ class PHPFrame_ResponseTest extends PHPUnit_Framework_TestCase
         $this->_response->setRenderer(new PHPFrame_PlainRenderer());
         $this->assertType("PHPFrame_PlainRenderer", $this->_response->getRenderer());
         
-        $this->_response->setRenderer(new PHPFrame_HTMLRenderer());
+        $this->_response->setRenderer(new PHPFrame_HTMLRenderer("somepath"));
         $this->assertType("PHPFrame_HTMLRenderer", $this->_response->getRenderer());
         
         $this->_response->setRenderer(new PHPFrame_PlainRenderer());

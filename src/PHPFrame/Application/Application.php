@@ -819,14 +819,6 @@ class PHPFrame_Application
             $this->setRequest($request);
         }
         
-        // If no controller has been set we use de default value provided in 
-        // etc/phpframe.ini
-        $controller_name = $request->getControllerName();
-        if (is_null($controller_name) || empty($controller_name)) {
-            $def_controller = $this->getConfig()->get("default_controller");
-            $request->setControllerName($def_controller);
-        }
-        
         // Acquire instance of Plugin Handler
         $plugins_path = $this->getInstallDir().DS."src".DS."plugins";
         $this->_plugin_handler = new PHPFrame_PluginHandler($plugins_path);
@@ -841,6 +833,14 @@ class PHPFrame_Application
         
         // Invoke route startup hook before request object is initialised
         $this->_plugin_handler->handle("routeStartup");
+        
+        // If no controller has been set we use de default value provided in 
+        // etc/phpframe.ini
+        $controller_name = $request->getControllerName();
+        if (is_null($controller_name) || empty($controller_name)) {
+            $def_controller = $this->getConfig()->get("default_controller");
+            $request->setControllerName($def_controller);
+        }
         
         // Invoke route shutdown hook
         $this->_plugin_handler->handle("routeShutdown");

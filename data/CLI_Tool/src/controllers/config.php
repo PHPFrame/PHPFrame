@@ -25,8 +25,19 @@
  */
 class ConfigController extends PHPFrame_ActionController
 {
+	/**
+	 * Reference to config object.
+	 * 
+	 * @var PHPFrame_Config
+	 */
     private $_config=null;
     
+    /**
+     * Constructor
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct()
     {
         $path = getcwd().DS."etc".DS."phpframe.ini";
@@ -35,29 +46,54 @@ class ConfigController extends PHPFrame_ActionController
             throw new RuntimeException($msg);
         }
         
-        $this->_config = PHPFrame_Config::instance($path);
+        $this->_config = new PHPFrame_Config($path);
         
         parent::__construct("list_all");
     }
     
+    /**
+     * List all configuration values.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function list_all()
     {
         $str = (string) $this->_config;
         
         $view = $this->getView();
         $view->addData("config", $str);
-        $view->display();
+        
+        $this->response()->setBody($view);
     }
     
+    /**
+     * Display value for a given configuration parameter.
+     * 
+     * @param string $key The name of the config parameter.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function get($key)
     {
         $key = trim((string) $key);
         
         $view = $this->getView();
         $view->addData($key, $this->_config->get($key));
-        $view->display();
+        
+        $this->response()->setBody($view);
     }
     
+    /**
+     * Set the value of a given configuration parameter.
+     * 
+     * @param string $key   The name of the config parameter.
+     * @param string $value The new value for the parameter.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function set($key, $value)
     {
         $key   = trim((string) $key);
@@ -74,6 +110,7 @@ class ConfigController extends PHPFrame_ActionController
         
         $view = $this->getView();
         $view->addData($key, $this->_config->get($key));
-        $view->display();
+        
+        $this->response()->setBody($view);
     }
 }

@@ -38,7 +38,6 @@ class PHPFrame_String
      * 
      * @param string $str The string the object will represent.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -50,7 +49,6 @@ class PHPFrame_String
     /**
      * Magic method called we try to use a string object as a string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -62,7 +60,6 @@ class PHPFrame_String
     /**
      * Get string length
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -74,7 +71,6 @@ class PHPFrame_String
     /**
      * Get string in upper case
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -86,7 +82,6 @@ class PHPFrame_String
     /**
      * Get string in lower case
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -98,7 +93,6 @@ class PHPFrame_String
     /**
      * Get string with first character in upper case
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -110,7 +104,6 @@ class PHPFrame_String
     /**
      * Get string with first character in every word in upper case
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -126,7 +119,6 @@ class PHPFrame_String
      *                              whether we should make the string safe for 
      *                              javascript.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -143,7 +135,6 @@ class PHPFrame_String
      *                                want to add trailing dots or not. Default 
      *                                is TRUE.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -171,7 +162,6 @@ class PHPFrame_String
      *                                want to add trailing dots or not. Default 
      *                                is TRUE.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -201,7 +191,6 @@ class PHPFrame_String
      *                                want to add trailing dots or not. Default 
      *                                is TRUE.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */

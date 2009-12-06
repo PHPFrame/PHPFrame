@@ -61,7 +61,6 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -77,7 +76,6 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Magic method used when object is used as string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -86,7 +84,6 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Implementation of the IteratorAggregate interface.
      * 
-     * @access public
      * @return Iterator
      * @since  1.0
      */
@@ -105,7 +102,6 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Get the document's character set
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -117,7 +113,6 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Get document's mime type
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -127,9 +122,8 @@ abstract class PHPFrame_Document implements IteratorAggregate
     }
     
     /**
-     * Get the document _title
+     * Get the document title
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -139,11 +133,10 @@ abstract class PHPFrame_Document implements IteratorAggregate
     }
     
     /**
-     * Set the document _title
+     * Set the document title
      * 
-     * @param string $str The string to set as document _title.
+     * @param string $str The string to set as document title.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -153,11 +146,10 @@ abstract class PHPFrame_Document implements IteratorAggregate
     }
     
     /**
-     * Append string to the document _title
+     * Append string to the document title
      * 
      * @param string $str The string to append.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -169,7 +161,6 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Get the document body
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -183,7 +174,6 @@ abstract class PHPFrame_Document implements IteratorAggregate
      * 
      * @param string $str
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -195,7 +185,6 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Append string to the document body
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -207,7 +196,6 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Prepend string to the document body
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

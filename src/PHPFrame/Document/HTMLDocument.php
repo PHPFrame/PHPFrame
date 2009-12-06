@@ -36,7 +36,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      * @param string $mime    [Optional]
      * @param string $charset [Optional]
      * 
-     * @access public
      * @return void
      * @uses   DOMImplementation, PHPFrame_URI, PHPFrame_Pathway
      * @since  1.0 
@@ -78,7 +77,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Convert object to string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -128,7 +126,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Get DOM Document Type object
      * 
-     * @access public
      * @return DOMDocumentType
      * @since  1.0
      */
@@ -164,7 +161,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      *                           gather information for HTTP response message 
      *                           headers.
      * 
-     * @access public
      * @return void
      * @since  1.0
      * @todo   This method should check whether the meta tag has already been 
@@ -187,7 +183,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      * @param string $src  The relative or absolute URL to the script source.
      * @param string $type The script type. Default is text/javascript.
      * 
-     * @access public
      * @return void
      * @since  1.0
      * @todo   This method should check whether the script has already been 
@@ -207,7 +202,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      * @param string $href The relative or absolute URL to the link source.
      * @param string $type The link type. Default is text/css.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -224,65 +218,33 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     }
     
     /**
-     * Set the document body (overrides inherited method)
-     * 
-     * @param string $str
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function setBody($str, $apply_theme=true)
-    {
-//        if (
-//            $apply_theme 
-//            && !PHPFrame::Request()->isAJAX()
-//        ) {
-//            $str = $this->_applyTheme($str);
-//        } else {
-//            $sysevents = PHPFrame::Response()->getRenderer()->renderPartial("sysevents");
-//            $str = $sysevents.$str;
-//        }
-        
-        parent::setBody($str);
-    }
-    
-    /**
      * Apply theme
      * 
-     * @access private
+     * @param string $theme_url           URL to theme.
+     * @param string $theme_path          Absolute path to theme template in 
+     *                                    filesystem.
+     * @param PHPFrame_Response $response Response object.
+     * 
      * @return void
      * @since  1.0
      */
-    private function _applyTheme($str) 
-    {
+    public function applyTheme(
+        $theme_url, 
+        $theme_path, 
+        PHPFrame_Response $response
+    ) {
         // Add theme stylesheets
-        $this->addStyleSheet("themes/".PHPFrame::Config()->get("theme")."/css/styles.css");
-        
-        // make pathway available in local scope
-        $pathway = PHPFrame::Response()->getPathway();
-        
-        $component_output = $str;
-        
-        // Set file name to load depending on session auth
-        $controller = PHPFrame::Request()->getControllerName();
-        if ($controller == "login") {
-            $template_filename = 'login.php';
-        } else {
-            $template_filename = 'index.php';
-        }
-        
-        $template_path = PHPFRAME_INSTALL_DIR.DS."public".DS."themes".DS.PHPFrame::Config()->get("theme");
+        $this->addStyleSheet($theme_url."/css/styles.css");
         
         // Start buffering
         ob_start();
-        require_once $template_path.DS.$template_filename;
+        require_once $theme_path;
         // save buffer in body
         $str = ob_get_contents();
         // clean output buffer
         ob_end_clean();
         
-        return $str;
+        $this->setBody($str);
     }
     
     /**
@@ -290,7 +252,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      * 
      * @param string $path The path we want to make absolute.
      * 
-     * @access private
      * @return void
      * @since  1.0
      */

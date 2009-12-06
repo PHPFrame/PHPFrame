@@ -34,6 +34,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
         
         return strip_tags(trim((string) $value));
     }
+    
     /**
      * Render view and store in document's body
      * 
@@ -42,7 +43,6 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      * 
      * @param PHPFrame_View $view        The view object to process.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -75,9 +75,8 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      * @param int $fault_code The fault code.
      * @param string $fault_string The fault description.
      * 
-     * @access private
-     * @since  1.0
      * @return string An XML-RPC methodResponse structure with Fault node.
+     * @since  1.0
      */
     private function _makeFaultPayload($fault_code, $fault_string)
     {
@@ -97,9 +96,8 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      * 
      * @param mixed $param_value The parameter value as a scalar value or array.
      * 
-     * @access private
-     * @since  1.0
      * @return string An XML-RPC methodResponse structure with Param node.
+     * @since  1.0
      */
     private function _makeParamPayload($param_value)
     {
@@ -119,10 +117,10 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      * Value
      * 
      * @param DOMNode $parentNode The name to be given to the node.
-     * @param string $nodeName The name to be given to the node.
-     * @param mixed $nodeValue The node value (string|int|double|array).
+     * @param string  $nodeName   The name to be given to the node.
+     * @param mixed   $nodeValue  The node value (string|int|double|array).
      * 
-     * @access private
+     * @return void
      * @since  1.0
      */
     private function _buildNode($parent_node, $node_name, $node_value)
@@ -163,11 +161,10 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      * 
      * This method is used to check if an array is an associative array
      * 
-     * @param array $testArray The array to be tested.
+     * @param array $test_array The array to be tested.
      * 
-     * @access private
-     * @since  1.0
      * @return boolean True if array is associative or empty.
+     * @since  1.0
      */
     private function _isAssoc($test_array)
     {
@@ -194,9 +191,8 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      * 
      * @param mixed $nodeValue The value to be checked and wrapped if applicable.
      * 
-     * @access private
-     * @since  1.0
      * @return DOMNode The original node, or firstChild if type added.
+     * @since  1.0
      */
     private function _addType($parent_node, $node_value)
     {
@@ -221,7 +217,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      * 
      * @param array $assocArray The associative array.
      * 
-     * @access private
+     * @return void
      * @since  1.0
      */
     private function _addStruct($parent_node, $assoc_array)
@@ -245,7 +241,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      * 
      * @param array $indexArray The array.
      * 
-     * @access private
+     * @return void
      * @since  1.0
      */
     private function _addArray($parent_node, $index_array)

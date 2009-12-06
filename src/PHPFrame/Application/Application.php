@@ -823,7 +823,11 @@ class PHPFrame_Application
         
         // Acquire instance of Plugin Handler
         $plugins_path = $this->getInstallDir().DS."src".DS."plugins";
-        $this->_plugin_handler = new PHPFrame_PluginHandler($plugins_path);
+        $this->_plugin_handler = new PHPFrame_PluginHandler(
+            $plugins_path,
+            $this->getRequest(),
+            $this->getResponse()
+        );
         
         // Register installed plugins with plugin handler
         foreach ($this->getPlugins() as $plugin) {
@@ -883,6 +887,25 @@ class PHPFrame_Application
         $this->_plugin_handler->handle("dispatchLoopShutdown");
         
         $response = $this->getResponse();
+        
+        // Apply theme if needed
+        $document = $response->getDocument();
+        if (
+            $document instanceof PHPFrame_HTMLDocument
+            && !$request->isAJAX()
+        ) {
+        	$theme       = $this->getConfig()->get("theme");
+        	$base_url    = $this->getConfig()->get("base_url");
+        	$theme_url   = $base_url."themes/".$theme;
+        	$theme_path  = $this->getInstallDir().DS."public".DS."themes";
+        	$theme_path .= DS.$theme.DS."index.php";
+            $document->applyTheme($theme_url, $theme_path, $response);
+        } else {
+        	// Append system events when no theme
+        	$sysevents = PHPFrame::getSession()->getSysevents();
+            $sysevents = $response->getRenderer()->render($sysevents);
+            $document->prependBody($sysevents);
+        }
         
         // If not in quiet mode, send response back to the client
         if (!$request->isQuiet()) {

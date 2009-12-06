@@ -30,18 +30,18 @@
 class PHPFrame_PluginHandler
 {
     /**
+     * Absolute path to plugins directory.
+     * 
+     * @var string
+     */
+    private static $_plugins_path;
+    /**
      * This property holds an instance of SplObjectStorage used to store 
      * instances of the registered plugins.
      * 
      * @var SplObjectStorage
      */
     private $_plugins = null;
-    /**
-     * Absolute path to plugins directory.
-     * 
-     * @var string
-     */
-    private static $_plugins_path;
     /**
      * An array defining the support events or hooks
      * 
@@ -55,19 +55,37 @@ class PHPFrame_PluginHandler
         "preDispatch",
         "postDispatch"
     );
+    /**
+     * Reference to request object.
+     * 
+     * @var PHPFrame_Request
+     */
+    private $_request;
+    /**
+     * Reference to response object.
+     * 
+     * @var PHPFrame_Response
+     */
+    private $_response;
     
     /**
      * Constructor
      * 
-     * @param string $plugins_path Absolute path to plugins directory.
+     * @param string            $plugins_path Absolute path to plugins dir.
+     * @param PHPFrame_Request  $request      Reference to request object.
+     * @param PHPFrame_Response $response     Reference to response object.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($plugins_path)
-    {
+    public function __construct(
+        $plugins_path, 
+        PHPFrame_Request $request, 
+        PHPFrame_Response $response
+    ) {
     	self::$_plugins_path = trim((string) $plugins_path);
+    	$this->_request      = $request;
+    	$this->_response     = $response;
     	
         // Acquire instance of SplObjectStorage
         $this->_plugins = new SplObjectStorage();
@@ -84,7 +102,6 @@ class PHPFrame_PluginHandler
      * @param string $class_name The class name to load
      * 
      * @static
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -104,7 +121,6 @@ class PHPFrame_PluginHandler
      * @param PHPFrame_Plugin $plugin Instance of the plugin object we want to 
      *                                register.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -118,8 +134,7 @@ class PHPFrame_PluginHandler
      * 
      * @param PHPFrame_Plugin $plugin Instance of the plugin object we want to 
      *                                unregister.
-     *                                
-     * @access public
+     * 
      * @return void
      * @since  1.0
      */
@@ -136,7 +151,6 @@ class PHPFrame_PluginHandler
      *                      dispatchLoopStartup, dispatchLoopShutdown, 
      *                      preDispatch, postDispatch
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -150,7 +164,7 @@ class PHPFrame_PluginHandler
         }
         
         foreach ($this->_plugins as $plugin) {
-            $plugin->$event();
+            $plugin->$event($this->_request, $this->_response);
         }
     }
 }

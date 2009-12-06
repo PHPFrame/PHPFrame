@@ -49,7 +49,6 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
      * 
      * @param PHPFrame_View $view The view object to process.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -80,7 +79,6 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
      * 
      * @param string $name
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -99,7 +97,7 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
         // Start buffering
         ob_start();
         // Include partial file
-        require_once $path;
+        include $path;
         // save buffer in body property
         $partial = ob_get_contents();
         // clean output buffer
@@ -135,7 +133,6 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
      * 
      * @param PHPFrame_Collection $collection
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -186,7 +183,6 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
      * 
      * @param PHPFrame_Collection $collection
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -250,7 +246,6 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
      * @param PHPFrame_Collection $collection The collection object for
      *                                         which to create the pagination.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */

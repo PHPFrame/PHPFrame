@@ -32,10 +32,8 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * Check if this is the correct helper for the client being used
      * 
      * @static
-     * @access public
      * @return PHPFrame_Client|boolean Object instance of this class if correct 
-     *                                         helper for client or FALSE 
-     *                                         otherwise.
+     *                                 helper for client or FALSE otherwise.
      * @since  1.0
      */
     public static function detect() 
@@ -67,8 +65,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     /**    
      * Get client name
      * 
-     * @access public
-     * @return string Name to identify helper type
+     * @return string Name to identify client type.
      * @since  1.0
      */
     public function getName() 
@@ -79,7 +76,6 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     /**    
      * Populate the Unified Request array
      * 
-     * @access public
      * @return array  Unified Request Array
      * @since  1.0
      */
@@ -123,7 +119,6 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * @param PHPFrame_Response $response   The response object to prepare.
      * @param string            $views_path Absolute path to vies dir.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -152,7 +147,6 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * 
      * @param string $url
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -181,10 +175,11 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     
     /**
      * This method is used to parse an XML remote procedure call
-     *
-     * @access private
+     * 
      * @param string $xml A string containing the XML call.
+     * 
      * @return array A nice asociative array with all the data.
+     * @since  1.0
      */
     private function _parseXMLRPC($xml, PHPFrame_RequestRegistry $request) 
     {
@@ -257,14 +252,15 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
        
     /**
      * Parses an xml-rpc value node and returns the correct data type.
-     *
-     * @access private
-     * @param object $domXPath    The DOMXPath object used for parsing the XML. 
-     *                            This object is created in _parseXMLResponse().
-     * @param DOMNode $node The value DOMNode to parse
-     * @return various if the given node is a scalar value, the scalar value is 
-     * returned, if the node is a struct, an associative array with key value 
-     * pairs is returned, if the node is an array 
+     * 
+     * @param object  $domXPath The DOMXPath object used for parsing the XML. 
+     *                          This object is created in _parseXMLResponse().
+     * @param DOMNode $node     The value DOMNode to parse.
+     * 
+     * @return Various if the given node is a scalar value, the scalar value is 
+     *         returned, if the node is a struct, an associative array with key 
+     *         value pairs is returned, if the node is an array
+     * @since  1.0
      */
      private function _parseXMLRPCRecurse($domXPath, $node) {
          if (!(($node instanceof DOMNode) && $node->nodeName=='value')) {
@@ -316,12 +312,14 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * to the user specified parameters.
      * 
      * @param string $controller The name of the controller
-     * @param string $action The name of the action to check on the controller
-     * @param array $params The indexed array of parameters required for the 
-     * controller action
-     * @return mixed either an array containing paramter mapping or void 
-     * with thrown PHPFrame_XMLRPCException if controller, action or parameters 
-     * are invalid
+     * @param string $action     The name of the action to check on the controller
+     * @param array  $params     The indexed array of parameters required for 
+     *                           the controller action.
+     * 
+     * @return mixed Either an array containing paramter mapping or void 
+     *               with thrown PHPFrame_XMLRPCException if controller, action 
+     *               or parameters are invalid
+     * @since  1.0
      */
     private function _getComponentActionParameterMapping(
         $controller, 
@@ -425,9 +423,11 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * This returns the ReflectionClass object if there is an instantiable 
      * controller class for the specified controller.
      * 
-     * @param $controller
+     * @param string $controller
+     * 
      * @return mixed ReflectionClass if a controller with this name exists, 
-     * FALSE otherwise
+     *               FALSE otherwise.
+     * @since  1.0
      */
     private function _getControllerClass($controller)
     {
@@ -468,9 +468,12 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * The node must be one of the scalar values as specified by the 
      * xml rpc (i4, int, boolean, string, double, dateTime.iso8601, base64).
      * 
-     * @param $node DOMNode containing value to return
+     * @param $node DOMNode containing value to return.
+     * 
      * @return mixed int for i4, int or dateTime.iso8601 (unix timestamp) nodes, 
-     * boolean for boolean, string for string or base64 and float for double
+     *               boolean for boolean, string for string or base64 and float 
+     *               for double.
+     * @since  1.0
      */
     private function _nodeScalarValue($node)
     {
@@ -537,9 +540,11 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * deemed to authenticated. Otherwise a <code>PHPFrame_XMLRPCException</code> 
      * exception with fault code <code>INVALID_API_KEY_OR_USER</code> is thrown.
      *  
-     * @param string $xml_payload the complete XML-RPC call string used to test 
-     * the api signature against 
-     * @return void or throws Exception if api authentication fails
+     * @param string $xml_payload The complete XML-RPC call string used to test 
+     *                            the api signature against.
+     *                             
+     * @return void or throws Exception if api authentication fails.
+     * @since  1.0
      */
     private function _authenticate($xml_payload)
     {
@@ -599,6 +604,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * 
      * @return void or throws PHPFrame_XMLRPCException if XMLRPC client is not 
      *         authorized to perform the requested action
+     * @since  1.0
      */
     private function _checkAPIPermisssions()
     {

@@ -41,7 +41,6 @@ class PHPFrame_Informer extends PHPFrame_Observer
      * @param array           $recipients An array containing email addresses 
      *                                    of the recipients of this informer.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -60,7 +59,6 @@ class PHPFrame_Informer extends PHPFrame_Observer
      * 
      * @param PHPFrame_Subject $subject The subject issuing the update
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */

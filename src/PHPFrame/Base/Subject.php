@@ -51,7 +51,6 @@ abstract class PHPFrame_Subject implements SplSubject
     /**
      * Get controller's success flag
      * 
-     * @access public
      * @return boolean
      * @since  1.0
      */
@@ -66,7 +65,6 @@ abstract class PHPFrame_Subject implements SplSubject
      * @param string $msg  The event message
      * @param int    $type The event type. See class constants.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -100,7 +98,6 @@ abstract class PHPFrame_Subject implements SplSubject
      * 
      * @param PHPFrame_Observer $observer The object to attach to this subject
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -118,7 +115,6 @@ abstract class PHPFrame_Subject implements SplSubject
      * 
      * @param SplObserver $observer The observer object to detach
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -130,7 +126,6 @@ abstract class PHPFrame_Subject implements SplSubject
     /**
      * Notify observers
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

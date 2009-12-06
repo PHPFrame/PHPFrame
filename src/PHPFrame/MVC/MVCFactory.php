@@ -121,13 +121,14 @@ class PHPFrame_MVCFactory
      * Get a named view.
      *
      * @param string $name The name of the view to get.
+     * @param array  $data Data to assign to the view.
      * 
      * @access public
      * @return PHPFrame_View
      * @since  1.0
      */
-    public static function getView($name) 
+    public static function getView($name, array $data=null) 
     {
-        return new PHPFrame_View($name);
+        return new PHPFrame_View($name, $data);
     }
 }

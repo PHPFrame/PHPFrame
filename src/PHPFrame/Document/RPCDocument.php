@@ -29,7 +29,6 @@ class PHPFrame_RPCDocument extends PHPFrame_XMLDocument
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @uses   DOMImplementation, PHPFrame_URI, PHPFrame_Pathway
      * @since  1.0 
@@ -46,7 +45,6 @@ class PHPFrame_RPCDocument extends PHPFrame_XMLDocument
     /**
      * Convert object to string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */

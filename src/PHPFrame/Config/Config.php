@@ -59,8 +59,7 @@ class PHPFrame_Config implements IteratorAggregate
      * Constructor
      *
      * @param string $path Full path to ini file with data
-     *
-     * @access public
+     * 
      * @return void
      * @since  1.0
      */
@@ -88,7 +87,6 @@ class PHPFrame_Config implements IteratorAggregate
      * The above example should print the config object as a string in the ini 
      * format.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -118,7 +116,6 @@ class PHPFrame_Config implements IteratorAggregate
      * This method implements the IteratorAggregate interface and thus makes config 
      * objects traversable, hooking to the foreach construct.
      * 
-     * @access public
      * @return ArrayIterator
      * @since  1.0
      */
@@ -138,7 +135,6 @@ class PHPFrame_Config implements IteratorAggregate
      * 
      * @param string $key
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -162,7 +158,6 @@ class PHPFrame_Config implements IteratorAggregate
      * @param string $key   The config key we want to set (ie: debug.log_level)
      * @param array  $value The new value for the config key
      *
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -183,7 +178,6 @@ class PHPFrame_Config implements IteratorAggregate
      * 
      * @param array $array
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -215,7 +209,6 @@ class PHPFrame_Config implements IteratorAggregate
     /**
      * Get config sections
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -229,7 +222,6 @@ class PHPFrame_Config implements IteratorAggregate
      * 
      * @param string $str
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -246,7 +238,6 @@ class PHPFrame_Config implements IteratorAggregate
     /**
      * Get config keys
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -275,7 +266,6 @@ class PHPFrame_Config implements IteratorAggregate
      * @param string $str    A string with the key we want to check.
      * @param bool   $ensure If set to TRUE method will trigger error.
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -304,8 +294,7 @@ class PHPFrame_Config implements IteratorAggregate
      * Store config object in filesystem as ini file
      *
      * @param string $path Full path to ini file with data
-     *
-     * @access public
+     * 
      * @return void
      * @since  1.0
      */
@@ -324,7 +313,6 @@ class PHPFrame_Config implements IteratorAggregate
     /**
      * Fetch data from ini file
      * 
-     * @access private
      * @return void
      * @since  1.0
      */
@@ -343,7 +331,6 @@ class PHPFrame_Config implements IteratorAggregate
      * 
      * @param string $str
      * 
-     * @access private
      * @return array
      * @since  1.0
      */

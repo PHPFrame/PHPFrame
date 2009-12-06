@@ -46,7 +46,6 @@ class PHPFrame_Array extends ArrayObject
      * 
      * @param array $array [Optional] The array the object will represent.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -62,7 +61,6 @@ class PHPFrame_Array extends ArrayObject
     /**
      * Magic method called we try to use an array object as a string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -74,7 +72,6 @@ class PHPFrame_Array extends ArrayObject
     /**
      * Is associative array?
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -92,7 +89,6 @@ class PHPFrame_Array extends ArrayObject
      * @param array $array [Optional] The array to calculate the depth for. If
      *                     not passed the internal array is used.
      * 
-     * @access public
      * @return int
      * @since  1.0
      */

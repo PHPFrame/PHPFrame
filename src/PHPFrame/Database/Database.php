@@ -162,7 +162,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * @param string $db_pass    [Optional] The database password if any.
      * @param string $tbl_prefix [Optional] Table prefix.
      * 
-     * @access private
      * @return void
      * @since  1.0
      */
@@ -224,6 +223,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * @param string $tbl_prefix [Optional] Table prefix.
      * 
      * @return PHPFrame_Database
+     * @since  1.0
      */
     public static function getInstance(
         $dsn, 
@@ -268,7 +268,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Create PDO object to represent db connection
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
@@ -289,7 +288,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Get the PDO object
      * 
-     * @access protected
      * @return PDO
      * @since  1.0
      */
@@ -298,6 +296,14 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
         return $this->_pdo;
     }
     
+    /**
+     * Check whether database has a given table.
+     * 
+     * @param string $tbl_name The name of the table to check.
+     * 
+     * @return bool
+     * @since  1.0
+     */
     public function hasTable($tbl_name)
     {
         foreach ($this->getTables() as $table) {
@@ -312,7 +318,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Get the database tables
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -323,7 +328,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * 
      * @param PHPFrame_DatabaseTable $table
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -334,7 +338,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * 
      * @param string $tbl_name
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -345,7 +348,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * 
      * @param PHPFrame_DatabaseTable $table
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -356,7 +358,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * 
      * @param string $table_name
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -365,7 +366,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Get the PDOStatement object
      * 
-     * @access public
      * @return PDOStatement
      * @since  1.0
      */
@@ -382,7 +382,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * @param array  $params     An array with the query parameters if any
      * @param int    $fetch_mode Mode in which to fetch the query result
      * 
-     * @access public
      * @return mixed
      * @since  1.0
      */
@@ -467,7 +466,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      *                          to set attribute values for the PDOStatement 
      *                          object that this method returns.
      * 
-     * @access public
      * @return PDOStatement
      * @since  1.0
      */
@@ -481,7 +479,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Get id from the last insert query
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -496,7 +493,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      * 
-     * @access public
      * @return string Returns a string with the single result.
      * @since  1.0
      */
@@ -512,7 +508,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      * 
-     * @access public
      * @return array Returns an array with strings with the single result.
      * @since  1.0
      */
@@ -528,7 +523,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      * 
-     * @access public
      * @return array Returns an array containing single column for each row
      *               or FALSE on failure.
      * @since  1.0
@@ -548,6 +542,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * 
      * @return array A numerically indexed array containing numerically indexed
      *               arrays with the row data
+     * @since  1.0
      */
     public function fetchArrayList($sql, $params=array())
     {
@@ -560,8 +555,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * 
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
-     *
-     * @access public
+     * 
      * @return array An associative array with the row data
      * @since  1.0
      */
@@ -576,8 +570,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * 
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
-     *
-     * @access public
+     * 
      * @return array A numerically indexed array containing associative arrays
      *               with the row data
      * @since  1.0
@@ -594,7 +587,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      * 
-     * @access public
      * @return stdClass
      * @since  1.0
      */
@@ -610,7 +602,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * @param string $sql    The SQL statement to run.
      * @param array  $params An array with the query parameters if any
      * 
-     * @access public
      * @return array An array containing objects of type stdClass
      * @since  1.0
      */
@@ -625,7 +616,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * 
      * @param string $text The string to be escaped.
      * 
-     * @access public
      * @return string Returns the escaped string.
      * @since  1.0
      */
@@ -639,7 +629,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * 
      * @param string $table_name The name of the table we want to query.
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -652,7 +641,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Close the current databasa connection
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -665,7 +653,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Is this instance of type SQLite?
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -677,7 +664,6 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Is this instance of type MySQL?
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */

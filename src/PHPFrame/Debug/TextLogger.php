@@ -33,7 +33,6 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
      * @param string $file_name
      * @param int    $log_level
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -62,7 +61,6 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
     /**
      * Implementation of IteratorAggregate interface
      * 
-     * @access public
      * @return Iterator
      * @since  1.0
      * @todo   This method still needs to be implemented.
@@ -77,7 +75,6 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
      * 
      * @param string|array $msg The string to append to log file
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

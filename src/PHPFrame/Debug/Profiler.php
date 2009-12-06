@@ -37,7 +37,6 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -49,7 +48,6 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
     /**
      * Magic method invoked whe trying to use an object of this class as a string.
      * 
-     * @access private
      * @return string
      * @since  1.0
      */
@@ -84,7 +82,6 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
     /**
      * Get iterator
      * 
-     * @access private
      * @return ArrayIterator
      * @since  1.0
      */
@@ -96,7 +93,6 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
     /**
      * Count elements in internal array
      * 
-     * @access private
      * @return ArrayIterator
      * @since  1.0
      */
@@ -110,7 +106,6 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
      * 
      * @param string $name The milestone name
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -133,7 +128,6 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
     /**
      * Calculate current microtime in miliseconds
      * 
-     * @access private
      * @return float
      * @since  1.0
      */

@@ -29,7 +29,6 @@ abstract class PHPFrame_Collection implements Iterator, Countable
     /**
      * Get limit of entries per page
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -38,7 +37,6 @@ abstract class PHPFrame_Collection implements Iterator, Countable
     /**
      * Get position at which the current page starts
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -47,7 +45,6 @@ abstract class PHPFrame_Collection implements Iterator, Countable
     /**
      * Get total number of entries in superset
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -56,7 +53,6 @@ abstract class PHPFrame_Collection implements Iterator, Countable
     /**
      * Get number of pages
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -73,7 +69,6 @@ abstract class PHPFrame_Collection implements Iterator, Countable
     /**
      * Get current page number
      * 
-     * @access public
      * @return int
      * @since  1.0
      */

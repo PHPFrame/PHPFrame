@@ -50,7 +50,6 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
      * 
      * @param PHPFrame_View $view The view object to process.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

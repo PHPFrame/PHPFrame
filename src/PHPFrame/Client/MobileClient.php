@@ -31,9 +31,9 @@ class PHPFrame_MobileClient extends PHPFrame_Client
      * Check if this is the correct helper for the client being used
      * 
      * @static
-     * @access public
      * @return PHPFrame_Client|boolean Instance of this class if correct 
-     *                                  helper for client or false otherwise.
+     *                                 helper for client or false otherwise.
+     * @since  1.0
      */
     public static function detect() 
     {
@@ -79,8 +79,8 @@ class PHPFrame_MobileClient extends PHPFrame_Client
     /**    
      * Get client name
      * 
-     * @access    public
-     * @return    string    Name to identify helper type
+     * @return string Name to identify client type.
+     * @since  1.0
      */
     public function getName() 
     {
@@ -88,10 +88,10 @@ class PHPFrame_MobileClient extends PHPFrame_Client
     }
     
     /**    
-     * Populate the Unified Request array
+     * Populate the Request object.
      * 
-     * @access    public
-     * @return    array    Unified Request Array
+     * @return void
+     * @since  1.0
      */
     public function populateRequest(PHPFrame_Request $request) 
     {

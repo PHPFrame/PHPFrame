@@ -26,10 +26,8 @@
 class PHPFrame_URLRewriter extends PHPFrame_Plugin
 {
     /**
-     * Rewrite the request
+     * Rewrite the request on route startup.
      * 
-     * @static
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -96,20 +94,19 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
     }
     
     /**
-     * Rewrite URL
+     * Rewrite URL after controllers have run in dispatch loop
      * 
-     * @param string $url   The URL to rewrite
-     * @param bool   $xhtml A boolean to indicate whether we want to use an XHTML
-     *                      compliant URL. Default value is TRUE.
+     * @param PHPFrame_Request  $request      Reference to request object.
+     * @param PHPFrame_Response $response     Reference to response object.
      * 
-     * @static
-     * @access public
      * @return string
      * @since  1.0
      */
-    public function dispatchLoopShutdown() 
-    {
-        $response_body = PHPFrame::Response()->getDocument()->getBody();
+    public function dispatchLoopShutdown(
+        PHPFrame_Request $request, 
+        PHPFrame_Response $response
+    ) {
+        $response_body = $response->getDocument()->getBody();
         $uri           = new PHPFrame_URI();
         
         $patterns[]     = '/"index.php\?controller=([a-zA-Z]+)&action=([a-zA-Z_]+)(&)?/';
@@ -118,7 +115,7 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
         $replacements[] = '"'.$uri->getBase().'${1}${2}';
         
         $processed_body = preg_replace($patterns, $replacements, $response_body);
-        PHPFrame::Response()->getDocument()->setBody($processed_body, false);
+        $response->getDocument()->setBody($processed_body, false);
     }
     
     public static function rewriteURL($url, $xhtml=true)

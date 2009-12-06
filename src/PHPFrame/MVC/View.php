@@ -47,13 +47,18 @@ class PHPFrame_View implements IteratorAggregate
      * Constructor
      * 
      * @param string $name The view name.
+     * @param array  $data Data to assign to the view.
      * 
      * @return void
      * @since  1.0
      */
-    public function __construct($name)
+    public function __construct($name, array $data=null)
     {
         $this->_name = trim((string) $name);
+        
+        if (!is_null($data)) {
+            $this->_data = $data;
+        }
     }
     
     /**

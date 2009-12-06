@@ -42,7 +42,6 @@ abstract class PHPFrame_Client
      * returns instance if so.
      * 
      * @static
-     * @access public
      * @return PHPFrame_Client|boolean
      * @since  1.0
      */
@@ -51,17 +50,15 @@ abstract class PHPFrame_Client
     /**    
      * Get client name
      * 
-     * @access public
-     * @return string Name to identify helper type
+     * @return string Name to identify client type.
      * @since  1.0
      */
     abstract public function getName();
     
     /**    
-     * Populate a Unified Request Array to return
+     * Populate the Request object.
      * 
-     * @access public
-     * @return array  Unified Request Array
+     * @return void
      * @since  1.0
      */
     abstract public function populateRequest(PHPFrame_Request $request);
@@ -80,7 +77,6 @@ abstract class PHPFrame_Client
      * @param PHPFrame_Response $response   The response object to prepare.
      * @param string            $views_path Absolute path to vies dir.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -94,7 +90,6 @@ abstract class PHPFrame_Client
      * 
      * @param string $url
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

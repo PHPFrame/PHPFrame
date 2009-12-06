@@ -40,7 +40,6 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
      *                                     issued by observed subjects will be
      *                                     written.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -60,7 +59,6 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
     /**
      * Handle updated issued by observed subjects
      * 
-     * @access public
      * @return void
      * @since  1.0
      * @see    PHPFrame_Observer::doUpdate()
@@ -79,7 +77,6 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
      * 
      * @param string|array $msg The string to append to log file
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

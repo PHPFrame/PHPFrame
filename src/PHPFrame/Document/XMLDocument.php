@@ -41,7 +41,6 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @uses   DOMImplementation
      * @since  1.0 
@@ -58,7 +57,6 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     /**
      * Covert object to string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -80,7 +78,6 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     /**
      * Get DOM Document Type object
      * 
-     * @access public
      * @return DOMDocumentType
      * @since  1.0
      */
@@ -99,12 +96,13 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     /**
      * Add node/tag
      * 
-     * @param DOMNode|null $parent  The parent object to which we want to add the new node.
-     * @param string  $name    The name of the new node or tag
-     * @param array   $attrs   An assoc array containing attributes key/value pairs.
-     * @param string  $content Text content of the node if any
+     * @param DOMNode|null $parent  The parent object to which we want to add 
+     *                              the new node.
+     * @param string       $name    The name of the new node or tag
+     * @param array        $attrs   An assoc array containing attributes 
+     *                              key/value pairs.
+     * @param string       $content Text content of the node if any
      * 
-     * @access public
      * @return DOMNode Returns a reference to the newly created node
      * @since  1.0
      */
@@ -140,7 +138,6 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      * @param string  $attr_name  The attribute name
      * @param string  $attr_value The value for the attribute if any.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -163,7 +160,6 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      * @param DOMNode $node The node where to add the content text.
      * @param string  $str  The text to add to the node
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -178,7 +174,6 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      * 
      * @param string $str The XML as string.
      * 
-     * @access protected
      * @return string
      * @since  1.0
      * @deprecated This function is now replaced with XML_Beautifier
@@ -225,7 +220,6 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      * 
      * @param int $depth
      * 
-     * @access protected
      * @return string
      * @since  1.0
      * @deprecated This function is now replaced with XML_Beautifier

@@ -41,7 +41,6 @@ class PHPFrame_Object
      * 
      * @param string $prop_name
      * 
-     * @access public
      * @return void
      * @throws LogicException
      * @since  1.0
@@ -60,7 +59,6 @@ class PHPFrame_Object
      * @param string $prop_name
      * @param mixed  $prop_value
      * 
-     * @access public
      * @return void
      * @throws LogicException
      * @since  1.0
@@ -75,7 +73,6 @@ class PHPFrame_Object
     /**
      * Get instance of ReflectionClass for this object.
      * 
-     * @access public
      * @return ReflectionClass
      * @since  1.0
      */
@@ -91,7 +88,6 @@ class PHPFrame_Object
     /**
      * Enforce scalar types.
      * 
-     * @access protected
      * @return void
      * @throws LogicException|InvalidArgumentException
      * @since  1.0
@@ -139,7 +135,6 @@ class PHPFrame_Object
      * 
      * @param mixed $value
      * 
-     * @access protected
      * @return void
      * @throws LogicException|RuntimeException
      * @since  1.0
@@ -172,7 +167,6 @@ class PHPFrame_Object
     /**
      * Get array with scalar types as defined in class constants.
      * 
-     * @access private
      * @return array
      * @since  1.0
      */

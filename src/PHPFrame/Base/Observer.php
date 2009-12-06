@@ -34,7 +34,6 @@ abstract class PHPFrame_Observer extends PHPFrame_Object implements SplObserver
      * 
      * @param PHPFrame_Subject $subject Instance of subject notifying the update
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -49,7 +48,6 @@ abstract class PHPFrame_Observer extends PHPFrame_Object implements SplObserver
      * @param PHPFrame_Subject $subject Instance of subject notifying the update
      * 
      * @abstract
-     * @access protected
      * @return void
      * @since  1.0
      */

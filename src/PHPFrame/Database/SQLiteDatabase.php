@@ -30,7 +30,6 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
     /**
      * Get database tables
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -109,7 +108,6 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
      * 
      * @param string $table_name
      * 
-     * @access public
      * @return array
      * @since  1.0
      */

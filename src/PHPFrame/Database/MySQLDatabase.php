@@ -31,7 +31,6 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
      * Create PDO object to represent db connection. This class override's the 
      * parent's connect method in order to set MySQL specific attributes.
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
@@ -45,7 +44,6 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
     /**
      * Get database tables
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -109,7 +107,6 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
      * 
      * @param string
      * 
-     * @access public
      * @return array
      * @since  1.0
      */

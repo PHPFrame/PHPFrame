@@ -28,7 +28,6 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @since  1.0 
      */
@@ -41,7 +40,6 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
     /**
      * Convert object to string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */

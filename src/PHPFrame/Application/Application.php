@@ -822,12 +822,7 @@ class PHPFrame_Application
         }
         
         // Acquire instance of Plugin Handler
-        $plugins_path = $this->getInstallDir().DS."src".DS."plugins";
-        $this->_plugin_handler = new PHPFrame_PluginHandler(
-            $plugins_path,
-            $this->getRequest(),
-            $this->getResponse()
-        );
+        $this->_plugin_handler = new PHPFrame_PluginHandler($this);
         
         // Register installed plugins with plugin handler
         foreach ($this->getPlugins() as $plugin) {

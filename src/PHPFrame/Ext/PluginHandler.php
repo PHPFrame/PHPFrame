@@ -56,36 +56,28 @@ class PHPFrame_PluginHandler
         "postDispatch"
     );
     /**
-     * Reference to request object.
+     * Reference to the application object.
      * 
      * @var PHPFrame_Request
      */
-    private $_request;
-    /**
-     * Reference to response object.
-     * 
-     * @var PHPFrame_Response
-     */
-    private $_response;
+    private $_app;
     
     /**
      * Constructor
      * 
-     * @param string            $plugins_path Absolute path to plugins dir.
-     * @param PHPFrame_Request  $request      Reference to request object.
-     * @param PHPFrame_Response $response     Reference to response object.
+     * @param PHPFrame_Application $app Reference to application object.
      * 
      * @return void
      * @since  1.0
      */
-    public function __construct(
-        $plugins_path, 
-        PHPFrame_Request $request, 
-        PHPFrame_Response $response
-    ) {
-    	self::$_plugins_path = trim((string) $plugins_path);
-    	$this->_request      = $request;
-    	$this->_response     = $response;
+    public function __construct(PHPFrame_Application $app)
+    {
+    	// Store plugins path in static property to make it available in 
+    	// static autoload method.
+    	self::$_plugins_path = $app->getInstallDir().DS."src".DS."plugins";
+    	
+    	// Store reference to application object in private property
+    	$this->_app = $app;
     	
         // Acquire instance of SplObjectStorage
         $this->_plugins = new SplObjectStorage();
@@ -164,7 +156,7 @@ class PHPFrame_PluginHandler
         }
         
         foreach ($this->_plugins as $plugin) {
-            $plugin->$event($this->_request, $this->_response);
+            $plugin->$event($this->_app);
         }
     }
 }

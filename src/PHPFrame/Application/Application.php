@@ -888,26 +888,23 @@ class PHPFrame_Application
         
         // Apply theme if needed
         $document = $response->getDocument();
-        if (
-            $document instanceof PHPFrame_HTMLDocument
-            && !$request->isAJAX()
-        ) {
-        	$theme       = $this->getConfig()->get("theme");
-        	$base_url    = $this->getConfig()->get("base_url");
-        	$theme_url   = $base_url."themes/".$theme;
-        	$theme_path  = $this->getInstallDir().DS."public".DS."themes";
-        	$theme_path .= DS.$theme.DS."index.php";
-            $document->applyTheme($theme_url, $theme_path, $response);
-        } else {
-        	// Set "body only" mode for AJAX requests when HTML document
-        	if ($document instanceof PHPFrame_HTMLDocument) {
-        		$document->setBodyOnly(true);
+        if ($document instanceof PHPFrame_HTMLDocument) {
+        	if (!$request->isAJAX()) {
+        	    $theme       = $this->getConfig()->get("theme");
+                $base_url    = $this->getConfig()->get("base_url");
+                $theme_url   = $base_url."themes/".$theme;
+                $theme_path  = $this->getInstallDir().DS."public".DS."themes";
+                $theme_path .= DS.$theme.DS."index.php";
+                $document->applyTheme($theme_url, $theme_path, $response);
+        	} else {
+                // Append system events when no theme
+                $sysevents = PHPFrame::getSession()->getSysevents();
+                $sysevents = $response->getRenderer()->render($sysevents);
+                $document->prependBody($sysevents);
+                
+                // Set "body only" mode for AJAX requests when HTML document
+                $document->setBodyOnly(true);
         	}
-        	
-        	// Append system events when no theme
-        	$sysevents = PHPFrame::getSession()->getSysevents();
-            $sysevents = $response->getRenderer()->render($sysevents);
-            $document->prependBody($sysevents);
         }
         
         // Invoke dispatchLoopShutdown hook

@@ -203,27 +203,4 @@ class PHPFrame_CLIClient extends PHPFrame_Client
         // Set response renderer
         $response->setRenderer(new PHPFrame_PlainRenderer());
     }
-    
-    public function redirect($url)
-    {
-        // Reset the request
-        PHPFrame::Request()->destroy();
-        
-        // Get query params from redirection url
-        $url = parse_url($url);
-        
-        if (isset($url["query"])) {
-            parse_str($url["query"], $params);
-            
-            // Loop through URL params and set values in request
-            foreach ($params as $key=>$value) {
-                $_REQUEST[$key] = $value;
-                $_GET[$key] = $value;
-                PHPFrame::Request()->setParam($key, $value);
-            }
-        }
-        
-        // Retrigger the app
-        PHPFrame::Fire();
-    }
 }

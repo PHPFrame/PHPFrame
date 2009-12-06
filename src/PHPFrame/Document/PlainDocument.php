@@ -47,20 +47,25 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
     {
         $str = "";
         
-        if ($this->getTitle()) {
-            $str .= $this->getTitle()."\n";
-            for ($i=0; $i<strlen($this->getTitle()); $i++) {
+        $title = $this->getTitle();
+        if (!empty($title)) {
+            $str .= $title."\n";
+            for ($i=0; $i<strlen($title); $i++) {
                 $str .= "-";
             }
             $str .= "\n\n";
         }
         
-        if (count(PHPFrame::getSession()->getSysevents()) > 0) {
-            $str .= (string) PHPFrame::getSession()->getSysevents();
+        $sysevents = PHPFrame::getSession()->getSysevents();
+        if (count($sysevents) > 0) {
+            $str .= (string) $sysevents;
             $str .= "\n";
         }
         
-        $str .= $this->getBody()."\n";
+        $body = $this->getBody();
+        if (!empty($body)) {
+            $str .= $body."\n";
+        }
         
         return $str;
     }

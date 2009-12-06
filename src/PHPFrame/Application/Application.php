@@ -955,9 +955,5 @@ class PHPFrame_Application
                 $file_obj->fwrite($profiler_out);
             }
         }
-        
-        // Exit setting status to 0, 
-        // which indicates that program terminated successfully
-        exit(0);
     }
 }

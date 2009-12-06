@@ -290,6 +290,33 @@ class PHPFrame_Response
     {
         return $this->_pathway;
     }
+    
+    /**
+     * Set the response body. The passed value will be rendered using the 
+     * response's renderer object.
+     * 
+     * @param mixed $value
+     * @param bool  $render [Optional] Default value is TRUE. To bypass 
+     *                                 renderer set to FALSE.
+     * @param bool  $append [Optional] Default value is FALSE.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function setBody($value, $render=true, $append=false)
+    {
+    	// Render the value to append
+    	if ($render) {
+    	    $value = $this->getRenderer()->render($value);
+    	}
+    	
+    	// Set the value in the document body
+    	if ($append) {
+    	    $this->getDocument()->appendBody($value);
+    	} else {
+    	    $this->getDocument()->setBody($value);
+    	}
+    }
      
     /**
      * Send HTTP response to client

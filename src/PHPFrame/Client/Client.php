@@ -77,13 +77,17 @@ abstract class PHPFrame_Client
      * response content to the right document type. See PHPFrame_DefaultClient 
      * for an example. 
      * 
-     * @param PHPFrame_Response $response The response object to prepare.
+     * @param PHPFrame_Response $response   The response object to prepare.
+     * @param string            $views_path Absolute path to vies dir.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    abstract public function prepareResponse(PHPFrame_Response $response);
+    abstract public function prepareResponse(
+        PHPFrame_Response $response, 
+        $views_path
+    );
     
     /**
      * Handle controller redirection
@@ -96,10 +100,9 @@ abstract class PHPFrame_Client
      */
     public function redirect($url)
     {
-        $url = trim((string) $url);
+    	$url = trim((string) $url);
         
         if ($url) {
-            $url = PHPFrame_URLRewriter::rewriteURL($url);
             header("Location: ".$url);
             exit;
         }

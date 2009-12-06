@@ -120,13 +120,14 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * requested action in the action controller. It gives the client an 
      * opportunity to do something before the controller is executed.
      * 
-     * @param PHPFrame_Response $response The response object to prepare.
+     * @param PHPFrame_Response $response   The response object to prepare.
+     * @param string            $views_path Absolute path to vies dir.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function prepareResponse(PHPFrame_Response $response)
+    public function prepareResponse(PHPFrame_Response $response, $views_path)
     {
         global $HTTP_RAW_POST_DATA;
         

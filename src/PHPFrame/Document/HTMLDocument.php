@@ -60,7 +60,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // Add head
         $head_node = $this->addNode($html_node, "head");
         // Add body
-        $this->addNode($html_node, "body", null, "{content}");
+        $this->addNode($html_node, "body", null, "\n{content}\n");
         
         // Add meta tags
         $this->addMetaTag("generator", "PHPFrame");
@@ -98,7 +98,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
             }
             // Add http_equiv attribute if any
             if (!is_null($meta_tag["http_equiv"])) {
-                $this->addNodeAttr($meta_node, "http_equiv", $meta_tag["http_equiv"]);
+                $this->addNodeAttr($meta_node, "http-equiv", $meta_tag["http_equiv"]);
             }
             
             // Add content attribute
@@ -234,16 +234,15 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     public function setBody($str, $apply_theme=true)
     {
-        if (
-            $apply_theme 
-            && PHPFrame::getRunLevel() > 1 
-            && !PHPFrame::Request()->isAJAX()
-        ) {
-            $str = $this->_applyTheme($str);
-        } else {
-            $sysevents = PHPFrame::Response()->getRenderer()->renderPartial("sysevents");
-            $str = $sysevents.$str;
-        }
+//        if (
+//            $apply_theme 
+//            && !PHPFrame::Request()->isAJAX()
+//        ) {
+//            $str = $this->_applyTheme($str);
+//        } else {
+//            $sysevents = PHPFrame::Response()->getRenderer()->renderPartial("sysevents");
+//            $str = $sysevents.$str;
+//        }
         
         parent::setBody($str);
     }

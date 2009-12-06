@@ -105,7 +105,10 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         $permissions = $app->getPermissions();
         $groupid     = PHPFrame::getSession()->getGroupId();
         
-        if ($permissions->authorise($controller, $action, $groupid) === true) {
+        if (
+            $permissions->authorise($controller, $action, $groupid) === true
+            || $app->getConfig()->get("ignore_acl") == 1
+        ) {
             // Invoke controller action
             $this->_invokeAction($action);
         } else {
@@ -265,6 +268,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * @access protected
      * @return void
      * @since  1.0
+     * @todo   Rewrite URL using plugin
      */
     protected function redirect() 
     {
@@ -279,6 +283,8 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         
         // Delegate redirection to client object if it is of the right type
         if (!empty($this->_redirect_url)) {
+        	//echo $this->_redirect_url; exit;
+        	//$url = PHPFrame_URLRewriter::rewriteURL($url);
             $client->redirect($this->_redirect_url);
         }
     }

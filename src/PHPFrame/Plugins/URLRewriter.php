@@ -123,7 +123,7 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
     
     public static function rewriteURL($url, $xhtml=true)
     {
-        $uri = new PHPFrame_URI();
+    	$uri = new PHPFrame_URI();
         
         if (!preg_match('/^http/i', $url)) {
             $url = $uri->getBase().$url;

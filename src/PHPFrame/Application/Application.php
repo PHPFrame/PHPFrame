@@ -586,7 +586,9 @@ class PHPFrame_Application
             );
             
             // Prepare response using client
-            PHPFrame::getSession()->getClient()->prepareResponse($response);
+            $client     = PHPFrame::getSession()->getClient();
+            $views_path = $this->getInstallDir().DS."src".DS."views";
+            $client->prepareResponse($response, $views_path);
             
             $this->setResponse($response);
         }

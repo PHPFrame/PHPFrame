@@ -31,48 +31,33 @@
 class PHPFrame_View implements IteratorAggregate
 {
     /**
-     * The view name
+     * The view name.
      * 
      * @var string
      */
     private $_name = null;
     /**
-     * Data array for view
+     * Data array for view.
      * 
      * @var array
      */
     private $_data = array();
-    /**
-     * Response object used to display the view
-     * 
-     * @var PHPFrame_Document
-     */
-    private $_response;
     
     /**
      * Constructor
      * 
-     * @param string             $name     The view name
-     * @param PHPFrame_Document  $document Document object used to display the 
-     *                                     view 
-     * @param PHPFrame_IRenderer $renderer Renderer object used to render the 
-     *                                     view
+     * @param string $name The view name.
      * 
      * @return void
      * @since  1.0
      */
-    public function __construct(
-        $name, 
-        PHPFrame_Document $document, 
-        PHPFrame_IRenderer $renderer
-    ) {
-        $this->_name     = trim((string) $name);
-        $this->_document = $document;
-        $this->_renderer = $renderer;
+    public function __construct($name)
+    {
+        $this->_name = trim((string) $name);
     }
     
     /**
-     * Convert view to string
+     * Convert view to string.
      * 
      * @return string
      * @since  1.0
@@ -89,7 +74,7 @@ class PHPFrame_View implements IteratorAggregate
     }
     
     /**
-     * Implementation of IteratorAggregate interface
+     * Implementation of IteratorAggregate interface.
      * 
      * @return ArrayIterator
      * @since  1.0
@@ -100,7 +85,7 @@ class PHPFrame_View implements IteratorAggregate
     }
     
     /**
-     * Get view name
+     * Get view name.
      * 
      * @return string
      * @since  1.0
@@ -111,7 +96,7 @@ class PHPFrame_View implements IteratorAggregate
     }
     
     /**
-     * Add a variable to data array
+     * Add a variable to data array.
      * 
      * @param string $key   The name of the variable inside the view.
      * @param mixed  $value The variable we want to add to the view.
@@ -125,7 +110,7 @@ class PHPFrame_View implements IteratorAggregate
     }
     
     /**
-     * Get view data
+     * Get view data.
      * 
      * @return array
      * @since  1.0
@@ -133,18 +118,5 @@ class PHPFrame_View implements IteratorAggregate
     public function getData()
     {
         return $this->_data;
-    }
-    
-    /**
-     * Display the view
-     * 
-     * This method loads the template layer of the view.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function display() 
-    {
-        $this->_response->getDocument()->setBody($this->_response->getRenderer()->render($this));
     }
 }

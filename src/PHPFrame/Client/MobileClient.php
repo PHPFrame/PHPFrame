@@ -105,10 +105,6 @@ class PHPFrame_MobileClient extends PHPFrame_Client
         $request['request'] = $inputfilter->process($_REQUEST);
         $request['get']     = $inputfilter->process($_GET);
         $request['post']    = $inputfilter->process($_POST);
-            
-        // Once the superglobal request arrays are processed we unset them
-        // to prevent them being used from here on
-        unset($_REQUEST, $_GET, $_POST);
         
         return $request;
     }
@@ -120,18 +116,19 @@ class PHPFrame_MobileClient extends PHPFrame_Client
      * requested action in the action controller. It gives the client an 
      * opportunity to do something before the component is executed.
      * 
-     * @param PHPFrame_Response $response The response object to prepare.
+     * @param PHPFrame_Response $response   The response object to prepare.
+     * @param string            $views_path Absolute path to vies dir.
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function prepareResponse(PHPFrame_Response $response)
+    public function prepareResponse(PHPFrame_Response $response, $views_path)
     {
         // Set document as response content
         $response->setDocument(new PHPFrame_HTMLDocument());
         
         // Set response renderer
-        $response->setRenderer(new PHPFrame_HTMLRenderer());
+        $response->setRenderer(new PHPFrame_HTMLRenderer($views_path));
     }
 }

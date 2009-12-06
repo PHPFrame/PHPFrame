@@ -26,6 +26,13 @@
  */
 class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
 {
+	private $_views_path;
+	
+	public function __construct($views_path)
+	{
+		$this->_views_path = $views_path;
+	}
+	
     public function render($value)
     {
         $str = $value;
@@ -48,8 +55,7 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
      */
     public function renderView(PHPFrame_View $view) 
     {
-        $tmpl_path = PHPFRAME_INSTALL_DIR.DS."src";
-        $tmpl_path .= DS."views".DS.$view->getName().".php";
+        $tmpl_path = $this->_views_path.DS.$view->getName().".php";
         
         if (is_file($tmpl_path)) {
             // Start buffering
@@ -81,15 +87,11 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
     public function renderPartial($name)
     {
         $name = trim((string) $name);
-        $path = PHPFRAME_INSTALL_DIR.DS."src".DS."views";
-        $path .= DS."partials".DS.$name;
+        $path = $this->_views_path.DS."partials".DS.$name;
         
         if (!is_file($path)) {
             $path .= ".php";
             if (!is_file($path)) {
-                $msg = "Could not load partial ".$path;
-                //throw new RuntimeException($msg);
-                //return "";
                 return;
             }
         }

@@ -60,6 +60,7 @@
    <file baseinstalldir="/" name="PHPFrame/Config/Config.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/Database.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseColumn.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Database/DatabaseFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseRow.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseRowCollection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/DatabaseTable.php" role="php" />
@@ -102,6 +103,7 @@
    <file baseinstalldir="/" name="PHPFrame/FileSystem/Filesystem.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/BoolFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/EmailFilter.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Filter/EnumFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/Filter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/FloatFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/IntFilter.php" role="php" />
@@ -124,6 +126,7 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectCollection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/RPCObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistentObjectAssembler.php" role="php" />
@@ -135,6 +138,7 @@
    <file baseinstalldir="/" name="PHPFrame/MVC/View.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Plugins/URLRewriter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/FileRegistry.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Registry/MockSessionRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Registry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/RequestRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/SessionRegistry.php" role="php" />
@@ -165,8 +169,8 @@
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/ext.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/man.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/scaffold.php" role="data" />
-   <file baseinstalldir="/" name="CLI_Tool/src/lang/en-GB/global.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/models/apptemplate.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/models/extinstaller.php" role="data" />
    
    <file baseinstalldir="/" name="lib/phpinputfilter/inputfilter.php" role="data" />
    <file baseinstalldir="/" name="lib/phpinputfilter/GPL-3.0.txt" role="data" />

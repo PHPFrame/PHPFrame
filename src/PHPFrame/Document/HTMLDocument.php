@@ -247,10 +247,10 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Apply theme
      * 
-     * @param string $theme_url           URL to theme.
-     * @param string $theme_path          Absolute path to theme template in 
-     *                                    filesystem.
-     * @param PHPFrame_Response $response Response object.
+     * @param string               $theme_url  URL to theme.
+     * @param string               $theme_path Absolute path to theme template 
+     *                                         in filesystem.
+     * @param PHPFrame_Application $app        Reference to application.
      * 
      * @return void
      * @since  1.0
@@ -258,7 +258,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     public function applyTheme(
         $theme_url, 
         $theme_path, 
-        PHPFrame_Response $response
+        PHPFrame_Application $app
     ) {
         // Add theme stylesheets
         $this->addStyleSheet($theme_url."/css/styles.css");

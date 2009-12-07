@@ -855,7 +855,7 @@ class PHPFrame_Application
                 $theme_url   = $base_url."themes/".$theme;
                 $theme_path  = $this->getInstallDir().DS."public".DS."themes";
                 $theme_path .= DS.$theme.DS."index.php";
-                $document->applyTheme($theme_url, $theme_path, $response);
+                $document->applyTheme($theme_url, $theme_path, $this);
         	} else {
                 // Append system events when no theme
                 $sysevents = PHPFrame::getSession()->getSysevents();

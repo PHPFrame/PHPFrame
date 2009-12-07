@@ -91,6 +91,20 @@ class PHPFrame_Application
      * @var PHPFrame_PluginHandler
      */
     private $_plugin_handler;
+    /**
+     * Instance of MVC factory used to server up userland controllers, models, 
+     * helpers and so on.
+     * 
+     * @var PHPFrame_MVCFactory
+     */
+    private $_mvc_factory;
+    /**
+     * A prefix used for MVC userland classes. Default value is empty. This 
+     * affects controllers, models, helpers and language classes.
+     * 
+     * @var string
+     */
+    private $_class_prefix = "";
     
     /**
      * Constructor
@@ -160,6 +174,9 @@ class PHPFrame_Application
         
         // Acquire config object and cache it
         $this->setConfig(new PHPFrame_Config($config_file));
+        
+        // Acquire and store instance of MVC Factory class
+        $this->setMVCFactory(new PHPFrame_MVCFactory($this));
         
         // Set profiler milestone
         $profiler = $this->getProfiler();
@@ -757,6 +774,55 @@ class PHPFrame_Application
     }
     
     /**
+     * Get reference to MVC factory object.
+     * 
+     * @return PHPFrame_MVCFactory
+     * @since  1.0
+     */
+    public function getMVCFactory()
+    {
+    	return $this->_mvc_factory;
+    }
+    
+    /**
+     * Set MVC factory object.
+     * 
+     * @param PHPFrame_MVCFactory $mvc_factory Reference to PHPFrame_MVCFactory
+     *                                         object.
+     *                                         
+     * @return void
+     * @since  1.0
+     */
+    public function setMVCFactory(PHPFrame_MVCFactory $mvc_factory)
+    {
+    	$this->_mvc_factory = $mvc_factory;
+    }
+    
+    /**
+     * Get the userland class prefix.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public function getClassPrefix()
+    {
+    	return $this->_class_prefix;
+    }
+    
+    /**
+     * Set the userland class prefix.
+     * 
+     * @param string $str The new class suffix.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function setClassPrefix($str)
+    {
+    	$this->_class_prefix = trim((string) $str);
+    }
+    
+    /**
      * Dispatch request
      * 
      * @param PHPFrame_Request $request [Optional] If omitted a new request 
@@ -826,7 +892,8 @@ class PHPFrame_Application
             $controller_name = $request->getControllerName();
             
             // Create the action controller
-            $controller = PHPFrame_MVCFactory::getActionController($controller_name);
+            $mvc_factory = $this->getMVCFactory();
+            $controller  = $mvc_factory->getActionController($controller_name);
             
             // Attach observers to the action controller
             $controller->attach(PHPFrame::getSession()->getSysevents());

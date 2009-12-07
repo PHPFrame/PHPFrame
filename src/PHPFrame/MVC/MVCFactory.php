@@ -27,37 +27,47 @@
  */
 class PHPFrame_MVCFactory
 {
-    /**
-     * Reference to application object
-     * 
-     * @var PHPFrame_Application
-     */
-    private static $_app;
-    
+	/**
+	 * Reference to application object.
+	 * 
+	 * @var PHPFrame_Application
+	 */
+	private $_app;
+	
     /**
      * Constructor
      * 
-     * @access private
+     * @param PHPFrame_Application $app Reference to application object.
+     * 
      * @return void
      * @since  1.0
      */
-    private function __construct() {}
+    public function __construct(PHPFrame_Application $app)
+    {
+    	$this->_app = $app;
+    }
     
     /**
      * Get a named action controller object
      * 
      * @param string $controller_name
      * 
-     * @static
-     * @access public
      * @return PHPFrame_ActionController
      * @since  1.0
      */
-    public static function getActionController($controller_name)
+    public function getActionController($controller_name)
     {
         // Create reflection object for named controller
         $controller_class = ucfirst($controller_name)."Controller";
-        $reflection_obj   = new ReflectionClass($controller_class);
+        
+        // Prepend userland class suffix if needed
+        $class_prefix = $this->_app->getClassPrefix();
+        if (!empty($class_prefix)) {
+            $controller_class = $class_prefix.$controller_class;
+        }
+        
+        // Get reflection object to inspect class before instantiating it
+        $reflection_obj = new ReflectionClass($controller_class);
         
         if (!$reflection_obj->isSubclassOf("PHPFrame_ActionController")) {
             $msg  = "Action Controller not supported. ".$controller_class;
@@ -75,12 +85,10 @@ class PHPFrame_MVCFactory
      * @param array  $args       An array with arguments to be passed to the
      *                           model's constructor if needed.
      * 
-     * @static
-     * @access public
      * @return object
      * @since  1.0
      */
-    public static function getModel($model_name, $args=array()) 
+    public function getModel($model_name, $args=array()) 
     {
         $model_name = trim((string) $model_name);
         $array      = explode("/", $model_name);
@@ -123,11 +131,10 @@ class PHPFrame_MVCFactory
      * @param string $name The name of the view to get.
      * @param array  $data Data to assign to the view.
      * 
-     * @access public
      * @return PHPFrame_View
      * @since  1.0
      */
-    public static function getView($name, array $data=null) 
+    public function getView($name, array $data=null) 
     {
         return new PHPFrame_View($name, $data);
     }

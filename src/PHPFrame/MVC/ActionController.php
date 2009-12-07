@@ -81,7 +81,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * 
      * @param PHPFrame_Application $app
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -124,6 +123,17 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
     
     /**
+     * Get controller's success flag
+     * 
+     * @return boolean
+     * @since  1.0
+     */
+    public function getSuccess() 
+    {
+        return $this->_success;
+    }
+    
+    /**
      * Get reference to application object
      * 
      * @return PHPFrame_Application
@@ -134,46 +144,70 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         return $this->_app;
     }
     
+    /**
+     * Get reference to application's request object.
+     * 
+     * @return PHPFrame_Request
+     * @since  1.0
+     */
     protected function request()
     {
         return $this->app()->getRequest();
     }
     
+    /**
+     * Get reference to application's response object.
+     * 
+     * @return PHPFrame_Response
+     * @since  1.0
+     */
     protected function response()
     {
         return $this->app()->getResponse();
     }
     
+    /**
+     * Get reference to application's config object.
+     * 
+     * @return PHPFrame_Config
+     * @since  1.0
+     */
     protected function config()
     {
         return $this->app()->getConfig();
     }
     
+    /**
+     * Get reference to application's database object.
+     * 
+     * @return PHPFrame_Database
+     * @since  1.0
+     */
     protected function db()
     {
         return $this->app()->getDB();
     }
     
+    /**
+     * Get reference to application's logger object.
+     * 
+     * @return PHPFrame_Logger
+     * @since  1.0
+     */
     protected function logger()
     {
         return $this->app()->getLogger();
     }
     
+    /**
+     * Get reference to application's session object.
+     * 
+     * @return PHPFrame_SessionRegistry
+     * @since  1.0
+     */
     protected function session()
     {
         return PHPFrame::getSession();
-    }
-    
-    /**
-     * Get controller's success flag
-     * 
-     * @access public
-     * @return boolean
-     * @since  1.0
-     */
-    public function getSuccess() 
-    {
-        return $this->_success;
     }
     
     /**
@@ -181,7 +215,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * 
      * @param string $msg
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
@@ -196,7 +229,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * 
      * @param string $msg
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
@@ -211,7 +243,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * 
      * @param string $msg
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
@@ -226,7 +257,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * 
      * @param string $msg
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
@@ -238,7 +268,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     /**
      * Cancel and set redirect to index.
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
@@ -253,7 +282,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * @param string $url The URL we want to redirect to when we call 
      *                    PHPFrame_ActionController::redirect()
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
@@ -265,7 +293,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     /**
      * Redirect browser to redirect URL.
      * 
-     * @access protected
      * @return void
      * @since  1.0
      * @todo   Rewrite URL using plugin
@@ -296,13 +323,12 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * @param array  $args An array containing arguments to be passed to the Model's 
      *                     constructor.
      * 
-     * @access protected
      * @return object
      * @since  1.0
      */
     protected function getModel($name, $args=array()) 
     {
-        return PHPFrame_MVCFactory::getModel($name, $args);
+        return $this->app()->getMVCFactory()->getModel($name, $args);
     }
     
     /**
@@ -311,13 +337,12 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * @param string $name The name of the view to create.
      * @param array  $data Data to assign to the view.
      * 
-     * @access protected
      * @return object
      * @since  1.0
      */
     protected function getView($name="", array $data=null)
     {
-        return PHPFrame_MVCFactory::getView($name, $data);
+        return $this->app()->getMVCFactory()->getView($name, $data);
     }
     
     /**
@@ -328,7 +353,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * 
      * @param string $action The action to inkoe in the concrete action controller
      * 
-     * @access private
      * @return void
      * @since  1.0
      */

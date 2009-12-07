@@ -49,7 +49,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      */
     public function __construct(array $options=null)
     {
-        // before we construct the parentwe add the necessary fields
+        // before we construct the parent we add the necessary fields
         $this->addField(
            "groupid", 
            0, 

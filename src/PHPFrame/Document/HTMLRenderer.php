@@ -77,12 +77,14 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
     /**
      * Render a partial view
      * 
-     * @param string $name
+     * @param string $name The partial name.
+     * @param array  $data An associative array with data to be passed to the 
+     *                     partial view.
      * 
      * @return void
      * @since  1.0
      */
-    public function renderPartial($name)
+    public function renderPartial($name, array $data=null)
     {
         $name = trim((string) $name);
         $path = $this->_views_path.DS."partials".DS.$name;

@@ -292,6 +292,18 @@ class PHPFrame_Response
     }
     
     /**
+     * Get the response body (stored in document object)
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public function getBody()
+    {
+        return $this->getDocument()->getBody();
+    }
+    
+    
+    /**
      * Set the response body. The passed value will be rendered using the 
      * response's renderer object.
      * 
@@ -316,6 +328,17 @@ class PHPFrame_Response
     	} else {
     	    $this->getDocument()->setBody($value);
     	}
+    }
+    
+    /**
+     * Get the response title (stored in document object)
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public function getTitle()
+    {
+        return $this->getDocument()->getTitle();
     }
     
     /**

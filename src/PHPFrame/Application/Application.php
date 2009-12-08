@@ -584,6 +584,20 @@ class PHPFrame_Application
      */
     public function setConfig(PHPFrame_Config $config)
     {
+    	// Check that config object has required data
+    	$array    = iterator_to_array($config);
+    	$req_keys = array("app_name", "base_url");
+    	foreach ($req_keys as $req_key) {
+    	    if (!isset($array[$req_key]) || empty($array[$req_key])) {
+    	    	$msg  = "Could not set configuration object. Config must ";
+    	    	$msg .= "contain a value for '".$req_key."'. ";
+    	    	$msg .= "To set this configuration parameter you can edit ";
+    	    	$msg .= "the configuration file stored in ";
+    	    	$msg .= "'".$config->getPath()."'.";
+    	        throw new RuntimeException($msg);
+    	    }
+    	}
+    	
         $this->_config = $config;
         
         // Set timezone

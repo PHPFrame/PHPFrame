@@ -256,8 +256,17 @@ class PHPFrame_Application
                 );
                 
                 if (strtolower($class_name) == $file_name_without_ext) {
-                    include_once $file->getRealPath();
+                    include $file->getRealPath();
                 }
+            }
+        }
+        
+        // Load libraries
+        foreach ($this->getLibraries() as $lib) {
+            $lib_path = $this->getInstallDir().DS."lib";
+            $lib_file = $lib_path.DS.$class_name.".php";
+            if (is_file($lib_file)) {
+                include $lib_file;
             }
         }
     }

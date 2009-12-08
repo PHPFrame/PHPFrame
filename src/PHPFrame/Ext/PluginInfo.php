@@ -27,5 +27,5 @@
  */
 class PHPFrame_PluginInfo extends PHPFrame_ExtInfo
 {
-    
+    //...
 }

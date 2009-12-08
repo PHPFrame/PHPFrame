@@ -27,48 +27,5 @@
  */
 class PHPFrame_LibInfo extends PHPFrame_ExtInfo
 {
-    protected $name;
-    protected $class_name;
-    protected $path;
-    protected $type;
-    
-    public function getName()
-    {
-        return $this->name;
-    }
-    
-    public function setName($str)
-    {
-        $this->name = (string) $str;
-    }
-    
-    public function getClassName()
-    {
-        return $this->class_name;
-    }
-    
-    public function setClassName($str)
-    {
-        $this->class_name = (string) $str;
-    }
-    
-    public function getPath()
-    {
-        return $this->path;
-    }
-    
-    public function setPath($str)
-    {
-        $this->path = $str;
-    }
-    
-    public function getType()
-    {
-        return $this->type;
-    }
-    
-    public function setType($str)
-    {
-        $this->type = $str;
-    }
+	//...
 }

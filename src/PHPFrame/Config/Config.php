@@ -311,6 +311,17 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
+     * Get absolute path to config file in file system.
+     *  
+     * @return string
+     * @since  1.0
+     */
+    public function getPath()
+    {
+    	return $this->_path;
+    }
+    
+    /**
      * Fetch data from ini file
      * 
      * @return void

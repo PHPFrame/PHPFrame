@@ -59,9 +59,6 @@ class AppTemplate
         // Create configuration xml files based on distro templates
         $this->_createConfig($config);
         
-        // Create dummy controller
-        $this->_createDummyController();
-        
         //Create writable tmp and var folders for app
         PHPFrame_Filesystem::ensureWritableDir($this->_install_dir.DS."tmp");
         PHPFrame_Filesystem::ensureWritableDir($this->_install_dir.DS."var");
@@ -162,21 +159,5 @@ class AppTemplate
         
         $config_file_name = $config_path.DS."phpframe.ini";
         $config->store($config_file_name);
-    }
-    
-    private function _createDummyController()
-    {
-        $source = PEAR_Config::singleton()->get("data_dir");
-        $source .= DS."PHPFrame".DS."DummyController.php";
-        $target = $this->_install_dir.DS."src".DS."controllers".DS."dummy.php";
-        
-        $msg = "Creating dummy controller...";
-        PHPFrame::getSession()->getSysevents()
-                           ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
-        
-        if (!copy($source, $target)) {
-            $msg = "Failed to create dummy controller.";
-            throw new RuntimeException($msg);   
-        }
     }
 }

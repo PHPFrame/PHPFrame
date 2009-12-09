@@ -142,7 +142,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         }
         
         // Render DOM Document as HTML string
-        //$html = $this->indent($this->dom->saveHTML());
         $this->dom->formatOutput = true;
         $html = $this->dom->saveHTML();
         

@@ -130,7 +130,6 @@ class PHPFrame
      * We declare an empty private constructor to ensure this class is not 
      * instantiated. All methods in this class are declared static.
      * 
-     * @access private
      * @return void
      * @since  1.0
      */
@@ -149,8 +148,6 @@ class PHPFrame
      * 
      * @param string $class_name The class name to load.
      * 
-     * @static
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -208,8 +205,6 @@ class PHPFrame
     /**
      * Get PHPFrame version
      * 
-     * @static
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -228,8 +223,6 @@ class PHPFrame
     /**
      * Get session object
      * 
-     * @static
-     * @access public
      * @return PHPFrame_SessionRegistry
      * @since  1.0
      */
@@ -245,8 +238,6 @@ class PHPFrame
     /**
      * Boot up the PHPFrame framework
      * 
-     * @static
-     * @access public
      * @return void
      * @since  1.0
      */

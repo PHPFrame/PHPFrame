@@ -174,7 +174,7 @@ class PHPFrame_SQLPersistentObjectAssembler
     public function delete($id_or_obj)
     {
         if ($id_or_obj instanceof PHPFrame_PersistentObject) {
-            $id = $obj->getId();
+            $id = $id_or_obj->getId();
         } else {
             $id = (int) $id_or_obj;
         }

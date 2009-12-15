@@ -37,7 +37,6 @@ class PHPFrame_HTMLUI
      * @param string $value The option value
      * @param string $label The option label
      * 
-     * @access public
      * @return object A standard object with the passed label and value as 
      *                properties.
      * @since  1.0
@@ -61,7 +60,6 @@ class PHPFrame_HTMLUI
      *                         select tag. ie: 'class="myClass" multiple="multiple"'
      * @param string $selected The selected value. This parameter is optional.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -70,8 +68,7 @@ class PHPFrame_HTMLUI
         $name, 
         $attribs, 
         $selected=NULL
-    )
-    {
+    ) {
         $html = '<select name="'.$name.'" '.$attribs.'>';
         foreach ($options as $option) {
             $html .= '<option value="'.$option->value.'"';
@@ -93,7 +90,6 @@ class PHPFrame_HTMLUI
      * 
      * @param string $formid The form's id attribute.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -138,8 +134,7 @@ class PHPFrame_HTMLUI
      *                               parameter is optional, if omitted the browser 
      *                               window will be redirected to the link's href 
      *                               instead of using an AJAX request.
-     *                               
-     * @access public                              
+     *                             
      * @return string
      * @since  1.0
      */
@@ -150,8 +145,7 @@ class PHPFrame_HTMLUI
         $height=560, 
         $form=false, 
         $ajax_container=''
-    )
-    {
+    ) {
         $uid = uniqid();
         
         // Start buffering
@@ -269,8 +263,7 @@ class PHPFrame_HTMLUI
      *                               parameter is optional, if omitted the browser 
      *                               window will be redirected to the link's href 
      *                               instead of using an AJAX request.
-     *                                    
-     * @access public                                   
+     *                                   
      * @return void
      * @since  1.0
      */
@@ -378,7 +371,6 @@ class PHPFrame_HTMLUI
      *                                 tag
      * @param bool   $show_format_hint Show/hide date format hint.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -389,8 +381,7 @@ class PHPFrame_HTMLUI
         $format='dd/mm/yy', 
         $attribs=array(), 
         $show_format_hint=false
-    ) 
-    {
+    ) {
         //set $id to $name if empty
         if (empty($id)) {
             $id = $name;
@@ -441,8 +432,15 @@ class PHPFrame_HTMLUI
             });
         });    
         </script>
-        <input id="<?php echo $id; ?>_datePicker" type="text" name="<?php echo $name; ?>_datePicker" <?php echo $attribs_str; ?> value="<?php echo $formatted_date; ?>" />
-        <input id="<?php echo $id; ?>" type="hidden" name="<?php echo $name; ?>" value="<?php echo $selected; ?>" />
+        <input id="<?php echo $id; ?>_datePicker" 
+               type="text" 
+               name="<?php echo $name; ?>_datePicker" <?php echo $attribs_str; ?> 
+               value="<?php echo $formatted_date; ?>" 
+               autocomplete="off" />
+        <input id="<?php echo $id; ?>" 
+               type="hidden" 
+               name="<?php echo $name; ?>" 
+               value="<?php echo $selected; ?>" />
         <?php    
     }
     
@@ -456,8 +454,7 @@ class PHPFrame_HTMLUI
      * @param bool   $matchContains Optional parameter (default: TRUE). If TRUE 
      *                              search matches inside string, if FALSE only at 
      *                              the beginning.
-     * 
-     * @access public                             
+     *                             
      * @return void
      * @since  1.0
      */
@@ -466,8 +463,7 @@ class PHPFrame_HTMLUI
         $attribs, 
         $tokens, 
         $matchContains=true
-    )
-    {
+    ) {
         $document = PHPFrame::Response()->getDocument();
         $document->addScript('lib/jquery/plugins/autocomplete/jquery.autocomplete.pack.js');
         $document->addStyleSheet('lib/jquery/plugins/autocomplete/jquery.autocomplete.css');
@@ -526,7 +522,6 @@ class PHPFrame_HTMLUI
      * @param string $onComplete
      * @param string $action
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -535,8 +530,7 @@ class PHPFrame_HTMLUI
         $name='userfile', 
         $onComplete='', 
         $action='index.php'
-    ) 
-    {
+    ) {
         $document = PHPFrame::getDocument('html');
         $document->addScript('lib/jquery/plugins/ajax-upload/jquery.ajax-upload-2.6.js');
         
@@ -613,7 +607,6 @@ class PHPFrame_HTMLUI
      * 
      * Use in conjuction with PHPFrame_Crypt::checkToken
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -632,7 +625,6 @@ class PHPFrame_HTMLUI
      * @param string $onclick A string to be printed in the onclick attribute 
      *                        of the button tag.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -648,7 +640,6 @@ class PHPFrame_HTMLUI
     /**
      * Build an html 'back' button tag and echo it.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -664,7 +655,6 @@ class PHPFrame_HTMLUI
     /**
      * Redirects to previous page using Javascript window.history.back()
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -682,7 +672,6 @@ class PHPFrame_HTMLUI
      *
      * @param string $msg A string containing the message to show in the alert box.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -701,8 +690,7 @@ class PHPFrame_HTMLUI
         $type="text", 
         $size=null, 
         $maxlength=null
-    )
-    {
+    ) {
         $str  = '<input type="'.$type.'" name="'.$name.'"';
         $str .= ' value="'.$value.'"';
         
@@ -726,8 +714,7 @@ class PHPFrame_HTMLUI
         $value=null, 
         $cols=null, 
         $rows=null
-    )
-    {
+    ) {
         $str = '<textarea name="'.$name.'"';
         
         if (!is_null($cols)) {
@@ -747,8 +734,7 @@ class PHPFrame_HTMLUI
         $name, 
         array $options=array(), 
         $value=null
-    )
-    {
+    ) {
         $str = "";
         
         foreach ($options as $k=>$v) {
@@ -767,8 +753,7 @@ class PHPFrame_HTMLUI
         $name, 
         array $options=array(), 
         $value=null
-    )
-    {
+    ) {
         $str  = "<select name=\"".$name."\">";
         
         foreach ($options as $option) {
@@ -783,16 +768,14 @@ class PHPFrame_HTMLUI
     public static function tableObjectToForm(
         PHPFrame_DatabaseTable $obj,
         $action
-    )
-    {
+    ) {
         
     }
     
     public static function persistentObjectToForm(
         PHPFrame_PersistentObject $obj,
         $action
-    )
-    {
+    ) {
         $str = "<form action=\"".$action."\">\n";
         
         $filters = $obj->getFilters();

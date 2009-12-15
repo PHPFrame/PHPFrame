@@ -95,7 +95,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param array $options
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -133,7 +132,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Magic method to handle the cloning of Persistent Objects
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -155,7 +153,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * @param bool            $allow_null
      * @param PHPFrame_Filter $filter
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -164,8 +161,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $def_value=null, 
         $allow_null=true, 
         PHPFrame_Filter $filter=null
-    )
-    {
+    ) {
         if (!is_string($name) || strlen($name) < 1) {
             $msg  = get_class($this)."::addField() expects argument ";
             $msg .= "\$name to be of type string and not empty and got value ";
@@ -186,7 +182,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Get filters
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -200,7 +195,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param string $field_name
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -215,7 +209,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * @param string $field_name
      * @param mixed  $value
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
@@ -240,7 +233,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * @param array $assoc An associative array containing the field names and 
      *                     the values to process.
      * 
-     * @access public
      * @return mixed The filtered array or FALSE on failure
      * @since  1.0
      */
@@ -254,7 +246,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Mark object as clean
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -267,7 +258,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * Is object dirty? If it is it means that it has changed since it was last 
      * persisted.
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -281,7 +271,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param PHPFrame_user $user
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -295,7 +284,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param PHPFrame_user $user
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -310,7 +298,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * This method implements the IteratorAggregate interface and thus makes 
      * domain objects traversable, hooking to the foreach construct.
      * 
-     * @access public
      * @return ArrayIterator
      * @since  1.0
      */
@@ -324,7 +311,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param array $options
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -364,7 +350,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Get id
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -378,7 +363,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param int $int
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -394,7 +378,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Get accessed timestamp
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -408,7 +391,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param int $int
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -424,7 +406,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Get created timestamp
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -438,7 +419,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param int $int
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -450,7 +430,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Get last modified timestamp
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -464,7 +443,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param int $int
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -476,7 +454,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Get owner
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -490,7 +467,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param int $int
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -502,7 +478,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Get group ownership
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -516,7 +491,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param int $int
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -528,7 +502,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Get permissions
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -542,7 +515,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * 
      * @param int $int
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -566,7 +538,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      * @param PHPFrame_user $user
      * @param int           $access_level
      * 
-     * @access private
      * @return bool
      * @since  1.0
      */

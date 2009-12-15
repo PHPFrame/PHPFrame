@@ -96,7 +96,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      *                       For a list of available options invoke 
      *                       PHPFrame_IdObject::getOptions().
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -108,7 +107,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Magic method invoked when trying to use object as string.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -120,7 +118,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Return an array with the list of available options in this object.
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -162,7 +159,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * 
      * @param string|array $fields a string or array of strings with field names
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -217,7 +213,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * 
      * @param string $table A string with the table name
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -245,7 +240,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * 
      * @param sting $join A join statement
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -283,7 +277,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * @param string $operator
      * @param string $right
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -312,7 +305,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * 
      * @param string $column The column name to group by
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -335,7 +327,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * @param string $column    The column name to order by
      * @param string $direction The order direction (either ASC or DESC)
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -362,7 +353,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * @param string $column    The column name to order by
      * @param string $direction The order direction (either ASC or DESC)
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -385,7 +375,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * @param int $limit     The total number of entries we want to limit to
      * @param int $limitstart The entry number of the first record in the current page
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -406,7 +395,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * 
      * @param int $limitstart The entry number of the first record in the current page
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -424,7 +412,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * @param string $key   The parameter marker
      * @param string $value The paramter value
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -441,7 +428,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * @param bool $limit A flag to indicate whether or not we want to include
      *                    LIMIT clause.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -476,7 +462,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get the an array with the fields in the SELECT query
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -504,7 +489,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get the table name in the FROM part of the query
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -525,7 +509,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get query parameters
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -539,7 +522,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * 
      * The total number of entries the subset will be limited to.
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -553,7 +535,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * 
      * The entry number of the first record in the current subset/page.
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -565,7 +546,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get SELECT SQL
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -598,7 +578,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get FROM SQL
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -622,7 +601,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * 
      * Get JOIN SQL
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -644,7 +622,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get WHERE SQL
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -671,7 +648,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get GROUP BY SQL
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -689,7 +665,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get ORDER BY SQL statement
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -708,7 +683,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Get LIMIT SQL statement
      * 
-     * @access public
      * @return string
      * @since  1.0
      */

@@ -50,7 +50,6 @@ class PHPFrame_Mapper
      *                                               name or the target class.
      * @param string                   $table_name   [Optional]
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -58,8 +57,7 @@ class PHPFrame_Mapper
         $target_class, 
         $db_or_path, 
         $table_name=null
-    )
-    {
+    ) {
         if ($db_or_path instanceof PHPFrame_Database) {
             $factory_class = "PHPFrame_SQLPersistenceFactory";
         } elseif (is_string($db_or_path)) {
@@ -81,7 +79,6 @@ class PHPFrame_Mapper
      * 
      * @param PHPFrame_IdObject|int $id_obj
      * 
-     * @access public
      * @return PHPFrame_PersistentObject
      * @since  1.0
      */
@@ -95,7 +92,6 @@ class PHPFrame_Mapper
      * 
      * @param PHPFrame_IdObject $id_obj
      * 
-     * @access public
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
@@ -109,7 +105,6 @@ class PHPFrame_Mapper
      * 
      * @param PHPFrame_PersistentObject $obj
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -123,7 +118,6 @@ class PHPFrame_Mapper
      * 
      * @param int|PHPFrame_PersistentObject $obj
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -135,7 +129,6 @@ class PHPFrame_Mapper
     /**
      * Create a new IdObject to work with the target class
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -147,7 +140,6 @@ class PHPFrame_Mapper
     /**
      * Is the mapper using SQL persistance?
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -159,7 +151,6 @@ class PHPFrame_Mapper
     /**
      * Is the mapper using XML persistance?
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */

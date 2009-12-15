@@ -30,7 +30,6 @@ class PHPFrame_PersistentObjectFactory
      * 
      * @param string $target_class
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -44,7 +43,6 @@ class PHPFrame_PersistentObjectFactory
      * 
      * @param array $array
      * 
-     * @access public
      * @return PHPFrame_PersistentObject
      * @since  1.0
      */

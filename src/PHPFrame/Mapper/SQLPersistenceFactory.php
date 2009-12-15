@@ -35,7 +35,6 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
      * @param string            $table_name
      * @param PHPFrame_Database $db           
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -43,8 +42,7 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
         $target_class, 
         $table_name, 
         PHPFrame_Database $db
-    )
-    {
+    ) {
         parent::__construct($target_class, $table_name);
         
         $this->_db = $db;
@@ -53,7 +51,6 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
     /**
      * Get object assembler
      * 
-     * @access public
      * @return PHPFrame_PersistentObjectAssembler
      * @since  1.0
      */
@@ -65,7 +62,6 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
     /**
      * Create a new IdObject to work with the target class
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */

@@ -35,7 +35,6 @@ abstract class PHPFrame_IdObject
      *                       For a list of available options invoke 
      *                       PHPFrame_IdObject::getOptions().
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -63,7 +62,6 @@ abstract class PHPFrame_IdObject
     /**
      * Magic method invoked when trying to use object as string.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -72,7 +70,6 @@ abstract class PHPFrame_IdObject
     /**
      * Return an array with the list of available options in this object.
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -93,7 +90,6 @@ abstract class PHPFrame_IdObject
      * 
      * @param string|array $fields a string or array of strings with field names
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -104,7 +100,6 @@ abstract class PHPFrame_IdObject
      * 
      * @param string $table A string with the table name
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -117,7 +112,6 @@ abstract class PHPFrame_IdObject
      * @param string $operator
      * @param string $right
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -126,7 +120,6 @@ abstract class PHPFrame_IdObject
     /**
      * Get the an array with the fields in the SELECT query
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -135,7 +128,6 @@ abstract class PHPFrame_IdObject
     /**
      * Get the table name in the FROM part of the query
      * 
-     * @access public
      * @return string
      * @since  1.0
      */

@@ -35,11 +35,11 @@ class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
      * @param string $table_name
      * @param string $path         [Optional]
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($target_class, $table_name, $path=null) {
+    public function __construct($target_class, $table_name, $path=null)
+    {
         parent::__construct($target_class, $table_name);
         
         if (!is_null($path)) {
@@ -50,7 +50,6 @@ class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
     /**
      * Get object assembler
      * 
-     * @access public
      * @return PHPFrame_PersistentObjectAssembler
      * @since  1.0
      */
@@ -62,7 +61,6 @@ class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
     /**
      * Create a new IdObject to work with the target class
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */

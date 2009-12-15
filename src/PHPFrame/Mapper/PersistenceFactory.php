@@ -44,11 +44,11 @@ abstract class PHPFrame_PersistenceFactory
      * @param string $target_class
      * @param string $table_name
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($target_class, $table_name=null) {
+    public function __construct($target_class, $table_name=null)
+    {
         $this->_target_class = trim((string) $target_class);
         
         if (!is_null($table_name)) {
@@ -67,7 +67,6 @@ abstract class PHPFrame_PersistenceFactory
      * @param int    $storage
      * @param bool   $try_alternative_storage
      * 
-     * @access public
      * @return PHPFrame_PersistenceFactory
      * @since  1.0
      */
@@ -76,19 +75,18 @@ abstract class PHPFrame_PersistenceFactory
         $table_name, 
         $storage=self::STORAGE_SQL, 
         $try_alternative_storage=true
-    )
-    {
+    ) {
         switch ($storage) {
-            case self::STORAGE_SQL :
-                $class_name = "PHPFrame_SQLPersistenceFactory";
-                break;
+        case self::STORAGE_SQL :
+            $class_name = "PHPFrame_SQLPersistenceFactory";
+            break;
             
-            case self::STORAGE_XML :
-                $class_name = "PHPFrame_XMLPersistenceFactory";
-                break;
-            
-            default :
-                throw new RuntimeException("Storage mechanism not supported");
+        case self::STORAGE_XML :
+            $class_name = "PHPFrame_XMLPersistenceFactory";
+            break;
+        
+        default :
+            throw new RuntimeException("Storage mechanism not supported");
         }
         
         $factory = new $class_name($target_class, $table_name);
@@ -99,7 +97,6 @@ abstract class PHPFrame_PersistenceFactory
     /**
      * Get PersistentObjectFactory
      * 
-     * @access public
      * @return PHPFrame_PersistentObjectFactory
      * @since  1.0
      */
@@ -116,7 +113,6 @@ abstract class PHPFrame_PersistenceFactory
      * @param int   $limit
      * @param int   $limitstart
      * 
-     * @access public
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
@@ -125,8 +121,7 @@ abstract class PHPFrame_PersistenceFactory
         $total=null, 
         $limit=-1, 
         $limitstart=0
-    )
-    {
+    ) {
         return new PHPFrame_PersistentObjectCollection(
             $raw, 
             $this->getPersistentObjectFactory(),
@@ -139,7 +134,6 @@ abstract class PHPFrame_PersistenceFactory
     /**
      * Get target class
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -151,7 +145,6 @@ abstract class PHPFrame_PersistenceFactory
     /**
      * Get table name
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -163,7 +156,6 @@ abstract class PHPFrame_PersistenceFactory
     /**
      * Get object assembler
      * 
-     * @access public
      * @return PHPFrame_PersistentObjectAssembler
      * @since  1.0
      */
@@ -172,7 +164,6 @@ abstract class PHPFrame_PersistenceFactory
     /**
      * Create a new IdObject to work with the target class
      * 
-     * @access public
      * @return PHPFrame_IdObject
      * @since  1.0
      */

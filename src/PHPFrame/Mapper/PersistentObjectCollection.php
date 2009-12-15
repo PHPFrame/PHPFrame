@@ -84,7 +84,6 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
      * @param int   $limit
      * @param int   $limitstart
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -94,8 +93,7 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
         $total=null, 
         $limit=-1, 
         $limitstart=0
-    )
-    {
+    ) {
         if (!is_null($raw) && !is_null($obj_factory)) {
             // If the raw array is only one level of depth we assume it is 
             // only one element and we wrap it in an array to make is a  
@@ -126,7 +124,6 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
      * 
      * @param string $key
      * 
-     * @access public
      * @return PHPFrame_PersistentObject
      * @since  1.0
      */
@@ -154,7 +151,6 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
      * 
      * @param PHPFrame_PersistentObject $obj
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -172,7 +168,6 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
      * 
      * @param PHPFrame_PersistentObject $obj
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -215,7 +210,6 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     /**
      * Implementation of Iterator::current()
      * 
-     * @access public
      * @return PHPFrame_DatabaseRow
      * @since  1.0
      */
@@ -227,7 +221,6 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     /**
      * Implementation of Iterator::next()
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -238,8 +231,7 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     
     /**
      * Implementation of Iterator::key()
-     *   
-     * @access public
+     * 
      * @return int
      * @since  1.0
      */
@@ -251,7 +243,6 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     /**
      * Implementation of Iterator::valid()
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -263,7 +254,6 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     /**
      * Implementation of Iterator::rewind()
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

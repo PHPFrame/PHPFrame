@@ -106,16 +106,21 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $this->addField("atime", null,   true,  new PHPFrame_IntFilter());
         $this->addField("ctime", time(), true,  new PHPFrame_IntFilter());
         $this->addField("mtime", time(), true,  new PHPFrame_IntFilter());
-        $this->addField("owner", 1,      false, new PHPFrame_IntFilter());
-        $this->addField("group", 1,      false, new PHPFrame_IntFilter());
+        $this->addField(
+            "owner", 
+            //PHPFrame::getSession()->getUserId(),
+            0, 
+            false, 
+            new PHPFrame_IntFilter()
+        );
+        $this->addField(
+            "group", 
+            //PHPFrame::getSession()->getGroupId(),
+            0, 
+            false, 
+            new PHPFrame_IntFilter()
+        );
         $this->addField("perms", 664,    false, new PHPFrame_IntFilter());
-        
-        // Set object ownership to current user if applicable
-//        if (PHPFrame::getSession()->isAuth()) {
-//            $this->setOwner(PHPFrame::getSession()->getUserId());
-//            $this->setGroup(PHPFrame::getSession()->getGroupId());
-//            $this->setPerms(664);
-//        }
         
         // Process options argument if passed
         if (!is_null($options)) {

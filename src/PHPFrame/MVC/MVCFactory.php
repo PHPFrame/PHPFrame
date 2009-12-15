@@ -27,13 +27,13 @@
  */
 class PHPFrame_MVCFactory
 {
-	/**
-	 * Reference to application object.
-	 * 
-	 * @var PHPFrame_Application
-	 */
-	private $_app;
-	
+    /**
+     * Reference to application object.
+     * 
+     * @var PHPFrame_Application
+     */
+    private $_app;
+    
     /**
      * Constructor
      * 
@@ -44,7 +44,7 @@ class PHPFrame_MVCFactory
      */
     public function __construct(PHPFrame_Application $app)
     {
-    	$this->_app = $app;
+        $this->_app = $app;
     }
     
     /**

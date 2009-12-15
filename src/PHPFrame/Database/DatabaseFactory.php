@@ -27,24 +27,24 @@
  */
 class PHPFrame_DatabaseFactory
 {
-	/**
-	 * Get instance of DB object based on options array.
-	 * 
-	 * @param array $options An associative array containing the following 
-	 *                       options: 
+    /**
+     * Get instance of DB object based on options array.
+     * 
+     * @param array $options An associative array containing the following 
+     *                       options: 
      *                         - driver (required)
      *                         - name (required)
      *                         - host
      *                         - user
      *                         - pass
      *                         - mysql_unix_socket
-	 * 
-	 * @return PHPFrame_Database
-	 * @since  1.0
-	 */
-	public static function getDB(array $options)
-	{
-		if (!array_key_exists("driver", $options) 
+     * 
+     * @return PHPFrame_Database
+     * @since  1.0
+     */
+    public static function getDB(array $options)
+    {
+        if (!array_key_exists("driver", $options) 
             || !array_key_exists("name", $options)
         ) {
             $msg  = "'driver' and 'name' are required in options array";
@@ -95,5 +95,5 @@ class PHPFrame_DatabaseFactory
             $db_pass, 
             $db_prefix
         );
-	}
+    }
 }

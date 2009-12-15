@@ -83,7 +83,7 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         }
         
         $sql .= "\n)\n";
-        
+        //echo $sql; exit;
         // Run SQL query
         $this->query($sql);
     }

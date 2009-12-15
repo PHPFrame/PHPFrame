@@ -25,11 +25,11 @@
  */
 class ConfigController extends PHPFrame_ActionController
 {
-	/**
-	 * Reference to config object.
-	 * 
-	 * @var PHPFrame_Config
-	 */
+    /**
+     * Reference to config object.
+     * 
+     * @var PHPFrame_Config
+     */
     private $_config=null;
     
     /**

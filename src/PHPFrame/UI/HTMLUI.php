@@ -712,20 +712,13 @@ class PHPFrame_HTMLUI
     public static function textarea(
         $name, 
         $value=null, 
-        $cols=null, 
-        $rows=null
+        $cols=50, 
+        $rows=10
     ) {
-        $str = '<textarea name="'.$name.'"';
-        
-        if (!is_null($cols)) {
-            $str .= ' cols="'.$cols.'"';
-        }
-        
-        if (!is_null($rows)) {
-            $str .= ' rows="'.$rows.'"';
-        }
-        
-        $str .= ">\n".$value."\n</textarea>\n";
+        $str  = '<textarea name="'.$name.'"';
+        $str .= ' cols="'.(int) $cols.'"';
+        $str .= ' rows="'.(int) $rows.'"';
+        $str .= ">".$value."</textarea>\n";
         
         return $str;
     }
@@ -774,9 +767,11 @@ class PHPFrame_HTMLUI
     
     public static function persistentObjectToForm(
         PHPFrame_PersistentObject $obj,
-        $action
+        $action,
+        $submit_label="Submit",
+        array $exclude=array()
     ) {
-        $str = "<form action=\"".$action."\">\n";
+        $str = "<form action=\"".$action."\" method=\"post\">\n";
         
         $filters = $obj->getFilters();
         $values  = iterator_to_array($obj);
@@ -792,12 +787,12 @@ class PHPFrame_HTMLUI
               "perms"
             );
             
-            if (in_array($key, $ignore)) {
+            if (in_array($key, array_merge($exclude, $ignore))) {
                 continue;
             }
             
             $str .= "<div>\n";
-            $str .= $key.': ';
+            $str .= "<label for=\"".$key."\">".$key."</label>\n";
             
             if ($value instanceof PHPFrame_BoolFilter) {
 
@@ -838,7 +833,7 @@ class PHPFrame_HTMLUI
                 
             } elseif ($value instanceof PHPFrame_EnumFilter) {
                 
-                $enums = $this->getOption('enums');
+                $enums = $value->getOption('enums');
                 $str  .= self::select($key, $enums, $values[$key]);
             
             }
@@ -846,7 +841,8 @@ class PHPFrame_HTMLUI
             $str .= "</div>\n";
         }
         
-        $str .= "<input type=\"submit\" />\n";
+        $str .= "<br />\n";
+        $str .= "<input type=\"submit\" value=\"".$submit_label."\" />\n";
         $str .= "</form>\n";
         
         return $str;

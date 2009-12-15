@@ -26,13 +26,13 @@
  */
 class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
 {
-	private $_views_path;
-	
-	public function __construct($views_path)
-	{
-		$this->_views_path = $views_path;
-	}
-	
+    private $_views_path;
+    
+    public function __construct($views_path)
+    {
+        $this->_views_path = $views_path;
+    }
+    
     public function render($value)
     {
         $str = $value;

@@ -26,11 +26,11 @@
  */
 class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
 {
-	/**
-	 * An array containing meta tags.
-	 * 
-	 * @var array
-	 */
+    /**
+     * An array containing meta tags.
+     * 
+     * @var array
+     */
     private $_meta_tags = array();
     /**
      * An array containing scripts.
@@ -104,11 +104,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     public function __toString()
     {
-    	// If "body only" mode we simply return the body
-    	if ($this->_body_only) {
-    	   return $this->getBody();
-    	}
-    	
+        // If "body only" mode we simply return the body
+        if ($this->_body_only) {
+           return $this->getBody();
+        }
+        
         // Add title tag in head node 
         $head_node = $this->dom->getElementsByTagName("head")->item(0);
         $this->addNode($head_node, "title", null, $this->getTitle());
@@ -284,7 +284,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     public function setBodyOnly($bool)
     {
-    	$this->_body_only = (bool) $bool;
+        $this->_body_only = (bool) $bool;
     }
     
     /**

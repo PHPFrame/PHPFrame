@@ -593,20 +593,20 @@ class PHPFrame_Application
      */
     public function setConfig(PHPFrame_Config $config)
     {
-    	// Check that config object has required data
-    	$array    = iterator_to_array($config);
-    	$req_keys = array("app_name", "base_url");
-    	foreach ($req_keys as $req_key) {
-    	    if (!isset($array[$req_key]) || empty($array[$req_key])) {
-    	    	$msg  = "Could not set configuration object. Config must ";
-    	    	$msg .= "contain a value for '".$req_key."'. ";
-    	    	$msg .= "To set this configuration parameter you can edit ";
-    	    	$msg .= "the configuration file stored in ";
-    	    	$msg .= "'".$config->getPath()."'.";
-    	        throw new RuntimeException($msg);
-    	    }
-    	}
-    	
+        // Check that config object has required data
+        $array    = iterator_to_array($config);
+        $req_keys = array("app_name", "base_url");
+        foreach ($req_keys as $req_key) {
+            if (!isset($array[$req_key]) || empty($array[$req_key])) {
+                $msg  = "Could not set configuration object. Config must ";
+                $msg .= "contain a value for '".$req_key."'. ";
+                $msg .= "To set this configuration parameter you can edit ";
+                $msg .= "the configuration file stored in ";
+                $msg .= "'".$config->getPath()."'.";
+                throw new RuntimeException($msg);
+            }
+        }
+        
         $this->_config = $config;
         
         // Set timezone
@@ -804,7 +804,7 @@ class PHPFrame_Application
      */
     public function getMVCFactory()
     {
-    	return $this->_mvc_factory;
+        return $this->_mvc_factory;
     }
     
     /**
@@ -818,7 +818,7 @@ class PHPFrame_Application
      */
     public function setMVCFactory(PHPFrame_MVCFactory $mvc_factory)
     {
-    	$this->_mvc_factory = $mvc_factory;
+        $this->_mvc_factory = $mvc_factory;
     }
     
     /**
@@ -829,7 +829,7 @@ class PHPFrame_Application
      */
     public function getClassPrefix()
     {
-    	return $this->_class_prefix;
+        return $this->_class_prefix;
     }
     
     /**
@@ -842,7 +842,7 @@ class PHPFrame_Application
      */
     public function setClassPrefix($str)
     {
-    	$this->_class_prefix = trim((string) $str);
+        $this->_class_prefix = trim((string) $str);
     }
     
     /**
@@ -939,14 +939,14 @@ class PHPFrame_Application
         // Apply theme if needed
         $document = $response->getDocument();
         if ($document instanceof PHPFrame_HTMLDocument) {
-        	if (!$request->isAJAX()) {
-        	    $theme       = $this->getConfig()->get("theme");
+            if (!$request->isAJAX()) {
+                $theme       = $this->getConfig()->get("theme");
                 $base_url    = $this->getConfig()->get("base_url");
                 $theme_url   = $base_url."themes/".$theme;
                 $theme_path  = $this->getInstallDir().DS."public".DS."themes";
                 $theme_path .= DS.$theme.DS."index.php";
                 $document->applyTheme($theme_url, $theme_path, $this);
-        	} else {
+            } else {
                 // Append system events when no theme
                 $sysevents = PHPFrame::getSession()->getSysevents();
                 $sysevents = $response->getRenderer()->render($sysevents);
@@ -954,7 +954,7 @@ class PHPFrame_Application
                 
                 // Set "body only" mode for AJAX requests when HTML document
                 $document->setBodyOnly(true);
-        	}
+            }
         }
         
         // Invoke dispatchLoopShutdown hook

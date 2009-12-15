@@ -37,44 +37,44 @@
  */
 abstract class PHPFrame_Plugin
 {
-	/**
+    /**
      * Static reference to application object.
      * 
      * @var PHPFrame_Application
      */
     private static $_app;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param PHPFrame_Application $app Reference to application object.
-	 * 
-	 * @return void
+    
+    /**
+     * Constructor
+     * 
+     * @param PHPFrame_Application $app Reference to application object.
+     * 
+     * @return void
      * @since  1.0
-	 */
-	public function __construct(PHPFrame_Application $app)
-	{
-		self::$_app = $app;
-	}
-	
-	/**
-	 * Get reference to application object.
-	 * 
-	 * @return PHPFrame_Application
-	 * @since  1.0
-	 */
-	protected function app()
-	{
-		return self::$_app;
-	}
-	
-	/**
-	 * This method is called BEFORE THE REQUEST IS ROUTED to a specific 
-	 * controller and action.
-	 * 
-	 * @return void
-	 * @since  1.0
-	 */
+     */
+    public function __construct(PHPFrame_Application $app)
+    {
+        self::$_app = $app;
+    }
+    
+    /**
+     * Get reference to application object.
+     * 
+     * @return PHPFrame_Application
+     * @since  1.0
+     */
+    protected function app()
+    {
+        return self::$_app;
+    }
+    
+    /**
+     * This method is called BEFORE THE REQUEST IS ROUTED to a specific 
+     * controller and action.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function routeStartup() {}
     
     /**

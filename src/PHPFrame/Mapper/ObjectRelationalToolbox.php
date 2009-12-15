@@ -38,7 +38,6 @@ class PHPFrame_ObjectRelationalToolbox
      *                                              existing table will be 
      *                                              dropped.
      * 
-     * @access public
      * @return void
      * @throws Exception on failure
      * @since  1.0
@@ -48,14 +47,24 @@ class PHPFrame_ObjectRelationalToolbox
         PHPFrame_PersistentObject $obj,
         $table_name=null,
         $drop=false
-    )
-    {
+    ) {
         if (is_null($table_name)) {
             $table_name = get_class($obj);
         }
         
-        $table = new PHPFrame_DatabaseTable($db, $table_name);
+        if ($db->hasTable($table_name) && !$drop) {
+            $msg  = "Could not create table. Table '".$table_name."' already ";
+            $msg .= "exists in database. Use the '\$drop' argument in ";
+            $msg .= get_class($this)."::".__FUNCTION__."() to drop the table ";
+            $msg .= "before trying to create it again.";
+            throw new RuntimeException($msg);
+        }
         
+        if ($drop) {
+            $db->dropTable($table_name);
+        }
+        
+        $table = new PHPFrame_DatabaseTable($db, $table_name);
         
         foreach ($obj->getFilters() as $key=>$filter) {
             $column = new PHPFrame_DatabaseColumn(array(
@@ -117,7 +126,6 @@ class PHPFrame_ObjectRelationalToolbox
      * @param PHPFrame_Database $db
      * @param string            $table_name
      * 
-     * @access public
      * @return string
      * @throws Exception on failure
      * @since  1.0
@@ -125,8 +133,7 @@ class PHPFrame_ObjectRelationalToolbox
     public function createPersistentObjectClass(
         PHPFrame_Database $db, 
         $table_name
-    )
-    {
+    ) {
         
     }
     
@@ -138,7 +145,6 @@ class PHPFrame_ObjectRelationalToolbox
      * @param string                    $table_name
      * @param PHPFrame_PersistentObject $obj
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -146,8 +152,7 @@ class PHPFrame_ObjectRelationalToolbox
         PHPFrame_Database $db, 
         $table_name,
         PHPFrame_PersistentObject $obj
-    )
-    {
+    ) {
         
     }
 }

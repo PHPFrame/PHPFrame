@@ -33,9 +33,9 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
      */
     public function routeStartup() 
     {
-    	$request_uri = $this->app()->getRequest()->getRequestURI();
-    	$script_name = $this->app()->getRequest()->getScriptName();
-    	
+        $request_uri = $this->app()->getRequest()->getRequestURI();
+        $script_name = $this->app()->getRequest()->getScriptName();
+        
         // If there is no request uri (ie: we are on the command line) we do 
         // not rewrite
         if (empty($request_uri)) {
@@ -130,7 +130,7 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
     
     public static function rewriteURL($url, $xhtml=true)
     {
-    	$uri = new PHPFrame_URI(self::$_app->getConfig()->get("base_url"));
+        $uri = new PHPFrame_URI(self::$_app->getConfig()->get("base_url"));
         
         if (!preg_match('/^http/i', $url)) {
             $url = $uri->getBase().$url;

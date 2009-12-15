@@ -32,7 +32,6 @@ class PHPFrame_SQLPersistentObjectAssembler
      * 
      * @param PHPFrame_PersistenceFactory $factory
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -44,16 +43,16 @@ class PHPFrame_SQLPersistentObjectAssembler
     /**
      * Find a persistent object using an IdObject
      * 
-     * @param PHPFrame_IdObject $id_obj
+     * @param int|PHPFrame_IdObject $id_or_id_obj Either a numeric id or an 
+     *                                            instance of IdObject.
      * 
-     * @access public
      * @return PHPFrame_PersistentObject
      * @since  1.0
      */
-    public function findOne($id_obj)
+    public function findOne($id_or_id_obj)
     {
-        if (is_int($id_obj)) {
-            $id = $id_obj;
+        if (is_int($id_or_id_obj)) {
+            $id = $id_or_id_obj;
             
             // Get table name
             $table_name = $this->factory->getTableName();
@@ -61,6 +60,8 @@ class PHPFrame_SQLPersistentObjectAssembler
             // Create new IdObject
             $id_obj = $this->factory->getIdObject();
             $id_obj->where("id", "=", ":id")->params(":id", $id);
+        } else {
+            $id_obj = $id_or_id_obj;
         }
         
         if (!$id_obj instanceof PHPFrame_IdObject) {
@@ -81,7 +82,6 @@ class PHPFrame_SQLPersistentObjectAssembler
      * 
      * @param PHPFrame_IdObject|int $id_obj
      * 
-     * @access public
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
@@ -132,7 +132,6 @@ class PHPFrame_SQLPersistentObjectAssembler
      * 
      * @param PHPFrame_PersistentObject $obj
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -165,17 +164,24 @@ class PHPFrame_SQLPersistentObjectAssembler
     /**
      * Delete persistent object from the database
      * 
-     * @param PHPFrame_PersistentObject $obj
+     * @param int|PHPFrame_PersistentObject $id_or_obj Either a numeric id or 
+     *                                                 an instance of the 
+     *                                                 persistence object.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    public function delete(PHPFrame_PersistentObject $obj)
+    public function delete($id_or_obj)
     {
+        if ($id_or_obj instanceof PHPFrame_PersistentObject) {
+            $id = $obj->getId();
+        } else {
+            $id = (int) $id_or_obj;
+        }
+        
         $sql    = "DELETE FROM `".$this->factory->getTableName()."`";
         $sql   .= " WHERE id = :id";
-        $params = array(":id"=>$obj->getId());
+        $params = array(":id"=>$id);
         
         $this->factory->getDB()->query($sql, $params);
     }
@@ -185,7 +191,6 @@ class PHPFrame_SQLPersistentObjectAssembler
      * 
      * @param array $array
      * 
-     * @access private
      * @return string
      * @since  1.0
      */
@@ -209,7 +214,6 @@ class PHPFrame_SQLPersistentObjectAssembler
      * 
      * @param array $array
      * 
-     * @access private
      * @return string
      * @since  1.0
      */
@@ -235,7 +239,6 @@ class PHPFrame_SQLPersistentObjectAssembler
      * 
      * @param array $array
      * 
-     * @access private
      * @return array
      * @since  1.0
      */

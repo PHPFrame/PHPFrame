@@ -95,7 +95,7 @@ abstract class PHPFrame_Client
      */
     public function redirect($url)
     {
-    	$url = trim((string) $url);
+        $url = trim((string) $url);
         
         if ($url) {
             header("Location: ".$url);

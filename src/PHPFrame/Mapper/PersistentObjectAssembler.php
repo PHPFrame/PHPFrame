@@ -39,7 +39,6 @@ abstract class PHPFrame_PersistentObjectAssembler
      * 
      * @param PHPFrame_PersistenceFactory $factory
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -51,20 +50,19 @@ abstract class PHPFrame_PersistentObjectAssembler
     /**
      * Find a persistent object using an IdObject or numeric id
      * 
-     * @param PHPFrame_IdObject|int $id_obj
+     * @param int|PHPFrame_IdObject $id_or_id_obj Either a numeric id or an 
+     *                                            instance of IdObject.
      * 
-     * @access public
      * @return PHPFrame_PersistentObject
      * @since  1.0
      */
-    abstract public function findOne($id_obj);
+    abstract public function findOne($id_or_id_obj);
     
     /**
      * Find a collection of persistent objects using an IdObject
      * 
      * @param PHPFrame_IdObject $id_obj
      * 
-     * @access public
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
@@ -75,7 +73,6 @@ abstract class PHPFrame_PersistentObjectAssembler
      * 
      * @param PHPFrame_PersistentObject $obj
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -84,11 +81,12 @@ abstract class PHPFrame_PersistentObjectAssembler
     /**
      * Delete persistent object
      * 
-     * @param PHPFrame_PersistentObject $obj
+     * @param int|PHPFrame_PersistentObject $id_or_obj Either a numeric id or 
+     *                                                 an instance of the 
+     *                                                 persistence object.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    abstract public function delete(PHPFrame_PersistentObject $obj);
+    abstract public function delete($id_or_obj);
 }

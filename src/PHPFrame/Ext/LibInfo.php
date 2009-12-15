@@ -27,5 +27,5 @@
  */
 class PHPFrame_LibInfo extends PHPFrame_ExtInfo
 {
-	//...
+    //...
 }

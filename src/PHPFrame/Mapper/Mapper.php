@@ -87,16 +87,7 @@ class PHPFrame_Mapper
      */
     public function findOne($id_obj)
     {
-        $obj = $this->_factory->getAssembler()->findOne($id_obj);
-        
-        if (
-            $obj instanceof PHPFrame_PersistentObject
-            && !$obj->canRead(PHPFrame::getSession()->getUser())
-        ) {
-            throw new PHPFrame_AccessDeniedException();
-        }
-        
-        return $obj;
+        return $this->_factory->getAssembler()->findOne($id_obj);
     }
     
     /**
@@ -110,15 +101,7 @@ class PHPFrame_Mapper
      */
     public function find(PHPFrame_IdObject $id_obj=null)
     {
-        $collection = $this->_factory->getAssembler()->find($id_obj);
-        
-        foreach ($collection as $obj) {
-            if (!$obj->canRead(PHPFrame::getSession()->getUser())) {
-                throw new PHPFrame_AccessDeniedException("Access denied");
-            }
-        }
-        
-        return $collection;
+        return $this->_factory->getAssembler()->find($id_obj);
     }
     
     /**
@@ -132,28 +115,20 @@ class PHPFrame_Mapper
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
-        if (!$obj->canWrite(PHPFrame::getSession()->getUser())) {
-            throw new PHPFrame_AccessDeniedException("Access to object denied!");
-        }
-        
         return $this->_factory->getAssembler()->insert($obj);
     }
     
     /**
      * Delete persistent object from persisted media (db or file)
      * 
-     * @param PHPFrame_PersistentObject $obj
+     * @param int|PHPFrame_PersistentObject $obj
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function delete(PHPFrame_PersistentObject $obj)
+    public function delete($obj)
     {
-        if (!$obj->canWrite(PHPFrame::getSession()->getUser())) {
-            throw new PHPFrame_AccessDeniedException();
-        }
-        
         return $this->_factory->getAssembler()->delete($obj);
     }
     

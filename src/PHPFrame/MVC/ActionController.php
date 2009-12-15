@@ -310,8 +310,8 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         
         // Delegate redirection to client object if it is of the right type
         if (!empty($this->_redirect_url)) {
-        	//echo $this->_redirect_url; exit;
-        	//$url = PHPFrame_URLRewriter::rewriteURL($url);
+            //echo $this->_redirect_url; exit;
+            //$url = PHPFrame_URLRewriter::rewriteURL($url);
             $client->redirect($this->_redirect_url);
         }
     }

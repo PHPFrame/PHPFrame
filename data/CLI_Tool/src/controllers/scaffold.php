@@ -25,11 +25,11 @@
  */
 class ScaffoldController extends PHPFrame_ActionController
 {
-	/**
-	 * Absolute path to installation directry.
-	 * 
-	 * @var string
-	 */
+    /**
+     * Absolute path to installation directry.
+     * 
+     * @var string
+     */
     private $_install_dir=null;
     
     /**
@@ -72,17 +72,13 @@ class ScaffoldController extends PHPFrame_ActionController
      *                            containing the persistent objects. If  
      *                            ommitted the default 'src/models' directory 
      *                            will be scanned.
-     * @param array  $table_names [Optional] Associative array with the table 
-     *                            names to use. Keys should be the class names. 
-     *                            If none specified we use the object's class 
-     *                            name.
      * @param bool   $drop        [Optional] Default value is FALSE. When set 
      *                            to true existing table will be dropped.
      * 
      * @return void
      * @since  1.0
      */
-    public function create_table($path="", $table_names=array(), $drop=false)
+    public function create_table($path="", $drop=false)
     {
         $path = $this->_install_dir.DS."src".DS."models".DS.$path;
         
@@ -121,38 +117,23 @@ class ScaffoldController extends PHPFrame_ActionController
         // Get database options from config file
         $config_file = $this->_install_dir.DS."etc".DS."phpframe.ini";
         $config      = new PHPFrame_Config($config_file);
-        $options_it  = new RegexIterator(
-            new IteratorIterator(PHPFrame::Config()), 
-            '/^db\./', 
-            RegexIterator::MATCH, 
-            RegexIterator::USE_KEY
-        );
-        $options = iterator_to_array($options_it);
+        $options     = $config->getSection("db");
         
-        // Make db_name absolute path if sqlite and relative path given
         if (
-            isset($options["db.driver"]) 
-            && isset($options["db.name"]) 
-            && strtolower($options["db.driver"]) == "sqlite"
-            && !preg_match('/^\//', $options["db.name"])
+            strtolower($options["driver"]) == "sqlite" 
+            && !preg_match("/^\//", $options["name"])
         ) {
-            $var_dir = $this->_install_dir.DS."var";
-            $options["db.name"] = $var_dir.DS.$options["db.name"];
+            $options["name"] = $this->_install_dir.DS."var".DS.$options["name"];
         }
         
-        $db = PHPFrame_DatabaseFactory::getDB($options);
-        
+        $db         = PHPFrame_DatabaseFactory::getDB($options);
         $or_toolbox = new PHPFrame_ObjectRelationalToolbox();
         
         foreach ($objs as $obj) {
-            if (array_key_exists(get_class($obj), $table_names)) {
-                $table_name = $table_names[get_class($obj)];
-            } else {
-                $table_name = get_class($obj);
-            }
+            $table_name = get_class($obj);
             
-            if (isset($options["db.prefix"]) && !empty($options["db.prefix"])) {
-                $table_name = $options["db.prefix"].$table_name;
+            if (isset($options["prefix"]) && !empty($options["prefix"])) {
+                $table_name = $options["prefix"].$table_name;
             }
             
             $or_toolbox->createTable($db, $obj, $table_name, $drop);

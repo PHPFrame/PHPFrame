@@ -73,13 +73,13 @@ class PHPFrame_PluginHandler
      */
     public function __construct(PHPFrame_Application $app)
     {
-    	// Store plugins path in static property to make it available in 
-    	// static autoload method.
-    	self::$_plugins_path = $app->getInstallDir().DS."src".DS."plugins";
-    	
-    	// Store reference to application object in private property
-    	$this->_app = $app;
-    	
+        // Store plugins path in static property to make it available in 
+        // static autoload method.
+        self::$_plugins_path = $app->getInstallDir().DS."src".DS."plugins";
+        
+        // Store reference to application object in private property
+        $this->_app = $app;
+        
         // Acquire instance of SplObjectStorage
         $this->_plugins = new SplObjectStorage();
         

@@ -36,7 +36,6 @@ class PHPFrame_XMLPersistentObjectAssembler
      * @param PHPFrame_PersistenceFactory $factory
      * @param string                      $path
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -67,18 +66,18 @@ class PHPFrame_XMLPersistentObjectAssembler
     /**
      * Find a persistent object using an IdObject
      * 
-     * @param PHPFrame_IdObject|int $id_obj
+     * @param int|PHPFrame_IdObject $id_or_id_obj Either a numeric id or an 
+     *                                            instance of IdObject.
      * 
-     * @access public
      * @return PHPFrame_PersistentObject
      * @since  1.0
      */
-    public function findOne($id_obj)
+    public function findOne($id_or_id_obj)
     {
-        if (is_int($id_obj)) {
-            $id = $id_obj;
+        if (is_int($id_or_id_obj)) {
+            $id = $id_or_id_obj;
             
-        } elseif ($id_obj instanceof PHPFrame_IdObject) {
+        } elseif ($id_or_id_obj instanceof PHPFrame_IdObject) {
             $msg = "XMLIdObject not implemented!!!.";
             throw new RuntimeException($msg);
             
@@ -101,7 +100,6 @@ class PHPFrame_XMLPersistentObjectAssembler
      * 
      * @param PHPFrame_IdObject $id_obj
      * 
-     * @access public
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
@@ -136,7 +134,6 @@ class PHPFrame_XMLPersistentObjectAssembler
      * 
      * @param PHPFrame_PersistentObject $obj
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -177,14 +174,21 @@ class PHPFrame_XMLPersistentObjectAssembler
     /**
      * Delete persistent object from the database
      * 
-     * @param PHPFrame_PersistentObject $obj
+     * @param int|PHPFrame_PersistentObject $id_or_obj Either a numeric id or 
+     *                                                 an instance of the 
+     *                                                 persistence object.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    public function delete(PHPFrame_PersistentObject $obj)
+    public function delete($id_or_obj)
     {
+        if (!$id_or_obj instanceof PHPFrame_PersistentObject) {
+            $obj = $this->findOne((int) $id_or_obj);
+        } else {
+            $obj = $id_or_obj;
+        }
+        
         // Get current collection
         $collection = $this->find();
         $collection->removeElement($obj);
@@ -201,14 +205,12 @@ class PHPFrame_XMLPersistentObjectAssembler
      * 
      * @param PHPFrame_PersistentObjectCollection $collection
      * 
-     * @access private
      * @return string
      * @since  1.0
      */
     private function _serializeCollection(
         PHPFrame_PersistentObjectCollection $collection
-    )
-    {
+    ) {
         // Flatten collection object to array
         $array = array();
         foreach ($collection as $item) {
@@ -221,7 +223,6 @@ class PHPFrame_XMLPersistentObjectAssembler
     /**
      * Get new id based on highest in current collection
      * 
-     * @access private
      * @return int
      * @since  1.0
      */

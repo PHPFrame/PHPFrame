@@ -318,7 +318,7 @@ class PHPFrame_Config implements IteratorAggregate
      */
     public function getPath()
     {
-    	return $this->_path;
+        return $this->_path;
     }
     
     /**

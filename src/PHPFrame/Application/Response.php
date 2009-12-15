@@ -317,17 +317,17 @@ class PHPFrame_Response
      */
     public function setBody($value, $render=true, $append=false)
     {
-    	// Render the value to append
-    	if ($render) {
-    	    $value = $this->getRenderer()->render($value);
-    	}
-    	
-    	// Set the value in the document body
-    	if ($append) {
-    	    $this->getDocument()->appendBody($value);
-    	} else {
-    	    $this->getDocument()->setBody($value);
-    	}
+        // Render the value to append
+        if ($render) {
+            $value = $this->getRenderer()->render($value);
+        }
+        
+        // Set the value in the document body
+        if ($append) {
+            $this->getDocument()->appendBody($value);
+        } else {
+            $this->getDocument()->setBody($value);
+        }
     }
     
     /**
@@ -352,7 +352,7 @@ class PHPFrame_Response
      */
     public function setTitle($str)
     {
-    	$this->getDocument()->setTitle($str);
+        $this->getDocument()->setTitle($str);
     }
      
     /**

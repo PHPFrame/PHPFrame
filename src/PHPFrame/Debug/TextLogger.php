@@ -25,11 +25,11 @@
  */
 class PHPFrame_TextLogger extends PHPFrame_Logger
 {
-	/**
-	 * Reference to fileinfo object.
-	 * 
-	 * @var SplFileInfo
-	 */
+    /**
+     * Reference to fileinfo object.
+     * 
+     * @var SplFileInfo
+     */
     private $_log_file_info = null;
     
     /**
@@ -79,7 +79,7 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
      */
     public function __sleep()
     {
-    	return array("file_name","log_level");
+        return array("file_name","log_level");
     }
     
     /**
@@ -91,7 +91,7 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
      */
     public function __wakeup()
     {
-    	$this->_log_file_info = new SplFileInfo($this->file_name);
+        $this->_log_file_info = new SplFileInfo($this->file_name);
     }
     
     /**

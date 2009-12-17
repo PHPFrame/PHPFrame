@@ -35,9 +35,9 @@ class PHPFrame_TextLoggerTest extends PHPUnit_Framework_TestCase
     
     public function test_serialize()
     {
-    	$serialised   = serialize($this->_logger);
-    	$unserialised = unserialize($serialised);
-    	
-    	$this->assertTrue($this->_logger == $unserialised);
+        $serialised   = serialize($this->_logger);
+        $unserialised = unserialize($serialised);
+        
+        $this->assertTrue($this->_logger == $unserialised);
     }
 }

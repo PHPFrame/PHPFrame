@@ -47,7 +47,7 @@ class PHPFrame_XMLPersistentObjectAssembler
         PHPFrame_Filesystem::ensureWritableDir($path);
         
         // Create FileInfo object for dir path
-        $this->_path_info = new PHPFrame_FileInfo($path);
+        $this->_path_info = new SplFileInfo($path);
         
         // Build full path to XML file
         $file_name = $this->_path_info->getRealPath();
@@ -56,10 +56,10 @@ class PHPFrame_XMLPersistentObjectAssembler
         // Create FileInfo object for XML file
         // Create XML file if it doesnt exist
         if (!is_file($file_name)) {
-            $file_obj = new PHPFrame_FileObject($file_name, "w");
+            $file_obj = new SplFileObject($file_name, "w");
             $this->_file_info = $file_obj->getFileInfo();
         } else {
-            $this->_file_info = new PHPFrame_FileInfo($file_name);
+            $this->_file_info = new SplFileInfo($file_name);
         }
     }
     

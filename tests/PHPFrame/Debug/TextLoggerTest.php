@@ -32,4 +32,9 @@ class PHPFrame_TextLoggerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($log_contents));
         $this->assertEquals(1, preg_match('/Some message$/', $log_contents[2]));
     }
+    
+    public function test_serialize()
+    {
+    	
+    }
 }

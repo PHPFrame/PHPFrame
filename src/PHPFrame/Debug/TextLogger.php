@@ -49,7 +49,7 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
         }
         
         // Instantiate file info object for log file
-        $this->_log_file_info = new PHPFrame_FileInfo($file_name);
+        $this->_log_file_info = new SplFileInfo($file_name);
         
         if (!$this->_log_file_info->isWritable()) {
             $msg  = "Log file ".$file_name." is not writable. ";
@@ -57,6 +57,16 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
             trigger_error($msg, E_USER_ERROR);
         }
     }
+    
+//    public function __sleep()
+//    {
+//    	return array();
+//    }
+//    
+//    public function __wakeup()
+//    {
+//    	
+//    }
     
     /**
      * Implementation of IteratorAggregate interface
@@ -86,7 +96,7 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
         }
         
         // Add log separator
-        $info = "\n---\n";
+        $info = "\n---";
         
         // Add date and time
         $info .= "[".date("Y-m-d H:i:s")."] ";
@@ -98,7 +108,9 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
             $info .= "[cli] ";
         }
         
-        // Write log to filesystem using PHPFrame's utility class
+        $info .= "\n";
+        
+        // Write log to filesystem
         $log_file_obj = $this->_log_file_info->openFile("a");
         $log_file_obj->fwrite($info.$msg);
     }

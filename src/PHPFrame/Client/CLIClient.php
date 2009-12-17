@@ -158,7 +158,7 @@ class PHPFrame_CLIClient extends PHPFrame_Client
             $request->setOutfile($result->options["outfile"]);
             
             if ($result->options["infile"]) {
-                $infile = new PHPFrame_FileObject($result->options["infile"]);
+                $infile = new SplFileObject($result->options["infile"]);
         
                 $request->attachFile("infile", array(
                     "tmp_name"=>$infile->getPath(),
@@ -202,5 +202,18 @@ class PHPFrame_CLIClient extends PHPFrame_Client
         
         // Set response renderer
         $response->setRenderer(new PHPFrame_PlainRenderer());
+    }
+    
+    /**
+     * Handle controller redirection
+     * 
+     * @param string $url
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function redirect($url)
+    {
+        // CLI cant resirect
     }
 }

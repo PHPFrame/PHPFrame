@@ -29,9 +29,9 @@
 class PHPFrame_FileRegistry extends PHPFrame_Registry
 {
     /**
-     * PHPFrame_FileObject object representing the cache file on disk
+     * SplFileObject object representing the cache file on disk
      * 
-     * @var PHPFrame_FileObject
+     * @var SplFileObject
      */
     private $_file_obj = null;
     /**
@@ -64,12 +64,13 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
         // Read data from cache
         if (is_file($cache_file)) {
             // Open cache file in read/write mode
-            $this->_file_obj = new PHPFrame_FileObject($cache_file, "r+");
+            $this->_file_obj = new SplFileObject($cache_file, "r+");
             // Load data from cache file
-            $this->_data = unserialize($this->_file_obj->getFileContents());
+            $file_contents = implode("\n", iterator_to_array($this->_file_obj));
+            $this->_data   = unserialize($file_contents);
         } else {
             // Open cache file in write mode
-            $this->_file_obj = new PHPFrame_FileObject($cache_file, "w");
+            $this->_file_obj = new SplFileObject($cache_file, "w");
         }
     }
     

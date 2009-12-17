@@ -141,14 +141,16 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
             $cache_file_name  = $this->getCacheDir();
             $cache_file_name .= DS.md5($this->getUrl()->getURL());
             if (is_file($cache_file_name)) {
-                $cache_file = new PHPFrame_FileObject($cache_file_name, "r+");
+                $cache_file = new SplFileObject($cache_file_name, "r+");
                 if ((time() - $cache_file->getMTime()) < $this->getCacheTime()) {
-                    $serialised = base64_decode($cache_file->getFileContents());
-                    // Fetch from cache file
+                	// Fetch data from cache file
+                	$lines           = iterator_to_array($cache_file);
+                	$contents        = implode("\n", $lines);
+                    $serialised      = base64_decode($contents);
                     $this->_response = unserialize($serialised);
                 }
             } else {
-                $cache_file = new PHPFrame_FileObject($cache_file_name, "w");
+                $cache_file = new SplFileObject($cache_file_name, "w");
             }
         }
         

@@ -1,11 +1,11 @@
 <?php
 /**
- * PHPFrame/FileSystem/Filesystem.php
+ * PHPFrame/Utils/Filesystem.php
  * 
  * PHP version 5
  * 
  * @category  PHPFrame
- * @package   FileSystem
+ * @package   Utils
  * @author    Luis Montero <luis.montero@e-noise.com>
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
@@ -18,7 +18,7 @@
  * such as copy, move, upload and so on.
  * 
  * @category PHPFrame
- * @package  FileSystem
+ * @package  Utils
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
@@ -31,8 +31,6 @@ class PHPFrame_Filesystem
      * 
      * @param string $filename
      * 
-     * @static
-     * @access public
      * @return void
      * @throws RuntimeException if touch fails
      * @since  1.0
@@ -52,8 +50,6 @@ class PHPFrame_Filesystem
      * @param string $dest
      * @param bool   $recursive
      * 
-     * @static
-     * @access public
      * @return void
      * @throws RuntimeException if copy fails
      * @since  1.0
@@ -88,8 +84,6 @@ class PHPFrame_Filesystem
      * @param string $origin
      * @param string $destination
      * 
-     * @static
-     * @access public
      * @return void
      * @throws RuntimeException if move fails
      * @since  1.0
@@ -105,8 +99,6 @@ class PHPFrame_Filesystem
      * 
      * @param string $file
      * 
-     * @static
-     * @access public
      * @return void
      * @throws RuntimeException if move fails
      * @since  1.0
@@ -122,8 +114,6 @@ class PHPFrame_Filesystem
      * 
      * @param string $dir
      * 
-     * @static
-     * @access public
      * @return Iterator
      * @throws RuntimeException if move fails
      * @since  1.0
@@ -139,7 +129,6 @@ class PHPFrame_Filesystem
      * 
      * @param string $path Path to directory to ensure that it is writable
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -187,7 +176,6 @@ class PHPFrame_Filesystem
      * @param  int    $max_upload_size
      * @param  bool   $overwrite
      * 
-     * @access public
      * @return PHPFrame_FileInfo
      * @throws Exception on failure
      * @since  1.0
@@ -290,7 +278,6 @@ class PHPFrame_Filesystem
     /**
      * Get the operating system's temp directory path
      * 
-     * @access public
      * @return string
      * @since  1.0
      */

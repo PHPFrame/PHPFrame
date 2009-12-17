@@ -968,7 +968,7 @@ class PHPFrame_Application
         // If outfile is defined we write the response to file
         $outfile = $request->getOutfile();
         if (!empty($outfile)) {
-            $file_obj = new PHPFrame_FileObject($outfile, "w");
+            $file_obj = new SplFileObject($outfile, "w");
             $file_obj->fwrite((string) $response);
         }
         
@@ -998,7 +998,7 @@ class PHPFrame_Application
             // Dump profiler output to file if outdir is specified in config
             if (!empty($profiler_outdir)) {
                 $profiler_outfile = $profiler_outdir.DS.time().".ppo";
-                $file_obj = new PHPFrame_FileObject($profiler_outfile, "w");
+                $file_obj = new SplFileObject($profiler_outfile, "w");
                 $file_obj->fwrite($profiler_out);
             }
         }

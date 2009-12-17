@@ -921,6 +921,16 @@ class PHPFrame_Application
             // Attach observers to the action controller
             $controller->attach(PHPFrame::getSession()->getSysevents());
             
+            $log_level = $this->getConfig()->get("debug.log_level");
+            if ($log_level > 0) {
+                $controller->attach($this->getLogger());
+            }
+            
+            $informer_level = $this->getConfig()->get("debug.informer_level");
+            if ($informer_level > 0) {
+                $controller->attach($this->getInformer());
+            }
+            
             // Execute the action in the given controller
             $controller->execute($this);
             

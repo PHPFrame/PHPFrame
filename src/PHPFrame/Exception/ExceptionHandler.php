@@ -46,7 +46,6 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      * 
      * This method encapsulates set_error_handler() and set_exception_handler().
      * 
-     * @access private
      * @return void
      * @since  1.0
      */
@@ -61,7 +60,6 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
     /**
      * Get singleton instance of PHPFrame_ExceptionHandler
      * 
-     * @access public
      * @return PHPFrame_ExceptionHandler
      * @since  1.0
      */
@@ -80,8 +78,6 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      * This method encapsulates restore_error_handler() and 
      * restore_exception_handler().
      * 
-     * @static
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -102,8 +98,6 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      * @param int    $errline
      * @param string $errcontext
      * 
-     * @static
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -113,8 +107,7 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
         $errfile, 
         $errline, 
         $errcontext
-    )
-    {
+    ) {
         // Throw error as custom exception
         throw new PHPFrame_ErrorException(
             $errstr, 
@@ -130,8 +123,6 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      * 
      * Handles uncaught exceptions.
      * 
-     * @static
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -171,7 +162,6 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      * 
      * @param $bool
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

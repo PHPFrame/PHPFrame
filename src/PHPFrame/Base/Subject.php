@@ -36,20 +36,20 @@ abstract class PHPFrame_Subject implements SplSubject
     const EVENT_TYPE_SUCCESS = 0x00000005;
     
     /**
-     * An "storage" object to store observers
+     * An "storage" object to store observers.
      *  
      * @var SplObjectStorage
      */
     private $_obs = null;
     /**
-     * A simple array holding the last raised event (error, success, info, ...)
+     * A simple array with the last raised event (error, success, info, ...).
      * 
      * @var array
      */
     private $_last_event = array();
     
     /**
-     * Get controller's success flag
+     * Get controller's success flag.
      * 
      * @return boolean
      * @since  1.0
@@ -60,9 +60,9 @@ abstract class PHPFrame_Subject implements SplSubject
     }
     
     /**
-     * Notify event to observers
+     * Notify event to observers.
      * 
-     * @param string $msg  The event message
+     * @param string $msg  The event message.
      * @param int    $type The event type. See class constants.
      * 
      * @return void
@@ -94,9 +94,9 @@ abstract class PHPFrame_Subject implements SplSubject
     }
     
     /**
-     * Attach an observer to this subject
+     * Attach an observer to this subject.
      * 
-     * @param PHPFrame_Observer $observer The object to attach to this subject
+     * @param PHPFrame_Observer $observer The object to attach to this subject.
      * 
      * @return void
      * @since  1.0
@@ -111,9 +111,9 @@ abstract class PHPFrame_Subject implements SplSubject
     }
 
     /**
-     * Detach an object from the subject
+     * Detach an object from the subject.
      * 
-     * @param SplObserver $observer The observer object to detach
+     * @param SplObserver $observer The observer object to detach.
      * 
      * @return void
      * @since  1.0
@@ -124,7 +124,7 @@ abstract class PHPFrame_Subject implements SplSubject
     }
     
     /**
-     * Notify observers
+     * Notify observers.
      * 
      * @return void
      * @since  1.0

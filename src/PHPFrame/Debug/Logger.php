@@ -30,7 +30,7 @@
 abstract class PHPFrame_Logger extends PHPFrame_Observer 
     implements IteratorAggregate
 {
-    private $_file_name, $_log_level;
+    protected $file_name, $log_level;
     
     /**
      * Constructor
@@ -52,8 +52,8 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
             throw new InvalidArgumentException($msg);
         }
         
-        $this->_file_name = $file_name;
-        $this->_log_level = (int) $log_level;
+        $this->file_name = $file_name;
+        $this->log_level = (int) $log_level;
     }
     
     /**
@@ -67,7 +67,7 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
     {
         list($msg, $type) = $subject->getLastEvent();
         
-        if ($type <= $this->_log_level || is_null($this->_log_level)) {
+        if ($type <= $this->log_level || is_null($this->log_level)) {
             $this->write($msg);
         }
     }

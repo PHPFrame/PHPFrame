@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Debug/TextLog.php
+ * PHPFrame/Debug/TextLogger.php
  * 
  * PHP version 5
  * 
@@ -14,7 +14,7 @@
  */
 
 /**
- * Text Log Class
+ * Text based implementation of {@link PHPFrame_Logger}.
  * 
  * @category PHPFrame
  * @package  Debug
@@ -25,13 +25,24 @@
  */
 class PHPFrame_TextLogger extends PHPFrame_Logger
 {
+	/**
+	 * Reference to fileinfo object.
+	 * 
+	 * @var SplFileInfo
+	 */
     private $_log_file_info = null;
     
     /**
-     * Constructor
+     * Constructor.
      * 
-     * @param string $file_name
-     * @param int    $log_level
+     * @param string $file_name Absolute path to log file.
+     * @param int    $log_level Log level. Possible values:
+     *                          5 - success, info, notices, warnings and errors
+     *                          4 - info, notices, warnings and errors
+     *                          3 - notices, warnings and errors
+     *                          2 - warnings and errors
+     *                          1 - errors only
+     *                          0 - Off
      * 
      * @return void
      * @since  1.0
@@ -58,22 +69,36 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
         }
     }
     
-//    public function __sleep()
-//    {
-//    	return array();
-//    }
-//    
-//    public function __wakeup()
-//    {
-//    	
-//    }
+    /**
+     * Magic method automatically invoked when 'serialising' object. This 
+     * method returns an array with the property names that need to be incuded 
+     * when serialising. Note that the fileinfo object is excluded.
+     * 
+     * @return array
+     * @since  1.0
+     */
+    public function __sleep()
+    {
+    	return array("file_name","log_level");
+    }
     
     /**
-     * Implementation of IteratorAggregate interface
+     * Magic method automatically invoked when unserialising object. This 
+     * method acquires a new instance of the fileinfo object.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function __wakeup()
+    {
+    	$this->_log_file_info = new SplFileInfo($this->file_name);
+    }
+    
+    /**
+     * Implementation of IteratorAggregate interface.
      * 
      * @return Iterator
      * @since  1.0
-     * @todo   This method still needs to be implemented.
      */
     public function getIterator()
     {
@@ -81,9 +106,9 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
     }
     
     /**
-     * Write string to log file
+     * Write string to log file.
      * 
-     * @param string|array $msg The string to append to log file
+     * @param string|array $msg The string to append to log file.
      * 
      * @return void
      * @since  1.0
@@ -96,7 +121,7 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
         }
         
         // Add log separator
-        $info = "\n---";
+        $info = "\n";
         
         // Add date and time
         $info .= "[".date("Y-m-d H:i:s")."] ";

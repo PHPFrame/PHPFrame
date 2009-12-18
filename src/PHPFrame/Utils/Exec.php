@@ -14,7 +14,8 @@
  */
 
 /**
- * Exec Class
+ * This is a very simple class that wraps around PHP's exec() function and 
+ * provides an Object Oriented interface to command execution.
  * 
  * @category PHPFrame
  * @package  Utils

@@ -19,8 +19,8 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $install_dir = preg_replace($pattern, $replacement, __FILE__);
         
         // Delete app registry if it exists
-        if (is_file($install_dir.DS."tmp".DS."cache".DS."app.reg")) {
-            unlink($install_dir.DS."tmp".DS."cache".DS."app.reg");
+        if (is_file($install_dir.DS."tmp".DS."app.reg")) {
+            unlink($install_dir.DS."tmp".DS."app.reg");
         }
         
         // Instantiate application

@@ -306,7 +306,7 @@ class PHPFrame_Application
         }
         
         if (is_null($this->getRegistry()->get("logger"))) {
-            $logger = new PHPFrame_TextLogger($this->_tmp_dir.DS."app.log");
+            $logger = new PHPFrame_TextLogger($this->_var_dir.DS."app.log");
             $this->setLogger($logger);
         }
         

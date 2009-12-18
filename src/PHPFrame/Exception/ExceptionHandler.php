@@ -154,6 +154,7 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
             $response->send();
         }
         
+        // Exit with error status
         exit(1);
     }
     

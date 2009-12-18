@@ -25,6 +25,11 @@
  */
 class PHPFrame_Mailer extends PHPMailer
 {
+	/**
+	 * Message ID suffix
+	 * 
+	 * @var string
+	 */
     private $_messageid_sfx = null;
     /**
      * Options array
@@ -46,9 +51,8 @@ class PHPFrame_Mailer extends PHPMailer
      * Constructor
      * 
      * @param array $options [Optional] Options: mailer, host, port, auth, 
-     *                                  user, pass, fromaddress, fromname.
+     *                       user, pass, fromaddress, fromname.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -84,9 +88,8 @@ class PHPFrame_Mailer extends PHPMailer
      * replies. The suffix is added to the the headers in $this->CreateHeader() and 
      * is encoded in base64.
      * 
-     * @param string $str
+     * @param string $str The message ID suffix.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -98,7 +101,6 @@ class PHPFrame_Mailer extends PHPMailer
     /**
      * Get the message id suffix.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -112,7 +114,6 @@ class PHPFrame_Mailer extends PHPMailer
      * 
      * This method appends the message id suffix encoded in base64.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */

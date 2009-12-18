@@ -765,6 +765,17 @@ class PHPFrame_HTMLUI
         
     }
     
+    /**
+     * Build an HTML form to be used with the given persistent object.
+     * 
+     * @param PHPFrame_PersistentObject $obj
+     * @param string                    $action
+     * @param string                    $submit_label
+     * @param array                     $exclude
+     * 
+     * @return string
+     * @since  1.0
+     */
     public static function persistentObjectToForm(
         PHPFrame_PersistentObject $obj,
         $action,
@@ -843,6 +854,7 @@ class PHPFrame_HTMLUI
         
         $str .= "<br />\n";
         $str .= "<input type=\"submit\" value=\"".$submit_label."\" />\n";
+        $str .= "<input type=\"hidden\" name=\"id\" value=\"".$obj->getId()."\" />\n";
         $str .= "</form>\n";
         
         return $str;

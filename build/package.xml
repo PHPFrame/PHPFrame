@@ -155,9 +155,6 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/URI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/vCard.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/XMLSerialiser.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/VersionControl/GITVersionControl.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/VersionControl/IVersionControl.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/VersionControl/SVNVersionControl.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    
    <file baseinstalldir="/" name="CLI_Tool/etc/phpframe.ini" role="data" />

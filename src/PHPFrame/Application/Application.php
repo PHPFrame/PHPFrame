@@ -301,12 +301,17 @@ class PHPFrame_Application
      */
     public function getLogger()
     {
-        if ($this->getConfig()->get("debug.log_level") <= 0) {
+    	$log_level = $this->getConfig()->get("debug.log_level");
+        if ($log_level <= 0) {
             return;
         }
         
         if (is_null($this->getRegistry()->get("logger"))) {
-            $logger = new PHPFrame_TextLogger($this->_var_dir.DS."app.log");
+            $logger = new PHPFrame_TextLogger(
+                $this->_var_dir.DS."app.log", 
+                $log_level
+            );
+            
             $this->setLogger($logger);
         }
         
@@ -376,10 +381,7 @@ class PHPFrame_Application
     public function getRegistry()
     {
         if (is_null($this->_registry)) {
-            $cache_dir = $this->_tmp_dir.DS."cache";
-            PHPFrame_Filesystem::ensureWritableDir($cache_dir);
-            
-            $cache_file = $cache_dir.DS."app.reg";
+            $cache_file = $this->_tmp_dir.DS."app.reg";
             $this->setRegistry(new PHPFrame_FileRegistry($cache_file));
         }
         

@@ -64,7 +64,7 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
      */
     public function getLogLevel()
     {
-    	return $this->log_level;
+        return $this->log_level;
     }
     
     /**
@@ -83,13 +83,13 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
      */
     public function setLogLevel($int)
     {
-    	if (!is_int($int) || $int < 0 || $int > 5) {
-    	    $msg  = "Argument \$int passed to ".get_class($this)." must be ";
-    	    $msg .= "an integer with a value between 0 and 5.";
-    	    throw new InvalidArgumentException($msg);
-    	}
-    	
-    	$this->log_level = $int;
+        if (!is_int($int) || $int < 0 || $int > 5) {
+            $msg  = "Argument \$int passed to ".get_class($this)." must be ";
+            $msg .= "an integer with a value between 0 and 5.";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $this->log_level = $int;
     }
     
     /**

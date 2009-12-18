@@ -38,12 +38,11 @@ class PHPFrame_vCard
      * 
      * @var VCARD
      */
-    private $_vcard=null;
+    private $_vcard = null;
     
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -55,7 +54,6 @@ class PHPFrame_vCard
     /**
      * Convert vCard object to string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -65,29 +63,39 @@ class PHPFrame_vCard
     }
     
     /**
-     * Set Name
+     * Set name properties.
      * 
-     * @param string $last_name
-     * @param string $first_name
-     * @param string $middle_names
-     * @param string $prefixes
-     * @param string $suffixes
+     * @param string $last_name    The last name.
+     * @param string $first_name   The first name.
+     * @param string $middle_names Any middle names.
+     * @param string $prefixes     Name prefixes
+     * @param string $suffixes     Name suffixes
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    public function setName($last_name, $first_name, $middle_names="", $prefixes="", $suffixes="")
-    {
-        $this->_vcard->setName($last_name, $first_name, $middle_names, $prefixes, $suffixes);
+    public function setName(
+        $last_name, 
+        $first_name, 
+        $middle_names="", 
+        $prefixes="", 
+        $suffixes=""
+    ) {
+        $this->_vcard->setName(
+            $last_name, 
+            $first_name, 
+            $middle_names, 
+            $prefixes, 
+            $suffixes
+        );
     }
     
     /**
      * Get Name
      * 
-     * @param string $attr Accepted values: "LAST", "FIRST", "MIDDLE", "PREF", "SUFF"
+     * @param string $attr Accepted values: "LAST", "FIRST", "MIDDLE", "PREF", 
+     * "SUFF"
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -99,9 +107,8 @@ class PHPFrame_vCard
     /**
      * Set formatted name
      * 
-     * @param string $formatted_name
+     * @param string $formatted_name A stringf with the formatted name.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -111,9 +118,8 @@ class PHPFrame_vCard
     }
     
     /**
-     * Get formatted name
+     * Get formatted name.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -123,10 +129,10 @@ class PHPFrame_vCard
     }
     
     /**
-     * Set email
+     * Set email.
      * 
-     * @param string $email
-     * @param string $attr
+     * @param string $email The email address.
+     * @param string $attr  [Optional] Default value is INTERNET
      * 
      * @access public
      * @return void
@@ -138,11 +144,10 @@ class PHPFrame_vCard
     }
     
     /**
-     * Set photo
+     * Set photo.
      * 
-     * @param string $photo_url
+     * @param string $photo_url URL to the photo.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

@@ -28,29 +28,30 @@ class PHPFrame_XMLSerialiser
     /**
      * Serialise a value to XML
      * 
-     * @param mixed  $value
+     * @param mixed  $value          The value we want to serialise to XML.
      * @param string $root_node_name [Optional]
      * 
-     * @static
-     * @access public
      * @return string
      * @since  1.0
      */
     public static function serialise(array $value, $root_node_name="root")
     {
+        // Build serialised string
         $str = self::_doSerialise($value);
         $str = "<".$root_node_name.">".$str."</".$root_node_name.">";
+        
+        // Get instance of beautifier to make string look pretty ;-)
         $xml_beautifier = new XML_Beautifier();
+        
+        // Return beautified string
         return $xml_beautifier->formatString($str);
     }
     
     /**
-     * Unserialise a string as a PHP value
+     * Unserialise a string as a PHP value.
      * 
-     * @param string $str
+     * @param string $str The XML string we want to unserialise.
      * 
-     * @static
-     * @access public
      * @return string
      * @since  1.0
      */

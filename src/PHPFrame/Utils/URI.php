@@ -108,11 +108,10 @@ class PHPFrame_URI
      * 
      * @param string $uri The URI string.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
-    public function __construct($uri='') 
+    public function __construct($uri='')
     {
         if (empty($uri)) {
             $uri = $this->_getRequestURI();
@@ -134,7 +133,6 @@ class PHPFrame_URI
     /**
      * Get the URI scheme.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -146,7 +144,6 @@ class PHPFrame_URI
     /**
      * Get the username specified in URI if any.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -158,7 +155,6 @@ class PHPFrame_URI
     /**
      * Get the password specified in URI if any.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -170,7 +166,6 @@ class PHPFrame_URI
     /**
      * Get the host
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -182,7 +177,6 @@ class PHPFrame_URI
     /**
      * Get the port
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -194,7 +188,6 @@ class PHPFrame_URI
     /**
      * Get the directory name
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -206,7 +199,6 @@ class PHPFrame_URI
     /**
      * Get the file name
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -218,7 +210,6 @@ class PHPFrame_URI
     /**
      * Get the file extension
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -230,7 +221,6 @@ class PHPFrame_URI
     /**
      * Get the query params
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -242,7 +232,6 @@ class PHPFrame_URI
     /**
      * Get the fragment
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -256,15 +245,16 @@ class PHPFrame_URI
      * 
      * This method retrieves the base URL for the current state of the URI object.
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
-    public function getBase() 
+    public function getBase()
     {
         $base = $this->_scheme."://".$this->_host;
-        if (($this->_scheme == "http" && $this->_port != 80)
-             || ($this->_scheme == "https" && $this->_port != 443)) {
+        if (
+            ($this->_scheme == "http" && $this->_port != 80)
+            || ($this->_scheme == "https" && $this->_port != 443)
+        ) {
             $base .= ":".$this->_port;    
         }
         
@@ -282,11 +272,10 @@ class PHPFrame_URI
     /**
      * Print URI object as URI string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
-    public function __toString() 
+    public function __toString()
     {
         $str  = $this->getBase();
         $str .= $this->_filename.".".$this->_extension;
@@ -309,8 +298,7 @@ class PHPFrame_URI
     /**
      * Get the URI string from the current request
      * 
-     * @access private
-     * @return string  The current request's URL
+     * @return string The current request's URL
      * @since  1.0
      */
     private function _getRequestURI() 
@@ -321,20 +309,24 @@ class PHPFrame_URI
         }
         
         // Determine if the request was over SSL (HTTPS)
-        if (isset($_SERVER['HTTPS']) 
+        if (
+            isset($_SERVER['HTTPS']) 
             && !empty($_SERVER['HTTPS']) 
-            && (strtolower($_SERVER['HTTPS']) != 'off')) {
+            && (strtolower($_SERVER['HTTPS']) != 'off')
+        ) {
             $scheme = 'https';
-        } 
-        else {
+        } else {
             $scheme = 'http';
         }
         
         $uri = $scheme.'://'.$_SERVER['HTTP_HOST'];
-        if (($scheme == 'http' && $_SERVER['SERVER_PORT'] != 80) 
-            || ($scheme == 'https' && $_SERVER['SERVER_PORT'] != 443)) {
+        if (
+            ($scheme == 'http' && $_SERVER['SERVER_PORT'] != 80) 
+            || ($scheme == 'https' && $_SERVER['SERVER_PORT'] != 443)
+        ) {
             $uri .= ':'.$_SERVER['SERVER_PORT'];    
         }
+        
         $uri .= $_SERVER["REQUEST_URI"];
         
         return $uri;
@@ -347,7 +339,6 @@ class PHPFrame_URI
      * 
      * @param string $uri The URI to parse
      * 
-     * @access private
      * @return void
      * @since  1.0
      */
@@ -361,6 +352,7 @@ class PHPFrame_URI
         // Parse URI using PHPs parse_url() method
         $array = parse_url($uri);
         
+        // Get URI parts from parsed array
         $this->_scheme = $array['scheme'];
         $this->_host   = $array['host'];
         

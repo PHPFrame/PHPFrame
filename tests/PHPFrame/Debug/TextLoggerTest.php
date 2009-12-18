@@ -43,20 +43,20 @@ class PHPFrame_TextLoggerTest extends PHPUnit_Framework_TestCase
     
     public function test_getAndSetLogLevel()
     {
-    	$log_level = $this->_logger->getLogLevel();
-    	
-    	$this->_logger->setLogLevel(5);
-    	$this->assertEquals(5, $this->_logger->getLogLevel());
-    	
-    	$this->_logger->setLogLevel(1);
+        $log_level = $this->_logger->getLogLevel();
+        
+        $this->_logger->setLogLevel(5);
+        $this->assertEquals(5, $this->_logger->getLogLevel());
+        
+        $this->_logger->setLogLevel(1);
         $this->assertEquals(1, $this->_logger->getLogLevel());
     }
     
     public function test_setLogLevelNegativeIntFailure()
     {
-    	$this->setExpectedException("InvalidArgumentException");
-    	
-    	$this->_logger->setLogLevel(-1);
+        $this->setExpectedException("InvalidArgumentException");
+        
+        $this->_logger->setLogLevel(-1);
     }
     
     public function test_setLogLevelValueTooHighFailure()

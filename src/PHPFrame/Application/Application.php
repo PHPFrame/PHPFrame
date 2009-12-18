@@ -301,7 +301,7 @@ class PHPFrame_Application
      */
     public function getLogger()
     {
-    	$log_level = $this->getConfig()->get("debug.log_level");
+        $log_level = $this->getConfig()->get("debug.log_level");
         if ($log_level <= 0) {
             return;
         }

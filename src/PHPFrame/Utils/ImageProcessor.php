@@ -35,7 +35,6 @@ class PHPFrame_ImageProcessor
      * @param int    $max_height
      * @param int    $imgcomp       0 best quality | 100 worst quality
      * 
-     * @access public
      * @return void
      * @throws Exception on failure
      * @since  1.0
@@ -46,8 +45,7 @@ class PHPFrame_ImageProcessor
         $max_width=85,
         $max_height=60,
         $imgcomp=0
-    ) 
-    {
+    ) {
         $imgcomp = (100 - $imgcomp);
 
         if (!file_exists($src_filename)) {
@@ -91,48 +89,48 @@ class PHPFrame_ImageProcessor
         }
     }
     
-    private function _createFromFile($src_filename, $src_type) 
+    private function _createFromFile($src_filename, $src_type)
     {
         ini_set('memory_limit', '32M');
         
         switch ($src_type) {
-            case 1: // for gif
-                return imagecreatefromgif($src_filename);
-            case 2: // for jpeg
-                return imagecreatefromjpeg($src_filename);
-            case 3: // for png
-                return imagecreatefrompng($src_filename);
+        case 1: // for gif
+            return imagecreatefromgif($src_filename);
+        case 2: // for jpeg
+            return imagecreatefromjpeg($src_filename);
+        case 3: // for png
+            return imagecreatefrompng($src_filename);
         }    
     }
     
-    private function _create($dst_width, $dst_height, $src_type) 
+    private function _create($dst_width, $dst_height, $src_type)
     {
         switch ($src_type) {
-            case 1: // for gif
-                return imagecreate($dst_width,$dst_height);
-            case (2 || 3): // for jpeg and png
-                return imagecreatetruecolor($dst_width,$dst_height);
+        case 1: // for gif
+            return imagecreate($dst_width,$dst_height);
+        case (2 || 3): // for jpeg and png
+            return imagecreatetruecolor($dst_width,$dst_height);
         }        
     }
     
-    private function _output($dst_img, $dst_filename, $imgcomp, $src_type) 
+    private function _output($dst_img, $dst_filename, $imgcomp, $src_type)
     {
         switch ($src_type) {
-            case 1: // for gif
-                imagegif($dst_img, $dst_filename); // for gif
-                break;
-            case 2: // for jpeg
-                imagejpeg($dst_img, $dst_filename, $imgcomp); // for jpeg
-                break;
-            case 3: // for png
-                $imgcomp /= 10;
-                if ($imgcomp > 9) $imgcomp = 9;
-                imagepng($dst_img, $dst_filename, $imgcomp); // for png
-                break;
+        case 1: // for gif
+            imagegif($dst_img, $dst_filename); // for gif
+            break;
+        case 2: // for jpeg
+            imagejpeg($dst_img, $dst_filename, $imgcomp); // for jpeg
+            break;
+        case 3: // for png
+            $imgcomp /= 10;
+            if ($imgcomp > 9) $imgcomp = 9;
+            imagepng($dst_img, $dst_filename, $imgcomp); // for png
+            break;
         }        
     }
     
-    private function _drawBorder($img_file, $type, $colour=127, $quality=100) 
+    private function _drawBorder($img_file, $type, $colour=127, $quality=100)
     {    
         /*
             a                        b

@@ -47,7 +47,7 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
      * @return void
      * @since  1.0
      */
-    public function __construct($file_name, $log_level=-1)
+    public function __construct($file_name, $log_level=1)
     {
         parent::__construct($file_name, $log_level);
         
@@ -79,7 +79,7 @@ class PHPFrame_TextLogger extends PHPFrame_Logger
      */
     public function __sleep()
     {
-        return array("file_name","log_level");
+        return array("file_name", "log_level");
     }
     
     /**

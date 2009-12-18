@@ -57,6 +57,42 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
     }
     
     /**
+     * Get the log level.
+     * 
+     * @return int
+     * @since  1.0
+     */
+    public function getLogLevel()
+    {
+    	return $this->log_level;
+    }
+    
+    /**
+     * Set the log level.
+     * 
+     * @param int $int The log level. Possible values:
+     *                 5 - success, info, notices, warnings and errors
+     *                 4 - info, notices, warnings and errors
+     *                 3 - notices, warnings and errors
+     *                 2 - warnings and errors
+     *                 1 - errors only
+     *                 0 - Off
+     *                 
+     * @return void
+     * @since  1.0
+     */
+    public function setLogLevel($int)
+    {
+    	if (!is_int($int) || $int < 0 || $int > 5) {
+    	    $msg  = "Argument \$int passed to ".get_class($this)." must be ";
+    	    $msg .= "an integer with a value between 0 and 5.";
+    	    throw new InvalidArgumentException($msg);
+    	}
+    	
+    	$this->log_level = $int;
+    }
+    
+    /**
      * Handle updated issued by observed subjects
      * 
      * @return void
@@ -67,7 +103,7 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
     {
         list($msg, $type) = $subject->getLastEvent();
         
-        if ($type <= $this->log_level || is_null($this->log_level)) {
+        if ($type <= $this->getLogLevel() || is_null($this->getLogLevel())) {
             $this->write($msg);
         }
     }

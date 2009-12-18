@@ -40,4 +40,64 @@ class PHPFrame_TextLoggerTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue($this->_logger == $unserialised);
     }
+    
+    public function test_getAndSetLogLevel()
+    {
+    	$log_level = $this->_logger->getLogLevel();
+    	
+    	$this->_logger->setLogLevel(5);
+    	$this->assertEquals(5, $this->_logger->getLogLevel());
+    	
+    	$this->_logger->setLogLevel(1);
+        $this->assertEquals(1, $this->_logger->getLogLevel());
+    }
+    
+    public function test_setLogLevelNegativeIntFailure()
+    {
+    	$this->setExpectedException("InvalidArgumentException");
+    	
+    	$this->_logger->setLogLevel(-1);
+    }
+    
+    public function test_setLogLevelValueTooHighFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+        
+        $this->_logger->setLogLevel(6);
+    }
+    
+    public function test_setLogLevelBoolTypeFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+        
+        $this->_logger->setLogLevel(true);
+    }
+    
+    public function test_setLogLevelFloatTypeFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+        
+        $this->_logger->setLogLevel(3.14);
+    }
+    
+    public function test_setLogLevelStringTypeFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+        
+        $this->_logger->setLogLevel("some string");
+    }
+    
+    public function test_setLogLevelArrayTypeFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+        
+        $this->_logger->setLogLevel(array());
+    }
+    
+    public function test_setLogLevelObjectTypeFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+        
+        $this->_logger->setLogLevel(new stdClass());
+    }
 }

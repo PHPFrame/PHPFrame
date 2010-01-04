@@ -170,8 +170,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
         $db_user=null, 
         $db_pass=null, 
         $tbl_prefix=null
-    )
-    {
+    ) {
         // Set internal properties
         $this->_dsn     = $dsn;
         $this->_db_user = $db_user;
@@ -230,8 +229,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
         $db_user=null, 
         $db_pass=null, 
         $tbl_prefix=null
-    )
-    {
+    ) {
         $dsn = trim((string) $dsn);
         
         if (!empty($db_user)) {

@@ -219,7 +219,10 @@ class PHPFrame_Application
         
         // Remove superclass name from class name
         $class_name = str_replace($super_class, "", $class_name);
-            
+        
+        // Remove class prefix if applicable
+        $class_name = str_replace($this->getClassPrefix(), "", $class_name);
+        
         // Build dir path by breaking camel case class name
         $pattern = '/[A-Z]{1}[a-zA-Z0-9]+/';
         $matches = array();

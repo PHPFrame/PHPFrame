@@ -178,6 +178,9 @@ class PHPFrame_Application
         // Acquire and store instance of MVC Factory class
         $this->setMVCFactory(new PHPFrame_MVCFactory($this));
         
+        //Register MVC autoload function
+        spl_autoload_register(array($this, "autoload"));
+        
         // Set profiler milestone
         $profiler = $this->getProfiler();
         if ($profiler instanceof PHPFrame_Profiler) {
@@ -862,11 +865,6 @@ class PHPFrame_Application
      */
     public function dispatch(PHPFrame_Request $request=null)
     {
-        /**
-         * Register MVC autoload function
-         */
-        spl_autoload_register(array($this, "autoload"));
-        
         // If no request is passed we try to use request object cached in app
         // or a new request is created using the session's client
         if (is_null($request)) {

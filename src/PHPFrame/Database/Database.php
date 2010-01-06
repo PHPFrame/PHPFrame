@@ -297,15 +297,15 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Check whether database has a given table.
      * 
-     * @param string $tbl_name The name of the table to check.
+     * @param string $table_name The name of the table to check.
      * 
      * @return bool
      * @since  1.0
      */
-    public function hasTable($tbl_name)
+    public function hasTable($table_name)
     {
         foreach ($this->getTables() as $table) {
-            if ($table->getName() == $tbl_name) {
+            if ($table->getName() == $table_name) {
                 return true;
             }
         }
@@ -314,7 +314,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     }
     
     /**
-     * Get the database tables
+     * Get the database tables.
      * 
      * @return array
      * @since  1.0
@@ -324,7 +324,9 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Create database table for a given table object
      * 
-     * @param PHPFrame_DatabaseTable $table
+     * @param PHPFrame_DatabaseTable $table A reference to an object of type 
+     *                                      PHPFrame_DatabaseTable representing 
+     *                                      the table we want to create.
      * 
      * @return void
      * @since  1.0
@@ -334,17 +336,25 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Delete a named database table
      * 
-     * @param string $tbl_name
+     * @param string $table_name The name of the table we want to drop.
      * 
      * @return void
      * @since  1.0
      */
-    abstract public function dropTable($tbl_name);
+    public function dropTable($table_name)
+    {
+    	$sql = "DROP TABLE IF EXISTS `".$tbl_name."`";
+        
+        // Run SQL query
+        $this->query($sql);
+    }
     
     /**
      * Alter a database table
      * 
-     * @param PHPFrame_DatabaseTable $table
+     * @param PHPFrame_DatabaseTable $table A reference to an object of type 
+     *                                      PHPFrame_DatabaseTable representing 
+     *                                      the table we want to alter.
      * 
      * @return void
      * @since  1.0
@@ -352,9 +362,21 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     abstract public function alterTable(PHPFrame_DatabaseTable $table);
     
     /**
+     * Truncate a database table. This method deletes all records from a table 
+     * and resets the auto increment counter back to zero. 
+     * 
+     * @param string $table_name The name of the table we want to truncate.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    abstract public function truncate($table_name);
+    
+    /**
      * Get the columns of a given table
      * 
-     * @param string $table_name
+     * @param string $table_name The name of the table for which we want to get 
+     *                           the columns.
      * 
      * @return array
      * @since  1.0

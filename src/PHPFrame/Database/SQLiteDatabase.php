@@ -28,9 +28,9 @@
 class PHPFrame_SQLiteDatabase extends PHPFrame_Database
 {
     /**
-     * Get database tables
+     * Get the database tables.
      * 
-     * @return void
+     * @return array
      * @since  1.0
      */
     public function getTables()
@@ -50,6 +50,16 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         return $tbl_objs;
     }
     
+    /**
+     * Create database table for a given table object
+     * 
+     * @param PHPFrame_DatabaseTable $table A reference to an object of type 
+     *                                      PHPFrame_DatabaseTable representing 
+     *                                      the table we want to create.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function createTable(PHPFrame_DatabaseTable $table)
     {
         $sql = "CREATE TABLE `".$table->getName()."` (";
@@ -88,25 +98,47 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         $this->query($sql);
     }
     
-    public function dropTable($tbl_name)
-    {
-        $sql = "DROP TABLE IF EXISTS `".$tbl_name."`";
-        
-        // Run SQL query
-        $this->query($sql);
-    }
-    
+    /**
+     * Alter a database table
+     * 
+     * @param PHPFrame_DatabaseTable $table A reference to an object of type 
+     *                                      PHPFrame_DatabaseTable representing 
+     *                                      the table we want to alter.
+     * 
+     * @return void
+     * @since  1.0
+     * @todo   This method needs to be implemented.
+     */
     public function alterTable(PHPFrame_DatabaseTable $table)
     {
         
     }
     
     /**
-     * Get the columns of a given table.
+     * Truncate a database table. This method deletes all records from a table 
+     * and resets the auto increment counter back to zero. 
+     * 
+     * @param string $table_name The name of the table we want to truncate.
+     * 
+     * @return void
+     * @since  1.0
+     * @todo   This method needs to be implemented.
+     */
+    public function truncate($table_name)
+    {
+    	$sql = "DELETE FROM ".$table_name;
+    	
+    	// Run SQL query
+        $this->query($sql);
+    }
+    
+    /**
+     * Get the columns of a given table
      * 
      * If table doesn't exists it returns an empty array.
      * 
-     * @param string $table_name
+     * @param string $table_name The name of the table for which we want to get 
+     *                           the columns.
      * 
      * @return array
      * @since  1.0

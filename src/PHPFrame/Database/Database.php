@@ -304,8 +304,8 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      */
     public function hasTable($table_name)
     {
-        foreach ($this->getTables() as $table) {
-            if ($table->getName() == $table_name) {
+        foreach ($this->getTables(true) as $table) {
+            if ($table == $table_name) {
                 return true;
             }
         }
@@ -316,10 +316,15 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
     /**
      * Get the database tables.
      * 
+     * @param bool $return_names [Optional] Default value is FALSE. If set to 
+     *                           TRUE an array containing table names will be 
+     *                           returned instead of an array containing  
+     *                           objects of type {@link PHPFrame_DatabaseTable}.
+     * 
      * @return array
      * @since  1.0
      */
-    abstract public function getTables();
+    abstract public function getTables($return_names=false);
     
     /**
      * Create database table for a given table object
@@ -343,7 +348,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      */
     public function dropTable($table_name)
     {
-    	$sql = "DROP TABLE IF EXISTS `".$tbl_name."`";
+        $sql = "DROP TABLE IF EXISTS `".$table_name."`";
         
         // Run SQL query
         $this->query($sql);

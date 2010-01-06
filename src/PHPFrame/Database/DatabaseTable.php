@@ -34,8 +34,10 @@ class PHPFrame_DatabaseTable
         $this->_name    = $name;
         $this->_columns = new SplObjectStorage();
         
-        foreach ($db->getColumns($this->getName()) as $col) {
-            $this->addColumn($col);
+        if ($db->hasTable($this->getName())) {
+            foreach ($db->getColumns($this->getName()) as $col) {
+                $this->addColumn($col);
+            }
         }
     }
     
@@ -46,7 +48,7 @@ class PHPFrame_DatabaseTable
     
     public function getColumns()
     {
-        return $this->_columns;
+        return iterator_to_array($this->_columns);
     }
     
     public function getRows()

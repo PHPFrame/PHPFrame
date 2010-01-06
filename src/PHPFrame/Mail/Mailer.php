@@ -25,11 +25,11 @@
  */
 class PHPFrame_Mailer extends PHPMailer
 {
-	/**
-	 * Message ID suffix
-	 * 
-	 * @var string
-	 */
+    /**
+     * Message ID suffix
+     * 
+     * @var string
+     */
     private $_messageid_sfx = null;
     /**
      * Options array

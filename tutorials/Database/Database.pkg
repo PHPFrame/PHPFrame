@@ -10,7 +10,11 @@
     <title>Package decription</title>
     
     <para>
-    The Database package ...
+    The Database package contains a number of classes that abstract the main 
+    elements involved in database interaction. The abstract 
+    {@link PHPFrame_Database} class provides a consistent interface for 
+    different databases (MySQL, SQLite, ...) and relies on the PHP Data Objects 
+    (PDO) extension.
     </para>
 
 </refsect1>
@@ -28,7 +32,31 @@
         
         <listitem>
         <para>
-        {@link PHPFrame_DSN}
+        {@link PHPFrame_MySQLDatabase}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_SQLiteDatabase}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_DatabaseTable}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_DatabaseColumn}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_DatabaseFactory}
         </para>
         </listitem>
         
@@ -36,39 +64,75 @@
 
 </refsect1>
 
+<refsect1 id="{@id class_diagram">
+    <title>Class diagram</title>
+    
+</refsect1>
+
 <refsect1 id="{@id examples}">
     <title>Examples</title>
     
     <example>
-        <title>Run query and get results as an associative array</title>
-        <para>
-        Note that in this example we instantiate a DSN object and pass it to 
-        {@link PHPFrame::DB()} along with the username and password. If you have 
-        configured the default database connection in etc/phpframe.ini you can call 
-        {@link PHPFrame::DB()} without any parameters.
-        </para>
+        <title>Interacting with a SQLite database</title>
         <programlisting>{@example Database/example-1.php 3}</programlisting>
-        
         <screen>
 <![CDATA[
+Array
+(
+    [0] => PHPFrame_DatabaseColumn Object
+        (
+            [_name:private] => id
+            [_type:private] => int
+            [_null:private] => 
+            [_key:private] => PRI
+            [_default:private] => 
+            [_extra:private] => auto_increment
+            [_reflection_obj:private] => ReflectionClass Object
+                (
+                    [name] => PHPFrame_DatabaseColumn
+                )
+
+        )
+
+    [1] => PHPFrame_DatabaseColumn Object
+        (
+            [_name:private] => name
+            [_type:private] => varchar
+            [_null:private] => 
+            [_key:private] => 
+            [_default:private] => 
+            [_extra:private] => 
+            [_reflection_obj:private] => ReflectionClass Object
+                (
+                    [name] => PHPFrame_DatabaseColumn
+                )
+
+        )
+
+)
 Array
 (
     [0] => Array
         (
             [id] => 1
-            [name] => An entry
+            [name] => This is sample data
         )
 
     [1] => Array
         (
             [id] => 2
-            [name] => Another entry
+            [name] => More sample data
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [name] => And a little more
         )
 
 )
 ]]>
         </screen>
-       
     </example>
     
 </refsect1>

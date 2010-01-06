@@ -15,7 +15,7 @@
  */
 
 /**
- * SQLite Database class
+ * This class is the SQLite implementation of {@link PHPFrame_Database}.
  * 
  * @category PHPFrame
  * @package  Database
@@ -30,16 +30,24 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
     /**
      * Get the database tables.
      * 
+     * @param bool $return_names [Optional] Default value is FALSE. If set to 
+     *                           TRUE an array containing table names will be 
+     *                           returned instead of an array containing  
+     *                           objects of type {@link PHPFrame_DatabaseTable}. 
+     * 
      * @return array
      * @since  1.0
      */
-    public function getTables()
+    public function getTables($return_names=false)
     {
         // Get list of all tables in database
-        $sql = "SELECT tbl_name FROM sqlite_master WHERE type = 'table'";
-        
+        $sql       = "SELECT tbl_name FROM sqlite_master WHERE type = 'table'";
         $tbl_names = $this->fetchColumnList($sql);
         $tbl_objs  = array();
+        
+        if ((bool) $return_names && is_array($tbl_names)) {
+            return $tbl_names;
+        }
         
         if (is_array($tbl_names) && count($tbl_names) > 0) {
             foreach ($tbl_names as $tbl_name) {
@@ -126,9 +134,9 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
      */
     public function truncate($table_name)
     {
-    	$sql = "DELETE FROM ".$table_name;
-    	
-    	// Run SQL query
+        $sql = "DELETE FROM ".$table_name;
+        
+        // Run SQL query
         $this->query($sql);
     }
     

@@ -57,7 +57,7 @@ class PHPFrame_SQLiteDatabaseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($tables));
         
         foreach ($tables as $table) {
-            $cols = iterator_to_array($table->getColumns());
+            $cols = $table->getColumns();
             $this->assertEquals(2, count($cols));
             
             $this->assertType("PHPFrame_DatabaseColumn", $cols[0]);

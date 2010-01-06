@@ -210,7 +210,7 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     /**
      * Implementation of Iterator::current()
      * 
-     * @return PHPFrame_DatabaseRow
+     * @return PHPFrame_PersistentObject
      * @since  1.0
      */
     public function current() 

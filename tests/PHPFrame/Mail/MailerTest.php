@@ -33,9 +33,9 @@ class PHPFrame_MailerTest extends PHPUnit_Framework_TestCase
     
     public function test_serialise()
     {
-    	$serialised   = serialize($this->_mailer);
-    	$unserialised = unserialize($serialised);
-    	
-    	$this->assertEquals($this->_mailer, $unserialised);
+        $serialised   = serialize($this->_mailer);
+        $unserialised = unserialize($serialised);
+        
+        $this->assertEquals($this->_mailer, $unserialised);
     }
 }

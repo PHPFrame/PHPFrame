@@ -15,7 +15,7 @@
  */
 
 /**
- * MySQL Database class
+ * This class is the MySQL implementation of {@link PHPFrame_Database}.
  * 
  * @category PHPFrame
  * @package  Database
@@ -44,20 +44,31 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
     /**
      * Get the database tables.
      * 
+     * @param bool $return_names [Optional] Default value is FALSE. If set to 
+     *                           TRUE an array containing table names will be 
+     *                           returned instead of an array containing  
+     *                           objects of type {@link PHPFrame_DatabaseTable}.
+     * 
      * @return array
      * @since  1.0
      */
-    public function getTables()
+    public function getTables($return_names=false)
     {
-        $sql = "SHOW TABLES";
-        $tables = $this->fetchColumnList($sql);
-            
-        // Loop through every table and read structure
-        foreach ($tables as $table_name) {
-            // Store structure in array uning table name as key
-            $sql = "SHOW COLUMNS FROM `".$table_name."`";
-            $structure[$table_name] = $this->fetchAssocList($sql);
+        $sql       = "SHOW TABLES";
+        $tbl_names = $this->fetchColumnList($sql);
+        $tbl_objs  = array();
+        
+        if ((bool) $return_names && is_array($tbl_names)) {
+            return $tbl_names;
         }
+        
+        if (is_array($tbl_names) && count($tbl_names) > 0) {
+            foreach ($tbl_names as $tbl_name) {
+                $tbl_objs[] = new PHPFrame_DatabaseTable($this, $tbl_name);
+            }
+        }
+        
+        return $tbl_objs;
     }
     
     /**
@@ -69,6 +80,7 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
      * 
      * @return void
      * @since  1.0
+     * @todo   This method needs to be finished...
      */
     public function createTable(PHPFrame_DatabaseTable $table)
     {
@@ -126,9 +138,9 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
      */
     public function truncate($table_name)
     {
-    	$sql = "TRUNCATE TABLE `".$table_name."`";
-    	
-    	// Run SQL query
+        $sql = "TRUNCATE TABLE `".$table_name."`";
+        
+        // Run SQL query
         $this->query($sql);
     }
     
@@ -140,9 +152,12 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
      * 
      * @return array
      * @since  1.0
+     * @todo   This method needs to be implemented.
      */
     public function getColumns($table_name)
     {
-        
+        // Store structure in array uning table name as key
+        //$sql = "SHOW COLUMNS FROM `".$table_name."`";
+        //$structure[$table_name] = $this->fetchAssocList($sql);
     }
 }

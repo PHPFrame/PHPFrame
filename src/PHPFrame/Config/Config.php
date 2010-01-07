@@ -76,16 +76,6 @@ class PHPFrame_Config implements IteratorAggregate
      * This method is automatically called when trying to use the object as a string 
      * or by explicitly casting it to string.
      * 
-     * Example:
-     * 
-     * <code>
-     * $config = PHPFrame::Config();
-     * echo $config;
-     * </code>
-     * 
-     * The above example should print the config object as a string in the ini 
-     * format.
-     * 
      * @return string
      * @since  1.0
      */

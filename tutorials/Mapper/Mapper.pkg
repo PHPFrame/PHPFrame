@@ -67,6 +67,7 @@
 </refsect1>
 
 
+<!--
 <refsect1 id="{@id extending-domainobject}">
     <title>Extending the PersistentObject class</title>
     
@@ -132,6 +133,7 @@ Array
 ]]>
         </screen>
     </example>
+    
     
 </refsect1>
 
@@ -229,5 +231,6 @@ PHPFrame_ACL Object
     </example>
     
 </refsect1>
-    
+-->
+
 </refentry>

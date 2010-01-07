@@ -19,9 +19,16 @@
     <title>Classes in Document Package</title>
     
     <itemizedlist>
+    
         <listitem>
         <para>
         {@link PHPFrame_Document}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_IRenderer}
         </para>
         </listitem>
         
@@ -33,7 +40,19 @@
         
         <listitem>
         <para>
+        {@link PHPFrame_HTMLRenderer}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
         {@link PHPFrame_PlainDocument}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_PlainRenderer}
         </para>
         </listitem>
         
@@ -45,7 +64,19 @@
         
         <listitem>
         <para>
+        {@link PHPFrame_RPCRenderer}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
         {@link PHPFrame_XMLDocument}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_XMLRenderer}
         </para>
         </listitem>
         

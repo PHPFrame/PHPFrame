@@ -19,6 +19,13 @@
     <title>Classes in Base Package</title>
     
     <itemizedlist>
+    
+        <listitem>
+        <para>
+        {@link PHPFrame_String}
+        </para>
+        </listitem>
+        
         <listitem>
         <para>
         {@link PHPFrame_Array}
@@ -27,13 +34,7 @@
         
         <listitem>
         <para>
-        {@link PHPFrame_Number}
-        </para>
-        </listitem>
-        
-        <listitem>
-        <para>
-        {@link PHPFrame_String}
+        {@link PHPFrame_Collection}
         </para>
         </listitem>
         

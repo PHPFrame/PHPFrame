@@ -210,10 +210,10 @@ class PHPFrame_Filesystem
         // check for generic errors first          
         if ($file_error > 0) {
             switch ($file_error) {
-              case 1: $msg = PHPFrame_Lang::UPLOAD_ERROR_PHP_UP_MAX_FILESIZE;
-              case 2: $msg = PHPFrame_Lang::UPLOAD_ERROR_PHP_MAX_FILESIZE;
-              case 3: $msg = PHPFrame_Lang::UPLOAD_ERROR_PARTIAL_UPLOAD;
-              case 4: $msg = PHPFrame_Lang::UPLOAD_ERROR_NO_FILE;
+              case 1: $msg = "ERROR: PHP upload maximum file size exceeded!";
+              case 2: $msg = "ERROR: PHP maximum file size exceeded!";
+              case 3: $msg = "ERROR: Partial upload!";
+              case 4: $msg = "ERROR: No file submitted for upload!";
             }
             
             throw new RuntimeException($msg);
@@ -221,7 +221,7 @@ class PHPFrame_Filesystem
         
         // check custom max_upload_size passed into the function
         if (!empty($max_upload_size) && $max_upload_size < $file_size) {
-            $msg  = PHPFrame_Lang::UPLOAD_ERROR_MAX_FILESIZE;
+            $msg  = "ERROR: Maximum file size exceeded!";
             $msg .= ' max_upload_size: '.$max_upload_size;
             $msg .= ' | file_size: '.$file_size;
             throw new RuntimeException($msg);
@@ -231,7 +231,7 @@ class PHPFrame_Filesystem
         if ($accept != "*") {
             $valid_file_types = explode(",", $accept);
             if (!in_array($file_type, $valid_file_types)) {
-                $msg = PHPFrame_Lang::UPLOAD_ERROR_FILETYPE;
+                $msg = "ERROR: File type not valid!";
                 throw new RuntimeException($msg);
             }    
         }
@@ -264,11 +264,11 @@ class PHPFrame_Filesystem
         $path = $dir.DS.$file_name;
         if (is_uploaded_file($file_tmp)) {
             if (!move_uploaded_file($file_tmp, $path)) {
-                $msg = PHPFrame_Lang::UPLOAD_ERROR_MOVE;
+                $msg = "ERROR: Could not move file to destination directory!";
                 throw new RuntimeException($msg);
             }
         } else {
-            $msg = PHPFrame_Lang::UPLOAD_ERROR_ATTACK.' '.$file_name;
+            $msg = "ERROR: Possible file attack!".' '.$file_name;
             throw new RuntimeException($msg);
         }
         

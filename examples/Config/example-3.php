@@ -1,8 +1,8 @@
 <?php
 require "PHPFrame.php";
 
-// Get default config
-$config = PHPFrame::Config();
+// Read config file in current directory
+$config = new PHPFrame_Config("phpframe.ini");
 
 // Set some config keys
 $config->set("app_name", "New app name");

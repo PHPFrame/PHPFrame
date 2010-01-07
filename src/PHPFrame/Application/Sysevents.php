@@ -57,19 +57,19 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
         foreach ($this->_events as $event) {
             switch ($event[1]) {
             case PHPFrame_Subject::EVENT_TYPE_ERROR :
-                $event_type = PHPFrame_Lang::EVENT_TYPE_ERROR;
+                $event_type = "Error";
                 break;
             case PHPFrame_Subject::EVENT_TYPE_WARNING :
-                $event_type = PHPFrame_Lang::EVENT_TYPE_WARNING;
+                $event_type = "Warning";
                 break;
             case PHPFrame_Subject::EVENT_TYPE_NOTICE :
-                $event_type = PHPFrame_Lang::EVENT_TYPE_NOTICE;
+                $event_type = "Notice";
                 break;
             case PHPFrame_Subject::EVENT_TYPE_INFO :
-                $event_type = PHPFrame_Lang::EVENT_TYPE_INFO;
+                $event_type = "Info";
                 break;
             case PHPFrame_Subject::EVENT_TYPE_SUCCESS :
-                $event_type = PHPFrame_Lang::EVENT_TYPE_SUCCESS;
+                $event_type = "Success";
                 break;
             }
             

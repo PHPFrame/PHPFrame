@@ -33,7 +33,7 @@
         </para>
         
         <para>
-        The Mailer class wraps around PHPMailer
+        The Mailer class extends PHPMailer.
         </para>
         </listitem>
         

@@ -35,19 +35,7 @@
         
         <listitem>
         <para>
-        {@link PHPFrame_FeedReader}
-        </para>
-        </listitem>
-        
-        <listitem>
-        <para>
         {@link PHPFrame_Filesystem}
-        </para>
-        </listitem>
-        
-        <listitem>
-        <para>
-        {@link PHPFrame_Filter}
         </para>
         </listitem>
         
@@ -66,6 +54,12 @@
         <listitem>
         <para>
         {@link PHPFrame_vCard}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_XMLSerialiser}
         </para>
         </listitem>
     </itemizedlist>

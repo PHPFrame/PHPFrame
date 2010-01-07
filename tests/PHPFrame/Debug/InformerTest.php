@@ -23,9 +23,9 @@ class PHPFrame_InformerTest extends PHPUnit_Framework_TestCase
     
     public function test_serialise()
     {
-    	$serialised   = serialize($this->_informer);
-    	$unserialised = unserialize($serialised);
-    	
-    	$this->assertEquals($this->_informer, $unserialised);
+        $serialised   = serialize($this->_informer);
+        $unserialised = unserialize($serialised);
+        
+        $this->assertEquals($this->_informer, $unserialised);
     }
 }

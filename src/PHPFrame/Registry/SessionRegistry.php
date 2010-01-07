@@ -29,10 +29,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
  * @see      PHPFrame_Registry
- * @uses     PHPFrame, PHPFrame_RequestRegistry, PHPFrame_URI, PHPFrame_User, 
- *           PHPFrame_Sysevents, PHPFrame_Client, 
- *           PHPFrame_CLIClient, PHPFrame_DefaultClient, PHPFrame_XMLRPCClient, 
- *           PHPFrame_MobileClient
  * @since    1.0
  */
 class PHPFrame_SessionRegistry extends PHPFrame_Registry
@@ -526,7 +522,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         }
 
         //throw error if no helper is found
-        throw new RuntimeException(PHPFrame_Lang::SESSION_ERROR_NO_CLIENT_DETECTED);
+        throw new RuntimeException("ERROR: No client could be found!");
     }
 
     /**

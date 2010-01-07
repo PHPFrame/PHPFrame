@@ -181,7 +181,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * @return array A nice asociative array with all the data.
      * @since  1.0
      */
-    private function _parseXMLRPC($xml, PHPFrame_RequestRegistry $request) 
+    private function _parseXMLRPC($xml, PHPFrame_Request $request) 
     {
         $array = array();
         

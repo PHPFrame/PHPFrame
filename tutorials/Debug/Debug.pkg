@@ -33,6 +33,12 @@
         
         <listitem>
         <para>
+        {@link PHPFrame_TextLogger}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
         {@link PHPFrame_Profiler}
         </para>
         </listitem>

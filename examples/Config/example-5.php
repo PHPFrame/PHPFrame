@@ -1,4 +1,7 @@
 <?php
 require "PHPFrame.php";
 
-print_r(iterator_to_array(PHPFrame::Config()));
+// Read config file in current directory
+$config = new PHPFrame_Config("phpframe.ini");
+
+print_r(iterator_to_array($config));

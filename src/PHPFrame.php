@@ -256,9 +256,6 @@ class PHPFrame
             set_include_path($include_path);
         }
         
-        // Load language file
-        require "PHPFrame".DS."Lang".DS."en-GB.php";
-        
         // Initialise PHPFrame's error and exception handlers.
         PHPFrame_ExceptionHandler::instance();
     }

@@ -1,8 +1,8 @@
 <?php
 require "PHPFrame.php";
 
-// Get default config
-$config = PHPFrame::Config();
+// Read config file in current directory
+$config = new PHPFrame_Config("phpframe.ini");
 
 // print config object as string
 // Note that if we try to use a config object as a string it will automatically 

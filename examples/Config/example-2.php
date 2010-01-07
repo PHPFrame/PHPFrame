@@ -1,4 +1,7 @@
 <?php
 require "PHPFrame.php";
 
-var_dump(PHPFrame::Config()->getKeys());
+// Read config file in current directory
+$config = new PHPFrame_Config("phpframe.ini");
+
+print_r($config->getKeys());

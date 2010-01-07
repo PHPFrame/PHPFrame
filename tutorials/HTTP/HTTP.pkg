@@ -10,8 +10,7 @@
     <title>Package decription</title>
     
     <para>
-    The HTTP package provides a number of classes based based on PEARs 
-    HTTP_Request2.
+    The HTTP package provides a number of classes based on PEARs HTTP_Request2.
     </para>
 
 </refsect1>

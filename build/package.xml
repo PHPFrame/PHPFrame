@@ -110,7 +110,6 @@
    <file baseinstalldir="/" name="PHPFrame/HTTP/DownloadRequestListener.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/FeedReader.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/HTTPRequest.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Lang/en-GB.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/IdObject.php" role="php" />
@@ -135,7 +134,6 @@
    <file baseinstalldir="/" name="PHPFrame/Registry/FileRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/MockSessionRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/Registry.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Registry/RequestRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/SessionRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/CLIUI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/HTMLUI.php" role="php" />

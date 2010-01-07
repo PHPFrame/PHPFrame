@@ -38,11 +38,10 @@
         </para>
         <para>
         Logic excpetions should be thrown when a programming error occurs. For 
-        example, if you try to call PHPFrame::AppRegistry() in a standalone script 
-        a LogicException will be throws warning you that before you can use the 
-        method you need to set up the environment by calling PHPFrame::Env(). This 
-        is purely a programming error and nothing to do with the data that was 
-        passed to the app.
+        example, if you try to call a method that needs another method to be 
+        called first you woud get a logic exception, this is purely a 
+        programming error and nothing to do with the data that was passed to 
+        the app.
         </para>
         
         <para>LogicException sub-classes:</para>
@@ -180,6 +179,12 @@
         <listitem>
         <para>
         {@link PHPFrame_XMLRPCException}
+        </para>
+        </listitem>
+        
+        <listitem>
+        <para>
+        {@link PHPFrame_AccessDeniedException}
         </para>
         </listitem>
         

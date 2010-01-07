@@ -78,10 +78,8 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
             $sql .= "`".$col->getName()."`";
             //$sql .= " ".$col->getType();
             
-            if (
-               $col->getType() == PHPFrame_DatabaseColumn::TYPE_INT
-               && 
-               $col->getExtra() == PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT
+            if ($col->getType() == PHPFrame_DatabaseColumn::TYPE_INT
+                && $col->getExtra() == PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT
             ) {
                 $sql .= " INTEGER PRIMARY KEY ASC";
                 
@@ -130,7 +128,6 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
      * 
      * @return void
      * @since  1.0
-     * @todo   This method needs to be implemented.
      */
     public function truncate($table_name)
     {
@@ -157,7 +154,6 @@ class PHPFrame_SQLiteDatabase extends PHPFrame_Database
         $sql     = "SELECT sql FROM sqlite_master ";
         $sql    .= "WHERE type = 'table' AND name = :table_name";
         $params  = array(":table_name" => $table_name);
-        
         $sql     = $this->fetchColumn($sql, $params);
         
         // If query returns null we return an empty array

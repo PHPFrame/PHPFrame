@@ -15,22 +15,20 @@
  */
 
 /**
- * Abstract Database class
- * 
  * This class deals with the connection(s) to the database(s).
  * 
  * The database class serves singleton objects for each connection, determined 
  * by the dsn and db user credentials.
  * 
- * This class also extends PHPFrame_Subject allowing observer objects to 
- * subscribe for updates.
+ * This class also extends {@link PHPFrame_Subject} allowing observer objects 
+ * to subscribe for updates.
  * 
  * @category PHPFrame
  * @package  Database
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
- * @see      PHPFrame_Subject
+ * @see      PHPFrame_Subject, PHPFrame_DatabaseTable, PHPFrame_DatabaseColumn
  * @since    1.0
  * @abstract
  */
@@ -239,12 +237,12 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
         if (preg_match('/^(mysql|sqlite)/i', $dsn, $matches)) {
             $driver = strtolower($matches[1]);
             switch ($driver) {
-                case "sqlite" : 
-                    $concrete_class = "PHPFrame_SQLiteDatabase";
-                    break;
-                case "mysql" : 
-                    $concrete_class = "PHPFrame_MySQLDatabase";
-                    break;
+            case "sqlite" : 
+                $concrete_class = "PHPFrame_SQLiteDatabase";
+                break;
+            case "mysql" : 
+                $concrete_class = "PHPFrame_MySQLDatabase";
+                break;
             }
         } else {
             $msg = "Database driver not recognised.";
@@ -420,7 +418,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
             // Prepare statement
             $this->_stmt = $this->_pdo->prepare($sql);
             
-            if (!($this->_stmt instanceof PDOStatement)){
+            if (!($this->_stmt instanceof PDOStatement)) {
                 $msg = implode("\n", $this->_pdo->errorInfo());
                 throw new PHPFrame_DatabaseException($msg);
             }
@@ -434,41 +432,41 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
             }
             
             switch ($fetch_mode) {
-                case self::FETCH_COLUMN :
-                    return $this->_stmt->fetchColumn();
+            case self::FETCH_COLUMN :
+                return $this->_stmt->fetchColumn();
                     
-                case self::FETCH_COLUMN_LIST :
-                    return $this->_stmt->fetchAll(PDO::FETCH_COLUMN);
-                    
-                case self::FETCH_ARRAY :
-                    return $this->_stmt->fetch(PDO::FETCH_NUM);
-                    
-                case self::FETCH_ARRAY_LIST :
-                    return $this->_stmt->fetchAll(PDO::FETCH_NUM);
-                    
-                case self::FETCH_ASSOC :
-                    return $this->_stmt->fetch(PDO::FETCH_ASSOC);
-                    
-                case self::FETCH_ASSOC_LIST :
-                    return $this->_stmt->fetchAll(PDO::FETCH_ASSOC);
-                    
-                case self::FETCH_OBJ :
-                    return $this->_stmt->fetch(PDO::FETCH_OBJ);
-                    
-                case self::FETCH_OBJ_LIST :
-                    return $this->_stmt->fetchAll(PDO::FETCH_OBJ);
-                    
-                case self::FETCH_NUM_ROWS :
-                    return $this->_stmt->rowCount();
-                    
-                case self::FETCH_AFFECTED_ROWS :
-                    //return $this->_pdo->exec($sql);
-                    
-                case self::FETCH_LAST_INSERTID :
-                    return $this->lastInsertId();
-                    
-                default :
-                    return $this->_stmt;
+            case self::FETCH_COLUMN_LIST :
+                return $this->_stmt->fetchAll(PDO::FETCH_COLUMN);
+                
+            case self::FETCH_ARRAY :
+                return $this->_stmt->fetch(PDO::FETCH_NUM);
+                
+            case self::FETCH_ARRAY_LIST :
+                return $this->_stmt->fetchAll(PDO::FETCH_NUM);
+                
+            case self::FETCH_ASSOC :
+                return $this->_stmt->fetch(PDO::FETCH_ASSOC);
+                
+            case self::FETCH_ASSOC_LIST :
+                return $this->_stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+            case self::FETCH_OBJ :
+                return $this->_stmt->fetch(PDO::FETCH_OBJ);
+                
+            case self::FETCH_OBJ_LIST :
+                return $this->_stmt->fetchAll(PDO::FETCH_OBJ);
+                
+            case self::FETCH_NUM_ROWS :
+                return $this->_stmt->rowCount();
+                
+            case self::FETCH_AFFECTED_ROWS :
+                //return $this->_pdo->exec($sql);
+                
+            case self::FETCH_LAST_INSERTID :
+                return $this->lastInsertId();
+                
+            default :
+                return $this->_stmt;
             }
         }
         catch (PDOException $e) {

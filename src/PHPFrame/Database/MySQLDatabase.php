@@ -80,15 +80,26 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
      * 
      * @return void
      * @since  1.0
-     * @todo   This method needs to be finished...
      */
     public function createTable(PHPFrame_DatabaseTable $table)
     {
-        $sql = "CREATE TABLE `".$table->getName()."` (\n";
+        $sql = "CREATE TABLE `".$table->getName()."` (";
         
+        $i = 0;
         foreach ($table->getColumns() as $col) {
+            $sql .= ($i>0) ? ",\n" : "\n";
             $sql .= "`".$col->getName()."`";
             $sql .= " ".$col->getType();
+            
+            // Add display width
+            switch ($col->getType()) {
+            case "int" :
+                $sql .= "(11)";
+                break;
+            case "varchar" :
+                $sql .= "(100)";
+                break;
+            }
             
             if (!$col->getNull()) {
                 $sql .= " NOT NULL";
@@ -102,13 +113,19 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
                 $sql .= " ".$col->getExtra();
             }
             
-            $sql .= ",\n";
+            if (!is_null($col->getKey())) {
+                switch ($col->getKey()) {
+                case "PRI" : 
+                    $sql .= " PRIMARY KEY";
+                }
+            }
+            
+            $i++;
         }
         
-        $sql .= ") DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci\n";
-        
-        print_r($this->query($sql));
-        exit;
+        $sql .= "\n) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci\n";
+        //echo $sql; exit;
+        $this->query($sql);
     }
     
     /**
@@ -145,19 +162,40 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
     }
     
     /**
-     * Get the columns of a given table
+     * Get the columns of a given table.
      * 
      * @param string $table_name The name of the table for which we want to get 
      *                           the columns.
      * 
      * @return array
      * @since  1.0
-     * @todo   This method needs to be implemented.
      */
     public function getColumns($table_name)
     {
         // Store structure in array uning table name as key
-        //$sql = "SHOW COLUMNS FROM `".$table_name."`";
-        //$structure[$table_name] = $this->fetchAssocList($sql);
+        $sql  = "SHOW COLUMNS FROM `".$table_name."`";
+        $cols = $this->fetchAssocList($sql);
+        
+        if (!is_array($cols) || count($cols) <= 0) {
+            return array();
+        }
+        
+        $col_objs = array();
+        foreach ($cols as $col) {
+            $col_obj = new PHPFrame_DatabaseColumn(array(
+                "name" => $col["Field"]
+            ));
+            
+            $type = preg_replace("/(.*)\(\d+\)/i", "$1", $col["Type"]);
+            $col_obj->setType($type);
+            $col_obj->setNull(($col["Null"] == "NO") ? false : true);
+            $col_obj->setDefault($col["Default"]);
+            $col_obj->setKey($col["Key"]);
+            $col_obj->setExtra($col["Extra"]);
+            
+            $col_objs[] = $col_obj;
+        }
+        
+        return $col_objs;
     }
 }

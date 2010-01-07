@@ -103,8 +103,8 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         // Add the base fields
         $this->addField("id",    null,   true,  new PHPFrame_IntFilter());
         $this->addField("atime", null,   true,  new PHPFrame_IntFilter());
-        $this->addField("ctime", time(), true,  new PHPFrame_IntFilter());
-        $this->addField("mtime", time(), true,  new PHPFrame_IntFilter());
+        $this->addField("ctime", null, true,  new PHPFrame_IntFilter());
+        $this->addField("mtime", null, true,  new PHPFrame_IntFilter());
         $this->addField(
             "owner", 
             //PHPFrame::getSession()->getUserId(),

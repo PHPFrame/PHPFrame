@@ -98,7 +98,7 @@ class PHPFrame_HTMLUI
         ?>
         
         <script type="text/javascript">  
-        $(function() {
+        jQuery(document).ready(function($) {
             $('#<?php echo $formid; ?>').validate({
                 rules: {
                     password2: {
@@ -153,7 +153,7 @@ class PHPFrame_HTMLUI
         ?>
         
         <script type="text/javascript">
-        $(document).ready(function() {
+        jQuery(document).ready(function($) {
 
             // Dynamically add an HTML element at the end of the body to show the dialog
             $("body").append('<div style="position: absolute" id="dialog_<?php echo $uid; ?>"></div>');
@@ -281,8 +281,8 @@ class PHPFrame_HTMLUI
         // This variable is used to identify the element where to load the AJAX request.
         var confirm_response_container_id_<?php echo $uid; ?>; 
         <?php endif; ?>
-        
-        $(function() {
+
+        jQuery(document).ready(function($) {
             //Dinamically add an HTML element to show the confirmation dialog at the end of the body
             $("body").append('<div id="confirm_dialog_<?php echo $uid; ?>" title="<?php echo $title; ?>"></div>');
             
@@ -422,7 +422,7 @@ class PHPFrame_HTMLUI
         //invoke datepicker via jquery
         ?>
         <script type="text/javascript">
-        $(function(){
+        jQuery(document).ready(function($) {
             $('#<?php echo $id; ?>_datePicker').datepicker({
                 inline: true,
                 <?php if ($show_format_hint) : ?>appendText: '(dd/mm/yyyy)',<?php endif; ?>
@@ -479,7 +479,7 @@ class PHPFrame_HTMLUI
         <input name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>" type="hidden" />
 
         <script type="text/javascript">
-            $(document).ready(function() {
+            jQuery(document).ready(function($) {
                 var data_string = "<?php echo $users_string; ?>".split(";");
                 var data = new Array();
 
@@ -542,7 +542,7 @@ class PHPFrame_HTMLUI
         ?>
         
         <script type= "text/javascript">/*<![CDATA[*/
-        $(document).ready(function(){
+        jQuery(document).ready(function($) {
             var button = $('#upload_file_<?php echo $uid; ?>'), interval;
             new Ajax_upload(button,{
                 action: '<?php echo $action; ?>', 

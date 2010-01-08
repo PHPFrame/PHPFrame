@@ -138,6 +138,17 @@ class PHPFrame_Mapper
     }
     
     /**
+     * Get factory object.
+     * 
+     * @return PHPFrame_PersistenceFactory
+     * @since  1.0
+     */
+    public function getFactory()
+    {
+    	return $this->_factory;
+    }
+    
+    /**
      * Is the mapper using SQL persistance?
      * 
      * @return bool

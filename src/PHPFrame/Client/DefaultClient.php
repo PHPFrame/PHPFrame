@@ -149,10 +149,10 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
         
         if (!headers_sent()) {
             header("Location: ".$url);
-            exit;
         } else {
         	echo '<meta http-equiv="refresh" content="1; URL='.$url.'">';
-        	exit;
         }
+        
+        exit(0);
     }
 }

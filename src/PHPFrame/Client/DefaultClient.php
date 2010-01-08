@@ -130,4 +130,29 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
         // Set response renderer
         $response->setRenderer(new PHPFrame_HTMLRenderer($views_path));
     }
+    
+    /**
+     * Handle controller redirection
+     * 
+     * @param string $url
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function redirect($url)
+    {
+        $url = trim((string) $url);
+        
+        if (!$url) {
+            return;
+        }
+        
+        if (!headers_sent()) {
+            header("Location: ".$url);
+            exit;
+        } else {
+        	echo '<meta http-equiv="refresh" content="1; URL='.$url.'">';
+        	exit;
+        }
+    }
 }

@@ -15,7 +15,7 @@
     <!-- Release info -->
     <property name="api.version" value="1.0" />
     <property name="api.stability" value="beta" />
-    <property name="release.version" value="0.0.8" />
+    <property name="release.version" value="0.0.9" />
     <property name="release.stability" value="beta" />
     <property name="notes" value="No notes for now..." />
     

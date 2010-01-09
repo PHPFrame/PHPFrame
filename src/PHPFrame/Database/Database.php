@@ -302,6 +302,9 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      */
     public function hasTable($table_name)
     {
+    	// Replace table prefix
+        $table_name = str_replace('#__', $this->_tbl_prefix, $table_name);
+        
         foreach ($this->getTables(true) as $table) {
             if ($table == $table_name) {
                 return true;
@@ -410,7 +413,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      */
     public function query($sql, $params=array(), $fetch_mode=self::FETCH_STMT)
     {
-        // Replace table prefix with config value
+        // Replace table prefix
         $sql = str_replace('#__', $this->_tbl_prefix, $sql);
         
         // Run SQL query

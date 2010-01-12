@@ -148,6 +148,7 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/Exec.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Filesystem.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/ImageProcessor.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Utils/InputFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/URI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/vCard.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/XMLSerialiser.php" role="php" />
@@ -163,8 +164,6 @@
    <file baseinstalldir="/" name="CLI_Tool/src/models/apptemplate.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/models/extinstaller.php" role="data" />
    
-   <file baseinstalldir="/" name="lib/phpinputfilter/inputfilter.php" role="data" />
-   <file baseinstalldir="/" name="lib/phpinputfilter/GPL-3.0.txt" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/language/phpmailer.lang-en.php" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/LICENSE" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/phpmailer.php" role="data" />

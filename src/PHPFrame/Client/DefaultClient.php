@@ -62,7 +62,7 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
     public function populateRequest(PHPFrame_Request $request) 
     {
         // Get an instance of PHP Input filter
-        $inputfilter = new InputFilter();
+        $inputfilter = new PHPFrame_InputFilter();
             
         // Process incoming request arrays and store filtered data in class
         $filtered_request = $inputfilter->process($_REQUEST);

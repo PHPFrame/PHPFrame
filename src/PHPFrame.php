@@ -187,11 +187,7 @@ class PHPFrame
         // Load core libraries
         $lib_dir = self::$_data_dir.DS."lib";
         
-        if ($class_name == "InputFilter") {
-            $file_path = "phpinputfilter".DS."inputfilter.php";
-            include $lib_dir.DS.$file_path;
-            return;
-        } elseif ($class_name == "PHPMailer") {
+        if ($class_name == "PHPMailer") {
             $file_path = "phpmailer".DS."phpmailer.php";
             include $lib_dir.DS.$file_path;
             return;

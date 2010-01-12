@@ -99,7 +99,7 @@ class PHPFrame_MobileClient extends PHPFrame_Client
         $request = array();
         
         // Get an instance of PHP Input filter
-        $inputfilter = new InputFilter();
+        $inputfilter = new PHPFrame_InputFilter();
             
         // Process incoming request arrays and store filtered data in class
         $request['request'] = $inputfilter->process($_REQUEST);

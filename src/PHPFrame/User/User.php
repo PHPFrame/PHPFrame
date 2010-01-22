@@ -381,7 +381,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $str = $this->validate("email", $str);
         
         // Set last name in vCard object making sure we dont overwrite first name)
-        $this->_vcard->setEmail($str);
+        $this->_vcard->addEmail($str);
         
         // Set property
         $this->fields["email"] = $str;

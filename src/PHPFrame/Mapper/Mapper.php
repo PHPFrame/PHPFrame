@@ -18,8 +18,8 @@
  * subpackage.
  * 
  * This class should be extended to provide more specialised mappers for common 
- * persistent objects that require mapping. See the UsersMapper class in the user 
- * feature for an example. 
+ * persistent objects that require mapping. See {@link PHPFrame_UsersMapper} 
+ * in the user Utils subpackage for an example. 
  * 
  * @category PHPFrame
  * @package  Mapper
@@ -145,7 +145,7 @@ class PHPFrame_Mapper
      */
     public function getFactory()
     {
-    	return $this->_factory;
+        return $this->_factory;
     }
     
     /**

@@ -168,8 +168,6 @@
    <file baseinstalldir="/" name="lib/phpmailer/LICENSE" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/phpmailer.php" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/smtp.php" role="data" />
-   <file baseinstalldir="/" name="lib/vcard/LICENSE" role="data" />
-   <file baseinstalldir="/" name="lib/vcard/vcardclass.inc" role="data" />
    
    <file baseinstalldir="/" name="etc/groups.xml" role="data" />
    <file baseinstalldir="/" name="etc/phpframe.ini" role="data" />

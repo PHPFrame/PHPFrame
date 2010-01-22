@@ -15,14 +15,6 @@
 
 /**
  * vCard Class
- * 
- * Class to manipulate with vCard information, according vCard v2.1 and vCard v3.0.
- * References: http://www.imc.org/pdi/
- * 
- * This class wraps around the VCARD class by Viatcheslav Ivanov, E-Witness Inc., Canada;
- * mail: ivanov@e-witness.ca, v_iv@hotmail.com;
- * web: www.e-witness.ca; www.coolwater.ca; www.strongpost.net;
- * version: 1.00 /09.20.2002
  *
  * @category PHPFrame
  * @package  Utils
@@ -34,21 +26,60 @@
 class PHPFrame_vCard
 {
     /**
-     * Viatcheslav Ivanov's VCARD object
+     * Array containing vCard data
      * 
-     * @var VCARD
+     * @var array
      */
-    private $_vcard = null;
+    private $_data = array(
+        "N" => array(
+            "FAMILY"     => null,
+            "GIVEN"      => null,
+            "ADDITIONAL" => null,
+            "PREFIXES"   => null,
+            "SUFFIXES"   => null
+        ),
+        "FN"    => null,
+        "EMAIL" => array(),
+        "PHOTO" => null
+    );
     
     /**
-     * Constructor
+     * Constructor.
+     * 
+     * @param array $name_array [Optional] An array containing the different 
+     *                          parts of the "name":
+     *                          - "FAMILY"
+     *                          - "GIVEN"
+     *                          - "ADDITIONAL" 
+     *                          - "PREFIXES"
+     *                          - "SUFFIXES"
      * 
      * @return void
      * @since  1.0
      */
-    public function __construct()
+    public function __construct(array $name_array=array())
     {
-        $this->_vcard = new VCARD;
+        $optional_keys = array(
+            "FAMILY", 
+            "GIVEN", 
+            "ADDITIONAL", 
+            "PREFIXES", 
+            "SUFFIXES"
+        );
+        
+        foreach ($optional_keys as $optional_key) {
+            if (!array_key_exists($optional_key, $name_array)) {
+                $name_array[$optional_key] = null;
+            }
+        }
+        
+        $this->setName(
+            $name_array["FAMILY"], 
+            $name_array["GIVEN"],
+            $name_array["ADDITIONAL"],
+            $name_array["PREFIXES"],
+            $name_array["SUFFIXES"]
+        );
     }
     
     /**
@@ -59,7 +90,41 @@ class PHPFrame_vCard
      */
     public function __toString()
     {
-        return $this->_vcard->getvCard();
+        $str  = "BEGIN:VCARD\n";
+        $str .= "VERSION:3.0\n";
+        
+        
+        $str .= "N:".$this->getName()."\n";
+        
+        $fn = $this->_data["FN"];
+        if (empty($fn)) {
+            $fn = $this->getName();
+        }
+        $str .= "FN:".$fn."\n";
+        
+        foreach ($this->_data["EMAIL"] as $email) {
+            $str .= "EMAIL;TYPE=".$email[1].":".$email[0]."\n";
+        }
+        
+        if (!empty($this->_data["PHOTO"])) {
+            $str .= "PHOTO;VALUE=URL:".$this->_data["PHOTO"]."\n";
+        }
+        
+        $str .= "END:VCARD";
+        
+        return $str;
+        
+        /*
+ORG:Bubba Gump Shrimp Co.
+TITLE:Shrimp Man
+TEL;TYPE=WORK,VOICE:(111) 555-1212
+TEL;TYPE=HOME,VOICE:(404) 555-1212
+ADR;TYPE=WORK:;;100 Waters Edge;Baytown;LA;30314;United States of America
+LABEL;TYPE=WORK:100 Waters Edge\nBaytown, LA 30314\nUnited States of America
+ADR;TYPE=HOME:;;42 Plantation St.;Baytown;LA;30314;United States of America
+LABEL;TYPE=HOME:42 Plantation St.\nBaytown, LA 30314\nUnited States of America
+REV:20080424T195243Z
+         */
     }
     
     /**
@@ -67,9 +132,9 @@ class PHPFrame_vCard
      * 
      * @param string $last_name    The last name.
      * @param string $first_name   The first name.
-     * @param string $middle_names Any middle names.
-     * @param string $prefixes     Name prefixes
-     * @param string $suffixes     Name suffixes
+     * @param string $middle_names [Optional] Any middle names.
+     * @param string $prefixes     [Optional] Name prefixes.
+     * @param string $suffixes     [Optional] Name suffixes.
      * 
      * @return void
      * @since  1.0
@@ -81,40 +146,59 @@ class PHPFrame_vCard
         $prefixes="", 
         $suffixes=""
     ) {
-        $this->_vcard->setName(
-            $last_name, 
-            $first_name, 
-            $middle_names, 
-            $prefixes, 
-            $suffixes
-        );
+        $this->_data["N"]["FAMILY"]     = (string) $last_name;
+        $this->_data["N"]["GIVEN"]      = (string) $first_name;
+        $this->_data["N"]["ADDITIONAL"] = (string) $middle_names;
+        $this->_data["N"]["PREFIXES"]   = (string) $prefixes;
+        $this->_data["N"]["SUFFIXES"]   = (string) $suffixes;
+        
+        // remove special chars
+        foreach ($this->_data["N"] as $key=>$value) {
+            $value = str_replace(array(";", ":", "\n"), "", $value);
+            $this->_data["N"][$key] = $value;
+        }
     }
     
     /**
-     * Get Name
-     * 
-     * @param string $attr Accepted values: "LAST", "FIRST", "MIDDLE", "PREF", 
-     * "SUFF"
+     * Get name.
      * 
      * @return string
      * @since  1.0
      */
-    public function getName($attr="LAST")
+    public function getName()
     {
-        return $this->_vcard->getName($attr);
+        $str = "";
+        
+        if (!empty($this->_data["N"]["PREFIXES"])) {
+            $str .= $this->_data["N"]["PREFIXES"]." ";
+        }
+        
+        $str .= $this->_data["N"]["GIVEN"];
+        
+        if (!empty($this->_data["N"]["ADDITIONAL"])) {
+            $str .= " ".$this->_data["N"]["ADDITIONAL"];
+        }
+        
+        $str .= " ".$this->_data["N"]["FAMILY"];
+        
+        if (!empty($this->_data["N"]["SUFFIXES"])) {
+            $str .= " ".$this->_data["N"]["SUFFIXES"]." ";
+        }
+        
+        return $str;
     }
     
     /**
      * Set formatted name
      * 
-     * @param string $formatted_name A stringf with the formatted name.
+     * @param string $formatted_name A string with the formatted name.
      * 
      * @return void
      * @since  1.0
      */
     public function setFormattedName($formatted_name)
     {
-        $this->_vcard->setFormattedName($formatted_name);
+        $this->_data["FN"] = (string) $formatted_name;
     }
     
     /**
@@ -125,22 +209,100 @@ class PHPFrame_vCard
      */
     public function getFormattedName()
     {
-        $this->_vcard->getFormattedName();
+        return $this->_data["FN"];
     }
     
     /**
      * Set email.
      * 
      * @param string $email The email address.
-     * @param string $attr  [Optional] Default value is INTERNET
+     * @param string $type
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setEmail($email, $attr="INTERNET")
+    public function addEmail($email, $type="PREF")
     {
-        $this->_vcard->setEmail($email, $attr);
+        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+        
+        if ($email === false) {
+            $msg  = "Email argument passed to ".get_class($this)."::";
+            $msg .= __FUNCTION__."() is not a valid email address.";
+            throw new InvalidArgumentException($email);
+        }
+        
+        $type = str_replace(array(";", ":", "\n"), "", trim($type));
+        
+        // if email to be added/modified is to be set as "preferred" we make 
+        // sure no other email is also set to "PREF"
+        if (stripos($type, "PREF") !== false) {
+            for ($i=0; $i<count($this->_data["EMAIL"]); $i++) {
+                $t = explode(",", $this->_data["EMAIL"][$i][1]);
+                if (in_array("PREF", $t)) {
+                    $t_without_pref = "";
+                    for ($j=0; $j<count($t); $j++) {
+                        if (strtoupper($t[$j]) != "PREF") {
+                            if (!empty($t_without_pref)) {
+                                $t_without_pref .= ",";
+                            } 
+                            $t_without_pref .= $t[$j];
+                        }
+                    }
+                    $this->_data["EMAIL"][$i][1] = $t_without_pref; 
+                }
+            }
+        }
+        
+        // If email address already exists in vCard we simply update its "type"
+        for ($i=0; $i<count($this->_data["EMAIL"]); $i++) {
+            if ($this->_data["EMAIL"][$i][0] == $email) {
+                $this->_data["EMAIL"][$i][1] = $type;
+                return;
+            }
+        }
+        
+        $this->_data["EMAIL"][] = array((string) $email, $type);
+    }
+    
+    public function removeEmail($email)
+    {
+        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+        
+        if ($email === false) {
+            $msg  = "Email argument passed to ".get_class($this)."::";
+            $msg .= __FUNCTION__."() is not a valid email address.";
+            throw new InvalidArgumentException($email);
+        }
+        
+        for ($i=0; $i<count($this->_data["EMAIL"]); $i++) {
+            if ($this->_data["EMAIL"][$i][0] == $email) {
+                unset($this->_data["EMAIL"][$i]);
+            }
+        }
+        
+        // Re-index array
+        $this->_data["EMAIL"] = array_values($this->_data["EMAIL"]);
+    }
+    
+    public function getEmailAddresses()
+    {
+        return $this->_data["EMAIL"];
+    }
+    
+    public function getPreferredEmail()
+    {
+        foreach ($this->_data["EMAIL"] as $email) {
+            if (stripos($email[1], "PREF") !== false) {
+                return $email[0];
+            }
+        }
+        
+        // If no email is set as preferred return the first entry if vCard
+        // has at least one email
+        if (isset($this->_data["EMAIL"][0][0])) {
+            return $this->_data["EMAIL"][0][0];
+        }
     }
     
     /**
@@ -153,6 +315,17 @@ class PHPFrame_vCard
      */
     public function setPhoto($photo_url)
     {
-        $this->_vcard->setBinary("PHOTO", $photo_url, "URL");
+        $this->_data["PHOTO"] = (string) $photo_url;
+    }
+    
+    /**
+     * Get photo URL.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public function getPhoto()
+    {
+        return $this->_data["PHOTO"];
     }
 }

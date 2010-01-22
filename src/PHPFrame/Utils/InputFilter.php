@@ -9,14 +9,14 @@ class PHPFrame_InputFilter
     private $attr_blacklist = array(
         'action', 'background', 'codebase', 'dynsrc', 'lowsrc'
     ); // should also strip ALL event handlers
-	
-	public function __construct()
-	{
-		
-	}
-	
-	public function process($var)
-	{
-		return $var;
-	}
+    
+    public function __construct()
+    {
+        
+    }
+    
+    public function process($var)
+    {
+        return $var;
+    }
 }

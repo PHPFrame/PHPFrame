@@ -302,7 +302,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      */
     public function hasTable($table_name)
     {
-    	// Replace table prefix
+        // Replace table prefix
         $table_name = str_replace('#__', $this->_tbl_prefix, $table_name);
         
         foreach ($this->getTables(true) as $table) {

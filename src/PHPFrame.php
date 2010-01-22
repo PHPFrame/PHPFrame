@@ -22,7 +22,7 @@ define("DS", DIRECTORY_SEPARATOR);
 /**
  * Register autoload function
  */
-spl_autoload_register(array("PHPFrame", "__autoload"));
+spl_autoload_register(array("PHPFrame", "autoload"));
 
 /**
  * This class encapsulates information about the installed version of the 
@@ -151,7 +151,7 @@ class PHPFrame
      * @return void
      * @since  1.0
      */
-    public static function __autoload($class_name)
+    public static function autoload($class_name)
     {
         $file_path = "";
         
@@ -184,15 +184,11 @@ class PHPFrame
             }
         }
         
-        // Load core libraries
+        // Load PHPMailer
         $lib_dir = self::$_data_dir.DS."lib";
         
         if ($class_name == "PHPMailer") {
             $file_path = "phpmailer".DS."phpmailer.php";
-            include $lib_dir.DS.$file_path;
-            return;
-        } elseif ($class_name == "VCARD") {
-            $file_path = "vcard".DS."vcardclass.inc";
             include $lib_dir.DS.$file_path;
             return;
         }

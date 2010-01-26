@@ -132,7 +132,7 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
         }
         
         $sql .= "\n) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci\n";
-        echo $sql; exit;
+        //echo $sql; exit;
         $this->query($sql);
     }
     

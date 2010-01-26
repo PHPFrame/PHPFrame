@@ -93,12 +93,20 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
             
             // Add display width
             switch ($col->getType()) {
+            case "boolean" :
+            	$def_value = (int) (bool) $col->getDefault();
+            	break;
             case "int" :
-                $sql .= "(11)";
+                $sql      .= "(11)";
+                $def_value = (int) $col->getDefault();
                 break;
             case "varchar" :
-                $sql .= "(100)";
+                $sql      .= "(100)";
+                $def_value = (string) $col->getDefault();
                 break;
+            default :
+            	$def_value = (string) $col->getDefault();
+            	break;
             }
             
             if (!$col->getNull()) {
@@ -106,7 +114,7 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
             }
             
             if (!is_null($col->getDefault())) {
-                $sql .= " DEFAULT '".$col->getDefault()."'";
+            	$sql .= " DEFAULT '".$def_value."'";
             }
             
             if (!is_null($col->getExtra())) {
@@ -124,7 +132,7 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
         }
         
         $sql .= "\n) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci\n";
-        //echo $sql; exit;
+        echo $sql; exit;
         $this->query($sql);
     }
     

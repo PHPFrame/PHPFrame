@@ -145,6 +145,9 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $this->dom->formatOutput = true;
         $html = $this->dom->saveHTML();
         
+        // Make line breaks after script tags for pretty output
+        $html = preg_replace("/<\/script>/", "</script>\n", $html);
+        
         // Add body and return
         return str_replace("{content}", $this->getBody(), $html);
     }

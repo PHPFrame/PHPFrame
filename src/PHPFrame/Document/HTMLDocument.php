@@ -55,15 +55,23 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Constructor
      * 
-     * @param string $mime    [Optional]
-     * @param string $charset [Optional]
+     * @param string $mime      [Optional]
+     * @param string $charset   [Optional]
+     * @param string $public_id [Optional] Default value is 
+     *                          "-//W3C//DTD XHTML 1.0 Strict//EN".
+     * @param string $system_id [Optional] Default value is 
+     *                          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
      * 
      * @return void
      * @uses   DOMImplementation, PHPFrame_URI, PHPFrame_Pathway
      * @since  1.0 
      */
-    public function __construct($mime="text/html", $charset=null) 
-    {
+    public function __construct(
+        $mime="text/html", 
+        $charset=null,
+        $public_id="-//W3C//DTD XHTML 1.0 Strict//EN", 
+        $system_id="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+    ) {
         // Call parent's constructor to set mime type
         parent::__construct($mime, $charset);
         
@@ -72,7 +80,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $this->dom = $imp->createDocument(
             null,
             "html",
-            $this->getDocType()
+            $this->getDocType($public_id, $system_id)
         ); 
         
         // Get root node
@@ -155,21 +163,25 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Get DOM Document Type object
      * 
+     * @param string $public_id [Optional] Default value is 
+     *                          "-//W3C//DTD XHTML 1.0 Strict//EN".
+     * @param string $system_id [Optional] Default value is 
+     *                          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+     * 
      * @return DOMDocumentType
      * @since  1.0
      */
-    public function getDocType()
-    {
+    public function getDocType(
+        $public_id="-//W3C//DTD XHTML 1.0 Strict//EN", 
+        $system_id="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+    ) {
         // Create new doc type object if we don't have one yet
         if (!($this->doctype instanceof DOMDocumentType)) {
-             // Create doc type object
-            $publicId = "-//W3C//DTD HTML 4.01//EN";
-            $systemId = "http://www.w3.org/TR/html4/strict.dtd";
             $imp = new DOMImplementation;
             $this->doctype = $imp->createDocumentType(
                 "html",
-                $publicId,
-                $systemId
+                $public_id,
+                $system_id
             );
         }
         

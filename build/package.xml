@@ -158,11 +158,9 @@
    <file baseinstalldir="/" name="CLI_Tool/public/index.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/app.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/config.php" role="data" />
-   <file baseinstalldir="/" name="CLI_Tool/src/controllers/ext.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/man.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/scaffold.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/models/apptemplate.php" role="data" />
-   <file baseinstalldir="/" name="CLI_Tool/src/models/extinstaller.php" role="data" />
    
    <file baseinstalldir="/" name="lib/phpmailer/language/phpmailer.lang-en.php" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/LICENSE" role="data" />

@@ -95,24 +95,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
            new PHPFrame_EmailFilter(array("min_length"=>7, "max_length"=>100))
         );
         $this->addField(
-           "photo", 
-           "default.png", 
-           false, 
-           new PHPFrame_StringFilter(array("min_length"=>5, "max_length"=>128))
-        );
-        $this->addField(
-           "notifications", 
-           true, 
-           false, 
-           new PHPFrame_BoolFilter()
-        );
-        $this->addField(
-           "show_email", 
-           false, 
-           false, 
-           new PHPFrame_BoolFilter()
-        );
-        $this->addField(
            "block", 
            false, 
            false, 
@@ -125,12 +107,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
            new PHPFrame_IntFilter()
         );
         $this->addField(
-           "activation", 
-           null, 
-           true, 
-           new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>100))
-        );
-        $this->addField(
            "params", 
            array(), 
            true, 
@@ -141,12 +117,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
            0, 
            true, 
            new PHPFrame_IntFilter()
-        );
-        $this->addField(
-           "openid_urls", 
-           null, 
-           true, 
-           new PHPFrame_StringFilter()
         );
         
         // If we are passed a vCard object we deal with this first
@@ -388,96 +358,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     }
     
     /**
-     * Get photo
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function getPhoto()
-    {
-        return $this->fields["photo"];
-    }
-    
-    /**
-     * Set photo
-     * 
-     * @param string $str
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function setPhoto($str)
-    {
-        $str = $this->validate("photo", $str);
-        
-        // Set last name in vCard object making sure we dont overwrite first name)
-        $this->_vcard->setPhoto($str);
-        
-        // Set property
-        $this->fields["photo"] = $str;
-    }
-    
-    /**
-     * Get notifications flag
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    public function getNotifications()
-    {
-        return $this->fields["notifications"];
-    }
-    
-    /**
-     * Set notifications flag
-     * 
-     * @param bool $bool
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function setNotifications($bool)
-    {
-        $bool = $this->validate("notifications", $bool);
-        
-        // Set local property
-        $this->fields["notifications"] = (bool) $bool;
-    }
-    
-    /**
-     * Get show_email flag
-     * 
-     * @access public
-     * @return bool
-     * @since  1.0
-     */
-    public function getShowEmail()
-    {
-        return $this->fields["show_email"];
-    }
-    
-    /**
-     * Set show_email flag
-     * 
-     * @param bool $bool
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function setShowEmail($bool)
-    {
-        $bool = $this->validate("show_email", $bool);
-        
-        // Set property
-        $this->fields["show_email"] = (bool) $bool;
-    }
-    
-    /**
      * Get block flag
      * 
      * @access public
@@ -530,32 +410,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     public function setLastVisit($int)
     {
         $this->fields["last_visit"] = $this->validate("last_visit", $int);
-    }
-    
-    /**
-     * Get activation key
-     * 
-     * @access public
-     * @return string
-     * @since  1.0
-     */
-    public function getActivation()
-    {
-        return $this->fields["activation"];
-    }
-    
-    /**
-     * Set activation key
-     * 
-     * @param string $str
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function setActivation($str)
-    {
-        $this->fields["activation"] = $this->validate("activation", $str);
     }
     
     /**
@@ -654,58 +508,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         //TODO: Here we have to parse the vCard data 
         // and update the firstname and lastname proerties
         $this->_vcard = $vcard;
-    }
-    
-    /**
-     * Get OpenId URLs
-     * 
-     * @access public
-     * @return array
-     * @since  1.0
-     */
-    public function getOpenidUrls()
-    {
-        return $this->fields["openid_urls"];
-    }
-    
-    /**
-     * Add an OpenId URL for this user
-     * 
-     * @param string $str
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function addOpenidUrl($str)
-    {
-        $str = $this->validate("openid_urls", $str);
-        
-        if (!in_array($str, $this->fields["openid_urls"])) {
-            $this->fields["openid_urls"][] = $str;
-        }
-    }
-    
-    /**
-     * Remove a given URL from the openid_urls array
-     * 
-     * @param string $str
-     * 
-     * @access public
-     * @return void
-     * @since  1.0
-     */
-    public function removeOpenidUrl($str)
-    {
-        $str = $this->validate("openid_urls", $str);
-        
-        foreach ($this->fields["openid_urls"] as $url) {
-            if ($str != $url) {
-                $array[] = $url;
-            }
-        }
-        
-        $this->fields["openid_urls"] = $array;
     }
     
     /**

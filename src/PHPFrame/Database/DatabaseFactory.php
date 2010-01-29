@@ -57,7 +57,7 @@ class PHPFrame_DatabaseFactory
         } elseif ($dsn == "mysql") {
             $dsn .= ":dbname=".$options["name"];
             if (isset($options["host"]) && !empty($options["host"])) {
-                $dsn .= ";host=".$options["host"].";";
+                $dsn .= ";host=".$options["host"];
             }
             if (isset($options["mysql_unix_socket"]) 
                 && !empty($options["mysql_unix_socket"])

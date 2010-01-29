@@ -429,7 +429,10 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
             $this->_stmt->execute($params);
             
             $error_info = $this->_stmt->errorInfo();
-            if (is_array($error_info) && count($error_info) > 1) {
+            if (is_array($error_info) 
+                && count($error_info) > 1
+                && (int) $error_info[0] > 0
+            ) {
                 $msg = "Error running query";
                 throw new PHPFrame_DatabaseException($msg, $this->_stmt);
             }

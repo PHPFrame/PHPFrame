@@ -5,8 +5,8 @@ require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 class PHPFrame_DatabaseTableTest extends PHPUnit_Framework_TestCase
 {
     private $_dsn     = "mysql:dbname=phpframe-test;host=localhost";
-    private $_db_user = "root";
-    private $_db_pass = "W\$termell0n";
+    private $_db_user = "phpframe-test";
+    private $_db_pass = "Passw0rd";
     private $_db;
     private $_table;
     

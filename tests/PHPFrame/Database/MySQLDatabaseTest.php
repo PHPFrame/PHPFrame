@@ -6,7 +6,7 @@ class PHPFrame_MySQLDatabaseTest extends PHPUnit_Framework_TestCase
 {
     private $_dsn     = "mysql:dbname=phpframe-test;host=localhost";
     private $_db_user = "phpframe-test";
-    private $_db_pass = "ZfHZtpTXhwYVc8p4";
+    private $_db_pass = "Passw0rd";
     private $_db;
     
     public function setUp()

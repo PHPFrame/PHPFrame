@@ -53,7 +53,7 @@ abstract class PHPFrame_IdObject
             // Options is an array
             foreach ($options as $key=>$val) {
                 if (method_exists($this, $key)) {
-                    call_user_func_array(array($this, $key), $val);
+                    call_user_func_array(array($this, $key), array($val));
                 }
             }
         }

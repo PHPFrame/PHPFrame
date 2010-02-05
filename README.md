@@ -8,15 +8,15 @@ This project is still work in progress...
 
 Project resources
 ------------------
-* Project home page: http://www.phpframe.org/
+* [Project home page](http://www.phpframe.org/)
 
-* Documentation: http://www.phpframe.org/doc/api/
+* [Documentation](http://www.phpframe.org/doc/api/)
 
-* Bug tracker: http://github.com/PHPFrame/PHPFrame/issues
+* [Bug tracker](http://github.com/PHPFrame/PHPFrame/issues)
 
-* Source: http://github.com/PHPFrame/PHPFrame
+* [Source](http://github.com/PHPFrame/PHPFrame)
 
-* Developers discussion group: http://groups.google.com/group/phpframe-dev
+* [Developers discussion group](http://groups.google.com/group/phpframe-dev)
 
 How to install PHPFrame with PEAR command line installer
 -----------------------------

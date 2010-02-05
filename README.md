@@ -18,7 +18,7 @@ Project resources
 
 * [Developers discussion group](http://groups.google.com/group/phpframe-dev)
 
-How to install PHPFrame with PEAR command line installer
+How to install PHPFrame with the PEAR command line installer
 -----------------------------
 
 Tell the PEAR installer that you want to install alpha packages:

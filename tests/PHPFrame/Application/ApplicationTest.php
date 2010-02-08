@@ -140,7 +140,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("Content-Language", $headers);
         $this->assertArrayHasKey("Content-Type", $headers);
         
-        $this->assertEquals(1, preg_match('/^PHPFrame/', $headers["X-Powered-By"]));
+        $this->assertEquals(1, preg_match('/PHPFrame/', $headers["X-Powered-By"]));
         $this->assertEquals(200, $headers["Status"]);
         $this->assertEquals("en-GB", $headers["Content-Language"]);
     }

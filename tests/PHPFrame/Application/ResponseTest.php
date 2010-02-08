@@ -57,13 +57,13 @@ class PHPFrame_ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("Content-Language", $headers);
         $this->assertArrayHasKey("Content-Type", $headers);
         
-        $this->assertEquals(1, preg_match('/^PHPFrame/', $headers["X-Powered-By"]));
+        $this->assertEquals(1, preg_match('/PHPFrame/', $headers["X-Powered-By"]));
         $this->assertEquals(200, $headers["Status"]);
     }
     
     public function test_getHeader()
     {
-        $this->assertEquals(1, preg_match('/^PHPFrame/', $this->_response->getHeader("X-Powered-By")));
+        $this->assertEquals(1, preg_match('/PHPFrame/', $this->_response->getHeader("X-Powered-By")));
         $this->assertEquals(200, $this->_response->getHeader("Status"));
     }
     

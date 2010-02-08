@@ -10,6 +10,9 @@ class PHPFrame_InformerTest extends PHPUnit_Framework_TestCase
     {
         PHPFrame::setTestMode(true);
         
+        $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
+        PHPFrame::setDataDir($data_dir);
+        
         $this->_informer = new PHPFrame_Informer(
             new PHPFrame_Mailer(), 
             array("lupomontero@gmail.com")

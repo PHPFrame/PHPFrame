@@ -8,8 +8,8 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
     
     public function __construct()
     {
-        $this->_config_file  = PEAR_Config::singleton()->get("data_dir");
-        $this->_config_file .= DS."PHPFrame".DS."etc".DS."phpframe.ini";
+    	$this->_config_file  = preg_replace("/tests\/.*/", "data", __FILE__);
+    	$this->_config_file .= "/etc/phpframe.ini";
     }
     
     public function setUp()

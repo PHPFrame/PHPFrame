@@ -1,69 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="PHPFrame" basedir="../" default="build">
-    
-    <fileset dir="${project.basedir}/src" id="codefiles">
-        <include name="**" />
-    </fileset>
-    
-    <fileset dir="${project.basedir}/tests" id="testfiles">
-        <include name="**/*Test.php"/>
-    </fileset>
-    
-    <property name="build.dir" value="${project.basedir}/build" />
-    <property name="report.dir" value="${build.dir}/report" />
-  
-    <!-- This target checks for PHP syntax errors in all source files
-    <target name="checkphp">
-      <apply executable="php" failonerror="true">
-        <arg value="-l" />
-        <fileset dir="${basedir}/src">
-          <include name="**/*.php" />
-        </fileset>
-      </apply>
-    </target>
-    -->
-   
-    <!-- This target checks Coding Standards (CS) using PHP_CodeSniffer -->
-    <target name="phpcs">
-        <exec 
-            command="phpcs --report=checkstyle --standard=PEAR src" 
-            dir="${project.basedir}" 
-            output="${report.dir}/phpcs.xml" />
-    </target>
-  
-    <!-- This target creates a PHAR archive grouping all PHPFrame files into a single .phar file 
-    <target name="phar">
-      <exec executable="php" dir="${basedir}" failonerror="on">
-          <arg line="makepackage.php" />
-      </exec> 
-    </target>
-    -->
-    
-    <!-- Prepare directories -->
-    <target name="prepare">
-        <mkdir dir="${report.dir}" />
-    </target>
-    
-    <!-- Run PHPUnit tests -->
-    <target name="test">
-        <phpunit haltonfailure="true" printsummary="true">
-            <batchtest>
-                <fileset refid="testfiles" />
-            </batchtest>
-            <formatter type="xml" todir="${report.dir}" outfile="logfile.xml" />
-        </phpunit>
-    </target>
-    
-    <!-- Generate phpunit report -->
-    <target name="generate-report">
-        <phpunit2report 
-            infile="${report.dir}/logfile.xml" 
-            styledir="resources/xsl" 
-            todir="${report.dir}" 
-            format="noframes" />
-    </target>
-    
-    <!-- Build project -->
-    <target name="build" depends="prepare, test, phpcs" />
+<project name="PHPFrame" default="build" basedir="../">
+    <target name="build" 
+            depends="checkout, php-documentor, php-codesniffer, phpunit" />
 
+    <target name="checkout">
+        <exec executable="git" dir="${basedir}">
+            <arg line="pull" />
+        </exec>
+    </target>
+    
+    <target name="php-codesniffer">
+        <exec executable="phpcs"
+              dir="${basedir}/source"
+              output="${basedir}/build/logs/checkstyle.xml">
+            <arg line="--report=checkstyle --standard=PEAR ." />
+        </exec>
+    </target>
+
+    <target name="phpunit">
+        <exec executable="phpunit" dir="${basedir}/src" failonerror="on">
+            <arg line="--log-xml ${basedir}/build/logs/phpunit.xml
+                       --log-pmd ${basedir}/build/logs/phpunit.pmd.xml 
+                       --log-metrics ${basedir}/build/logs/phpunit.metrics.xml 
+                       --coverage-xml ${basedir}/build/logs/phpunit.coverage.xml 
+                       --coverage-html ${basedir}/build/coverage 
+                       ." />
+        </exec>
+    </target>
+    
+    <target name="php-documentor">
+        <exec executable="phpdoc" dir="${basedir}/src">
+            <arg line="-ct type -ue on -t ${basedir}/build/api
+                       -tb /usr/share/php/data/phpUnderControl/data/phpdoc
+                       -o HTML:Phpuc:phpuc -d ." />
+        </exec>
+    </target>
 </project>

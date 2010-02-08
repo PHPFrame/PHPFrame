@@ -11,7 +11,7 @@
     
     <target name="php-codesniffer">
         <exec executable="phpcs"
-              dir="${basedir}/source"
+              dir="${basedir}/src"
               output="${basedir}/build/logs/checkstyle.xml">
             <arg line="--report=checkstyle --standard=PEAR ." />
         </exec>

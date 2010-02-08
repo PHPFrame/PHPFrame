@@ -33,7 +33,7 @@
                        --log-metrics ${basedir}/build/logs/phpunit.metrics.xml 
                        --coverage-xml ${basedir}/build/logs/phpunit.coverage.xml 
                        --coverage-html ${basedir}/build/coverage 
-                       ." />
+                       ${basedir}/tests" />
         </exec>
     </target>
     

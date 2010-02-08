@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="PHPFrame" default="build" basedir="../">
     <target name="build" 
-            depends="checkout, php-documentor, php-codesniffer, phpunit" />
+            depends="checkout, prepare, php-codesniffer, phpunit, php-documentor" />
             
     <target name="prepare">
         <exec executable="rm" dir="${basedir}">
@@ -27,7 +27,7 @@
     </target>
 
     <target name="phpunit">
-        <exec executable="phpunit" dir="${basedir}/src" failonerror="on">
+        <exec executable="phpunit" dir="${basedir}/tests" failonerror="on">
             <arg line="--log-xml ${basedir}/build/logs/phpunit.xml
                        --log-pmd ${basedir}/build/logs/phpunit.pmd.xml 
                        --log-metrics ${basedir}/build/logs/phpunit.metrics.xml 

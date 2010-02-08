@@ -10,6 +10,9 @@ class PHPFrame_MailerTest extends PHPUnit_Framework_TestCase
     {
         PHPFrame::setTestMode(true);
         
+        $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
+        PHPFrame::setDataDir($data_dir);
+        
         $this->_mailer = new PHPFrame_Mailer();
     }
     

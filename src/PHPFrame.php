@@ -272,6 +272,28 @@ class PHPFrame
     {
         return (bool) self::$_test_mode;
     }
+    
+    /**
+     * Set PHPFrame's data directory. By default this is a directory called 
+     * "data/PHPFrame" under the PEAR shared library dir.
+     * 
+     * @param string $str The absolute path to PHPFrame's data dir.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public static function setDataDir($str)
+    {
+    	$str = trim((string) $str);
+    	
+    	if (!is_dir($str) || !is_readable($str)) {
+    	    $msg  = "Could not set PHPFrame's data dir. Directory '".$str;
+    	    $msg .= "' doesn't exist or is not readable.";
+    	    throw new InvalidArgumentException($msg);
+    	}
+    	
+    	self::$_data_dir = $str;
+    }
 }
 
 // Boot up the Framework!!!

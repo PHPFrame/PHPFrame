@@ -307,9 +307,9 @@ class PHPFrame_Response
      * Set the response body. The passed value will be rendered using the 
      * response's renderer object.
      * 
-     * @param mixed $value
+     * @param mixed $value  The value to set as the response body.
      * @param bool  $render [Optional] Default value is TRUE. To bypass 
-     *                                 renderer set to FALSE.
+     *                      renderer set to FALSE.
      * @param bool  $append [Optional] Default value is FALSE.
      * 
      * @return void

@@ -425,8 +425,7 @@ class PHPFrame_Application
         }
         
         // Make absolute path for sqlite db if relative given
-        if (
-            strtolower($options["driver"]) == "sqlite" 
+        if (strtolower($options["driver"]) == "sqlite" 
             && !preg_match('/^\//', $options["name"])
         ) {
             $options["name"] = $this->_var_dir.DS.$options["name"];

@@ -252,7 +252,7 @@ class PHPFrame
     /**
      * Set the framework to run in test mode
      * 
-     * @param bool $bool
+     * @param bool $bool TRUE to run in test mode FALSE to use real sessions.
      * 
      * @return void
      * @since  1.0
@@ -284,15 +284,15 @@ class PHPFrame
      */
     public static function setDataDir($str)
     {
-    	$str = trim((string) $str);
-    	
-    	if (!is_dir($str) || !is_readable($str)) {
-    	    $msg  = "Could not set PHPFrame's data dir. Directory '".$str;
-    	    $msg .= "' doesn't exist or is not readable.";
-    	    throw new InvalidArgumentException($msg);
-    	}
-    	
-    	self::$_data_dir = $str;
+        $str = trim((string) $str);
+        
+        if (!is_dir($str) || !is_readable($str)) {
+            $msg  = "Could not set PHPFrame's data dir. Directory '".$str;
+            $msg .= "' doesn't exist or is not readable.";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        self::$_data_dir = $str;
     }
 }
 

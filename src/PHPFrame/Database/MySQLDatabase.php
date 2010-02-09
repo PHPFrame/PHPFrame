@@ -94,8 +94,8 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
             // Add display width
             switch ($col->getType()) {
             case "boolean" :
-            	$def_value = (int) (bool) $col->getDefault();
-            	break;
+                $def_value = (int) (bool) $col->getDefault();
+                break;
             case "int" :
                 $sql      .= "(11)";
                 $def_value = (int) $col->getDefault();
@@ -105,8 +105,8 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
                 $def_value = (string) $col->getDefault();
                 break;
             default :
-            	$def_value = (string) $col->getDefault();
-            	break;
+                $def_value = (string) $col->getDefault();
+                break;
             }
             
             if (!$col->getNull()) {
@@ -114,7 +114,7 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
             }
             
             if (!is_null($col->getDefault())) {
-            	$sql .= " DEFAULT '".$def_value."'";
+                $sql .= " DEFAULT '".$def_value."'";
             }
             
             if (!is_null($col->getExtra())) {

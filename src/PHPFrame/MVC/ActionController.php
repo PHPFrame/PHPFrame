@@ -337,7 +337,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * @param string $name The name of the view to create.
      * @param array  $data Data to assign to the view.
      * 
-     * @return object
+     * @return PHPFrame_View
      * @since  1.0
      */
     protected function getView($name="", array $data=null)

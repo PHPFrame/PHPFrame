@@ -36,3 +36,4 @@ Download and install the latest successful build:
 Run post installation scripts:
 
 `pear run-scripts pear.e-noise.com/PHPFrame`
+

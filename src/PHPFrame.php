@@ -204,7 +204,7 @@ class PHPFrame
         $str .= " (".self::BUILD_LABEL.": ".self::BUILD_DATE.") ";
         $str .= "\nAPI version: ";
         $str .= self::API_VERSION." ".self::API_STABILITY;
-        $str .= "\nCopyright (c) 2009 The PHPFrame Group";
+        $str .= "\nCopyright (c) ".date("Y")." The PHPFrame Group";
         
         return $str;
     }

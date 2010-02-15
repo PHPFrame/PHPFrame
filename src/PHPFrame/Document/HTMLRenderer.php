@@ -61,6 +61,13 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
             ob_start();
             // set view data as local array
             $data = $view->getData();
+            
+            if (is_array($data) && count($data) > 0) {
+	            foreach ($data as $key=>$value) {
+	            	$$key = $value;
+	            }
+            }
+            
             // Include template file
             require_once $tmpl_path;
             // save buffer in body property
@@ -98,6 +105,13 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
         
         // Start buffering
         ob_start();
+        
+        if (is_array($data) && count($data) > 0) {
+	        foreach ($data as $key=>$value) {
+	            $$key = $value;
+	        }
+        }
+            
         // Include partial file
         include $path;
         // save buffer in body property

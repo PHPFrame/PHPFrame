@@ -37,6 +37,13 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      * @var DOMDocument
      */
     protected $dom = null;
+    /**
+     * A boolean indicating whether or not to use the XML beautifier when 
+     * converting to string.
+     * 
+     * @var bool
+     */
+    private $_use_beautifier=true;
     
     /**
      * Constructor
@@ -62,12 +69,34 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      */
     public function __toString()
     {
-        $str            = $this->dom->saveXML();
-        $str           .= $this->getBody();
+        $str  = $this->dom->saveXML();
+        $str .= $this->getBody();
         
-        $xml_beautifier = new XML_Beautifier();
-        return $xml_beautifier->formatString($str);
-        //return $this->indent($this->dom->saveXML().$this->getBody());
+        if ($this->useBeautifier()) {
+            $xml_beautifier = new XML_Beautifier();
+            return $xml_beautifier->formatString($str);
+        }
+        
+        return $str;
+    }
+    
+    /**
+     * Set whether or not to use the XML beautifier when converting to string.
+     * 
+     * @param bool $bool [Optional] Boolean indicating whether or not to use 
+     *                   the beautifier. If not passed this method simply 
+     *                   returns the current value.
+     * 
+     * @return bool
+     * @since  1.0
+     */
+    public function useBeautifier($bool=null)
+    {
+    	if (!is_null($bool)) {
+    	    $this->_use_beautifier = (bool) $bool;
+    	}
+    	
+    	return $this->_use_beautifier;
     }
     
     public function getDOM()

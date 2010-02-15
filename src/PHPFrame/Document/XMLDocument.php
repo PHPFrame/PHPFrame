@@ -92,11 +92,11 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      */
     public function useBeautifier($bool=null)
     {
-    	if (!is_null($bool)) {
-    	    $this->_use_beautifier = (bool) $bool;
-    	}
-    	
-    	return $this->_use_beautifier;
+        if (!is_null($bool)) {
+            $this->_use_beautifier = (bool) $bool;
+        }
+        
+        return $this->_use_beautifier;
     }
     
     public function getDOM()

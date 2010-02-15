@@ -63,9 +63,9 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
             $data = $view->getData();
             
             if (is_array($data) && count($data) > 0) {
-	            foreach ($data as $key=>$value) {
-	            	$$key = $value;
-	            }
+                foreach ($data as $key=>$value) {
+                    $$key = $value;
+                }
             }
             
             // Include template file
@@ -107,9 +107,9 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
         ob_start();
         
         if (is_array($data) && count($data) > 0) {
-	        foreach ($data as $key=>$value) {
-	            $$key = $value;
-	        }
+            foreach ($data as $key=>$value) {
+                $$key = $value;
+            }
         }
             
         // Include partial file

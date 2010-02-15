@@ -80,12 +80,12 @@ class ScaffoldController extends PHPFrame_ActionController
      */
     public function create_table($path="", $drop=false)
     {
-    	$path = trim((string) $path);
-    	
-    	// Prepend path to models if relative path is passed
-    	if (!preg_match("/^\//", $path)) {
-    	    $path = $this->_install_dir.DS."src".DS."models".DS.$path;
-    	}
+        $path = trim((string) $path);
+        
+        // Prepend path to models if relative path is passed
+        if (!preg_match("/^\//", $path)) {
+            $path = $this->_install_dir.DS."src".DS."models".DS.$path;
+        }
         
         if (is_dir($path)) {
             $dir_it    = new RecursiveDirectoryIterator($path);

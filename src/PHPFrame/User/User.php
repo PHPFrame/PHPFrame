@@ -79,14 +79,14 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         $this->addField(
            "firstname", 
            null, 
-           false, 
-           new PHPFrame_StringFilter(array("min_length"=>1, "max_length"=>50))
+           true, 
+           new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>50))
         );
         $this->addField(
            "lastname", 
            null, 
-           false, 
-           new PHPFrame_StringFilter(array("min_length"=>1, "max_length"=>50))
+           true, 
+           new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>50))
         );
         $this->addField(
            "email", 

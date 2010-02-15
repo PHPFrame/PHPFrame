@@ -45,4 +45,9 @@ abstract class PHPFrame_ViewHelper
     {
         $this->_app = $app;
     }
+    
+    public function app()
+    {
+    	return $this->_app;
+    }
 }

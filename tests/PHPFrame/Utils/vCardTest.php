@@ -50,7 +50,7 @@ class PHPFrame_vCardTest extends PHPUnit_Framework_TestCase
     public function test_addEmail()
     {
         $this->_vcard->addEmail("lupomontero@googlemail.com", "HOME");
-        $this->_vcard->addEmail("me@lupomontero", "HOME");
+        $this->_vcard->addEmail("me@lupomontero.com", "HOME");
         $this->_vcard->addEmail("lupo@e-noise.com", "WORK,PREF");
         
         $emails = $this->_vcard->getEmailAddresses();
@@ -71,12 +71,12 @@ class PHPFrame_vCardTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(count($emails) == 2);
         $this->assertEquals("lupo@e-noise.com", $this->_vcard->getPreferredEmail());
         
-        $this->_vcard->addEmail("me@lupomontero", "HOME,PREF");
+        $this->_vcard->addEmail("me@lupomontero.com", "HOME,PREF");
         
         $emails = $this->_vcard->getEmailAddresses();
         $this->assertType("array", $emails);
         $this->assertTrue(count($emails) == 2);
-        $this->assertEquals("me@lupomontero", $this->_vcard->getPreferredEmail());
+        $this->assertEquals("me@lupomontero.com", $this->_vcard->getPreferredEmail());
     }
     
     public function test_setPhoto()

@@ -28,10 +28,8 @@
 
     <target name="phpunit">
         <exec executable="phpunit" dir="${basedir}/tests" failonerror="on">
-            <arg line="--log-xml ${basedir}/build/logs/phpunit.xml
-                       --log-pmd ${basedir}/build/logs/phpunit.pmd.xml 
-                       --log-metrics ${basedir}/build/logs/phpunit.metrics.xml 
-                       --coverage-xml ${basedir}/build/logs/phpunit.coverage.xml 
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml
+                       --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml 
                        --coverage-html ${basedir}/build/coverage 
                        ${basedir}/tests" />
         </exec>

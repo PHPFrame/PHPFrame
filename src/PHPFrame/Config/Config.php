@@ -42,20 +42,20 @@
 class PHPFrame_Config implements IteratorAggregate
 {
     /**
-     * Full path to ini file with data
+     * Full path to ini file with data.
      * 
      * @var string
      */
     private $_path = null;
     /**
-     * Array holding config data
+     * Array holding config data.
      * 
      * @var array
      */
     private $_data = array();
     
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $path Full path to ini file with data
      * 
@@ -71,7 +71,7 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Convert object to string
+     * Convert object to string.
      * 
      * This method is automatically called when trying to use the object as a string 
      * or by explicitly casting it to string.
@@ -100,7 +100,7 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Get iterator
+     * Get iterator.
      * 
      * This method implements the IteratorAggregate interface and thus makes config 
      * objects traversable, hooking to the foreach construct.
@@ -120,9 +120,9 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Get config key
+     * Get config key.
      * 
-     * @param string $key
+     * @param string $key The name of the config key we want to get.
      * 
      * @return string
      * @since  1.0
@@ -140,7 +140,7 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Set config param
+     * Set config param.
      *
      * This method returns the current instance allowing for fluent syntax
      *
@@ -165,7 +165,8 @@ class PHPFrame_Config implements IteratorAggregate
     /**
      * Bind array to config object
      * 
-     * @param array $array
+     * @param array $array Associative array containing keys with the same 
+     *                     names as config keys. Unknown keys are ignored.
      * 
      * @return void
      * @since  1.0
@@ -196,7 +197,7 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Get config sections
+     * Get config sections.
      * 
      * @return array
      * @since  1.0
@@ -207,9 +208,9 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Get section data as an associative array
+     * Get section data as an associative array.
      * 
-     * @param string $str
+     * @param string $section_name  The name of the section we want to get.
      * 
      * @return array
      * @since  1.0
@@ -225,7 +226,7 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Get config keys
+     * Get config keys.
      * 
      * @return array
      * @since  1.0
@@ -280,9 +281,9 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Store config object in filesystem as ini file
+     * Store config object in filesystem as ini file.
      *
-     * @param string $path Full path to ini file with data
+     * @param string $path Full path to ini file with data.
      * 
      * @return void
      * @since  1.0
@@ -311,7 +312,7 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Fetch data from ini file
+     * Fetch data from ini file.
      * 
      * @return void
      * @since  1.0
@@ -327,9 +328,9 @@ class PHPFrame_Config implements IteratorAggregate
     }
     
     /**
-     * Parse key string into section and key
+     * Parse key string into section and key.
      * 
-     * @param string $str
+     * @param string $str The config key.
      * 
      * @return array
      * @since  1.0

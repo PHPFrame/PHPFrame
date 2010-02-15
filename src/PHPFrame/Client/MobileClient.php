@@ -90,6 +90,8 @@ class PHPFrame_MobileClient extends PHPFrame_Client
     /**    
      * Populate the Request object.
      * 
+     * @param PHPFrame_Request $request Reference to the request object.
+     * 
      * @return void
      * @since  1.0
      */
@@ -106,7 +108,7 @@ class PHPFrame_MobileClient extends PHPFrame_Client
         $request['get']     = $inputfilter->process($_GET);
         $request['post']    = $inputfilter->process($_POST);
         
-        return $request;
+        return;
     }
     
     /**

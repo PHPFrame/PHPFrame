@@ -56,6 +56,8 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
     /**    
      * Populate the Request object.
      * 
+     * @param PHPFrame_Request $request Reference to the request object.
+     * 
      * @return void
      * @since  1.0
      */
@@ -134,7 +136,7 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
     /**
      * Handle controller redirection
      * 
-     * @param string $url
+     * @param string $url The URL we want to redirect to.
      * 
      * @return void
      * @since  1.0

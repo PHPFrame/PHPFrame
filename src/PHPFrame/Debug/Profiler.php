@@ -104,8 +104,6 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
     /**
      * Set milestone in the profiler
      * 
-     * @param string $name The milestone name
-     * 
      * @return void
      * @since  1.0
      */
@@ -119,7 +117,7 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
             if ($isset && $backtrace_call["class"] != "PHPFrame_Profiler") {
                 $key  = $backtrace_call["class"]."::";
                 $key .= $backtrace_call["function"]."()";
-                $this->_milestones[$key] = $this->_microtime_float();
+                $this->_milestones[$key] = $this->_microtimeFloat();
                 break;
             }
         }
@@ -131,7 +129,7 @@ class PHPFrame_Profiler implements IteratorAggregate, Countable
      * @return float
      * @since  1.0
      */
-    private function _microtime_float() 
+    private function _microtimeFloat() 
     {
         list ($msec, $sec) = explode(" ", microtime());
         return ((float) $msec + (float) $sec) * 1000;

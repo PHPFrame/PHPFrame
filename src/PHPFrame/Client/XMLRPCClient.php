@@ -31,7 +31,6 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     /**
      * Check if this is the correct helper for the client being used
      * 
-     * @static
      * @return PHPFrame_Client|boolean Object instance of this class if correct 
      *                                 helper for client or FALSE otherwise.
      * @since  1.0
@@ -74,9 +73,11 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     }
     
     /**    
-     * Populate the Unified Request array
+     * Populate the Request object.
      * 
-     * @return array  Unified Request Array
+     * @param PHPFrame_Request $request Reference to the request object.
+     * 
+     * @return void
      * @since  1.0
      */
     public function populateRequest(PHPFrame_Request $request) 
@@ -145,7 +146,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     /**
      * Handle controller redirection
      * 
-     * @param string $url
+     * @param string $url The URL we want to redirect to.
      * 
      * @return void
      * @since  1.0

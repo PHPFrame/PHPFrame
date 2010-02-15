@@ -37,7 +37,7 @@ class PHPFrame_Informer extends PHPFrame_Observer
     /**
      * Constructor
      * 
-     * @param PHPFrame_Mailer $mailer
+     * @param PHPFrame_Mailer $mailer     Reference to a mailer object.
      * @param array           $recipients An array containing email addresses 
      *                                    of the recipients of this informer.
      * 

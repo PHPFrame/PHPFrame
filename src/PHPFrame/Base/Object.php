@@ -39,7 +39,7 @@ class PHPFrame_Object
      * The __get() magic method is automatically invoked when an undefined 
      * property is accessed.
      * 
-     * @param string $prop_name
+     * @param string $prop_name The property name.
      * 
      * @return void
      * @throws LogicException
@@ -56,8 +56,8 @@ class PHPFrame_Object
      * The __set() magic method is automatically invoked when an undefined 
      * property is set.
      * 
-     * @param string $prop_name
-     * @param mixed  $prop_value
+     * @param string $prop_name  The property name.
+     * @param mixed  $prop_value The property value.
      * 
      * @return void
      * @throws LogicException
@@ -114,10 +114,8 @@ class PHPFrame_Object
                 throw new LogicException($msg);
             }
             
-            if (
-                in_array($matches[1], $this->_getScalarTypes()) 
-                &&
-                !call_user_func("is_".$matches[1], $args[$i])
+            if (in_array($matches[1], $this->_getScalarTypes()) 
+                && !call_user_func("is_".$matches[1], $args[$i])
             ) {
                 $msg  = "Argument '".$param->getName()."' in ".$class."::";
                 $msg .= $function."() must be of type '".$matches[1]."' and ";
@@ -133,7 +131,7 @@ class PHPFrame_Object
      * Check whether a given value is of the type specified in docblock 
      * comment.
      * 
-     * @param mixed $value
+     * @param mixed $value The value for which we want to enforce return type.
      * 
      * @return void
      * @throws LogicException|RuntimeException

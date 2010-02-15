@@ -35,10 +35,9 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
     /**
      * Constructor
      * 
-     * @param string $file_name
+     * @param string $file_name Absolute path to the log file.
      * @param int    $log_level [Optional] If log level is omitted all updates
-     *                                     issued by observed subjects will be
-     *                                     written.
+     *                          issued by observed subjects will be written.
      * 
      * @return void
      * @since  1.0
@@ -93,7 +92,10 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
     }
     
     /**
-     * Handle updated issued by observed subjects
+     * Handle updated issued by observed subjects.
+     * 
+     * PHPFrame_Subject $subject Reference to observable object issuing the 
+     *                           updates (observer pattern).
      * 
      * @return void
      * @since  1.0

@@ -200,6 +200,17 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
     
     /**
+     * Get reference to application's mailer object.
+     * 
+     * @return PHPFrame_Mailer
+     * @since  1.0
+     */
+    protected function mailer()
+    {
+        return $this->app()->getMailer();
+    }
+    
+    /**
      * Get reference to application's session object.
      * 
      * @return PHPFrame_SessionRegistry

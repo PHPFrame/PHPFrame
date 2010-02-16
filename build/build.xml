@@ -13,14 +13,6 @@
         </exec>
     </target>
     
-    <!--
-    <target name="checkout">
-        <exec executable="git" dir="${basedir}">
-            <arg line="pull" />
-        </exec>
-    </target>
-    -->
-    
     <target name="phpcs">
         <exec executable="phpcs"
               dir="${basedir}/src"

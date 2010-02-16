@@ -46,8 +46,7 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
         $path = substr($script_name, 0, (strrpos($script_name, '/')+1));
         
         // If script name doesnt appear in the request URI we need to rewrite
-        if (
-            strpos($request_uri, $script_name) === false
+        if (strpos($request_uri, $script_name) === false
             && $request_uri != $path
             && $request_uri != $path."index.php"
         ) {
@@ -84,7 +83,8 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
                 $_SERVER['QUERY_STRING'] = $rewritten_query_string;
                 
                 // Update request uri
-                $_SERVER['REQUEST_URI'] = $path."index.php?".$_SERVER['QUERY_STRING'];
+                $_SERVER['REQUEST_URI']  = $path."index.php?";
+                $_SERVER['REQUEST_URI'] .= $_SERVER['QUERY_STRING'];
                 
             }
         }
@@ -128,6 +128,13 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
         $this->app()->getResponse()->getDocument()->setBody($body);
     }
     
+    /**
+     * Rewrite a given URL.
+     * 
+     * @param string $url   The URL to rewrite.
+     * @param bool   $xhtml [Optional] Default value is TRUE.
+     * @return unknown_type
+     */
     public static function rewriteURL($url, $xhtml=true)
     {
         $uri = new PHPFrame_URI(self::$_app->getConfig()->get("base_url"));
@@ -145,11 +152,15 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
         
         
         // If there are no query parameters we don't need to rewrite anything
-        if (count($query_array) == 0) return $url;
+        if (count($query_array) == 0) {
+            return $url;
+        }
         
         $rewritten_url = "";
         
-        if (isset($query_array['controller']) && !empty($query_array['controller'])) {
+        if (isset($query_array['controller']) 
+            && !empty($query_array['controller'])
+        ) {
             $rewritten_url .= $query_array['controller'];
             unset($query_array['controller']);
         }
@@ -163,7 +174,9 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
             $rewritten_url .= "?";
             $i=0;
             foreach ($query_array as $key=>$value) {
-                if ($i>0) $rewritten_url .= $xhtml ? "&amp;" : "&"; 
+                if ($i>0) {
+                    $rewritten_url .= $xhtml ? "&amp;" : "&"; 
+                }
                 $rewritten_url .= $key."=".urlencode($value);
                 $i++;
             }

@@ -51,7 +51,7 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
     /**
      * Constructor
      * 
-     * @param string $cache_file
+     * @param string $cache_file Absolute path to cache file.
      * 
      * @return void
      * @since  1.0
@@ -105,8 +105,8 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
     /**
      * Get an application registry variable
      * 
-     * @param string $key
-     * @param mixed  $default_value
+     * @param string $key           The registry key we want to get.
+     * @param mixed  $default_value [Optional]
      * 
      * @return mixed
      * @since  1.0
@@ -134,8 +134,8 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
     /**
      * Set an application registry variable
      * 
-     * @param string $key
-     * @param mixed  $value
+     * @param string $key   The registry key where we want to store the value.
+     * @param mixed  $value The value value to store in the registry.
      * 
      * @return void
      * @since  1.0

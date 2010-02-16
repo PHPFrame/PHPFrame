@@ -41,7 +41,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Constructor
      * 
-     * @param array $options
+     * @param array $options [Optional]
      * 
      * @return void
      * @since  1.0

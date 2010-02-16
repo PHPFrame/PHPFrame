@@ -46,6 +46,12 @@ abstract class PHPFrame_ViewHelper
         $this->_app = $app;
     }
     
+    /**
+     * Get reference to application object
+     * 
+     * @return PHPFrame_Application
+     * @since  1.0
+     */
     public function app()
     {
         return $this->_app;

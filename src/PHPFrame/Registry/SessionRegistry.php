@@ -147,11 +147,14 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
             && isset($_SERVER["HTTP_X_API_SIGNATURE"])
             && !($this->_data['client'] instanceof PHPFrame_XMLRPCClient)
         ) {
-            // If we are dealing with an api request that already has an existing session
-            // but the client object is not set to XMLRPC we instantiate a new client object
-            // replace it in the session, store the old one in another var as well as the 
-            // user object so that we can put them back in place when the next non-api
-            // request is received
+            /*
+             * If we are dealing with an api request that already has an 
+             * existing session but the client object is not set to XMLRPC we 
+             * instantiate a new client object replace it in the session, store 
+             * the old one in another var as well as the  user object so that 
+             * we can put them back in place when the next non-api request is 
+             * received
+             */
             $this->_data['overriden_client'] = $this->_data['client'];
             $this->_data['overriden_user']   = $this->_data['user'];
             $this->_data['client']           = new PHPFrame_XMLRPCClient();
@@ -162,8 +165,9 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
             && isset($this->_data['overriden_client']) 
             && $this->_data['overriden_client'] instanceof PHPFrame_Client
         ) {
-            // If we already have a session with an xmlrpc client object but no api
-            // headers are included in request we then revert the client and user objects
+            // If we already have a session with an xmlrpc client object but no 
+            // api headers are included in request we then revert the client 
+            // and user objects
             $this->_data['client'] = $this->_data['overriden_client'];
             $this->_data['user']   = $this->_data['overriden_user'];
             unset($this->_data['overriden_client']);
@@ -186,6 +190,12 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         return self::$_instance;
     }
     
+    /**
+     * Implementation of the IteratorAggregate interface.
+     * 
+     * @return ArrayIterator
+     * @since  1.0
+     */
     public function getIterator()
     {
         return new ArrayIterator($this->_data);
@@ -500,22 +510,21 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Create a token-string
-     *
-     *
+     * 
      * @param int $length Lenght of string.
      * 
-     * @return string  Generated token.
+     * @return string Generated token.
      * @since  1.0
      */
     private function _createToken($length = 32)
     {
         static $chars = '0123456789abcdef';
 
-        $max   = strlen( $chars ) - 1;
+        $max   = strlen($chars) - 1;
         $token = '';
         $name  = session_name();
 
-        for($i=0; $i<$length; ++$i) {
+        for ($i=0; $i<$length; ++$i) {
             $token .= $chars[ (rand(0, $max)) ];
         }
 

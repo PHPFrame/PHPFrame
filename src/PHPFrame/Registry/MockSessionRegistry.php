@@ -26,14 +26,19 @@
  */
 class PHPFrame_MockSessionRegistry extends PHPFrame_SessionRegistry
 {
-        /**
+    /**
      * Instance of itself in order to implement the singleton pattern
      *
      * @var object of type PHPFrame_SessionRegistry
      */
     private static $_instance = null;
 
-    
+    /**
+     * Constructor.
+     * 
+     * @return void
+     * @since  1.0
+     */
     protected function __construct()
     {
         // Store session id in session array

@@ -9,15 +9,15 @@
     
     <!-- Package info  -->
     <property name="channel" value="pear.e-noise.com" />
-    <property name="summary" value="PHPFrame is an object oriented MVC framework for PHP" />
-    <property name="description" value="PHPFrame is a minimal and object oriented PHP framework for quickly developing, powerful, flexible, robust and extendible web apps." />
+    <property name="summary" value="PHPFrame MVC Framework" />
+    <property name="description" value="PHPFrame is a minimal and object oriented PHP MVC framework." />
     
     <!-- Release info -->
     <property name="api.version" value="1.0" />
     <property name="api.stability" value="alpha" />
     <property name="release.version" value="1.0.0" />
     <property name="release.stability" value="alpha" />
-    <property name="notes" value="No notes for now..." />
+    <property name="notes" value="This is the first alpha release aimed at developers." />
     
     <!-- Lead/Author -->
     <property name="lead.name" value="Lupo Montero" />

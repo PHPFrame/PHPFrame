@@ -258,7 +258,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     /**
      * This generates padding with specified depth
      * 
-     * @param int $depth
+     * @param int $depth The padding depth.
      * 
      * @return string
      * @since  1.0

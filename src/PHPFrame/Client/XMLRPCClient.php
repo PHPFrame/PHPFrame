@@ -46,11 +46,9 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
             if ($domDocument->loadXML($HTTP_RAW_POST_DATA)) {
                 $domXPath = new DOMXPath($domDocument);
                 //check for valid RPC
-                //query always returns DOMNodelist,
-                //item(0) returns DOMNode or null,
-                //DOMNode has $nodeValue and null->nodeValue = null
-                //TODO: xmlrpc detect perhaps check for empty methodName string?
-                if ($domXPath->query("//methodCall/methodName")->item(0)->nodeValue != null) {
+                $query       = "//methodCall/methodName";
+                $method_node = $domXPath->query($query)->item(0);
+                if ($method_node->nodeValue != null) {
                     return new self;
                 }
             } else {
@@ -211,8 +209,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         $query = '//methodCall/params/param/value';
         $query_result = $domXPath->query($query);
         //look at the first struct element members to identify parameter values
-        if (
-            $query_result instanceof DOMNodeList 
+        if ($query_result instanceof DOMNodeList 
             && $query_result->length!=0 
             && $query_result->item(0)->hasChildNodes()
         ) {
@@ -264,7 +261,8 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      *         value pairs is returned, if the node is an array
      * @since  1.0
      */
-    private function _parseXMLRPCRecurse($domXPath, $node) {
+    private function _parseXMLRPCRecurse($domXPath, $node)
+    {
         if (!(($node instanceof DOMNode) && $node->nodeName=='value')) {
             $msg  = "Invalid parameter type, nodes must be of type DOMNode ";
             $msg .= "and must be a value node!";
@@ -341,8 +339,10 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         }
         
         if (!$reflectionClass->hasMethod($action)) {
+            $msg  = 'No such action: '.$action.' exists in controller: ';
+            $msg .= $controller;
             throw new PHPFrame_XMLRPCException(
-                'No such action: '.$action.' exists in controller: '.$controller, 
+                $msg, 
                 PHPFrame_XMLRPCException::INVALID_ACTION
             );
             return;
@@ -350,8 +350,10 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         
         $actionMethod = $reflectionClass->getMethod($action);
         if (!$actionMethod->isPublic()) {
+            $msg  = 'Action: '.$action.' is inaccessible in controller: ';
+            $msg .= $controller;
             throw new PHPFrame_XMLRPCException(
-                'Action: '.$action.' is inaccessible in controller: '.$controller, 
+                $msg, 
                 PHPFrame_XMLRPCException::INVALID_ACTION
             );
             return;
@@ -361,14 +363,20 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         $numParams = count($reflectionParameters);
         $minReqParams = $actionMethod->getNumberOfRequiredParameters();
         if (count($params) > $numParams) {
+            $msg  = 'Too many parameters for action: '.$action;
+            $msg .= ' in controller: '.$controller;
             throw new PHPFrame_XMLRPCException(
-                'Too many parameters for action: '.$action.' in controller: '.$controller, 
+                $msg, 
                 PHPFrame_XMLRPCException::INVALID_NUMBER_PARAMETERS
             );
+            
             return;
+            
         } elseif (count($params) < $minReqParams) {
+            $msg  = 'Too few parameters for action: '.$action;
+            $msg .= ' in controller: '.$controller;
             throw new PHPFrame_XMLRPCException(
-                'Too few parameters for action: '.$action.' in controller: '.$controller,
+                $msg,
                 PHPFrame_XMLRPCException::INVALID_NUMBER_PARAMETERS
             );
         }
@@ -382,16 +390,18 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
                 if ($reflectionParam->isArray() 
                     && !is_array($params[$paramPosition])
                 ) {
-                    $msg  = 'Parameter type mis-match for parameter '.$paramPosition;
-                    $msg .= ', expected an array, got primitive type';
+                    $msg  = 'Parameter type mis-match for parameter ';
+                    $msg .= $paramPosition.', expected an array, got ';
+                    $msg .= 'primitive type';
                     throw new PHPFrame_XMLRPCException(
                         $msg, 
                         PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE
                     );
                     return;
                 } elseif (!empty($class) && !is_array($params[$paramPosition])) {
-                    $msg  = 'Parameter type mis-match for parameter '.$paramPosition;
-                    $msg .= ', expected a struct, got primitive type';
+                    $msg  = 'Parameter type mis-match for parameter ';
+                    $msg .= $paramPosition.', expected a struct, got ';
+                    $msg .= 'primitive type';
                     throw new PHPFrame_XMLRPCException(
                         $msg, 
                         PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE
@@ -402,15 +412,17 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
                     && empty($class) 
                     && is_array($params[$paramPosition])
                 ) {
-                    $msg  = 'Parameter type mis-match for parameter '.$paramPosition;
-                    $msg .= ', expected a primitive, got a struct/array';
+                    $msg  = 'Parameter type mis-match for parameter ';
+                    $msg .= $paramPosition.', expected a primitive, got a ';
+                    $msg .= "struct/array";
                     throw new PHPFrame_XMLRPCException(
                         $msg, 
                         PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE
                     );
                     return;
                 } else {
-                    $paramMap[$reflectionParam->getName()] = $params[$paramPosition];
+                    $param_name = $reflectionParam->getName();
+                    $paramMap[$param_name] = $params[$paramPosition];
                 }
                 $paramIndex++;
             } else {
@@ -485,8 +497,9 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
             throw new InvalidArgumentException($msg);
         }
         
-        $nodeName = $node->nodeName;
-        $time_reg = '/(^[0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2}$)/';
+        $nodeName  = $node->nodeName;
+        $time_reg  = '/(^[0-9]{4})([0-9]{2})([0-9]{2})T';
+        $time_reg .='([0-9]{2}):([0-9]{2}):([0-9]{2}$)/';
         switch ($nodeName){
         case 'i4':
         case 'int':

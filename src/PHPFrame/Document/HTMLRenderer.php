@@ -26,11 +26,11 @@
  */
 class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
 {
-	/**
-	 * Full path to directory with HTML view files.
-	 * 
-	 * @var string
-	 */
+    /**
+     * Full path to directory with HTML view files.
+     * 
+     * @var string
+     */
     private $_views_path;
     
     /**
@@ -97,7 +97,7 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
             // clean output buffer
             ob_end_clean();
         } else {
-        	$msg = "Layout template file ".$tmpl_path." not found.";
+            $msg = "Layout template file ".$tmpl_path." not found.";
             throw new RuntimeException($msg);
         }
         
@@ -249,7 +249,8 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
         $html .= '<div class="subset_limit">';
         $html .= '<form name="limitform" id="limitform" method="post">';
         $html .= 'Display Num: ';
-        $html .= '<select name="limit" onchange="document.forms[\'limitform\'].submit();">';
+        $html .= '<select name="limit" ';
+        $html .= 'onchange="document.forms[\'limitform\'].submit();">';
         for ($i=25; $i<=100; $i+=25) {
             $html .= '<option value="'.$i.'"';
             if ($collection->getLimit() == $i) {
@@ -282,12 +283,18 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
                     }
                   </script>';
         
-        $html .= '<form action="index.php" id="listsearchform" name="listsearchform" method="post">';
-        $html .= '<input type="text" name="search" id="search" value="'.PHPFrame::Request()->getParam('search').'">';
-        $html .= '<button type="button" class="button" onclick="submit_filter(false);">Search</button>';
-        $html .= '<button type="button" class="button" onclick="submit_filter(true);">Reset</button>';
-        $html .= '<input type="hidden" name="component" value="'.PHPFrame::Request()->getControllerName().'" />';
-        $html .= '<input type="hidden" name="action" value="'.PHPFrame::Request()->getAction().'" />';
+        $html .= '<form action="index.php" id="listsearchform" ';
+        $html .= 'name="listsearchform" method="post">';
+        $html .= '<input type="text" name="search" id="search" value="';
+        $html .= PHPFrame::Request()->getParam('search').'">';
+        $html .= '<button type="button" class="button" ';
+        $html .= 'onclick="submit_filter(false);">Search</button>';
+        $html .= '<button type="button" class="button" ';
+        $html .= 'onclick="submit_filter(true);">Reset</button>';
+        $html .= '<input type="hidden" name="component" value="';
+        $html .= PHPFrame::Request()->getControllerName().'" />';
+        $html .= '<input type="hidden" name="action" value="';
+        $html .= PHPFrame::Request()->getAction().'" />';
         $html .= '</form>';
         
         $html .= '</div>';

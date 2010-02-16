@@ -26,7 +26,7 @@
  */
 class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
 {
-	/**
+    /**
      * Render a given value.
      * 
      * @param mixed $value The value we want to render.
@@ -111,8 +111,9 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     private function _makeParamPayload($param_value)
     {
         $doc = PHPFrame::Response()->getDocument();
+        $dom = $doc->getDom(); 
         
-        $parent_node = $doc->getDom()->getElementsByTagName("methodResponse")->item(0);
+        $parent_node = $dom->getElementsByTagName("methodResponse")->item(0);
         $parent_node = $doc->addNode($parent_node, 'params');
         $parent_node = $doc->addNode($parent_node, 'param');
         
@@ -210,10 +211,16 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
         $doc = PHPFrame::Response()->getDocument();
         
         $type = 'string';
-        if (is_int($node_value))    $type = 'int';
-        if (is_bool($node_value))   $type = 'boolean';
-        if (is_float($node_value))  $type = 'double';
-        if (is_double($node_value)) $type = 'double';
+        
+        if (is_bool($node_value)) {
+        	$type = 'boolean';
+        } elseif (is_int($node_value)) {
+            $type = 'int';
+        } elseif (is_float($node_value)) {
+        	$type = 'double';
+        } elseif (is_double($node_value)) {
+        	$type = 'double';
+        }
         
         $parent_node = $doc->addNode($parent_node, $type);
         
@@ -236,7 +243,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     {
         $doc = PHPFrame::Response()->getDocument();
         
-        $parent_node = $doc->addNode($parent_node,'struct');
+        $parent_node = $doc->addNode($parent_node, 'struct');
         
         foreach ($assoc_array as $key=>$value) {
             $local_parent = $doc->addNode($parent_node, 'member');

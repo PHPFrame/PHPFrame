@@ -22,8 +22,8 @@
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
- * @since    1.0
  * @see      HTTP_Request2
+ * @since    1.0
  */
 class PHPFrame_HTTPRequest extends HTTP_Request2
 {
@@ -47,6 +47,7 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
     private $_cache_dir = null;
     
     /**
+     * Constructor.
      * 
      * @param string|Net_Url2 $url    [Optional]
      * @param string          $method [Optional]
@@ -59,8 +60,7 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
         $url=null, 
         $method=HTTP_Request2::METHOD_GET, 
         array $config=array()
-    )
-    {
+    ) {
         parent::__construct($url, $method, $config);
     }
     

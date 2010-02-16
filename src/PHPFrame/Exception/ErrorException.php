@@ -46,7 +46,8 @@ class PHPFrame_ErrorException extends Exception
      * 
      * @param string $message The error message.
      * @param int    $code    The error code.
-     * @param string $file    A string with the path to the file where the error occurred.
+     * @param string $file    A string with the path to the file where the 
+     *                        error occurred.
      * @param int    $line    The line number where the error occurred.
      * @param array  $context The context array.
      * 

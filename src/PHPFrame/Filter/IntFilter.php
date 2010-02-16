@@ -144,17 +144,16 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
             return false;
         }
         
-        if (
-            is_bool($value) 
+        if (is_bool($value) 
             || is_float($value) 
             || is_array($value) 
             || is_object($value) 
             || is_resource($value)
         ) {
             if (is_object($value) || is_resource($value)) {
-               $value_as_string = gettype($value);
+                $value_as_string = gettype($value);
             } else {
-               $value_as_string = (string) $value;
+                $value_as_string = (string) $value;
             }
             
             $msg  = "Argument \$value in ".get_class($this)."::process() can ";

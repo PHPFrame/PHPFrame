@@ -190,7 +190,8 @@ abstract class PHPFrame_Filter
     /**
      * Fail filtering
      * 
-     * @param string $str The failure message
+     * @param string $str             The failure message.
+     * @param string $exception_class [Optional]
      * 
      * @return void
      * @since  1.0

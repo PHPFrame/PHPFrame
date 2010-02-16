@@ -123,9 +123,9 @@ class PHPFrame_FloatFilter extends PHPFrame_Filter
             || is_resource($value)
         ) {
             if (is_object($value) || is_resource($value)) {
-               $value_as_string = gettype($value);
+                $value_as_string = gettype($value);
             } else {
-               $value_as_string = (string) $value;
+                $value_as_string = (string) $value;
             }
             
             $msg  = "Argument \$value in ".get_class($this)."::process() can ";

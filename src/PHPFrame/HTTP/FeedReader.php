@@ -190,43 +190,29 @@ class PHPFrame_FeedReader
         
         $link_nodes = $this->_dom->getElementsByTagName("link");
         
-        $this->_link_self = $link_nodes->item(0)
-                                       ->attributes
-                                       ->getNamedItem("href")
-                                       ->value;
+        $attr = $link_nodes->item(0)->attributes;
+        $this->_link_self = $href->getNamedItem("href")->value;
                                        
-        $this->_link_alternate = $link_nodes->item(1)
-                                            ->attributes
-                                            ->getNamedItem("href")
-                                            ->value;
+        $this->_link_alternate = $attr->getNamedItem("href")->value;
         
         $entries_nodes = $this->_dom->getElementsByTagName("entry");
         
         foreach ($entries_nodes as $entries_node) {
             $array = array();
             
-            $array["updated"] = $entries_node->getElementsByTagName("updated")
-                                             ->item(0)->nodeValue;
-            $array["id"]      = $entries_node->getElementsByTagName("id")
-                                             ->item(0)->nodeValue;
+            $updated = $entries_node->getElementsByTagName("updated")->item(0);
+            $id      = $entries_node->getElementsByTagName("id")->item(0);
+            $link    = $entries_node->getElementsByTagName("link")->item(0);
+            $title   = $entries_node->getElementsByTagName("title")->item(0);
+            $author  = $entries_node->getElementsByTagName("author")->item(0);
+            $content = $entries_node->getElementsByTagName("content")->item(0);
             
-            $array["link"]    = $entries_node->getElementsByTagName("link")
-                                             ->item(0)
-                                             ->attributes
-                                             ->getNamedItem("href")
-                                             ->value;
-            
-            $array["title"]   = $entries_node->getElementsByTagName("title")
-                                             ->item(0)->nodeValue;
-            
-            $array["author"]  = $entries_node->getElementsByTagName("author")
-                                             ->item(0)
-                                             ->nodeValue;
-            
-            $array["author"] = trim($array["author"]);
-            
-            $array["content"] = $entries_node->getElementsByTagName("content")
-                                             ->item(0)->nodeValue;
+            $array["updated"] = $updated->nodeValue;
+            $array["id"]      = $id->nodeValue;
+            $array["link"]    = $link->attributes->getNamedItem("href")->value;
+            $array["title"]   = $title->nodeValue;
+            $array["author"]  = trim($author->nodeValue);
+            $array["content"] = $content->nodeValue;
             
             $this->_entries[] = $array;
         }

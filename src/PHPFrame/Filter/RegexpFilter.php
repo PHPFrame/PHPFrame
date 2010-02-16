@@ -75,13 +75,18 @@ class PHPFrame_RegexpFilter extends PHPFrame_StringFilter
         // Process with parent first
         $parent_value = parent::process($value);
         if ($parent_value === false) {
-           return false;
+            return false;
         }
         
         // Delegate to filter_var function
         $options        = array("regexp"=>$this->getOption("regexp"));
         $options        = array("options"=>$options);
-        $filtered_value = filter_var($parent_value, FILTER_VALIDATE_REGEXP, $options);
+        $filtered_value = filter_var(
+            $parent_value, 
+            FILTER_VALIDATE_REGEXP, 
+            $options
+        );
+        
         if ($filtered_value === false) {
             $msg  = "Failed to validate value '".gettype($value)."(".$value;
             $msg .= ")' with filter ".get_class($this)." using reguar ";

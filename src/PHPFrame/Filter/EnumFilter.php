@@ -41,18 +41,17 @@ class PHPFrame_EnumFilter extends PHPFrame_Filter
     {
         $enums = $this->getOption('enums');
         $found = false;
-        foreach ($enums as $enum){
-            if ($value == $enum){
+        foreach ($enums as $enum) {
+            if ($value == $enum) {
                 $found = true;
             }
         }
-        if (!$found){
+        if (!$found) {
             $err_msg = "Argument \$value in ".get_class($this)."::process() is 
             not one of the stored enums";
             $this->fail($err_msg, 'InvalidArgumentException');
             return false;
-        }
-        else {
+        } else {
             return $value;
         }
     }

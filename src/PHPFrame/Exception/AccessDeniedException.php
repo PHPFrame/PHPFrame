@@ -25,6 +25,14 @@
  */
 class PHPFrame_AccessDeniedException extends RuntimeException
 {
+    /**
+     * Constructor.
+     * 
+     * @param string $msg [Optional] Error message.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct($msg="")
     {
         parent::__construct($msg, 401);

@@ -25,5 +25,13 @@
  */
 interface PHPFrame_IRenderer
 {
+	/**
+     * Render a given value.
+     * 
+     * @param mixed $value The value we want to render.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function render($value);
 }

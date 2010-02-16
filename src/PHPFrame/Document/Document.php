@@ -61,6 +61,9 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Constructor
      * 
+     * @param string $mime    The document's MIME type.
+     * @param string $charset [Optional] The document's character set. Default 
+     *                        value is 'UTF-8'.
      * @return void
      * @since  1.0
      */
@@ -172,7 +175,7 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Set the document body
      * 
-     * @param string $str
+     * @param string $str String containing the document body.
      * 
      * @return void
      * @since  1.0
@@ -184,6 +187,8 @@ abstract class PHPFrame_Document implements IteratorAggregate
     
     /**
      * Append string to the document body
+     * 
+     * @param string $str String containing the document body.
      * 
      * @return void
      * @since  1.0

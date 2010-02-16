@@ -177,7 +177,8 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     /**
      * This method is used to parse an XML remote procedure call
      * 
-     * @param string $xml A string containing the XML call.
+     * @param string           $xml     A string containing the XML call.
+     * @param PHPFrame_Request $request Reference to the request object.
      * 
      * @return array A nice asociative array with all the data.
      * @since  1.0
@@ -216,7 +217,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
             && $query_result->item(0)->hasChildNodes()
         ) {
             $parameters = array();
-            foreach($query_result as $parameter) {
+            foreach ($query_result as $parameter) {
                 $parameters[] = $this->_parseXMLRPCRecurse($domXPath, $parameter);
             }
             try {
@@ -263,19 +264,19 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      *         value pairs is returned, if the node is an array
      * @since  1.0
      */
-     private function _parseXMLRPCRecurse($domXPath, $node) {
-         if (!(($node instanceof DOMNode) && $node->nodeName=='value')) {
-             $msg  = "Invalid parameter type, nodes must be of type DOMNode ";
-             $msg .= "and must be a value node!";
-             throw new InvalidArgumentException($msg);
-         }
+    private function _parseXMLRPCRecurse($domXPath, $node) {
+        if (!(($node instanceof DOMNode) && $node->nodeName=='value')) {
+            $msg  = "Invalid parameter type, nodes must be of type DOMNode ";
+            $msg .= "and must be a value node!";
+            throw new InvalidArgumentException($msg);
+        }
          
         //check if current value is a struct, array or scalar type
         if ($node->firstChild->nodeName=='struct') {
             $newStruct = array();
             $query = 'struct/member';
             $members = $domXPath->query($query, $node);
-            foreach ($members as $member){
+            foreach ($members as $member) {
                 $query = 'name';
                 $key   = $domXPath->query($query, $member)->item(0)->nodeValue;
                 $query = 'value';
@@ -286,18 +287,21 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
                 
                 $newStruct[$key] = $value;
             }
+            
             return $newStruct;
+            
         } else if ($node->firstChild->nodeName=='array') {
             $newArray = array();
-            $query  = 'array/data/value';
-            $values = $domXPath->query($query, $node);
+            $query    = 'array/data/value';
+            $values   = $domXPath->query($query, $node);
             
             foreach ($values as $value) {
                 $newArray[] = $this->_parseXMLRPCRecurse($domXPath, $value);
             }
             
             return $newArray;
-        } else{//value node must a scalar type
+            
+        } else {//value node must a scalar type
             $leafValue = $node->firstChild;
             return $this->_nodeScalarValue($leafValue);
         }
@@ -326,8 +330,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         $controller, 
         $action, 
         $params
-    )
-    {
+    ) {
         $reflectionClass = $this->_getControllerClass($controller);
         if (!$reflectionClass) {
             throw new PHPFrame_XMLRPCException(
@@ -376,8 +379,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
             if ($paramIndex<count($params)) {
                 $class = $reflectionParam->getClass();
                 $paramPosition = $reflectionParam->getPosition();
-                if (
-                    $reflectionParam->isArray() 
+                if ($reflectionParam->isArray() 
                     && !is_array($params[$paramPosition])
                 ) {
                     $msg  = 'Parameter type mis-match for parameter '.$paramPosition;
@@ -424,7 +426,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * This returns the ReflectionClass object if there is an instantiable 
      * controller class for the specified controller.
      * 
-     * @param string $controller
+     * @param string $controller The controller name.
      * 
      * @return mixed ReflectionClass if a controller with this name exists, 
      *               FALSE otherwise.
@@ -438,7 +440,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         try{
             $reflectionObj = new ReflectionClass($class_name);
         } catch (Exception $e){
-            return FALSE;
+            return false;
         }
         
         // Check if class is instantiable
@@ -469,7 +471,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * The node must be one of the scalar values as specified by the 
      * xml rpc (i4, int, boolean, string, double, dateTime.iso8601, base64).
      * 
-     * @param $node DOMNode containing value to return.
+     * @param DOMNode $node DOMNode object containing value to return.
      * 
      * @return mixed int for i4, int or dateTime.iso8601 (unix timestamp) nodes, 
      *               boolean for boolean, string for string or base64 and float 
@@ -486,49 +488,49 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         $nodeName = $node->nodeName;
         $time_reg = '/(^[0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2}$)/';
         switch ($nodeName){
-            case 'i4':
-            case 'int':
-                $value = (int) $node->nodeValue;
-                break;
+        case 'i4':
+        case 'int':
+            $value = (int) $node->nodeValue;
+            break;
+            
+        case 'boolean':
+            $value = (boolean) $node->nodeValue;
+            break;
                 
-            case 'boolean':
-                $value = (boolean) $node->nodeValue;
-                break;
+        case 'string':
+        case 'base64':
+            $value = (string) $node->nodeValue;
+            break;
                 
-            case 'string':
-            case 'base64':
-                $value = (string) $node->nodeValue;
-                break;
+        case 'double':
+            $value = (float) $node->nodeValue;
+            break;
                 
-            case 'double':
-                $value = (float) $node->nodeValue;
-                break;
-                
-            case 'dateTime.iso8601':
-                $matches = array();
-                $isValidTime = preg_match($time_reg, $node->nodeValue, $matches);
-                
-                if ($isValidTime!=1) {
-                    $msg  = "Invalid dateTime format found for value ";
-                    $msg .= $node->nodeValue."!";
-                    throw new DomainException($msg);
-                } else {
-                    $value = mktime(
-                        $matches[4], 
-                        $matches[5], 
-                        $matches[6], 
-                        $matches[2], 
-                        $matches[3], 
-                        $matches[1]
-                    );
-                }
-                
-                break;
-                
-            default:
-                $value = "";
+        case 'dateTime.iso8601':
+            $matches = array();
+            $isValidTime = preg_match($time_reg, $node->nodeValue, $matches);
+            
+            if ($isValidTime!=1) {
+                $msg  = "Invalid dateTime format found for value ";
+                $msg .= $node->nodeValue."!";
+                throw new DomainException($msg);
+            } else {
+                $value = mktime(
+                    $matches[4], 
+                    $matches[5], 
+                    $matches[6], 
+                    $matches[2], 
+                    $matches[3], 
+                    $matches[1]
+                );
+            }
+            
+            break;
+            
+        default:
+            $value = "";
         }
-        
+    
         return $value;
     }
     

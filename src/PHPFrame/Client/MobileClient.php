@@ -42,7 +42,7 @@ class PHPFrame_MobileClient extends PHPFrame_Client
         }
         
         if (isset($_SERVER["HTTP_ACCEPT"]) 
-            && preg_match("/wap\.|\.wap/i",$_SERVER["HTTP_ACCEPT"])
+            && preg_match("/wap\.|\.wap/i", $_SERVER["HTTP_ACCEPT"])
         ) { 
             return new self;
         }

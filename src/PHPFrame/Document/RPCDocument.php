@@ -27,10 +27,14 @@
 class PHPFrame_RPCDocument extends PHPFrame_XMLDocument
 {
     /**
-     * Constructor
+     * Constructor.
+     * 
+     * @param string $mime    [Optional] The document's MIME type. The default 
+     *                        value is 'text/xml'.
+     * @param string $charset [Optional] The document's character set. Default 
+     *                        value is 'UTF-8'.
      * 
      * @return void
-     * @uses   DOMImplementation, PHPFrame_URI, PHPFrame_Pathway
      * @since  1.0 
      */
     public function __construct($mime="text/xml", $charset=null) 

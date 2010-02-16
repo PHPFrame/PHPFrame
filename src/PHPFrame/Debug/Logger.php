@@ -94,8 +94,8 @@ abstract class PHPFrame_Logger extends PHPFrame_Observer
     /**
      * Handle updated issued by observed subjects.
      * 
-     * PHPFrame_Subject $subject Reference to observable object issuing the 
-     *                           updates (observer pattern).
+     * @param PHPFrame_Subject $subject Reference to observable object issuing 
+     *                                  the updates (observer pattern).
      * 
      * @return void
      * @since  1.0

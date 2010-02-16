@@ -48,6 +48,11 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     /**
      * Constructor
      * 
+     * @param string $mime    [Optional] The document's MIME type. The default 
+     *                        value is 'text/xml'.
+     * @param string $charset [Optional] The document's character set. Default 
+     *                        value is 'UTF-8'.
+     *                        
      * @return void
      * @uses   DOMImplementation
      * @since  1.0 
@@ -99,6 +104,12 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
         return $this->_use_beautifier;
     }
     
+    /**
+     * Get reference to DOM object.
+     * 
+     * @return DOMDocument
+     * @since  1.0
+     */
     public function getDOM()
     {
         return $this->dom;
@@ -213,7 +224,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
         $depth        = -1;
         
         for ($i = 0; $i < count($return_array) - 1; $i++) {
-            if(strpos($return_array[$i], "\n")!==false) {
+            if (strpos($return_array[$i], "\n") !== false) {
                 $return_array[$i] = trim($return_array[$i]);
             }
                     
@@ -224,7 +235,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
                     $return_array[$i] = $this->padding($depth).$return_array[$i];
                     $depth--; 
                     $return_array[$i] = str_replace(
-                        "</",
+                        "</", 
                         "\r\n".$this->padding($depth)."</",$return_array[$i]
                     );
                 } else {

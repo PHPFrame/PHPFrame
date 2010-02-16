@@ -162,13 +162,16 @@ class PHPFrame_CLIClient extends PHPFrame_Client
             if ($result->options["infile"]) {
                 $infile = new SplFileObject($result->options["infile"]);
         
-                $request->attachFile("infile", array(
-                    "tmp_name"=>$infile->getPath(),
-                    "name"=>$infile->getFilename(),
-                    "size"=>$infile->getSize(),
-                    "type"=>$infile->getType(),
-                    "error"=>null
-                ));
+                $request->attachFile(
+                    "infile", 
+                    array(
+                        "tmp_name"=>$infile->getPath(),
+                        "name"=>$infile->getFilename(),
+                        "size"=>$infile->getSize(),
+                        "type"=>$infile->getType(),
+                        "error"=>null
+                    )
+                );
             }
             
             foreach ($result->args["params"] as $param) {

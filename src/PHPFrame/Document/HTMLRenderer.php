@@ -26,13 +26,35 @@
  */
 class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
 {
+	/**
+	 * Full path to directory with HTML view files.
+	 * 
+	 * @var string
+	 */
     private $_views_path;
     
+    /**
+     * Constructor.
+     * 
+     * @param string $views_path Full path to directory with HTML view files.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct($views_path)
     {
-        $this->_views_path = $views_path;
+        $this->_views_path = (string) $views_path;
     }
     
+    /**
+     * Render a given value.
+     * 
+     * @param mixed $value The value we want to render.
+     * 
+     * @return void
+     * @since  1.0
+     * @see    PHPFrame/Document/PHPFrame_IRenderer#render($value)
+     */
     public function render($value)
     {
         $str = $value;
@@ -69,13 +91,14 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
             }
             
             // Include template file
-            require_once $tmpl_path;
+            include_once $tmpl_path;
             // save buffer in body property
             $str = ob_get_contents();
             // clean output buffer
             ob_end_clean();
         } else {
-            throw new RuntimeException("Layout template file ".$tmpl_path." not found.");
+        	$msg = "Layout template file ".$tmpl_path." not found.";
+            throw new RuntimeException($msg);
         }
         
         return $str;
@@ -122,32 +145,48 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
         return $partial;
     }
     
+    /**
+     * Render pathway object.
+     * 
+     * @param PHPFrame_Pathway $pathway Reference to the pathway object we want 
+     *                                  to render.
+     *                                  
+     * @return string
+     * @since  1.0
+     */
     public function renderPathway(PHPFrame_Pathway $pathway)
     {
         $array = $pathway->toArray();
         
         $html = '<div class="pathway">';
+        
         for ($i=0; $i<count($array); $i++) {
             if ($i>0) {
                 $html .= ' &gt;&gt; ';
             }
             $html .= '<span class="pathway_item">';
             if (!empty($array[$i]['url']) && $i < (count($array))-1) {
-                $html .= '<a href="'.$array[$i]['url'].'">'.$array[$i]['title'].'</a>';
+                $html .= '<a href="'.$array[$i]['url'].'">';
+                $html .= $array[$i]['title'].'</a>';
             } else {
                 $html .= $array[$i]['title'];
             }
             $html .= '</span>';
         }
+        
         $html .= '</div>';
         
         return $html;
     }
     
     /**
-     * Method used to render Collections in HTML format
+     * Method used to render Collections in HTML format.
      * 
-     * @param PHPFrame_Collection $collection
+     * @param PHPFrame_Collection $collection Collection object to render.
+     * @param array               $headings   [Optional] An array with the 
+     *                                        column headings. If no specified 
+     *                                        headings we get keys from 
+     *                                        collection.
      * 
      * @return string
      * @since  1.0
@@ -257,10 +296,10 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
     }
     
     /**
-     * Render HTML pagination for collection object
+     * Render HTML pagination for collection object.
      * 
-     * @param PHPFrame_Collection $collection The collection object for
-     *                                         which to create the pagination.
+     * @param PHPFrame_Collection $collection The collection object for which 
+     *                                        to create the pagination.
      * 
      * @return string
      * @since  1.0
@@ -292,7 +331,9 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
         // Prev link
         $html .= '<li>';
         if ($collection->getCurrentPage() != 1) {
-            $html .= '<a href="'.$href.'&amp;limitstart='.(($collection->getCurrentPage()-2) * $collection->getLimit()).'">Prev</a>';
+            $html .= '<a href="'.$href.'&amp;limitstart=';
+            $html .= (($collection->getCurrentPage()-2) * $collection->getLimit());
+            $html .= '">Prev</a>';
         } else {
             $html .= 'Prev';
         }
@@ -301,7 +342,8 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
         for ($j=0; $j<$collection->getPages(); $j++) {
             $html .= '<li>';
             if ($collection->getCurrentPage() != ($j+1)) {
-                $html .= '<a href="'.$href.'&amp;limitstart='.($collection->getLimit() * $j).'">'.($j+1).'</a>';    
+                $html .= '<a href="'.$href.'&amp;limitstart=';
+                $html .= ($collection->getLimit() * $j).'">'.($j+1).'</a>';    
             } else {
                 $html .= ($j+1);
             }
@@ -310,14 +352,18 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
         // Next link
         $html .= '<li>';
         if ($collection->getCurrentPage() != $collection->getPages()) {
-            $html .= '<a href="'.$href.'&amp;limitstart='.($collection->getCurrentPage() * $collection->getLimit()).'">Next</a>';    
+            $html .= '<a href="'.$href.'&amp;limitstart=';
+            $html .= ($collection->getCurrentPage() * $collection->getLimit());
+            $html .= '">Next</a>';    
         } else {
             $html .= 'Next';
         }
         // End link
         $html .= '<li>';
         if ($collection->getCurrentPage() != $collection->getPages()) {
-            $html .= '<a href="'.$href.'&amp;limitstart='.(($collection->getPages()-1) * $collection->getLimit()).'">End</a>';    
+            $html .= '<a href="'.$href.'&amp;limitstart=';
+            $html .= (($collection->getPages()-1) * $collection->getLimit());
+            $html .= '">End</a>';    
         } else {
             $html .= 'End';
         }

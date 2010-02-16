@@ -210,7 +210,7 @@ class PHPFrame_Config implements IteratorAggregate
     /**
      * Get section data as an associative array.
      * 
-     * @param string $section_name  The name of the section we want to get.
+     * @param string $section_name The name of the section we want to get.
      * 
      * @return array
      * @since  1.0
@@ -263,8 +263,7 @@ class PHPFrame_Config implements IteratorAggregate
     {
         list($section, $key) = $this->_parseKey($str);
         
-        if (
-            !isset($this->_data[$section]) 
+        if (!isset($this->_data[$section]) 
             || !isset($this->_data[$section][$key])
         ) {
             if ($ensure) {

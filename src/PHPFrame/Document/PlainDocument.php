@@ -26,7 +26,12 @@
 class PHPFrame_PlainDocument extends PHPFrame_Document
 {
     /**
-     * Constructor
+     * Constructor.
+     * 
+     * @param string $mime    [Optional] The document's MIME type. The default 
+     *                        value is 'text/plain'.
+     * @param string $charset [Optional] The document's character set. Default 
+     *                        value is 'UTF-8'.
      * 
      * @return void
      * @since  1.0 

@@ -114,7 +114,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     {
         // If "body only" mode we simply return the body
         if ($this->_body_only) {
-           return $this->getBody();
+            return $this->getBody();
         }
         
         // Add title tag in head node 
@@ -131,7 +131,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
             }
             // Add http_equiv attribute if any
             if (!is_null($meta_tag["http_equiv"])) {
-                $this->addNodeAttr($meta_node, "http-equiv", $meta_tag["http_equiv"]);
+                $this->addNodeAttr(
+                    $meta_node, 
+                    "http-equiv", 
+                    $meta_tag["http_equiv"]
+                );
             }
             
             // Add content attribute
@@ -279,7 +283,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         
         // Start buffering
         ob_start();
-        require_once $theme_path;
+        include_once $theme_path;
         // save buffer in body
         $str = ob_get_contents();
         // clean output buffer
@@ -305,7 +309,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Make path absolute
      * 
-     * @param string $path The path we want to make absolute.
+     * @param string &$path The path we want to make absolute.
      * 
      * @return void
      * @since  1.0

@@ -34,7 +34,7 @@
         <format property="date" pattern="yyyy-MM-dd" locale="en,UK"/>
     </tstamp>
     <tstamp>
-        <format property="time" pattern="H:m:s" locale="en,UK"/>
+        <format property="time" pattern="HH:mm:ss" locale="en,UK"/>
     </tstamp>
     
     <!-- Prepare directories before we start -->

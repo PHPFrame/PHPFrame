@@ -28,8 +28,8 @@ class PHPFrame_UserHelper
     /**
      * Format full name to standard
      *
-     * @param string $firstname
-     * @param string $lastname
+     * @param string $firstname The user's first name.
+     * @param string $lastname  The user's last name.
      * 
      * @return string full name in format: [Uppercase first initial]"." [Surname]
      * @since  1.0
@@ -46,8 +46,8 @@ class PHPFrame_UserHelper
      * 
      * @param int $id The ID to be translated
      * 
-     * @return string If no id is passed returns false, otherwise returns the username 
-     *                as a string
+     * @return string If no id is passed returns false, otherwise returns the 
+     *                username as a string
      * @since  1.0
      */
     public static function id2name($id=0) 
@@ -60,7 +60,11 @@ class PHPFrame_UserHelper
                 return false;
             }
             
-            return PHPFrame_UserHelper::fullname_format($row->firstname, $row->lastname);
+            return PHPFrame_UserHelper::fullname_format(
+                $row->firstname, 
+                $row->lastname
+            );
+            
         } else {
             return false;
         }
@@ -160,11 +164,15 @@ class PHPFrame_UserHelper
      * @return string A string with the HTML select
      * @since  1.0
      */
-    public static function select($selected=0, $attribs='', $fieldname='userid') 
+    public static function select($selected=0, $attribs='', $fieldname='userid')
     {
         // assemble users to the array
         $options   = array();
-        $options[] = PHPFrame_HTMLUI::_('select.option', '0', PHPFrame_String::html( '-- Select a User --' ) );
+        $options[] = PHPFrame_HTMLUI::_(
+            'select.option', 
+            '0', 
+            PHPFrame_String::html('-- Select a User --')
+        );
         
         // get users from #__users
         $db = PHPFrame::DB();
@@ -180,11 +188,24 @@ class PHPFrame_UserHelper
           return false;
         } else {
             foreach ($rows as $row) {
-                $options[] = PHPFrame_HTMLUI::_('select.option', $row->id, PHPFrame_UserHelper::fullname_format($row->firstname, $row->lastname));
+                $options[] = PHPFrame_HTMLUI::_(
+                    'select.option', 
+                    $row->id, 
+                    PHPFrame_UserHelper::fullname_format(
+                        $row->firstname, 
+                        $row->lastname
+                    )
+                );
             }
         }
         
-        $output = PHPFrame_HTMLUI::_('select.genericlist', $options, $fieldname, $attribs, $selected);
+        $output = PHPFrame_HTMLUI::_(
+            'select.genericlist', 
+            $options, 
+            $fieldname, 
+            $attribs, 
+            $selected
+        );
         
         return $output;        
     }
@@ -193,16 +214,21 @@ class PHPFrame_UserHelper
      * Build checkboxes with users to pick assignees.
      * 
      * @param mixed  $selected  Either a single userid or an array of ids.
-     * @param string $attribs   A string with attributes to be printed in the input tags.
+     * @param string $attribs   A string with attributes to be printed in the 
+     *                          input tags.
      * @param string $fieldname String tu use for the input tags name attribute.
-     * @param int    $projectid This parameter is optional. If passed users will be 
-     *                          filtered to the project members.
+     * @param int    $projectid This parameter is optional. If passed users will 
+     *                          be filtered to the project members.
      * 
      * @return string A string with the html code containing the checkboxes.
      * @since  1.0
      */
-    public static function assignees($selected=0, $attribs='', $fieldname='assignees[]', $projectid=0) 
-    {
+    public static function assignees(
+        $selected=0, 
+        $attribs='', 
+        $fieldname='assignees[]', 
+        $projectid=0
+    ) {
         $db = PHPFrame::DB();
         
         $sql = "SELECT u.id, u.firstname, u.lastname ";
@@ -217,7 +243,7 @@ class PHPFrame_UserHelper
         $sql .= " ORDER BY u.lastname";
         
         if (!$rows = $db->fetchObjectList($sql, array(":projectid"=>$projectid))) {
-          return false;
+            return false;
         }
         
         // organise assignees in array for checking selected users
@@ -236,7 +262,11 @@ class PHPFrame_UserHelper
             $output .= ' value="'.$rows[$i]->id.'" '.$attribs;
             if (in_array($rows[$i]->id, $assignees)) { $output .= 'checked'; }
             $output .= ' /> ';
-            $output .= PHPFrame_UserHelper::fullname_format($rows[$i]->firstname, $rows[$i]->lastname).'&nbsp;&nbsp;';
+            $output .= PHPFrame_UserHelper::fullname_format(
+                $rows[$i]->firstname, 
+                $rows[$i]->lastname
+            );
+            $output .= '&nbsp;&nbsp;';
             // Add line break every three entries (test using modulus)
             if ((($i+1) % 3) == 0) { $output .= '<br />'; }
         }
@@ -270,7 +300,10 @@ class PHPFrame_UserHelper
         
         // Organise rows into array of arrays instead of array of objects
         foreach ($rows as $row) {
-            $tokens[] = array('id' => $row->id, 'name' => $row->firstname." ".$row->lastname." (".$row->username.")");
+            $tokens[] = array(
+                'id'   => $row->id, 
+                'name' => $row->firstname." ".$row->lastname." (".$row->username.")"
+            );
         }
         
         PHPFrame_HTMLUI::autocomplete('userids', 'cols="60" rows="2"', $tokens);
@@ -286,27 +319,37 @@ class PHPFrame_UserHelper
      * @return string A string with the HTML select
      * @since  1.0
      */
-    public static function selectGroup($selected=0, $attribs='', $fieldname='groupid') 
-    {
+    public static function selectGroup(
+        $selected=0, 
+        $attribs='', 
+        $fieldname='groupid'
+    ) {
         // assemble users to the array
         $options = array();
-        //$options[] = PHPFrame_HTMLUI::_('select.option', '0', PHPFrame_String::html( '-- Select a Group --' ) );
         
         // get users from #__users
-        $db = PHPFrame::DB();
-        $sql = "SELECT id, name FROM #__groups ORDER BY id";
+        $db   = PHPFrame::DB();
+        $sql  = "SELECT id, name FROM #__groups ORDER BY id";
         $rows = $db->fetchObjectList($sql);
         
         if (!is_array($rows) || count($rows) < 1) {
-          return false;
+            return false;
         } else {
             foreach ($rows as $row) {
-                $options[] = PHPFrame_HTMLUI::_('select.option', $row->id, ucwords($row->name));
+                $options[] = PHPFrame_HTMLUI::_(
+                    'select.option', 
+                    $row->id, 
+                    ucwords($row->name)
+                );
             }
         }
         
-        $output = PHPFrame_HTMLUI::_('select.genericlist', $options, $fieldname, $attribs, $selected);
-        
-        return $output;        
+        return PHPFrame_HTMLUI::_(
+            'select.genericlist', 
+            $options, 
+            $fieldname, 
+            $attribs, 
+            $selected
+        );   
     }
 }

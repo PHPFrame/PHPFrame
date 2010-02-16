@@ -16,13 +16,14 @@
 /**
  * API User Class
  * 
- * @category PHPFrame
- * @package  User
- * @author   Luis Montero <luis.montero@e-noise.com>
- * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://github.com/PHPFrame/PHPFrame
- * @since    1.0
- * @deprecated
+ * @category   PHPFrame
+ * @package    User
+ * @author     Luis Montero <luis.montero@e-noise.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://github.com/PHPFrame/PHPFrame
+ * @since      1.0
+ * @deprecated This class is irrelevant and it should be replaced by a userland 
+ *             User object.
  */
 class PHPFrame_APIUser extends PHPFrame_PersistentObject
 {

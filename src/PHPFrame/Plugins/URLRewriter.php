@@ -133,7 +133,9 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
      * 
      * @param string $url   The URL to rewrite.
      * @param bool   $xhtml [Optional] Default value is TRUE.
-     * @return unknown_type
+     * 
+     * @return string The rewritten URL
+     * @since  1.0
      */
     public static function rewriteURL($url, $xhtml=true)
     {

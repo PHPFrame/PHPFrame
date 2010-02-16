@@ -75,7 +75,10 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
      * @return PHPFrame_IdObject
      * @since  1.0
      */
-    public function select($fields) {}
+    public function select($fields)
+    {
+    	//...
+    }
     
     /**
      * Set the table from which to select rows
@@ -85,19 +88,25 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
      * @return PHPFrame_IdObject
      * @since  1.0
      */
-    public function from($table) {}
+    public function from($table)
+    {
+    	//...
+    }
     
     /**
      * Add "where" condition
      * 
-     * @param string $left
-     * @param string $operator
-     * @param string $right
+     * @param string $left     The left operand.
+     * @param string $operator The comparison operator. Ie: '=' or '<'.
+     * @param string $right    The right operand.
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
      */
-    public function where($left, $operator, $right) {}
+    public function where($left, $operator, $right)
+    {
+    	//...
+    }
     
     /**
      * Get the an array with the fields in the SELECT query
@@ -105,7 +114,10 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
      * @return array
      * @since  1.0
      */
-    public function getObjectFields() {}
+    public function getObjectFields()
+    {
+    	//...
+    }
     
     /**
      * Get the table name in the FROM part of the query
@@ -113,5 +125,8 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
      * @return string
      * @since  1.0
      */
-    public function getTableName() {}
+    public function getTableName()
+    {
+    	//...
+    }
 }

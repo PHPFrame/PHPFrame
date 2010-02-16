@@ -247,12 +247,15 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     {
         $join       = trim((string) $join);
         $join_array = explode(" ON ", $join);
+        $pattern    = '/^(JOIN|INNER JOIN|OUTER JOIN|LEFT JOIN|RIGHT JOIN)';
+        $pattern   .= '\s+(.*)$/';
         
-        preg_match('/^(JOIN|INNER JOIN|OUTER JOIN|LEFT JOIN|RIGHT JOIN)\s+(.*)$/', $join_array[0], $matches);
+        preg_match($pattern, $join_array[0], $matches);
+        
         if (is_array($matches) && count($matches) == 3) {
             $array["type"]       = $matches[1];
             $array["table_name"] = $matches[2];
-        } elseif(count($matches) == 4) {
+        } elseif (count($matches) == 4) {
             $array["table_alias"] = $matches[2];
         } else {
             throw new LogicException("SQL join clause not recognised");
@@ -273,9 +276,9 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Add "where" condition
      * 
-     * @param string $left
-     * @param string $operator
-     * @param string $right
+     * @param string $left     The left operand.
+     * @param string $operator The comparison operator. Ie: '=' or '<'.
+     * @param string $right    The right operand.
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
@@ -285,8 +288,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
         // Validate input types and set internal property
         $pattern1 = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:]+$/";
         $pattern2  = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN)$/";
-        if (
-            !preg_match($pattern1, $left)
+        if (!preg_match($pattern1, $left)
             || !preg_match($pattern1, $right)
             || !preg_match($pattern2, $operator)
         ) {
@@ -303,7 +305,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Set group by clause
      * 
-     * @param string $column The column name to group by
+     * @param string $column The column name to group by.
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
@@ -324,8 +326,9 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Set order by clause
      * 
-     * @param string $column    The column name to order by
-     * @param string $direction The order direction (either ASC or DESC)
+     * @param string $column    The column name to order by.
+     * @param string $direction [Optional] The order direction (either ASC or 
+     *                          DESC).
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
@@ -372,8 +375,9 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Set limit clause
      * 
-     * @param int $limit     The total number of entries we want to limit to
-     * @param int $limitstart The entry number of the first record in the current page
+     * @param int $limit      The total number of entries we want to limit to
+     * @param int $limitstart The entry number of the first record in the 
+     *                        current page.
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
@@ -393,7 +397,8 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Set row number of first row in current page
      * 
-     * @param int $limitstart The entry number of the first record in the current page
+     * @param int $limitstart The entry number of the first record in the 
+     *                        current page.
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
@@ -474,8 +479,12 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
             // it is an alias and replace it with table name
             if (!empty($field["table_name"])) {
                 $table_name = $this->_tableAliasToName($field["table_name"]);
-                $table_name = (empty($table_name)) ? $field["table_name"] : $table_name;
-                $array[]    = $table_name.".".$field["field_name"];
+                
+                if (empty($table_name)) {
+                	$table_name = $field["table_name"];
+                }
+                
+                $array[] = $table_name.".".$field["field_name"];
                 
             // If no table name is specified we assume main "from" table
             } else {
@@ -501,6 +510,12 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
         return $this->_from;
     }
     
+    /**
+     * Get join tables.
+     * 
+     * @return array
+     * @since  1.0
+     */
     public function getJoinTables()
     {
         return $this->_join;
@@ -552,8 +567,8 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function getSelectSQL()
     {
         if (count($this->_select) < 1) {
-            $exception_msg = "Can not build query. No fields have been selected.";
-            throw new LogicException($exception_msg);
+            $msg = "Can not build query. No fields have been selected.";
+            throw new LogicException($msg);
         }
         
         $sql = "SELECT ";
@@ -697,6 +712,14 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
         return $sql;
     }
     
+    /**
+     * Resolve table alias to real table name.
+     * 
+     * @param string $alias The table alias.
+     * 
+     * @return string|null
+     * @since  1.0
+     */
     private function _tableAliasToName($alias)
     {
         if (isset($this->_from[1]) && $this->_from[1] == $alias) {

@@ -2,7 +2,7 @@
 <project name="PHPFrame" default="build" basedir="../">
 
     <target name="build" 
-            depends="checkout, prepare, phpcs, phpunit, phpdoc" />
+            depends="prepare, phpcs, phpunit" />
             
     <target name="prepare">
         <exec executable="rm" dir="${basedir}">
@@ -13,11 +13,13 @@
         </exec>
     </target>
     
+    <!--
     <target name="checkout">
         <exec executable="git" dir="${basedir}">
             <arg line="pull" />
         </exec>
     </target>
+    -->
     
     <target name="phpcs">
         <exec executable="phpcs"

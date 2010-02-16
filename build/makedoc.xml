@@ -2,12 +2,13 @@
 <project name="PHPFrame" default="build" basedir="../">
 
     <property name="build.dir" value="${basedir}/build"/>
-    <property name="report.dir" value="${build.dir}/report"/>
+    <property name="logs.dir" value="${build.dir}/logs"/>
     <property name="doc.dir" value="${build.dir}/doc"/>
     <property name="tmp.dir" value="${build.dir}/tmp/doc"/>
     
     <!-- Prepare directories -->
     <target name="prepare">
+        <mkdir dir="${logs.dir}"/>
         <delete dir="${doc.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
         <mkdir dir="${doc.dir}"/>
         
@@ -40,7 +41,7 @@
     <target name="phpdoc" depends="copy">
         <exec executable="phpdoc" 
               dir="${basedir}" 
-              output="${report.dir}/phpdoc.log">
+              output="${logs.dir}/phpdoc.log">
             <arg line="-d ${tmp.dir} 
                        -t ${doc.dir} 
                        -ric README.md,LICENSE,CREDITS
@@ -57,7 +58,7 @@
     <target name="sync" depends="phpdoc">
         <exec executable="rsync" 
               dir="${basedir}" 
-              output="${report.dir}/rsync_doc.log">
+              output="${logs.dir}/rsync_doc.log">
             <arg line="-vru -e 'ssh -p 2222' --delete 
                        ${doc.dir}/ phpframe@e-noise.com:~/doc/api/" />
         </exec>

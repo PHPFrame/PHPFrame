@@ -39,7 +39,7 @@
         <exec executable="phpdoc" dir="${basedir}/src">
             <arg line="-ct type -ue on -t ${basedir}/build/api
                        -tb /usr/share/php/data/phpUnderControl/data/phpdoc
-                       -o HTML:Phpuc:phpuc -d ." />
+                       -o HTML:Smarty:PHP -d ." />
         </exec>
     </target>
 </project>

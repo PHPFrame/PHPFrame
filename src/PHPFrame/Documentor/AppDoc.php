@@ -29,6 +29,15 @@ class PHPFrame_AppDoc implements IteratorAggregate
 {
     private $_controllers = array();
     
+    /**
+     * Constructor.
+     * 
+     * @param string $install_dir Absolute path to installation directory of 
+     *                            application we want to build the docs for.
+     *                            
+     * @return void
+     * @since  1.0
+     */
     public function __construct($install_dir)
     {
         $controllers_dir = $install_dir.DS."src".DS."controllers";
@@ -53,6 +62,12 @@ class PHPFrame_AppDoc implements IteratorAggregate
         }
     }
     
+    /**
+     * Convert object to string.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
         $str = "Controllers:\n\n";
@@ -69,6 +84,12 @@ class PHPFrame_AppDoc implements IteratorAggregate
         return $str;
     }
     
+    /**
+     * Implementation of the IteratorAggregate interface.
+     * 
+     * @return ArrayIterator
+     * @since  1.0
+     */
     public function getIterator()
     {
         $array = array();

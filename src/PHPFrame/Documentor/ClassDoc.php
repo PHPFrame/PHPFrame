@@ -38,11 +38,19 @@ class PHPFrame_ClassDoc implements IteratorAggregate
         "methods" => array("own"=>array(), "inherited"=>array())
     );
     
+    /**
+     * Constructor.
+     * 
+     * @param $reflection_obj
+     * @param $visibility
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct(
         ReflectionClass $reflection_obj, 
         $visibility=self::VISIBILITY_PUBLIC
-    )
-    {
+    ) {
         $this->_visibility = $visibility;
         
         $this->_array["class_name"] = $reflection_obj->getName();
@@ -82,6 +90,12 @@ class PHPFrame_ClassDoc implements IteratorAggregate
         }
     }
     
+    /**
+     * Convert object to string.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
         $str  = "Class: ".$this->getClassName()."\n";
@@ -110,6 +124,12 @@ class PHPFrame_ClassDoc implements IteratorAggregate
         return $str;
     }
     
+    /**
+     * Implementation of the IteratorAggregate interface.
+     * 
+     * @return ArrayIterator
+     * @since  1.0
+     */
     public function getIterator()
     {
         return new ArrayIterator($this->_array);

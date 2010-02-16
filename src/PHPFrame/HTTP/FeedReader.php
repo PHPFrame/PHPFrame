@@ -108,26 +108,56 @@ class PHPFrame_FeedReader
         return $this->_dom;
     }
     
+    /**
+     * Get date updated.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getUpdated()
     {
         return $this->_updated;
     }
     
+    /**
+     * Get feed ID.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getId()
     {
         return $this->_id;
     }
     
+    /**
+     * Get feed title.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getTitle()
     {
         return $this->_title;
     }
     
+    /**
+     * Get feed's link to itself.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getLinkSelf()
     {
         return $this->_link_self;
     }
     
+    /**
+     * Get alternate link.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getLinkAlternate()
     {
         return $this->_link_alternate;

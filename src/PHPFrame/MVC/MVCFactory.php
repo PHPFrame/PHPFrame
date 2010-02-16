@@ -50,7 +50,7 @@ class PHPFrame_MVCFactory
     /**
      * Get a named action controller object
      * 
-     * @param string $controller_name
+     * @param string $controller_name The controller name.
      * 
      * @return PHPFrame_ActionController
      * @since  1.0
@@ -110,8 +110,9 @@ class PHPFrame_MVCFactory
             }
             // No declared constructor, so we instantiate without args
             return new $class_name;
-        // If class is not instantiable we look for a "getInstance" method
+        
         } elseif ($reflectionObj->hasMethod('getInstance')) {
+            // If class is not instantiable we look for a "getInstance" method
             $get_instance = $reflectionObj->getMethod('getInstance');
             if ($get_instance->isPublic() && $get_instance->isStatic()) {
                 $class_method_array = array($class_name, 'getInstance');

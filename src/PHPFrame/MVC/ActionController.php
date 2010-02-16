@@ -79,7 +79,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     /**
      * This method executes a given action (invokes a named member method).
      * 
-     * @param PHPFrame_Application $app
+     * @param PHPFrame_Application $app Reference to application object.
      * 
      * @return void
      * @since  1.0
@@ -104,8 +104,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         $permissions = $app->getPermissions();
         $groupid     = PHPFrame::getSession()->getGroupId();
         
-        if (
-            $permissions->authorise($controller, $action, $groupid) === true
+        if ($permissions->authorise($controller, $action, $groupid) === true
             || $app->getConfig()->get("ignore_acl") == 1
         ) {
             // Invoke controller action
@@ -224,7 +223,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     /**
      * Raise error
      * 
-     * @param string $msg
+     * @param string $msg The error message.
      * 
      * @return void
      * @since  1.0
@@ -238,7 +237,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     /**
      * Raise warning
      * 
-     * @param string $msg
+     * @param string $msg The warning message.
      * 
      * @return void
      * @since  1.0
@@ -252,7 +251,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     /**
      * Notify success
      * 
-     * @param string $msg
+     * @param string $msg The success message.
      * 
      * @return void
      * @since  1.0
@@ -266,7 +265,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     /**
      * Notify info
      * 
-     * @param string $msg
+     * @param string $msg The info message.
      * 
      * @return void
      * @since  1.0

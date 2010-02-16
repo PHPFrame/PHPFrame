@@ -30,7 +30,6 @@
  * array of all fields for the object that should be sent over an XML-RPC 
  * request. The RPC renderer will choose to send the RPC fields of a persistent 
  * object if it implements this interface.
- *  
  * 
  * @category PHPFrame
  * @package  Mapper
@@ -39,14 +38,14 @@
  * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
- interface PHPFrame_RPCObject
- {
-     /**
-      * Gets the fields that should be used to represent the state of this 
-      * object when being sent via an XML-RPC request.
-      * 
-      * @return array an associative array containing the fields to be used to 
-      * represent this object
-      */
-     public function getRPCFields();
- }
+interface PHPFrame_RPCObject
+{
+    /**
+     * Gets the fields that should be used to represent the state of this 
+     * object when being sent via an XML-RPC request.
+     * 
+     * @return array an associative array containing the fields to be used to 
+     * represent this object
+     */
+    public function getRPCFields();
+}

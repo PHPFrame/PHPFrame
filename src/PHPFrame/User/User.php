@@ -50,72 +50,72 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     {
         // before we construct the parent we add the necessary fields
         $this->addField(
-           "groupid", 
-           0, 
-           false, 
-           new PHPFrame_IntFilter()
+            "groupid", 
+            0, 
+            false, 
+            new PHPFrame_IntFilter()
         );
         $this->addField(
-           "username", 
-           "guest", 
-           false, 
-           new PHPFrame_RegexpFilter(array(
-               "regexp"=>'/^[a-zA-Z\.]{3,20}$/', 
-               "min_length"=>3, 
-               "max_length"=>20
-           ))
+            "username", 
+            "guest", 
+            false, 
+            new PHPFrame_RegexpFilter(array(
+                "regexp"=>'/^[a-zA-Z\.]{3,20}$/', 
+                "min_length"=>3, 
+                "max_length"=>20
+            ))
         );
         $this->addField(
-           "password", 
-           null, 
-           false, 
-           new PHPFrame_RegexpFilter(array(
-               "regexp"=>'/^.{6,100}$/',
-               "min_length"=>6, 
-               "max_length"=>100
-           ))
+            "password", 
+            null, 
+            false, 
+            new PHPFrame_RegexpFilter(array(
+                "regexp"=>'/^.{6,100}$/',
+                "min_length"=>6, 
+                "max_length"=>100
+            ))
         );
         $this->addField(
-           "firstname", 
-           null, 
-           true, 
-           new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>50))
+            "firstname", 
+            null, 
+            true, 
+            new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>50))
         );
         $this->addField(
-           "lastname", 
-           null, 
-           true, 
-           new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>50))
+            "lastname", 
+            null, 
+            true, 
+            new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>50))
         );
         $this->addField(
-           "email", 
-           null, 
-           false, 
-           new PHPFrame_EmailFilter(array("min_length"=>7, "max_length"=>100))
+            "email", 
+            null, 
+            false, 
+            new PHPFrame_EmailFilter(array("min_length"=>7, "max_length"=>100))
         );
         $this->addField(
-           "block", 
-           false, 
-           false, 
-           new PHPFrame_BoolFilter()
+            "block", 
+            false, 
+            false, 
+            new PHPFrame_BoolFilter()
         );
         $this->addField(
-           "last_visit", 
-           null, 
-           true, 
-           new PHPFrame_IntFilter()
+            "last_visit", 
+            null, 
+            true, 
+            new PHPFrame_IntFilter()
         );
         $this->addField(
-           "params", 
-           array(), 
-           true, 
-           new PHPFrame_StringFilter()
+            "params", 
+            array(), 
+            true, 
+            new PHPFrame_StringFilter()
         );
         $this->addField(
-           "deleted", 
-           0, 
-           true, 
-           new PHPFrame_IntFilter()
+            "deleted", 
+            0, 
+            true, 
+            new PHPFrame_IntFilter()
         );
         
         // If we are passed a vCard object we deal with this first
@@ -147,7 +147,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set groupid
      * 
-     * @param int $int
+     * @param int $int The group ID.
      * 
      * @return void
      * @since  1.0
@@ -171,7 +171,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set groupname
      * 
-     * @param string $str
+     * @param string $str The group name.
      * 
      * @return void
      * @since  1.0
@@ -195,7 +195,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set username
      * 
-     * @param string $str
+     * @param string $str The username.
      * 
      * @return void
      * @since  1.0
@@ -219,7 +219,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set password
      * 
-     * @param string $str
+     * @param string $str The password.
      * 
      * @return void
      * @since  1.0
@@ -232,7 +232,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Create enrypted password
      * 
-     * @param string $str
+     * @param string $str The unencrypted password.
      * 
      * @return string
      * @since  1.0
@@ -264,7 +264,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set first name
      * 
-     * @param string $str
+     * @param string $str The first name.
      * 
      * @return void
      * @since  1.0
@@ -294,7 +294,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set last name
      * 
-     * @param string $str
+     * @param string $str The last name.
      * 
      * @return void
      * @since  1.0
@@ -324,7 +324,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set email
      * 
-     * @param string $str
+     * @param string $str The email.
      * 
      * @return void
      * @since  1.0
@@ -354,7 +354,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set block flag
      * 
-     * @param bool $bool
+     * @param bool $bool Flag indicating whether user is blocked (no access).
      * 
      * @return void
      * @since  1.0
@@ -381,7 +381,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set last visit datetime
      * 
-     * @param int $int
+     * @param int $int UNIX timestamp.
      * 
      * @return void
      * @since  1.0
@@ -405,7 +405,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set params
      * 
-     * @param string|array $params Either a serialised string or an array
+     * @param string|array $params Either a serialised string or an array.
      * 
      * @return void
      * @since  1.0
@@ -443,7 +443,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set deleted datetime
      * 
-     * @param int $int
+     * @param int $int Either 0 (deleted) or 1.
      * 
      * @return void
      * @since  1.0
@@ -471,7 +471,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set vCard object for this user
      * 
-     * @param PHPFrame_VCard $vcard
+     * @param PHPFrame_VCard $vcard An instance of PHPFrame_VCard.
      * 
      * @return void
      * @since  1.0

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="PHPFrame" default="build" basedir="../">
+
     <target name="build" 
             depends="checkout, prepare, phpcs, phpunit, phpdoc" />
             
@@ -34,12 +35,5 @@
                        ${basedir}/tests" />
         </exec>
     </target>
-    
-    <target name="phpdoc">
-        <exec executable="phpdoc" dir="${basedir}/src">
-            <arg line="-ct type -ue on -t ${basedir}/build/api
-                       -tb /usr/share/php/data/phpUnderControl/data/phpdoc
-                       -o HTML:Smarty:PHP -d ." />
-        </exec>
-    </target>
+
 </project>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="PHPFrame" basedir="../" default="build">
+<project name="PHPFrame" default="build" basedir="../">
 
-    <property name="build.dir" value="${project.basedir}/build"/>
+    <property name="build.dir" value="${basedir}/build"/>
     <property name="report.dir" value="${build.dir}/report"/>
     <property name="doc.dir" value="${build.dir}/doc"/>
     <property name="tmp.dir" value="${build.dir}/tmp/doc"/>
@@ -16,7 +16,7 @@
     </target>
     
     <!-- copy files to tmp doc dir for parsing documentation -->
-    <target name="copy">
+    <target name="copy" depends="prepare">
         <!-- copy files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${build.dir}/tmp">
@@ -31,37 +31,38 @@
         </copy>
         <!-- copy tutorials files -->
         <copy todir="${tmp.dir}" overwrite="true">
-            <fileset dir="${project.basedir}">
+            <fileset dir="${basedir}">
                 <include name="tutorials/**" />
             </fileset>
         </copy>
     </target>
     
-    <!-- Generate API documentation from Javadoc comments using phpdoc -->
-    <target name="apidoc">
-        <exec 
-            command="phpdoc \
-                    -d ${tmp.dir} \
-                    -t ${doc.dir} \
-                    -ric README,LICENSE,CREDITS \
-                    -i examples/ \
-                    -s on \
-                    -dn PHPFrame \
-                    -o HTML:Smarty:PHP \
-                    -ti 'PHPFrame 1.0 API Documentation'" 
-            dir="${project.basedir}" 
-            output="${report.dir}/phpdoc.log" />
+    <target name="phpdoc" depends="copy">
+        <exec executable="phpdoc" 
+              dir="${basedir}" 
+              output="${report.dir}/phpdoc.log">
+            <arg line="-d ${tmp.dir} 
+                       -t ${doc.dir} 
+                       -ric README.md,LICENSE,CREDITS
+                       -i examples/
+                       -s on
+                       -dn PHPFrame 
+                       -ct type 
+                       -ue on 
+                       -o HTML:Smarty:PHP 
+                       -ti 'PHPFrame 1.0 API Documentation'" />
+        </exec>
     </target>
     
-    <target name="sync">
-        <exec 
-            command="rsync -vru -e 'ssh -p 2222' --delete \
-                     ${doc.dir}/ \
-                     phpframe@e-noise.com:~/doc/api/" 
-            dir="${project.basedir}" 
-            output="${report.dir}/rsync_doc.log" />
+    <target name="sync" depends="phpdoc">
+        <exec executable="rsync" 
+              dir="${basedir}" 
+              output="${report.dir}/rsync_doc.log">
+            <arg line="-vru -e 'ssh -p 2222' --delete 
+                       ${doc.dir}/ phpframe@e-noise.com:~/doc/api/" />
+        </exec>
     </target>
     
-    <target name="build" depends="prepare, copy, apidoc, sync" />
+    <target name="build" depends="prepare, copy, phpdoc, sync" />
     
 </project>

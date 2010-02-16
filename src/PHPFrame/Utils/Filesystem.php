@@ -27,12 +27,12 @@
 class PHPFrame_Filesystem
 {
     /**
-     * Touch a file
+     * Touch a file.
      * 
-     * @param string $filename
+     * @param string $filename Absolute path to file.
      * 
      * @return void
-     * @throws RuntimeException if touch fails
+     * @throws RuntimeException if touch fails.
      * @since  1.0
      */
     public static function touch($filename)
@@ -46,9 +46,9 @@ class PHPFrame_Filesystem
     /**
      * Copy file
      * 
-     * @param string $source
-     * @param string $dest
-     * @param bool   $recursive
+     * @param string $source    Absolute path to origin.
+     * @param string $dest      Absolute path to destination.
+     * @param bool   $recursive [Optional]
      * 
      * @return void
      * @throws RuntimeException if copy fails
@@ -81,8 +81,8 @@ class PHPFrame_Filesystem
     /**
      * Move/rename file
      * 
-     * @param string $origin
-     * @param string $destination
+     * @param string $origin      Absolute path to origin.
+     * @param string $destination Absolute path to destination.
      * 
      * @return void
      * @throws RuntimeException if move fails
@@ -97,7 +97,7 @@ class PHPFrame_Filesystem
     /**
      * Remove file
      * 
-     * @param string $file
+     * @param string $file Absolute path to file.
      * 
      * @return void
      * @throws RuntimeException if move fails
@@ -112,7 +112,7 @@ class PHPFrame_Filesystem
     /**
      * List directory contents
      * 
-     * @param string $dir
+     * @param string $dir Absolute path to directory.
      * 
      * @return Iterator
      * @throws RuntimeException if move fails
@@ -162,19 +162,28 @@ class PHPFrame_Filesystem
         }
     }
     
+    /**
+     * Check whether a directory is empty.
+     * 
+     * @param string $dir Absolute path to directory.
+     * 
+     * @return bool
+     * @since  1.0
+     */
     public static function isEmptyDir($dir)
     {
-        return (($files = @scandir($dir)) && count($files) <= 2);
+        return (bool) (($files = @scandir($dir)) && count($files) <= 2);
     } 
     
     /**
-     * Upload file
+     * Upload file.
      * 
-     * @param  string $fieldName
-     * @param  string $dir
-     * @param  string $accept
-     * @param  int    $max_upload_size
-     * @param  bool   $overwrite
+     * @param  string $field_name      Name of input field of type file.
+     * @param  string $dir             Absolute path to upload dir.
+     * @param  string $accept          [Optional] List of accepted MIME types 
+     *                                 separated by commas. Default value is '*'.
+     * @param  int    $max_upload_size [Optional]
+     * @param  bool   $overwrite       [Optional]
      * 
      * @return PHPFrame_FileInfo
      * @throws Exception on failure
@@ -210,10 +219,18 @@ class PHPFrame_Filesystem
         // check for generic errors first          
         if ($file_error > 0) {
             switch ($file_error) {
-              case 1: $msg = "ERROR: PHP upload maximum file size exceeded!";
-              case 2: $msg = "ERROR: PHP maximum file size exceeded!";
-              case 3: $msg = "ERROR: Partial upload!";
-              case 4: $msg = "ERROR: No file submitted for upload!";
+            case 1 :
+            	$msg = "ERROR: PHP upload maximum file size exceeded!";
+            	break;
+            case 2 :
+            	$msg = "ERROR: PHP maximum file size exceeded!";
+            	break;
+            case 3 :
+            	$msg = "ERROR: Partial upload!";
+            	break;
+            case 4 :
+            	$msg = "ERROR: No file submitted for upload!";
+            	break;
             }
             
             throw new RuntimeException($msg);
@@ -238,7 +255,7 @@ class PHPFrame_Filesystem
         
         // Check for special chars
         $special_chars = array(
-            '�','$','%','^','&','*','?','!','(',')','[',']','{','}',',','/','\\'
+            'ñ','$','%','^','&','*','?','!','(',')','[',']','{','}',',','/','\\'
         );
         foreach ($special_chars as $special_char) {
             $file_name = str_replace($special_char, '', $file_name);

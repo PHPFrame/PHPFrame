@@ -45,7 +45,6 @@ class PHPFrame_Crypt
     
     /**
      * Formats a password using the current encryption.
-     *
      * 
      * @param string $plaintext    The plaintext password to encrypt.
      * @param string $salt         The salt to use to encrypt the password.
@@ -135,8 +134,10 @@ class PHPFrame_Crypt
                 }
                 
                 $p[] = self::_toAPRMD5(
-                    (ord($binary[$i]) << 16) | (ord($binary[$k]) << 8) 
-                       | (ord($binary[$j])), 
+                    (ord($binary[$i]) << 16) 
+                    | (ord($binary[$k]) << 8) 
+                    | (ord($binary[$j])
+                    ), 
                     5
                 );
             }
@@ -158,7 +159,6 @@ class PHPFrame_Crypt
      * Optionally takes a seed and a plaintext password, to extract the seed
      * of an existing password, or for encryption types that use the plaintext
      * in the generation of the salt.
-     *
      * 
      * @param string $encryption The kind of pasword encryption to use.
      *                           Defaults to md5-hex.
@@ -178,79 +178,93 @@ class PHPFrame_Crypt
     ) {
         // Encrypt the password.
         switch ($encryption) {
-            case 'crypt' :
-            case 'crypt-des' :
-                if ($seed) {
-                    return substr(preg_replace('|^{crypt}|i', '', $seed), 0, 2);
-                } else {
-                    return substr(md5(mt_rand()), 0, 2);
+        case 'crypt' :
+        case 'crypt-des' :
+            if ($seed) {
+                return substr(preg_replace('|^{crypt}|i', '', $seed), 0, 2);
+            } else {
+                return substr(md5(mt_rand()), 0, 2);
+            }
+            
+            break;
+        
+        case 'crypt-md5' :
+            if ($seed) {
+                return substr(preg_replace('|^{crypt}|i', '', $seed), 0, 12);
+            } else {
+                return '$1$'.substr(md5(mt_rand()), 0, 8).'$';
+            }
+            
+            break;
+        
+        case 'crypt-blowfish' :
+            if ($seed) {
+                return substr(preg_replace('|^{crypt}|i', '', $seed), 0, 16);
+            } else {
+                return '$2$'.substr(md5(mt_rand()), 0, 12).'$';
+            }
+            
+            break;
+        
+        case 'ssha' :
+            if ($seed) {
+                return substr(preg_replace('|^{SSHA}|', '', $seed), -20);
+            } else {
+                return mhash_keygen_s2k(
+                    MHASH_SHA1, 
+                    $plaintext, 
+                    substr(pack('h*', md5(mt_rand())), 0, 8), 
+                    4
+                );
+            }
+            
+            break;
+        
+        case 'smd5' :
+            if ($seed) {
+                return substr(preg_replace('|^{SMD5}|', '', $seed), -16);
+            } else {
+                return mhash_keygen_s2k(
+                    MHASH_MD5, 
+                    $plaintext, 
+                    substr(pack('h*', md5(mt_rand())), 0, 8), 
+                    4
+                );
+            }
+            
+            break;
+        
+        case 'aprmd5' :
+            /* 64 characters that are valid for APRMD5 passwords. */
+            $APRMD5  = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            $APRMD5 .= "abcdefghijklmnopqrstuvwxyz";
+        
+            if ($seed) {
+                return substr(
+                    preg_replace('/^\$apr1\$(.{8}).*/', '\\1', $seed), 
+                    0, 
+                    8
+                );
+            } else {
+                $salt = '';
+                for ($i=0; $i<8; $i++) {
+                    $salt .= $APRMD5 { rand(0, 63) };
                 }
-                
-                break;
-
-            case 'crypt-md5' :
-                if ($seed) {
-                    return substr(preg_replace('|^{crypt}|i', '', $seed), 0, 12);
-                } else {
-                    return '$1$'.substr(md5(mt_rand()), 0, 8).'$';
-                }
-                
-                break;
-
-            case 'crypt-blowfish' :
-                if ($seed) {
-                    return substr(preg_replace('|^{crypt}|i', '', $seed), 0, 16);
-                } else {
-                    return '$2$'.substr(md5(mt_rand()), 0, 12).'$';
-                }
-                
-                break;
-
-            case 'ssha' :
-                if ($seed) {
-                    return substr(preg_replace('|^{SSHA}|', '', $seed), -20);
-                } else {
-                    return mhash_keygen_s2k(MHASH_SHA1, $plaintext, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
-                }
-                
-                break;
-
-            case 'smd5' :
-                if ($seed) {
-                    return substr(preg_replace('|^{SMD5}|', '', $seed), -16);
-                } else {
-                    return mhash_keygen_s2k(MHASH_MD5, $plaintext, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
-                }
-                
-                break;
-
-            case 'aprmd5' :
-                /* 64 characters that are valid for APRMD5 passwords. */
-                $APRMD5  = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                $APRMD5 .= "abcdefghijklmnopqrstuvwxyz";
-
-                if ($seed) {
-                    return substr(preg_replace('/^\$apr1\$(.{8}).*/', '\\1', $seed), 0, 8);
-                } else {
-                    $salt = '';
-                    for ($i=0; $i<8; $i++) {
-                        $salt .= $APRMD5 { rand(0, 63) };
-                    }
-                    return $salt;
-                }
-                
-                break;
-
-            default :
-                $salt = "";
-                
-                if ($seed) {
-                    $salt = $seed;
-                }
-                
                 return $salt;
-                
-                break;
+            }
+            
+            break;
+        
+        default :
+            $salt = "";
+            
+            if ($seed) {
+                $salt = $seed;
+            }
+            
+            return $salt;
+            
+            break;
         }
     }
 
@@ -295,9 +309,10 @@ class PHPFrame_Crypt
     private function _toAPRMD5($value, $count)
     {
         /* 64 characters that are valid for APRMD5 passwords. */
-        $APRMD5 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        $aprmd5 = '';
-        $count  = abs($count);
+        $APRMD5  = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $APRMD5 .= 'abcdefghijklmnopqrstuvwxyz';
+        $aprmd5  = '';
+        $count   = abs($count);
         
         while (--$count) {
             $aprmd5 .= $APRMD5[$value & 0x3f];

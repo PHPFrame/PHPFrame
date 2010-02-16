@@ -29,11 +29,13 @@ class PHPFrame_ImageProcessor
     /**
      * Resize image
      * 
-     * @param string $src_filename
-     * @param string $dst_filename
-     * @param int    $max_width
-     * @param int    $max_height
-     * @param int    $imgcomp       0 best quality | 100 worst quality
+     * @param string $src_filename Absolute path to source image.
+     * @param string $dst_filename Absolute path to destination image.
+     * @param int    $max_width    [Optional] Maximum allowed width in pixels. 
+     *                             Default value is 85.
+     * @param int    $max_height   [Optional] Maximum allowed height in pixels. 
+     *                             Default value is 60.
+     * @param int    $imgcomp      [Optional] 0 best quality, 100 worst quality.
      * 
      * @return void
      * @throws Exception on failure
@@ -89,6 +91,15 @@ class PHPFrame_ImageProcessor
         }
     }
     
+    /**
+     * Create image from file.
+     * 
+     * @param string $src_filename Absolute path to source image.
+     * @param int    $src_type     Image type. 1 = gif, 2 = jpeg, 3 = png.
+     * 
+     * @return resource An image resource identifier on success, false on error.
+     * @since  1.0
+     */
     private function _createFromFile($src_filename, $src_type)
     {
         ini_set('memory_limit', '32M');
@@ -103,16 +114,37 @@ class PHPFrame_ImageProcessor
         }    
     }
     
+    /**
+     * Create image.
+     * 
+     * @param int $dst_width  Width of new image.
+     * @param int $dst_height Height of new image.
+     * @param int $src_type   Image type. 1 = gif, 2 = jpeg, 3 = png.
+     * 
+     * @return resource An image resource identifier on success, false on error.
+     * @since  1.0
+     */
     private function _create($dst_width, $dst_height, $src_type)
     {
         switch ($src_type) {
         case 1: // for gif
-            return imagecreate($dst_width,$dst_height);
+            return imagecreate($dst_width, $dst_height);
         case (2 || 3): // for jpeg and png
-            return imagecreatetruecolor($dst_width,$dst_height);
+            return imagecreatetruecolor($dst_width, $dst_height);
         }        
     }
     
+    /**
+     * Output image to file.
+     * 
+     * @param resource $dst_img      Absolute path to destination image.
+     * @param string   $dst_filename Absolute path to destination image.
+     * @param int      $imgcomp      0 best quality, 100 worst quality.
+     * @param int      $src_type     Image type. 1 = gif, 2 = jpeg, 3 = png.
+     * 
+     * @return void
+     * @since  1.0
+     */
     private function _output($dst_img, $dst_filename, $imgcomp, $src_type)
     {
         switch ($src_type) {
@@ -130,6 +162,17 @@ class PHPFrame_ImageProcessor
         }        
     }
     
+    /**
+     * Draw image border.
+     * 
+     * @param string $img_file Absolute path to image file.
+     * @param int    $type     Image type. 1 = gif, 2 = jpeg, 3 = png.
+     * @param int    $colour   [Optional] Border colour. Default value is 127.
+     * @param int    $quality  [Optional] 0 best quality, 100 worst quality.
+     * 
+     * @return void
+     * @since  1.0
+     */
     private function _drawBorder($img_file, $type, $colour=127, $quality=100)
     {    
         /*
@@ -171,10 +214,10 @@ class PHPFrame_ImageProcessor
        $cdY1 = $height-1;
     
        // DRAW LINES   
-       imageline($scr_img,$abX,$abY,$abX1,$abY1,$colour);
-       imageline($scr_img,$acX,$acY,$acX1,$acY1,$colour);
-       imageline($scr_img,$bdX,$bdY,$bdX1,$bdY1,$colour);
-       imageline($scr_img,$cdX,$cdY,$cdX1,$cdY1,$colour);
+       imageline($scr_img, $abX, $abY, $abX1, $abY1, $colour);
+       imageline($scr_img, $acX, $acY, $acX1, $acY1, $colour);
+       imageline($scr_img, $bdX, $bdY, $bdX1, $bdY1, $colour);
+       imageline($scr_img, $cdX, $cdY, $cdX1, $cdY1, $colour);
  
        // create copy from image   
        $this->_output($scr_img, $img_file, $quality, $type);

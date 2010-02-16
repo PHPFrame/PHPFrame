@@ -243,7 +243,8 @@ class PHPFrame_URI
     /**
      * Get base URL
      * 
-     * This method retrieves the base URL for the current state of the URI object.
+     * This method retrieves the base URL for the current state of the URI 
+     * object.
      * 
      * @return string
      * @since  1.0
@@ -251,8 +252,7 @@ class PHPFrame_URI
     public function getBase()
     {
         $base = $this->_scheme."://".$this->_host;
-        if (
-            ($this->_scheme == "http" && $this->_port != 80)
+        if (($this->_scheme == "http" && $this->_port != 80)
             || ($this->_scheme == "https" && $this->_port != 443)
         ) {
             $base .= ":".$this->_port;    
@@ -283,7 +283,9 @@ class PHPFrame_URI
             $str .= "?";
             $i=0;
             foreach ($this->_query as $key=>$value) {
-                if ($i>0) $str .= "&";
+                if ($i>0) {
+                	$str .= "&";
+                }
                 $str .= $key."=".$value;
                 $i++;
             }
@@ -309,8 +311,7 @@ class PHPFrame_URI
         }
         
         // Determine if the request was over SSL (HTTPS)
-        if (
-            isset($_SERVER['HTTPS']) 
+        if (isset($_SERVER['HTTPS']) 
             && !empty($_SERVER['HTTPS']) 
             && (strtolower($_SERVER['HTTPS']) != 'off')
         ) {
@@ -320,8 +321,7 @@ class PHPFrame_URI
         }
         
         $uri = $scheme.'://'.$_SERVER['HTTP_HOST'];
-        if (
-            ($scheme == 'http' && $_SERVER['SERVER_PORT'] != 80) 
+        if (($scheme == 'http' && $_SERVER['SERVER_PORT'] != 80) 
             || ($scheme == 'https' && $_SERVER['SERVER_PORT'] != 443)
         ) {
             $uri .= ':'.$_SERVER['SERVER_PORT'];    
@@ -335,7 +335,8 @@ class PHPFrame_URI
     /**
      * Parse URI
      * 
-     * This method parses the passed URI and sets the object's properties accordingly.
+     * This method parses the passed URI and sets the object's properties 
+     * accordingly.
      * 
      * @param string $uri The URI to parse
      * 

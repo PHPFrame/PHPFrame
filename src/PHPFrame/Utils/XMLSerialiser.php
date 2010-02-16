@@ -60,6 +60,14 @@ class PHPFrame_XMLSerialiser
         return self::_unserialiseNode(new SimpleXMLElement($str));
     }
     
+    /**
+     * Serialise value.
+     * 
+     * @param mixed $value The value we want to serialise to XML.
+     * 
+     * @return string
+     * @since  1.0
+     */
     private function _doSerialise($value)
     {
         if ($value instanceof Traversable) {
@@ -79,14 +87,21 @@ class PHPFrame_XMLSerialiser
         return (string) $value;
     }
     
+    /**
+     * Serialise array.
+     * 
+     * @param array $array The array.
+     * 
+     * @return string
+     * @since  1.0
+     */
     private static function _serialiseArray(array $array)
     {
         $str = "";
         
         $array_obj = new PHPFrame_Array($array);
         
-        if (
-            $array_obj->isAssoc() 
+        if ($array_obj->isAssoc() 
             && count($array_obj) == 1 
             && is_array(end($array))
         ) {
@@ -124,6 +139,14 @@ class PHPFrame_XMLSerialiser
         return $str;
     }
     
+    /**
+     * Unserialise SimpleXMLElement node.
+     * 
+     * @param SimpleXMLElement $node The node.
+     * 
+     * @return string|null
+     * @since  1.0
+     */
     private static function _unserialiseNode(SimpleXMLElement $node)
     {
         $children = $node->children();
@@ -131,20 +154,21 @@ class PHPFrame_XMLSerialiser
         if (count($children) > 0) {
             $value = array();
             foreach ($children as $child) {
-                if ($child->getName() == "array") {
+            	$child_name = $child->getName();
+                if ($child_name == "array") {
                     $value[] = self::_unserialiseNode($child);
                 } else {
-                    if (array_key_exists($child->getName(), $value)) {
-                        if (!is_array($value[$child->getName()])) {
-                            $value[$child->getName()] = array($value[$child->getName()]);
+                    if (array_key_exists($child_name, $value)) {
+                        if (!is_array($value[$child_name])) {
+                            $value[$child_name] = array($value[$child_name]);
                         }
-                        $array_obj = new PHPFrame_Array($value[$child->getName()]);
+                        $array_obj = new PHPFrame_Array($value[$child_name]);
                         if ($array_obj->isAssoc()) {
-                            $value[$child->getName()] = array($value[$child->getName()]);
+                            $value[$child_name] = array($value[$child_name]);
                         }
-                        $value[$child->getName()][] = self::_unserialiseNode($child);
+                        $value[$child_name][] = self::_unserialiseNode($child);
                     } else {
-                        $value[$child->getName()] = self::_unserialiseNode($child);
+                        $value[$child_name] = self::_unserialiseNode($child);
                     }
                 }
             }

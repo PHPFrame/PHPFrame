@@ -2,13 +2,13 @@
 // Include framework if not inculded yet
 require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 
-class PHPFrame_vCardTest extends PHPUnit_Framework_TestCase
+class PHPFrame_VCardTest extends PHPUnit_Framework_TestCase
 {
     private $_vcard;
     
     public function setUp()
     {
-        $this->_vcard = new PHPFrame_vCard(array(
+        $this->_vcard = new PHPFrame_VCard(array(
             "FAMILY" => "Montero Costa", 
             "GIVEN"  => "Luis"
         ));

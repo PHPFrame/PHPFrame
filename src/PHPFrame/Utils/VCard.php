@@ -23,7 +23,7 @@
  * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
  * @since    1.0
  */
-class PHPFrame_vCard
+class PHPFrame_VCard
 {
     /**
      * Array containing vCard data
@@ -113,18 +113,6 @@ class PHPFrame_vCard
         $str .= "END:VCARD";
         
         return $str;
-        
-        /*
-ORG:Bubba Gump Shrimp Co.
-TITLE:Shrimp Man
-TEL;TYPE=WORK,VOICE:(111) 555-1212
-TEL;TYPE=HOME,VOICE:(404) 555-1212
-ADR;TYPE=WORK:;;100 Waters Edge;Baytown;LA;30314;United States of America
-LABEL;TYPE=WORK:100 Waters Edge\nBaytown, LA 30314\nUnited States of America
-ADR;TYPE=HOME:;;42 Plantation St.;Baytown;LA;30314;United States of America
-LABEL;TYPE=HOME:42 Plantation St.\nBaytown, LA 30314\nUnited States of America
-REV:20080424T195243Z
-         */
     }
     
     /**
@@ -216,9 +204,9 @@ REV:20080424T195243Z
      * Set email.
      * 
      * @param string $email The email address.
-     * @param string $type
+     * @param string $type  [Optional] Email type ('PREF', 'HOME', 'WORK'). The 
+     *                      default value is 'PREF'.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -265,6 +253,14 @@ REV:20080424T195243Z
         $this->_data["EMAIL"][] = array((string) $email, $type);
     }
     
+    /**
+     * Remove email address.
+     * 
+     * @param string $email The email address we want to remove.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function removeEmail($email)
     {
         $email = filter_var($email, FILTER_VALIDATE_EMAIL);
@@ -285,11 +281,23 @@ REV:20080424T195243Z
         $this->_data["EMAIL"] = array_values($this->_data["EMAIL"]);
     }
     
+    /**
+     * Get email addresses.
+     * 
+     * @return array
+     * @since  1.0
+     */
     public function getEmailAddresses()
     {
         return $this->_data["EMAIL"];
     }
     
+    /**
+     * Get preferred email address.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getPreferredEmail()
     {
         foreach ($this->_data["EMAIL"] as $email) {

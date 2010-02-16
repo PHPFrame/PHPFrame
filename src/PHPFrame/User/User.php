@@ -34,7 +34,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * vCard object used to store user details 
      * 
-     * @var PHPFrame_vCard
+     * @var PHPFrame_VCard
      */
     private $_vcard=null;
     
@@ -122,12 +122,12 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         // If we are passed a vCard object we deal with this first
         if (
             isset($options['vcard'])
-            && $options['vcard'] instanceof PHPFrame_vCard
+            && $options['vcard'] instanceof PHPFrame_VCard
         ) {
             $this->_vcard = $options['vcard'];
             unset($options['vcard']);
         } else {
-            $this->_vcard = new PHPFrame_vCard();
+            $this->_vcard = new PHPFrame_VCard();
         }
         
         // Once we have set the vCard object we call the parent's constructor
@@ -486,7 +486,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * Get vCard object for this user
      * 
      * @access public
-     * @return PHPFrame_vCard
+     * @return PHPFrame_VCard
      * @since  1.0
      */
     public function getVCard()
@@ -497,13 +497,13 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Set vCard object for this user
      * 
-     * @param PHPFrame_vCard $vcard
+     * @param PHPFrame_VCard $vcard
      * 
      * @access public
      * @return void
      * @since  1.0
      */
-    public function setVCard(PHPFrame_vCard $vcard)
+    public function setVCard(PHPFrame_VCard $vcard)
     {
         //TODO: Here we have to parse the vCard data 
         // and update the firstname and lastname proerties

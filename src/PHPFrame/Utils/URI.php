@@ -284,7 +284,7 @@ class PHPFrame_URI
             $i=0;
             foreach ($this->_query as $key=>$value) {
                 if ($i>0) {
-                	$str .= "&";
+                    $str .= "&";
                 }
                 $str .= $key."=".$value;
                 $i++;

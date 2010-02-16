@@ -25,11 +25,11 @@
  */
 class PHPFrame_InputFilter
 {
-	/**
-	 * Array with tags to blacklist.
-	 * 
-	 * @var array
-	 */
+    /**
+     * Array with tags to blacklist.
+     * 
+     * @var array
+     */
     private $_tag_blacklist  = array(
         'applet', 'body', 'bgsound', 'base', 'basefont', 'embed', 'frame', 
         'frameset', 'head', 'html', 'id', 'iframe', 'ilayer', 'layer', 'link', 

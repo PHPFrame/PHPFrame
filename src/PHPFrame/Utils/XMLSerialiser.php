@@ -154,7 +154,7 @@ class PHPFrame_XMLSerialiser
         if (count($children) > 0) {
             $value = array();
             foreach ($children as $child) {
-            	$child_name = $child->getName();
+                $child_name = $child->getName();
                 if ($child_name == "array") {
                     $value[] = self::_unserialiseNode($child);
                 } else {

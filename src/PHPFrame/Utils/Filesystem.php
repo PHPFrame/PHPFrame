@@ -220,17 +220,17 @@ class PHPFrame_Filesystem
         if ($file_error > 0) {
             switch ($file_error) {
             case 1 :
-            	$msg = "ERROR: PHP upload maximum file size exceeded!";
-            	break;
+                $msg = "ERROR: PHP upload maximum file size exceeded!";
+                break;
             case 2 :
-            	$msg = "ERROR: PHP maximum file size exceeded!";
-            	break;
+                $msg = "ERROR: PHP maximum file size exceeded!";
+                break;
             case 3 :
-            	$msg = "ERROR: Partial upload!";
-            	break;
+                $msg = "ERROR: Partial upload!";
+                break;
             case 4 :
-            	$msg = "ERROR: No file submitted for upload!";
-            	break;
+                $msg = "ERROR: No file submitted for upload!";
+                break;
             }
             
             throw new RuntimeException($msg);

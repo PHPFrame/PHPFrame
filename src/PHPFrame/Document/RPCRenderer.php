@@ -213,13 +213,13 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
         $type = 'string';
         
         if (is_bool($node_value)) {
-        	$type = 'boolean';
+            $type = 'boolean';
         } elseif (is_int($node_value)) {
             $type = 'int';
         } elseif (is_float($node_value)) {
-        	$type = 'double';
+            $type = 'double';
         } elseif (is_double($node_value)) {
-        	$type = 'double';
+            $type = 'double';
         }
         
         $parent_node = $doc->addNode($parent_node, $type);

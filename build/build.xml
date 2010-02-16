@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="PHPFrame" default="build" basedir="../">
     <target name="build" 
-            depends="checkout, prepare, php-codesniffer, phpunit, php-documentor" />
+            depends="checkout, prepare, phpcs, phpunit, phpdoc" />
             
     <target name="prepare">
         <exec executable="rm" dir="${basedir}">
@@ -18,7 +18,7 @@
         </exec>
     </target>
     
-    <target name="php-codesniffer">
+    <target name="phpcs">
         <exec executable="phpcs"
               dir="${basedir}/src"
               output="${basedir}/build/logs/checkstyle.xml">
@@ -35,7 +35,7 @@
         </exec>
     </target>
     
-    <target name="php-documentor">
+    <target name="phpdoc">
         <exec executable="phpdoc" dir="${basedir}/src">
             <arg line="-ct type -ue on -t ${basedir}/build/api
                        -tb /usr/share/php/data/phpUnderControl/data/phpdoc

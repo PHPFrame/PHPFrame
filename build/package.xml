@@ -10,28 +10,28 @@
          http://pear.php.net/dtd/package-2.0     
          http://pear.php.net/dtd/package-2.0.xsd">
          
- <name>##PROJECT_NAME##</name>
- <channel>##CHANNEL##</channel>
- <summary>##SUMMARY##</summary>
- <description>##DESCRIPTION##</description>
+ <name>@PROJECT_NAME@</name>
+ <channel>@CHANNEL@</channel>
+ <summary>@SUMMARY@</summary>
+ <description>@DESCRIPTION@</description>
  <lead>
-  <name>##LEAD_NAME##</name>
-  <user>##LEAD_USER##</user>
-  <email>##LEAD_EMAIL##</email>
-  <active>##LEAD_ACTIVE##</active>
+  <name>@LEAD_NAME@</name>
+  <user>@LEAD_USER@</user>
+  <email>@LEAD_EMAIL@</email>
+  <active>@LEAD_ACTIVE@</active>
  </lead>
- <date>##DATE##</date>
- <time>##TIME##</time>
+ <date>@DATE@</date>
+ <time>@TIME@</time>
  <version>
-  <release>##RELEASE_VERSION##</release>
-  <api>##API_VERSION##</api>
+  <release>@RELEASE_VERSION@</release>
+  <api>@API_VERSION@</api>
  </version>
  <stability>
-  <release>##RELEASE_STABILITY##</release>
-  <api>##API_STABILITY##</api>
+  <release>@RELEASE_STABILITY@</release>
+  <api>@API_STABILITY@</api>
  </stability>
- <license uri="##LICENSE_URI##">##LICENSE##</license>
- <notes>##NOTES##</notes>
+ <license uri="@LICENSE_URI@">@LICENSE@</license>
+ <notes>@NOTES@</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" name="PHPFrame/Application/ACL.php" role="php" />
@@ -171,7 +171,7 @@
    
    <file baseinstalldir="/" name="CREDITS" role="data" />
    <file baseinstalldir="/" name="LICENSE" role="data" />
-   <file baseinstalldir="/" name="README" role="data" />
+   <file baseinstalldir="/" name="README.md" role="data" />
    
    <file baseinstalldir="" name="CLI_Tool.php" role="script">
     <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
@@ -298,16 +298,16 @@ insalling the PEAR package. If you want to continue type "yes".
  <changelog>
   <release>
    <version>
-    <release>##RELEASE_VERSION##</release>
-    <api>##API_VERSION##</api>
+    <release>@RELEASE_VERSION@</release>
+    <api>@API_VERSION@</api>
    </version>
    <stability>
-    <release>##RELEASE_STABILITY##</release>
-    <api>##API_STABILITY##</api>
+    <release>@RELEASE_STABILITY@</release>
+    <api>@API_STABILITY@</api>
    </stability>
-   <date>##DATE##</date>
-   <license uri="##LICENSE_URI##">##LICENSE##</license>
-   <notes>##NOTES##</notes>
+   <date>@DATE@</date>
+   <license uri="@LICENSE_URI@">@LICENSE@</license>
+   <notes>@NOTES@</notes>
   </release>
  </changelog>
 </package>

@@ -42,37 +42,37 @@ class PHPFrame
      * 
      * @var string
      */
-    const API_VERSION = "##API_VERSION##";
+    const API_VERSION = "@API_VERSION@";
     /**
      * The PHPFrame API stability
      * 
      * @var string
      */
-    const API_STABILITY = "##API_STABILITY##";
+    const API_STABILITY = "@API_STABILITY@";
     /**
      * The PHPFrame release version
      * 
      * @var string
      */
-    const RELEASE_VERSION = "##RELEASE_VERSION##";
+    const RELEASE_VERSION = "@RELEASE_VERSION@";
     /**
      * The PHPFrame release stability
      * 
      * @var string
      */
-    const RELEASE_STABILITY = "##RELEASE_STABILITY##";
+    const RELEASE_STABILITY = "@RELEASE_STABILITY@";
     /**
      * The build label
      * 
      * @var string
      */
-    const BUILD_LABEL = "##BUILD_LABEL##";
+    const BUILD_LABEL = "@BUILD_LABEL@";
     /**
      * The build date
      * 
      * @var string
      */
-    const BUILD_DATE = "##BUILD_DATE##";
+    const BUILD_DATE = "@BUILD_DATE@";
     /**
      * Core subpackages
      * 

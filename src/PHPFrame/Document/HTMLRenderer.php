@@ -236,7 +236,7 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
      * This method builds an HTML string with UI filtering elements to be used 
      * with row collection objects.
      * 
-     * @param PHPFrame_Collection $collection
+     * @param PHPFrame_Collection $collection Collection object to render.
      * 
      * @return string
      * @since  1.0

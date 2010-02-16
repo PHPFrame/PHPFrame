@@ -236,7 +236,8 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
                     $depth--; 
                     $return_array[$i] = str_replace(
                         "</", 
-                        "\r\n".$this->padding($depth)."</",$return_array[$i]
+                        "\r\n".$this->padding($depth)."</", 
+                        $return_array[$i]
                     );
                 } else {
                     $depth--;

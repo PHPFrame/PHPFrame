@@ -179,7 +179,10 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     private function _isAssoc($test_array)
     {
         $assoc = false;
-        if (empty($test_array)) return true;
+        
+        if (empty($test_array)) {
+            return true;
+        }
         
         $indexes = array_keys($test_array);
         $counter = 0;

@@ -156,7 +156,9 @@ class PHPFrame_ImageProcessor
             break;
         case 3: // for png
             $imgcomp /= 10;
-            if ($imgcomp > 9) $imgcomp = 9;
+            if ($imgcomp > 9) {
+                $imgcomp = 9;
+            }
             imagepng($dst_img, $dst_filename, $imgcomp); // for png
             break;
         }        
@@ -185,43 +187,43 @@ class PHPFrame_ImageProcessor
             c                        d 
         */
 
-       $scr_img = $this->_createFromFile($img_file, $type);
-       $width   = imagesx($scr_img);
-       $height  = imagesy($scr_img);
+        $scr_img = $this->_createFromFile($img_file, $type);
+        $width   = imagesx($scr_img);
+        $height  = imagesy($scr_img);
         
-       // line a - b
-       $abX  = 0;
-       $abY  = 0;
-       $abX1 = $width;
-       $abY1 = 0;
+        // line a - b
+        $abX  = 0;
+        $abY  = 0;
+        $abX1 = $width;
+        $abY1 = 0;
     
-       // line a - c
-       $acX  = 0;
-       $acY  = 0;
-       $acX1 = 0;
-       $acY1 = $height;
+        // line a - c
+        $acX  = 0;
+        $acY  = 0;
+        $acX1 = 0;
+        $acY1 = $height;
     
-       // line b - d
-       $bdX  = $width-1;
-       $bdY  = 0;
-       $bdX1 = $width-1;
-       $bdY1 = $height;
+        // line b - d
+        $bdX  = $width-1;
+        $bdY  = 0;
+        $bdX1 = $width-1;
+        $bdY1 = $height;
     
-       // line c - d
-       $cdX  = 0;
-       $cdY  = $height-1;
-       $cdX1 = $width;
-       $cdY1 = $height-1;
+        // line c - d
+        $cdX  = 0;
+        $cdY  = $height-1;
+        $cdX1 = $width;
+        $cdY1 = $height-1;
     
-       // DRAW LINES   
-       imageline($scr_img, $abX, $abY, $abX1, $abY1, $colour);
-       imageline($scr_img, $acX, $acY, $acX1, $acY1, $colour);
-       imageline($scr_img, $bdX, $bdY, $bdX1, $bdY1, $colour);
-       imageline($scr_img, $cdX, $cdY, $cdX1, $cdY1, $colour);
+        // DRAW LINES   
+        imageline($scr_img, $abX, $abY, $abX1, $abY1, $colour);
+        imageline($scr_img, $acX, $acY, $acX1, $acY1, $colour);
+        imageline($scr_img, $bdX, $bdY, $bdX1, $bdY1, $colour);
+        imageline($scr_img, $cdX, $cdY, $cdX1, $cdY1, $colour);
  
-       // create copy from image   
-       $this->_output($scr_img, $img_file, $quality, $type);
+        // create copy from image   
+        $this->_output($scr_img, $img_file, $quality, $type);
        
-       imagedestroy($scr_img);
+        imagedestroy($scr_img);
     }
 }

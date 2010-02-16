@@ -178,12 +178,12 @@ class PHPFrame_Filesystem
     /**
      * Upload file.
      * 
-     * @param  string $field_name      Name of input field of type file.
-     * @param  string $dir             Absolute path to upload dir.
-     * @param  string $accept          [Optional] List of accepted MIME types 
-     *                                 separated by commas. Default value is '*'.
-     * @param  int    $max_upload_size [Optional]
-     * @param  bool   $overwrite       [Optional]
+     * @param string $field_name      Name of input field of type file.
+     * @param string $dir             Absolute path to upload dir.
+     * @param string $accept          [Optional] List of accepted MIME types 
+     *                                separated by commas. Default value is '*'.
+     * @param int    $max_upload_size [Optional]
+     * @param bool   $overwrite       [Optional]
      * 
      * @return PHPFrame_FileInfo
      * @throws Exception on failure
@@ -263,18 +263,18 @@ class PHPFrame_Filesystem
         
         // Avoid overwriting if $overwrite is set to false
         if ($overwrite === false) {
-          $check_if_file_exists = file_exists($dir.DS.$file_name);
-          if ($check_if_file_exists === true) {
-            // split file name into name and extension
-            $split_point = strrpos($file_name, '.');
-            $file_n      = substr($file_name, 0, $split_point);
-            $file_ext    = substr($file_name, $split_point);
-            $i=0;
-            while (true === file_exists($dir.DS.$file_n.$i.$file_ext)) {
-                $i++;
+            $check_if_file_exists = file_exists($dir.DS.$file_name);
+            if ($check_if_file_exists === true) {
+                // split file name into name and extension
+                $split_point = strrpos($file_name, '.');
+                $file_n      = substr($file_name, 0, $split_point);
+                $file_ext    = substr($file_name, $split_point);
+                $i=0;
+                while (true === file_exists($dir.DS.$file_n.$i.$file_ext)) {
+                    $i++;
+                }
+                $file_name = $file_n.$i.$file_ext;
             }
-            $file_name = $file_n.$i.$file_ext;
-          }
         }
         
         // put the file where we'd like it

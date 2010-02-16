@@ -284,7 +284,7 @@ class PHPFrame_Crypt
         $makepass = '';
         $stat     = @stat(__FILE__);
         
-        if(empty($stat) || !is_array($stat)) {
+        if (empty($stat) || !is_array($stat)) {
             $stat = array(php_uname());
         }
 
@@ -300,8 +300,8 @@ class PHPFrame_Crypt
     /**
      * Converts to allowed 64 characters for APRMD5 passwords.
      *
-     * @param string $value
-     * @param int    $count
+     * @param string $value The value.
+     * @param int    $count Count.
      * 
      * @return string Value converted to the 64 MD5 characters.
      * @since  1.0

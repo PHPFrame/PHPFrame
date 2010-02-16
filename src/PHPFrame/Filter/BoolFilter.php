@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  Filter
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 class PHPFrame_BoolFilter extends PHPFrame_Filter
@@ -36,7 +36,6 @@ class PHPFrame_BoolFilter extends PHPFrame_Filter
      *                                    is TRUE.
      *                                  - strict (bool). Default value is FALSE.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -55,7 +54,6 @@ class PHPFrame_BoolFilter extends PHPFrame_Filter
      * @param bool $bool Boolean value indicating whether we want to switch on 
      *                   or off the null_on_failure option.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -69,7 +67,6 @@ class PHPFrame_BoolFilter extends PHPFrame_Filter
      * 
      * @param bool $bool Boolean indicating whether strict mode is on or off
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -91,7 +88,6 @@ class PHPFrame_BoolFilter extends PHPFrame_Filter
      * 
      * @param bool|int|string $value The value to process
      * 
-     * @access public
      * @return mixed See method description 
      * @since  1.0
      */
@@ -107,16 +103,15 @@ class PHPFrame_BoolFilter extends PHPFrame_Filter
             return $null_on_failure ? null : false;
         }
         
-        if (
-            is_float($value) 
+        if (is_float($value) 
             || is_array($value) 
             || is_object($value) 
             || is_resource($value)
         ) {
             if (is_object($value) || is_resource($value)) {
-               $value_as_string = gettype($value);
+                $value_as_string = gettype($value);
             } else {
-               $value_as_string = (string) $value;
+                $value_as_string = (string) $value;
             }
             
             $msg  = "Argument \$value in ".get_class($this)."::process() can ";
@@ -137,11 +132,14 @@ class PHPFrame_BoolFilter extends PHPFrame_Filter
         if ($null_on_failure === false) {
             $filtered_value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
         } else {
-            $filtered_value = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $filtered_value = filter_var(
+                $value, 
+                FILTER_VALIDATE_BOOLEAN, 
+                FILTER_NULL_ON_FAILURE
+            );
         }
         
-        if (
-            ($filtered_value === false && !$null_on_failure)
+        if (($filtered_value === false && !$null_on_failure)
             || (is_null($filtered_value) && $null_on_failure)
         ) {
             $msg  = "Failed to validate value '".$value."' of type ";

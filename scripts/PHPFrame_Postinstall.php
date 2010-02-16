@@ -11,7 +11,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -21,7 +21,7 @@
  * @package  Postinstall
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 class PHPFrame_Postinstall_postinstall
@@ -42,7 +42,6 @@ class PHPFrame_Postinstall_postinstall
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -72,7 +71,6 @@ class PHPFrame_Postinstall_postinstall
      *                                                  need to be performed,
      *                                                  if any.
      * 
-     * @access public
      * @return bool Returns TRUE on success or FALSE on failure
      * @since  1.0
      */
@@ -80,8 +78,7 @@ class PHPFrame_Postinstall_postinstall
         PEAR_Config $config, 
         PEAR_PackageFile_v2 $self, 
         $lastInstalledVersion=null
-    )
-    {
+    ) {
         // Include PHPFrame framework
         require_once "PHPFrame.php";
         
@@ -124,7 +121,6 @@ class PHPFrame_Postinstall_postinstall
      *                             _undoOnError can only be triggered by the 
      *                             PEAR installer.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -135,8 +131,7 @@ class PHPFrame_Postinstall_postinstall
             return false;
         }
         
-        if (
-            !$this->_createLogFile($this->_data_dir)
+        if (!$this->_createLogFile($this->_data_dir)
             || !$this->_createCLIToolEtc()
             || !$this->_createCLIToolTmp()
             || !$this->_createCLIToolVar()
@@ -222,7 +217,6 @@ class PHPFrame_Postinstall_postinstall
      * 
      * @param string $path
      * 
-     * @access private
      * @return bool
      * @since  1.0
      */
@@ -254,7 +248,6 @@ class PHPFrame_Postinstall_postinstall
      * @param string $msg
      * @param bool   $trigger_error
      * 
-     * @access private
      * @return void
      * @since  1.0
      */

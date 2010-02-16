@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  Filter
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 class PHPFrame_URLFilter extends PHPFrame_Filter
@@ -35,7 +35,6 @@ class PHPFrame_URLFilter extends PHPFrame_Filter
      *                                  - path_required (bool)
      *                                  - query_required (int)
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -52,7 +51,6 @@ class PHPFrame_URLFilter extends PHPFrame_Filter
      * 
      * @param bool $bool Boolean indicating whether option is on or off
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -66,7 +64,6 @@ class PHPFrame_URLFilter extends PHPFrame_Filter
      * 
      * @param bool $bool Boolean indicating whether option is on or off
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -80,7 +77,6 @@ class PHPFrame_URLFilter extends PHPFrame_Filter
      * 
      * @param string $value The value to process
      * 
-     * @access public
      * @return mixed Either the filtered value or FALSE on failure
      * @see    src/PHPFrame/Filter/PHPFrame_Filter#process($value)
      * @since  1.0

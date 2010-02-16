@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  Filter
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 class PHPFrame_Validator
@@ -71,7 +71,6 @@ class PHPFrame_Validator
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -87,7 +86,6 @@ class PHPFrame_Validator
      * @param PHPFrame_Filter $filter
      * @param bool            $allow_null
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -95,8 +93,7 @@ class PHPFrame_Validator
         $field_name, 
         PHPFrame_Filter $filter, 
         $allow_null=false
-    )
-    {
+    ) {
         if (!is_string($field_name) || strlen($field_name) < 1) {
             $msg  = get_class($this)."::setFilter() expects argument ";
             $msg .= "\$name to be of type string and not empty and got value ";
@@ -116,7 +113,6 @@ class PHPFrame_Validator
      * 
      * @param string $field_name
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -137,7 +133,6 @@ class PHPFrame_Validator
     /**
      * Get filters
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -151,7 +146,6 @@ class PHPFrame_Validator
      * 
      * @param string $field_name
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -165,7 +159,6 @@ class PHPFrame_Validator
      * 
      * @param bool $bool
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -185,7 +178,6 @@ class PHPFrame_Validator
      * 
      * @param string $str The exception class name
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -206,7 +198,6 @@ class PHPFrame_Validator
      * @param string $field_name
      * @param mixed  $value
      * 
-     * @access public
      * @return bool TRUE on success and FALSE on failure
      * @since  1.0
      */
@@ -224,8 +215,7 @@ class PHPFrame_Validator
             throw new UnexpectedValueException($msg);
         }
         
-        if (
-            in_array($field_name, $this->_allow_null_fields) 
+        if (in_array($field_name, $this->_allow_null_fields) 
             && is_null($value)
         ) {
             $this->_filtered_values[$field_name] = null;
@@ -242,12 +232,10 @@ class PHPFrame_Validator
             
         $this->_filtered_values[$field_name] = $filter->process($value);
             
-        if (
-             count($filter->getMessages()) > 0
-             && (
-                ($this->_filtered_values[$field_name] === false && !$null_on_failure)
+        if (count($filter->getMessages()) > 0
+             && (($this->_filtered_values[$field_name] === false && !$null_on_failure)
                 || (is_null($this->_filtered_values[$field_name]) && $null_on_failure)
-            )
+             )
         ) {
             $last_message = end($filter->getMessages());
             $this->fail($last_message[0], $last_message[1]);
@@ -263,7 +251,6 @@ class PHPFrame_Validator
      * @param array $assoc An associative array containing the field names and 
      *                     the values to process.
      * 
-     * @access public
      * @return mixed The filtered array or FALSE on failure
      * @since  1.0
      */
@@ -281,8 +268,7 @@ class PHPFrame_Validator
         $this->_filtered_values = array();
         
         foreach ($assoc as $key=>$value) {
-            if (
-                array_key_exists($key, $this->_filters)
+            if (array_key_exists($key, $this->_filters)
                 && !$this->validate($key, $value)
             ) {
                 return false;
@@ -295,7 +281,6 @@ class PHPFrame_Validator
     /**
      * Get original values array
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -307,7 +292,6 @@ class PHPFrame_Validator
     /**
      * Get filtered values array
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -321,7 +305,6 @@ class PHPFrame_Validator
      * 
      * @param string $field_name
      * 
-     * @access public
      * @return mixed
      * @since  1.0
      */
@@ -335,7 +318,6 @@ class PHPFrame_Validator
      * 
      * @param string $field_name
      * 
-     * @access public
      * @return mixed
      * @since  1.0
      */
@@ -347,7 +329,6 @@ class PHPFrame_Validator
     /**
      * Get messages array
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -362,7 +343,6 @@ class PHPFrame_Validator
      * @param string $str             The failure message
      * @param string $exception_class [Optional] Specialised exception class
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

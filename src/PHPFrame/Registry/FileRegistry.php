@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  Registry
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @see      PHPFrame_Registry
  * @uses     PHPFrame_Permissions, PHPFrame_Libraries, 
  *           PHPFrame_Features, PHPFrame_Filesystem
@@ -53,7 +53,6 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
      * 
      * @param string $cache_file
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -81,7 +80,6 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
      * particular object are removed or when the object is explicitly destroyed 
      * or in any order in shutdown sequence.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -96,7 +94,6 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
     /**
      * Implementation of IteratorAggregate interface
      * 
-     * @access public
      * @return ArrayIterator
      * @since  1.0
      */
@@ -111,7 +108,6 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
      * @param string $key
      * @param mixed  $default_value
      * 
-     * @access public
      * @return mixed
      * @since  1.0
      */
@@ -141,7 +137,6 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
      * @param string $key
      * @param mixed  $value
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -158,7 +153,6 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
     /**
      * Mark the application data as dirty (it needs writting to file)
      * 
-     * @access private
      * @return void
      * @since  1.0
      */
@@ -170,7 +164,6 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
     /**
      * Is the application registry data dirty?
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */

@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  * @ignore
  */
 
@@ -21,7 +21,7 @@
  * @package  Client
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  * @ignore
  */
@@ -121,7 +121,6 @@ class PHPFrame_MobileClient extends PHPFrame_Client
      * @param PHPFrame_Response $response   The response object to prepare.
      * @param string            $views_path Absolute path to vies dir.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

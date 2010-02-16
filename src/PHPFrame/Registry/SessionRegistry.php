@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -27,7 +27,7 @@
  * @package  Registry
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @see      PHPFrame_Registry
  * @since    1.0
  */
@@ -97,8 +97,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Constructor
-     *
-     * @access protected
+     * 
      * @return void
      * @since  1.0
      */
@@ -174,9 +173,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get Instance
-     *
-     * @static
-     * @access public
+     * 
      * @return PHPFrame_Registry
      * @since  1.0
      */
@@ -201,8 +198,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      *                              variable we want to retrieve.
      * @param mixed  $default_value An optional default value to assign if
      *                              the given key is not set.
-     *
-     * @access public
+     * 
      * @return mixed
      * @since  1.0
      */
@@ -227,8 +223,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      * @param string $key   A string used to identify the session variable we
      *                      want to set.
      * @param mixed  $value The value we want to store in the specified key.
-     *
-     * @access public
+     * 
      * @return void
      * @since  1.0
      */
@@ -239,8 +234,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get session id
-     *
-     * @access public
+     * 
      * @return string
      * @since  1.0
      */
@@ -251,8 +245,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get session name
-     *
-     * @access public
+     * 
      * @return string
      * @since  1.0
      */
@@ -263,15 +256,13 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get client object
-     *
-     * @access public
+     * 
      * @return PHPFrame_Environment_IClient|null
      * @since  1.0
      */
     public function getClient()
     {
-        if (
-            isset($this->_data['client'])
+        if (isset($this->_data['client'])
             && $this->_data['client'] instanceof PHPFrame_Client
         ) {
             return $this->_data['client'];
@@ -283,15 +274,13 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get client object's name
-     *
-     * @access public
+     * 
      * @return string
      * @since  1.0
      */
     public function getClientName()
     {
-        if (
-            isset($this->_data['client'])
+        if (isset($this->_data['client'])
             && $this->_data['client'] instanceof PHPFrame_Client
         ) {
             return $this->_data['client']->getName();
@@ -304,8 +293,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      * Set session user
      *
      * @param PHPFrame_User $user User object of type PHPFrame_User
-     *
-     * @access public
+     * 
      * @return void
      * @since  1.0
      */
@@ -316,15 +304,13 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get session's user object
-     *
-     * @access public
+     * 
      * @return PHPFrame_User|null
      * @since  1.0
      */
     public function getUser()
     {
-        if (
-            isset($this->_data['user'])
+        if (isset($this->_data['user'])
             && $this->_data['user'] instanceof PHPFrame_User
         ) {
             return $this->_data['user'];
@@ -335,15 +321,13 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get session user id
-     *
-     * @access public
+     * 
      * @return int
      * @since  1.0
      */
     public function getUserId()
     {
-        if (
-            isset($this->_data['user'])
+        if (isset($this->_data['user'])
             && $this->_data['user'] instanceof PHPFrame_User
         ) {
             return (int) $this->_data['user']->getId();
@@ -354,15 +338,13 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get session user groupid
-     *
-     * @access public
+     * 
      * @return int
      * @since  1.0
      */
     public function getGroupId()
     {
-        if (
-            isset($this->_data['user'])
+        if (isset($this->_data['user'])
             && $this->_data['user'] instanceof PHPFrame_User
         ) {
             return (int) $this->_data['user']->getGroupId();
@@ -373,15 +355,13 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Is the current session authenticated?
-     *
-     * @access public
+     * 
      * @return bool Returns TRUE if user is authenticated or FALSE otherwise.
      * @since  1.0
      */
     public function isAuth()
     {
-        if (
-            isset($this->_data['user'])
+        if (isset($this->_data['user'])
             && $this->_data['user'] instanceof PHPFrame_User
             && $this->_data['user']->getId() > 0
         ) {
@@ -393,8 +373,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Is the current session an admin session?
-     *
-     * @access public
+     * 
      * @return bool Returns TRUE if current user is admin or FALSE otherwise.
      * @since  1.0
      */
@@ -409,15 +388,13 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get system events object
-     *
-     * @access public
+     * 
      * @return PHPFrame_Sysevents
      * @since  1.0
      */
     public function getSysevents()
     {
-        if (
-            isset($this->_data['sysevents'])
+        if (isset($this->_data['sysevents'])
             && $this->_data['sysevents'] instanceof PHPFrame_Sysevents
         ) {
             return $this->_data['sysevents'];
@@ -434,8 +411,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      * it is present, if not it will invalidate the session.
      *
      * @param bool $force_new If true, force a new token to be created
-     *
-     * @access public
+     * 
      * @return string
      * @since  1.0
      */
@@ -451,8 +427,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Checks for a form token in the request
-     *
-     * @access public
+     * 
      * @return bool TRUE if found and valid, FALSE otherwise
      * @since  1.0
      */
@@ -469,8 +444,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Destroy session
-     *
-     * @access public
+     * 
      * @return void
      * @since  1.0
      */
@@ -494,8 +468,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Detect and set client object
-     *
-     * @access protected
+     * 
      * @return void
      * @since  1.0
      */
@@ -530,8 +503,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      *
      *
      * @param int $length Lenght of string.
-     *
-     * @access private
+     * 
      * @return string  Generated token.
      * @since  1.0
      */

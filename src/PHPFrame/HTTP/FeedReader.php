@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  HTTP
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 class PHPFrame_FeedReader
@@ -62,7 +62,6 @@ class PHPFrame_FeedReader
      * @param int    $cache     Cache time in seconds.
      * @param string $cache_dir Full path to the cache directory.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -79,7 +78,6 @@ class PHPFrame_FeedReader
     /**
      * Get the feed URL
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -91,7 +89,6 @@ class PHPFrame_FeedReader
     /**
      * Get XML string
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -103,7 +100,6 @@ class PHPFrame_FeedReader
     /**
      * Get DOM object
      * 
-     * @access public
      * @return DOMDocument
      * @since  1.0
      */
@@ -140,7 +136,6 @@ class PHPFrame_FeedReader
     /**
      * Get feed items/entries
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -155,7 +150,6 @@ class PHPFrame_FeedReader
      * @param int    $cache     Cache time in seconds.
      * @param string $cache_dir Full path to the cache directory.
      * 
-     * @access private
      * @return string The HTTP request body containing the XML string
      * @since  1.0
      */
@@ -178,7 +172,6 @@ class PHPFrame_FeedReader
     /**
      * Parse XML string stored in internal property
      * 
-     * @access private
      * @return void
      * @since  1.0
      */

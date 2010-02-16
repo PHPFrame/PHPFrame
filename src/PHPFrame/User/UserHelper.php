@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  User
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 class PHPFrame_UserHelper
@@ -31,8 +31,6 @@ class PHPFrame_UserHelper
      * @param string $firstname
      * @param string $lastname
      * 
-     * @static
-     * @access public
      * @return string full name in format: [Uppercase first initial]"." [Surname]
      * @since  1.0
      */
@@ -48,8 +46,6 @@ class PHPFrame_UserHelper
      * 
      * @param int $id The ID to be translated
      * 
-     * @static
-     * @access public
      * @return string If no id is passed returns false, otherwise returns the username 
      *                as a string
      * @since  1.0
@@ -75,10 +71,8 @@ class PHPFrame_UserHelper
      * 
      * @param string $username The username to be translated.
      * 
-     * @static
-     * @access public
-     * @return int    If no username is passed returns false, otherwise returns 
-     *                the user ID.
+     * @return int If no username is passed returns false, otherwise returns 
+     *             the user ID.
      * @since  1.0
      */
     public static function username2id($username='') 
@@ -97,10 +91,8 @@ class PHPFrame_UserHelper
      * 
      * @param string $email The email to be translated.
      * 
-     * @static
-     * @access public
-     * @return mixed  If no email is passed returns FALSE, otherwise returns 
-     *                the user ID.
+     * @return mixed If no email is passed returns FALSE, otherwise returns 
+     *               the user ID.
      * @since  1.0
      */
     public static function email2id($email='') 
@@ -119,8 +111,6 @@ class PHPFrame_UserHelper
      * 
      * @param int $id The userid to be translated.
      * 
-     * @static
-     * @access public
      * @return mixed A string with the email address or FALSE on fail.
      * @since  1.0
      */
@@ -140,16 +130,14 @@ class PHPFrame_UserHelper
      * 
      * @param int $id
      * 
-     * @static
-     * @access public
      * @return string
      * @since  1.0
      */
     public static function id2photo($id) 
     {
         if (!empty($id)) { // No user has been selected
-            $db = PHPFrame::DB();
-            $sql = "SELECT photo FROM #__users WHERE id = :id";
+            $db    = PHPFrame::DB();
+            $sql   = "SELECT photo FROM #__users WHERE id = :id";
             $photo = $db->fetchColumn($sql, array(":id"=>$id));
             
             if (empty($photo)) { 
@@ -157,8 +145,7 @@ class PHPFrame_UserHelper
             }
             
             return $photo;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -170,21 +157,19 @@ class PHPFrame_UserHelper
      * @param string $attribs   Attributes for the <select> tag
      * @param string $fieldname The field name to use for the select tag
      * 
-     * @static
-     * @access public
      * @return string A string with the HTML select
      * @since  1.0
      */
     public static function select($selected=0, $attribs='', $fieldname='userid') 
     {
         // assemble users to the array
-        $options = array();
+        $options   = array();
         $options[] = PHPFrame_HTMLUI::_('select.option', '0', PHPFrame_String::html( '-- Select a User --' ) );
         
         // get users from #__users
         $db = PHPFrame::DB();
         
-        $sql = "SELECT u.id, u.firstname, u.lastname ";
+        $sql  = "SELECT u.id, u.firstname, u.lastname ";
         $sql .= " FROM #__users AS u ";
         $sql .= " AND (u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL)";
         $sql .= " ORDER BY u.lastname";
@@ -213,8 +198,6 @@ class PHPFrame_UserHelper
      * @param int    $projectid This parameter is optional. If passed users will be 
      *                          filtered to the project members.
      * 
-     * @static
-     * @access public
      * @return string A string with the html code containing the checkboxes.
      * @since  1.0
      */
@@ -227,8 +210,7 @@ class PHPFrame_UserHelper
         if (!empty($projectid)) {
             $sql .= " LEFT JOIN #__users_roles ur ON ur.userid = u.id ";
             $sql .= " WHERE ur.projectid = :projectid";
-        }
-        else {
+        } else {
             $sql .= " WHERE 0=0";
         }
         $sql .= " AND (u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL)";
@@ -244,8 +226,7 @@ class PHPFrame_UserHelper
             foreach ($selected as $assignee) {
                 $assignees[] = $assignee['id'];
             }
-        }
-        elseif (!empty($selected)) {
+        } elseif (!empty($selected)) {
             $assignees[] = $selected;
         }
 
@@ -268,8 +249,6 @@ class PHPFrame_UserHelper
      * 
      * @param array $where An array with conditions to include in SQL query.
      * 
-     * @static
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -279,7 +258,7 @@ class PHPFrame_UserHelper
         
         $where[] = "(u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL)";
         
-        $sql = "SELECT id, username, firstname, lastname FROM #__users ";
+        $sql  = "SELECT id, username, firstname, lastname FROM #__users ";
         $sql .= ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
         $sql .= " ORDER BY username";
         
@@ -304,8 +283,6 @@ class PHPFrame_UserHelper
      * @param string $attribs   Attributes for the <select> tag
      * @param string $fieldname The name to use for the select tag
      * 
-     * @static
-     * @access public
      * @return string A string with the HTML select
      * @since  1.0
      */

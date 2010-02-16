@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  Ext
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
@@ -115,7 +115,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      * 
      * @param array $options
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -134,7 +133,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get name
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -146,7 +144,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set name
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -158,7 +155,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get channel
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -170,7 +166,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set channel
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -182,7 +177,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get summary
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -194,7 +188,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set summary
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -206,7 +199,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get description
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -218,7 +210,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set description
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -230,7 +221,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get author
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -242,7 +232,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set author
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -254,7 +243,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get date
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -266,7 +254,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set date
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -278,7 +265,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get time
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -290,7 +276,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set time
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -302,7 +287,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get release version
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -314,7 +298,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set version
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -326,7 +309,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set stability
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -338,7 +320,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set license
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -350,7 +331,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set notes
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -362,7 +342,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get dependencies
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -376,7 +355,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      * 
      * @param array $array
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -388,7 +366,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get contents
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -402,7 +379,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      * 
      * @param array $array
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -414,7 +390,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get install scripts
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -428,7 +403,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      * 
      * @param string $str
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -440,7 +414,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Get uninstall scripts
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -454,7 +427,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      * 
      * @param string $str
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -466,7 +438,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Is enabled?
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -480,7 +451,6 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      * 
      * @param bool $bool
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */

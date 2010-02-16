@@ -10,7 +10,7 @@
  * @copyright  2009 The PHPFrame Group
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version    SVN: $Id$
- * @link       http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link       http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -21,7 +21,7 @@
  * @package    HTTP
  * @author     Luis Montero <luis.montero@e-noise.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link       http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link       http://github.com/PHPFrame/PHPFrame
  * @uses       Console_ProgressBar
  * @since      1.0
  */
@@ -61,7 +61,6 @@ class PHPFrame_DownloadRequestListener implements SplObserver
     /**
      * Constructor
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -75,7 +74,6 @@ class PHPFrame_DownloadRequestListener implements SplObserver
     * 
     * @param string $str Target file name
     * 
-    * @access public
     * @return void
     * @since  1.0
     */
@@ -89,7 +87,6 @@ class PHPFrame_DownloadRequestListener implements SplObserver
     * 
     * @param string $str Path to download directory
     * 
-    * @access public
     * @return void
     * @since  1.0
     */
@@ -103,7 +100,6 @@ class PHPFrame_DownloadRequestListener implements SplObserver
      * 
      * @param SplSubject $subject
      * 
-     * @access public
      * @return void
      * @since  1.0
      */

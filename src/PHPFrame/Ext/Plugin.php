@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -32,7 +32,7 @@
  * @package  Ext
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 abstract class PHPFrame_Plugin
@@ -75,7 +75,10 @@ abstract class PHPFrame_Plugin
      * @return void
      * @since  1.0
      */
-    public function routeStartup() {}
+    public function routeStartup()
+    {
+        //...
+    }
     
     /**
      * This method is called AFTER THE REQUEST IS ROUTED to a specific 
@@ -84,7 +87,10 @@ abstract class PHPFrame_Plugin
      * @return void
      * @since  1.0
      */
-    public function routeShutdown() {}
+    public function routeShutdown()
+    {
+        //...
+    }
     
     /**
      * This method is called BEFORE THE DISPATCH LOOP is started. So it will 
@@ -94,7 +100,10 @@ abstract class PHPFrame_Plugin
      * @return void
      * @since  1.0
      */
-    public function preDispatch() {}
+    public function preDispatch()
+    {
+        //...
+    }
     
     /**
      * This method is called AFTER THE DISPATCH LOOP has finished iterating.  
@@ -104,7 +113,10 @@ abstract class PHPFrame_Plugin
      * @return void
      * @since  1.0
      */
-    public function postDispatch() {}
+    public function postDispatch()
+    {
+        //...
+    }
     
     /**
      * This method is called AT THE BEGINNING OF EVERY ITERATION OF THE 
@@ -113,7 +125,10 @@ abstract class PHPFrame_Plugin
      * @return void
      * @since  1.0
      */
-    public function dispatchLoopStartup() {}
+    public function dispatchLoopStartup()
+    {
+        //...
+    }
     
     /**
      * This method is called AT THE END OF EVERY ITERATION OF THE DISPATCH
@@ -122,7 +137,10 @@ abstract class PHPFrame_Plugin
      * @return void
      * @since  1.0
      */
-    public function dispatchLoopShutdown() {}
+    public function dispatchLoopShutdown()
+    {
+        //...
+    }
     
     /**
      * This method is called AFTER THE DISPATCH LOOP AND BEFORE THE THEME IS
@@ -131,7 +149,10 @@ abstract class PHPFrame_Plugin
      * @return void
      * @since  1.0
      */
-    public function preApplyTheme() {}
+    public function preApplyTheme()
+    {
+        //...
+    }
     
     /**
      * This method is called AFTER THE THEME IS APPLIED TO THE RESPONSE BODY 
@@ -141,5 +162,8 @@ abstract class PHPFrame_Plugin
      * @return void
      * @since  1.0
      */
-    public function postApplyTheme() {}
+    public function postApplyTheme()
+    {
+        //...
+    }
 }

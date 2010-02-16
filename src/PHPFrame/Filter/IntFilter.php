@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  Filter
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 class PHPFrame_IntFilter extends PHPFrame_Filter
@@ -42,7 +42,6 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      *                                    FALSE
      *                                  - strict (bool)
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -62,7 +61,6 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      * 
      * @param int $int The minimum allowed value for the filtered integer
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -76,7 +74,6 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      * 
      * @param int $int The maximum allowed value for the filtered integer
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -90,7 +87,6 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      * 
      * @param bool $bool Boolean to indicate whether or not octals are allowed
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -104,7 +100,6 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      * 
      * @param bool $bool Boolean to indicate whether or not hex are allowed
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -118,7 +113,6 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      * 
      * @param bool $bool Boolean indicating whether strict mode is on or off
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -137,7 +131,6 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
      * 
      * @param int|string $value The value to process
      * 
-     * @access public
      * @return mixed See method description 
      * @since  1.0
      */

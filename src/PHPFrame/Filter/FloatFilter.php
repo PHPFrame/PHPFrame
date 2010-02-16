@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  Filter
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 class PHPFrame_FloatFilter extends PHPFrame_Filter
@@ -40,7 +40,6 @@ class PHPFrame_FloatFilter extends PHPFrame_Filter
      *                                    separator. Default value is FALSE
      *                                  - strict (bool) Default value is FALSE
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -62,7 +61,6 @@ class PHPFrame_FloatFilter extends PHPFrame_Filter
      * 
      * @param string $str Decimal point character
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -76,7 +74,6 @@ class PHPFrame_FloatFilter extends PHPFrame_Filter
      * 
      * @param bool $bool Boolean to indicate option on or off
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -90,7 +87,6 @@ class PHPFrame_FloatFilter extends PHPFrame_Filter
      * 
      * @param bool $bool Boolean indicating whether strict mode is on or off
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -107,7 +103,6 @@ class PHPFrame_FloatFilter extends PHPFrame_Filter
      * 
      * @param int|float|string $value The value to process
      * 
-     * @access public
      * @return mixed Either the filtered value or FALSE on failure
      * @since  1.0
      * @see src/PHPFrame/Filter/PHPFrame_Filter#process($value)
@@ -122,8 +117,7 @@ class PHPFrame_FloatFilter extends PHPFrame_Filter
             return false;
         }
         
-        if (
-            is_bool($value)  
+        if (is_bool($value)  
             || is_array($value) 
             || is_object($value) 
             || is_resource($value)

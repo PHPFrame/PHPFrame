@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -21,7 +21,7 @@
  * @package  HTTP
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  * @see      HTTP_Request2
  */
@@ -52,7 +52,6 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
      * @param string          $method [Optional]
      * @param array           $config [Optional]
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -70,7 +69,6 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
      * 
      * @param int $int The cache time in seconds.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -82,7 +80,6 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
     /**
      * Get cache time in seconds. 0 means off.
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -96,7 +93,6 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
      * 
      * @param string $str Full path to the cache directory.
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -111,7 +107,6 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
     /**
      * Get cache directory
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -130,7 +125,6 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
     /**
      * Send HTTP request
      * 
-     * @access public
      * @return HTTP_Request2_Response
      * @since  1.0
      */
@@ -197,7 +191,6 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
      * @param string $download_dir [Optional]
      * @param string $filename     [Optional]
      * 
-     * @access public
      * @return HTTP_Request2_Response
      * @since  1.0
      */

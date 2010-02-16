@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  User
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 class PHPFrame_User extends PHPFrame_PersistentObject
@@ -43,7 +43,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param array $options
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -120,8 +119,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         );
         
         // If we are passed a vCard object we deal with this first
-        if (
-            isset($options['vcard'])
+        if (isset($options['vcard'])
             && $options['vcard'] instanceof PHPFrame_VCard
         ) {
             $this->_vcard = $options['vcard'];
@@ -138,7 +136,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get groupid
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -152,7 +149,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param int $int
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -164,7 +160,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get groupname
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -178,7 +173,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param string $str
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -190,7 +184,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get username
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -204,7 +197,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param string $str
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -216,7 +208,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get password
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -230,7 +221,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param string $str
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -244,7 +234,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param string $str
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -264,7 +253,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get first name
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -278,7 +266,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param string $str
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -296,7 +283,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get last name
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -310,7 +296,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param string $str
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -328,7 +313,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get email
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -342,7 +326,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param string $str
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -360,7 +343,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get block flag
      * 
-     * @access public
      * @return bool
      * @since  1.0
      */
@@ -374,7 +356,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param bool $bool
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -389,7 +370,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get last visit timestamp
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -403,7 +383,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param int $int
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -415,7 +394,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get params
      * 
-     * @access public
      * @return string
      * @since  1.0
      */
@@ -429,7 +407,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param string|array $params Either a serialised string or an array
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -455,7 +432,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get deleted timestamp
      * 
-     * @access public
      * @return int
      * @since  1.0
      */
@@ -469,7 +445,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param int $int
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -485,7 +460,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get vCard object for this user
      * 
-     * @access public
      * @return PHPFrame_VCard
      * @since  1.0
      */
@@ -499,7 +473,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * 
      * @param PHPFrame_VCard $vcard
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -513,7 +486,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Return Row object as associative array
      * 
-     * @access public
      * @return array
      * @since  1.0
      */

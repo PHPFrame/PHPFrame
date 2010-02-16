@@ -10,7 +10,7 @@
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version   SVN: $Id$
- * @link      http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link      http://github.com/PHPFrame/PHPFrame
  */
 
 /**
@@ -20,7 +20,7 @@
  * @package  Filter
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link     http://code.google.com/p/phpframe/source/browse/PHPFrame
+ * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
 abstract class PHPFrame_Filter
@@ -51,7 +51,6 @@ abstract class PHPFrame_Filter
      *                       the available options call 
      *                       PHPFrame_Filter::getOptions().
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -69,7 +68,6 @@ abstract class PHPFrame_Filter
      * 
      * @param string $key The option name or key
      * 
-     * @access public
      * @return mixed The option value
      * @since  1.0
      */
@@ -91,7 +89,6 @@ abstract class PHPFrame_Filter
      * @param string $key   The option name or key
      * @param mixed  $value The option value
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -122,7 +119,6 @@ abstract class PHPFrame_Filter
      * 
      * @param array $options An associative array with the filter options
      * 
-     * @access public
      * @return void
      * @since  1.0
      */
@@ -145,7 +141,6 @@ abstract class PHPFrame_Filter
     /**
      * Get options array
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -157,7 +152,6 @@ abstract class PHPFrame_Filter
     /**
      * Get mesages array
      * 
-     * @access public
      * @return array
      * @since  1.0
      */
@@ -171,8 +165,6 @@ abstract class PHPFrame_Filter
      * 
      * @param mixed $value The value to process
      * 
-     * @abstract
-     * @access public
      * @return mixed Either the filtered value or FALSE on failure
      * @since  1.0
      */
@@ -187,7 +179,6 @@ abstract class PHPFrame_Filter
      * @param string $key           The option key
      * @param mixed  $default_value [Optional] A default value for the option
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */
@@ -201,7 +192,6 @@ abstract class PHPFrame_Filter
      * 
      * @param string $str The failure message
      * 
-     * @access protected
      * @return void
      * @since  1.0
      */

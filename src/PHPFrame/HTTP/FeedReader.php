@@ -191,7 +191,7 @@ class PHPFrame_FeedReader
         $link_nodes = $this->_dom->getElementsByTagName("link");
         
         $attr = $link_nodes->item(0)->attributes;
-        $this->_link_self = $href->getNamedItem("href")->value;
+        $this->_link_self = $attr->getNamedItem("href")->value;
                                        
         $this->_link_alternate = $attr->getNamedItem("href")->value;
         

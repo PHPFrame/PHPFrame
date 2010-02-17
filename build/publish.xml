@@ -154,10 +154,17 @@
             <arg line="package" />
         </exec>
         
-        <!-- Move created package to dist directory -->
+        <!-- Move created package to dist directory 
         <move file="${tmp.dir}/${ant.project.name}-${release.version}.tgz" 
               tofile="${dist.dir}/${ant.project.name}-${release.version}-${label}.tgz" 
               overwrite="true"/>
+        -->
+        
+        <!-- Upload deliverable to live server -->
+        <scp file="${tmp.dir}/${ant.project.name}-${release.version}.tgz"
+             todir="phpframe@e-noise.com:~/dist"
+             port="2222" />
+        
     </target>
     
     <target name="build" depends="prepare, copy, tar" />

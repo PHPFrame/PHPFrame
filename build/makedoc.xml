@@ -60,7 +60,7 @@
               dir="${basedir}" 
               output="${logs.dir}/rsync_doc.log">
             <arg line="-vru -e 'ssh -p 2222' --delete 
-                       ${doc.dir}/ phpframe@e-noise.com:~/doc/api/" />
+                       ${doc.dir}/ phpframe@e-noise.com:~/doc/1.0/api/" />
         </exec>
     </target>
     

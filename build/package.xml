@@ -149,7 +149,7 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/ImageProcessor.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/InputFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/URI.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Utils/vCard.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Utils/VCard.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/XMLSerialiser.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
    

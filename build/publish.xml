@@ -160,10 +160,13 @@
               overwrite="true"/>
         
         <!-- Upload deliverable to live server -->
-        <scp file="${dist.dir}/${ant.project.name}-${release.version}-${label}.tgz"
-             todir="phpframe@e-noise.com:~/dist/"
-             port="2222"
-             keyfile="${user.home}/.ssh/id_rsa" />
+        <exec executable="scp" 
+              dir="${dist.dir}" 
+              failonerror="on" 
+              output="${logs.dir}/scp.log">
+            <arg line="-P 2222 ${dist.dir}/${ant.project.name}-${release.version}-${label}.tgz
+                       phpframe@e-noise.com:~/dist/ " />
+        </exec>
         
     </target>
     

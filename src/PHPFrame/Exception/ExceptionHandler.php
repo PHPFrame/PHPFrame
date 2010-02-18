@@ -92,11 +92,15 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      * 
      * Handles PHP errors and converts them to exceptions.
      * 
-     * @param int    $errno
-     * @param string $errstr
-     * @param string $errfile
-     * @param int    $errline
-     * @param string $errcontext
+     * @param int    $errno      The level of the error raised, as an integer. 
+     * @param string $errstr     The error message, as a string. 
+     * @param string $errfile    The filename that the error was raised in. 
+     * @param int    $errline    The line number the error was raised at.
+     * @param string $errcontext An array that points to the active symbol table 
+     *                           at the point the error occurred. In other 
+     *                           words, errcontext  will contain an array of 
+     *                           every variable that existed in the scope the 
+     *                           error was triggered in.
      * 
      * @return void
      * @since  1.0
@@ -119,14 +123,14 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
     }
     
     /**
-     * Exceptions handler
+     * Exceptions handler for uncaught exceptions.
      * 
-     * Handles uncaught exceptions.
+     * @param Exception $exception The uncaught exception.
      * 
      * @return void
      * @since  1.0
      */
-    public static function handleException($exception) 
+    public static function handleException(Exception $exception) 
     {
         $str  = "Uncaught ".get_class($exception).": ";
         $str .= $exception->getMessage()."\n";
@@ -161,7 +165,8 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
     /**
      * Set boolean to indicate whether or not exceptions should be displayed.
      * 
-     * @param $bool
+     * @param bool $bool Boolean indicating whether exceptions should be 
+     *                   displayed.
      * 
      * @return void
      * @since  1.0

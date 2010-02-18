@@ -73,6 +73,12 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
         return new PHPFrame_SQLIdObject($options);
     }
     
+    /**
+     * Get reference to database object.
+     * 
+     * @return PHPFrame_Database
+     * @since  1.0
+     */
     public function getDB()
     {
         return $this->_db;

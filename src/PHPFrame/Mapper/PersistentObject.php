@@ -103,7 +103,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     public function __construct(array $options=null)
     {
         // Add the base fields
-        $this->addField("id",    null, true, new PHPFrame_IntFilter());
+        $this->addField("id", null, true, new PHPFrame_IntFilter());
         $this->addField("atime", null, true, new PHPFrame_IntFilter());
         $this->addField("ctime", null, true, new PHPFrame_IntFilter());
         $this->addField("mtime", null, true, new PHPFrame_IntFilter());
@@ -121,7 +121,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
             false, 
             new PHPFrame_IntFilter()
         );
-        $this->addField("perms", 664,    false, new PHPFrame_IntFilter());
+        $this->addField("perms", 664, false, new PHPFrame_IntFilter());
         
         // Process options argument if passed
         if (!is_null($options)) {
@@ -233,10 +233,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     }
     
     /**
-     * Validate all fields and throw exception on failure
-     * 
-     * @param array $assoc An associative array containing the field names and 
-     *                     the values to process.
+     * Validate all fields and throw exception on failure.
      * 
      * @return mixed The filtered array or FALSE on failure
      * @since  1.0
@@ -529,6 +526,12 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $this->fields["perms"] = $this->validate("perms", $int);
     }
     
+    /**
+     * Get validator object.
+     * 
+     * @return PHPFrame_Validator
+     * @since  1.0
+     */
     private function _getValidator()
     {
         if (!$this->_validator instanceof PHPFrame_Validator) {
@@ -566,16 +569,14 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         }
         
         // Check user access
-        if (
-            $user->getId() == $this->getOwner() 
+        if ($user->getId() == $this->getOwner() 
             && $owner_access >= $access_level
         ) {
             return true;
         }
         
         // Check group access
-        if (
-            $user->getGroupId() == $this->getGroup() 
+        if ($user->getGroupId() == $this->getGroup() 
             && $group_access >= $access_level
         ) {
             return true;

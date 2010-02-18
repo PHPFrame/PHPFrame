@@ -141,7 +141,7 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     /**
      * Get persistent object at given key
      * 
-     * @param string $key
+     * @param string $key The key of the element to get.
      * 
      * @return PHPFrame_PersistentObject
      * @since  1.0
@@ -168,7 +168,8 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     /**
      * Add persistent object to the collection
      * 
-     * @param PHPFrame_PersistentObject $obj
+     * @param PHPFrame_PersistentObject $obj An instance of a persistent object 
+     *                                       to add to the collection.
      * 
      * @return void
      * @since  1.0
@@ -185,7 +186,8 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     /**
      * Remove persistent object from the collection
      * 
-     * @param PHPFrame_PersistentObject $obj
+     * @param PHPFrame_PersistentObject $obj An instance of a persistent object 
+     *                                       to remove from the collection.
      * 
      * @return void
      * @since  1.0
@@ -211,16 +213,37 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
         $this->_total_superset--;
     }
     
+    /**
+     * Get limit
+     * 
+     * @return int
+     * @see PHPFrame/Base/PHPFrame_Collection#getLimit()
+     * @since  1.0
+     */
     public function getLimit()
     {
         return $this->_limit;
     }
     
+    /**
+     * Get limitstart.
+     * 
+     * @return int
+     * @see PHPFrame/Base/PHPFrame_Collection#getLimitstart()
+     * @since  1.0
+     */
     public function getLimitstart()
     {
         return $this->_limitstart;
     }
     
+    /**
+     * Get total records in superset.
+     * 
+     * @return int
+     * @see PHPFrame/Base/PHPFrame_Collection#getTotal()
+     * @since  1.0
+     */
     public function getTotal()
     {
         return $this->_total_superset;
@@ -281,6 +304,13 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
         $this->_pointer = 0;
     }
     
+    /**
+     * Implementation of the Countable interface. It returns the number of 
+     * objects in the current subset.
+     * 
+     * @return int
+     * @since  1.0
+     */
     public function count()
     {
         return $this->_total_subset;

@@ -72,7 +72,6 @@ abstract class PHPFrame_PersistenceFactory
      * @param int    $storage      [Optional] Storage mechanism. If omitted SQL 
      *                             storage will be used. For supported storage 
      *                             mechanisms see class constants.
-     *                       
      * 
      * @return PHPFrame_PersistenceFactory
      * @since  1.0

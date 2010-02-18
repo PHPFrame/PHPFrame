@@ -36,7 +36,8 @@ class PHPFrame_XMLPersistentObjectAssembler
      * @param PHPFrame_PersistenceFactory $factory Instance of persistence 
      *                                             factory to be used with the 
      *                                             assembler.
-     * @param string                      $path
+     * @param string                      $path    Path to directory where to 
+     *                                             store the XML file.
      * 
      * @return void
      * @since  1.0
@@ -158,8 +159,8 @@ class PHPFrame_XMLPersistentObjectAssembler
             // Add new element to collection
             $collection->addElement($obj);
         
-        // Prepare existing elements (update)
         } else {
+            // Prepare existing elements (update)
             foreach ($collection as $item) {
                 if ($item->getId() == $obj->getId()) {
                     $item = iterator_to_array($obj);

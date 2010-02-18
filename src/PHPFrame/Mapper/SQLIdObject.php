@@ -129,12 +129,13 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Set the fields array used in select statement
      * 
-     * This method takes either a string a single column name or an array of column
-     * names.
+     * This method takes either a string a single column name or an array of 
+     * column names.
      * 
      * The "*" character is allowed and used to select "all" columns.
      * 
-     * This method returns the IdObject object, making it possible to use "fluent syntax".
+     * This method returns the IdObject object, making it possible to use 
+     * "fluent syntax".
      * 
      * Example:
      * 
@@ -146,7 +147,8 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * echo $id_object;
      * 
      * 
-     * // The same as above but passing the "select" and "table" options to the constructor.
+     * // The same as above but passing the "select" and "table" options to the 
+     * // constructor.
      * $options = array("select"=>"*", "from"->"my_table");
      * $id_object = new PHPFrame_IdObject($options);
      * // echo the SQL, this will automatically cast the IdObject to string
@@ -353,8 +355,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Set order direction
      * 
-     * @param string $column    The column name to order by
-     * @param string $direction The order direction (either ASC or DESC)
+     * @param string $direction The order direction (either ASC or DESC).
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
@@ -486,8 +487,8 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
                 
                 $array[] = $table_name.".".$field["field_name"];
                 
-            // If no table name is specified we assume main "from" table
             } else {
+                // If no table name is specified we assume main "from" table
                 $array[] = $field["field_name"];
             }
         }
@@ -574,7 +575,9 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
         $sql = "SELECT ";
         
         for ($i=0; $i<count($this->_select); $i++) {
-            if ($i>0) $sql .= ", ";
+            if ($i>0) {
+                $sql .= ", ";
+            }
             
             if (!empty($this->_select[$i]["table_name"])) {
                 $sql .= $this->_select[$i]["table_name"].".";
@@ -613,7 +616,6 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     }
     
     /**
-     * 
      * Get JOIN SQL
      * 
      * @return string

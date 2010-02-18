@@ -103,7 +103,7 @@ class PHPFrame_SQLPersistentObjectAssembler
         $sql_from   = $id_obj->getFromSQL();
         $table_name = $this->factory->getTableName();
         //check if they aliased the table name
-        if (strpos($sql_from, ' AS ') !== false){
+        if (strpos($sql_from, ' AS ') !== false) {
             $table_name = substr($sql_from, strpos($sql_from, ' AS ')+4);
         }
         $sql  = "SELECT COUNT(".$table_name.".id) ";
@@ -226,8 +226,14 @@ class PHPFrame_SQLPersistentObjectAssembler
         
         $count = 0;
         foreach (array_keys($array) as $key) {
-            if ($key == "id") continue;
-            if ($count > 0) $sql .= ", ";
+            if ($key == "id") {
+                continue;
+            }
+            
+            if ($count > 0) {
+                $sql .= ", ";
+            }
+            
             $sql .= "`".$key."` = :".$key;
             $count++;
         }

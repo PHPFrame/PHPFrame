@@ -27,7 +27,7 @@ Tell the PEAR installer that you want to install alpha packages:
 
 Tell the installer about the channel:
 
-`pear channel-discover pear.e-noise.com`
+`pear channel-discover pear.phpframe.org`
 
 Download and install the latest successful build:
 
@@ -35,5 +35,5 @@ Download and install the latest successful build:
 
 Run post installation scripts:
 
-`pear run-scripts pear.e-noise.com/PHPFrame`
+`pear run-scripts pear.phpframe.org/PHPFrame`
 

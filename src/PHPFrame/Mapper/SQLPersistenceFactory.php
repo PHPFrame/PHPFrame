@@ -31,9 +31,10 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
     /**
      * Constructor
      * 
-     * @param string            $target_class
-     * @param string            $table_name
-     * @param PHPFrame_Database $db           
+     * @param string            $target_class The target class for this factory.
+     * @param string            $table_name   The table name the target class is 
+     *                                        mapped to.
+     * @param PHPFrame_Database $db           Reference to the databse object.
      * 
      * @return void
      * @since  1.0

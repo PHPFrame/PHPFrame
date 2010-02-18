@@ -37,7 +37,9 @@ abstract class PHPFrame_PersistentObjectAssembler
     /**
      * Constructor
      * 
-     * @param PHPFrame_PersistenceFactory $factory
+     * @param PHPFrame_PersistenceFactory $factory Instance of persistence 
+     *                                             factory to be used with the 
+     *                                             assembler.
      * 
      * @return void
      * @since  1.0
@@ -61,7 +63,7 @@ abstract class PHPFrame_PersistentObjectAssembler
     /**
      * Find a collection of persistent objects using an IdObject
      * 
-     * @param PHPFrame_IdObject $id_obj
+     * @param PHPFrame_IdObject $id_obj Instance of {@link PHPFrame_IdObject}.
      * 
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
@@ -71,7 +73,8 @@ abstract class PHPFrame_PersistentObjectAssembler
     /**
      * Persist persistent object
      * 
-     * @param PHPFrame_PersistentObject $obj
+     * @param PHPFrame_PersistentObject $obj The persistent object we want to 
+     *                                       store with the mapper.
      * 
      * @return void
      * @since  1.0

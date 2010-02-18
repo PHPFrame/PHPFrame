@@ -28,7 +28,7 @@ class PHPFrame_PersistentObjectFactory
     /**
      * Constructor
      * 
-     * @param string $target_class
+     * @param string $target_class The target class for this object factory.
      * 
      * @return void
      * @since  1.0
@@ -41,7 +41,8 @@ class PHPFrame_PersistentObjectFactory
     /**
      * Create persistent object
      * 
-     * @param array $array
+     * @param array $array Associative array with data to be used to create 
+     *                     object.
      * 
      * @return PHPFrame_PersistentObject
      * @since  1.0

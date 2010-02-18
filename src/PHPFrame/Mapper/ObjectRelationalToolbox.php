@@ -28,8 +28,11 @@ class PHPFrame_ObjectRelationalToolbox
     /**
      * Create a database table to store a given persistent object
      * 
-     * @param PHPFrame_Database         $db
-     * @param PHPFrame_PersistentObject $obj
+     * @param PHPFrame_Database         $db         Reference to a database 
+     *                                              object.
+     * @param PHPFrame_PersistentObject $obj        An instance of the persistent
+     *                                              object we want to create the 
+     *                                              table for.
      * @param string                    $table_name [Optional] Table name to 
      *                                              use. If none specified we 
      *                                              use the object's class name.
@@ -80,11 +83,11 @@ class PHPFrame_ObjectRelationalToolbox
                 $range = $options["max_range"] - $options["min_range"];
                 if ($range <= 255) { // 1 byte int
                     $column->setType(PHPFrame_DatabaseColumn::TYPE_TINYINT);
-                } elseif($range <= 65535) { // 2 byte int
+                } elseif ($range <= 65535) { // 2 byte int
                     $column->setType(PHPFrame_DatabaseColumn::TYPE_SMALLINT);
-                } elseif($range <= 16777215) { // 3 byte int
+                } elseif ($range <= 16777215) { // 3 byte int
                     $column->setType(PHPFrame_DatabaseColumn::TYPE_MEDIUMINT);
-                } elseif($range <= 4294967295) { // 4 byte int
+                } elseif ($range <= 4294967295) { // 4 byte int
                     $column->setType(PHPFrame_DatabaseColumn::TYPE_INT);
                 } else { // 8 byte int
                     $column->setType(PHPFrame_DatabaseColumn::TYPE_BIGINT);
@@ -123,36 +126,42 @@ class PHPFrame_ObjectRelationalToolbox
      * Create the php code to represent a given database table as a persistent
      * object.
      * 
-     * @param PHPFrame_Database $db
-     * @param string            $table_name
+     * @param PHPFrame_Database $db         A reference to a database object.
+     * @param string            $table_name The name of the table we want to 
+     *                                      create the persistent object class
+     *                                      for.
      * 
      * @return string
      * @throws Exception on failure
      * @since  1.0
+     * @todo   This method needs to be implemented.
      */
     public function createPersistentObjectClass(
         PHPFrame_Database $db, 
         $table_name
     ) {
-        
+        //...
     }
     
     /**
      * Check whether a database table is valid to store a given persistent
      * object.
      * 
-     * @param PHPFrame_Database         $db
-     * @param string                    $table_name
-     * @param PHPFrame_PersistentObject $obj
+     * @param PHPFrame_Database         $db         A reference to a database 
+     *                                              object.
+     * @param string                    $table_name The table name.
+     * @param PHPFrame_PersistentObject $obj        Reference to a persistent 
+     *                                              of the type we want to check.
      * 
      * @return bool
      * @since  1.0
+     * @todo   This method needs to be implemented.
      */
     public function isValid(
         PHPFrame_Database $db, 
         $table_name,
         PHPFrame_PersistentObject $obj
     ) {
-        
+        //...
     }
 }

@@ -41,8 +41,12 @@ abstract class PHPFrame_PersistenceFactory
     /**
      * Constructor
      * 
-     * @param string $target_class
-     * @param string $table_name
+     * @param string $target_class The persistent object class this factory will
+     *                             work with.
+     * @param string $table_name   [Optional] The table name where we will be 
+     *                             mapping the persistent objects. If omitted 
+     *                             the table name will be assumed to be the same 
+     *                             as the target class. 
      * 
      * @return void
      * @since  1.0
@@ -56,16 +60,19 @@ abstract class PHPFrame_PersistenceFactory
         } else {
             $this->_table_name = $this->_target_class;
         }
-        
     }
     
     /**
      * Get concrete persistence factory
      * 
-     * @param string $target_class
-     * @param string $table_name
-     * @param int    $storage
-     * @param bool   $try_alternative_storage
+     * @param string $target_class The persistent object class this factory will
+     *                             work with.
+     * @param string $table_name   The table name where we will be mapping the 
+     *                             persistent objects.
+     * @param int    $storage      [Optional] Storage mechanism. If omitted SQL 
+     *                             storage will be used. For supported storage 
+     *                             mechanisms see class constants.
+     *                       
      * 
      * @return PHPFrame_PersistenceFactory
      * @since  1.0
@@ -73,8 +80,7 @@ abstract class PHPFrame_PersistenceFactory
     public static function getFactory(
         $target_class, 
         $table_name, 
-        $storage=self::STORAGE_SQL, 
-        $try_alternative_storage=true
+        $storage=self::STORAGE_SQL
     ) {
         switch ($storage) {
         case self::STORAGE_SQL :
@@ -108,10 +114,18 @@ abstract class PHPFrame_PersistenceFactory
     /**
      * Get Collection
      * 
-     * @param array $raw
-     * @param int   $total
-     * @param int   $limit
-     * @param int   $limitstart
+     * @param array $raw        [Optional] Array containig the raw collection 
+     *                          data.
+     * @param int   $total      [Optional] The total number of records in the 
+     *                          superset.
+     * @param int   $limit      [Optional] The number of records the current 
+     *                          subset is lmited to. Default value is '-1', 
+     *                          which means there is no limit, so we will get 
+     *                          all the records.
+     * @param int   $limitstart [Optional] The entry number from which to start 
+     *                          the subset. If ommited default value '0' will 
+     *                          be used, meaning that we start from the first 
+     *                          page of results.
      * 
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0

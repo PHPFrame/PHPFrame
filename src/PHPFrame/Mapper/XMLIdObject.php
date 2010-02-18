@@ -31,14 +31,14 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
     /**
      * Constructor
      * 
-     * @param array $options An associative array with initialisation options.
-     *                       For a list of available options invoke 
-     *                       PHPFrame_IdObject::getOptions().
+     * @param array $options [Optional] An associative array with initialisation 
+     *                       options. For a list of available options invoke 
+     *                       {@link PHPFrame_IdObject::getOptions()}.
      * 
      * @return void
      * @since  1.0
      */
-    public function __construct($options=null)
+    public function __construct(array $options=null)
     {
         throw new LogicException("This class has not been implemented yet!");
         
@@ -70,27 +70,27 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
     /**
      * Set the fields array used in select statement
      * 
-     * @param string|array $fields a string or array of strings with field names
+     * @param string|array $fields A string or array of strings with field names.
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function select($fields)
     {
-    	//...
+        //...
     }
     
     /**
      * Set the table from which to select rows
      * 
-     * @param string $table A string with the table name
+     * @param string $table A string with the table name.
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function from($table)
     {
-    	//...
+        //...
     }
     
     /**
@@ -105,7 +105,7 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
      */
     public function where($left, $operator, $right)
     {
-    	//...
+        //...
     }
     
     /**
@@ -116,7 +116,7 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
      */
     public function getObjectFields()
     {
-    	//...
+        //...
     }
     
     /**
@@ -127,6 +127,6 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
      */
     public function getTableName()
     {
-    	//...
+        //...
     }
 }

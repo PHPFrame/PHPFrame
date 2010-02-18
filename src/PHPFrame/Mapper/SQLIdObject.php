@@ -92,14 +92,14 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     /**
      * Constructor
      * 
-     * @param array $options An associative array with initialisation options.
-     *                       For a list of available options invoke 
-     *                       PHPFrame_IdObject::getOptions().
+     * @param array $options [Optional] An associative array with initialisation 
+     *                       options. For a list of available options call 
+     *                       {@link PHPFrame_IdObject::getOptions()}.
      * 
      * @return void
      * @since  1.0
      */
-    public function __construct($options=null)
+    public function __construct(array $options=null)
     {
         parent::__construct($options);
     }
@@ -157,7 +157,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * $id_object->select(array("id", "name", "email"))->from("my_table");
      * </code>
      * 
-     * @param string|array $fields a string or array of strings with field names
+     * @param string|array $fields a string or array of strings with field names.
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
@@ -211,7 +211,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      * 
      * Tables may be passed with an alias. Ie: "table_name AS tn".
      * 
-     * @param string $table A string with the table name
+     * @param string $table A string with the table name.
      * 
      * @return PHPFrame_IdObject
      * @since  1.0
@@ -481,7 +481,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
                 $table_name = $this->_tableAliasToName($field["table_name"]);
                 
                 if (empty($table_name)) {
-                	$table_name = $field["table_name"];
+                    $table_name = $field["table_name"];
                 }
                 
                 $array[] = $table_name.".".$field["field_name"];

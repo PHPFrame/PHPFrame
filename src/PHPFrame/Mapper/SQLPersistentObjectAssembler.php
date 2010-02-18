@@ -30,7 +30,9 @@ class PHPFrame_SQLPersistentObjectAssembler
     /**
      * Constructor
      * 
-     * @param PHPFrame_PersistenceFactory $factory
+     * @param PHPFrame_PersistenceFactory $factory Instance of persistence 
+     *                                             factory to be used with the 
+     *                                             assembler.
      * 
      * @return void
      * @since  1.0
@@ -80,7 +82,7 @@ class PHPFrame_SQLPersistentObjectAssembler
     /**
      * Find a collection of persistent objects using an IdObject
      * 
-     * @param PHPFrame_IdObject|int $id_obj
+     * @param PHPFrame_IdObject|int $id_obj Instance of {@link PHPFrame_IdObject}.
      * 
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
@@ -130,7 +132,8 @@ class PHPFrame_SQLPersistentObjectAssembler
     /**
      * Persist persistent object
      * 
-     * @param PHPFrame_PersistentObject $obj
+     * @param PHPFrame_PersistentObject $obj The persistent object we want to 
+     *                                       store with the mapper.
      * 
      * @return void
      * @since  1.0
@@ -189,7 +192,7 @@ class PHPFrame_SQLPersistentObjectAssembler
     /**
      * Build the INSERT SQL query
      * 
-     * @param array $array
+     * @param array $array Associative array containing the object's data.
      * 
      * @return string
      * @since  1.0
@@ -212,7 +215,7 @@ class PHPFrame_SQLPersistentObjectAssembler
     /**
      * Build the UPDATE SQL query
      * 
-     * @param array $array
+     * @param array $array Associative array containing the object's data.
      * 
      * @return string
      * @since  1.0
@@ -237,7 +240,7 @@ class PHPFrame_SQLPersistentObjectAssembler
     /**
      * Build SQL query parameters
      * 
-     * @param array $array
+     * @param array $array Associative array containing the query parameters.
      * 
      * @return array
      * @since  1.0

@@ -31,9 +31,14 @@ class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
     /**
      * Constructor
      * 
-     * @param string $target_class
-     * @param string $table_name
-     * @param string $path         [Optional]
+     * @param string $target_class The persistent object class this factory will
+     *                             work with.
+     * @param string $table_name   [Optional] The table name where we will be 
+     *                             mapping the persistent objects. If omitted 
+     *                             the table name will be assumed to be the same 
+     *                             as the target class.
+     * @param string $path         [Optional] Path to directory where to store 
+     *                             the XML file.
      * 
      * @return void
      * @since  1.0

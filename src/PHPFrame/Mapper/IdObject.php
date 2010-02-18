@@ -106,11 +106,15 @@ abstract class PHPFrame_IdObject
     abstract public function from($table);
     
     /**
-     * Add "where" condition
+     * Add "where" condition. For example:
      * 
-     * @param string $left
-     * @param string $operator
-     * @param string $right
+     * <code>
+     * $id_obj->where("id", "=", $id);
+     * </code>
+     * 
+     * @param string $left     The left operand.
+     * @param string $operator The comparison operator. ie: "=" or "<".
+     * @param string $right    The right operand.
      * 
      * @return PHPFrame_IdObject
      * @since  1.0

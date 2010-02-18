@@ -78,11 +78,30 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     /**
      * Constructor
      * 
-     * @param array                            $raw
-     * @param PHPFrame_PersistentObjectFactory $obj_factory
-     * @param int   $total
-     * @param int   $limit
-     * @param int   $limitstart
+     * @param array                            $raw         [Optional] Array 
+     *                                                      containig the raw 
+     *                                                      collection data.
+     * @param PHPFrame_PersistentObjectFactory $obj_factory [Optional] Instance 
+     *                                                      of persistence object 
+     *                                                      factory.
+     * @param int                              $total       [Optional] The total 
+     *                                                      number of records in 
+     *                                                      the superset.
+     * @param int                              $limit       [Optional] The number 
+     *                                                      of records the current 
+     *                                                      subset is lmited to. 
+     *                                                      Default value is '-1', 
+     *                                                      which means there is 
+     *                                                      no limit, so we will 
+     *                                                      get all the records.
+     * @param int                              $limitstart  [Optional] The entry 
+     *                                                      number from which to 
+     *                                                      start the subset. 
+     *                                                      If ommited default 
+     *                                                      value '0' will be 
+     *                                                      used, meaning that 
+     *                                                      we start from the 
+     *                                                      first page of results.
      * 
      * @return void
      * @since  1.0

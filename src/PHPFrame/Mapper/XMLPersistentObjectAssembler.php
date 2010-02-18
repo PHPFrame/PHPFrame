@@ -33,7 +33,9 @@ class PHPFrame_XMLPersistentObjectAssembler
     /**
      * Constructor
      * 
-     * @param PHPFrame_PersistenceFactory $factory
+     * @param PHPFrame_PersistenceFactory $factory Instance of persistence 
+     *                                             factory to be used with the 
+     *                                             assembler.
      * @param string                      $path
      * 
      * @return void
@@ -98,7 +100,7 @@ class PHPFrame_XMLPersistentObjectAssembler
     /**
      * Find a collection of persistent objects using an IdObject
      * 
-     * @param PHPFrame_IdObject $id_obj
+     * @param PHPFrame_IdObject $id_obj Instance of {@link PHPFrame_IdObject}.
      * 
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
@@ -132,7 +134,8 @@ class PHPFrame_XMLPersistentObjectAssembler
     /**
      * Persist persistent object
      * 
-     * @param PHPFrame_PersistentObject $obj
+     * @param PHPFrame_PersistentObject $obj The persistent object we want to 
+     *                                       store with the mapper.
      * 
      * @return void
      * @since  1.0
@@ -203,7 +206,9 @@ class PHPFrame_XMLPersistentObjectAssembler
     /**
      * Serialise collection as an XML string
      * 
-     * @param PHPFrame_PersistentObjectCollection $collection
+     * @param PHPFrame_PersistentObjectCollection $collection Instance of 
+     *                                                        collection object 
+     *                                                        to serialise.
      * 
      * @return string
      * @since  1.0

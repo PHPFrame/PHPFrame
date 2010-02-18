@@ -40,7 +40,10 @@ class PHPFrame_Mapper
     /**
      * Constructor
      * 
-     * @param string                   $target_class
+     * @param string                   $target_class The class the mapper will 
+     *                                               be working with. This class
+     *                                               will have to descend from 
+     *                                               PHPFrame_PersistentObject.
      * @param PHPFrame_Database|string $db_or_path   Either a Database object 
      *                                               or path to directory for 
      *                                               XML storage. File name 
@@ -77,7 +80,8 @@ class PHPFrame_Mapper
     /**
      * Find a persistent object using an IdObject
      * 
-     * @param PHPFrame_IdObject|int $id_obj
+     * @param PHPFrame_IdObject|int $id_obj Either a numeric id or an instance 
+     *                                      of {@link PHPFrame_IdObject}.
      * 
      * @return PHPFrame_PersistentObject
      * @since  1.0
@@ -90,7 +94,8 @@ class PHPFrame_Mapper
     /**
      * Find a collection of persistent objects using an IdObject
      * 
-     * @param PHPFrame_IdObject $id_obj
+     * @param PHPFrame_IdObject $id_obj [Optional] Instance of 
+     *                                  {@link PHPFrame_IdObject}.
      * 
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
@@ -103,7 +108,8 @@ class PHPFrame_Mapper
     /**
      * Persist persistent object
      * 
-     * @param PHPFrame_PersistentObject $obj
+     * @param PHPFrame_PersistentObject $obj The persistent object we want to 
+     *                                       store with the mapper.
      * 
      * @return void
      * @since  1.0
@@ -116,7 +122,8 @@ class PHPFrame_Mapper
     /**
      * Delete persistent object from persisted media (db or file)
      * 
-     * @param int|PHPFrame_PersistentObject $obj
+     * @param int|PHPFrame_PersistentObject $obj A reference to the persistent 
+     *                                           object we want to delete.
      * 
      * @return void
      * @since  1.0

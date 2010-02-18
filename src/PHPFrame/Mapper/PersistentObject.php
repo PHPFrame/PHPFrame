@@ -93,7 +93,9 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Constructor
      * 
-     * @param array $options
+     * @param array $options An associative array containing keys with the 
+     *                       field names and values used for this fields when
+     *                       constructing the object.
      * 
      * @return void
      * @since  1.0
@@ -101,10 +103,10 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     public function __construct(array $options=null)
     {
         // Add the base fields
-        $this->addField("id",    null,   true,  new PHPFrame_IntFilter());
-        $this->addField("atime", null,   true,  new PHPFrame_IntFilter());
-        $this->addField("ctime", null, true,  new PHPFrame_IntFilter());
-        $this->addField("mtime", null, true,  new PHPFrame_IntFilter());
+        $this->addField("id",    null, true, new PHPFrame_IntFilter());
+        $this->addField("atime", null, true, new PHPFrame_IntFilter());
+        $this->addField("ctime", null, true, new PHPFrame_IntFilter());
+        $this->addField("mtime", null, true, new PHPFrame_IntFilter());
         $this->addField(
             "owner", 
             //PHPFrame::getSession()->getUserId(),
@@ -148,10 +150,13 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Add a field in persistent object (stored in internal array)
      * 
-     * @param string          $name
-     * @param mixed           $def_value
-     * @param bool            $allow_null
-     * @param PHPFrame_Filter $filter
+     * @param string          $name       The field name.
+     * @param mixed           $def_value  [Optional] Default value.
+     * @param bool            $allow_null [Optional] Whether or not the field 
+     *                                    should allow null values.
+     * @param PHPFrame_Filter $filter     [Optional] An instance of 
+     *                                    {@link PHPFrame_Filter} used to 
+     *                                    validate the field's value.
      * 
      * @return void
      * @since  1.0
@@ -193,7 +198,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Check whether a given field allows null value
      * 
-     * @param string $field_name
+     * @param string $field_name The field name.
      * 
      * @return bool
      * @since  1.0
@@ -206,8 +211,8 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Validate value for a given field using validator
      * 
-     * @param string $field_name
-     * @param mixed  $value
+     * @param string $field_name The field name.
+     * @param mixed  $value      The field value.
      * 
      * @return void
      * @since  1.0
@@ -269,7 +274,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Can user read this object?
      * 
-     * @param PHPFrame_user $user
+     * @param PHPFrame_user $user Instance of {@link PHPFrame_User}.
      * 
      * @return bool
      * @since  1.0
@@ -282,7 +287,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Can user write this object?
      * 
-     * @param PHPFrame_user $user
+     * @param PHPFrame_user $user Instance of {@link PHPFrame_User}.
      * 
      * @return bool
      * @since  1.0
@@ -309,7 +314,8 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Bind array to object
      * 
-     * @param array $options
+     * @param array $options An associative array with the field names as keys.
+     *                       Unknown keys will be ignored.
      * 
      * @return void
      * @since  1.0
@@ -361,7 +367,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Set id
      * 
-     * @param int $int
+     * @param int $int The object ID.
      * 
      * @return void
      * @since  1.0
@@ -389,7 +395,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Set accessed timestamp
      * 
-     * @param int $int
+     * @param int $int The access time as a UNIX timestamp.
      * 
      * @return void
      * @since  1.0
@@ -417,7 +423,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Set created timestamp
      * 
-     * @param int $int
+     * @param int $int The created time as a UNIX timestamp.
      * 
      * @return void
      * @since  1.0
@@ -441,7 +447,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Set last modified timestamp
      * 
-     * @param int $int
+     * @param int $int The modified time as a UNIX timestamp.
      * 
      * @return void
      * @since  1.0
@@ -465,7 +471,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Set owner
      * 
-     * @param int $int
+     * @param int $int The user ID of the object's owner.
      * 
      * @return void
      * @since  1.0
@@ -489,7 +495,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Set group ownership
      * 
-     * @param int $int
+     * @param int $int The group ID of the object's group.
      * 
      * @return void
      * @since  1.0
@@ -513,7 +519,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Set permissions
      * 
-     * @param int $int
+     * @param int $int UNIX style permissions.
      * 
      * @return void
      * @since  1.0
@@ -535,8 +541,9 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Check permissions
      * 
-     * @param PHPFrame_user $user
-     * @param int           $access_level
+     * @param PHPFrame_user $user         Reference to the user object we want 
+     *                                    to check permissions for.
+     * @param int           $access_level The access level we want to check.
      * 
      * @return bool
      * @since  1.0

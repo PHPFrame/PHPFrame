@@ -80,4 +80,16 @@ class PHPFrame_PlainDocumentTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, preg_match("/The title/", $str));
     }
+    
+    public function test_toStringWithSysevents()
+    {
+        $this->_document->title("The title");
+        $this->_document->body("Blah blah blah blah");
+        
+        PHPFrame::getSession()->getSysevents()->append("Some message");
+        
+        $str = (string) $this->_document;
+        
+        $this->assertEquals(1, preg_match("/INFO: Some message/", $str));
+    }
 }

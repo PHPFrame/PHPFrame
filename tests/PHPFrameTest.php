@@ -14,8 +14,30 @@ class PHPFrameTest extends PHPUnit_Framework_TestCase
         //...
     }
     
+    function test_construct()
+    {
+        $refl_obj    = new ReflectionClass("PHPFrame");
+        $constructor = $refl_obj->getMethod("__construct");
+        
+        // Ensure that constructor is private
+        // This class shouldn't be instantiated
+        $this->assertTrue($constructor->isPrivate());
+    }
+    
     function test_Version()
     {
         $this->assertType("string", PHPFrame::Version());
+    }
+    
+    function test_getSession()
+    {
+        $this->assertType("PHPFrame_SessionRegistry", PHPFrame::getSession());
+    }
+    
+    function test_setDataDirFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+        
+        PHPFrame::setDataDir(1);
     }
 }

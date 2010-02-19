@@ -65,18 +65,14 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException("LogicException");
         
-        $body = "Lorem ipsum";
-        $this->_document->body($body);
-        $this->_document->appendBody($body);
+        $this->_document->appendBody("");
     }
     
     public function prependBody()
     {
         $this->setExpectedException("LogicException");
         
-        $body = "Lorem ipsum";
-        $this->_document->body($body);
-        $this->_document->prependBody("Blah");
+        $this->_document->prependBody("");
     }
     
     public function test_toString()
@@ -145,7 +141,7 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
         
         $this->assertXmlStringEqualsXmlString(
             "<node>Some content</node>", 
-            $this->_document->__toString()
+            (string) $this->_document
         );
     }
     
@@ -156,15 +152,10 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
         $content .= "<span class=\"keyword\">nodes</span> in it."; 
         
         $this->_document->addNodeContent($node, $content);
+        $this->_document->useBeautifier(false);
         
         $this->assertXmlStringEqualsXmlString(
-            "<node>
-    Some
-    <strong>content</strong>
-    with some
-    <span class=\"keyword\">nodes</span>
-    in it.
-</node>", 
+            "<node>".$content."</node>", 
             (string) $this->_document
         );
     }

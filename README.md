@@ -18,6 +18,8 @@ Project resources
 
 * [Developers discussion group](http://groups.google.com/group/phpframe-dev)
 
+* [Continuous Integration Server](http://ci.phpframe.org:8080/cruisecontrol)
+
 How to install PHPFrame with the PEAR command line installer
 -----------------------------
 
@@ -31,9 +33,9 @@ Tell the installer about the channel:
 
 Download and install the latest successful build:
 
-`pear install http://xinc.e-noise.com/api/deliverable/get/download/PHPFrame/latest-successful/PHPFrame.tgz`
+`pear install http://dist.phpframe.org/latest-build`
 
 Run post installation scripts:
 
-`pear run-scripts pear.phpframe.org/PHPFrame`
+`pear run-scripts phpframe/PHPFrame`
 

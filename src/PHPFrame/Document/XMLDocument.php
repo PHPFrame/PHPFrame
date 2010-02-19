@@ -133,19 +133,19 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     }
     
     /**
-     * Add node/tag
+     * Add node/tag.
      * 
+     * @param string       $name    The name of the new node or tag.
      * @param DOMNode|null $parent  The parent object to which we want to add 
      *                              the new node.
-     * @param string       $name    The name of the new node or tag
      * @param array        $attrs   An assoc array containing attributes 
      *                              key/value pairs.
-     * @param string       $content Text content of the node if any
+     * @param string       $content Text content of the node if any.
      * 
      * @return DOMNode Returns a reference to the newly created node
      * @since  1.0
      */
-    public function addNode($parent=null, $name, $attrs=array(), $content=null)
+    public function addNode($name, $parent=null, $attrs=array(), $content=null)
     {
         $new_node = $this->dom->createElement($name);
         

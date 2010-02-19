@@ -91,8 +91,8 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
         $dom = $doc->getDom();
         
         $parent_node = $dom->getElementsByTagName("methodResponse")->item(0);
-        $parent_node = $doc->addNode($parent_node, 'fault');
-        $parent_node = $doc->addNode($parent_node, 'value');
+        $parent_node = $doc->addNode('fault', $parent_node);
+        $parent_node = $doc->addNode('value', $parent_node);
         $fault_array = array('faultCode'=>$fault_code, 'faultString'=>$fault_string);
         $parent_node = $this->_addStruct($parent_node, $fault_array);
     }
@@ -113,8 +113,8 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
         $dom = $doc->getDom(); 
         
         $parent_node = $dom->getElementsByTagName("methodResponse")->item(0);
-        $parent_node = $doc->addNode($parent_node, 'params');
-        $parent_node = $doc->addNode($parent_node, 'param');
+        $parent_node = $doc->addNode('params', $parent_node);
+        $parent_node = $doc->addNode('param', $parent_node);
         
         $this->_buildNode($parent_node, 'value', $param_value);
     }
@@ -137,7 +137,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
         $doc = PHPFrame::Response()->getDocument();
         
         if (!is_null($node_value)) {
-            $parent_node = $doc->addNode($parent_node, $node_name);
+            $parent_node = $doc->addNode($node_name, $parent_node);
             
             if ($node_value instanceof PHPFrame_RPCObject) {
                 $node_value = $node_value->getRPCFields();
@@ -159,7 +159,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
             }
         } else {
             if ($node_name == 'value') {
-                $parent_node = $doc->addNode($parent_node, 'value');
+                $parent_node = $doc->addNode('value', $parent_node);
                 $doc->addNodeContent($parent_node, 'NULL');    
             }
         }
@@ -224,7 +224,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
             $type = 'double';
         }
         
-        $parent_node = $doc->addNode($parent_node, $type);
+        $parent_node = $doc->addNode($type, $parent_node);
         
         return $parent_node;
     }
@@ -245,11 +245,11 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     {
         $doc = PHPFrame::Response()->getDocument();
         
-        $parent_node = $doc->addNode($parent_node, 'struct');
+        $parent_node = $doc->addNode('struct', $parent_node);
         
         foreach ($assoc_array as $key=>$value) {
-            $local_parent = $doc->addNode($parent_node, 'member');
-            $doc->addNode($local_parent, 'name', null, $key);
+            $local_parent = $doc->addNode('member', $parent_node);
+            $doc->addNode('name', $local_parent, null, $key);
             $this->_buildNode($local_parent, 'value', $value);
         }
     }
@@ -270,8 +270,8 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     {
         $doc = PHPFrame::Response()->getDocument();
         
-        $parent_node = $doc->addNode($parent_node, 'array');
-        $parent_node = $doc->addNode($parent_node, 'data');
+        $parent_node = $doc->addNode('array', $parent_node);
+        $parent_node = $doc->addNode('data', $parent_node);
         
         foreach ($index_array as $value) {
             $this->_buildNode($parent_node, 'value', $value);

@@ -86,9 +86,9 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $html_node = $this->dom->getElementsByTagName("html")->item(0);
         
         // Add head
-        $head_node = $this->addNode($html_node, "head");
+        $head_node = $this->addNode("head", $html_node);
         // Add body
-        $this->addNode($html_node, "body", null, "\n{content}\n");
+        $this->addNode("body", $html_node, null, "\n{content}\n");
         
         // Add meta tags
         $this->addMetaTag("generator", "PHPFrame");
@@ -100,7 +100,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         
         // Add base url
         $uri = new PHPFrame_URI();
-        $this->addNode($head_node, "base", array("href"=>$uri->getBase()));
+        $this->addNode("base", $head_node, array("href"=>$uri->getBase()));
     }
     
     /**
@@ -118,11 +118,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         
         // Add title tag in head node 
         $head_node = $this->dom->getElementsByTagName("head")->item(0);
-        $this->addNode($head_node, "title", null, $this->getTitle());
+        $this->addNode("title", $head_node, null, $this->getTitle());
         
         // Add meta tags
         foreach ($this->_meta_tags as $meta_tag) {
-            $meta_node = $this->addNode($head_node, "meta");
+            $meta_node = $this->addNode("meta", $head_node);
             
             // Add name attribute if any
             if (!is_null($meta_tag["name"])) {
@@ -144,12 +144,12 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // Add scripts
         foreach ($this->_scripts as $script_attr) {
             // Create script tag node
-            $this->addNode($head_node, "script", $script_attr);
+            $this->addNode("script", $head_node, $script_attr);
         }
         
         // Add styles
         foreach ($this->_style_sheets as $style_sheet_attr) {
-            $this->addNode($head_node, "link", $style_sheet_attr);
+            $this->addNode("link", $head_node, $style_sheet_attr);
         }
         
         // Render DOM Document as HTML string

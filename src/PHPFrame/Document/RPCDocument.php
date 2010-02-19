@@ -42,7 +42,7 @@ class PHPFrame_RPCDocument extends PHPFrame_XMLDocument
         parent::__construct($mime, $charset);
         
         // Add body
-        $this->addNode($this->dom, "methodResponse");       
+        $this->addNode("methodResponse", $this->dom);       
     }
     
     /**

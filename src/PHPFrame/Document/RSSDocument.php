@@ -83,29 +83,29 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
      */
     public function __toString()
     {
-        $rss         = $this->addNode(null, "rss", array("version"=>"2.0"));
-        $channel     = $this->addNode($rss, "channel");
-        $title       = $this->addNode($channel, "title", null, $this->getTitle());
-        $link        = $this->addNode($channel, "link", null, $this->getLink());
+        $rss         = $this->addNode("rss", null, array("version"=>"2.0"));
+        $channel     = $this->addNode("channel", $rss);
+        $title       = $this->addNode("title", $channel, null, $this->getTitle());
+        $link        = $this->addNode("link", $channel, null, $this->getLink());
         $description = $this->addNode(
+            "description",
             $channel, 
-            "description", 
             null, 
             $this->getDescription()
         );
         
         $image_array = $this->getImage();
         if (count($image_array)> 0) {
-            $image     = $this->addNode($channel, "image");
+            $image     = $this->addNode("image", $channel);
             $image_url = $this->addNode(
-                $image, 
-                "url", 
+                "url",
+                $image,  
                 null, 
                 $image_array["url"]
             );
             $image_link = $this->addNode(
-                $image, 
-                "link", 
+                "link",
+                $image,  
                 null, 
                 $image_array["link"]
             );
@@ -113,12 +113,12 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
         
         if (count($this->getItems()) > 0) {
             foreach ($this->getItems() as $item_array) {
-                $item = $this->addNode($channel, "item");
-                $this->addNode($item, "title", null, $item_array["title"]);
-                $this->addNode($item, "link", null, $item_array["link"]);
+                $item = $this->addNode("item", $channel);
+                $this->addNode("title", $item, null, $item_array["title"]);
+                $this->addNode("link", $item, null, $item_array["link"]);
                 $this->addNode(
-                    $item, 
                     "description", 
+                    $item, 
                     null, 
                     $item_array["description"]
                 );
@@ -127,8 +127,8 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
                     && !empty($item_array["pub_date"])
                 ) {
                     $this->addNode(
-                        $item, 
                         "pubDate", 
+                        $item, 
                         null, 
                         $item_array["pub_date"]
                     );
@@ -138,8 +138,8 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
                     && !empty($item_array["author"])
                 ) {
                     $this->addNode(
-                        $item, 
                         "author", 
+                        $item, 
                         null, 
                         $item_array["author"]
                     );

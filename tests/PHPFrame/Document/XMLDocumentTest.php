@@ -145,7 +145,7 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
         
         $this->assertXmlStringEqualsXmlString(
             "<node>Some content</node>", 
-            (string) $this->_document
+            $this->_document->__toString()
         );
     }
     

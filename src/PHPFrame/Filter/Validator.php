@@ -26,50 +26,50 @@
 class PHPFrame_Validator
 {
     /**
-     * An array used to store field names and their filters
+     * An array used to store field names and their filters.
      * 
      * @var array
      */
     private $_filters = array();
     /**
-     * Array containing names of fields that allow null value
+     * Array containing names of fields that allow null value.
      * 
      * @var array
      */
     private $_allow_null_fields = array();
     /**
-     * The original values
+     * The original values.
      * 
      * @var array
      */
     private $_original_values = array();
     /**
-     * The filtered values
+     * The filtered values.
      * 
      * @var array
      */
     private $_filtered_values = array();
     /**
-     * Array used to store messages
+     * Array used to store messages.
      * 
      * @var array
      */
     private $_messages = array();
     /**
-     * Boolean indicating whether we want validator to throw exceptions
+     * Boolean indicating whether we want validator to throw exceptions.
      * 
      * @var bool
      */
     private $_throw_exceptions = false;
     /**
-     * Default exception class used when not specified by filter
+     * Default exception class used when not specified by filter.
      * 
      * @var string
      */
     private $_exception_class = "Exception";
     
     /**
-     * Constructor
+     * Constructor.
      * 
      * @return void
      * @since  1.0
@@ -80,11 +80,12 @@ class PHPFrame_Validator
     }
     
     /**
-     * Set a filter for a given field name in the validator
+     * Set a filter for a given field name in the validator.
      * 
-     * @param string          $field_name
-     * @param PHPFrame_Filter $filter
-     * @param bool            $allow_null
+     * @param string          $field_name The name of the field this filter 
+     *                                    will apply to.
+     * @param PHPFrame_Filter $filter     An object of type {@link PHPFrame_Filter}.
+     * @param bool            $allow_null [Optional] Default value is FALSE.
      * 
      * @return void
      * @since  1.0
@@ -109,11 +110,12 @@ class PHPFrame_Validator
     }
     
     /**
-     * Get filter for a given field in the validator
+     * Get filter for a given field in the validator.
      * 
-     * @param string $field_name
+     * @param string $field_name The name of the filter we want to get the 
+     *                           filter for.
      * 
-     * @return void
+     * @return PHPFrame_Filter|null
      * @since  1.0
      */
     public function getFilter($field_name)
@@ -131,7 +133,7 @@ class PHPFrame_Validator
     }
     
     /**
-     * Get filters
+     * Get filters.
      * 
      * @return array
      * @since  1.0
@@ -142,9 +144,9 @@ class PHPFrame_Validator
     }
     
     /**
-     * Check whether a given field allows null value
+     * Check whether a given field allows null value.
      * 
-     * @param string $field_name
+     * @param string $field_name The field name we want to check.
      * 
      * @return bool
      * @since  1.0
@@ -155,9 +157,11 @@ class PHPFrame_Validator
     }
     
     /**
-     * Set whether or not the validator should throw exceptions
+     * Set whether or not the validator should throw exceptions.
      * 
-     * @param bool $bool
+     * @param bool $bool Boolean indicating whether the validator should throw
+     *                   exceptions. By default it is not set and validator 
+     *                   will simply return FALSE on failure.
      * 
      * @return void
      * @since  1.0
@@ -176,7 +180,7 @@ class PHPFrame_Validator
     /**
      * Set default exception class
      * 
-     * @param string $str The exception class name
+     * @param string $str The exception class name.
      * 
      * @return void
      * @since  1.0
@@ -193,12 +197,12 @@ class PHPFrame_Validator
     }
     
     /**
-     * Validate a value for a single field in validator
+     * Validate a value for a single field in validator.
      * 
-     * @param string $field_name
-     * @param mixed  $value
+     * @param string $field_name The field name we want to validate.
+     * @param mixed  $value      The value we want to validate.
      * 
-     * @return bool TRUE on success and FALSE on failure
+     * @return bool TRUE on success and FALSE on failure.
      * @since  1.0
      */
     public function validate($field_name, $value)
@@ -246,12 +250,12 @@ class PHPFrame_Validator
     }
     
     /**
-     * Validate all fields and return
+     * Validate all fields and return.
      * 
      * @param array $assoc An associative array containing the field names and 
      *                     the values to process.
      * 
-     * @return mixed The filtered array or FALSE on failure
+     * @return mixed The filtered array or FALSE on failure.
      * @since  1.0
      */
     public function validateAll(array $assoc)
@@ -279,7 +283,7 @@ class PHPFrame_Validator
     }
     
     /**
-     * Get original values array
+     * Get original values array.
      * 
      * @return array
      * @since  1.0
@@ -290,7 +294,7 @@ class PHPFrame_Validator
     }
     
     /**
-     * Get filtered values array
+     * Get filtered values array.
      * 
      * @return array
      * @since  1.0
@@ -301,9 +305,9 @@ class PHPFrame_Validator
     }
     
     /**
-     * Get original value
+     * Get original value.
      * 
-     * @param string $field_name
+     * @param string $field_name The field name we want to get the value for.
      * 
      * @return mixed
      * @since  1.0
@@ -314,9 +318,9 @@ class PHPFrame_Validator
     }
     
     /**
-     * Get filtered value
+     * Get filtered value.
      * 
-     * @param string $field_name
+     * @param string $field_name The field name we want to get the value for.
      * 
      * @return mixed
      * @since  1.0
@@ -327,7 +331,7 @@ class PHPFrame_Validator
     }
     
     /**
-     * Get messages array
+     * Get messages array.
      * 
      * @return array
      * @since  1.0
@@ -338,10 +342,10 @@ class PHPFrame_Validator
     }
     
     /**
-     * Notify failure
+     * Notify failure.
      * 
-     * @param string $str             The failure message
-     * @param string $exception_class [Optional] Specialised exception class
+     * @param string $str             The failure message.
+     * @param string $exception_class [Optional] Specialised exception class.
      * 
      * @return void
      * @since  1.0

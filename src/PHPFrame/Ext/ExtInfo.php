@@ -112,7 +112,7 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Constructor
      * 
-     * @param array $options
+     * @param array $options [Optional]
      * 
      * @return void
      * @since  1.0
@@ -122,6 +122,13 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
         parent::__construct($options);
     }
     
+    /**
+     * Implementation of IteratorAgreggate interface
+     * 
+     * @return ArrayIterator
+     * @see PHPFrame/Mapper/PHPFrame_PersistentObject#getIterator()
+     * @since  1.0
+     */
     public function getIterator()
     {
         $properties = get_object_vars($this);
@@ -143,12 +150,14 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set name
      * 
+     * @param string $str The extension name.
+     * 
      * @return void
      * @since  1.0
      */
     public function setName($str)
     {
-        $this->name = $str;
+        $this->name = (string) $str;
     }
     
     /**
@@ -164,6 +173,8 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     
     /**
      * Set channel
+     * 
+     * @param string $str The extenion's channel.
      * 
      * @return void
      * @since  1.0
@@ -187,6 +198,8 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set summary
      * 
+     * @param string $str The extenion's summary.
+     * 
      * @return void
      * @since  1.0
      */
@@ -208,6 +221,8 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     
     /**
      * Set description
+     * 
+     * @param string $str The extenion's description.
      * 
      * @return void
      * @since  1.0
@@ -231,6 +246,8 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set author
      * 
+     * @param string $str The extenion's author.
+     * 
      * @return void
      * @since  1.0
      */
@@ -252,6 +269,8 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     
     /**
      * Set date
+     * 
+     * @param string $str The extenion's build date.
      * 
      * @return void
      * @since  1.0
@@ -275,6 +294,8 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set time
      * 
+     * @param string $str The extenion's build time.
+     * 
      * @return void
      * @since  1.0
      */
@@ -297,6 +318,8 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set version
      * 
+     * @param array $array The extenion's version.
+     * 
      * @return void
      * @since  1.0
      */
@@ -307,6 +330,8 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     
     /**
      * Set stability
+     * 
+     * @param array $array The extenion's stability.
      * 
      * @return void
      * @since  1.0
@@ -319,6 +344,8 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set license
      * 
+     * @param array $array The extenion's license.
+     * 
      * @return void
      * @since  1.0
      */
@@ -329,6 +356,8 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     
     /**
      * Set notes
+     * 
+     * @param string $str The extenion's release notes.
      * 
      * @return void
      * @since  1.0
@@ -352,7 +381,7 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set dependencies
      * 
-     * @param array $array
+     * @param array $array The extenion's dependencies.
      * 
      * @return void
      * @since  1.0
@@ -376,7 +405,7 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Add content
      * 
-     * @param array $array
+     * @param array $array The extenion's content array.
      * 
      * @return void
      * @since  1.0
@@ -400,7 +429,7 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Add install script
      * 
-     * @param string $str
+     * @param string $str Path to script.
      * 
      * @return void
      * @since  1.0
@@ -424,7 +453,7 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Add uninstall script
      * 
-     * @param string $str
+     * @param string $str Path to script.
      * 
      * @return void
      * @since  1.0
@@ -448,7 +477,7 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Set enabled
      * 
-     * @param bool $bool
+     * @param bool $bool Boolean indicating whether extension is enabled.
      * 
      * @return bool
      * @since  1.0

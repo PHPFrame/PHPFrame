@@ -30,14 +30,14 @@ class PHPFrame_IMAPTest extends PHPUnit_Framework_TestCase
     
     public function test_getMailboxInfo()
     {
-    	$array = $this->_imap->getMailboxInfo();
-    	
-    	$this->assertArrayHasKey("date", $array);
-    	$this->assertArrayHasKey("driver", $array);
-    	$this->assertTrue(in_array($array["driver"], array("pop3", "imap","nntp")));
-    	$this->assertArrayHasKey("mailbox", $array);
-    	$this->assertArrayHasKey("nmsgs", $array);
-    	$this->assertArrayHasKey("recent", $array);
+        $array = $this->_imap->getMailboxInfo();
+        
+        $this->assertArrayHasKey("date", $array);
+        $this->assertArrayHasKey("driver", $array);
+        $this->assertTrue(in_array($array["driver"], array("pop3", "imap","nntp")));
+        $this->assertArrayHasKey("mailbox", $array);
+        $this->assertArrayHasKey("nmsgs", $array);
+        $this->assertArrayHasKey("recent", $array);
     }
     
     public function test_getMessages()
@@ -66,9 +66,9 @@ class PHPFrame_IMAPTest extends PHPUnit_Framework_TestCase
     
 //    public function test_constructorException()
 //    {
-//    	$this->setExpectedException("Exception");
-//    	
-//    	$imap = new PHPFrame_IMAP(
+//        $this->setExpectedException("Exception");
+//        
+//        $imap = new PHPFrame_IMAP(
 //            $this->_host, 
 //            $this->_user, 
 //            $this->_pass

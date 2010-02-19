@@ -17,8 +17,8 @@
  * Throw exception if IMAP extension is not loaded.
  */
 if (!function_exists("imap_open")) {
-	$msg = "PHP's IMAP extension not loaded!!";
-	throw new RuntimeException($msg);
+    $msg = "PHP's IMAP extension not loaded!!";
+    throw new RuntimeException($msg);
 }
 
 /**
@@ -34,11 +34,11 @@ if (!function_exists("imap_open")) {
  */
 class PHPFrame_IMAP
 {
-	/**
-	 * IMAP stream.
-	 * 
-	 * @var resource
-	 */
+    /**
+     * IMAP stream.
+     * 
+     * @var resource
+     */
     private $_stream;
     /**
      * IMAP host name or IP address.
@@ -115,9 +115,9 @@ class PHPFrame_IMAP
      */
     public function __sleep()
     {
-    	$this->close();
-    	
-    	return array_keys(get_object_vars($this));
+        $this->close();
+        
+        return array_keys(get_object_vars($this));
     }
     
     /**
@@ -128,7 +128,7 @@ class PHPFrame_IMAP
      */
     public function __wakeup()
     {
-    	$this->_connect();
+        $this->_connect();
     }
     
     /**
@@ -140,7 +140,7 @@ class PHPFrame_IMAP
      */
     private function _connect()
     {
-    	// Build mailbox name
+        // Build mailbox name
         $mbox  = '{'.$this->_host.':'.$this->_port.'/novalidate-cert}';
         $mbox .= $this->_mbox;
         
@@ -188,20 +188,20 @@ class PHPFrame_IMAP
      */
     public function getMailboxInfo()
     {
-    	if (is_null($this->_mbox_info)) {
-	    	$mbox_check = imap_check($this->_stream);
-	    	
-	        if ($mbox_check === false) {
-	            throw new RuntimeException(imap_last_error());
-	        }
-	        
-	        $this->_mbox_info["date"]    = $mbox_check->Date;
-	        $this->_mbox_info["driver"]  = $mbox_check->Driver;
-	        $this->_mbox_info["mailbox"] = $mbox_check->Mailbox;
-	        $this->_mbox_info["nmsgs"]   = $mbox_check->Nmsgs;
-	        $this->_mbox_info["recent"]  = $mbox_check->Recent;
-    	}
-    	
+        if (is_null($this->_mbox_info)) {
+            $mbox_check = imap_check($this->_stream);
+            
+            if ($mbox_check === false) {
+                throw new RuntimeException(imap_last_error());
+            }
+            
+            $this->_mbox_info["date"]    = $mbox_check->Date;
+            $this->_mbox_info["driver"]  = $mbox_check->Driver;
+            $this->_mbox_info["mailbox"] = $mbox_check->Mailbox;
+            $this->_mbox_info["nmsgs"]   = $mbox_check->Nmsgs;
+            $this->_mbox_info["recent"]  = $mbox_check->Recent;
+        }
+        
         return $this->_mbox_info;
     }
     
@@ -213,7 +213,7 @@ class PHPFrame_IMAP
      */
     public function getMessages() 
     {
-    	// This will only try to reconnect if needed.
+        // This will only try to reconnect if needed.
         $this->reconnect();
         
         $mbox_info = $this->getMailboxInfo();
@@ -238,7 +238,7 @@ class PHPFrame_IMAP
                     
                     // We declare an empty body if not set yet
                     if (!isset($overview->body[$key])) {
-                    	$overview->body = array($key=>"");
+                        $overview->body = array($key=>"");
                     }
                     
                     $overview->body[$key] .= imap_fetchbody(
@@ -314,7 +314,7 @@ class PHPFrame_IMAP
      */
     private function _createPartArray($structure, $prefix="") 
     {
-    	if (isset($structure->parts) && count($structure->parts) > 0) {
+        if (isset($structure->parts) && count($structure->parts) > 0) {
             foreach ($structure->parts as $key=>$value) {
                 $this->_addPartToArray($value, $prefix.($key+1), $parts_array);
             }
@@ -359,8 +359,8 @@ class PHPFrame_IMAP
                             );
                         }
                     } else {
-                    	// Attached email does not have a seperate mime 
-                    	// attachment for text
+                        // Attached email does not have a seperate mime 
+                        // attachment for text
                         $parts_array[] = array(
                             'part_number' => $partno.'.'.($count+1), 
                             'part_object' => $obj
@@ -368,14 +368,14 @@ class PHPFrame_IMAP
                     }
                 }
             } else {
-            	// Not sure if this is possible
+                // Not sure if this is possible
                 $parts_array[] = array(
                     'part_number' => $prefix.'.1', 
                     'part_object' => $obj
                 );
             }
         } else {
-        	// If there are more sub-parts, expand them out.
+            // If there are more sub-parts, expand them out.
             if (isset($obj->parts) && count($obj->parts) > 0) {
                 foreach ($obj->parts as $count => $p) {
                     $this->_addPartToArray(

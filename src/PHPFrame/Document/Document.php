@@ -69,10 +69,10 @@ abstract class PHPFrame_Document implements IteratorAggregate
      */
     public function __construct($mime, $charset=null) 
     {
-        $this->_mime_type = (string) $mime;
+        $this->mime($mime);
         
         if (!is_null($charset)) {
-            $this->_charset = (string) $charset;
+            $this->charset($charset);
         }
     }
     
@@ -206,6 +206,6 @@ abstract class PHPFrame_Document implements IteratorAggregate
      */
     public function prependBody($str)
     {
-        $this->_body = (string) $str.$this->getBody();
+        $this->_body = (string) $str.$this->_body;
     }
 }

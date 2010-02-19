@@ -18,6 +18,13 @@ class PHPFrame_PlainDocumentTest extends PHPUnit_Framework_TestCase
         //...
     }
     
+    public function test_construct()
+    {
+    	$doc = new PHPFrame_PlainDocument("text/plain", "ISO-8859-1");
+    	
+    	$this->assertEquals("ISO-8859-1", $doc->charset());
+    }
+    
     public function test_charset()
     {
         $this->assertEquals("UTF-8", $this->_document->charset());
@@ -91,5 +98,26 @@ class PHPFrame_PlainDocumentTest extends PHPUnit_Framework_TestCase
         $str = (string) $this->_document;
         
         $this->assertEquals(1, preg_match("/INFO: Some message/", $str));
+    }
+    
+    public function test_getIterator()
+    {
+    	$title = "A nice title";
+    	$body  = "Some really nice content...";
+    	
+    	$this->_document->title($title);
+    	$this->_document->body($body);
+    	
+    	$array = iterator_to_array($this->_document);
+    	
+    	$this->assertEquals(4, count($array));
+    	$this->assertArrayHasKey("mime_type", $array);
+    	$this->assertArrayHasKey("charset", $array);
+    	$this->assertArrayHasKey("title", $array);
+    	$this->assertArrayHasKey("body", $array);
+    	$this->assertEquals("text/plain", $array["mime_type"]);
+    	$this->assertEquals("UTF-8", $array["charset"]);
+    	$this->assertEquals($title, $array["title"]);
+    	$this->assertEquals($body, $array["body"]);
     }
 }

@@ -33,6 +33,15 @@ class PHPFrame_PropertyDoc implements IteratorAggregate
         "declaring_class" => null
     );
     
+    /**
+     * Constructor.
+     * 
+     * @param ReflectionProperty $reflection_prop An object instance of 
+     *                                            ReflectionProperty.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct(ReflectionProperty $reflection_prop)
     {
         $this->_array["name"] = $reflection_prop->getName();
@@ -45,10 +54,16 @@ class PHPFrame_PropertyDoc implements IteratorAggregate
             $this->_array["access"] = "private";
         }
         
-        $this->_array["declaring_class"] = $reflection_prop->getDeclaringClass()
-                                                           ->getName();
+        $declaring_class = $reflection_prop->getDeclaringClass();
+        $this->_array["declaring_class"] = $declaring_class->getName();
     }
     
+    /**
+     * Convert object to string.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
         $str  = $this->_array["name"]." (".$this->_array["access"].") - ";
@@ -57,6 +72,12 @@ class PHPFrame_PropertyDoc implements IteratorAggregate
         return $str;
     }
     
+    /**
+     * Implementation of the IteratorAggregate interface.
+     * 
+     * @return ArrayIterator
+     * @since  1.0
+     */
     public function getIterator()
     {
         return new ArrayIterator($this->_array);

@@ -24,19 +24,28 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_MethodDoc
+class PHPFrame_MethodDoc implements IteratorAggregate
 {
     private $_array = array(
         "name"            => null,
         "access"          => null,
         "declaring_class" => null,
         "params"          => array(),
-        "return"          => null,
+        "return"          => array("type"=>null, "description"=>null),
         "since"           => null,
         "description"     => ""
     );
     private $_show_access = true;
     
+    /**
+     * Constructor.
+     * 
+     * @param ReflectionMethod $reflection_method An object instance of 
+     *                                            ReflectionMethod.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct(ReflectionMethod $reflection_method)
     {
         $this->_array["name"] = $reflection_method->getName();
@@ -49,7 +58,8 @@ class PHPFrame_MethodDoc
             $this->_array["access"] = "private";
         }
         
-        $this->_array["declaring_class"] = $reflection_method->getDeclaringClass()->getName();
+        $declaring_class = $reflection_method->getDeclaringClass();
+        $this->_array["declaring_class"] = $declaring_class->getName();
         
         foreach ($reflection_method->getParameters() as $reflection_param) {
             $param_doc = new PHPFrame_ParamDoc($reflection_param);
@@ -62,6 +72,12 @@ class PHPFrame_MethodDoc
         $this->_parseDocComment($doc_comment);
     }
     
+    /**
+     * Convert object to string.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
         $str  = $this->getAccess()." ";
@@ -99,51 +115,114 @@ class PHPFrame_MethodDoc
         return $str;
     }
     
+    /**
+     * Implementation of the IteratorAggregate interface.
+     * 
+     * @return ArrayIterator
+     * @since  1.0
+     */
     public function getIterator()
     {
         return new ArrayIterator($this->_array);
     }
     
+    /**
+     * Get method name.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getName()
     {
         return $this->_array["name"];
     }
     
+    /**
+     * Get method access/visibility.
+     * 
+     * @return string Either 'public', 'protected' or 'private'.
+     * @since  1.0
+     */
     public function getAccess()
     {
         return $this->_array["access"];
     }
     
+    /**
+     * Get method's declaring class.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getDeclaringClass()
     {
         return $this->_array["declaring_class"];
     }
     
+    /**
+     * Get params.
+     * 
+     * @return array
+     * @since  1.0
+     */
     public function getParams()
     {
         return $this->_array["params"];
     }
     
-    public function getReturn()
+    /**
+     * Get method return type.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public function getReturnType()
     {
-        return $this->_array["return"];
+        return $this->_array["return"]["type"];
     }
     
+    /**
+     * Get method return description.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public function getReturnDescription()
+    {
+        return $this->_array["return"]["description"];
+    }
+    
+    /**
+     * Get method since.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getSince()
     {
         return $this->_array["since"];
     }
     
+    /**
+     * Get method description.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getDescription()
     {
         return $this->_array["description"];
     }
     
-    public function showAccess($bool)
-    {
-        $this->_show_access = (bool) $bool;
-    }
-    
+    /**
+     * Parse docblock text.
+     * 
+     * @param string $str The docblock text to parse.
+     * 
+     * @return void
+     * @since  1.0
+     * @todo   Have to parse docblock using tokenizer extension.
+     */
     private function _parseDocComment($str)
     {
         if (!is_string($str)) {

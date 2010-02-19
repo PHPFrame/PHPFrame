@@ -26,6 +26,12 @@
  */
 class PHPFrame_ControllerDoc extends PHPFrame_ClassDoc
 {
+    /**
+     * Convert object to string.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
         $str = "";

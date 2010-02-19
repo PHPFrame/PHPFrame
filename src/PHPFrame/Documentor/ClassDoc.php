@@ -40,8 +40,13 @@ class PHPFrame_ClassDoc implements IteratorAggregate
     /**
      * Constructor.
      * 
-     * @param $reflection_obj
-     * @param $visibility
+     * @param ReflectionClass $reflection_obj Reflection object of the class to 
+     *                                        document.
+     * @param int             $visibility     [Optional] The visibility level 
+     *                                        to include in documentation. 
+     *                                        Default value is 1 (public). See 
+     *                                        class constants for possible 
+     *                                        values.
      * 
      * @return void
      * @since  1.0
@@ -55,11 +60,9 @@ class PHPFrame_ClassDoc implements IteratorAggregate
         $this->_array["class_name"] = $reflection_obj->getName();
         
         foreach ($reflection_obj->getProperties() as $reflection_prop) {
-            if (
-                ($reflection_prop->isProtected() 
+            if (($reflection_prop->isProtected() 
                 && $this->_visibility < PHPFrame_ClassDoc::VISIBILITY_PROTECTED)
-                ||
-                ($reflection_prop->isPrivate()
+                || ($reflection_prop->isPrivate()
                 && $this->_visibility < PHPFrame_ClassDoc::VISIBILITY_PRIVATE)
             ) {
                 continue;
@@ -69,11 +72,9 @@ class PHPFrame_ClassDoc implements IteratorAggregate
         }
         
         foreach ($reflection_obj->getMethods() as $reflection_method) {
-            if (
-                ($reflection_method->isProtected() 
+            if (($reflection_method->isProtected() 
                 && $this->_visibility < PHPFrame_ClassDoc::VISIBILITY_PROTECTED)
-                ||
-                ($reflection_method->isPrivate()
+                || ($reflection_method->isPrivate()
                 && $this->_visibility < PHPFrame_ClassDoc::VISIBILITY_PRIVATE)
             ) {
                 continue;
@@ -134,26 +135,58 @@ class PHPFrame_ClassDoc implements IteratorAggregate
         return new ArrayIterator($this->_array);
     }
     
+    /**
+     * Get class name.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getClassName()
     {
         return $this->_array["class_name"];
     }
     
+    /**
+     * Get class name.
+     * 
+     * @return array An associative array with the following keys:
+     *               - own: An array containig methods defined by the class.
+     *               - inherited: An array containing inherited methods.
+     * @since  1.0
+     */
     public function getMethods()
     {
         return $this->_array["methods"];
     }
     
+    /**
+     * Get own methods.
+     * 
+     * @return array An array containing objects of type PHPFrame_MethodDoc.
+     * @since  1.0
+     */
     public function getOwnMethods()
     {
         return $this->_array["methods"]["own"];
     }
     
+    /**
+     * Get inherited methods.
+     * 
+     * @return array An array containing objects of type PHPFrame_MethodDoc.
+     * @since  1.0
+     */
     public function getInheritedMethods()
     {
         return $this->_array["methods"]["inherited"];
     }
     
+    /**
+     * Get properties.
+     * 
+     * @return array
+     * @since  1.0
+     */
     public function getProps()
     {
         return $this->_array["props"];

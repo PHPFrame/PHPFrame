@@ -28,15 +28,31 @@ class PHPFrame_ParamDoc
 {
     private $_array = array("name"=>null, "type"=>null, "description"=>null);
     
+    /**
+     * Constructor.
+     * 
+     * @param ReflectionParameter $reflection_param An object instance of 
+     *                                              ReflectionParameter.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct(ReflectionParameter $reflection_param)
     {
         $this->_array["name"] = $reflection_param->getName();
         
-        $doc_comment = (string) $reflection_param->getDeclaringFunction()
-                                                   ->getDocComment();
+        $declaring_func = $reflection_param->getDeclaringFunction();
+        $doc_comment    = (string) $declaring_func->getDocComment();
+        
         $this->_parseDocComment($doc_comment);
     }
     
+    /**
+     * Convert object to string.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
         $str = "";
@@ -54,26 +70,59 @@ class PHPFrame_ParamDoc
         return $str;
     }
     
+    /**
+     * Implementation of the IteratorAggregate interface.
+     * 
+     * @return ArrayIterator
+     * @since  1.0
+     */
     public function getIterator()
     {
         return new ArrayIterator($this->_array);
     }
     
+    /**
+     * Get parameter name.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getName()
     {
         return $this->_array["name"];
     }
     
+    /**
+     * Get parameter type.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getType()
     {
         return $this->_array["type"];
     }
     
+    /**
+     * Get parameter description.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function getDescription()
     {
         return $this->_array["description"];
     }
     
+    /**
+     * Parse docblock comment.
+     * 
+     * @param string $str The docblock text to parse.
+     * 
+     * @return void
+     * @since  1.0
+     * @todo   Have to parse docblock using tokenizer extension.
+     */
     private function _parseDocComment($str)
     {
         if (!is_string($str)) {

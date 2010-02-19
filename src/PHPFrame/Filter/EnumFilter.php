@@ -24,7 +24,18 @@
  */
 class PHPFrame_EnumFilter extends PHPFrame_Filter
 {
-    
+    /**
+     * Constructor.
+     * 
+     * @param array $options [Optional] An associative array with the filter 
+     *                       options. The FloatFilter supports the following 
+     *                       options:
+     *                       
+     *                       - enums (array)
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct(array $options=null)
     {
         $this->registerOption('enums', array());
@@ -34,7 +45,11 @@ class PHPFrame_EnumFilter extends PHPFrame_Filter
     /**
      * Processes the given enum value against the allowed enums.
      * 
+     * @param mixed $value The value to filter.
+     * 
+     * @return void
      * @see src/PHPFrame/Filter/PHPFrame_Filter#process($value)
+     * @since  1.0
      */
     public function process($value)
     {
@@ -55,6 +70,14 @@ class PHPFrame_EnumFilter extends PHPFrame_Filter
         }
     }
     
+    /**
+     * Set enums.
+     * 
+     * @param array $enums An array containing the values allowed by the filter.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function setEnums(array $enums)
     {
         $this->setOption('enums', $enums);

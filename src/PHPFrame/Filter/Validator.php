@@ -229,17 +229,16 @@ class PHPFrame_Validator
         $filter = $this->_filters[$field_name];
         
         if ($filter instanceof PHPFrame_BoolFilter) {
-            $null_on_failure = $filter->getOption("null_on_failure");
+            $null_on_fail = $filter->getOption("null_on_failure");
         } else {
-            $null_on_failure = false;
+            $null_on_fail = false;
         }
             
         $this->_filtered_values[$field_name] = $filter->process($value);
             
         if (count($filter->getMessages()) > 0
-             && (($this->_filtered_values[$field_name] === false && !$null_on_failure)
-                || (is_null($this->_filtered_values[$field_name]) && $null_on_failure)
-             )
+            && (($this->_filtered_values[$field_name] === false && !$null_on_fail)
+            || (is_null($this->_filtered_values[$field_name]) && $null_on_fail))
         ) {
             $last_message = end($filter->getMessages());
             $this->fail($last_message[0], $last_message[1]);

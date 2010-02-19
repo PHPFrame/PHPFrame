@@ -107,6 +107,8 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      * {@link PHPFrame_XMLDocument::addNodeAttr()} or 
      * {@link PHPFrame_XMLDocument::addNodeContent()} methods.
      * 
+     * @param string $str String to append the document body.
+     * 
      * @return void
      * @throws LogicException always.
      * @since  1.0
@@ -127,6 +129,8 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      * {@link PHPFrame_XMLDocument::addNode()}, 
      * {@link PHPFrame_XMLDocument::addNodeAttr()} or 
      * {@link PHPFrame_XMLDocument::addNodeContent()} methods.
+     * 
+     * @param string $str String to prepend the document body.
      * 
      * @return void
      * @throws LogicException always.

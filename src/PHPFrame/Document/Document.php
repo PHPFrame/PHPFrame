@@ -186,7 +186,7 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Append string to the document body
      * 
-     * @param string $str String containing the document body.
+     * @param string $str String to append the document body.
      * 
      * @return void
      * @since  1.0
@@ -199,7 +199,7 @@ abstract class PHPFrame_Document implements IteratorAggregate
     /**
      * Prepend string to the document body
      * 
-     * @param string $str String containing the document body.
+     * @param string $str String to prepend to the document body.
      * 
      * @return void
      * @since  1.0

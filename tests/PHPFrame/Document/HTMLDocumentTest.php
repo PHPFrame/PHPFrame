@@ -22,4 +22,11 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
     {
         //print_r($this->_document);
     }
+    
+    public function test_getDocType()
+    {
+        $doc_type = $this->_document->getDocType();
+        $this->assertType("DOMDocumentType", $doc_type);
+        $this->assertEquals("html", $doc_type->name);
+    }
 }

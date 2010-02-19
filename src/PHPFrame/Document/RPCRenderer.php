@@ -88,7 +88,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     private function _makeFaultPayload($fault_code, $fault_string)
     {
         $doc = PHPFrame::Response()->getDocument();
-        $dom = $doc->getDom();
+        $dom = $doc->dom();
         
         $parent_node = $dom->getElementsByTagName("methodResponse")->item(0);
         $parent_node = $doc->addNode('fault', $parent_node);
@@ -110,7 +110,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     private function _makeParamPayload($param_value)
     {
         $doc = PHPFrame::Response()->getDocument();
-        $dom = $doc->getDom(); 
+        $dom = $doc->dom(); 
         
         $parent_node = $dom->getElementsByTagName("methodResponse")->item(0);
         $parent_node = $doc->addNode('params', $parent_node);

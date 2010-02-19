@@ -132,7 +132,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertType("PHPFrame_Response", $this->_app->getResponse());
         
         // Check the response headers for the sake of testing
-        $headers = $this->_app->getResponse()->getHeaders();
+        $headers = $this->_app->getResponse()->headers();
         
         $this->assertType("array", $headers);
         $this->assertArrayHasKey("X-Powered-By", $headers);

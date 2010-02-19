@@ -126,9 +126,9 @@ class PHPFrame_MobileClient extends PHPFrame_Client
     public function prepareResponse(PHPFrame_Response $response, $views_path)
     {
         // Set document as response content
-        $response->setDocument(new PHPFrame_HTMLDocument());
+        $response->document(new PHPFrame_HTMLDocument());
         
         // Set response renderer
-        $response->setRenderer(new PHPFrame_HTMLRenderer($views_path));
+        $response->renderer(new PHPFrame_HTMLRenderer($views_path));
     }
 }

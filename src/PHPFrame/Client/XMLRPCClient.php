@@ -134,10 +134,10 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         }
         
         // Set document as response content
-        $response->setDocument(new PHPFrame_RPCDocument());
+        $response->document(new PHPFrame_RPCDocument());
         
         // Set response renderer
-        $response->setRenderer(new PHPFrame_RPCRenderer());     
+        $response->renderer(new PHPFrame_RPCRenderer());     
     }
     
     /**
@@ -147,28 +147,11 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      * 
      * @return void
      * @since  1.0
+     * @todo   This method needs to be implemented.
      */
     public function redirect($url)
     {
-        // Reset the request
-        PHPFrame::Request()->destroy();
-        
-        // Get query params from redirection url
-        $url = parse_url($url);
-        
-        if (isset($url["query"])) {
-            parse_str($url["query"], $params);
-            
-            // Loop through URL params and set values in request
-            foreach ($params as $key=>$value) {
-                $_REQUEST[$key] = $value;
-                $_GET[$key] = $value;
-                PHPFrame::Request()->setParam($key, $value);
-            }
-        }
-        
-        // Retrigger the app
-        PHPFrame::Fire();
+        // ...
     }
     
     /**

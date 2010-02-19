@@ -18,63 +18,63 @@ class PHPFrame_PlainDocumentTest extends PHPUnit_Framework_TestCase
         //...
     }
     
-    public function test_getCharset()
+    public function test_charset()
     {
-        $this->assertEquals("UTF-8", $this->_document->getCharset());
+        $this->assertEquals("UTF-8", $this->_document->charset());
     }
     
-    public function test_getMimeType()
+    public function test_mime()
     {
-        $this->assertEquals("text/plain", $this->_document->getMimeType());
+        $this->assertEquals("text/plain", $this->_document->mime());
     }
     
-    public function test_setTitle()
+    public function test_title()
     {
         $title = "Lorem ipsum";
-        $this->_document->setTitle($title);
+        $this->_document->title($title);
         
-        $this->assertEquals($title, $this->_document->getTitle());
+        $this->assertEquals($title, $this->_document->title());
     }
     
     public function test_appendTitle()
     {
         $title = "Lorem ipsum";
-        $this->_document->setTitle($title);
+        $this->_document->title($title);
         $this->_document->appendTitle($title);
         
-        $this->assertEquals($title.$title, $this->_document->getTitle());
+        $this->assertEquals($title.$title, $this->_document->title());
     }
     
-    public function test_setBody()
+    public function test_body()
     {
         $body = "Lorem ipsum...";
-        $this->_document->setBody($body);
+        $this->_document->body($body);
         
-        $this->assertEquals($body, $this->_document->getBody());
+        $this->assertEquals($body, $this->_document->body());
     }
     
     public function test_appendBody()
     {
         $body = "Lorem ipsum";
-        $this->_document->setBody($body);
+        $this->_document->body($body);
         $this->_document->appendBody($body);
         
-        $this->assertEquals($body.$body, $this->_document->getBody());
+        $this->assertEquals($body.$body, $this->_document->body());
     }
     
     public function prependBody()
     {
         $body = "Lorem ipsum";
-        $this->_document->setBody($body);
+        $this->_document->body($body);
         $this->_document->prependBody("Blah");
         
-        $this->assertEquals("Blah".$body, $this->_document->getBody());
+        $this->assertEquals("Blah".$body, $this->_document->body());
     }
     
     public function test_toString()
     {
-        $this->_document->setTitle("The title");
-        $this->_document->setBody("Blah blah blah blah");
+        $this->_document->title("The title");
+        $this->_document->body("Blah blah blah blah");
         
         $str = (string) $this->_document;
         

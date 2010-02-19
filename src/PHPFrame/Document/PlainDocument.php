@@ -51,7 +51,7 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
     {
         $str = "";
         
-        $title = $this->getTitle();
+        $title = $this->title();
         if (!empty($title)) {
             $str .= $title."\n";
             for ($i=0; $i<strlen($title); $i++) {
@@ -66,7 +66,7 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
             $str .= "\n";
         }
         
-        $body = $this->getBody();
+        $body = $this->body();
         if (!empty($body)) {
             $str .= $body."\n";
         }

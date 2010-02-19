@@ -85,7 +85,7 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
     {
         $rss         = $this->addNode("rss", null, array("version"=>"2.0"));
         $channel     = $this->addNode("channel", $rss);
-        $title       = $this->addNode("title", $channel, null, $this->getTitle());
+        $title       = $this->addNode("title", $channel, null, $this->title());
         $link        = $this->addNode("link", $channel, null, $this->getLink());
         $description = $this->addNode(
             "description",
@@ -148,31 +148,6 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
         }
         
         return parent::__toString();
-    }
-    
-    /**
-     * Set the feed's title
-     * 
-     * @param string $str The feed's title.
-     * 
-     * @return void
-     * @since 1.0
-     * @see PHPFrame/Document/PHPFrame_Document#setTitle($str)
-     */
-    public function setTitle($str)
-    {
-        $this->_title = (string) $str;
-    }
-    
-    /**
-     * Get feed's title.
-     * 
-     * @return void
-     * @since 1.0
-     */
-    public function getTitle()
-    {
-        return $this->_title;
     }
     
     /**

@@ -42,7 +42,7 @@ class PHPFrame_RPCDocument extends PHPFrame_XMLDocument
         parent::__construct($mime, $charset);
         
         // Add body
-        $this->addNode("methodResponse", $this->dom);       
+        $this->addNode("methodResponse", $this->dom());       
     }
     
     /**
@@ -53,9 +53,6 @@ class PHPFrame_RPCDocument extends PHPFrame_XMLDocument
      */
     public function __toString()
     {
-        // Commented out indentation as it was making some of the parsing fail
-        // in the clients 
-        //return $this->indent($this->dom->saveXML());
-        return $this->dom->saveXML();
+        return $this->dom()->saveXML();
     }
 }

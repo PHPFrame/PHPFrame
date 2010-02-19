@@ -202,10 +202,10 @@ class PHPFrame_CLIClient extends PHPFrame_Client
     public function prepareResponse(PHPFrame_Response $response, $views_path) 
     {
         // Set document as response content
-        $response->setDocument(new PHPFrame_PlainDocument());
+        $response->document(new PHPFrame_PlainDocument());
         
         // Set response renderer
-        $response->setRenderer(new PHPFrame_PlainRenderer());
+        $response->renderer(new PHPFrame_PlainRenderer());
     }
     
     /**

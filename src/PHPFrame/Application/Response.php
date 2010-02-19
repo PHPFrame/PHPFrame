@@ -123,15 +123,15 @@ class PHPFrame_Response
         // Get global headers
         foreach (headers_list() as $header) {
             if (preg_match('/^([a-zA-Z-]+):(.*)$/', $header, $matches)) {
-                $this->setHeader($matches[1], trim($matches[2]));
+                $this->header($matches[1], trim($matches[2]));
             }
         }
         
-        $this->setStatusCode(200);
+        $this->statusCode(200);
         
-        $x_powered_by  = $this->getHeader("X-Powered-By");
+        $x_powered_by  = $this->header("X-Powered-By");
         $x_powered_by .= " PHPFrame/".PHPFrame::RELEASE_VERSION;
-        $this->setHeader("X-Powered-By", $x_powered_by);
+        $this->header("X-Powered-By", $x_powered_by);
         
         // Acquire pathway object
         $this->_pathway = new PHPFrame_Pathway();
@@ -147,38 +147,42 @@ class PHPFrame_Response
     {
         $str = "";
         
-        foreach ($this->getHeaders() as $key=>$value) {
+        foreach ($this->headers() as $key=>$value) {
             $str .= ucwords($key).": ".$value."\n";
         }
         
-        $str .= "\n".$this->getDocument();
+        $str .= "\n".$this->document();
         
         return $str;
     }
     
     /**
-     * Set the HTTP response status code
+     * Get/set the HTTP response status code.
      * 
-     * @param int $int The status code. Allowed values are: 200, 301, 302, 303, 
-     *                 400, 401, 403, 404, 500 and 501
+     * @param int $int [Optional] The status code. Allowed values are: 200, 
+     *                 301, 302, 303, 400, 401, 403, 404, 500 and 501
      * 
-     * @return void
+     * @return int The current HTTP status code.
      * @throws InvalidArgumentException if supplied code is not allowed.
      * @since  1.0
      */
-    public function setStatusCode($int)
+    public function statusCode($int=null)
     {
-        $array = array(200, 301, 302, 303, 400, 401, 403, 404, 500, 501);
-        
-        if (!in_array($int, $array)) {
-            $msg  = "HTTP response status code not valid. Valid codes are: ";
-            $msg .= "'".implode("','", $array)."'.";
-            throw new InvalidArgumentException($msg);
-        }
-        
-        $this->_code = $int;
-        
-        $this->setHeader("Status", $this->_code);
+    	if (!is_null($int)) {
+    	    $array = array(200, 301, 302, 303, 400, 401, 403, 404, 500, 501);
+            
+	        if (!in_array($int, $array)) {
+	            $msg  = "HTTP response status code not valid. Valid codes ";
+	            $msg .= "are: '".implode("','", $array)."'.";
+	            throw new InvalidArgumentException($msg);
+	        }
+	        
+	        $this->_code = $int;
+	        
+	        $this->header("Status", $this->_code);
+    	}
+    	
+    	return $this->_code;
     }
     
     /**
@@ -187,96 +191,71 @@ class PHPFrame_Response
      * @return array
      * @since  1.0
      */
-    public function getHeaders()
+    public function headers()
     {
         return $this->_headers;
     }
     
     /**
-     * Get a given HTTP header by key
+     * Get/set a given HTTP header line by key.
      * 
-     * @param string $key The name of the HTTP header we want to get, "Status" 
-     *                    for example.
+     * @param string $key   The name of the HTTP header, "Status" for example.
+     * @param string $value [Optional] The header value if we want to set it.
      * 
      * @return string
      * @since  1.0
      */
-    public function getHeader($key)
+    public function header($key, $value=null)
     {
-        if (!isset($this->_headers[$key])) {
+    	$key = trim((string) $key);
+    	
+        if (is_null($value) && !isset($this->_headers[$key])) {
             return null;
+        }
+        
+        if (!is_null($value)) {
+	        $this->_headers[$key] = trim((string) $value);
         }
         
         return $this->_headers[$key];
     }
     
     /**
-     * Set header line
+     * Get/set the document object used as the response body.
      * 
-     * @param string $key   The header key
-     * @param string $value The header value
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setHeader($key, $value) 
-    {
-        $key   = trim((string) $key);
-        $value = trim((string) $value);
-        
-        $this->_headers[$key] = $value;
-    }
-    
-    /**
-     * Get the document object used as the response body
+     * @param PHPFrame_Document $document [Optional] Document object used to 
+     *                                    display the response.
      * 
      * @return PHPFrame_Document
      * @since  1.0
      */
-    public function getDocument()
+    public function document(PHPFrame_Document $document=null)
     {
+    	if (!is_null($document)) {
+    	    $this->_document = $document;
+        
+            $this->header("Content-Type", $this->_document->mime());
+    	}
+    	
         return $this->_document;
     }
     
     /**
-     * Set the document object used as the response body
+     * Get/set the renderer object.
      * 
-     * @param PHPFrame_Document $document Document object used to display the 
-     *                                    response.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setDocument(PHPFrame_Document $document) 
-    {
-        $this->_document = $document;
-        
-        $this->setHeader("Content-Type", $this->_document->getMimeType());
-    }
-    
-    /**
-     * Get the renderer object
+     * @param PHPFrame_IRenderer $renderer [Optional] Renderer object used to 
+     *                                     display the response.
      * 
      * @return PHPFrame_IRenderer
      * @since  1.0
      */
-    public function getRenderer()
+    public function renderer(PHPFrame_IRenderer $renderer=null)
     {
+    	if (!is_null($renderer)) {
+    		$this->_renderer = $renderer;
+    	}
+    	
         return $this->_renderer;
-    }
-    
-    /**
-     * Set the renderer object
-     * 
-     * @param PHPFrame_IRenderer $renderer Renderer object used to display the 
-     *                                     response.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setRenderer(PHPFrame_IRenderer $renderer) 
-    {
-        $this->_renderer = $renderer;
     }
     
     /**
@@ -285,72 +264,59 @@ class PHPFrame_Response
      * @return PHPFrame_Pathway
      * @since  1.0
      */
-    public function getPathway()
+    public function pathway()
     {
         return $this->_pathway;
     }
     
     /**
-     * Get the response body (stored in document object)
+     * Get the response body (stored in document object).
      * 
-     * @return string
-     * @since  1.0
-     */
-    public function getBody()
-    {
-        return $this->getDocument()->getBody();
-    }
-    
-    
-    /**
-     * Set the response body. The passed value will be rendered using the 
-     * response's renderer object.
+     * If a value is passed it will set the response body. The passed value 
+     * will be rendered using the response's renderer object.
      * 
-     * @param mixed $value  The value to set as the response body.
+     * @param mixed $value  [Optional] The value to set as the response body.
      * @param bool  $render [Optional] Default value is TRUE. To bypass 
      *                      renderer set to FALSE.
      * @param bool  $append [Optional] Default value is FALSE.
      * 
-     * @return void
+     * @return string
      * @since  1.0
      */
-    public function setBody($value, $render=true, $append=false)
+    public function body($value=null, $render=true, $append=false)
     {
-        // Render the value to append
-        if ($render) {
-            $value = $this->getRenderer()->render($value);
-        }
-        
-        // Set the value in the document body
-        if ($append) {
-            $this->getDocument()->appendBody($value);
-        } else {
-            $this->getDocument()->setBody($value);
-        }
+    	if (!is_null($value)) {
+	    	// Render the value to append
+	        if ($render) {
+	            $value = $this->renderer()->render($value);
+	        }
+	        
+	        // Set the value in the document body
+	        if ($append) {
+	            $this->document()->appendBody($value);
+	        } else {
+	            $this->document()->body($value);
+	        }
+    	}
+    	
+        return $this->document()->body();
     }
     
     /**
      * Get the response title (stored in document object)
      * 
+     * @param string $str The string to set as document title.
+     * 
      * @return string
      * @since  1.0
      */
-    public function getTitle()
+    public function title($str=null)
     {
-        return $this->getDocument()->getTitle();
-    }
-    
-    /**
-     * Set the document title
-     * 
-     * @param string $str The string to set as document title.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setTitle($str)
-    {
-        $this->getDocument()->setTitle($str);
+    	if (!is_null($str)) {
+    	    $this->document()->title($str);
+    	}
+    	
+        return $this->document()->title();
     }
      
     /**
@@ -363,7 +329,7 @@ class PHPFrame_Response
     {
         // Send headers
         if (!headers_sent()) {
-            header("HTTP/1.1 ".$this->_code);
+            header("HTTP/1.1 ".$this->statusCode());
             
             foreach ($this->_headers as $key=>$value) {
                 header($key.": ".$value);
@@ -371,6 +337,6 @@ class PHPFrame_Response
         }
         
         // Print response content (the document object)
-        echo (string) $this->getDocument();
+        echo (string) $this->document();
     }
 }

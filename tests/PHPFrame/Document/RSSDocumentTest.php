@@ -20,7 +20,7 @@ class PHPFrame_RSSDocumentTest extends PHPUnit_Framework_TestCase
     
     public function test_()
     {
-        $this->_rss->setTitle("My RSS Feed");
+        $this->_rss->title("My RSS Feed");
         $this->_rss->setLink("http://www.lupomontero.com/feed");
         $this->_rss->setDescription("Some really cool news feed...");
         $this->_rss->setImage("http://www.xul.fr/xul.gif", "http://www.xul.fr/en/index.php");

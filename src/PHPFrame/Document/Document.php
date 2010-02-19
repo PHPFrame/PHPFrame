@@ -43,19 +43,19 @@ abstract class PHPFrame_Document implements IteratorAggregate
      *
      * @var string
      */
-    private $_charset = 'UTF-8';
+    private $_charset = "UTF-8";
     /**
      * The document title
      * 
      * @var string
      */
-    private $_title = null;
+    private $_title = "";
     /**
      * The document body
      * 
      * @var string
      */
-    private $_body = null;
+    private $_body = "";
     
     /**
      * Constructor
@@ -93,59 +93,64 @@ abstract class PHPFrame_Document implements IteratorAggregate
     public function getIterator()
     {
         $array = array(
-            "mime_type" => $this->getMimeType(),
-            "charset"   => $this->getCharset(),
-            "title"     => $this->getTitle(),
-            "body"      => $this->getBody()
+            "mime_type" => $this->mime(),
+            "charset"   => $this->charset(),
+            "title"     => $this->title(),
+            "body"      => $this->body()
         );
         
         return new ArrayIterator($array);
     }
     
     /**
-     * Get the document's character set
+     * Get/set the document's character set
+     * 
+     * @param string $str [Optional] The character set to use for the document.
      * 
      * @return string
      * @since  1.0
      */
-    public function getCharset()
+    public function charset($str=null)
     {
+        if (!is_null($str)) {
+            $this->_charset = (string) $str;
+        }
+        
         return $this->_charset;
     }
     
     /**
-     * Get document's mime type
+     * Get/set document's mime type
+     * 
+     * @param string $str [Optional] The MIME type to use for the document.
      * 
      * @return string
      * @since  1.0
      */
-    public function getMimeType()
+    public function mime($str=null)
     {
+        if (!is_null($str)) {
+            $this->_mime_type = (string) $str;
+        }
+        
         return $this->_mime_type;
     }
     
     /**
-     * Get the document title
+     * Get/set the document title
+     * 
+     * @param string $str [Optional] The string to set as document title.
      * 
      * @return string
      * @since  1.0
      */
-    public function getTitle()
+    public function title($str=null)
     {
+    	if (!is_null($str)) {
+    	    $this->_title = (string) $str;
+    	}
+        
         return $this->_title;
-    }
-    
-    /**
-     * Set the document title
-     * 
-     * @param string $str The string to set as document title.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setTitle($str)
-    {
-        $this->_title = (string) $str;
     }
     
     /**
@@ -162,27 +167,20 @@ abstract class PHPFrame_Document implements IteratorAggregate
     }
     
     /**
-     * Get the document body
+     * Get/set the document body.
+     * 
+     * @param string $str String containing the document body.
      * 
      * @return string
      * @since  1.0
      */
-    public function getBody()
+    public function body($str=null)
     {
-        return $this->_body;
-    }
-    
-    /**
-     * Set the document body
-     * 
-     * @param string $str String containing the document body.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setBody($str)
-    {
-        $this->_body = (string) $str;
+        if (!is_null($str)) {
+            $this->_body = (string) $str;
+        }
+        
+        return (string) $this->_body;
     }
     
     /**

@@ -25,17 +25,11 @@
 class PHPFrame_XMLDocument extends PHPFrame_Document
 {
     /**
-     * DOM Document Type object
-     * 
-     * @var DOMDocumentType
-     */
-    protected $doctype = null;
-    /**
      * DOM Document object
      * 
      * @var DOMDocument
      */
-    protected $dom = null;
+    private $_dom = null;
     /**
      * A boolean indicating whether or not to use the XML beautifier when 
      * converting to string.
@@ -45,7 +39,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     private $_use_beautifier=true;
     
     /**
-     * Constructor
+     * Constructor.
      * 
      * @param string $mime    [Optional] The document's MIME type. The default 
      *                        value is 'text/xml'.
@@ -62,26 +56,89 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
         parent::__construct($mime, $charset);
         
         // Acquire DOM object of HTML type
-        $this->dom = new DOMDocument("1.0", $this->getCharset()); 
+        $this->dom(new DOMDocument("1.0", $this->charset())); 
     }
     
     /**
-     * Covert object to string
+     * Covert object to string.
      * 
      * @return string
      * @since  1.0
      */
     public function __toString()
     {
-        $str  = $this->dom->saveXML();
-        $str .= $this->getBody();
-        
         if ($this->useBeautifier()) {
             $xml_beautifier = new XML_Beautifier();
-            return $xml_beautifier->formatString($str);
+            return $xml_beautifier->formatString($this->dom()->saveXML());
         }
         
-        return $str;
+        return $this->dom()->saveXML();
+    }
+    
+    /**
+     * Get/set the document body.
+     * 
+     * @param string $str String containing the document body in XML format.
+     * 
+     * @return string
+     * @throws InvalidArgumentException if XML string is not valid.
+     * @since  1.0
+     */
+    public function body($str=null)
+    {
+        if (!is_null($str)) {
+        	// Acquire a new instance of DOM
+            $this->dom(new DOMDocument("1.0", $this->charset())); 
+            if (!@$this->dom()->loadXML((string) $str)) {
+                $msg  = "XML string passed to ".get_class($this)."::";
+                $msg .= __FUNCTION__."() is not valid.";
+                throw new InvalidArgumentException($msg);
+            }
+        }
+        
+        return (string) $this;
+    }
+    
+    /**
+     * Method not supported. XML documents can only have one root node so 
+     * appending would not make sense. Use the {@link PHPFrame_XMLDocument::dom()} 
+     * method to get a reference to the DOMDocument object or use the 
+     * {@link PHPFrame_XMLDocument::addNode()}, 
+     * {@link PHPFrame_XMLDocument::addNodeAttr()} or 
+     * {@link PHPFrame_XMLDocument::addNodeContent()} methods.
+     * 
+     * @return void
+     * @throws LogicException always.
+     * @since  1.0
+     */
+    public function appendBody($str)
+    {
+    	$msg  = __FUNCTION__."() not supported by ".get_class($this).". XML ";
+    	$msg .= "documents can only have one root node so appending would ";
+    	$msg .= "not make sense. Use the dom() method to get a reference to ";
+    	$msg .= "the DOMDocument object or use the addNode() method.";
+        throw new LogicException($msg);
+    }
+    
+    /**
+     * Method not supported. XML documents can only have one root node so 
+     * prepending would not make sense. Use the {@link PHPFrame_XMLDocument::dom()} 
+     * method to get a reference to the DOMDocument object or use the 
+     * {@link PHPFrame_XMLDocument::addNode()}, 
+     * {@link PHPFrame_XMLDocument::addNodeAttr()} or 
+     * {@link PHPFrame_XMLDocument::addNodeContent()} methods.
+     * 
+     * @return void
+     * @throws LogicException always.
+     * @since  1.0
+     */
+    public function prependBody($str)
+    {
+        $msg  = __FUNCTION__."() not supported by ".get_class($this).". XML ";
+        $msg .= "documents can only have one root node so prepending would ";
+        $msg .= "not make sense. Use the dom() method to get a reference to ";
+        $msg .= "the DOMDocument object or use the addNode() method.";
+        throw new LogicException($msg);
     }
     
     /**
@@ -106,53 +163,49 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     /**
      * Get reference to DOM object.
      * 
+     * @param DOMDocument $dom [Optional]
+     * 
      * @return DOMDocument
      * @since  1.0
      */
-    public function getDOM()
+    public function dom(DOMDocument $dom=null)
     {
-        return $this->dom;
-    }
-    
-    /**
-     * Get DOM Document Type object
-     * 
-     * @return DOMDocumentType
-     * @since  1.0
-     */
-    public function getDocType()
-    {
-        // Create new doc type object if we don't have one yet
-        if (!($this->doctype instanceof DOMDocumentType)) {
-             // Create doc type object
-            $imp = new DOMImplementation;
-            $this->doctype = $imp->createDocumentType($this->qualified_name);
-        }
-        
-        return $this->doctype;
+    	if (!is_null($dom)) {
+    	    $this->_dom = $dom;
+    	}
+    	
+        return $this->_dom;
     }
     
     /**
      * Add node/tag.
      * 
-     * @param string       $name    The name of the new node or tag.
-     * @param DOMNode|null $parent  The parent object to which we want to add 
-     *                              the new node.
-     * @param array        $attrs   An assoc array containing attributes 
-     *                              key/value pairs.
-     * @param string       $content Text content of the node if any.
+     * @param string  $name        The name of the new node or tag.
+     * @param DOMNode $parent      [Optional] The parent object to which we 
+     *                             want to add the new node.
+     * @param array   $attrs       [Optional] An assoc array containing 
+     *                             attributes key/value pairs.
+     * @param string  $content     [Optional] Text content of the node.
+     * @param bool    $xml_content [Optional] Default value is TRUE. If set to 
+     *                             FALSE the passed content will be treated as 
+     *                             text and XML entities will be replaced.
      * 
-     * @return DOMNode Returns a reference to the newly created node
+     * @return DOMNode Returns a reference to the newly created node.
      * @since  1.0
      */
-    public function addNode($name, $parent=null, $attrs=array(), $content=null)
-    {
-        $new_node = $this->dom->createElement($name);
+    public function addNode(
+        $name, 
+        DOMNode $parent=null, 
+        array $attrs=null, 
+        $content=null, 
+        $xml_content=true
+    ) {
+        $new_node = $this->dom()->createElement($name);
         
         if ($parent instanceof DOMNode) {
             $parent->appendChild($new_node);
         } else {
-            $this->dom->appendChild($new_node);
+            $this->dom()->appendChild($new_node);
         }
 
         // Add attributes if any
@@ -164,17 +217,17 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
         
         // Add text content if any
         if (!is_null($content)) {
-            $this->addNodeContent($new_node, $content);
+            $this->addNodeContent($new_node, $content, $xml_content);
         }
         
         return $new_node;
     }
     
     /**
-     * Add an attribute to a given node
+     * Add an attribute to a given node.
      * 
      * @param DOMNode $node       The node we want to add the attributes to.
-     * @param string  $attr_name  The attribute name
+     * @param string  $attr_name  The attribute name.
      * @param string  $attr_value The value for the attribute if any.
      * 
      * @return void
@@ -183,10 +236,10 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     public function addNodeAttr(DOMNode $node, $attr_name, $attr_value)
     {
         // Create attribute
-        $attr = $this->dom->createAttribute($attr_name);
+        $attr = $this->dom()->createAttribute($attr_name);
         
         // Add attribute value
-        $value = $this->dom->createTextNode($attr_value);
+        $value = $this->dom()->createTextNode($attr_value);
         $attr->appendChild($value);
         
         // Append attribute to node
@@ -194,84 +247,36 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     }
     
     /**
-     * Add content to given node
+     * Add content to given node.
      * 
      * @param DOMNode $node The node where to add the content text.
      * @param string  $str  The text to add to the node
+     * @param bool    $xml  [Optional] Default value is TRUE. If set to FALSE
+     *                      the passed srting will be treated as text content 
+     *                      and XML entities will be replaced.
      * 
      * @return void
      * @since  1.0
      */
-    public function addNodeContent(DOMNode $node, $str)
+    public function addNodeContent(DOMNode $node, $str, $xml=true)
     {
-        $text_node = $this->dom->createTextNode($str);
-        $node->appendChild($text_node);
-    }
-    
-    /**
-     * This method is used to turn inline XML into human-readable text
-     * 
-     * @param string $str The XML as string.
-     * 
-     * @return string
-     * @since  1.0
-     * @deprecated This function is now replaced with XML_Beautifier
-     */
-    protected function indent($str)
-    {
-        $return_array = explode('>', $str);
-        $depth        = -1;
-        
-        for ($i = 0; $i < count($return_array) - 1; $i++) {
-            if (strpos($return_array[$i], "\n") !== false) {
-                $return_array[$i] = trim($return_array[$i]);
-            }
-                    
-            $end_tag = strpos($return_array[$i], "</");
-            
-            if ($end_tag !== false) {
-                if ($end_tag != 0) {
-                    $return_array[$i] = $this->padding($depth).$return_array[$i];
-                    $depth--; 
-                    $return_array[$i] = str_replace(
-                        "</", 
-                        "\r\n".$this->padding($depth)."</", 
-                        $return_array[$i]
-                    );
-                } else {
-                    $depth--;
-                    $return_array[$i] = $this->padding($depth).$return_array[$i];
-                }
-                
-                $depth--;
-            } else {
-                $return_array[$i] = $this->padding($depth).$return_array[$i];
-            }
-            
-            $return_array[$i] = $return_array[$i].">\r\n";
-            $depth++;
-        }
-        
-        return implode($return_array);
-    }
-    
-    /**
-     * This generates padding with specified depth
-     * 
-     * @param int $depth The padding depth.
-     * 
-     * @return string
-     * @since  1.0
-     * @deprecated This function is now replaced with XML_Beautifier
-     */
-    protected function padding($depth)
-    {
-        $padding = '';
-        
-        for ($tabs=0; $tabs<$depth; $tabs++) {
-            $padding .= '  ';
-        }
-        
-        return $padding;    
+    	if ($xml) {
+    		// Create XML fragment object
+    	    $fragment = $this->dom()->createDocumentFragment();
+    	    
+    	    // Try to append the XML fragment, catch error and throw exception
+    	    // if it fails
+	        if (@$fragment->appendXML($str) === false) {
+	        	$msg  = "Invalid xml string passed to ".get_class($this);
+	        	$msg .= "::".__FUNCTION__."()";
+	        	throw new RuntimeException($msg);
+	        }
+	        
+	        $node->appendChild($fragment);
+	        
+    	} else {
+    	    $text_node = $this->dom()->createTextNode($str);
+            $node->appendChild($text_node);
+    	}
     }
 }

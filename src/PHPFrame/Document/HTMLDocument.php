@@ -25,6 +25,12 @@
  */
 class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
 {
+	/**
+     * DOM Document Type object
+     * 
+     * @var DOMDocumentType
+     */
+    private $_doctype = null;
     /**
      * An array containing meta tags.
      * 
@@ -54,8 +60,8 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Constructor
      * 
-     * @param string $mime      [Optional]
-     * @param string $charset   [Optional]
+     * @param string $mime      [Optional] Default value is 'text/html'.
+     * @param string $charset   [Optional] Default value is 'UTF-8'.
      * @param string $public_id [Optional] Default value is 
      *                          "-//W3C//DTD XHTML 1.0 Strict//EN".
      * @param string $system_id [Optional] Default value is 
@@ -75,15 +81,13 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         parent::__construct($mime, $charset);
         
         // Acquire DOM object of HTML type
-        $imp = new DOMImplementation;
-        $this->dom = $imp->createDocument(
-            null,
-            "html",
-            $this->getDocType($public_id, $system_id)
-        ); 
+        $imp       = new DOMImplementation();
+        $doc_type  = $this->getDocType($public_id, $system_id);
+        
+        $this->dom($imp->createDocument(null, "html", $doc_type)); 
         
         // Get root node
-        $html_node = $this->dom->getElementsByTagName("html")->item(0);
+        $html_node = $this->dom()->getElementsByTagName("html")->item(0);
         
         // Add head
         $head_node = $this->addNode("head", $html_node);
@@ -94,7 +98,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $this->addMetaTag("generator", "PHPFrame");
         $this->addMetaTag(
             null, 
-            $this->getMimeType()."; charset=".$this->getCharset(),
+            $this->mime()."; charset=".$this->charset(),
             "Content-Type"
         );
         
@@ -117,7 +121,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         }
         
         // Add title tag in head node 
-        $head_node = $this->dom->getElementsByTagName("head")->item(0);
+        $head_node = $this->dom()->getElementsByTagName("head")->item(0);
         $this->addNode("title", $head_node, null, $this->getTitle());
         
         // Add meta tags
@@ -153,8 +157,8 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         }
         
         // Render DOM Document as HTML string
-        $this->dom->formatOutput = true;
-        $html = $this->dom->saveHTML();
+        $this->dom()->formatOutput = true;
+        $html = $this->dom()->saveHTML();
         
         // Make line breaks after script tags for pretty output
         $html = preg_replace("/<\/script>/", "</script>\n", $html);
@@ -179,16 +183,16 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $system_id="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
     ) {
         // Create new doc type object if we don't have one yet
-        if (!($this->doctype instanceof DOMDocumentType)) {
+        if (!($this->_doctype instanceof DOMDocumentType)) {
             $imp = new DOMImplementation;
-            $this->doctype = $imp->createDocumentType(
+            $this->_doctype = $imp->createDocumentType(
                 "html",
                 $public_id,
                 $system_id
             );
         }
         
-        return $this->doctype;
+        return $this->_doctype;
     }
     
     /**

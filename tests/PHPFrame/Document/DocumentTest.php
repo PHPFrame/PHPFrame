@@ -21,13 +21,11 @@ class PHPFrame_DocumentTest extends PHPUnit_Framework_TestCase
     public function test_interface()
     {
         $this->assertTrue($this->_reflector->implementsInterface("IteratorAggregate"));
-        $this->assertTrue($this->_reflector->hasMethod("getCharset"));
-        $this->assertTrue($this->_reflector->hasMethod("getMimeType"));
-        $this->assertTrue($this->_reflector->hasMethod("getTitle"));
-        $this->assertTrue($this->_reflector->hasMethod("setTitle"));
+        $this->assertTrue($this->_reflector->hasMethod("charset"));
+        $this->assertTrue($this->_reflector->hasMethod("mime"));
+        $this->assertTrue($this->_reflector->hasMethod("title"));
         $this->assertTrue($this->_reflector->hasMethod("appendTitle"));
-        $this->assertTrue($this->_reflector->hasMethod("getBody"));
-        $this->assertTrue($this->_reflector->hasMethod("setBody"));
+        $this->assertTrue($this->_reflector->hasMethod("body"));
         $this->assertTrue($this->_reflector->hasMethod("appendBody"));
         $this->assertTrue($this->_reflector->hasMethod("prependBody"));
     }

@@ -572,7 +572,7 @@ class PHPFrame_Application
         if (is_null($this->_response)) {
             // Create new response object
             $response = new PHPFrame_Response();
-            $response->setHeader(
+            $response->header(
                 "Content-Language", 
                 $this->getConfig()->get("default_lang")
             );

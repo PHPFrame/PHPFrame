@@ -87,7 +87,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
     public function body($str=null)
     {
         if (!is_null($str)) {
-        	// Acquire a new instance of DOM
+            // Acquire a new instance of DOM
             $this->dom(new DOMDocument("1.0", $this->charset())); 
             if (!@$this->dom()->loadXML((string) $str)) {
                 $msg  = "XML string passed to ".get_class($this)."::";
@@ -113,10 +113,10 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      */
     public function appendBody($str)
     {
-    	$msg  = __FUNCTION__."() not supported by ".get_class($this).". XML ";
-    	$msg .= "documents can only have one root node so appending would ";
-    	$msg .= "not make sense. Use the dom() method to get a reference to ";
-    	$msg .= "the DOMDocument object or use the addNode() method.";
+        $msg  = __FUNCTION__."() not supported by ".get_class($this).". XML ";
+        $msg .= "documents can only have one root node so appending would ";
+        $msg .= "not make sense. Use the dom() method to get a reference to ";
+        $msg .= "the DOMDocument object or use the addNode() method.";
         throw new LogicException($msg);
     }
     
@@ -170,10 +170,10 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      */
     public function dom(DOMDocument $dom=null)
     {
-    	if (!is_null($dom)) {
-    	    $this->_dom = $dom;
-    	}
-    	
+        if (!is_null($dom)) {
+            $this->_dom = $dom;
+        }
+        
         return $this->_dom;
     }
     
@@ -260,23 +260,23 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
      */
     public function addNodeContent(DOMNode $node, $str, $xml=true)
     {
-    	if ($xml) {
-    		// Create XML fragment object
-    	    $fragment = $this->dom()->createDocumentFragment();
-    	    
-    	    // Try to append the XML fragment, catch error and throw exception
-    	    // if it fails
-	        if (@$fragment->appendXML($str) === false) {
-	        	$msg  = "Invalid xml string passed to ".get_class($this);
-	        	$msg .= "::".__FUNCTION__."()";
-	        	throw new RuntimeException($msg);
-	        }
-	        
-	        $node->appendChild($fragment);
-	        
-    	} else {
-    	    $text_node = $this->dom()->createTextNode($str);
+        if ($xml) {
+            // Create XML fragment object
+            $fragment = $this->dom()->createDocumentFragment();
+            
+            // Try to append the XML fragment, catch error and throw exception
+            // if it fails
+            if (@$fragment->appendXML($str) === false) {
+                $msg  = "Invalid xml string passed to ".get_class($this);
+                $msg .= "::".__FUNCTION__."()";
+                throw new RuntimeException($msg);
+            }
+            
+            $node->appendChild($fragment);
+            
+        } else {
+            $text_node = $this->dom()->createTextNode($str);
             $node->appendChild($text_node);
-    	}
+        }
     }
 }

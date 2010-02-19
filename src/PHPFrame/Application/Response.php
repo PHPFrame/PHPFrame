@@ -168,21 +168,21 @@ class PHPFrame_Response
      */
     public function statusCode($int=null)
     {
-    	if (!is_null($int)) {
-    	    $array = array(200, 301, 302, 303, 400, 401, 403, 404, 500, 501);
+        if (!is_null($int)) {
+            $array = array(200, 301, 302, 303, 400, 401, 403, 404, 500, 501);
             
-	        if (!in_array($int, $array)) {
-	            $msg  = "HTTP response status code not valid. Valid codes ";
-	            $msg .= "are: '".implode("','", $array)."'.";
-	            throw new InvalidArgumentException($msg);
-	        }
-	        
-	        $this->_code = $int;
-	        
-	        $this->header("Status", $this->_code);
-    	}
-    	
-    	return $this->_code;
+            if (!in_array($int, $array)) {
+                $msg  = "HTTP response status code not valid. Valid codes ";
+                $msg .= "are: '".implode("','", $array)."'.";
+                throw new InvalidArgumentException($msg);
+            }
+            
+            $this->_code = $int;
+            
+            $this->header("Status", $this->_code);
+        }
+        
+        return $this->_code;
     }
     
     /**
@@ -207,14 +207,14 @@ class PHPFrame_Response
      */
     public function header($key, $value=null)
     {
-    	$key = trim((string) $key);
-    	
+        $key = trim((string) $key);
+        
         if (is_null($value) && !isset($this->_headers[$key])) {
             return null;
         }
         
         if (!is_null($value)) {
-	        $this->_headers[$key] = trim((string) $value);
+            $this->_headers[$key] = trim((string) $value);
         }
         
         return $this->_headers[$key];
@@ -231,12 +231,12 @@ class PHPFrame_Response
      */
     public function document(PHPFrame_Document $document=null)
     {
-    	if (!is_null($document)) {
-    	    $this->_document = $document;
+        if (!is_null($document)) {
+            $this->_document = $document;
         
             $this->header("Content-Type", $this->_document->mime());
-    	}
-    	
+        }
+        
         return $this->_document;
     }
     
@@ -251,10 +251,10 @@ class PHPFrame_Response
      */
     public function renderer(PHPFrame_IRenderer $renderer=null)
     {
-    	if (!is_null($renderer)) {
-    		$this->_renderer = $renderer;
-    	}
-    	
+        if (!is_null($renderer)) {
+            $this->_renderer = $renderer;
+        }
+        
         return $this->_renderer;
     }
     
@@ -285,20 +285,20 @@ class PHPFrame_Response
      */
     public function body($value=null, $render=true, $append=false)
     {
-    	if (!is_null($value)) {
-	    	// Render the value to append
-	        if ($render) {
-	            $value = $this->renderer()->render($value);
-	        }
-	        
-	        // Set the value in the document body
-	        if ($append) {
-	            $this->document()->appendBody($value);
-	        } else {
-	            $this->document()->body($value);
-	        }
-    	}
-    	
+        if (!is_null($value)) {
+            // Render the value to append
+            if ($render) {
+                $value = $this->renderer()->render($value);
+            }
+            
+            // Set the value in the document body
+            if ($append) {
+                $this->document()->appendBody($value);
+            } else {
+                $this->document()->body($value);
+            }
+        }
+        
         return $this->document()->body();
     }
     
@@ -312,10 +312,10 @@ class PHPFrame_Response
      */
     public function title($str=null)
     {
-    	if (!is_null($str)) {
-    	    $this->document()->title($str);
-    	}
-    	
+        if (!is_null($str)) {
+            $this->document()->title($str);
+        }
+        
         return $this->document()->title();
     }
      

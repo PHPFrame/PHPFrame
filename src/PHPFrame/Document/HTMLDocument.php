@@ -25,7 +25,7 @@
  */
 class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
 {
-	/**
+    /**
      * DOM Document Type object
      * 
      * @var DOMDocumentType

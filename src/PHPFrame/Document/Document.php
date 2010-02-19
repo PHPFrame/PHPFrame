@@ -146,9 +146,9 @@ abstract class PHPFrame_Document implements IteratorAggregate
      */
     public function title($str=null)
     {
-    	if (!is_null($str)) {
-    	    $this->_title = (string) $str;
-    	}
+        if (!is_null($str)) {
+            $this->_title = (string) $str;
+        }
         
         return $this->_title;
     }

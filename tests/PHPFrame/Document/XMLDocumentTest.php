@@ -55,16 +55,16 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
     
     public function test_bodyFailure()
     {
-    	$this->setExpectedException("InvalidArgumentException");
-    	
+        $this->setExpectedException("InvalidArgumentException");
+        
         $body = "Lorem ipsum...";
         $this->_document->body($body);
     }
     
     public function test_appendBody()
     {
-    	$this->setExpectedException("LogicException");
-    	
+        $this->setExpectedException("LogicException");
+        
         $body = "Lorem ipsum";
         $this->_document->body($body);
         $this->_document->appendBody($body);
@@ -72,8 +72,8 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
     
     public function prependBody()
     {
-    	$this->setExpectedException("LogicException");
-    	
+        $this->setExpectedException("LogicException");
+        
         $body = "Lorem ipsum";
         $this->_document->body($body);
         $this->_document->prependBody("Blah");
@@ -101,18 +101,18 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
     
     public function test_addNode()
     {
-    	$painting = $this->_document->addNode("painting");
-    	
-    	$this->_document->addNode("img", $painting, array(
-    	    "src" => "madonna.jpg", 
-    	    "alt" => "Foligno Madonna, by Raphael"
-    	));
-    	
-    	$xml_content  = "This is Raphael's \"Foligno\" Madonna, painted in ";
-    	$xml_content .= "<date>1511</date>-<date>1512</date>.";
-    	$this->_document->addNode("caption", $painting, null, $xml_content);
-    	
-    	$this->assertXmlStringEqualsXmlString("<painting>
+        $painting = $this->_document->addNode("painting");
+        
+        $this->_document->addNode("img", $painting, array(
+            "src" => "madonna.jpg", 
+            "alt" => "Foligno Madonna, by Raphael"
+        ));
+        
+        $xml_content  = "This is Raphael's \"Foligno\" Madonna, painted in ";
+        $xml_content .= "<date>1511</date>-<date>1512</date>.";
+        $this->_document->addNode("caption", $painting, null, $xml_content);
+        
+        $this->assertXmlStringEqualsXmlString("<painting>
     <img alt=\"Foligno Madonna, by Raphael\" src=\"madonna.jpg\" />
     <caption>
         This is Raphael&apos;s &quot;Foligno&quot; Madonna, painted in
@@ -123,7 +123,7 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
     </caption>
 </painting>
 ", (string) $this->_document);
-    	
+        
     }
     
     public function test_addNodeAttr()
@@ -171,8 +171,8 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
     
     public function test_addNodeContentXMLFailure()
     {
-    	$this->setExpectedException("RuntimeException");
-    	
+        $this->setExpectedException("RuntimeException");
+        
         $node     = $this->_document->addNode("node");
         $content  = "Some <strong>content</strong> with some ";
         $content .= "<span class=\"keyword\">nodes</spam> in it.";

@@ -9,7 +9,6 @@
  * @author    Chris McDonald <chris.mcdonald@sliderstudio.co.uk>
  * @copyright 2009 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @version   SVN: $Id$
  * @link      http://github.com/PHPFrame/PHPFrame
  */
 

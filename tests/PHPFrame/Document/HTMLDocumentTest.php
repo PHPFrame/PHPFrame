@@ -159,7 +159,7 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $this->_document->body("Some really <strong>cool</strong> content...");
         
         $theme_url   = "http://testrunner";
-        $theme_path  = dirname(__FILE__).DS."theme.html";
+        $theme_path  = dirname(__FILE__).DS."html".DS."theme.html";
         $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
         $app         = new PHPFrame_Application(array("install_dir"=>$install_dir));
         

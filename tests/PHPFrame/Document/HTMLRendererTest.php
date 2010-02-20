@@ -8,7 +8,7 @@ class PHPFrame_HTMLRendererTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->_renderer = new PHPFrame_HTMLRenderer(dirname(__FILE__));
+        $this->_renderer = new PHPFrame_HTMLRenderer(dirname(__FILE__).DS."html");
     }
     
     public function tearDown()
@@ -64,6 +64,34 @@ class PHPFrame_HTMLRendererTest extends PHPUnit_Framework_TestCase
 Blah blah blah...</div>
 ", 
             $this->_renderer->render($view)
+        );
+    }
+    
+    public function test_renderViewFailure()
+    {
+        $this->setExpectedException("RuntimeException");
+        
+        $view = new PHPFrame_View("index");
+        $this->_renderer->render($view);
+    }
+    
+    public function test_renderPartial()
+    {
+        $data["menu"] = array("a","b","c");
+        $this->assertEquals(
+            "<ul>
+        <li>
+        <a href=\"a\">a</a>
+    </li>
+        <li>
+        <a href=\"b\">b</a>
+    </li>
+        <li>
+        <a href=\"c\">c</a>
+    </li>
+    </ul>
+", 
+            $this->_renderer->renderPartial("menu", $data)
         );
     }
 }

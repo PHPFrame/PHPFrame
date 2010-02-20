@@ -23,19 +23,23 @@ Project resources
 How to install PHPFrame with the PEAR command line installer
 -----------------------------
 
+Tell the installer about our PEAR channel:
+
+`pear channel-discover pear.phpframe.org`
+
 Tell the PEAR installer that you want to install alpha packages:
 
 `pear config-set preferred_state alpha`
 
-Tell the installer about the channel:
-
-`pear channel-discover pear.phpframe.org`
-
 Download and install the latest successful build:
 
-`pear install http://dist.phpframe.org/latest-build`
+`pear install phpframe/PHPFrame`
 
 Run post installation scripts:
 
 `pear run-scripts phpframe/PHPFrame`
+
+Set your preferred state for packages back to stable:
+
+`pear config-set preferred_state stable`
 

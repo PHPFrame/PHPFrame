@@ -18,11 +18,11 @@ class PHPFrame_ExceptionHandlerTest extends PHPUnit_Framework_TestCase
     
     public function catchableErrorsToExceptions()
     {
-    	$this->assertFalse($this->_handler->catchableErrorsToExceptions());
-    	$this->assertTrue($this->_handler->catchableErrorsToExceptions(true));
-    	$this->assertTrue($this->_handler->catchableErrorsToExceptions());
-    	$this->assertFalse($this->_handler->catchableErrorsToExceptions(false));
-    	$this->assertFalse($this->_handler->catchableErrorsToExceptions());
+        $this->assertFalse($this->_handler->catchableErrorsToExceptions());
+        $this->assertTrue($this->_handler->catchableErrorsToExceptions(true));
+        $this->assertTrue($this->_handler->catchableErrorsToExceptions());
+        $this->assertFalse($this->_handler->catchableErrorsToExceptions(false));
+        $this->assertFalse($this->_handler->catchableErrorsToExceptions());
     }
     
     public function test_handleError()
@@ -32,12 +32,12 @@ class PHPFrame_ExceptionHandlerTest extends PHPUnit_Framework_TestCase
     
     public function test_handleException()
     {
-    	//...
+        //...
     }
     
     public function test_displayExceptions()
     {
-    	$this->assertTrue($this->_handler->displayExceptions());
+        $this->assertTrue($this->_handler->displayExceptions());
         $this->assertFalse($this->_handler->displayExceptions(false));
         $this->assertFalse($this->_handler->displayExceptions());
         $this->assertTrue($this->_handler->displayExceptions(true));

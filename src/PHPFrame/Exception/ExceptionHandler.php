@@ -57,10 +57,9 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      */
     private function __construct()
     {
-        set_exception_handler(array(
-            "PHPFrame_ExceptionHandler", 
-            "handleException"
-        ));
+        set_exception_handler(
+            array("PHPFrame_ExceptionHandler", "handleException")
+        );
     }
     
     /**
@@ -104,19 +103,18 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      */
     public function catchableErrorsToExceptions($bool=null)
     {
-    	if (!is_null($bool)) {
-    		$this->_handle_errors = (bool) $bool;
-    		if ($this->_handle_errors) {
-    		    set_error_handler(array(
-	                "PHPFrame_ExceptionHandler", 
-	                "handleError"
-	            ));
-    		} else {
-    		    restore_error_handler();
-    		}
-    	}
-    	
-    	return $this->_handle_errors;
+        if (!is_null($bool)) {
+            $this->_handle_errors = (bool) $bool;
+            if ($this->_handle_errors) {
+                set_error_handler(
+                    array("PHPFrame_ExceptionHandler", "handleError")
+                );
+            } else {
+                restore_error_handler();
+            }
+        }
+        
+        return $this->_handle_errors;
     }
     
     /**
@@ -205,10 +203,10 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      */
     public static function displayExceptions($bool=null)
     {
-    	if (!is_null($bool)) {
-    	    self::instance()->_display_exceptions = (bool) $bool;
-    	}
-    	
+        if (!is_null($bool)) {
+            self::instance()->_display_exceptions = (bool) $bool;
+        }
+        
         return self::instance()->_display_exceptions;
     }
 }

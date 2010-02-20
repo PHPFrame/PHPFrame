@@ -19,6 +19,7 @@ class PHPFrame_PlainRendererTest extends PHPUnit_Framework_TestCase
     public function test_render()
     {
         $array = array(
+            array(null, null),
             array(true, "1"),
             array(false, ""),
             array(1, "1"),
@@ -86,7 +87,28 @@ class PHPFrame_PlainRendererTest extends PHPUnit_Framework_TestCase
     public function test_renderTraversable()
     {
         $user = new PHPFrame_User();
-        //print_r($this->_renderer->render($user));
+        $this->assertEquals(
+            "{
+    \"groupid\": 0,
+    \"username\": \"guest\",
+    \"password\": ,
+    \"firstname\": ,
+    \"lastname\": ,
+    \"email\": ,
+    \"block\": ,
+    \"last_visit\": ,
+    \"params\": \"\",
+    \"deleted\": 0,
+    \"id\": ,
+    \"atime\": ,
+    \"ctime\": ,
+    \"mtime\": ,
+    \"owner\": 0,
+    \"group\": 0,
+    \"perms\": 664
+}", 
+            $this->_renderer->render($user)
+        );
     }
     
     public function test_renderObject()

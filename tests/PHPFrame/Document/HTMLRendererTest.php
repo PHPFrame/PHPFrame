@@ -94,4 +94,9 @@ Blah blah blah...</div>
             $this->_renderer->renderPartial("menu", $data)
         );
     }
+    
+    public function test_renderPartialSilentFailure()
+    {
+        $this->assertNull($this->_renderer->renderPartial("menuxx"));
+    }
 }

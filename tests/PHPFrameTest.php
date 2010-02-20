@@ -29,11 +29,6 @@ class PHPFrameTest extends PHPUnit_Framework_TestCase
         $this->assertType("string", PHPFrame::Version());
     }
     
-    function test_getSession()
-    {
-        $this->assertType("PHPFrame_SessionRegistry", PHPFrame::getSession());
-    }
-    
     function test_setDataDirFailure()
     {
         $this->setExpectedException("InvalidArgumentException");

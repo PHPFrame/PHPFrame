@@ -74,7 +74,6 @@
    <file baseinstalldir="/" name="PHPFrame/Document/IRenderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/PlainDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/PlainRenderer.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Document/RPCDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/RPCRenderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/XMLDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/XMLRenderer.php" role="php" />

@@ -26,6 +26,27 @@
 class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
 {
     /**
+     * Reference to the document object his renderer will work with.
+     * 
+     * @var PHPFrame_XMLDocument
+     */
+    private $_document;
+    
+    /**
+     * Constructor.
+     * 
+     * @param PHPFrame_XMLDocument $document Reference to the document object 
+     *                                       this renderer will work with.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function __construct(PHPFrame_XMLDocument $document)
+    {
+        $this->_document = $document;
+    }
+    
+    /**
      * Render a given value.
      * 
      * @param mixed $value The value we want to render.
@@ -35,7 +56,10 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      */
     public function render($value)
     {
-        if ($value instanceof PHPFrame_View) {
+        if (is_array($value)) {
+            $this->_makeParamPayload($value);
+            
+        } elseif ($value instanceof PHPFrame_View) {
             $value = $this->renderView($value);
         }
         
@@ -87,7 +111,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      */
     private function _makeFaultPayload($fault_code, $fault_string)
     {
-        $doc = PHPFrame::Response()->getDocument();
+        $doc = $this->_document;
         $dom = $doc->dom();
         
         $parent_node = $dom->getElementsByTagName("methodResponse")->item(0);
@@ -109,7 +133,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      */
     private function _makeParamPayload($param_value)
     {
-        $doc = PHPFrame::Response()->getDocument();
+        $doc = $this->_document;
         $dom = $doc->dom(); 
         
         $parent_node = $dom->getElementsByTagName("methodResponse")->item(0);
@@ -134,7 +158,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      */
     private function _buildNode($parent_node, $node_name, $node_value)
     {
-        $doc = PHPFrame::Response()->getDocument();
+        $doc = $this->_document;
         
         if (!is_null($node_value)) {
             $parent_node = $doc->addNode($node_name, $parent_node);
@@ -210,7 +234,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      */
     private function _addType(DOMNode $parent_node, $node_value)
     {
-        $doc = PHPFrame::Response()->getDocument();
+        $doc = $this->_document;
         
         $type = 'string';
         
@@ -243,7 +267,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      */
     private function _addStruct($parent_node, $assoc_array)
     {
-        $doc = PHPFrame::Response()->getDocument();
+        $doc = $this->_document;
         
         $parent_node = $doc->addNode('struct', $parent_node);
         
@@ -268,7 +292,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      */
     private function _addArray($parent_node, $index_array)
     {
-        $doc = PHPFrame::Response()->getDocument();
+        $doc = $this->_document;
         
         $parent_node = $doc->addNode('array', $parent_node);
         $parent_node = $doc->addNode('data', $parent_node);

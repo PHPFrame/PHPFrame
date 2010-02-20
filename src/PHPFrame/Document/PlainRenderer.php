@@ -25,6 +25,9 @@
  */
 class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
 {
+    private $_indent = "";
+    private $_nl = "\n";
+    
     /**
      * Render a given value.
      * 
@@ -35,40 +38,141 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
      */
     public function render($value)
     {
-        if (is_null($value)
-            || (is_string($value) && empty($value))
-            || (is_array($value) && count($value) == 0
-            || ($value instanceof Countable) && count($value) == 0)
-        ) {
+        if (is_null($value)) {
             return;
-        } elseif ($value instanceof PHPFrame_View) {
-            $value = $this->renderView($value);
+            
+        } elseif (is_array($value)) {
+            return $this->_renderArray($value);
+            
+        } elseif ($value instanceof Traversable) {
+            return $this->_renderArray(iterator_to_array($value));
+            
+        } elseif (is_object($value)) {
+            return $this->_renderObject($value);
+            
+        } elseif (is_bool($value)) {
+            if ($value) {
+                $value = 1;
+            } else {
+                return;
+            }
         }
         
-        return strip_tags(trim((string) $value));
+        $int = filter_var($value, FILTER_VALIDATE_INT);
+        if (is_int($int)) {
+            return (string) $int;
+        }
+        
+        $float = filter_var($value, FILTER_VALIDATE_FLOAT);
+        if (is_float($float)) {
+            return (string) $float;
+        }
+        
+        return "\"".strip_tags(trim((string) $value))."\"";
     }
     
     /**
-     * Render view and store in document's body
+     * Render array.
      * 
-     * This method is invoked by the views and renders the ouput data in the
-     * document specific format.
+     * @param array $array The array to render.
      * 
-     * @param PHPFrame_View $view The view object to process.
+     * @return string
+     * @since  1.0
+     */
+    private function _renderArray(array $array)
+    {
+        if (count($array) == 0) {
+            return "[]";
+        }
+        
+        $array = new PHPFrame_Array($array);
+        if ($array->isAssoc()) {
+            return $this->_renderAssoc($array);
+        }
+        
+        $str = "[".$this->_nl;
+        $this->_increaseIndent();
+        
+        $i = 0;
+        foreach ($array as $key=>$value) {
+            if ($i > 0) {
+                $str .= ",".$this->_nl;
+            }
+            
+            $str .= $this->_indent.$this->render($value);
+            $i++;
+        }
+        
+        $this->_decreaseIndent();
+        $str .= $this->_nl.$this->_indent."]";
+        
+        return $str;
+    }
+    
+    /**
+     * Render associative array.
+     * 
+     * @param PHPFrame_Array $array_obj Instance of PHPFrame_Array.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    private function _renderAssoc(PHPFrame_Array $array)
+    {
+        $str = "{".$this->_nl;
+        $this->_increaseIndent();
+        
+        $i = 0;
+        foreach ($array as $key=>$value) {
+            if ($i > 0) {
+                $str .= ",".$this->_nl;
+            }
+            
+            $str .= $this->_indent."\"".$key."\": ".$this->render($value);
+            $i++;
+        }
+        
+        $this->_decreaseIndent();
+        $str .= $this->_nl.$this->_indent."}";
+        
+        return $str;
+    }
+    
+    /**
+     * Render object
+     * 
+     * @param object $obj The object to render.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    private function _renderObject($obj)
+    {
+        $key   = get_class($obj);
+        $value = get_object_vars($obj);
+        
+        return $this->_renderArray(array($key=>$value));
+    }
+    
+    /**
+     * Increase indentation.
      * 
      * @return void
      * @since  1.0
      */
-    public function renderView(PHPFrame_View $view)
+    private function _increaseIndent()
     {
-        $str = "";
-        
-        foreach ($view->getData() as $key=>$value) {
-            $str .= $key.": ";
-            $str .= (string) $value;
-            $str .= "\n\n";
-        }
-        
-        return $str;
+        $this->_indent .= "    ";
+    }
+    
+    /**
+     * Decrease indentation.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    private function _decreaseIndent()
+    {
+        $this->_indent = substr($this->_indent, 4);
     }
 }

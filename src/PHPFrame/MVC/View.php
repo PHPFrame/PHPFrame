@@ -61,23 +61,6 @@ class PHPFrame_View implements IteratorAggregate
     }
     
     /**
-     * Convert view to string.
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function __toString()
-    {
-        $str = "";
-        
-        foreach ($this->_data as $data) {
-            $str .= print_r($data, true)."\n";
-        }
-        
-        return $str;
-    }
-    
-    /**
      * Implementation of IteratorAggregate interface.
      * 
      * @return ArrayIterator

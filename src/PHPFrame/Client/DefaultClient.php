@@ -27,6 +27,17 @@
  */
 class PHPFrame_DefaultClient extends PHPFrame_Client
 {
+    /**    
+     * Get client name.
+     * 
+     * @return string Name to identify client type.
+     * @since  1.0
+     */
+    public function getName() 
+    {
+        return "default";
+    }
+    
     /**
      * Check if this is the correct helper for the client being used
      * 
@@ -39,17 +50,6 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
     {
         //this is our last hope to find a helper, just return instance
         return new self;
-    }
-    
-    /**    
-     * Get client name.
-     * 
-     * @return string Name to identify client type.
-     * @since  1.0
-     */
-    public function getName() 
-    {
-        return "default";
     }
     
     /**    

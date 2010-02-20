@@ -26,11 +26,11 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
     
     public function test_execute()
     {
-    	$this->_app->request()->setControllerName("man");
-    	
-    	$this->assertEquals("", (string) $this->_app->response()->document());
+        $this->_app->request()->setControllerName("man");
         
-    	$this->_controller->execute($this->_app);
+        $this->assertEquals("", (string) $this->_app->response()->document());
+        
+        $this->_controller->execute($this->_app);
         
         $pattern = "/PHPFrame Command Line Tool/";
         $this->assertRegExp($pattern, (string) $this->_app->response()->document());

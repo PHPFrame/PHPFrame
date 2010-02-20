@@ -98,6 +98,8 @@ class PHPFrame_PlainDocumentTest extends PHPUnit_Framework_TestCase
         $str = (string) $this->_document;
         
         $this->assertEquals(1, preg_match("/INFO: Some message/", $str));
+        
+        PHPFrame::getSession()->getSysevents()->clear();
     }
     
     public function test_getIterator()

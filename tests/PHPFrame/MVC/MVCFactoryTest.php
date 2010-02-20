@@ -26,15 +26,15 @@ class PHPFrame_MVCFactoryTest extends PHPUnit_Framework_TestCase
     
     public function test_getActionController()
     {
-    	$controller = $this->_factory->getActionController("app");
-    	
-    	$this->assertType("AppController", $controller);
+        $controller = $this->_factory->getActionController("app");
+        
+        $this->assertType("AppController", $controller);
     }
     
     public function test_getActionControllerReflectionException()
     {
-    	$this->setExpectedException("ReflectionException");
-    	
+        $this->setExpectedException("ReflectionException");
+        
         $controller = $this->_factory->getActionController("apppp");
     }
     
@@ -59,8 +59,8 @@ class PHPFrame_MVCFactoryTest extends PHPUnit_Framework_TestCase
     
     public function test_getViewPassDataFailure()
     {
-    	$this->setExpectedException("InvalidArgumentException");
-    	
+        $this->setExpectedException("InvalidArgumentException");
+        
         $view = $this->_factory->view("index", array("value"));
     }
 }

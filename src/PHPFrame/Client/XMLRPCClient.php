@@ -26,6 +26,16 @@
  */
 class PHPFrame_XMLRPCClient extends PHPFrame_Client
 {
+    /**    
+     * Get client name
+     * 
+     * @return string Name to identify client type.
+     * @since  1.0
+     */
+    public function getName() 
+    {
+        return "xmlrpc";
+    }
     
     /**
      * Check if this is the correct helper for the client being used
@@ -56,17 +66,6 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         }
         
         return false;
-    }
-    
-    /**    
-     * Get client name
-     * 
-     * @return string Name to identify client type.
-     * @since  1.0
-     */
-    public function getName() 
-    {
-        return "xmlrpc";
     }
     
     /**    

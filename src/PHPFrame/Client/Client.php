@@ -36,6 +36,14 @@
  */
 abstract class PHPFrame_Client
 {
+    /**    
+     * Get client name
+     * 
+     * @return string Name to identify client type.
+     * @since  1.0
+     */
+    abstract public function getName();
+    
     /**
      * Check if this is the correct helper for the client being used and 
      * returns instance if so.
@@ -45,14 +53,6 @@ abstract class PHPFrame_Client
      * @since  1.0
      */
     abstract public static function detect();
-    
-    /**    
-     * Get client name
-     * 
-     * @return string Name to identify client type.
-     * @since  1.0
-     */
-    abstract public function getName();
     
     /**    
      * Populate the Request object.

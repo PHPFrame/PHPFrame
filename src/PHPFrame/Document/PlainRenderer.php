@@ -112,7 +112,7 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
     /**
      * Render associative array.
      * 
-     * @param PHPFrame_Array $array_obj Instance of PHPFrame_Array.
+     * @param PHPFrame_Array $array Instance of PHPFrame_Array.
      * 
      * @return string
      * @since  1.0

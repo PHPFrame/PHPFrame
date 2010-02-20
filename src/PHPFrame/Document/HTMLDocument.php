@@ -26,6 +26,12 @@
 class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
 {
     /**
+     * The document body
+     * 
+     * @var string
+     */
+    private $_body;
+    /**
      * DOM Document Type object
      * 
      * @var DOMDocumentType
@@ -60,12 +66,10 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     /**
      * Constructor
      * 
-     * @param string $mime      [Optional] Default value is 'text/html'.
-     * @param string $charset   [Optional] Default value is 'UTF-8'.
-     * @param string $public_id [Optional] Default value is 
-     *                          "-//W3C//DTD XHTML 1.0 Strict//EN".
-     * @param string $system_id [Optional] Default value is 
-     *                          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+     * @param string          $mime    [Optional] Default value is 'text/html'.
+     * @param string          $charset [Optional] Default value is 'UTF-8'.
+     * @param DOMDocumentType $doctype [Optional] Default doctype used is XHTML 
+     *                                 1.0 Strict.
      * 
      * @return void
      * @uses   DOMImplementation, PHPFrame_URI, PHPFrame_Pathway
@@ -74,17 +78,19 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     public function __construct(
         $mime="text/html", 
         $charset=null,
-        $public_id="-//W3C//DTD XHTML 1.0 Strict//EN", 
-        $system_id="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+        DOMDocumentType $doctype=null
     ) {
         // Call parent's constructor to set mime type
         parent::__construct($mime, $charset);
         
-        // Acquire DOM object of HTML type
-        $imp       = new DOMImplementation();
-        $doc_type  = $this->getDocType($public_id, $system_id);
+        // Get default doctype if not passed
+        if (is_null($doctype)) {
+            $doctype = $this->doctype();
+        }
         
-        $this->dom($imp->createDocument(null, "html", $doc_type)); 
+        // Acquire DOM object of HTML type
+        $imp = new DOMImplementation();
+        $this->dom($imp->createDocument(null, "html", $doctype)); 
         
         // Get root node
         $html_node = $this->dom()->getElementsByTagName("html")->item(0);
@@ -116,24 +122,28 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     public function __toString()
     {
         // If "body only" mode we simply return the body
-        if ($this->_body_only) {
-            return $this->getBody();
+        if ($this->bodyOnly()) {
+            return $this->body();
         }
         
         // Add title tag in head node 
         $head_node = $this->dom()->getElementsByTagName("head")->item(0);
-        $this->addNode("title", $head_node, null, $this->getTitle());
+        
+        $title = $this->title();
+        if ($title) {
+            $this->addNode("title", $head_node, null, $title);
+        }
         
         // Add meta tags
         foreach ($this->_meta_tags as $meta_tag) {
             $meta_node = $this->addNode("meta", $head_node);
             
             // Add name attribute if any
-            if (!is_null($meta_tag["name"])) {
+            if (!empty($meta_tag["name"])) {
                 $this->addNodeAttr($meta_node, "name", $meta_tag["name"]);
             }
             // Add http_equiv attribute if any
-            if (!is_null($meta_tag["http_equiv"])) {
+            if (!empty($meta_tag["http_equiv"])) {
                 $this->addNodeAttr(
                     $meta_node, 
                     "http-equiv", 
@@ -156,39 +166,99 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
             $this->addNode("link", $head_node, $style_sheet_attr);
         }
         
-        // Render DOM Document as HTML string
-        $this->dom()->formatOutput = true;
-        $html = $this->dom()->saveHTML();
-        
-        // Make line breaks after script tags for pretty output
-        $html = preg_replace("/<\/script>/", "</script>\n", $html);
+        // Render dom using parent's __toString() method
+        if ($this->useBeautifier()) {
+            // Render dom as XML
+            $str = $this->dom()->saveXML();
+            
+            // First remove xml declaration
+            $xmldecl = substr($str, 0, strpos($str, "\n"));
+            $str     = substr($str, strlen($xmldecl)+1);
+            
+            // Split the string so that we can pass the XML to the beautifier 
+            // and print the doctype separately
+            $doctype = substr($str, 0, strpos($str, "\n"));
+            $html    = substr($str, strpos($str, "\n")+1);
+            
+            $beautifier = new XML_Beautifier();
+            $html       = $beautifier->formatString($html);
+            $html       = $doctype."\n".$html;
+        } else {
+            $this->dom()->formatOutput = true;
+            $html = $this->dom()->saveHTML();
+        }
         
         // Add body and return
-        return str_replace("{content}", $this->getBody(), $html);
+        return str_replace("{content}", "\n".$this->body()."\n", $html);
     }
     
     /**
-     * Get DOM Document Type object
+     * Get/set the document body.
      * 
-     * @param string $public_id [Optional] Default value is 
-     *                          "-//W3C//DTD XHTML 1.0 Strict//EN".
-     * @param string $system_id [Optional] Default value is 
-     *                          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+     * @param string $str String containing the document body.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public function body($str=null)
+    {
+        if (!is_null($str)) {
+            $this->_body = (string) $str;
+        }
+        
+        return (string) $this->_body;
+    }
+    
+    /**
+     * Append string to the document body
+     * 
+     * @param string $str String to append the document body.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function appendBody($str)
+    {
+        $this->_body .= (string) $str;
+    }
+    
+    /**
+     * Prepend string to the document body
+     * 
+     * @param string $str String to prepend to the document body.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function prependBody($str)
+    {
+        $this->_body = (string) $str.$this->_body;
+    }
+    
+    /**
+     * Get/set DOM Document Type object. If not set yet a default one will be 
+     * created with the following values:
+     * - public_id : -//W3C//DTD XHTML 1.0 Strict//EN
+     * - system_id: http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd
+     * 
+     * @param DOMDocumentType $doctype [Optional] 
      * 
      * @return DOMDocumentType
      * @since  1.0
      */
-    public function getDocType(
-        $public_id="-//W3C//DTD XHTML 1.0 Strict//EN", 
-        $system_id="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-    ) {
+    public function doctype(DOMDocumentType $doctype=null)
+    {
+        if (!is_null($doctype)) {
+            $this->_doctype = $doctype;
+        }
+        
         // Create new doc type object if we don't have one yet
         if (!($this->_doctype instanceof DOMDocumentType)) {
-            $imp = new DOMImplementation;
+            $imp = new DOMImplementation();
             $this->_doctype = $imp->createDocumentType(
                 "html",
-                $public_id,
-                $system_id
+                "-//W3C//DTD XHTML 1.0 Strict//EN", 
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
             );
         }
         
@@ -217,9 +287,9 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     public function addMetaTag($name, $content, $http_equiv=null) 
     {
         $this->_meta_tags[] = array(
-            "name"       => $name, 
-            "content"    => $content, 
-            "http_equiv" => $http_equiv
+            "name"       => (string) $name, 
+            "content"    => (string) $content, 
+            "http_equiv" => (string) $http_equiv
         );
     }
     
@@ -238,10 +308,10 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     public function addScript($src, $type='text/javascript') 
     {
-        // Make source absolute URL
-        $this->_makeAbsolute($src);
-        
-        $this->_scripts[] = array("src"=>$src, "type"=>$type);
+        $this->_scripts[] = array(
+            "src"  => (string) $src, 
+            "type" => (string) $type
+        );
     }
     
     /**
@@ -255,13 +325,10 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     public function addStyleSheet($href, $type='text/css') 
     {
-        // Make source absolute URL
-        $this->_makeAbsolute($href);
-        
         $this->_style_sheets[] = array(
             "rel"  => "stylesheet", 
-            "href" => $href, 
-            "type" => $type
+            "href" => (string) $href, 
+            "type" => (string) $type
         );
     }
     
@@ -292,37 +359,24 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // clean output buffer
         ob_end_clean();
         
-        $this->setBody($str);
+        $this->body($str);
     }
     
     /**
-     * Set the "body only" flag. If set to TRUE object will only include 
+     * Get/set the "body only" flag. If set to TRUE object will only include 
      * contents of the body tag. This is used for AJAX output.
      * 
-     * @param bool $bool Whether or not to render as "body only".
+     * @param bool $bool [Optional] Whether or not to render as "body only".
      * 
      * @return void
      * @since  1.0
      */
-    public function setBodyOnly($bool)
+    public function bodyOnly($bool=null)
     {
-        $this->_body_only = (bool) $bool;
-    }
-    
-    /**
-     * Make path absolute
-     * 
-     * @param string &$path The path we want to make absolute.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    private function _makeAbsolute(&$path) 
-    {
-        // Add the document base if a relative path
-        if (substr($path, 0, 4) != 'http') {
-            $uri = new PHPFrame_URI();
-            $path = $uri->getBase().$path;
+        if (!is_null($bool)) {
+            $this->_body_only = (bool) $bool;
         }
+        
+        return $this->_body_only;
     }
 }

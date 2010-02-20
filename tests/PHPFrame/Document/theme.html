@@ -1,0 +1,13 @@
+<a name="up" id="up"></a>
+
+<h1 id="sitename">
+<a href="index.php"><?php echo $app->getConfig()->get("app_name"); ?></a>
+</h1>
+    
+<div id="content">
+<?php echo $this->body()."\n"; ?>
+</div>
+
+<div id="footer">
+Powered by <?php echo nl2br(PHPFrame::Version())."\n"; ?>
+</div>

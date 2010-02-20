@@ -68,7 +68,7 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
         $this->_document->appendBody("");
     }
     
-    public function prependBody()
+    public function test_prependBody()
     {
         $this->setExpectedException("LogicException");
         

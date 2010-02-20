@@ -72,6 +72,7 @@ class PHPFrame_XMLDocument extends PHPFrame_Document
             return $xml_beautifier->formatString($this->dom()->saveXML());
         }
         
+        $this->dom()->formatOutput = true;
         return $this->dom()->saveXML();
     }
     

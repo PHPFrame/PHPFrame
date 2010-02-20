@@ -27,7 +27,7 @@
  * @author   Luis Montero <luis.montero@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
- * @uses     PHPFrame_Document, PHPFrame_IRenderer, PHPFrame_Pathway
+ * @uses     PHPFrame_Document, PHPFrame_IRenderer
  * @since    1.0
  */
 class PHPFrame_Response
@@ -78,12 +78,6 @@ class PHPFrame_Response
      * @var PHPFrame_IRenderer
      */
     private $_renderer = null;
-    /**
-     * A pathway object for this view.
-     * 
-     * @var PHPFrame_Pathway
-     */
-    private $_pathway = null;
     
     /**
      * Both arguments in the constructor are optional.
@@ -132,9 +126,6 @@ class PHPFrame_Response
         $x_powered_by  = $this->header("X-Powered-By");
         $x_powered_by .= " PHPFrame/".PHPFrame::RELEASE_VERSION;
         $this->header("X-Powered-By", $x_powered_by);
-        
-        // Acquire pathway object
-        $this->_pathway = new PHPFrame_Pathway();
     }
     
     /**
@@ -256,17 +247,6 @@ class PHPFrame_Response
         }
         
         return $this->_renderer;
-    }
-    
-    /**
-     * Get the view's pathway object
-     * 
-     * @return PHPFrame_Pathway
-     * @since  1.0
-     */
-    public function pathway()
-    {
-        return $this->_pathway;
     }
     
     /**

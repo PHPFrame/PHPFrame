@@ -60,7 +60,7 @@ class PHPFrame_MVCFactory
         $controller_class = ucfirst($controller_name)."Controller";
         
         // Prepend userland class suffix if needed
-        $class_prefix = $this->_app->getClassPrefix();
+        $class_prefix = $this->_app->classPrefix();
         if (!empty($class_prefix)) {
             $controller_class = $class_prefix.$controller_class;
         }

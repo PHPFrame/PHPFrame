@@ -72,7 +72,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      *                                 1.0 Strict.
      * 
      * @return void
-     * @uses   DOMImplementation, PHPFrame_URI, PHPFrame_Pathway
+     * @uses   DOMImplementation, PHPFrame_URI
      * @since  1.0 
      */
     public function __construct(
@@ -158,7 +158,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // Add scripts
         foreach ($this->_scripts as $script_attr) {
             // Create script tag node
-            $this->addNode("script", $head_node, $script_attr);
+            $this->addNode("script", $head_node, $script_attr, "//");
         }
         
         // Add styles

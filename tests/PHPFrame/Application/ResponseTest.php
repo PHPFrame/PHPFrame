@@ -110,11 +110,6 @@ class PHPFrame_ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertType("PHPFrame_PlainRenderer", $this->_response->renderer());
     }
     
-    public function test_pathway()
-    {
-        $this->assertType("PHPFrame_Pathway", $this->_response->pathway());
-    }
-    
     public function test_send()
     {
         

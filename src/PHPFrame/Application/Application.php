@@ -84,6 +84,12 @@ class PHPFrame_Application
      */
     private $_response;
     /**
+     * Reference to database object.
+     * 
+     * @var PHPFrame_Database
+     */
+    private $_db;
+    /**
      * An instance of PluginHandler that the application will use to provide
      * hooks for plugins.
      * 
@@ -172,16 +178,16 @@ class PHPFrame_Application
         }
         
         // Acquire config object and cache it
-        $this->setConfig(new PHPFrame_Config($config_file));
+        $this->config(new PHPFrame_Config($config_file));
         
         // Acquire and store instance of MVC Factory class
-        $this->setMVCFactory(new PHPFrame_MVCFactory($this));
+        $this->factory(new PHPFrame_MVCFactory($this));
         
         //Register MVC autoload function
         spl_autoload_register(array($this, "autoload"));
         
         // Set profiler milestone
-        $profiler = $this->getProfiler();
+        $profiler = $this->profiler();
         if ($profiler instanceof PHPFrame_Profiler) {
             $profiler->addMilestone();
         }
@@ -213,7 +219,7 @@ class PHPFrame_Application
         
         // Append lang dir based on config for lang classes
         if ($super_class == "Lang") {
-            $file_path .= DS.$this->getConfig()->get("default_lang");
+            $file_path .= DS.$this->config()->get("default_lang");
         } else {
             // Append 's' to dir name except for all others
             $file_path .= "s";
@@ -223,7 +229,7 @@ class PHPFrame_Application
         $class_name = str_replace($super_class, "", $class_name);
         
         // Remove class prefix if applicable
-        $class_name = str_replace($this->getClassPrefix(), "", $class_name);
+        $class_name = str_replace($this->classPrefix(), "", $class_name);
         
         // Build dir path by breaking camel case class name
         $pattern = '/[A-Z]{1}[a-zA-Z0-9]+/';
@@ -267,7 +273,7 @@ class PHPFrame_Application
         }
         
         // Load libraries
-        foreach ($this->getLibraries() as $lib) {
+        foreach ($this->libraries() as $lib) {
             $lib_path = $this->getInstallDir().DS."lib";
             $lib_file = $lib_path.DS.$class_name.".php";
             if (is_file($lib_file)) {
@@ -288,58 +294,354 @@ class PHPFrame_Application
     }
     
     /**
-     * Get Config object
+     * Get/set configuration object.
+     * 
+     * @param PHPFrame_Config $config [Optional] The new configuration object 
+     *                                to use in the application.
      * 
      * @return PHPFrame_Config
      * @since  1.0
      */
-    public function getConfig()
+    public function config(PHPFrame_Config $config=null)
     {
+        if (!is_null($config)) {
+            $this->_setConfig($config);
+        }
+        
         return $this->_config;
     }
     
     /**
-     * Get Logger object
+     * Get/set Request object.
+     * 
+     * @param PHPFrame_Request $request [Optional] Request object.
+     * 
+     * @return PHPFrame_Request
+     * @since  1.0
+     */
+    public function request(PHPFrame_Request $request=null)
+    {
+        if (!is_null($request)) {
+            $this->_request = $request;
+            
+        } elseif (is_null($this->_request)) {
+            // Create new request
+            $request = new PHPFrame_Request();
+            
+            // populate request using client
+            PHPFrame::getSession()->getClient()->populateRequest($request);
+            
+            $this->_request = $request;
+        }
+        
+        return $this->_request;
+    }
+    
+    /**
+     * Get/set Response object.
+     * 
+     * @param PHPFrame_Response $response [Optional] Response object.
+     * 
+     * @return PHPFrame_Response
+     * @since  1.0
+     */
+    public function response(PHPFrame_Response $response=null)
+    {
+        if (!is_null($response)) {
+            $this->_response = $response;
+            
+        } elseif (is_null($this->_response)) {
+            // Create new response object
+            $response = new PHPFrame_Response();
+            $response->header(
+                "Content-Language", 
+                $this->config()->get("default_lang")
+            );
+            
+            // Prepare response using client
+            $client     = PHPFrame::getSession()->getClient();
+            $views_path = $this->getInstallDir().DS."src".DS."views";
+            $client->prepareResponse($response, $views_path);
+            
+            $this->_response = $response;
+        }
+        
+        return $this->_response;
+    }
+    
+    /**
+     * Get/set Registry object
+     * 
+     * The registry object is used to cache all application objects that are 
+     * shared across the whole app. This registry is itself automatically 
+     * cached to file during garbage collection.
+     * 
+     * @param PHPFrame_FileRegistry $file_registry [Optional] A file registry 
+     *                                             object used to cache 
+     *                                             application wide data to 
+     *                                             file.
+     * 
+     * @return PHPFrame_FileRegistry
+     * @since  1.0
+     */
+    public function registry(PHPFrame_FileRegistry $file_registry=null)
+    {
+        if (!is_null($file_registry)) {
+            $this->_registry = $file_registry;
+            
+        } elseif (is_null($this->_registry)) {
+            $cache_file = $this->_tmp_dir.DS."app.reg";
+            $this->_registry = new PHPFrame_FileRegistry($cache_file);
+        }
+        
+        return $this->_registry;
+    }
+    
+    /**
+     * Get/set database object.
+     * 
+     * @param PHPFrame_Database $db [Optional] Instance of PHPFrame_Database.
+     * 
+     * @return PHPFrame_Database
+     * @since  1.0
+     */
+    public function db(PHPFrame_Database $db=null)
+    {
+        if (!is_null($db)) {
+            $this->_db = $db;
+            
+        } elseif (is_null($this->_db)) {
+            $options = $this->config()->getSection("db");
+        
+            if (!array_key_exists("driver", $options) 
+                || !array_key_exists("name", $options)
+            ) {
+                $msg  = "'driver' and 'name' are required in options array";
+                throw new InvalidArgumentException($msg);
+            }
+            
+            // Make absolute path for sqlite db if relative given
+            if (strtolower($options["driver"]) == "sqlite" 
+                && !preg_match('/^\//', $options["name"])
+            ) {
+                $options["name"] = $this->_var_dir.DS.$options["name"];
+            }
+            
+            $this->_db = PHPFrame_DatabaseFactory::getDB($options);
+        }
+        
+        return $this->_db;
+    }
+    
+    /**
+     * Get/set Mailer object
+     * 
+     * @param PHPFrame_Mailer $mailer Mailer object.
+     * 
+     * @return PHPFrame_Mailer
+     * @since  1.0
+     */
+    public function mailer(PHPFrame_Mailer $mailer=null)
+    {
+        if (!is_null($mailer)) {
+            $this->registry()->set("mailer", $mailer);
+            
+        } elseif (is_null($this->registry()->get("mailer"))
+            && $this->config()->get("smtp.enable")
+        ) {
+            $options = $this->config()->getSection("smtp");
+            $mailer  = new PHPFrame_Mailer($options);
+            $this->registry()->set("mailer", $mailer);
+        }
+        
+        return $this->registry()->get("mailer");
+    }
+    
+    /**
+     * Get/set IMAP object used for incoming email.
+     * 
+     * @param PHPFrame_IMAP $imap [Optional] IMAP object.
+     * 
+     * @return PHPFrame_IMAP
+     * @since  1.0
+     */
+    public function imap(PHPFrame_IMAP $imap=null)
+    {
+        if (!is_null($imap)) {
+            $this->registry()->set("imap", $imap);
+            
+        } elseif (is_null($this->registry()->get("imap"))) {
+            $this->registry()->set("imap", new PHPFrame_IMAP());
+        }
+        
+        return $this->registry()->get("imap");
+    }
+    
+    /**
+     * Get/set Permissions object.
+     * 
+     * @param PHPFrame_Permissions $permissions [Optional] Permissions object.
+     * 
+     * @return PHPFrame_Permissions
+     * @since  1.0
+     */
+    public function permissions(PHPFrame_Permissions $permissions=null)
+    {
+        if (!is_null($permissions)) {
+            $this->registry()->set("permissions", $permissions);
+            
+        } elseif (is_null($this->registry()->get("permissions"))) {
+            // Create mapper for ACL objects
+            $mapper = new PHPFrame_Mapper(
+                "PHPFrame_ACL", 
+                $this->_config_dir, 
+                "acl"
+            );
+            
+            $this->registry()->set(
+                "permissions", 
+                new PHPFrame_Permissions($mapper)
+            );
+        }
+        
+        return $this->_registry->get("permissions");
+    }
+    
+    /**
+     * Get/set Libraries object.
+     * 
+     * @param PHPFrame_Libraries $libraries [Optional] Libraries object.
+     * 
+     * @return PHPFrame_Libraries
+     * @since  1.0
+     */
+    public function libraries(PHPFrame_Libraries $libraries=null)
+    {
+        if (!is_null($libraries)) {
+            $this->registry()->set("libraries", $libraries);
+            
+        } elseif (is_null($this->registry()->get("libraries"))) {
+            // Create mapper for PHPFrame_LibInfo object
+            $mapper = new PHPFrame_Mapper(
+                "PHPFrame_LibInfo", 
+                $this->_config_dir, 
+                "lib"
+            );
+            
+            $this->registry()->set("libraries", new PHPFrame_Libraries($mapper));
+        }
+        
+        return $this->_registry->get("libraries");
+    }
+    
+    /**
+     * Get/set Features object.
+     * 
+     * @param PHPFrame_Features $features [Optional] Features object.
+     * 
+     * @return PHPFrame_Features
+     * @since  1.0
+     */
+    public function features(PHPFrame_Features $features=null)
+    {
+        if (!is_null($features)) {
+            $this->registry()->set("features", $features);
+        
+        } elseif (is_null($this->registry()->get("features"))) {
+            // Create mapper for PHPFrame_Features object
+            $mapper = new PHPFrame_Mapper(
+                "PHPFrame_FeatureInfo", 
+                $this->_config_dir, 
+                "features"
+            );
+            
+            $this->registry()->set("features", new PHPFrame_Features($mapper));
+        }
+        
+        return $this->_registry->get("features");
+    }
+    
+    /**
+     * Get/set Plugins object.
+     * 
+     * @param PHPFrame_Plugins $plugins [Optional] Plugins object.
+     * 
+     * @return PHPFrame_Plugins
+     * @since  1.0
+     */
+    public function plugins(PHPFrame_Plugins $plugins=null)
+    {
+        if (!is_null($plugins)) {
+            $this->registry()->set("plugins", $plugins);
+            
+        } elseif (is_null($this->registry()->get("plugins"))) {
+            // Create mapper for PHPFrame_Plugins object
+            $mapper = new PHPFrame_Mapper(
+                "PHPFrame_PluginInfo", 
+                $this->_config_dir, 
+                "plugins"
+            );
+            
+            $this->registry()->set("plugins", new PHPFrame_Plugins($mapper));
+        }
+        
+        return $this->_registry->get("plugins");
+    }
+    
+    /**
+     * Get/set Logger object.
+     * 
+     * @param PHPFrame_Logger $logger [Optional] Logger object to be used in 
+     *                                application.
      * 
      * @return PHPFrame_Logger
      * @since  1.0
      */
-    public function getLogger()
+    public function logger(PHPFrame_Logger $logger=null)
     {
-        $log_level = $this->getConfig()->get("debug.log_level");
+        $log_level = $this->config()->get("debug.log_level");
         if ($log_level <= 0) {
             return;
         }
         
-        if (is_null($this->getRegistry()->get("logger"))) {
+        if (!is_null($logger)) {
+            $this->_setLogger($logger);
+            
+        } elseif (is_null($this->registry()->get("logger"))) {
             $logger = new PHPFrame_TextLogger(
                 $this->_var_dir.DS."app.log", 
                 $log_level
             );
             
-            $this->setLogger($logger);
+            $this->_setLogger($logger);
         }
         
-        return $this->getRegistry()->get("logger");
+        return $this->registry()->get("logger");
     }
     
     /**
-     * Get Informer object
+     * Get/set Informer object.
+     * 
+     * @param PHPFrame_Informer $informer [Optional] Informer object to be used 
+     *                                    in application.
      * 
      * @return PHPFrame_Informer
      * @since  1.0
      */
-    public function getInformer()
+    public function informer(PHPFrame_Informer $informer=null)
     {
-        if ($this->getConfig()->get("debug.informer_level") <= 0) {
+        if ($this->config()->get("debug.informer_level") <= 0) {
             return;
         }
         
-        if (is_null($this->getRegistry()->get("informer"))) {
+        if (!is_null($informer)) {
+            $this->_setInformer($informer);
+            
+        } elseif (is_null($this->registry()->get("informer"))) {
             // Create informer
-            $recipients = $this->getConfig()->get("debug.informer_recipients");
+            $recipients = $this->config()->get("debug.informer_recipients");
             $recipients = explode(",", $recipients);
-            $mailer     = $this->getMailer();
+            $mailer     = $this->mailer();
             
             if (!$mailer instanceof PHPFrame_Mailer) {
                 $msg  = "Can not create informer object. No mailer has been ";
@@ -348,507 +650,69 @@ class PHPFrame_Application
                 throw new LogicException($msg);
             }
             
-            $this->setInformer(new PHPFrame_Informer($mailer, $recipients));
+            $this->_setInformer(new PHPFrame_Informer($mailer, $recipients));
         }
         
-        return $this->getRegistry()->get("informer");
+        return $this->registry()->get("informer");
     }
     
     /**
-     * Get Profiler object
+     * Get/set Profiler object.
+     * 
+     * @param PHPFrame_Profiler $profiler [Optional] Profiler object to be used 
+     *                                    in application.
      * 
      * @return PHPFrame_Profiler
      * @since  1.0
      */
-    public function getProfiler()
+    public function profiler(PHPFrame_Profiler $profiler=null)
     {
-        if ($this->getConfig()->get("debug.profiler_enable") != 1) {
+        if ($this->config()->get("debug.profiler_enable") != 1) {
             return;
         }
         
-        if (is_null($this->getRegistry()->get("profiler"))) {
-            $this->setProfiler(new PHPFrame_Profiler());
+        if (!is_null($profiler)) {
+            $this->registry()->set("profiler", $profiler);
+        } elseif (is_null($this->registry()->get("profiler"))) {
+            $this->registry()->set("profiler", new PHPFrame_Profiler());
         }
         
-        return $this->getRegistry()->get("profiler");
+        return $this->registry()->get("profiler");
     }
     
     /**
-     * Get Registry object
+     * Get/set reference to MVC factory object.
      * 
-     * The registry object is used to cache all application objects that are 
-     * shared across the whole app. This registry is itself automatically 
-     * cached to file during garbage collection.
-     * 
-     * @return PHPFrame_FileRegistry
-     * @since  1.0
-     */
-    public function getRegistry()
-    {
-        if (is_null($this->_registry)) {
-            $cache_file = $this->_tmp_dir.DS."app.reg";
-            $this->setRegistry(new PHPFrame_FileRegistry($cache_file));
-        }
-        
-        return $this->_registry;
-    }
-    
-    /**
-     * Get database object
-     * 
-     * @param array $options [Optional] An associative array containing the  
-     *                       following options: 
-     *                         - driver (required)
-     *                         - name (required)
-     *                         - host
-     *                         - user
-     *                         - pass
-     *                         - mysql_unix_socket
-     *                       This parameter is optional. If omitted options
-     *                       will be loaded from etc/phpframe.ini.
-     * 
-     * @return PHPFrame_Database
-     * @since  1.0
-     */
-    public function getDB(array $options=null)
-    {
-        if (is_null($options)) {
-            $options = $this->getConfig()->getSection("db");
-        }
-        
-        if (!array_key_exists("driver", $options) 
-            || !array_key_exists("name", $options)
-        ) {
-            $msg  = "'driver' and 'name' are required in options array";
-            throw new InvalidArgumentException($msg);
-        }
-        
-        // Make absolute path for sqlite db if relative given
-        if (strtolower($options["driver"]) == "sqlite" 
-            && !preg_match('/^\//', $options["name"])
-        ) {
-            $options["name"] = $this->_var_dir.DS.$options["name"];
-        }
-        
-        return PHPFrame_DatabaseFactory::getDB($options);
-    }
-    
-    /**
-     * Get Mailer object
-     * 
-     * @return PHPFrame_Mailer
-     * @since  1.0
-     */
-    public function getMailer()
-    {
-        if (is_null($this->getRegistry()->get("mailer"))
-            && $this->getConfig()->get("smtp.enable")
-        ) {
-            $options = $this->getConfig()->getSection("smtp");
-            $mailer  = new PHPFrame_Mailer($options);
-            $this->setMailer($mailer);
-        }
-        
-        return $this->getRegistry()->get("mailer");
-    }
-    
-    /**
-     * Get Permissions object
-     * 
-     * @return PHPFrame_Permissions
-     * @since  1.0
-     */
-    public function getPermissions()
-    {
-        if (is_null($this->getRegistry()->get("permissions"))) {
-            // Create mapper for ACL objects
-            $mapper = new PHPFrame_Mapper(
-                "PHPFrame_ACL", 
-                $this->_config_dir, 
-                "acl"
-            );
-            
-            $this->setPermissions(new PHPFrame_Permissions($mapper));
-        }
-        
-        return $this->_registry->get("permissions");
-    }
-    
-    /**
-     * Get Libraries object
-     * 
-     * @return PHPFrame_Libraries
-     * @since  1.0
-     */
-    public function getLibraries()
-    {
-        if (is_null($this->getRegistry()->get("libraries"))) {
-            // Create mapper for PHPFrame_LibInfo object
-            $mapper = new PHPFrame_Mapper(
-                "PHPFrame_LibInfo", 
-                $this->_config_dir, 
-                "lib"
-            );
-            
-            $this->setLibraries(new PHPFrame_Libraries($mapper));
-        }
-        
-        return $this->_registry->get("libraries");
-    }
-    
-    /**
-     * Get Features object
-     * 
-     * @return PHPFrame_Features
-     * @since  1.0
-     */
-    public function getFeatures()
-    {
-        if (is_null($this->getRegistry()->get("features"))) {
-            // Create mapper for PHPFrame_Features object
-            $mapper = new PHPFrame_Mapper(
-                "PHPFrame_FeatureInfo", 
-                $this->_config_dir, 
-                "features"
-            );
-            
-            $this->setFeatures(new PHPFrame_Features($mapper));
-        }
-        
-        return $this->_registry->get("features");
-    }
-    
-    /**
-     * Get Plugins object
-     * 
-     * @return PHPFrame_Plugins
-     * @since  1.0
-     */
-    public function getPlugins()
-    {
-        if (is_null($this->getRegistry()->get("plugins"))) {
-            // Create mapper for PHPFrame_Plugins object
-            $mapper = new PHPFrame_Mapper(
-                "PHPFrame_PluginInfo", 
-                $this->_config_dir, 
-                "plugins"
-            );
-            
-            $this->setPlugins(new PHPFrame_Plugins($mapper));
-        }
-        
-        return $this->_registry->get("plugins");
-    }
-    
-    /**
-     * Get Request object
-     * 
-     * @return PHPFrame_Request
-     * @since  1.0
-     */
-    public function getRequest()
-    {
-        if (is_null($this->_request)) {
-            // Create new request
-            $request = new PHPFrame_Request();
-            
-            // populate request using client
-            PHPFrame::getSession()->getClient()->populateRequest($request);
-            
-            $this->setRequest($request);
-        }
-        
-        return $this->_request;
-    }
-    
-    /**
-     * Get Response object
-     * 
-     * @return PHPFrame_Response
-     * @since  1.0
-     */
-    public function getResponse()
-    {
-        if (is_null($this->_response)) {
-            // Create new response object
-            $response = new PHPFrame_Response();
-            $response->header(
-                "Content-Language", 
-                $this->getConfig()->get("default_lang")
-            );
-            
-            // Prepare response using client
-            $client     = PHPFrame::getSession()->getClient();
-            $views_path = $this->getInstallDir().DS."src".DS."views";
-            $client->prepareResponse($response, $views_path);
-            
-            $this->setResponse($response);
-        }
-        
-        return $this->_response;
-    }
-    
-    /**
-     * Set configuration object
-     * 
-     * @param PHPFrame_Config $config The new configuration object to use in 
-     *                                the application.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setConfig(PHPFrame_Config $config)
-    {
-        // Check that config object has required data
-        $array    = iterator_to_array($config);
-        $req_keys = array("app_name", "base_url");
-        foreach ($req_keys as $req_key) {
-            if (!isset($array[$req_key]) || empty($array[$req_key])) {
-                $msg  = "Could not set configuration object. Config must ";
-                $msg .= "contain a value for '".$req_key."'. ";
-                $msg .= "To set this configuration parameter you can edit ";
-                $msg .= "the configuration file stored in ";
-                $msg .= "'".$config->getPath()."'.";
-                throw new RuntimeException($msg);
-            }
-        }
-        
-        $this->_config = $config;
-        
-        // Set timezone
-        date_default_timezone_set($config->get("timezone"));
-        
-        // Set display_exceptions in exception handler
-        $display_exceptions = $config->get("debug.display_exceptions");
-        PHPFrame_ExceptionHandler::displayExceptions($display_exceptions);
-    }
-    
-    /**
-     * Set Registry object
-     * 
-     * @param PHPFrame_FileRegistry $file_registry A file registry object used 
-     *                                             to cache application wide 
-     *                                             data to file.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setRegistry(PHPFrame_FileRegistry $file_registry)
-    {
-        $this->_registry = $file_registry;
-    }
-    
-    /**
-     * Set Logger object
-     * 
-     * @param PHPFrame_Logger $logger Logger object to be used in application.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setLogger(PHPFrame_Logger $logger)
-    {
-        $this->getRegistry()->set("logger", $logger);
-        
-        // Attach logger observer to exception handler
-        PHPFrame_ExceptionHandler::instance()->attach($logger);
-    }
-    
-    /**
-     * Set Informer object
-     * 
-     * @param PHPFrame_Informer $informer Informer object to be used in 
-     *                                    application.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setInformer(PHPFrame_Informer $informer)
-    {
-        $this->getRegistry()->set("informer", $informer);
-        
-        // Attach informer to exception handler
-        PHPFrame_ExceptionHandler::instance()->attach($informer);
-    }
-    
-    /**
-     * Set Profiler object
-     * 
-     * @param PHPFrame_Profiler $profiler Profiler object to be used in 
-     *                                    application.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setProfiler(PHPFrame_Profiler $profiler)
-    {
-        $this->getRegistry()->set("profiler", $profiler);
-    }
-    
-    /**
-     * Set Database object
-     * 
-     * @param PHPFrame_Database $db Default database object for application.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setDB(PHPFrame_Database $db)
-    {
-        $this->getRegistry()->set("db", $db);
-    }
-    
-    /**
-     * Set Mailer object used for outgoing email
-     * 
-     * @param PHPFrame_Mailer $mailer Mailer object.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setMailer(PHPFrame_Mailer $mailer)
-    {
-        $this->getRegistry()->set("mailer", $mailer);
-    }
-    
-    /**
-     * Set IMAP object used for incoming email
-     * 
-     * @param PHPFrame_IMAP $imap IMAP object.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setIMAP(PHPFrame_IMAP $imap)
-    {
-        $this->getRegistry()->set("imap", $imap);
-    }
-    
-    /**
-     * Set Permissions object
-     * 
-     * @param PHPFrame_Permissions $permissions Permissions object.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setPermissions(PHPFrame_Permissions $permissions)
-    {
-        $this->getRegistry()->set("permissions", $permissions);
-    }
-    
-    /**
-     * Set Features object
-     * 
-     * @param PHPFrame_Features $features Features object.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setFeatures(PHPFrame_Features $features)
-    {
-        $this->getRegistry()->set("features", $features);
-    }
-    
-    /**
-     * Set Plugins object
-     * 
-     * @param PHPFrame_Plugins $plugins Plugins object.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setPlugins(PHPFrame_Plugins $plugins)
-    {
-        $this->getRegistry()->set("plugins", $plugins);
-    }
-    
-    /**
-     * Set Libraries object
-     * 
-     * @param PHPFrame_Libraries $libraries Libraries object.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setLibraries(PHPFrame_Libraries $libraries)
-    {
-        $this->getRegistry()->set("libraries", $libraries);
-    }
-    
-    /**
-     * Set Request object
-     * 
-     * @param PHPFrame_Request $request Request object.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setRequest(PHPFrame_Request $request)
-    {
-        $this->_request = $request;
-    }
-    
-    /**
-     * Set Response object
-     * 
-     * @param PHPFrame_Response $response Response object.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setResponse(PHPFrame_Response $response)
-    {
-        $this->_response = $response;
-    }
-    
-    /**
-     * Get reference to MVC factory object.
+     * @param PHPFrame_MVCFactory $mvc_factory [Optional] Reference to 
+     *                                         PHPFrame_MVCFactory object.
      * 
      * @return PHPFrame_MVCFactory
      * @since  1.0
      */
-    public function getMVCFactory()
+    public function factory(PHPFrame_MVCFactory $mvc_factory=null)
     {
+        if (!is_null($mvc_factory)) {
+            $this->_mvc_factory = $mvc_factory;
+        }
+        
         return $this->_mvc_factory;
     }
     
     /**
-     * Set MVC factory object.
+     * Get/set the userland class prefix.
      * 
-     * @param PHPFrame_MVCFactory $mvc_factory Reference to PHPFrame_MVCFactory
-     *                                         object.
-     *                                         
-     * @return void
-     * @since  1.0
-     */
-    public function setMVCFactory(PHPFrame_MVCFactory $mvc_factory)
-    {
-        $this->_mvc_factory = $mvc_factory;
-    }
-    
-    /**
-     * Get the userland class prefix.
+     * @param string $str [Optional] The new class suffix.
      * 
      * @return string
      * @since  1.0
      */
-    public function getClassPrefix()
+    public function classPrefix($str=null)
     {
+        if (!is_null($str)) {
+            $this->_class_prefix = trim((string) $str);
+        }
+        
         return $this->_class_prefix;
-    }
-    
-    /**
-     * Set the userland class prefix.
-     * 
-     * @param string $str The new class suffix.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setClassPrefix($str)
-    {
-        $this->_class_prefix = trim((string) $str);
     }
     
     /**
@@ -866,7 +730,7 @@ class PHPFrame_Application
         // If no request is passed we try to use request object cached in app
         // or a new request is created using the session's client
         if (is_null($request)) {
-            $request = $this->getRequest();
+            $request = $this->request();
         } else {
             $this->setRequest($request);
         }
@@ -875,7 +739,7 @@ class PHPFrame_Application
         $this->_plugin_handler = new PHPFrame_PluginHandler($this);
         
         // Register installed plugins with plugin handler
-        foreach ($this->getPlugins() as $plugin) {
+        foreach ($this->plugins() as $plugin) {
             if ($plugin->isEnabled()) {
                 $plugin_name = $plugin->getName();
                 $this->_plugin_handler->registerPlugin(new $plugin_name($this));
@@ -889,7 +753,7 @@ class PHPFrame_Application
         // etc/phpframe.ini
         $controller_name = $request->getControllerName();
         if (is_null($controller_name) || empty($controller_name)) {
-            $def_controller = $this->getConfig()->get("default_controller");
+            $def_controller = $this->config()->get("default_controller");
             $request->setControllerName($def_controller);
         }
         
@@ -916,20 +780,20 @@ class PHPFrame_Application
             $controller_name = $request->getControllerName();
             
             // Create the action controller
-            $mvc_factory = $this->getMVCFactory();
+            $mvc_factory = $this->factory();
             $controller  = $mvc_factory->getActionController($controller_name);
             
             // Attach observers to the action controller
             $controller->attach(PHPFrame::getSession()->getSysevents());
             
-            $log_level = $this->getConfig()->get("debug.log_level");
+            $log_level = $this->config()->get("debug.log_level");
             if ($log_level > 0) {
-                $controller->attach($this->getLogger());
+                $controller->attach($this->logger());
             }
             
-            $informer_level = $this->getConfig()->get("debug.informer_level");
+            $informer_level = $this->config()->get("debug.informer_level");
             if ($informer_level > 0) {
-                $controller->attach($this->getInformer());
+                $controller->attach($this->informer());
             }
             
             // Execute the action in the given controller
@@ -942,17 +806,17 @@ class PHPFrame_Application
         // Invoke dispatchLoopShutdown hook
         $this->_plugin_handler->handle("dispatchLoopShutdown");
         
-        $response = $this->getResponse();
+        $response = $this->response();
         
         // Invoke dispatchLoopShutdown hook
         $this->_plugin_handler->handle("preApplyTheme");
         
         // Apply theme if needed
-        $document = $response->getDocument();
+        $document = $response->document();
         if ($document instanceof PHPFrame_HTMLDocument) {
             if (!$request->isAJAX()) {
-                $theme       = $this->getConfig()->get("theme");
-                $base_url    = $this->getConfig()->get("base_url");
+                $theme       = $this->config()->get("theme");
+                $base_url    = $this->config()->get("base_url");
                 $theme_url   = $base_url."themes/".$theme;
                 $theme_path  = $this->getInstallDir().DS."public".DS."themes";
                 $theme_path .= DS.$theme.DS."index.php";
@@ -960,11 +824,11 @@ class PHPFrame_Application
             } else {
                 // Append system events when no theme
                 $sysevents = PHPFrame::getSession()->getSysevents();
-                $sysevents = $response->getRenderer()->render($sysevents);
+                $sysevents = $response->renderer()->render($sysevents);
                 $document->prependBody($sysevents);
                 
                 // Set "body only" mode for AJAX requests when HTML document
-                $document->setBodyOnly(true);
+                $document->bodyOnly(true);
             }
         }
         
@@ -984,16 +848,16 @@ class PHPFrame_Application
         }
         
         // Handle profiler
-        $profiler_enable  = $this->getConfig()->get("debug.profiler_enable");
-        $profiler_display = $this->getConfig()->get("debug.profiler_display");
-        $profiler_outdir  = $this->getConfig()->get("debug.profiler_outdir");
+        $profiler_enable  = $this->config()->get("debug.profiler_enable");
+        $profiler_display = $this->config()->get("debug.profiler_display");
+        $profiler_outdir  = $this->config()->get("debug.profiler_outdir");
         
         if ($profiler_enable) {
             // Add final milestone
-            $this->getProfiler()->addMilestone();
+            $this->profiler()->addMilestone();
             
             // Get profiler output by casting object to string
-            $profiler_out = (string) $this->getProfiler();
+            $profiler_out = (string) $this->profiler();
             
             // Display output if set in config
             if ($profiler_display) {
@@ -1013,5 +877,73 @@ class PHPFrame_Application
                 $file_obj->fwrite($profiler_out);
             }
         }
+    }
+    
+    /**
+     * Set configuration object
+     * 
+     * @param PHPFrame_Config $config The new configuration object to use in 
+     *                                the application.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    private function _setConfig(PHPFrame_Config $config)
+    {
+        // Check that config object has required data
+        $array    = iterator_to_array($config);
+        $req_keys = array("app_name", "base_url");
+        foreach ($req_keys as $req_key) {
+            if (!isset($array[$req_key]) || empty($array[$req_key])) {
+                $msg  = "Could not set configuration object. Config must ";
+                $msg .= "contain a value for '".$req_key."'. ";
+                $msg .= "To set this configuration parameter you can edit ";
+                $msg .= "the configuration file stored in ";
+                $msg .= "'".$config->getPath()."'.";
+                throw new RuntimeException($msg);
+            }
+        }
+        
+        $this->_config = $config;
+        
+        // Set timezone
+        date_default_timezone_set($config->get("timezone"));
+        
+        // Set display_exceptions in exception handler
+        $display_exceptions = $config->get("debug.display_exceptions");
+        PHPFrame_ExceptionHandler::displayExceptions($display_exceptions);
+    }
+    
+    /**
+     * Set Logger object
+     * 
+     * @param PHPFrame_Logger $logger Logger object to be used in application.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    private function _setLogger(PHPFrame_Logger $logger)
+    {
+        $this->registry()->set("logger", $logger);
+        
+        // Attach logger observer to exception handler
+        PHPFrame_ExceptionHandler::instance()->attach($logger);
+    }
+    
+    /**
+     * Set Informer object
+     * 
+     * @param PHPFrame_Informer $informer Informer object to be used in 
+     *                                    application.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    private function _setInformer(PHPFrame_Informer $informer)
+    {
+        $this->registry()->set("informer", $informer);
+        
+        // Attach informer to exception handler
+        PHPFrame_ExceptionHandler::instance()->attach($informer);
     }
 }

@@ -115,13 +115,26 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
             foreach ($this->items() as $item_array) {
                 $item = $this->addNode("item", $channel);
                 $this->addNode("title", $item, null, $item_array["title"]);
-                $this->addNode("link", $item, null, $item_array["link"]);
-                $this->addNode(
-                    "description", 
-                    $item, 
-                    null, 
-                    $item_array["description"]
-                );
+                
+                if ($item_array["link"]) {
+                    $this->addNode(
+                        "link", 
+                        $item, 
+                        null, 
+                        htmlentities($item_array["link"])
+                    );
+                }
+                
+                if ($item_array["description"]) {
+                    $this->addNode(
+                        "description", 
+                        $item, 
+                        null, 
+                        $item_array["description"],
+                        false
+                    );
+                }
+                
                 
                 if (isset($item_array["pub_date"]) 
                     && !empty($item_array["pub_date"])

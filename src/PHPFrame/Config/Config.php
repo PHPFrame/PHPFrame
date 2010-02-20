@@ -25,7 +25,7 @@
  * 
  * <code>
  * // this code would be inside a controller
- * $config = $this->getApp()->getConfig();
+ * $config = $this->getApp()->config();
  * foreach ($config as $key=>$value) {
  *     echo $key.': '.$value;
  * }

@@ -610,7 +610,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         $controller  = PHPFrame::Request()->getControllerName();
         $action      = PHPFrame::Request()->getAction();
         $groupid     = PHPFrame::getSession()->getGroupId();
-        $permissions = PHPFrame::AppRegistry()->getPermissions();
+        $permissions = PHPFrame::AppRegistry()->permissions();
         
         if ($permissions->authorise($controller, $action, $groupid) !== true) {
             $msg  = "Insufficient XMLRPC API permissions to perform action. ";

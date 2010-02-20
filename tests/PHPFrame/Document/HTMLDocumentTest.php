@@ -140,7 +140,7 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $url = "http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js";
         $this->_document->addScript($url);
         
-        $pattern = '/<script src="http:\/\/ajax\.googleapis\.com\/ajax\/libs\/jquery\/1\.3\.2\/jquery\.min\.js" type="text\/javascript" \/>/';
+        $pattern = '/<script src="http:\/\/ajax\.googleapis\.com\/ajax\/libs\/jquery\/1\.3\.2\/jquery\.min\.js" type="text\/javascript">/';
         $this->assertRegExp($pattern, (string) $this->_document);
     }
     

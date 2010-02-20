@@ -39,7 +39,6 @@
    <file baseinstalldir="/" name="PHPFrame/Application/Extensions.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Features.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Libraries.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Application/Pathway.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Permissions.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Plugins.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Request.php" role="php" />

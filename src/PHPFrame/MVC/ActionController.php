@@ -88,23 +88,23 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         $this->_app = $app;
         
         // Get action from the request
-        $request_action = $app->getRequest()->getAction();
+        $request_action = $app->request()->getAction();
         
         // If no specific action has been requested we use default action
         if (empty($request_action)) {
             $action = $this->_default_action;
-            $app->getRequest()->setAction($action);
+            $app->request()->setAction($action);
         } else {
             $action = $request_action;
         }
         
         // Check permissions before we execute
-        $controller  = $app->getRequest()->getControllerName();
-        $permissions = $app->getPermissions();
+        $controller  = $app->request()->getControllerName();
+        $permissions = $app->permissions();
         $groupid     = PHPFrame::getSession()->getGroupId();
         
         if ($permissions->authorise($controller, $action, $groupid) === true
-            || $app->getConfig()->get("ignore_acl") == 1
+            || $app->config()->get("ignore_acl") == 1
         ) {
             // Invoke controller action
             $this->_invokeAction($action);
@@ -150,7 +150,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function request()
     {
-        return $this->app()->getRequest();
+        return $this->app()->request();
     }
     
     /**
@@ -161,7 +161,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function response()
     {
-        return $this->app()->getResponse();
+        return $this->app()->response();
     }
     
     /**
@@ -172,7 +172,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function config()
     {
-        return $this->app()->getConfig();
+        return $this->app()->config();
     }
     
     /**
@@ -183,7 +183,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function db()
     {
-        return $this->app()->getDB();
+        return $this->app()->db();
     }
     
     /**
@@ -194,7 +194,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function logger()
     {
-        return $this->app()->getLogger();
+        return $this->app()->logger();
     }
     
     /**
@@ -205,7 +205,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function mailer()
     {
-        return $this->app()->getMailer();
+        return $this->app()->mailer();
     }
     
     /**
@@ -337,7 +337,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function getModel($name, $args=array()) 
     {
-        return $this->app()->getMVCFactory()->getModel($name, $args);
+        return $this->app()->factory()->getModel($name, $args);
     }
     
     /**
@@ -351,7 +351,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function getView($name="", array $data=null)
     {
-        return $this->app()->getMVCFactory()->getView($name, $data);
+        return $this->app()->factory()->getView($name, $data);
     }
     
     /**
@@ -408,7 +408,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
                 $default_value = null;
             }
             
-            $request_param = $this->app()->getRequest()->getParam(
+            $request_param = $this->app()->request()->getParam(
                 $param->getName(), 
                 $default_value
             );

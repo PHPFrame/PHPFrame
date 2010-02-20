@@ -32,8 +32,8 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
      */
     public function routeStartup() 
     {
-        $request_uri = $this->app()->getRequest()->getRequestURI();
-        $script_name = $this->app()->getRequest()->getScriptName();
+        $request_uri = $this->app()->request()->getRequestURI();
+        $script_name = $this->app()->request()->getScriptName();
         
         // If there is no request uri (ie: we are on the command line) we do 
         // not rewrite
@@ -62,13 +62,13 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
             preg_match('/^([a-zA-Z]+)\/([a-zA-Z_]+)?/', $params, $matches);
             
             if (isset($matches[1])) {
-                $this->app()->getRequest()->setControllerName($matches[1]);
+                $this->app()->request()->setControllerName($matches[1]);
                 
                 // Prepend component to query string
                 $rewritten_query_string = "controller=".$matches[1];
                 
                 if (isset($matches[2])) {
-                    $this->app()->getRequest()->setAction($matches[2]);
+                    $this->app()->request()->setAction($matches[2]);
                     
                     // Prepend component and action to query string
                     $rewritten_query_string .= "&action=".$matches[2];
@@ -99,8 +99,8 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
     public function postApplyTheme()
     {
         // Get response body
-        $body     = $this->app()->getResponse()->getDocument()->getBody();
-        $base_url = $this->app()->getConfig()->get("base_url");
+        $body     = $this->app()->response()->document()->body();
+        $base_url = $this->app()->config()->get("base_url");
         
         // Build sub patterns
         $controller = 'controller=([a-zA-Z]+)';
@@ -124,7 +124,7 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
         $body = preg_replace($patterns, $replacements, $body);
         
         // Set the processed body back in the response
-        $this->app()->getResponse()->getDocument()->setBody($body);
+        $this->app()->response()->document()->body($body);
     }
     
     /**
@@ -138,7 +138,7 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
      */
     public static function rewriteURL($url, $xhtml=true)
     {
-        $uri = new PHPFrame_URI(self::$_app->getConfig()->get("base_url"));
+        $uri = new PHPFrame_URI(self::$_app->config()->get("base_url"));
         
         if (!preg_match('/^http/i', $url)) {
             $url = $uri->getBase().$url;

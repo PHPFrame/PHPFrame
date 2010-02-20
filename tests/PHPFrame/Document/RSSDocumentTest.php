@@ -25,7 +25,13 @@ class PHPFrame_RSSDocumentTest extends PHPUnit_Framework_TestCase
         $this->_rss->description("Some really cool news feed...");
         $this->_rss->image("http://www.xul.fr/xul.gif", "http://www.xul.fr/en/index.php");
         
-        $this->_rss->addItem("Hello world", "http://www.lupomontero.com/hello-world", "Blah blah blah...");
+        $this->_rss->addItem(
+            "Hello world", 
+            "http://www.lupomontero.com/hello-world", 
+            "Blah blah blah...",
+            "2010-02-20",
+            "Lupo Montero"
+        );
         
         $this->assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <rss version=\"2.0\">
@@ -41,6 +47,8 @@ class PHPFrame_RSSDocumentTest extends PHPUnit_Framework_TestCase
       <title>Hello world</title>
       <link>http://www.lupomontero.com/hello-world</link>
       <description>Blah blah blah...</description>
+      <pubDate>2010-02-20</pubDate>
+      <author>Lupo Montero</author>
     </item>
   </channel>
 </rss>

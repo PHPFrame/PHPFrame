@@ -18,7 +18,7 @@ class PHPFrame_HTMLRendererTest extends PHPUnit_Framework_TestCase
     
     public function test_renderBool()
     {
-    	$this->assertEquals("1", $this->_renderer->render(true));
+        $this->assertEquals("1", $this->_renderer->render(true));
         $this->assertEquals("", $this->_renderer->render(false));
     }
     

@@ -36,15 +36,12 @@
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" name="PHPFrame/Application/ACL.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Application.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Application/Extensions.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Application/Features.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Libraries.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Permissions.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Plugins.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Request.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Response.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Application/Sysevents.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Application/Themes.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Array.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Collection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Base/Object.php" role="php" />
@@ -88,12 +85,10 @@
    <file baseinstalldir="/" name="PHPFrame/Exception/ExceptionHandler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/XMLRPCException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/ExtInfo.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Ext/FeatureInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/LibInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/Plugin.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/PluginHandler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/PluginInfo.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Ext/ThemeInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/BoolFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/EmailFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/EnumFilter.php" role="php" />
@@ -134,7 +129,6 @@
    <file baseinstalldir="/" name="PHPFrame/Registry/Registry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/SessionRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/HTMLUI.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/User/APIUser.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/Group.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/Organisation.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/User.php" role="php" />

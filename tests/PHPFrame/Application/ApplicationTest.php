@@ -111,11 +111,6 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertType("PHPFrame_Libraries", $this->_app->libraries());
     }
     
-    public function test_features()
-    {
-        $this->assertType("PHPFrame_Features", $this->_app->features());
-    }
-    
     public function test_plugins()
     {
         $this->assertType("PHPFrame_Plugins", $this->_app->plugins());

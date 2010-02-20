@@ -535,33 +535,6 @@ class PHPFrame_Application
     }
     
     /**
-     * Get/set Features object.
-     * 
-     * @param PHPFrame_Features $features [Optional] Features object.
-     * 
-     * @return PHPFrame_Features
-     * @since  1.0
-     */
-    public function features(PHPFrame_Features $features=null)
-    {
-        if (!is_null($features)) {
-            $this->registry()->set("features", $features);
-        
-        } elseif (is_null($this->registry()->get("features"))) {
-            // Create mapper for PHPFrame_Features object
-            $mapper = new PHPFrame_Mapper(
-                "PHPFrame_FeatureInfo", 
-                $this->_config_dir, 
-                "features"
-            );
-            
-            $this->registry()->set("features", new PHPFrame_Features($mapper));
-        }
-        
-        return $this->_registry->get("features");
-    }
-    
-    /**
      * Get/set Plugins object.
      * 
      * @param PHPFrame_Plugins $plugins [Optional] Plugins object.

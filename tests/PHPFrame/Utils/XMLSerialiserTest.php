@@ -95,24 +95,24 @@ class PHPFrame_XMLSerialiserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(iterator_to_array($user), iterator_to_array($user2));
     }
     
-    public function test_serialiseFeatureInfo()
+    public function test_serialisePluginInfo()
     {
-        $ext = new PHPFrame_FeatureInfo();
-        $ext->setName("Users");
-        $ext->setChannel("dist.phpframe.org");
-        $ext->setSummary("This is the summary");
-        $ext->setDescription("This is the description");
-        $ext->setAuthor("Luis Montero");
-        $ext->setDate("2009-08-27");
-        $ext->setTime("00:47");
-        $ext->setVersion(array("release"=>"0.1.1", "api"=>"1.0"));
-        $ext->setStability(array("release"=>"beta", "api"=>"beta"));
-        $ext->setLicense(array(
+        $plugin = new PHPFrame_PluginInfo();
+        $plugin->setName("Users");
+        $plugin->setChannel("dist.phpframe.org");
+        $plugin->setSummary("This is the summary");
+        $plugin->setDescription("This is the description");
+        $plugin->setAuthor("Luis Montero");
+        $plugin->setDate("2009-08-27");
+        $plugin->setTime("00:47");
+        $plugin->setVersion(array("release"=>"0.1.1", "api"=>"1.0"));
+        $plugin->setStability(array("release"=>"beta", "api"=>"beta"));
+        $plugin->setLicense(array(
             "name" => "BSD Style", 
             "uri"  => "http://www.opensource.org/licenses/bsd-license.php"
         ));
-        $ext->setNotes("This are the notes....");
-        $ext->setDependencies(array(
+        $plugin->setNotes("This are the notes....");
+        $plugin->setDependencies(array(
             "required" => null,
             "optional" => array(
                 "feature" => array(
@@ -137,21 +137,21 @@ class PHPFrame_XMLSerialiserTest extends PHPUnit_Framework_TestCase
                 )
             )
         ));
-        $ext->setContents(array(
+        $plugin->setContents(array(
             array("path"=>"src/controllers/users.php", "role"=>"php"),
             array("path"=>"src/controllers/users.php", "role"=>"php"),
             array("path"=>"src/models/users.php", "role"=>"php")
         ));
         
-        $ext->validateAll();
+        $plugin->validateAll();
         
-        $array = iterator_to_array($ext);
+        $array = iterator_to_array($plugin);
         
         $serialised   = PHPFrame_XMLSerialiser::serialise($array);
         $unserialised = PHPFrame_XMLSerialiser::unserialise($serialised);
         
-        $ext2 = new PHPFrame_FeatureInfo($unserialised);
+        $plugin2 = new PHPFrame_PluginInfo($unserialised);
         
-        $this->assertEquals(iterator_to_array($ext), iterator_to_array($ext2));
+        $this->assertEquals(iterator_to_array($plugin), iterator_to_array($plugin2));
     }
 }

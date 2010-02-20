@@ -251,9 +251,6 @@ insalling the PEAR package. If you want to continue type "yes".
     <name>filter</name>
    </extension>
    <extension>
-    <name>imap</name>
-   </extension>
-   <extension>
     <name>pdo</name>
    </extension>
    <extension>
@@ -266,13 +263,11 @@ insalling the PEAR package. If you want to continue type "yes".
     <channel>pear.phpunit.de</channel>
     <min>3.3.16</min>
    </package>
-   <package>
-    <name>phing</name>
-    <channel>pear.phing.info</channel>
-    <min>2.3.3</min>
-   </package>
    <extension>
     <name>pdo_mysql</name>
+   </extension>
+   <extension>
+    <name>imap</name>
    </extension>
    <extension>
     <name>xdebug</name>

@@ -62,7 +62,7 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
             $str = $this->renderView($value);
         }
         
-        return $str;
+        return (string) $str;
     }
     
     /**

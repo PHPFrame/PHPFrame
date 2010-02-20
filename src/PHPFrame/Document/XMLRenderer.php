@@ -35,6 +35,10 @@ class PHPFrame_XMLRenderer implements PHPFrame_IRenderer
      */
     public function render($value)
     {
+    	if (!is_array($value) && !is_object($value)) {
+    	    return (string) $value;
+    	}
+    	
         return PHPFrame_XMLSerialiser::serialise($value);
     }
 }

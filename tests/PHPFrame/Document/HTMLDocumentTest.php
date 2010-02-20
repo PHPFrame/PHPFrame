@@ -95,6 +95,22 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, preg_match("/<html.*>.*<\/html>/s", $matches[2]));
     }
     
+    public function test_toStringNoBeautifier()
+    {
+        $this->_document->useBeautifier(false);
+        $this->_document->title("The title");
+        $this->_document->body("<h1>Hellow World</h1>");
+        $str = (string) $this->_document;
+        
+        // Remove doctype
+        $this->assertEquals(1, preg_match("/(.+)(<html.*>.*<\/html>)/s", $str, $matches));
+        
+        $this->assertType("array", $matches);
+        $this->assertEquals(3, count($matches));
+        $this->assertEquals(1, preg_match("/DOCTYPE html PUBLIC/", $matches[1]));
+        $this->assertEquals(1, preg_match("/<html.*>.*<\/html>/s", $matches[2]));
+    }
+    
     public function test_dom()
     {
         $this->assertType("DOMDocument", $this->_document->dom());
@@ -105,6 +121,10 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $doc_type = $this->_document->doctype();
         $this->assertType("DOMDocumentType", $doc_type);
         $this->assertEquals("html", $doc_type->name);
+        
+        $new_doctype = new DOMDocumentType();
+        $this->_document->doctype($new_doctype);
+        $this->assertEquals($new_doctype, $this->_document->doctype());
     }
     
     public function test_addMetaTag()

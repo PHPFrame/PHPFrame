@@ -86,15 +86,15 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
         $rss         = $this->addNode("rss", null, array("version"=>"2.0"));
         $channel     = $this->addNode("channel", $rss);
         $title       = $this->addNode("title", $channel, null, $this->title());
-        $link        = $this->addNode("link", $channel, null, $this->getLink());
+        $link        = $this->addNode("link", $channel, null, $this->link());
         $description = $this->addNode(
             "description",
             $channel, 
             null, 
-            $this->getDescription()
+            $this->description()
         );
         
-        $image_array = $this->getImage();
+        $image_array = $this->image();
         if (count($image_array)> 0) {
             $image     = $this->addNode("image", $channel);
             $image_url = $this->addNode(
@@ -111,8 +111,8 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
             );
         }
         
-        if (count($this->getItems()) > 0) {
-            foreach ($this->getItems() as $item_array) {
+        if (count($this->items()) > 0) {
+            foreach ($this->items() as $item_array) {
                 $item = $this->addNode("item", $channel);
                 $this->addNode("title", $item, null, $item_array["title"]);
                 $this->addNode("link", $item, null, $item_array["link"]);
@@ -151,100 +151,80 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
     }
     
     /**
-     * Set feed's link.
+     * Get/set feed's link.
      * 
-     * @param string $str URL to the feed title will point to.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setLink($str)
-    {
-        $this->_link = (string) $str;
-    }
-    
-    /**
-     * Get feed's link.
+     * @param string $str [Optional] URL to the feed title will point to.
      * 
      * @return string
      * @since  1.0
      */
-    public function getLink()
+    public function link($str=null)
     {
+        if (!is_null($str)) {
+            $this->_link = (string) $str;
+        }
+        
         return $this->_link;
     }
     
     /**
-     * Set the feed's description.
+     * Get/set the feed's description.
      * 
-     * @param string $str The feed's description.
+     * @param string $str [Optional] The feed's description.
      * 
-     * @return void
+     * @return string
      * @since  1.0
      */
-    public function setDescription($str)
+    public function description($str=null)
     {
-        $this->_description = (string) $str;
-    }
-    
-    /**
-     * Get the feed's description.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function getDescription()
-    {
+        if (!is_null($str)) {
+            $this->_description = (string) $str;
+        }
+        
         return $this->_description;
     }
     
     /**
-     * Set image.
+     * Get/set image.
      * 
-     * @param string $url  URL to the image file.
-     * @param string $link Link the image should point to.
+     * @param string $url  [Optional] URL to the image file.
+     * @param string $link [Optional] Link the image should point to.
      * 
-     * @return void
+     * @return array with image url and link.
      * @since  1.0
      */
-    public function setImage($url, $link)
+    public function image($url=null, $link=null)
     {
-        $this->_image = array("url"=>$url, "link"=>$link);
-    }
-    
-    /**
-     * Get array with image url and link.
-     * 
-     * @return array
-     * @since  1.0
-     */
-    public function getImage()
-    {
+        if (!is_null($url)) {
+            if (is_null($link)) {
+                $msg = "Image URL specified but no link passed.";
+                throw new InvalidArgumentException($msg);
+            }
+            
+            $this->_image = array(
+                "url"  => (string) $url, 
+                "link" => (string) $link
+            );
+        }
+        
         return $this->_image;
     }
     
     /**
-     * Set feed items array.
+     * Get/set feed items array.
      * 
-     * @param array $array An array containig the feed items (see 
-     * {@link PHPFrame_RSSDocument::addItem()}).
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setItems(array $array)
-    {
-        $this->_items = $array;
-    }
-    
-    /**
-     * Get post items.
+     * @param array $array [Optional] An array containig the feed items (see 
+     *                     {@link PHPFrame_RSSDocument::addItem()}).
      * 
      * @return array
      * @since  1.0
      */
-    public function getItems()
+    public function items(array $array=null)
     {
+        if (!is_null($array)) {
+            $this->_items = $array;
+        }
+        
         return $this->_items;
     }
     
@@ -255,7 +235,7 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
      * @param string $link        URL to the post.
      * @param string $description The post body or excerpt.
      * @param string $pub_date    Publish date.
-     * @param string $author      The post author
+     * @param string $author      The post author.
      * 
      * @return void
      * @since  1.0
@@ -268,11 +248,11 @@ class PHPFrame_RSSDocument extends PHPFrame_XMLDocument
         $author=null
     ) {
         $this->_items[] = array(
-            "title"       => $title, 
-            "link"        => $link, 
-            "description" => $description,
-            "pub_date"    => $pub_date,
-            "author"      => $author
+            "title"       => (string) $title, 
+            "link"        => (string) $link, 
+            "description" => (string) $description,
+            "pub_date"    => (string) $pub_date,
+            "author"      => (string) $author
         );
     }
 }

@@ -620,7 +620,7 @@ class PHPFrame_Application
         
         // Set display_exceptions in exception handler
         $display_exceptions = $config->get("debug.display_exceptions");
-        PHPFrame_ExceptionHandler::setDisplayExceptions($display_exceptions);
+        PHPFrame_ExceptionHandler::displayExceptions($display_exceptions);
     }
     
     /**

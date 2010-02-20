@@ -36,6 +36,13 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      * @var bool
      */
     private $_display_exceptions = true;
+    /**
+     * Boolean indicating whether catchable errors should be caught and 
+     * rethrown as exceptions.
+     *  
+     * @var bool
+     */
+    private $_handle_errors = false;
     
     /**
      * We declare a private constructor to avoid instantiation from client code 
@@ -50,10 +57,10 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      */
     private function __construct()
     {
-        //error_reporting(E_ALL | E_NOTICE | E_STRICT);
-        error_reporting(E_ALL);
-        //set_error_handler(array("PHPFrame_ExceptionHandler", "handleError"));
-        set_exception_handler(array('PHPFrame_ExceptionHandler','handleException'));
+        set_exception_handler(array(
+            "PHPFrame_ExceptionHandler", 
+            "handleException"
+        ));
     }
     
     /**
@@ -84,6 +91,32 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
     {
         restore_error_handler();
         restore_exception_handler();
+    }
+    
+    /**
+     * Get/set whether catchable errors should be caught and rethrown as 
+     * exceptions.
+     * 
+     * @param bool $bool [Optional]
+     * 
+     * @return bool
+     * @since  1.0
+     */
+    public function catchableErrorsToExceptions($bool=null)
+    {
+    	if (!is_null($bool)) {
+    		$this->_handle_errors = (bool) $bool;
+    		if ($this->_handle_errors) {
+    		    set_error_handler(array(
+	                "PHPFrame_ExceptionHandler", 
+	                "handleError"
+	            ));
+    		} else {
+    		    restore_error_handler();
+    		}
+    	}
+    	
+    	return $this->_handle_errors;
     }
     
     /**
@@ -131,7 +164,7 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
      */
     public static function handleException(Exception $exception) 
     {
-        $str  = "Uncaught ".get_class($exception).": ";
+        $str  = "[PHPFrame] Uncaught ".get_class($exception).": ";
         $str .= $exception->getMessage()."\n";
         $str .= "File: ".$exception->getFile()."\n";
         $str .= "Line: ".$exception->getLine()."\n";
@@ -144,16 +177,16 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
         // Display the exception details if applicable
         if (self::instance()->_display_exceptions) {
             $response = new PHPFrame_Response();
-            $response->setDocument(new PHPFrame_PlainDocument());
+            $response->document(new PHPFrame_PlainDocument());
             
             $status_code = $exception->getCode();
             if (!empty($status_code) && $status_code > 0) {
-                $response->setStatusCode($status_code);
+                $response->statusCode($status_code);
             } else {
-                $response->setStatusCode(500);
+                $response->statusCode(500);
             }
             
-            $response->getDocument()->setBody($str, false);
+            $response->body($str, false);
             $response->send();
         }
         
@@ -162,16 +195,20 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
     }
     
     /**
-     * Set boolean to indicate whether or not exceptions should be displayed.
+     * Get/set boolean to indicate whether or not exceptions should be shown.
      * 
-     * @param bool $bool Boolean indicating whether exceptions should be 
-     *                   displayed.
+     * @param bool $bool [Optional] Boolean indicating whether exceptions 
+     *                   should be displayed.
      * 
-     * @return void
+     * @return bool
      * @since  1.0
      */
-    public static function setDisplayExceptions($bool)
+    public static function displayExceptions($bool=null)
     {
-        self::instance()->_display_exceptions = (bool) $bool;
+    	if (!is_null($bool)) {
+    	    self::instance()->_display_exceptions = (bool) $bool;
+    	}
+    	
+        return self::instance()->_display_exceptions;
     }
 }

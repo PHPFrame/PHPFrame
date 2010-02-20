@@ -164,11 +164,11 @@ class PHPFrame_CLIClient extends PHPFrame_Client
                 $request->attachFile(
                     "infile", 
                     array(
-                        "tmp_name"=>$infile->getPath(),
-                        "name"=>$infile->getFilename(),
-                        "size"=>$infile->getSize(),
-                        "type"=>$infile->getType(),
-                        "error"=>null
+                        "tmp_name" => $infile->getPath(),
+                        "name"     => $infile->getFilename(),
+                        "size"     => $infile->getSize(),
+                        "type"     => $infile->getType(),
+                        "error"    => null
                     )
                 );
             }
@@ -218,6 +218,6 @@ class PHPFrame_CLIClient extends PHPFrame_Client
      */
     public function redirect($url)
     {
-        // CLI cant resirect
+        // CLI can't redirect
     }
 }

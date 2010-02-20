@@ -9,14 +9,14 @@ class CustomersController extends PHPFrame_ActionController
     public function index()
     {
         // Create new customer object
-        $customer = $this->getModel("Customer", array(array(
+        $customer = new Customer(array(
             "first_name"=>"Homer", 
             "last_name"=>"Simpson", 
             "email"=>"homer@simpson.com"
-        )));
+        ));
         
         // Get specialised mapper
-        $customer_mapper = $this->getModel("CustomerMapper");
+        $customer_mapper = new CustomerMapper();
         
         // Save customer object in storage
         $customer_mapper->insert($customer);
@@ -27,7 +27,7 @@ class CustomersController extends PHPFrame_ActionController
         $customer_collection = $customer_mapper->find();
         
         // Get the "list" view and assign the customers collection to it
-        $view = $this->getView("customers/list");
+        $view = $this->view("customers/list");
         $view->addData("customers", $customer_collection);
         $view->display();
     }

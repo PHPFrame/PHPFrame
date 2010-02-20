@@ -55,7 +55,7 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
         if (!empty($title)) {
             $str .= $title."\n";
             for ($i=0; $i<strlen($title); $i++) {
-                $str .= "-";
+                $str .= "=";
             }
             $str .= "\n\n";
         }

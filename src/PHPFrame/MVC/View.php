@@ -56,6 +56,13 @@ class PHPFrame_View implements IteratorAggregate
         $this->_name = trim((string) $name);
         
         if (!is_null($data)) {
+            $array_obj = new PHPFrame_Array($data);
+            if (!$array_obj->isAssoc()) {
+                $msg  = "Argument 'data' in ".get_class($this)."::";
+                $msg .= __FUNCTION__."() must be an associative array.";
+                throw new InvalidArgumentException($msg);
+            }
+            
             $this->_data = $data;
         }
     }

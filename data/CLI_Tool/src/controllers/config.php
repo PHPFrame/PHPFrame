@@ -60,10 +60,10 @@ class ConfigController extends PHPFrame_ActionController
     {
         $str = (string) $this->_config;
         
-        $view = $this->getView();
+        $view = $this->view();
         $view->addData("config", $str);
         
-        $this->response()->setBody($view);
+        $this->response()->body($view);
     }
     
     /**
@@ -78,10 +78,10 @@ class ConfigController extends PHPFrame_ActionController
     {
         $key = trim((string) $key);
         
-        $view = $this->getView();
+        $view = $this->view();
         $view->addData($key, $this->_config->get($key));
         
-        $this->response()->setBody($view);
+        $this->response()->body($view);
     }
     
     /**
@@ -107,9 +107,9 @@ class ConfigController extends PHPFrame_ActionController
             $this->raiseError("An error ocurred while saving config");
         }
         
-        $view = $this->getView();
+        $view = $this->view();
         $view->addData($key, $this->_config->get($key));
         
-        $this->response()->setBody($view);
+        $this->response()->body($view);
     }
 }

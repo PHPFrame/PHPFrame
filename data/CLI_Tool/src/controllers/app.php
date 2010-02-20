@@ -75,11 +75,11 @@ class AppController extends PHPFrame_ActionController
         
         try {
             // Get model and pass install dir to constructor
-            $model = $this->getModel("AppTemplate", array(
+            $model = new AppTemplate(
                 $this->_install_dir, 
                 $this->config()->get("sources.preferred_mirror"),
                 $this->config()->get("sources.preferred_state")
-            ));
+            );
             
             // Install new app
             $model->install(
@@ -115,7 +115,7 @@ class AppController extends PHPFrame_ActionController
     public function remove()
     {
         try {
-            $model = $this->getModel("AppTemplate", array($this->_install_dir));
+            $model = new AppTemplate($this->_install_dir);
             $model->remove();
             
             $msg = "App removed successfully";

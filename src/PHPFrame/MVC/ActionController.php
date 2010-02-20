@@ -47,18 +47,19 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     private $_app;
     /**
-     * A string containing a url to be redirected to. Leave empty for no redirection.
+     * A string containing a url to be redirected to. Leave empty for no 
+     * redirection.
      *
      * @var string
      */
     private $_redirect_url = null;
     /**
-     * This is a flag we use to indicate whether the controller's executed task was 
-     * successful or not.
+     * This is a flag we use to indicate whether the controller's executed task 
+     * was successful or not.
      * 
      * @var boolean
      */
-    private $_success = false;
+    private $_success = true;
     
     /**
      * Constructor
@@ -143,6 +144,17 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
     
     /**
+     * Get reference to application's config object.
+     * 
+     * @return PHPFrame_Config
+     * @since  1.0
+     */
+    protected function config()
+    {
+        return $this->app()->config();
+    }
+    
+    /**
      * Get reference to application's request object.
      * 
      * @return PHPFrame_Request
@@ -165,14 +177,14 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
     
     /**
-     * Get reference to application's config object.
+     * Get reference to application's registry object.
      * 
-     * @return PHPFrame_Config
+     * @return PHPFrame_FileRegistry
      * @since  1.0
      */
-    protected function config()
+    protected function registry()
     {
-        return $this->app()->config();
+        return $this->app()->registry();
     }
     
     /**
@@ -187,17 +199,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
     
     /**
-     * Get reference to application's logger object.
-     * 
-     * @return PHPFrame_Logger
-     * @since  1.0
-     */
-    protected function logger()
-    {
-        return $this->app()->logger();
-    }
-    
-    /**
      * Get reference to application's mailer object.
      * 
      * @return PHPFrame_Mailer
@@ -209,6 +210,28 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
     
     /**
+     * Get reference to application's IMAP object.
+     * 
+     * @return PHPFrame_FileRegistry
+     * @since  1.0
+     */
+    protected function imap()
+    {
+        return $this->app()->imap();
+    }
+    
+    /**
+     * Get reference to application's logger object.
+     * 
+     * @return PHPFrame_Logger
+     * @since  1.0
+     */
+    protected function logger()
+    {
+        return $this->app()->logger();
+    }
+    
+    /**
      * Get reference to application's session object.
      * 
      * @return PHPFrame_SessionRegistry
@@ -217,6 +240,84 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     protected function session()
     {
         return PHPFrame::getSession();
+    }
+    
+    /**
+     * Get a named view
+     *
+     * @param string $name The name of the view to create.
+     * @param array  $data Data to assign to the view.
+     * 
+     * @return PHPFrame_View
+     * @since  1.0
+     */
+    protected function view($name="", array $data=null)
+    {
+        return $this->app()->factory()->view($name, $data);
+    }
+    
+    /**
+     * Get a named view helper.
+     *
+     * @param string $name The name of the helper to create.
+     * 
+     * @return PHPFrame_ViewHelper
+     * @since  1.0
+     */
+    protected function helper($name)
+    {
+        return $this->app()->factory()->getViewHelper($name);
+    }
+    
+    /**
+     * Cancel and set redirect to index.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    protected function cancel() 
+    {
+        $this->setRedirect('index.php');
+    }
+    
+    /**
+     * Set the redirection URL.
+     *
+     * @param string $url The URL we want to redirect to when we call 
+     *                    PHPFrame_ActionController::redirect()
+     * 
+     * @return void
+     * @since  1.0
+     */
+    protected function setRedirect($url) 
+    {
+        $this->_redirect_url = $url;
+    }
+    
+    /**
+     * Redirect browser to redirect URL.
+     * 
+     * @return void
+     * @since  1.0
+     * @todo   Rewrite URL using plugin
+     */
+    protected function redirect() 
+    {
+        // Get client object from session
+        $client = PHPFrame::getSession()->getClient();
+        
+        // Check that we got the right type
+        if (!$client instanceof PHPFrame_Client) {
+            $msg = "Action controller could not redirect using client object";
+            throw new RuntimeException($msg);
+        }
+        
+        // Delegate redirection to client object if it is of the right type
+        if (!empty($this->_redirect_url)) {
+            //echo $this->_redirect_url; exit;
+            //$url = PHPFrame_URLRewriter::rewriteURL($url);
+            $client->redirect($this->_redirect_url);
+        }
     }
     
     /**
@@ -275,92 +376,12 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
     
     /**
-     * Cancel and set redirect to index.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    protected function cancel() 
-    {
-        $this->setRedirect('index.php');
-    }
-    
-    /**
-     * Set the redirection URL.
-     *
-     * @param string $url The URL we want to redirect to when we call 
-     *                    PHPFrame_ActionController::redirect()
-     * 
-     * @return void
-     * @since  1.0
-     */
-    protected function setRedirect($url) 
-    {
-        $this->_redirect_url = $url;
-    }
-    
-    /**
-     * Redirect browser to redirect URL.
-     * 
-     * @return void
-     * @since  1.0
-     * @todo   Rewrite URL using plugin
-     */
-    protected function redirect() 
-    {
-        // Get client object from session
-        $client = PHPFrame::getSession()->getClient();
-        
-        // Check that we got the right type
-        if (!$client instanceof PHPFrame_Client) {
-            $msg = "Action controller could not redirect using client object";
-            throw new RuntimeException($msg);
-        }
-        
-        // Delegate redirection to client object if it is of the right type
-        if (!empty($this->_redirect_url)) {
-            //echo $this->_redirect_url; exit;
-            //$url = PHPFrame_URLRewriter::rewriteURL($url);
-            $client->redirect($this->_redirect_url);
-        }
-    }
-    
-    /**
-     * Get a named model
-     *
-     * @param string $name The model name. If empty the view name is used as default.
-     * @param array  $args An array containing arguments to be passed to the Model's 
-     *                     constructor.
-     * 
-     * @return object
-     * @since  1.0
-     */
-    protected function getModel($name, $args=array()) 
-    {
-        return $this->app()->factory()->getModel($name, $args);
-    }
-    
-    /**
-     * Get a named view
-     *
-     * @param string $name The name of the view to create.
-     * @param array  $data Data to assign to the view.
-     * 
-     * @return PHPFrame_View
-     * @since  1.0
-     */
-    protected function getView($name="", array $data=null)
-    {
-        return $this->app()->factory()->getView($name, $data);
-    }
-    
-    /**
      * Invoke action in concrete controller
      * 
      * This method thows an exception if the action is not supported by the 
      * controller or if any required arguments are not defined in the request.
      * 
-     * @param string $action The action to inkoe in the concrete action controller
+     * @param string $action The action to invoke in the action controller.
      * 
      * @return void
      * @since  1.0

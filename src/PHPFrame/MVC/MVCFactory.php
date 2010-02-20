@@ -78,54 +78,6 @@ class PHPFrame_MVCFactory
     }
     
     /**
-     * Get model
-     * 
-     * @param string $model_name The name of the model to get.
-     * @param array  $args       An array with arguments to be passed to the
-     *                           model's constructor if needed.
-     * 
-     * @return object
-     * @since  1.0
-     */
-    public function getModel($model_name, $args=array()) 
-    {
-        $model_name = trim((string) $model_name);
-        $array      = explode("/", $model_name);
-        $class_name = end($array);
-        
-        // make a reflection object
-        $reflectionObj = new ReflectionClass($class_name);
-        
-        // Check if class is instantiable
-        if ($reflectionObj->isInstantiable()) {
-            // Try to get the constructor
-            $constructor = $reflectionObj->getConstructor();
-            // Check to see if we have a valid constructor method
-            if ($constructor instanceof ReflectionMethod) {
-                // If constructor is public we create a new instance
-                if ($constructor->isPublic()) {
-                    return $reflectionObj->newInstanceArgs($args);
-                }
-            }
-            // No declared constructor, so we instantiate without args
-            return new $class_name;
-        
-        } elseif ($reflectionObj->hasMethod('getInstance')) {
-            // If class is not instantiable we look for a "getInstance" method
-            $get_instance = $reflectionObj->getMethod('getInstance');
-            if ($get_instance->isPublic() && $get_instance->isStatic()) {
-                $class_method_array = array($class_name, 'getInstance');
-                return call_user_func_array($class_method_array, $args);
-            }
-        }
-        
-        // If we have not been able to return a model we throw an exception
-        $exception_msg = $model_name." not supported. ";
-        $exception_msg .= "Could not get instance of ".$class_name;
-        throw new RuntimeException($exception_msg);
-    }
-    
-    /**
      * Get a named view.
      *
      * @param string $name The name of the view to get.
@@ -134,8 +86,39 @@ class PHPFrame_MVCFactory
      * @return PHPFrame_View
      * @since  1.0
      */
-    public function getView($name, array $data=null) 
+    public function view($name, array $data=null) 
     {
         return new PHPFrame_View($name, $data);
+    }
+    
+    /**
+     * Get a named view helper.
+     *
+     * @param string $name The name of the view to get.
+     * @param array  $data Data to assign to the view.
+     * 
+     * @return PHPFrame_View
+     * @since  1.0
+     */
+    public function getViewHelper($name) 
+    {
+        $helper_class = ucfirst($name)."Helper";
+        
+        // Prepend userland class suffix if needed
+        $class_prefix = $this->_app->classPrefix();
+        if (!empty($class_prefix)) {
+            $helper_class = $class_prefix.$helper_class;
+        }
+        
+        // Get reflection object to inspect class before instantiating it
+        $reflection_obj = new ReflectionClass($helper_class);
+        
+        if (!$reflection_obj->isSubclassOf("PHPFrame_ViewHelper")) {
+            $msg  = "View Helper not supported. ".$controller_class;
+            $msg .= " does NOT extend PHPFrame_ViewHelper.";
+            throw new LogicException($msg);
+        }
+        
+        return $reflection_obj->newInstance($this->_app);
     }
 }

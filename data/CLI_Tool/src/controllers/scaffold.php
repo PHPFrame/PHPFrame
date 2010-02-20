@@ -60,8 +60,8 @@ class ScaffoldController extends PHPFrame_ActionController
     {
         $doc = new PHPFrame_ControllerDoc(new ReflectionClass(get_class($this)));
         
-        $this->response()->setTitle("Usage instructions");
-        $this->response()->setBody((string) $doc);
+        $this->response()->title("Usage instructions");
+        $this->response()->body((string) $doc);
     }
     
     /**

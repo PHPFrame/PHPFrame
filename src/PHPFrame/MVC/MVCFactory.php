@@ -95,7 +95,6 @@ class PHPFrame_MVCFactory
      * Get a named view helper.
      *
      * @param string $name The name of the view to get.
-     * @param array  $data Data to assign to the view.
      * 
      * @return PHPFrame_View
      * @since  1.0

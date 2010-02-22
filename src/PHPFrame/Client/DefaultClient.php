@@ -75,9 +75,9 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
             } elseif ($key == "action") {
                 $request->action($value);
             } elseif ($key == "ajax") {
-                $request->setAJAX($value);
+                $request->ajax($value);
             } else {
-                $request->setParam($key, $value);
+                $request->param($key, $value);
             }
         }
         
@@ -85,19 +85,19 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
             if (substr($key, 0, 5) == "HTTP_") {
                 $key = str_replace('_', ' ', substr($key, 5));
                 $key = str_replace(' ', '-', ucwords(strtolower($key)));
-                $request->setHeader($key, $value);
+                $request->header($key, $value);
             } elseif ($key == "REQUEST_METHOD") {
-                $request->setMethod($value);
+                $request->method($value);
             } elseif ($key == "REMOTE_ADDR") {
-                $request->setRemoteAddr($value);
+                $request->remoteAddr($value);
             } elseif ($key == "REQUEST_URI") {
-                $request->setRequestURI($value);
+                $request->requestURI($value);
             } elseif ($key == "SCRIPT_NAME") {
-                $request->setScriptName($value);
+                $request->scriptName($value);
             } elseif ($key == "QUERY_STRING") {
-                $request->setQueryString($value);
+                $request->queryString($value);
             } elseif ($key == "REQUEST_TIME") {
-                $request->setRequestTime($value);
+                $request->requestTime($value);
             }
         }
         

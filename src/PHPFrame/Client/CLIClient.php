@@ -79,7 +79,7 @@ class PHPFrame_CLIClient extends PHPFrame_Client
         $session->setUser($user);
         
         // Automatically set session token in request to allow forms
-        $request->setParam($session->getToken(), 1);
+        $request->param($session->getToken(), 1);
         
         // create the CLI parser
         $parser = new Console_CommandLine();
@@ -150,13 +150,13 @@ class PHPFrame_CLIClient extends PHPFrame_Client
             $request->action($result->args["action"]);
             
             global $argv;
-            $request->setScriptName($argv[0]);
+            $request->scriptName($argv[0]);
             
-            $request->setRequestTime(time());
-            $request->setQuiet($result->options["quiet"]);
-            $request->setMethod("CLI");
+            $request->requestTime(time());
+            $request->quiet($result->options["quiet"]);
+            $request->method("CLI");
             
-            $request->setOutfile($result->options["outfile"]);
+            $request->outfile($result->options["outfile"]);
             
             if ($result->options["infile"]) {
                 $infile = new SplFileObject($result->options["infile"]);
@@ -176,7 +176,7 @@ class PHPFrame_CLIClient extends PHPFrame_Client
             foreach ($result->args["params"] as $param) {
                 parse_str($param, $param_pair);
                 foreach ($param_pair as $param_key=>$param_value) {
-                    $request->setParam($param_key, $param_value);
+                    $request->param($param_key, $param_value);
                 }
             }
             

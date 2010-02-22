@@ -24,7 +24,7 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_MobileClient extends PHPFrame_Client
+class PHPFrame_MobileClient extends PHPFrame_DefaultClient
 {
     /**    
      * Get client name
@@ -84,51 +84,5 @@ class PHPFrame_MobileClient extends PHPFrame_Client
         
         }
         return false;
-    }
-    
-    /**    
-     * Populate the Request object.
-     * 
-     * @param PHPFrame_Request $request Reference to the request object.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function populateRequest(PHPFrame_Request $request) 
-    {
-    
-        $request = array();
-        
-        // Get an instance of PHP Input filter
-        $inputfilter = new PHPFrame_InputFilter();
-            
-        // Process incoming request arrays and store filtered data in class
-        $request['request'] = $inputfilter->process($_REQUEST);
-        $request['get']     = $inputfilter->process($_GET);
-        $request['post']    = $inputfilter->process($_POST);
-        
-        return;
-    }
-    
-    /**
-     * Prepare response
-     * 
-     * This method is invoked by the front controller before invoking the 
-     * requested action in the action controller. It gives the client an 
-     * opportunity to do something before the component is executed.
-     * 
-     * @param PHPFrame_Response $response   The response object to prepare.
-     * @param string            $views_path Absolute path to vies dir.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function prepareResponse(PHPFrame_Response $response, $views_path)
-    {
-        // Set document as response content
-        $response->document(new PHPFrame_HTMLDocument());
-        
-        // Set response renderer
-        $response->renderer(new PHPFrame_HTMLRenderer($views_path));
     }
 }

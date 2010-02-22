@@ -20,85 +20,85 @@ class PHPFrame_RequestTest extends PHPUnit_Framework_TestCase
     
     public function test_toString()
     {
-    	$this->assertType("string", (string) $this->_request);
+        $this->assertType("string", (string) $this->_request);
     }
     
     public function test_getIterator()
     {
-    	$this->assertType("array", iterator_to_array($this->_request));
+        $this->assertType("array", iterator_to_array($this->_request));
     }
     
     public function test_controllerName()
     {
-    	$this->assertType("string", $this->_request->controllerName("index"));
-    	$this->assertEquals("index", $this->_request->controllerName());
+        $this->assertType("string", $this->_request->controllerName("index"));
+        $this->assertEquals("index", $this->_request->controllerName());
     }
     
     public function test_controllerNameException()
     {
-    	$this->setExpectedException("InvalidArgumentException");
-    	
+        $this->setExpectedException("InvalidArgumentException");
+        
         $this->assertType("string", $this->_request->controllerName("indexJJ"));
     }
     
     public function test_action()
     {
-    	$this->assertType("string", $this->_request->action("index"));
+        $this->assertType("string", $this->_request->action("index"));
         $this->assertEquals("index", $this->_request->action());
     }
     
     public function test_params()
     {
-    	$this->assertType("array", $this->_request->params());
+        $this->assertType("array", $this->_request->params());
     }
     
     public function test_param()
     {
-    	$this->assertType("string", $this->_request->param("myvar", "some value"));
+        $this->assertType("string", $this->_request->param("myvar", "some value"));
         $this->assertEquals("some value", $this->_request->param("myvar"));
     }
     
     public function test_headers()
     {
-    	$this->assertType("array", $this->_request->headers());
+        $this->assertType("array", $this->_request->headers());
     }
     
     public function test_header()
     {
-    	$this->assertType("string", $this->_request->header("Status", 200));
+        $this->assertType("string", $this->_request->header("Status", 200));
         $this->assertEquals("200", $this->_request->header("Status"));
         $this->assertArrayHasKey("Status", $this->_request->headers());
     }
     
     public function test_method()
     {
-    	$this->assertType("string", $this->_request->method("CLI"));
+        $this->assertType("string", $this->_request->method("CLI"));
         $this->assertEquals("CLI", $this->_request->method());
     }
     
     public function test_isPost()
     {
-    	$this->assertFalse($this->_request->isPost());
+        $this->assertFalse($this->_request->isPost());
     }
     
     public function test_isGet()
     {
-    	$this->assertFalse($this->_request->isGet());
+        $this->assertFalse($this->_request->isGet());
     }
     
     public function test_attachFile()
     {
-    	
+        
     }
     
     public function test_dettachFile()
     {
-    	
+        
     }
     
     public function test_files()
     {
-    	
+        
     }
     
     public function test_remoteAddr()

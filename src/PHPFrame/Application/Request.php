@@ -103,9 +103,9 @@ class PHPFrame_Request implements IteratorAggregate
             ));
             
             if (!$this->_array['controller'] = $filter->process($str)) {
-            	$msg  = "Invalid controller name '".$str."'. Controller ";
-            	$msg .= "names can only contain alphabetic characters plus ";
-            	$msg .= "an underscore.";
+                $msg  = "Invalid controller name '".$str."'. Controller ";
+                $msg .= "names can only contain alphabetic characters plus ";
+                $msg .= "an underscore.";
                 throw new InvalidArgumentException($msg);
             }
         }

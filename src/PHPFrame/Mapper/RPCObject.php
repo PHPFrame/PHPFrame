@@ -7,7 +7,7 @@
  * @category  PHPFrame
  * @package   Mapper
  * @author    Chris McDonald <chris.mcdonald@sliderstudio.co.uk>
- * @copyright 2009 The PHPFrame Group
+ * @copyright 2010 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link      http://github.com/PHPFrame/PHPFrame
  */

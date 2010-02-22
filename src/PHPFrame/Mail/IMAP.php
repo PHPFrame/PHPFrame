@@ -6,8 +6,8 @@
  * 
  * @category  PHPFrame
  * @package   Mail
- * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 The PHPFrame Group
+ * @author    Lupo Montero <lupo@e-noise.com>
+ * @copyright 2010 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link      http://github.com/PHPFrame/PHPFrame
  */
@@ -26,7 +26,7 @@ if (!function_exists("imap_open")) {
  * 
  * @category PHPFrame
  * @package  Mail
- * @author   Luis Montero <luis.montero@e-noise.com>
+ * @author   Lupo Montero <lupo@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0

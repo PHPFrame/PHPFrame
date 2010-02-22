@@ -5,10 +5,8 @@ include_once "PHPFrame.php";
 // and specify XML storage
 $mapper = new PHPFrame_Mapper(
     "PHPFrame_ACL", 
-    "acl", 
-    PHPFrame_Mapper::STORAGE_XML, 
-    false, 
-    DS."tmp".DS."domain.objects"
+    dirname(__FILE__), 
+    "acl"
 );
 
 // Instantiate persistent object

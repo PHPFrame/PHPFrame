@@ -18,11 +18,9 @@ $ext->setLicense(array(
 $ext->setNotes("This are the notes....");
 
 $mapper = new PHPFrame_Mapper(
-    "PHPFrame_PluginInfo", 
-    "features",
-    PHPFrame_Mapper::STORAGE_XML,
-    false,
-    "/Users/lupomontero/Desktop" 
+    "PHPFrame_PluginInfo",
+    dirname(__FILE__),  
+    "features"
 );
 
 $mapper->insert($ext);

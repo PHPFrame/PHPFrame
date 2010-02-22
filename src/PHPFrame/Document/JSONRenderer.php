@@ -22,8 +22,9 @@
  * @link     http://github.com/PHPFrame/PHPFrame
  * @see      PHPFrame_IRenderer
  * @since    1.0
+ * @todo     This renderer should make use of PHP's json extension.
  */
-class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
+class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
 {
     private $_indent = "";
     private $_nl = "\n";
@@ -45,7 +46,7 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
             return $this->_renderArray($value);
             
         } elseif ($value instanceof Traversable) {
-            return $this->_renderTraversable($value);
+            return $this->_renderArray(iterator_to_array($value));
             
         } elseif (is_object($value)) {
             return $this->_renderObject($value);
@@ -68,7 +69,7 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
             return (string) $float;
         }
         
-        return strip_tags(trim((string) $value));
+        return "\"".strip_tags(trim((string) $value))."\"";
     }
     
     /**
@@ -81,22 +82,61 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
      */
     private function _renderArray(array $array)
     {
-        return print_r($array, true);
+        if (count($array) == 0) {
+            return "[]";
+        }
+        
+        $array = new PHPFrame_Array($array);
+        if ($array->isAssoc()) {
+            return $this->_renderAssoc($array);
+        }
+        
+        $str = "[".$this->_nl;
+        $this->_increaseIndent();
+        
+        $i = 0;
+        foreach ($array as $key=>$value) {
+            if ($i > 0) {
+                $str .= ",".$this->_nl;
+            }
+            
+            $str .= $this->_indent.$this->render($value);
+            $i++;
+        }
+        
+        $this->_decreaseIndent();
+        $str .= $this->_nl.$this->_indent."]";
+        
+        return $str;
     }
     
     /**
-     * Render traversable objects.
+     * Render associative array.
      * 
-     * @param Traversable $obj The object to render.
+     * @param PHPFrame_Array $array Instance of PHPFrame_Array.
      * 
      * @return string
      * @since  1.0
      */
-    public function _renderTraversable(Traversable $obj)
+    private function _renderAssoc(PHPFrame_Array $array)
     {
-        $str = $this->_renderArray(iterator_to_array($obj));
+        $str = "{".$this->_nl;
+        $this->_increaseIndent();
         
-        return preg_replace("/^Array/", get_class($obj), $str);
+        $i = 0;
+        foreach ($array as $key=>$value) {
+            if ($i > 0) {
+                $str .= ",".$this->_nl;
+            }
+            
+            $str .= $this->_indent."\"".$key."\": ".$this->render($value);
+            $i++;
+        }
+        
+        $this->_decreaseIndent();
+        $str .= $this->_nl.$this->_indent."}";
+        
+        return $str;
     }
     
     /**
@@ -109,8 +149,31 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
      */
     private function _renderObject($obj)
     {
-        $str =  $this->_renderArray(get_object_vars($obj));
+        $key   = get_class($obj);
+        $value = get_object_vars($obj);
         
-        return preg_replace("/^Array/", get_class($obj), $str);
+        return $this->_renderArray(array($key=>$value));
+    }
+    
+    /**
+     * Increase indentation.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    private function _increaseIndent()
+    {
+        $this->_indent .= "    ";
+    }
+    
+    /**
+     * Decrease indentation.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    private function _decreaseIndent()
+    {
+        $this->_indent = substr($this->_indent, 4);
     }
 }

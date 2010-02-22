@@ -69,6 +69,7 @@
    <file baseinstalldir="/" name="PHPFrame/Document/HTMLDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/HTMLRenderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/IRenderer.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document/JSONRenderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/PlainDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/PlainRenderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/RPCRenderer.php" role="php" />
@@ -184,7 +185,7 @@
        <tasks:prompt>
 The postinstall script will make log files writable to all users. Only do 
 this if you will be running PHPFrame as a different user to the one 
-insalling the PEAR package. If you want to continue type "yes".
+installing the PEAR package. If you want to continue type "yes".
        </tasks:prompt>
        <tasks:type>string</tasks:type>
        <tasks:default></tasks:default>

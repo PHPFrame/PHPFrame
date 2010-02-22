@@ -27,7 +27,7 @@ class PHPFrame_PlainRendererTest extends PHPUnit_Framework_TestCase
             array(-345, "-345"),
             array(3.14, "3.14"),
             array(-3.14, "-3.14"),
-            array("some string", "\"some string\"")
+            array("some string", "some string")
         );
         
         foreach ($array as $test_pair) {
@@ -38,9 +38,10 @@ class PHPFrame_PlainRendererTest extends PHPUnit_Framework_TestCase
     public function test_renderArray()
     {
         $array = array(
-            array(array(), "[]"), 
-            array(array(1), "[\n    1\n]"), 
-            array(array(1,2,3), "[\n    1,\n    2,\n    3\n]")
+            array(array(), "Array\n(\n)\n"), 
+            array(array(1), "Array\n(\n    [0] => 1\n)\n"),  
+            array(array(1,2,3), "Array\n(\n    [0] => 1\n    [1] => 2\n    "
+                               ."[2] => 3\n)\n")
         );
         
         foreach ($array as $test_pair) {
@@ -51,30 +52,25 @@ class PHPFrame_PlainRendererTest extends PHPUnit_Framework_TestCase
     public function test_renderAssoc()
     {
         $array = array(
-            array(array("k"=>"v"), "{\n    \"k\": \"v\"\n}"),
-            array(array("k"=>"v", "a"=>new stdClass()), "{\n    \"k\": \"v\",\n    \"a\": {\n        \"stdClass\": []\n    }\n}"),
+            array(array("k"=>"v"), "Array\n(\n    [k] => v\n)\n"), 
+            array(array("k"=>"v", "a"=>new stdClass()), "Array\n(\n    "
+                       ."[k] => v\n    [a] => stdClass Object\n        (\n"
+                       ."        )\n\n)\n"), 
             array(
                 array(
                     "key1" => array(1,2, "sfsfaf", array(222, 333, array("k"=>"v"))),
                     "value without a key",
                     "another key" => 3.14
                 ),
-                "{
-    \"key1\": [
-        1,
-        2,
-        \"sfsfaf\",
-        [
-            222,
-            333,
-            {
-                \"k\": \"v\"
-            }
-        ]
-    ],
-    \"0\": \"value without a key\",
-    \"another key\": 3.14
-}"
+                "Array\n(\n    [key1] => Array\n        (\n            "
+                ."[0] => 1\n            [1] => 2\n            [2] => sfsfaf\n"
+                ."            [3] => Array\n                (\n"
+                ."                    [0] => 222\n                    "
+                ."[1] => 333\n                    [2] => Array\n"
+                ."                        (\n                            "
+                ."[k] => v\n                        )\n\n                "
+                .")\n\n        )\n\n    [0] => value without a key\n    "
+                ."[another key] => 3.14\n)\n"
             )
             
         );
@@ -88,25 +84,12 @@ class PHPFrame_PlainRendererTest extends PHPUnit_Framework_TestCase
     {
         $user = new PHPFrame_User();
         $this->assertEquals(
-            "{
-    \"groupid\": 0,
-    \"username\": \"guest\",
-    \"password\": ,
-    \"firstname\": ,
-    \"lastname\": ,
-    \"email\": ,
-    \"block\": ,
-    \"last_visit\": ,
-    \"params\": \"\",
-    \"deleted\": 0,
-    \"id\": ,
-    \"atime\": ,
-    \"ctime\": ,
-    \"mtime\": ,
-    \"owner\": 0,
-    \"group\": 0,
-    \"perms\": 664
-}", 
+            "PHPFrame_User\n(\n    [groupid] => 0\n    [username] => guest\n"
+           ."    [password] => \n    [firstname] => \n    [lastname] => \n"
+           ."    [email] => \n    [block] => \n    [last_visit] => \n    "
+           ."[params] => \n    [deleted] => 0\n    [id] => \n    [atime] => \n"
+           ."    [ctime] => \n    [mtime] => \n    [owner] => 0\n    [group] => "
+           ."0\n    [perms] => 664\n)\n", 
             $this->_renderer->render($user)
         );
     }
@@ -118,6 +101,11 @@ class PHPFrame_PlainRendererTest extends PHPUnit_Framework_TestCase
         $obj->int = 1234;
         $obj->array = array(1,2,3);
         
-        //print_r($this->_renderer->render($obj));
+        $this->assertEquals(
+            "stdClass\n(\n    [somevar] => some value\n    [int] => 1234\n"
+           ."    [array] => Array\n        (\n            [0] => 1\n"
+           ."            [1] => 2\n            [2] => 3\n        )\n\n)\n", 
+            $this->_renderer->render($obj)
+        );
     }
 }

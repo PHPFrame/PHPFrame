@@ -72,6 +72,7 @@
    <file baseinstalldir="/" name="PHPFrame/Document/PlainDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/PlainRenderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/RPCRenderer.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document/RSSDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/XMLDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/XMLRenderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Documentor/AppDoc.php" role="php" />
@@ -124,6 +125,7 @@
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/MVCFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/View.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/MVC/ViewHelper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Plugins/URLRewriter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/FileRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Registry/MockSessionRegistry.php" role="php" />
@@ -205,11 +207,6 @@ insalling the PEAR package. If you want to continue type "yes".
        <name>Config</name>
        <channel>pear.php.net</channel>
        <min>1.10.11</min>
-   </package>
-   <package>
-       <name>XML_Serializer</name>
-       <channel>pear.php.net</channel>
-       <min>0.20.0</min>
    </package>
    <package>
        <name>XML_Beautifier</name>

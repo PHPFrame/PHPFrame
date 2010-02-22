@@ -32,8 +32,8 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
      */
     public function routeStartup() 
     {
-        $request_uri = $this->app()->request()->getRequestURI();
-        $script_name = $this->app()->request()->getScriptName();
+        $request_uri = $this->app()->request()->requestURI();
+        $script_name = $this->app()->request()->scriptName();
         
         // If there is no request uri (ie: we are on the command line) we do 
         // not rewrite

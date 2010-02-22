@@ -177,6 +177,31 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $pattern = "/".$html."/s";
         
         $this->assertRegExp($pattern, (string) $this->_document);
+        
+        // Clean up CLI_Tool's cache and var dirs
+        $tmp_dir = $app->getInstallDir().DS."tmp";
+        $app_reg = $tmp_dir.DS."app.reg";
+        
+        if (is_file($app_reg)) {
+            unlink($app_reg);
+        }
+        if (is_dir($tmp_dir)) {
+            rmdir($tmp_dir);
+        }
+        
+        $var_dir = $app->getInstallDir().DS."var";
+        $app_log = $var_dir.DS."app.log";
+        $data_db = $var_dir.DS."data.db";
+        
+        if (is_file($app_log)) {
+            unlink($app_log);
+        }
+        if (is_file($data_db)) {
+            unlink($data_db);
+        }
+        if (is_dir($var_dir)) {
+            rmdir($var_dir);
+        }
     }
     
     public function test_bodyOnly()

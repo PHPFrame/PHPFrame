@@ -36,7 +36,7 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
      * @return void
      * @since  1.0
      */
-    public function render($value, $recurse=false)
+    public function render($value)
     {
         if (is_null($value)) {
             return;
@@ -92,7 +92,7 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
      * @return string
      * @since  1.0
      */
-    public function _renderTraversable(Traversable $obj)
+    private function _renderTraversable(Traversable $obj)
     {
         $str = $this->_renderArray(iterator_to_array($obj));
         

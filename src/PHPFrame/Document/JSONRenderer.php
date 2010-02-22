@@ -37,7 +37,7 @@ class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
      * @return void
      * @since  1.0
      */
-    public function render($value, $recurse=false)
+    public function render($value)
     {
         if (is_null($value)) {
             return;

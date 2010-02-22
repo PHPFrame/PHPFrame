@@ -86,64 +86,55 @@ class PHPFrame_Request implements IteratorAggregate
     }
     
     /**
-     * Get controller name
+     * Get/set controller name.
+     * 
+     * @param string $str [Optional] The value to set the controller name to.
      * 
      * @return string
      * @since  1.0
      */
-    public function getControllerName() 
+    public function controllerName($str=null) 
     {
+        if (!is_null($str)) {
+            $filter = new PHPFrame_RegexpFilter(array(
+                "regexp"     => '/^[a-z_]+$/', 
+                "min_length" => 1, 
+                "max_length" => 50
+            ));
+            
+            if (!$this->_array['controller'] = $filter->process($str)) {
+            	$msg  = "Invalid controller name '".$str."'. Controller ";
+            	$msg .= "names can only contain alphabetic characters plus ";
+            	$msg .= "an underscore.";
+                throw new InvalidArgumentException($msg);
+            }
+        }
+        
         return $this->_array['controller'];
     }
     
     /**
-     * Set controller name
+     * Get action name.
      * 
-     * @param string $str The value to set the variable to.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setControllerName($str) 
-    {
-        $filter = new PHPFrame_RegexpFilter(array(
-            "regexp"     => '/^[a-z_]+$/', 
-            "min_length" => 1, 
-            "max_length" => 50
-        ));
-        
-        $this->_array['controller'] = $filter->process($str);
-    }
-    
-    /**
-     * Get action name
+     * @param string $str [Optional] The value to set the action to.
      * 
      * @return string
      * @since  1.0
      */
-    public function getAction() 
-    {   
-        return $this->_array['action'];
-    }
-    
-    /**
-     * Set $_action.
-     * 
-     * @param string $str The value to set the variable to.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setAction($str) 
+    public function action($str=null) 
     {
-        // Filter value before assigning to variable
-        $filter = new PHPFrame_RegexpFilter(array(
-            "regexp"     => '/^[a-z_]+$/', 
-            "min_length" => 1, 
-            "max_length" => 50
-        ));
+        if (!is_null($str)) {
+            // Filter value before assigning to variable
+            $filter = new PHPFrame_RegexpFilter(array(
+                "regexp"     => '/^[a-z_]+$/', 
+                "min_length" => 1, 
+                "max_length" => 50
+            ));
+            
+            $this->_array['action'] = $filter->process($str);
+        }
         
-        $this->_array['action'] = $filter->process($str);
+        return $this->_array['action'];
     }
     
     /**
@@ -152,28 +143,28 @@ class PHPFrame_Request implements IteratorAggregate
      * @return array
      * @since  1.0
      */
-    public function getParams() 
+    public function params() 
     {
         return $this->_array['params'];
     }
     
     /**
-     * Get a request variable
+     * Get/set a request variable
      * 
-     * @param string $key       The param key.
-     * @param mixed  $def_value [Optional] If provided and no value has been 
-     *                          set for the given key yet it wil be set to this 
-     *                          value.
+     * @param string $key   The param key.
+     * @param mixed  $value [Optional] If provided and no value has been set 
+     *                      for the given key yet it wil be set to this 
+     *                      value.
      * 
      * @return mixed
      * @since  1.0
      */
-    public function getParam($key, $def_value=null) 
+    public function param($key, $value=null) 
     {
         $key = trim((string) $key);
         
-        if (!isset($this->_array['params'][$key]) && !is_null($def_value)) {
-            $this->_array['params'][$key] = $def_value;
+        if (!isset($this->_array['params'][$key]) && !is_null($value)) {
+            $this->_array['params'][$key] = $value;
         }
         
         // Return null if index is not defined
@@ -185,78 +176,63 @@ class PHPFrame_Request implements IteratorAggregate
     }
     
     /**
-     * Set a request variable
-     * 
-     * @param string $key   The param key.
-     * @param mixed  $value The param value.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setParam($key, $value) 
-    {
-        $key = trim((string) $key);
-        
-        $this->_array['params'][$key] = $value;
-    }
-    
-    /**
      * Get request headers
      * 
      * @return array
      * @since  1.0
      */
-    public function getHeaders()
+    public function headers()
     {
         return $this->_array["headers"];
     }
     
     /**
-     * Set a request header
+     * Get/set a request header
      * 
      * @param string $key   The header name.
-     * @param string $value The header value.
+     * @param string $value [Optional] The header value.
      * 
-     * @return void
+     * @return string|null
      * @since  1.0
      */
-    public function setHeader($key, $value)
+    public function header($key, $value=null)
     {
-        $key   = trim((string) $key);
-        $value = trim((string) $value);
+        $key = trim((string) $key);
         
-        $this->_array["headers"][$key] = $value;
+        if (!is_null($value)) {
+            $value = trim((string) $value);
+            $this->_array["headers"][$key] = $value;
+        }
+        
+        if (!isset($this->_array["headers"][$key])) {
+            return null;
+        }
+        
+        return $this->_array["headers"][$key];
     }
     
     /**
      * Get request method. Either "GET", "POST" or "CLI".
      * 
+     * @param string $str [Optional] Allowed values are "GET", "POST" and "CLI".
+     * 
      * @return string
      * @since  1.0
      */
-    public function getMethod()
+    public function method($str=null)
     {
-        return $this->_array['method'];
-    }
-    
-    /**
-     * Set the request method
-     * 
-     * @param string $str Allowed values are "GET", "POST" and "CLI".
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setMethod($str)
-    {
-        // Filter value before assigning to variable
-        $filter = new PHPFrame_RegexpFilter(array(
-            "regexp"     => '/^(GET|POST|CLI)$/', 
-            "min_length" => 3, 
-            "max_length" => 4
-        ));
+        if (!is_null($str)) {
+            // Filter value before assigning to variable
+            $filter = new PHPFrame_RegexpFilter(array(
+                "regexp"     => '/^(GET|POST|CLI)$/', 
+                "min_length" => 3, 
+                "max_length" => 4
+            ));
+            
+            $this->_array['method'] = $filter->process($str);
+        }
         
-        $this->_array['method'] = $filter->process($str);
+        return $this->_array['method'];
     }
     
     /**
@@ -314,225 +290,162 @@ class PHPFrame_Request implements IteratorAggregate
      * @return array
      * @since  1.0
      */
-    public function getFiles()
+    public function files()
     {
         return $this->_array["files"];
     }
     
     /**
-     * Get remote address (IP)
+     * Get/set remote address (IP)
+     * 
+     * @param string $str [Optional] Requested IP address.
      * 
      * @return string
      * @since  1.0
      */
-    public function getRemoteAddr()
+    public function remoteAddr($str=null)
     {
+        if (!is_null($str)) {
+            $this->_array["remote_addr"] = (string) $str;
+        }
+        
         return $this->_array["remote_addr"];
     }
     
     /**
-     * Set the request remote address (IP).
+     * Get/set request URI
      * 
-     * @param string $str Requested IP address.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setRemoteAddr($str)
-    {
-        $this->_array["remote_addr"] = $str;
-    }
-    
-    /**
-     * Get request URI
+     * @param string $str [Optional] Requested URI.
      * 
      * @return string
      * @since  1.0
      */
-    public function getRequestURI()
+    public function requestURI($str=null)
     {
+        if (!is_null($str)) {
+            $this->_array["request_uri"] = $str;
+        }
+        
         return $this->_array["request_uri"];
     }
     
     /**
-     * Set the request URI
+     * Get/set request script name.
      * 
-     * @param string $str Requested URI.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setRequestURI($str)
-    {
-        $this->_array["request_uri"] = $str;
-    }
-    
-    /**
-     * Get request script name
+     * @param string $str [Optional] The name of the requested script.
      * 
      * @return string
      * @since  1.0
      */
-    public function getScriptName()
+    public function scriptName($str=null)
     {
+        if (!is_null($str)) {
+            $this->_array["script_name"] = (string) $str;
+        }
+        
         return $this->_array["script_name"];
     }
     
     /**
-     * Set the request script name
+     * Get/set request query string.
      * 
-     * @param string $str The name of the requested script.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setScriptName($str)
-    {
-        $this->_array["script_name"] = $str;
-    }
-    
-    /**
-     * Get request query string
+     * @param string $str [Optional] The query string.
      * 
      * @return string
      * @since  1.0
      */
-    public function getQueryString()
+    public function queryString($str=null)
     {
+        if (!is_null($str)) {
+            $this->_array["query_string"] = $str;
+        }
+        
         return $this->_array["query_string"];
     }
     
     /**
-     * Set the request query string
+     * Get the request time (unix timestamp).
      * 
-     * @param string $str The query string.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setQueryString($str)
-    {
-        $this->_array["query_string"] = $str;
-    }
-    
-    /**
-     * Get the request time (unix timestamp)
+     * @param int $int [Optional] Unix timestamp.
      * 
      * @return int
      * @since  1.0
      */
-    public function getRequestTime()
+    public function requestTime($int)
     {
+        if (!is_null($int)) {
+            $this->_array["request_time"] = (int) $int;
+        }
+        
         return $this->_array["request_time"];
     }
     
     /**
-     * Set the request time.
+     * Get/set output file absolute path. If not set no output will not be 
+     * written to file, which is the normal behaviour.
      * 
-     * @param int $int Unix timestamp.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setRequestTime($int)
-    {
-        $this->_array["request_time"] = (int) $int;
-    }
-    
-    /**
-     * Get output file absolute path
+     * @param string $str Absolute path for file to write output.
      * 
      * @return string
      * @since  1.0
      */
-    public function getOutfile()
+    public function outfile($str=null)
     {
+        if (!is_null($str)) {
+            $this->_array["outfile"] = (string) $str;
+        }
+        
         return $this->_array["outfile"];
     }
     
     /**
-     * Set absolute path for file to write output. If not set no output will 
-     * not be written to file, which is the normal behaviour.
+     * Is Quiet request? (no output)
      * 
-     * @param string $str Absolute path for file to write output.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setOutfile($str)
-    {
-         $this->_array["outfile"] = (string) $str;
-    }
-    
-    /**
-     * Is Quiet request?
+     * @param bool $bool [Optional] TRUE or FALSE.
      * 
      * @return bool
      * @since  1.0
      */
-    public function isQuiet()
+    public function quiet($bool=null)
     {
+        if (!is_null($bool)) {
+            $this->_array["quiet"] = (bool) $bool;
+        }
+        
         return $this->_array["quiet"];
-    }
-    
-    /**
-     * Set whether the request should be handled in "quiet" mode (no output)
-     * 
-     * @param bool $bool TRUE or FALSE.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setQuiet($bool)
-    {
-        $this->_array["quiet"] = (bool) $bool;
     }
     
     /**
      * Is AJAX request?
      * 
+     * @param bool $bool [Optional] TRUE or FALSE.
+     * 
      * @return bool
      * @since  1.0
      */
-    public function isAJAX()
+    public function ajax($bool=null)
     {
+        if (!is_null($bool)) {
+            $this->_array["ajax"] = (bool) $bool;
+        }
+        
         return $this->_array["ajax"];
-    }
-    
-    /**
-     * Set whether request is AJAX.
-     * 
-     * @param bool $bool TRUE or FALSE.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setAJAX($bool)
-    {
-        $this->_array["ajax"] = (bool) $bool;
     }
     
     /**
      * Has request already been dispatched?
      * 
+     * @param bool $bool TRUE or FALSE.
+     * 
      * @return bool
      * @since  1.0
      */
-    public function isDispatched()
+    public function dispatched($bool=null)
     {
+        if (!is_null($bool)) {
+            $this->_dispatched = (bool) $bool;
+        }
+        
         return $this->_dispatched;
-    }
-    
-    /**
-     * Set dispatched flag
-     * 
-     * @param bool $bool TRUE or FALSE.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setDispatched($bool)
-    {
-        $this->_dispatched = (bool) $bool;
     }
 }

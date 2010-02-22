@@ -41,8 +41,8 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
 //    {
 //        $request = new PHPFrame_Request();
 //        
-//        $this->assertType("array", $request->getParams());
-//        $this->assertEquals(0, count($request->getParams()));
+//        $this->assertType("array", $request->params());
+//        $this->assertEquals(0, count($request->params()));
 //        
 //        $script_name = $request->getScriptName();
 //        $this->assertTrue(empty($script_name));
@@ -54,8 +54,8 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
 //        $this->_client->populateRequest($request);
 //        
 //        // Now check that we got some values
-//        $this->assertType("array", $request->getParams());
-//        $this->assertEquals(1, count($request->getParams()));
+//        $this->assertType("array", $request->params());
+//        $this->assertEquals(1, count($request->params()));
 //        
 //        $script_name = $request->getScriptName();
 //        $this->assertTrue(!empty($script_name));

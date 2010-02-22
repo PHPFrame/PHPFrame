@@ -71,9 +71,9 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
         // Populate request params
         foreach ($filtered_request as $key=>$value) {
             if ($key == "controller") {
-                $request->setControllerName($value);
+                $request->controllerName($value);
             } elseif ($key == "action") {
-                $request->setAction($value);
+                $request->action($value);
             } elseif ($key == "ajax") {
                 $request->setAJAX($value);
             } else {

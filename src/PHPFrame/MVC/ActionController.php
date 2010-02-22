@@ -89,18 +89,18 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         $this->_app = $app;
         
         // Get action from the request
-        $request_action = $app->request()->getAction();
+        $request_action = $app->request()->action();
         
         // If no specific action has been requested we use default action
         if (empty($request_action)) {
             $action = $this->_default_action;
-            $app->request()->setAction($action);
+            $app->request()->action($action);
         } else {
             $action = $request_action;
         }
         
         // Check permissions before we execute
-        $controller  = $app->request()->getControllerName();
+        $controller  = $app->request()->controllerName();
         $permissions = $app->permissions();
         $groupid     = PHPFrame::getSession()->getGroupId();
         

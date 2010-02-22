@@ -724,10 +724,10 @@ class PHPFrame_Application
         
         // If no controller has been set we use de default value provided in 
         // etc/phpframe.ini
-        $controller_name = $request->getControllerName();
+        $controller_name = $request->controllerName();
         if (is_null($controller_name) || empty($controller_name)) {
             $def_controller = $this->config()->get("default_controller");
-            $request->setControllerName($def_controller);
+            $request->controllerName($def_controller);
         }
         
         // Invoke route shutdown hook
@@ -736,21 +736,21 @@ class PHPFrame_Application
         // Invoke dispatchLoopStartup hook
         $this->_plugin_handler->handle("dispatchLoopStartup");
         
-        while (!$request->isDispatched()) {
+        while (!$request->dispatched()) {
             // Set request as dispatched
-            $request->setDispatched(true);
+            $request->dispatched(true);
             
             // Invoke preDispatch hook for every iteration of the dispatch loop
             $this->_plugin_handler->handle("preDispatch");
             
             // If any plugin set dispatched to false we start a new iteration
-            if (!$request->isDispatched()) {
-                $request->setDispatched(true);
+            if (!$request->dispatched()) {
+                $request->dispatched(true);
                 continue;
             }
             
             // Get requested controller name
-            $controller_name = $request->getControllerName();
+            $controller_name = $request->controllerName();
             
             // Create the action controller
             $mvc_factory = $this->factory();
@@ -787,7 +787,7 @@ class PHPFrame_Application
         // Apply theme if needed
         $document = $response->document();
         if ($document instanceof PHPFrame_HTMLDocument) {
-            if (!$request->isAJAX()) {
+            if (!$request->ajax()) {
                 $theme       = $this->config()->get("theme");
                 $base_url    = $this->config()->get("base_url");
                 $theme_url   = $base_url."themes/".$theme;
@@ -809,12 +809,12 @@ class PHPFrame_Application
         $this->_plugin_handler->handle("postApplyTheme");
         
         // If not in quiet mode, send response back to the client
-        if (!$request->isQuiet()) {
+        if (!$request->quiet()) {
             $response->send();
         }
         
         // If outfile is defined we write the response to file
-        $outfile = $request->getOutfile();
+        $outfile = $request->outfile();
         if (!empty($outfile)) {
             $file_obj = new SplFileObject($outfile, "w");
             $file_obj->fwrite((string) $response);

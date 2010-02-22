@@ -30,7 +30,7 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
         // populate a new one using the CLIClient and this creates a conflict
         // with PHPUnit. 
         $request = new PHPFrame_Request();
-        $this->_app->request($request)->setControllerName("man");
+        $this->_app->request($request)->controllerName("man");
         
         $this->assertEquals("", (string) $this->_app->response()->document());
         

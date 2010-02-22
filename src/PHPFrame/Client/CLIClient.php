@@ -146,8 +146,8 @@ class PHPFrame_CLIClient extends PHPFrame_Client
             // Parse input options
             $result = $parser->parse();
             
-            $request->setControllerName($result->args["controller"]);
-            $request->setAction($result->args["action"]);
+            $request->controllerName($result->args["controller"]);
+            $request->action($result->args["action"]);
             
             global $argv;
             $request->setScriptName($argv[0]);

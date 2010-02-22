@@ -180,10 +180,10 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         //matches?
         if (count($matches) > 0) {
             //first match is controller
-            $request->setControllerName($matches[1]);
+            $request->controllerName($matches[1]);
             //third match is action (if it exists) 
             if (count($matches) > 2) {
-                $request->setAction($matches[3]);   
+                $request->action($matches[3]);   
             }
         }
         
@@ -606,8 +606,8 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     private function _checkAPIPermisssions()
     {
         // Check permissions before we execute
-        $controller  = PHPFrame::Request()->getControllerName();
-        $action      = PHPFrame::Request()->getAction();
+        $controller  = PHPFrame::Request()->controllerName();
+        $action      = PHPFrame::Request()->action();
         $groupid     = PHPFrame::getSession()->getGroupId();
         $permissions = PHPFrame::AppRegistry()->permissions();
         

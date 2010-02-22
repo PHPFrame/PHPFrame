@@ -62,13 +62,13 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
             preg_match('/^([a-zA-Z]+)\/([a-zA-Z_]+)?/', $params, $matches);
             
             if (isset($matches[1])) {
-                $this->app()->request()->setControllerName($matches[1]);
+                $this->app()->request()->controllerName($matches[1]);
                 
                 // Prepend component to query string
                 $rewritten_query_string = "controller=".$matches[1];
                 
                 if (isset($matches[2])) {
-                    $this->app()->request()->setAction($matches[2]);
+                    $this->app()->request()->action($matches[2]);
                     
                     // Prepend component and action to query string
                     $rewritten_query_string .= "&action=".$matches[2];

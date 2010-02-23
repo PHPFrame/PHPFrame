@@ -30,20 +30,20 @@
     </target>
 
     <target name="phpunit">
-        <exec executable="phpunit" dir="${basedir}/tests" failonerror="on">
+        <exec executable="phpunit" dir="${basedir}" failonerror="on">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml
                        --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml 
                        --coverage-html ${basedir}/build/coverage 
-                       ${basedir}/tests" />
+                       tests/" />
         </exec>
     </target>
     
     <target name="phpunit-clitool">
-        <exec executable="phpunit" dir="${basedir}/tests" failonerror="on">
+        <exec executable="phpunit" dir="${basedir}/data/CLI_Tool" failonerror="on">
             <arg line="--log-junit ${basedir}/build/logs/clitool.phpunit.xml
                        --coverage-clover ${basedir}/build/logs/clitool.phpunit.coverage.xml 
-                       --coverage-html ${basedir}/build/coverage 
-                       ${basedir}/data/CLI_Tool/tests" />
+                       --coverage-html ${basedir}/build/clitool-coverage 
+                       tests/" />
         </exec>
     </target>
 

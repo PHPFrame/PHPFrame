@@ -28,27 +28,41 @@ class AppTemplate
     private $_preferred_mirror = null;
     private $_preferred_state = null;
     
+    /**
+     * Constructor.
+     * 
+     * @param string $install_dir      Absolute path to installation directory.
+     * @param string $preferred_mirror [Optional] Default value is 
+     *                                 'http://dist.phpframe.org'.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct(
         $install_dir, 
-        $preferred_mirror="http://dist.phpframe.org", 
-        $preferred_state="stable"
+        $preferred_mirror="http://dist.phpframe.org"
     ) {
         $this->_install_dir       = trim((string) $install_dir);
         $this->_preferred_mirror  = trim((string) $preferred_mirror);
         $this->_preferred_mirror .= "/app_templates";
-        $this->_preferred_state   = trim((string) $preferred_state);
     }
     
+    /**
+     * Install a new application using app template in current install dir.
+     * 
+     * @param string $app_name            The name for the new app.
+     * @param string $template            [Optional] Default value is 'basic'.
+     * @param bool   $allow_non_empty_dir [Optional]
+     * 
+     * @return void
+     * @throws RuntimeException
+     * @since  1.0
+     */
     public function install(
-        array $config, 
-        $template=null, 
+        $app_name, 
+        $template="basic", 
         $allow_non_empty_dir=false
     ) {
-        if (!isset($config["app_name"]) || empty($config["app_name"])) {
-            $msg = "App name is required";
-            throw new InvalidArgumentException($msg);
-        }
-        
         // before anything else we check that the directory is writable
         PHPFrame_Filesystem::ensureWritableDir($this->_install_dir);
         
@@ -56,13 +70,20 @@ class AppTemplate
         $this->_fetchSource($template, $allow_non_empty_dir);
         
         // Create configuration xml files based on distro templates
-        $this->_createConfig($config);
+        $this->_createConfig(array("app_name"=>(string) $app_name));
         
         //Create writable tmp and var folders for app
         PHPFrame_Filesystem::ensureWritableDir($this->_install_dir.DS."tmp");
         PHPFrame_Filesystem::ensureWritableDir($this->_install_dir.DS."var");
     }
     
+    /**
+     * Remove application from current install dir.
+     * 
+     * @return void
+     * @throws RuntimeException
+     * @since  1.0
+     */
     public function remove()
     {
         $cmd = "rm -rf ".$this->_install_dir.DS."*";
@@ -78,7 +99,17 @@ class AppTemplate
         }
     }
     
-    private function _fetchSource($template="Full", $allow_non_empty_dir=false)
+    /**
+     * Fetch app template source from remote server and extract in install dir.
+     * 
+     * @param string $template            [Optional]
+     * @param bool   $allow_non_empty_dir [Optional]
+     *  
+     * @return void
+     * @throws RuntimeException
+     * @since  1.0
+     */
+    private function _fetchSource($template="basic", $allow_non_empty_dir=false)
     {
         // check that the directory is empty
         $is_empty_dir = PHPFrame_Filesystem::isEmptyDir($this->_install_dir);
@@ -127,6 +158,15 @@ class AppTemplate
         $archive->extract($this->_install_dir);
     }
     
+    /**
+     * Create config file.
+     * 
+     * @param array $array Array containing config data.
+     * 
+     * @return void
+     * @throws InvalidArgumentException
+     * @since  1.0
+     */
     private function _createConfig($array)
     {
         if (!is_array($array)) {

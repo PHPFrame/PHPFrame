@@ -49,11 +49,6 @@ class AppController extends PHPFrame_ActionController
      * Create a new application
      * 
      * @param string $app_name
-     * @param string $db_driver
-     * @param string $db_name
-     * @param string $db_host
-     * @param string $db_user
-     * @param string $db_pass
      * @param string $template
      * @param string $allow_non_empty_dir
      * 
@@ -62,11 +57,6 @@ class AppController extends PHPFrame_ActionController
      */
     public function new_app(
         $app_name, 
-        $db_driver="SQLite",
-        $db_name="data.db",
-        $db_host=null,
-        $db_user=null,
-        $db_pass=null,
         $template=null, 
         $allow_non_empty_dir=false
     ) {
@@ -82,18 +72,7 @@ class AppController extends PHPFrame_ActionController
             );
             
             // Install new app
-            $model->install(
-                array(
-                    "app_name"  => $app_name,
-                    "db.driver" => $db_driver,
-                    "db.name"   => $db_name,
-                    "db.host"   => $db_host,
-                    "db.user"   => $db_user,
-                    "db.pass"   => $db_pass
-                ), 
-                $template, 
-                $allow_non_empty_dir
-            );
+            $model->install($app_name, $template, $allow_non_empty_dir);
             
             $msg = "App created successfully";
             $this->notifySuccess($msg);

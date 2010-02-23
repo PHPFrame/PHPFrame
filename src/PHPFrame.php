@@ -6,8 +6,8 @@
  * 
  * @category  PHPFrame
  * @package   PHPFrame
- * @author    Luis Montero <luis.montero@e-noise.com>
- * @copyright 2009 The PHPFrame Group
+ * @author    Lupo Montero <lupo@e-noise.com>
+ * @copyright 2010 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link      http://github.com/PHPFrame/PHPFrame
  */
@@ -29,7 +29,7 @@ spl_autoload_register(array("PHPFrame", "autoload"));
  * 
  * @category PHPFrame
  * @package  PHPFrame
- * @author   Luis Montero <luis.montero@e-noise.com>
+ * @author   Lupo Montero <lupo@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
@@ -181,7 +181,7 @@ class PHPFrame
         }
         
         // Load PHPMailer
-        $lib_dir = self::$_data_dir.DS."lib";
+        $lib_dir = self::dataDir().DS."lib";
         
         if ($class_name == "PHPMailer") {
             $file_path = "phpmailer".DS."phpmailer.php";
@@ -216,7 +216,7 @@ class PHPFrame
      */
     public static function getSession() 
     {
-        if (self::isTestMode()) {
+        if (self::testMode()) {
             return PHPFrame_MockSessionRegistry::getInstance();
         }
         
@@ -231,10 +231,8 @@ class PHPFrame
      */
     public static function boot()
     {
-        // Set paths to source and data directories
-        self::$_src_dir   = PEAR_Config::singleton()->get("php_dir");
-        self::$_data_dir  = PEAR_Config::singleton()->get("data_dir");
-        self::$_data_dir .= DS."PHPFrame";
+        // Set paths to source directory
+        self::$_src_dir = dirname(__FILE__);
         
         // Add core subpackages to include path
         foreach (self::$_subpackages as $subpackage) {
@@ -249,49 +247,70 @@ class PHPFrame
     }
     
     /**
-     * Set the framework to run in test mode
-     * 
-     * @param bool $bool TRUE to run in test mode FALSE to use real sessions.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public static function setTestMode($bool)
-    {
-        self::$_test_mode = (bool) $bool;
-    }
-    
-    /**
      * Is PHPFrame running in test mode?
+     * 
+     * @param bool $bool [Optional] TRUE to run in test mode FALSE to use real 
+     *                              sessions.
      * 
      * @return bool
      * @since  1.0
      */
-    public static function isTestMode()
+    public static function testMode($bool=null)
     {
+        if (!is_null($bool)) {
+            self::$_test_mode = (bool) $bool;
+        }
+        
         return (bool) self::$_test_mode;
     }
     
     /**
-     * Set PHPFrame's data directory. By default this is a directory called 
+     * Get/set PHPFrame's data directory. By default this is a directory called 
      * "data/PHPFrame" under the PEAR shared library dir.
      * 
-     * @param string $str The absolute path to PHPFrame's data dir.
+     * @param string $str [Optional] The absolute path to PHPFrame's data dir.
      * 
-     * @return void
+     * @return string
      * @since  1.0
      */
-    public static function setDataDir($str)
+    public static function dataDir($str=null)
     {
-        $str = trim((string) $str);
+        if (!is_null($str)) {
+            $str = trim((string) $str);
         
-        if (!is_dir($str) || !is_readable($str)) {
-            $msg  = "Could not set PHPFrame's data dir. Directory '".$str;
-            $msg .= "' doesn't exist or is not readable.";
-            throw new InvalidArgumentException($msg);
+            if (!is_dir($str) || !is_readable($str)) {
+                $msg  = "Could not set PHPFrame's data dir. Directory '".$str;
+                $msg .= "' doesn't exist or is not readable.";
+                throw new InvalidArgumentException($msg);
+            }
+            
+            self::$_data_dir = $str;
         }
         
-        self::$_data_dir = $str;
+        if (is_null(self::$_data_dir)) {
+            if (!class_exists("PEAR_Config")) {
+                $msg  = "Data dir has not been set in PHPFrame class. Tried ";
+                $msg .= "to use PEAR's data directory but could load the ";
+                $msg .= "PEAR_Config class. Please make sure that you ";
+                $msg .= "explicitly set a data dir using PHPFrame::";
+                $msg .= __FUNCTION__."() when running the framework outside ";
+                $msg .= "of a PEAR installation."; 
+                throw new RuntimeException($msg);
+            }
+            
+            self::$_data_dir  = PEAR_Config::singleton()->get("data_dir");
+            self::$_data_dir .= DS."PHPFrame";
+            
+            if (!is_dir(self::$_data_dir) 
+                || !is_dir(self::$_data_dir.DS."CLI_Tool")
+            ) {
+                $msg  = "Tried to fall back to PEAR's default data directory ";
+                $msg .= "but '".self::$_data_dir."' doesn't seem to exist.";
+                throw new RuntimeException($msg);
+            }
+        }
+        
+        return self::$_data_dir;
     }
 }
 

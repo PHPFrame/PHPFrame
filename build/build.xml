@@ -26,7 +26,7 @@
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml
                        --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml 
                        --coverage-html ${basedir}/build/coverage 
-                       ${basedir}/tests" />
+                       ${basedir}" />
         </exec>
     </target>
 

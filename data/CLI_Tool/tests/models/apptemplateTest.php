@@ -42,9 +42,9 @@ class AppTemplateTest extends PHPUnit_Framework_TestCase
     
     public function test_remove()
     {
-    	$this->_app_template->install("myapp");
-    	
-    	$this->assertTrue(is_dir($this->_install_dir.DS."etc"));
+        $this->_app_template->install("myapp");
+        
+        $this->assertTrue(is_dir($this->_install_dir.DS."etc"));
         $this->assertTrue(is_dir($this->_install_dir.DS."public"));
         $this->assertTrue(is_dir($this->_install_dir.DS."src"));
         $this->assertTrue(is_dir($this->_install_dir.DS."tmp"));

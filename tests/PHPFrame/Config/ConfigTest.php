@@ -9,7 +9,7 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
     public function __construct()
     {
         $this->_config_file  = preg_replace("/tests\/.*/", "data", __FILE__);
-        $this->_config_file .= "/etc/phpframe.ini";
+        $this->_config_file .= "/CLI_Tool/etc/phpframe.ini";
     }
     
     public function setUp()

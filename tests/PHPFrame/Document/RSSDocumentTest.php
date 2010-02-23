@@ -8,7 +8,7 @@ class PHPFrame_RSSDocumentTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $this->_rss = new PHPFrame_RSSDocument();
     }

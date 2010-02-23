@@ -8,7 +8,7 @@ class PHPFrame_SessionRegistryTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $this->_session = PHPFrame::getSession();
     }

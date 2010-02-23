@@ -33,6 +33,6 @@ class PHPFrameTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException("InvalidArgumentException");
         
-        PHPFrame::setDataDir(1);
+        PHPFrame::dataDir(1);
     }
 }

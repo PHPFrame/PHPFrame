@@ -8,7 +8,7 @@ class PHPFrame_ResponseTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $this->_response = new PHPFrame_Response();
     }

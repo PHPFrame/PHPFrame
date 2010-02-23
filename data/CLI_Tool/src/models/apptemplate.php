@@ -180,8 +180,8 @@ class AppTemplate
                            ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         // Instantiate new config object
-        $dist_config_ini = PEAR_Config::singleton()->get("data_dir");
-        $dist_config_ini .= DS."PHPFrame".DS."etc".DS."phpframe.ini";
+        $dist_config_ini  = PHPFrame::dataDir();
+        $dist_config_ini .= DS."CLI_Tool".DS."etc".DS."phpframe.ini";
         $config = new PHPFrame_Config($dist_config_ini);
         
         // Bind to array

@@ -11,10 +11,10 @@ class PHPFrame_IMAPTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
-        PHPFrame::setDataDir($data_dir);
+        PHPFrame::dataDir($data_dir);
         
         $this->_imap = new PHPFrame_IMAP(
             $this->_host, 

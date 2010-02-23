@@ -8,7 +8,7 @@ class PHPFrame_RequestTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $this->_request = new PHPFrame_Request();
     }

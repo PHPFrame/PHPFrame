@@ -11,7 +11,7 @@ class AppTemplateTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $this->_install_dir  = PHPFrame_Filesystem::getSystemTempDir();
         $this->_install_dir .= DS."apptemplate-test";

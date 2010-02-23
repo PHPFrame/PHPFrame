@@ -8,10 +8,10 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
-        PHPFrame::setDataDir($data_dir);
+        PHPFrame::dataDir($data_dir);
         
         // Get application install dir (we use CLI Tool for tests)
         $pattern     = '/(.*)(\/|\\\)tests(\/|\\\)PHPFrame(\/|\\\)(.*)/';

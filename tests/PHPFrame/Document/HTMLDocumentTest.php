@@ -8,7 +8,7 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $this->_document = new PHPFrame_HTMLDocument();
     }

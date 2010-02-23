@@ -8,7 +8,7 @@ class PHPFrame_DocumentTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $this->_reflector = new ReflectionClass("PHPFrame_Document");
     }

@@ -8,7 +8,7 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $this->_client = new PHPFrame_CLIClient();
     }

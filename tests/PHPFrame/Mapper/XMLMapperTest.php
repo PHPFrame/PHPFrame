@@ -10,7 +10,7 @@ class PHPFrame_XMLMapperTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         // Delete the XML file if it already exists
         $xml_file = dirname(__FILE__).DS.$this->_target_class.".xml";

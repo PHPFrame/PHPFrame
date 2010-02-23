@@ -8,7 +8,7 @@ class PHPFrame_FileRegistryTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $this->_cache_file = dirname(__FILE__).DS."test.reg";
         

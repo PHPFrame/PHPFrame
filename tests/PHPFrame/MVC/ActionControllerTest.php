@@ -8,7 +8,7 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
         

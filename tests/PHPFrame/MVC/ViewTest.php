@@ -8,7 +8,7 @@ class PHPFrame_ViewTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        PHPFrame::setTestMode(true);
+        PHPFrame::testMode(true);
         
         $this->_view = new PHPFrame_View("test", array("somevar"=>"somevalue"));
     }

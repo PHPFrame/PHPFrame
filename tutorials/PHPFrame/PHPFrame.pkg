@@ -27,7 +27,7 @@
     <para>
     The PHPFrame class also provides access to the global Session object. The 
     Session class will be refactored to be decoupled from the global scope. In 
-    the meantime the PHPFrame class has the PHPFrame::setTestMode() used to 
+    the meantime the PHPFrame class has the PHPFrame::testMode() used to 
     replace the "live" session with a mock session for unit testing.
     </para>
 </refsect1>

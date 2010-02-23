@@ -46,13 +46,13 @@ class PHPFrame_MailerTest extends PHPUnit_Framework_TestCase
     
     public function test_serialiseAfterSend()
     {
-    	$this->_mailer = new PHPFrame_Mailer($this->_config->getSection("smtp"));
-    	
-    	$this->_mailer->Subject = "Test email";
-    	$this->_mailer->Body    = "This email was sent by a unit test.";
-    	$this->_mailer->AddAddress("lupo@e-noise.com");
-    	$this->_mailer->send();
-    	
+        $this->_mailer = new PHPFrame_Mailer($this->_config->getSection("smtp"));
+        
+        $this->_mailer->Subject = "Test email";
+        $this->_mailer->Body    = "This email was sent by a unit test.";
+        $this->_mailer->AddAddress("lupo@e-noise.com");
+        $this->_mailer->send();
+        
         $serialised   = serialize($this->_mailer);
         $unserialised = unserialize($serialised);
         

@@ -2,7 +2,7 @@
 <project name="PHPFrame" default="build" basedir="../">
 
     <target name="build" 
-            depends="prepare, phpcs, phpunit" />
+            depends="prepare, phpcs, phpcs-clitool, phpunit, phpunit-clitool" />
             
     <target name="prepare">
         <exec executable="rm" dir="${basedir}">
@@ -20,6 +20,14 @@
             <arg line="--report=checkstyle --standard=PEAR ." />
         </exec>
     </target>
+    
+    <target name="phpcs-clitool">
+        <exec executable="phpcs"
+              dir="${basedir}/data/CLI_Tool/src"
+              output="${basedir}/build/logs/clitool.checkstyle.xml">
+            <arg line="--report=checkstyle --standard=PEAR ." />
+        </exec>
+    </target>
 
     <target name="phpunit">
         <exec executable="phpunit" dir="${basedir}/tests" failonerror="on">
@@ -30,10 +38,10 @@
         </exec>
     </target>
     
-    <target name="phpunitcli">
+    <target name="phpunit-clitool">
         <exec executable="phpunit" dir="${basedir}/tests" failonerror="on">
-            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml
-                       --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml 
+            <arg line="--log-junit ${basedir}/build/logs/clitool.phpunit.xml
+                       --coverage-clover ${basedir}/build/logs/clitool.phpunit.coverage.xml 
                        --coverage-html ${basedir}/build/coverage 
                        ${basedir}/data/CLI_Tool/tests" />
         </exec>

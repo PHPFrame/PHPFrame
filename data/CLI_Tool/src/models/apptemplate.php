@@ -115,7 +115,7 @@ class AppTemplate
         $is_empty_dir = PHPFrame_Filesystem::isEmptyDir($this->_install_dir);
         if (!$allow_non_empty_dir && !$is_empty_dir) {
             $msg = "Target directory is not empty. ";
-            $msg .= "Use \"phpframe app new_app app_name=MyApp ";
+            $msg .= "Use \"phpframe app create app_name=MyApp ";
             $msg .= "allow_non_empty_dir=true\" to force install";
             throw new RuntimeException($msg);
         }

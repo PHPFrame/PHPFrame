@@ -32,22 +32,14 @@ class ScaffoldController extends PHPFrame_ActionController
     private $_install_dir=null;
     
     /**
-     * Constructor
-     * 
-     * @param string $install_dir [Optional] Absolute path to installation 
-     *                            directory. If not passed the current working 
-     *                            directory is used.
+     * Constructor.
      * 
      * @return void
      * @since  1.0
      */
-    public function __construct($install_dir=null)
+    public function __construct()
     {
-        if (is_null($install_dir)) {
-            $this->_install_dir = getcwd();
-        } else {
-            $this->_install_dir = trim((string) $install_dir);
-        }
+        $this->_install_dir = getcwd();
         
         parent::__construct("usage");
     }

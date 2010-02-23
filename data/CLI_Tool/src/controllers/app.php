@@ -29,22 +29,14 @@ class AppController extends PHPFrame_ActionController
     /**
      * Constructor.
      * 
-     * @param string $install_dir [Optional] Absolute path to installation 
-     *                            directory. If not passed the current working 
-     *                            directory is used.
-     * 
      * @return void
      * @since  1.0
      */
-    public function __construct($install_dir=null)
+    public function __construct()
     {
-        if (is_null($install_dir)) {
-            $this->_install_dir = getcwd();
-        } else {
-            $this->_install_dir = trim((string) $install_dir);
-        }
+        $this->_install_dir = getcwd();
         
-        parent::__construct("new_app");
+        parent::__construct("create");
     }
     
     /**
@@ -60,7 +52,7 @@ class AppController extends PHPFrame_ActionController
      * @return void
      * @since  1.0
      */
-    public function new_app(
+    public function create(
         $app_name, 
         $template="basic", 
         $allow_non_empty_dir=false

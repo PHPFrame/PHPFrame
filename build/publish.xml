@@ -15,7 +15,7 @@
     <!-- Release info -->
     <property name="api.version" value="1.0" />
     <property name="api.stability" value="beta" />
-    <property name="release.version" value="0.0.13" />
+    <property name="release.version" value="0.0.14" />
     <property name="release.stability" value="alpha" />
     <property name="notes" value="This is the first alpha release aimed at developers." />
     

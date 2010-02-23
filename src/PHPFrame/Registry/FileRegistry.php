@@ -65,7 +65,7 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
             $this->_file_obj = new SplFileObject($cache_file, "r+");
             // Load data from cache file
             $file_contents = implode("\n", iterator_to_array($this->_file_obj));
-            $this->_data   = unserialize($file_contents);
+            $this->_data   = unserialize(base64_decode($file_contents));
         } else {
             // Open cache file in write mode
             $this->_file_obj = new SplFileObject($cache_file, "w");
@@ -86,7 +86,7 @@ class PHPFrame_FileRegistry extends PHPFrame_Registry
     {
         if ($this->isDirty()) {
             $this->_file_obj->rewind();
-            $this->_file_obj->fwrite(serialize($this->_data));
+            $this->_file_obj->fwrite(base64_encode(serialize($this->_data)));
         }
     }
     

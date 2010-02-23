@@ -258,30 +258,30 @@ class PHPFrame_Request implements IteratorAggregate
     }
     
     /**
-     * Attach a file to the request.
+     * Get/set file in the request.
      * 
-     * @param string $key   Key used to store file.
-     * @param array  $array File data.
+     * @param string $key   Key used to store file. Normally the name of the 
+     *                      form field to be used for posting the file.
+     * @param array  $array [Optional] File data.
+     *                      - tmp_name
+     *                      - name
+     *                      - size
+     *                      - type- error
      * 
-     * @return void
+     * @return array|null
      * @since  1.0
      */
-    public function attachFile($key, array $array)
+    public function file($key, array $array=null)
     {
-        $this->_array["files"][$key] = $array;
-    }
-    
-    /**
-     * Detach a file from the request.
-     * 
-     * @param string $key Key used to store file.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function dettachFile($key)
-    {
-        unset($this->_array["files"][$key]);
+        if (!is_null($array)) {
+            $this->_array["files"][$key] = $array;
+        }
+        
+        if (!isset($this->_array["files"][$key])) {
+            return null;
+        }
+        
+        return $this->_array["files"][$key];
     }
     
     /**

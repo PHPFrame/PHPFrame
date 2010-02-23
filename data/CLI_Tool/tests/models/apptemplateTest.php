@@ -16,6 +16,8 @@ class AppTemplateTest extends PHPUnit_Framework_TestCase
         $this->_install_dir  = PHPFrame_Filesystem::getSystemTempDir();
         $this->_install_dir .= DS."apptemplate-test";
         
+        PHPFrame::dataDir(preg_replace("/CLI_Tool\/.*/", "", __FILE__));
+        
         if (is_dir($this->_install_dir)) {
             PHPFrame_Filesystem::rm($this->_install_dir, true);
         }

@@ -26,7 +26,16 @@
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml
                        --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml 
                        --coverage-html ${basedir}/build/coverage 
-                       ${basedir}" />
+                       ${basedir}/tests" />
+        </exec>
+    </target>
+    
+    <target name="phpunitcli">
+        <exec executable="phpunit" dir="${basedir}/tests" failonerror="on">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml
+                       --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml 
+                       --coverage-html ${basedir}/build/coverage 
+                       ${basedir}/data/CLI_Tool/tests" />
         </exec>
     </target>
 

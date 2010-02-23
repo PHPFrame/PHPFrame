@@ -1,0 +1,19 @@
+[smtp]
+
+enable = on
+mailer = smtp
+auth = 1
+host = mail.phpframe.org
+port = 25
+user = tests@phpframe.org
+pass = 
+fromaddress = tests@phpframe.org
+fromname = PHPFrame Unit tests
+
+[imap]
+
+enable = on
+host = mail.phpframe.org
+port = 143
+user = tests@phpframe.org
+pass = 

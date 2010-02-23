@@ -5,15 +5,17 @@ require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 class PHPFrame_MailerTest extends PHPUnit_Framework_TestCase
 {
     private $_mailer;
+    private $_config;
     
     public function setUp()
     {
         PHPFrame::testMode(true);
         
-        $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
-        PHPFrame::dataDir($data_dir);
+        $basedir = preg_replace("/tests\/.*/", "", __FILE__);
+        PHPFrame::dataDir($basedir."data");
         
         $this->_mailer = new PHPFrame_Mailer();
+        $this->_config = new PHPFrame_Config($basedir."tests".DS."tests.ini");
     }
     
     public function tearDown()
@@ -36,6 +38,21 @@ class PHPFrame_MailerTest extends PHPUnit_Framework_TestCase
     
     public function test_serialise()
     {
+        $serialised   = serialize($this->_mailer);
+        $unserialised = unserialize($serialised);
+        
+        $this->assertEquals($this->_mailer, $unserialised);
+    }
+    
+    public function test_serialiseAfterSend()
+    {
+    	$this->_mailer = new PHPFrame_Mailer($this->_config->getSection("smtp"));
+    	
+    	$this->_mailer->Subject = "Test email";
+    	$this->_mailer->Body    = "This email was sent by a unit test.";
+    	$this->_mailer->AddAddress("lupo@e-noise.com");
+    	$this->_mailer->send();
+    	
         $serialised   = serialize($this->_mailer);
         $unserialised = unserialize($serialised);
         

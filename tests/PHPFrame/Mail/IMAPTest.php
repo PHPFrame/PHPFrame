@@ -5,21 +5,21 @@ require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 class PHPFrame_IMAPTest extends PHPUnit_Framework_TestCase
 {
     private $_imap;
-    private $_host = "mail.phpframe.org";
-    private $_user = "tests@phpframe.org";
-    private $_pass = "uZeu4zeeng8Ii5Oh";
+    private $_config;
     
     public function setUp()
     {
         PHPFrame::testMode(true);
         
-        $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
-        PHPFrame::dataDir($data_dir);
+        $basedir = preg_replace("/tests\/.*/", "", __FILE__);
+        PHPFrame::dataDir($basedir."data");
+        
+        $this->_config = new PHPFrame_Config($basedir."tests".DS."tests.ini");
         
         $this->_imap = new PHPFrame_IMAP(
-            $this->_host, 
-            $this->_user, 
-            $this->_pass
+            $this->_config->get("imap.host"), 
+            $this->_config->get("imap.user"), 
+            $this->_config->get("imap.pass")
         );
     }
     

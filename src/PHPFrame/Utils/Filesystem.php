@@ -26,50 +26,82 @@
 class PHPFrame_Filesystem
 {
     /**
-     * Touch a file.
+     * Copy file or directory.
      * 
-     * @param string $filename Absolute path to file.
+     * When copying directorties, the trailing slash at the end of the source 
+     * path will determine whether we copy the whole directory (including the 
+     * directory itself) or only its contents into the desination directory. 
      * 
-     * @return void
-     * @throws RuntimeException if touch fails.
-     * @since  1.0
-     */
-    public static function touch($filename)
-    {
-        if (!touch($filename)) {
-            $msg = "Could not touch file ".$filename;
-            throw new RuntimeException($msg);
-        }
-    }
-    
-    /**
-     * Copy file
+     * <code>
+     * // This will copy the contents of /tmp/test1 into /tmp/test2.
+     * PHPFrame_Filesystem::cp("/tmp/test1/" "/tmp/test2/", true);
+     * </code>
+     * 
+     * <code>
+     * // This will copy /tmp/test1 into /tmp/test2 resulting in 
+     * // /tmp/test2/test1.
+     * PHPFrame_Filesystem::cp("/tmp/test1" "/tmp/test2", true);
+     * 
+     * // This is the same as above, the trailing slash in the destination 
+     * // doesn't affect the behaviour
+     * PHPFrame_Filesystem::cp("/tmp/test1" "/tmp/test2/", true);
+     * </code>
      * 
      * @param string $source    Absolute path to origin.
      * @param string $dest      Absolute path to destination.
-     * @param bool   $recursive [Optional]
+     * @param bool   $recursive [Optional] Default value is false.
      * 
      * @return void
      * @throws RuntimeException if copy fails
      * @since  1.0
-     * @todo   handle recursive copy
      */
     public static function cp($source, $dest, $recursive=false)
     {
+        if (!is_readable($source)) {
+            $msg  = "Can not copy '".$source."'. File or directory is not ";
+            $msg .= "readable.";
+            throw new RuntimeException($msg);
+        }
+        
+        if (is_dir($dest)) {
+            if (!is_writable($dest)) {
+                $msg  = "Can not copy to '".$dest."'. File or directory is not ";
+                $msg .= "writable.";
+                throw new RuntimeException($msg);
+            }
+            
+            // If dest exists and is a dir we append source file or dir name
+            $dest .= DS.end(explode(DS, $source));
+        }
+        
         if (is_dir($source) && !$recursive) {
             $msg  = $source." is a directory. To copy directories pass third ";
             $msg .= " argument 'recursive' with a value of TRUE."; 
             throw new LogicException($msg);
-        } elseif (is_dir($source) && $recursive) {
-            $dir_it = new RecursiveDirectoryIterator($source);
-            //print_r($dir_it);
-            echo "FIX ME!! Im in ".__FILE__." line ".__LINE__;
-            exit;
+            
+        } elseif (is_dir($source)) {
+            foreach (new DirectoryIterator($source) as $finfo) {
+                if ($finfo->isDot()) {
+                    continue;
+                    
+                } elseif ($finfo->isDir()) {
+                    self::cp(
+                        $finfo->getRealPath(),
+                        $dest.DS.$finfo->getFilename(), 
+                        true
+                    );
+                    
+                } else {
+                    if (!is_dir($dest) && !mkdir($dest)) {
+                        $msg = "Could not create directory '".$new_dir."'.";
+                        throw new RuntimeException($msg);
+                    }
+                    
+                    self::cp($finfo->getRealPath(), $dest);
+                }
+            }
+            
         } else {
-            $array = explode(DS, $dest);
-            array_pop($array);
-            $dest_dir = implode(DS, $array);
-            PHPFrame_Filesystem::ensureWritableDir($dest_dir);
             if (!copy($source, $dest)) {
                 $msg = "Could not copy '".$source."' to '".$dest."'";
                 throw new RuntimeException($msg);
@@ -78,67 +110,70 @@ class PHPFrame_Filesystem
     }
     
     /**
-     * Move/rename file
+     * Remove file or directory.
      * 
-     * @param string $origin      Absolute path to origin.
-     * @param string $destination Absolute path to destination.
-     * 
-     * @return void
-     * @throws RuntimeException if move fails
-     * @since  1.0
-     * @todo   method not implemented
-     */
-    public static function mv($origin, $destination)
-    {
-        echo "FIX ME!! Im in ".__FILE__." line ".__LINE__;
-    }
-    
-    /**
-     * Remove file
-     * 
-     * @param string $file Absolute path to file.
+     * @param string $file      Absolute path to file or directory.
+     * @param bool   $recursive [Optional] Default value is FALSE.
      * 
      * @return void
-     * @throws RuntimeException if move fails
+     * @throws InvalidArgumentException, RuntimeException
      * @since  1.0
-     * @todo   method not implemented
      */
-    public static function rm($file)
+    public static function rm($file, $recursive=false)
     {
-        echo "FIX ME!! Im in ".__FILE__." line ".__LINE__;
+        if ($recursive && is_dir($file)) {
+            foreach (new DirectoryIterator($file) as $finfo) {
+                if ($finfo->isDot()) {
+                    continue;
+                } elseif ($finfo->isDir()) {
+                    self::rm($finfo->getRealPath(), true);
+                } else {
+                    self::rm($finfo->getRealPath());
+                }
+            }
+           
+            if (is_dir($file)) {
+                if (!rmdir($file)) {
+                    $msg  = "Can not delete directory '".$file."'. Please check ";
+                    $msg .= "file permissions.";
+                    throw new RuntimeException($msg);
+                }
+            }    
+        }
+        
+        if (is_dir($file)) {
+            $msg = "Can not remove '".$file."'. It is a directory! ";
+            $msg .= "To delete directories and their contents set the ";
+            $msg .= "'\$recursive' argument to TRUE when calling ";
+            $msg .= "PHPFrame_Filesystem::".__FUNCTION__."().";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        if (is_file($file)) {
+            if (!unlink($file)) {
+                $msg  = "Can not delete file '".$file."'. Please check file ";
+                $msg .= "permissions.";
+                throw new RuntimeException($msg);
+            }
+        }
     }
     
     /**
-     * List directory contents
+     * Ensure that directory is writable.
      * 
-     * @param string $dir Absolute path to directory.
-     * 
-     * @return Iterator
-     * @throws RuntimeException if move fails
-     * @since  1.0
-     * @todo   method not implemented
-     */
-    public static function ls($dir)
-    {
-        echo "FIX ME!! Im in ".__FILE__." line ".__LINE__;
-    }
-    
-    /**
-     * Ensure that directory is writable
-     * 
-     * @param string $path Path to directory to ensure that it is writable
+     * @param string $path Path to directory to ensure that it is writable.
      * 
      * @return void
      * @since  1.0
      */
     public static function ensureWritableDir($path)
     {
-        $path = (string) $path;
-        $path_array = explode(DS, trim($path, DS));
+        $path        = (string) $path;
+        $path_array  = explode(DS, trim($path, DS));
         $path_prefix = DS;
         
         //if the DS is backslash we are on windows, path prefix should be empty
-        if (DS=="\\") {
+        if (DS == "\\") {
             $path_prefix = '';
         }
         
@@ -177,7 +212,23 @@ class PHPFrame_Filesystem
     /**
      * Upload file.
      * 
-     * @param string $field_name      Name of input field of type file.
+     * <code>
+     * // We assume that a form was posted containing a file field named 
+     * // 'form_file_field'
+     * $file = PHPFrame_Filesystem::upload(
+     *     $request()->file("form_file_field"),
+     *     "/some/dir/"
+     * );
+     * </code>
+     * 
+     * @param string $file_array      An associative array with the posted file
+     *                                details. This is normally taken from the 
+     *                                request.
+     *                                - tmp_name
+     *                                - name
+     *                                - size
+     *                                - type
+     *                                - error
      * @param string $dir             Absolute path to upload dir.
      * @param string $accept          [Optional] List of accepted MIME types 
      *                                separated by commas. Default value is '*'.
@@ -188,32 +239,23 @@ class PHPFrame_Filesystem
      * @throws Exception on failure
      * @since  1.0
      */
-    public static function uploadFile(
-        $field_name,
+    public static function upload(
+        $file_array,
         $dir,
         $accept="*",
         $max_upload_size=0,
         $overwrite=false
     ) {
-        // Get file data from request
-        $files = PHPFrame::Request()->getFiles();
-        
-        if (!isset($files[$field_name])) {
-            $msg  = "Can not upload file. ";
-            $msg .= "File field '".$field_name."' not found in request.";
-            throw new RuntimeException($msg);
-        }
-        
         // $file_tmp is where file went on webserver
-        $file_tmp   = $files[$field_name]['tmp_name'];
+        $file_tmp   = $file_array['tmp_name'];
         // $file_tmp_name is original file name
-        $file_name  = $files[$field_name]['name'];
+        $file_name  = $file_array['name'];
         // $file_size is size in bytes 
-        $file_size  = $files[$field_name]['size'];
+        $file_size  = $file_array['size'];
         // $file_type is mime type e.g. image/gif
-        $file_type  = $files[$field_name]['type'];
+        $file_type  = $file_array['type'];
         // $file_error is any error encountered
-        $file_error = $files[$field_name]['error'];
+        $file_error = $file_array['error'];
         
         // check for generic errors first          
         if ($file_error > 0) {

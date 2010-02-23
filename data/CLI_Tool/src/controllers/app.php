@@ -27,9 +27,11 @@ class AppController extends PHPFrame_ActionController
     private $_install_dir=null;
     
     /**
-     * Constructor
+     * Constructor.
      * 
-     * @param string $install_dir
+     * @param string $install_dir [Optional] Absolute path to installation 
+     *                            directory. If not passed the current working 
+     *                            directory is used.
      * 
      * @return void
      * @since  1.0
@@ -48,16 +50,19 @@ class AppController extends PHPFrame_ActionController
     /**
      * Create a new application
      * 
-     * @param string $app_name
-     * @param string $template
-     * @param string $allow_non_empty_dir
+     * @param string $app_name            The name of the new application.
+     * @param string $template            [Optional] The application template 
+     *                                    to use. The default value is "basic".
+     * @param string $allow_non_empty_dir [Optional] Whether to allow 
+     *                                    installation in a directory that is 
+     *                                    not empty. The default value is FALSE.
      * 
      * @return void
      * @since  1.0
      */
     public function new_app(
         $app_name, 
-        $template=null, 
+        $template="basic", 
         $allow_non_empty_dir=false
     ) {
         $app_name            = trim((string) $app_name);

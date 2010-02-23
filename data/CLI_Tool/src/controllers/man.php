@@ -24,11 +24,23 @@
  */
 class ManController extends PHPFrame_ActionController
 {
+    /**
+     * Constructor.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct()
     {
         parent::__construct("index");
     }
     
+    /**
+     * Show manual.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function index()
     {
         $app_doc = new PHPFrame_AppDoc($this->app()->getInstallDir());

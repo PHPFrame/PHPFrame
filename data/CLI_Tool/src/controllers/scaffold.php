@@ -34,7 +34,9 @@ class ScaffoldController extends PHPFrame_ActionController
     /**
      * Constructor
      * 
-     * @param string $install_dir
+     * @param string $install_dir [Optional] Absolute path to installation 
+     *                            directory. If not passed the current working 
+     *                            directory is used.
      * 
      * @return void
      * @since  1.0
@@ -67,12 +69,11 @@ class ScaffoldController extends PHPFrame_ActionController
     /**
      * Create a database table for a given PersistentObject class.
      *  
-     * @param string $path        [Optional] Path to file or directory  
-     *                            containing the persistent objects. If  
-     *                            ommitted the default 'src/models' directory 
-     *                            will be scanned.
-     * @param bool   $drop        [Optional] Default value is FALSE. When set 
-     *                            to true existing table will be dropped.
+     * @param string $path [Optional] Path to file or directory containing the  
+     *                     persistent objects. If ommitted the default 
+     *                     'src/models' directory will be scanned.
+     * @param bool   $drop [Optional] Default value is FALSE. When set to true 
+     *                     existing table will be dropped.
      * 
      * @return void
      * @since  1.0
@@ -92,10 +93,10 @@ class ScaffoldController extends PHPFrame_ActionController
             $filter_it = new RegexIterator($flat_it, '/\.php$/');
             
             foreach ($filter_it as $file) {
-                require_once $file->getRealPath();
+                include_once $file->getRealPath();
             }
         } elseif (is_file($path)) {
-           require_once $path;
+            include_once $path;
         } else {
             $msg  = "Could not find any PHP files to search for persistent ";
             $msg .= "objects.";
@@ -123,8 +124,7 @@ class ScaffoldController extends PHPFrame_ActionController
         $config      = new PHPFrame_Config($config_file);
         $options     = $config->getSection("db");
         
-        if (
-            strtolower($options["driver"]) == "sqlite" 
+        if (strtolower($options["driver"]) == "sqlite" 
             && !preg_match("/^\//", $options["name"])
         ) {
             $options["name"] = $this->_install_dir.DS."var".DS.$options["name"];
@@ -144,41 +144,5 @@ class ScaffoldController extends PHPFrame_ActionController
         }
         
         $this->notifySuccess("Database table successfully created.");
-    }
-    
-    /**
-     * Create a persistent object class file based on a database table.
-     * 
-     * @return void
-     * @since  1.0
-     * @todo   Method needs implementation...
-     */
-    public function create_persistent_object()
-    {
-        
-    }
-    
-    /**
-     * Create a files for a new feature...
-     * 
-     * @return void
-     * @since  1.0
-     * @todo   Method needs implementation...
-     */
-    public function create_feature()
-    {
-        
-    }
-    
-    /**
-     * Create a template controller class.
-     * 
-     * @return void
-     * @since  1.0
-     * @todo   Method needs implementation...
-     */
-    public function create_controller()
-    {
-        
     }
 }

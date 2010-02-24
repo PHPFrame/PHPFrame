@@ -253,12 +253,13 @@ class PHPFrame_Config implements IteratorAggregate
      * Ensure a given key exists in internal array.
      * 
      * @param string $str    A string with the key we want to check.
-     * @param bool   $ensure If set to TRUE method will trigger error.
+     * @param bool   $ensure [Optional] If set to TRUE method will throw 
+     *                       exceptions on failure.
      * 
      * @return bool
      * @since  1.0
      */
-    public function keyExists($str=null, $ensure=false)
+    public function keyExists($str, $ensure=false)
     {
         list($section, $key) = $this->_parseKey($str);
         
@@ -269,7 +270,7 @@ class PHPFrame_Config implements IteratorAggregate
                 $msg  = "Configuration file (".$this->_path.") ";
                 $msg .= "does not containg key ";
                 $msg .= "'".$str."'";
-                trigger_error($msg, E_USER_ERROR);
+                throw new LogicException($msg);
             } else {
                 return false;
             }
@@ -319,7 +320,7 @@ class PHPFrame_Config implements IteratorAggregate
     {
         if (!$array = @parse_ini_file($this->_path, true)) {
             $msg = "Could not load configuration file ".$this->_path;
-            trigger_error($msg, E_USER_ERROR);
+            throw new RuntimeException($msg);
         }
         
         $this->_data = $array;

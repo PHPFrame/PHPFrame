@@ -24,8 +24,6 @@
  */
 class AppController extends PHPFrame_ActionController
 {
-    private $_install_dir=null;
-    
     /**
      * Constructor.
      * 

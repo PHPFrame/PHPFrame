@@ -25,13 +25,6 @@
 class ScaffoldController extends PHPFrame_ActionController
 {
     /**
-     * Absolute path to installation directry.
-     * 
-     * @var string
-     */
-    private $_install_dir=null;
-    
-    /**
      * Constructor.
      * 
      * @return void
@@ -39,8 +32,6 @@ class ScaffoldController extends PHPFrame_ActionController
      */
     public function __construct()
     {
-        $this->_install_dir = getcwd();
-        
         parent::__construct("usage");
     }
     
@@ -52,7 +43,7 @@ class ScaffoldController extends PHPFrame_ActionController
      */
     public function usage()
     {
-        $doc = new PHPFrame_ControllerDoc(new ReflectionClass(get_class($this)));
+        $doc = new PHPFrame_ControllerDoc(new ReflectionClass($this));
         
         $this->response()->title("Usage instructions");
         $this->response()->body((string) $doc);
@@ -61,80 +52,77 @@ class ScaffoldController extends PHPFrame_ActionController
     /**
      * Create a database table for a given PersistentObject class.
      *  
-     * @param string $path [Optional] Path to file or directory containing the  
-     *                     persistent objects. If ommitted the default 
-     *                     'src/models' directory will be scanned.
-     * @param bool   $drop [Optional] Default value is FALSE. When set to true 
-     *                     existing table will be dropped.
+     * @param string $path        Path to file with the persistent object class.
+     * @param bool   $drop        [Optional] Default value is FALSE. When set 
+     *                            to true existing table will be dropped.
+     * @param string $install_dir [Optional] Absolute path to the installation 
+     *                            directory of the app we are working with.
      * 
      * @return void
      * @since  1.0
      */
-    public function create_table($path="", $drop=false)
+    public function create_table($path, $drop=false, $install_dir=null)
     {
         $path = trim((string) $path);
         
-        // Prepend path to models if relative path is passed
+        // If path is relative we prepend working directory
         if (!preg_match("/^\//", $path)) {
-            $path = $this->_install_dir.DS."src".DS."models".DS.$path;
+            $path = getcwd().DS.$path;
         }
         
-        if (is_dir($path)) {
-            $dir_it    = new RecursiveDirectoryIterator($path);
-            $flat_it   = new RecursiveIteratorIterator($dir_it);
-            $filter_it = new RegexIterator($flat_it, '/\.php$/');
-            
-            foreach ($filter_it as $file) {
-                include_once $file->getRealPath();
-            }
-        } elseif (is_file($path)) {
-            include_once $path;
-        } else {
-            $msg  = "Could not find any PHP files to search for persistent ";
-            $msg .= "objects.";
-            throw new UnexpectedValueException($msg);
+        if (!is_file($path)) {
+            $msg  = "Could not find file '".$path."'.";
+            $this->raiseError($msg);
+            return;
         }
         
-        $declared_classes = get_declared_classes();
+        $class_file = file_get_contents($path);
         
-        // We get the key of the current class in the get_declared_classes() 
-        // array in order to detect new declared classes after including the
-        // php files
-        $class_key = array_keys($declared_classes, get_class($this));
-        $class_key = $class_key[0];
+        preg_match("/class\s+(\w+)\s+extends\s+\w+\s+{/", $class_file, $matches);
         
-        $objs = array();
-        for ($i=($class_key+1); $i<count($declared_classes); $i++) {
-            $reflection_obj = new ReflectionClass($declared_classes[$i]);
-            if ($reflection_obj->isSubclassOf("PHPFrame_PersistentObject")) {
-                $objs[] = $reflection_obj->newInstance();
-            }
+        if (!isset($matches[1])) {
+            $msg  = "Could not find any classes that could extend ";
+            $msg .= "PHPFrame_PersistentObject.";
+            $this->raiseError($msg);
+            return;
         }
+        
+        $reflection_obj = new ReflectionClass($matches[1]);
+        if (!$reflection_obj->isSubclassOf("PHPFrame_PersistentObject")) {
+            $msg = $match[1]." does not descend from PHPFrame_PersistentObject";
+            $this->raiseError($msg);
+            return;
+        }
+        
+        $obj = $reflection_obj->newInstance();
         
         // Get database options from config file
-        $config_file = $this->_install_dir.DS."etc".DS."phpframe.ini";
+        $config_file = $install_dir.DS."etc".DS."phpframe.ini";
         $config      = new PHPFrame_Config($config_file);
         $options     = $config->getSection("db");
         
         if (strtolower($options["driver"]) == "sqlite" 
             && !preg_match("/^\//", $options["name"])
         ) {
-            $options["name"] = $this->_install_dir.DS."var".DS.$options["name"];
+            $options["name"] = $install_dir.DS."var".DS.$options["name"];
         }
         
         $db         = PHPFrame_DatabaseFactory::getDB($options);
         $or_toolbox = new PHPFrame_ObjectRelationalToolbox();
         
-        foreach ($objs as $obj) {
-            $table_name = get_class($obj);
+        $table_name = get_class($obj);
             
-            if (isset($options["prefix"]) && !empty($options["prefix"])) {
-                $table_name = $options["prefix"].$table_name;
-            }
-            
-            $or_toolbox->createTable($db, $obj, $table_name, $drop);
+        if (isset($options["prefix"]) && !empty($options["prefix"])) {
+            $table_name = $options["prefix"].$table_name;
         }
         
-        $this->notifySuccess("Database table successfully created.");
+        try {
+            $or_toolbox->createTable($db, $obj, $table_name, $drop);
+            
+            $this->notifySuccess("Database table successfully created.");
+            
+        } catch (Exception $e) {
+            $this->raiseError($e->getMessage());
+        }
     }
 }

@@ -25,13 +25,6 @@
 class ConfigController extends PHPFrame_ActionController
 {
     /**
-     * Reference to config object.
-     * 
-     * @var PHPFrame_Config
-     */
-    private $_config=null;
-    
-    /**
      * Constructor
      * 
      * @return void
@@ -39,77 +32,105 @@ class ConfigController extends PHPFrame_ActionController
      */
     public function __construct()
     {
-        $path = getcwd().DS."etc".DS."phpframe.ini";
-        if (!is_file($path)) {
-            $msg = "Cannot load config File";
-            throw new RuntimeException($msg);
-        }
-        
-        $this->_config = new PHPFrame_Config($path);
-        
         parent::__construct("show");
     }
     
     /**
      * List all configuration values.
      * 
+     * @param string $install_dir [Optional] Absolute path to app for which to 
+     *                            get the config obj.
+     * 
      * @return void
      * @since  1.0
      */
-    public function show()
+    public function show($install_dir=null)
     {
-        $str = (string) $this->_config;
+        if (is_null($install_dir)) {
+            $install_dir = getcwd();
+        }
         
-        $view = $this->view();
-        $view->addData("config", $str);
+        $config = $this->_getConfigObj($install_dir);
         
-        $this->response()->body($view);
+        $this->response()->body((string) $config);
     }
     
     /**
      * Display value for a given configuration parameter.
      * 
-     * @param string $key The name of the config parameter.
+     * @param string $key         The name of the config parameter.
+     * @param string $install_dir [Optional] Absolute path to app for which to 
+     *                            get the config obj.
      * 
      * @return void
      * @since  1.0
      */
-    public function get($key)
+    public function get($key, $install_dir=null)
     {
+        if (is_null($install_dir)) {
+            $install_dir = getcwd();
+        }
+        
         $key = trim((string) $key);
         
-        $view = $this->view();
-        $view->addData($key, $this->_config->get($key));
+        $config = $this->_getConfigObj($install_dir);
         
-        $this->response()->body($view);
+        $this->response()->body($key.": ".$config->get($key));
     }
     
     /**
      * Set the value of a given configuration parameter.
      * 
-     * @param string $key   The name of the config parameter.
-     * @param string $value The new value for the parameter.
+     * @param string $key         The name of the config parameter.
+     * @param string $value       The new value for the parameter.
+     * @param string $install_dir [Optional] Absolute path to app for which to 
+     *                            get the config obj.
      * 
      * @return void
      * @since  1.0
      */
-    public function set($key, $value)
+    public function set($key, $value, $install_dir=null)
     {
-        $key   = trim((string) $key);
-        $value = trim((string) $value);
-        
-        try {
-            $this->_config->set($key, $value);
-            $this->_config->store();
-            
-            $this->notifySuccess("Config param updated");
-        } catch (Exception $e) {
-            $this->raiseError("An error ocurred while saving config");
+        if (is_null($install_dir)) {
+            $install_dir = getcwd();
         }
         
-        $view = $this->view();
-        $view->addData($key, $this->_config->get($key));
+        $key    = trim((string) $key);
+        $value  = trim((string) $value);
+        $config = $this->_getConfigObj($install_dir);
         
-        $this->response()->body($view);
+        try {
+            $config->set($key, $value);
+            $config->store();
+            
+            $this->notifySuccess("Config param updated.");
+            
+        } catch (Exception $e) {
+            $this->raiseError("An error ocurred while saving config.");
+        }
+        
+        $this->response()->body($key.": ".$config->get($key));
+    }
+    
+    /**
+     * Get config object.
+     * 
+     * @param string $install_dir Absolute path to app for which to get the 
+     *                            config obj.
+     *                            
+     * @return PHPFrame_Config
+     * @throws RuntimeException
+     * @since  1.0
+     */
+    private function _getConfigObj($install_dir)
+    {
+        $path = $install_dir.DS."etc".DS."phpframe.ini";
+        
+        if (!is_file($path)) {
+            $msg = "Cannot load config File";
+            throw new RuntimeException($msg);
+        }
+        
+        return new PHPFrame_Config($path);
     }
 }

@@ -158,23 +158,15 @@ class AppTemplate
         }
         
         // Instantiate new config object
-        $dist_config_ini  = PHPFrame::dataDir();
-        $dist_config_ini .= DS."CLI_Tool".DS."etc".DS."phpframe.ini";
-        $config = new PHPFrame_Config($dist_config_ini);
+        $config = new PHPFrame_Config(
+            $this->_install_dir.DS."etc".DS."phpframe.ini"
+        );
         
         // Bind to array
         $config->bind($array);
         
         // Create random secret string
         $config->set("secret", md5(uniqid()));
-        
-        // Write to filesystem
-        $config_path = $this->_install_dir.DS."etc";
-        
-        // Make sure we can write in etc directory
-        PHPFrame_Filesystem::ensureWritableDir($config_path);
-        
-        $config_file_name = $config_path.DS."phpframe.ini";
-        $config->store($config_file_name);
+        $config->store();
     }
 }

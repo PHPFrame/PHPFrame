@@ -4,117 +4,157 @@ require_once preg_replace("/data\/.*/", "src/PHPFrame.php", __FILE__);
 
 class AppControllerTest extends PHPUnit_Framework_TestCase
 {
+    private $_app;
+    private $_newapp_dir;
+    
+    public function __construct()
+    {
+        $this->_newapp_dir = PHPFrame_Filesystem::getSystemTempDir().DS."newapp";
+    }
+    
     public function setUp()
     {
-        //...
-        $this->_bootstrap = preg_replace("/tests\/.*/", "public/index.php", __FILE__);
+        PHPFrame::testMode(true);
+        
+        $install_dir = preg_replace("/tests\/.*/", "", __FILE__);
+        
+        $this->_app = new PHPFrame_Application(array(
+            "install_dir" => $install_dir
+        ));
+        
+        if (is_dir($this->_newapp_dir)) {
+            PHPFrame_Filesystem::rm($this->_newapp_dir, true);
+        }
     }
     
     public function tearDown()
     {
         //...
+        PHPFrame::getSession()->getSysevents()->clear();
     }
     
     public function test_create()
     {
-        $install_dir = PHPFrame_Filesystem::getSystemTempDir().DS."newapp";
+        $request = new PHPFrame_Request();
+        $request->controllerName("app");
+        $request->action("create");
+        $request->param("app_name", "MyApp");
+        $request->param("install_dir", $this->_newapp_dir);
         
-        if (is_dir($install_dir)) {
-            PHPFrame_Filesystem::rm($install_dir, true);
+        ob_start();
+        $this->_app->dispatch($request);
+        ob_end_clean();
+        
+        $this->assertRegExp(
+            "/SUCCESS: App created successfully/", 
+            (string) $this->_app->response()
+        );
+        
+        PHPFrame_Filesystem::rm($this->_newapp_dir, true);
+    }
+    
+    public function test_createDirNotEmpty()
+    {
+        if (!is_dir($this->_newapp_dir)) {
+            mkdir($this->_newapp_dir);
         }
         
-        mkdir($install_dir);
+        touch($this->_newapp_dir.DS."file1.txt");
+        touch($this->_newapp_dir.DS."file2.txt");
         
-        $cmd        = "cd ".$install_dir." && ";
-        $cmd       .= "php ".$this->_bootstrap." app create app_name=MyApp";
-        $output     = null;
-        $return_var = null;
+        $request = new PHPFrame_Request();
+        $request->controllerName("app");
+        $request->action("create");
+        $request->param("app_name", "MyApp");
+        $request->param("install_dir", $this->_newapp_dir);
+        $request->param("allow_non_empty_dir", true);
         
-        exec($cmd, $output, $return_var);
+        ob_start();
+        $this->_app->dispatch($request);
+        ob_end_clean();
         
-        $this->assertTrue(is_dir($install_dir.DS."etc"));
-        $this->assertTrue(is_dir($install_dir.DS."public"));
-        $this->assertTrue(is_dir($install_dir.DS."src"));
-        $this->assertTrue(is_file($install_dir.DS."etc".DS."phpframe.ini"));
+        $this->assertRegExp(
+            "/SUCCESS: App created successfully/", 
+            (string) $this->_app->response()
+        );
         
-        $this->assertType("array", $output);
-        
-        // Grab last line of output ignoring empty line
-        foreach(array_reverse($output) as $line) {
-            if (empty($line)) {
-                continue;
-            }
-            
-            break;
+        PHPFrame_Filesystem::rm($this->_newapp_dir, true);
+    }
+    
+    public function test_createFailureDirNotEmpty()
+    {
+        if (!is_dir($this->_newapp_dir)) {
+            mkdir($this->_newapp_dir);
         }
         
-        $this->assertEquals(0, $return_var);
-        $this->assertRegExp("/^SUCCESS: /", $line);
+        touch($this->_newapp_dir.DS."file1.txt");
+        touch($this->_newapp_dir.DS."file2.txt");
         
-        PHPFrame_Filesystem::rm($install_dir, true);
+        $request = new PHPFrame_Request();
+        $request->controllerName("app");
+        $request->action("create");
+        $request->param("app_name", "MyApp");
+        $request->param("install_dir", $this->_newapp_dir);
+        
+        ob_start();
+        $this->_app->dispatch($request);
+        ob_end_clean();
+        
+        $this->assertRegExp(
+            "/ERROR: Target directory is not empty/", 
+            (string) $this->_app->response()
+        );
+    }
+    
+    public function test_createFailureUnknownTemplate()
+    {
+        $request = new PHPFrame_Request();
+        $request->controllerName("app");
+        $request->action("create");
+        $request->param("app_name", "MyApp");
+        $request->param("install_dir", $this->_newapp_dir);
+        $request->param("template", "blah");
+        
+        ob_start();
+        $this->_app->dispatch($request);
+        ob_end_clean();
+        
+        $this->assertRegExp(
+            "/ERROR: Unknown app template 'blah'/", 
+            (string) $this->_app->response()
+        );
     }
     
     public function test_remove()
     {
-        // First we create an app
-        $install_dir = PHPFrame_Filesystem::getSystemTempDir().DS."newapp";
+        $request = new PHPFrame_Request();
+        $request->controllerName("app");
+        $request->action("create");
+        $request->param("app_name", "MyApp");
+        $request->param("install_dir", $this->_newapp_dir);
         
-        if (is_dir($install_dir)) {
-            PHPFrame_Filesystem::rm($install_dir, true);
-        }
+        ob_start();
+        $this->_app->dispatch($request);
+        ob_end_clean();
         
-        mkdir($install_dir);
+        $this->assertRegExp(
+            "/SUCCESS: App created successfully/", 
+            (string) $this->_app->response()
+        );
         
-        $cmd        = "cd ".$install_dir." && ";
-        $cmd       .= "php ".$this->_bootstrap." app create app_name=MyApp";
-        $output     = null;
-        $return_var = null;
+        // Now that we have installed we can test the 'remove' action
+        $request = new PHPFrame_Request();
+        $request->controllerName("app");
+        $request->action("remove");
+        $request->param("install_dir", $this->_newapp_dir);
         
-        exec($cmd, $output, $return_var);
+        ob_start();
+        $this->_app->dispatch($request);
+        ob_end_clean();
         
-        $this->assertTrue(is_dir($install_dir.DS."etc"));
-        $this->assertTrue(is_dir($install_dir.DS."public"));
-        $this->assertTrue(is_dir($install_dir.DS."src"));
-        $this->assertTrue(is_file($install_dir.DS."etc".DS."phpframe.ini"));
-        
-        $this->assertType("array", $output);
-        
-        // Grab last line of output ignoring empty line
-        foreach(array_reverse($output) as $line) {
-            if (empty($line)) {
-                continue;
-            }
-            
-            break;
-        }
-        
-        $this->assertEquals(0, $return_var);
-        $this->assertRegExp("/^SUCCESS: /", $line);
-        
-        // Now we remove app
-        $cmd        = "cd ".$install_dir." && ";
-        $cmd       .= "php ".$this->_bootstrap." app remove";
-        $output     = null;
-        $return_var = null;
-        
-        exec($cmd, $output, $return_var);
-        
-        $this->assertFalse(is_dir($install_dir.DS."etc"));
-        $this->assertFalse(is_dir($install_dir.DS."public"));
-        $this->assertFalse(is_dir($install_dir.DS."src"));
-        
-        $this->assertType("array", $output);
-        
-        // Grab last line of output ignoring empty line
-        foreach(array_reverse($output) as $line) {
-            if (empty($line)) {
-                continue;
-            }
-            
-            break;
-        }
-        
-        $this->assertEquals(0, $return_var);
-        $this->assertRegExp("/^SUCCESS: /", $line);
+        $this->assertRegExp(
+            "/SUCCESS: App removed successfully/", 
+            (string) $this->_app->response()
+        );
     }
 }

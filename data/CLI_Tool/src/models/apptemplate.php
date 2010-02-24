@@ -86,17 +86,7 @@ class AppTemplate
      */
     public function remove()
     {
-        $cmd = "rm -rf ".$this->_install_dir.DS."*";
-        $msg = "Removing app. Using command \"".$cmd."\"...";
-        PHPFrame::getSession()->getSysevents()
-                           ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
-        
-        $exec = new PHPFrame_Exec($cmd);
-        
-        if ($exec->getReturnVar() > 0) {
-            $msg = "Failed to remove app.";
-            throw new RuntimeException($msg);
-        }
+        PHPFrame_Filesystem::rm($this->_install_dir, true);
     }
     
     /**
@@ -132,10 +122,6 @@ class AppTemplate
         // Make sure we can write in download directory
         PHPFrame_Filesystem::ensureWritableDir($download_tmp);
         
-        $msg = "Attempting to download ".$url."...";
-        PHPFrame::getSession()->getSysevents()
-                           ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
-        
         // Create the http request
         $request  = new PHPFrame_HTTPRequest($url);
         $response = $request->download($download_tmp, $file_name);
@@ -148,10 +134,6 @@ class AppTemplate
             $msg .= "Reason: ".$response->getReasonPhrase();
             throw new RuntimeException($msg);
         }
-        
-        $msg = "Extracting archive...";
-        PHPFrame::getSession()->getSysevents()
-                           ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         // Extract archive in install dir
         $archive = new Archive_Tar($download_tmp.DS.$file_name, "gz");
@@ -174,10 +156,6 @@ class AppTemplate
             $msg .= " expected an array as only argument.";
             throw new InvalidArgumentException($msg);
         }
-        
-        $msg = "Creating configuration file...";
-        PHPFrame::getSession()->getSysevents()
-                           ->append($msg, PHPFrame_Subject::EVENT_TYPE_INFO);
         
         // Instantiate new config object
         $dist_config_ini  = PHPFrame::dataDir();

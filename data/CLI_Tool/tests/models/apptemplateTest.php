@@ -32,7 +32,9 @@ class AppTemplateTest extends PHPUnit_Framework_TestCase
     
     public function test_install()
     {
+        ob_start();
         $this->_app_template->install("myapp");
+        ob_end_clean();
         
         $this->assertTrue(is_dir($this->_install_dir.DS."etc"));
         $this->assertTrue(is_dir($this->_install_dir.DS."public"));
@@ -44,7 +46,9 @@ class AppTemplateTest extends PHPUnit_Framework_TestCase
     
     public function test_remove()
     {
+        ob_start();
         $this->_app_template->install("myapp");
+        ob_end_clean();
         
         $this->assertTrue(is_dir($this->_install_dir.DS."etc"));
         $this->assertTrue(is_dir($this->_install_dir.DS."public"));

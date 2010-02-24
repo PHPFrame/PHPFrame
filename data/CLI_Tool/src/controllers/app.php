@@ -34,8 +34,6 @@ class AppController extends PHPFrame_ActionController
      */
     public function __construct()
     {
-        $this->_install_dir = getcwd();
-        
         parent::__construct("create");
     }
     
@@ -48,6 +46,8 @@ class AppController extends PHPFrame_ActionController
      * @param string $allow_non_empty_dir [Optional] Whether to allow 
      *                                    installation in a directory that is 
      *                                    not empty. The default value is FALSE.
+     * @param string $install_dir         [Optional] Absolute path to directory
+     *                                    where we want to create the new app.
      * 
      * @return void
      * @since  1.0
@@ -55,15 +55,26 @@ class AppController extends PHPFrame_ActionController
     public function create(
         $app_name, 
         $template="basic", 
-        $allow_non_empty_dir=false
+        $allow_non_empty_dir=false,
+        $install_dir=null
     ) {
         $app_name            = trim((string) $app_name);
         $allow_non_empty_dir = (bool) $allow_non_empty_dir;
         
+        if (!in_array($template, array("basic"))) {
+            $msg = "Unknown app template '".$template."'.";
+            $this->raiseError($msg);
+            return;
+        }
+        
+        if (is_null($install_dir)) {
+            $install_dir = getcwd();
+        }
+        
         try {
             // Get model and pass install dir to constructor
             $model = new AppTemplate(
-                $this->_install_dir, 
+                $install_dir, 
                 $this->config()->get("sources.preferred_mirror"),
                 $this->config()->get("sources.preferred_state")
             );
@@ -84,14 +95,29 @@ class AppController extends PHPFrame_ActionController
     /**
      * Remove application.
      * 
+     * @param string $install_dir [Optional] Absolute path to directory where 
+     *                            we want to create the new app.
+     * 
      * @return void
      * @since  1.0
      * @todo   Have to check for databases and other things to delete.
      */
-    public function remove()
+    public function remove($install_dir=null)
     {
+        if (is_null($install_dir)) {
+            $install_dir = getcwd();
+        }
+        
+        if (!is_dir($install_dir) || !is_writable($install_dir)) {
+            $msg  = "Could not delete directory '".$install_dir."'. Please ";
+            $msg .= "check that the directory exists and that you have ";
+            $msg .= "write permissions.";
+            $this->raiseError($msg);
+            return;
+        }
+        
         try {
-            $model = new AppTemplate($this->_install_dir);
+            $model = new AppTemplate($install_dir);
             $model->remove();
             
             $msg = "App removed successfully";

@@ -47,7 +47,7 @@ class ConfigController extends PHPFrame_ActionController
         
         $this->_config = new PHPFrame_Config($path);
         
-        parent::__construct("list_all");
+        parent::__construct("show");
     }
     
     /**
@@ -56,7 +56,7 @@ class ConfigController extends PHPFrame_ActionController
      * @return void
      * @since  1.0
      */
-    public function list_all()
+    public function show()
     {
         $str = (string) $this->_config;
         

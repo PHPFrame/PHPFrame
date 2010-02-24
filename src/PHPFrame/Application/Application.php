@@ -705,7 +705,7 @@ class PHPFrame_Application
         if (is_null($request)) {
             $request = $this->request();
         } else {
-            $this->setRequest($request);
+            $this->request($request);
         }
         
         // Acquire instance of Plugin Handler

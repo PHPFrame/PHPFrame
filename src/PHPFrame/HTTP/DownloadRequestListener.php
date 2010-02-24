@@ -157,7 +157,7 @@ class PHPFrame_DownloadRequestListener implements SplObserver
         
         case "receivedBodyPart" :
             $this->_size += strlen($event["data"]);
-            $this->_bar->update(round($this->_size / 1024));
+            @$this->_bar->update(round($this->_size / 1024));
             fwrite($this->_fp, $event["data"]);
             break;
         

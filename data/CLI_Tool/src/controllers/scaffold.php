@@ -24,6 +24,8 @@
  */
 class ScaffoldController extends PHPFrame_ActionController
 {
+    private $_tmpl_path;
+    
     /**
      * Constructor.
      * 
@@ -32,21 +34,7 @@ class ScaffoldController extends PHPFrame_ActionController
      */
     public function __construct()
     {
-        parent::__construct("usage");
-    }
-    
-    /**
-     * Display controller's usage instructions
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function usage()
-    {
-        $doc = new PHPFrame_ControllerDoc(new ReflectionClass($this));
-        
-        $this->response()->title("Usage instructions");
-        $this->response()->body((string) $doc);
+        parent::__construct("table");
     }
     
     /**
@@ -61,7 +49,7 @@ class ScaffoldController extends PHPFrame_ActionController
      * @return void
      * @since  1.0
      */
-    public function create_table($path, $drop=false, $install_dir=null)
+    public function table($path, $drop=false, $install_dir=null)
     {
         $path = trim((string) $path);
         
@@ -74,6 +62,10 @@ class ScaffoldController extends PHPFrame_ActionController
             $msg  = "Could not find file '".$path."'.";
             $this->raiseError($msg);
             return;
+        }
+        
+        if (is_null($install_dir)) {
+            $install_dir = getcwd();
         }
         
         $class_file = file_get_contents($path);
@@ -107,6 +99,13 @@ class ScaffoldController extends PHPFrame_ActionController
             $options["name"] = $install_dir.DS."var".DS.$options["name"];
         }
         
+        if (!$options["enable"]) {
+            $msg  = "Database is not enabled in ini file. Please edit the ";
+            $msg .= "database section in etc/phpframe.ini to enable a database.";
+            $this->raiseError($msg);
+            return;
+        }
+        
         $db         = PHPFrame_DatabaseFactory::getDB($options);
         $or_toolbox = new PHPFrame_ObjectRelationalToolbox();
         
@@ -124,5 +123,163 @@ class ScaffoldController extends PHPFrame_ActionController
         } catch (Exception $e) {
             $this->raiseError($e->getMessage());
         }
+    }
+    
+    /**
+     * Create an empty persistent object class.
+     * 
+     * @param string $name        The class name.
+     * @param string $install_dir [Optional] Absolute path to installation 
+     *                            directory. If not specified the current 
+     *                            working directory will be used.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function persistent($name, $install_dir=null)
+    {
+        $this->_createClass(
+            "PersistentObject", 
+            array("MyPersistentObject"=>$name), 
+            "src".DS."models", 
+            strtolower($name).".php", 
+            $install_dir
+        );
+    }
+    
+    /**
+     * Create a mapper class for a given persistent object class.
+     * 
+     * @param string $class       The mapper name. The string 'Mapper' will 
+     *                            be appended to the name.
+     * @param string $install_dir [Optional] Absolute path to installation 
+     *                            directory. If not specified the current 
+     *                            working directory will be used.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function mapper($class, $install_dir=null)
+    {
+        $msg = get_class($this)."::".__FUNCTION__."() not implemented";
+        throw new LogicException($msg);
+    }
+    
+    /**
+     * Create an empty controller class.
+     * 
+     * @param string $name        The controller name. The string 'Controller' 
+     *                            will be appended to the name.
+     * @param string $install_dir [Optional] Absolute path to installation 
+     *                            directory. If not specified the current 
+     *                            working directory will be used.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function controller($name, $install_dir=null)
+    {
+        $this->_createClass(
+            "ActionController", 
+            array("MyAction"=>$name), 
+            "src".DS."controllers", 
+            strtolower($name).".php", 
+            $install_dir
+        );
+    }
+    
+    /**
+     * Create an empty view helper class.
+     * 
+     * @param string $name        The helper name. The string 'Helper' will be
+     *                            appended to the name.
+     * @param string $install_dir [Optional] Absolute path to installation 
+     *                            directory. If not specified the current 
+     *                            working directory will be used.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function helper($name, $install_dir=null)
+    {
+        $this->_createClass(
+            "ViewHelper", 
+            array("MyView"=>$name), 
+            "src".DS."helpers", 
+            strtolower($name).".php", 
+            $install_dir
+        );
+    }
+    
+    /**
+     * Create an empty plugin class.
+     * 
+     * @param string $name        The plugin name.
+     * @param string $install_dir [Optional] Absolute path to installation 
+     *                            directory. If not specified the current 
+     *                            working directory will be used.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function plugin($name, $install_dir=null)
+    {
+        $this->_createClass(
+            "Plugin", 
+            array("MyPlugin"=>$name), 
+            "src".DS."plugins", 
+            strtolower($name).".php", 
+            $install_dir
+        );
+    }
+    
+    /**
+     * Private method to create the actual classes and write them to disk.
+     * 
+     * @param string $tmpl        The template to use.
+     * @param array  $replace     Key value pairs with patterns and replacementes.
+     * @param string $dir         Absolute path to the directory where we will 
+     *                            be writing the class file.
+     * @param string $filename    The name of the class file to write.
+     * @param string $install_dir [Optional] Absolute path to installation 
+     *                            directory. If not specified the current 
+     *                            working directory will be used.
+     * 
+     * @return void
+     * @since  1.0
+     */
+    private function _createClass(
+        $tmpl, 
+        array $replace, 
+        $dir, 
+        $filename, 
+        $install_dir=null
+    ) {
+        if (is_null($install_dir)) {
+            $install_dir = getcwd();
+        }
+        
+        $file = $install_dir.DS.$dir.DS.$filename;
+        
+        if (is_file($file)) {
+            $msg = "Could not create class. File '".$file."' already exists.";
+            $this->raiseError($msg);
+            return;
+        }
+        
+        $tmpl_path = $this->app()->getInstallDir().DS."var".DS."class-templates";
+        $creator   = new ClassCreator($tmpl_path);
+        $class     = $creator->create($tmpl, $replace);
+        
+        try {
+            PHPFrame_Filesystem::ensureWritableDir($install_dir.DS.$dir);
+        } catch (Exception $e) {
+            $this->raiseError($e->getMessage());
+            return;
+        }
+        
+        file_put_contents($file, $class);
+        
+        $this->notifySuccess("Class file created: ".$file);
     }
 }

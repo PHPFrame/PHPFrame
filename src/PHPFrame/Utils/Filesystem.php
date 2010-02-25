@@ -180,7 +180,7 @@ class PHPFrame_Filesystem
         foreach ($path_array as $path_item) {
             // If dir doesnt exist we try to create it
             if (!is_dir($path_prefix.$path_item)) {
-                if (!mkdir($path_prefix.$path_item, 0771)) {
+                if (@!mkdir($path_prefix.$path_item, 0771)) {
                     $msg  = "Could not create directory ";
                     $msg .= $path_prefix.$path_item.".";
                     throw new RuntimeException($msg);

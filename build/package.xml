@@ -154,6 +154,7 @@
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/scaffold.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/helpers/cli.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/models/apptemplate.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/src/models/classcreator.php" role="data" />
    
    <file baseinstalldir="/" name="lib/phpmailer/language/phpmailer.lang-en.php" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/LICENSE" role="data" />
@@ -238,12 +239,6 @@ installing the PEAR package. If you want to continue type "yes".
     <name>spl</name>
    </extension>
    <extension>
-    <name>json</name>
-   </extension>
-   <extension>
-    <name>gd</name>
-   </extension>
-   <extension>
     <name>filter</name>
    </extension>
    <extension>
@@ -264,6 +259,12 @@ installing the PEAR package. If you want to continue type "yes".
    </extension>
    <extension>
     <name>imap</name>
+   </extension>
+   <extension>
+    <name>json</name>
+   </extension>
+   <extension>
+    <name>gd</name>
    </extension>
    <extension>
     <name>xdebug</name>

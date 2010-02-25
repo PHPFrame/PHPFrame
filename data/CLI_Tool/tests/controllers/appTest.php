@@ -15,6 +15,8 @@ class AppControllerTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         PHPFrame::testMode(true);
+        PHPFrame::dataDir(preg_replace("/CLI_Tool\/.*/", "", __FILE__));
+        PHPFrame::getSession()->getSysevents()->clear();
         
         $install_dir = preg_replace("/tests\/.*/", "", __FILE__);
         
@@ -30,7 +32,6 @@ class AppControllerTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         //...
-        PHPFrame::getSession()->getSysevents()->clear();
     }
     
     public function test_create()

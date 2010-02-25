@@ -37,7 +37,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
             unlink($app_reg);
         }
         if (is_dir($tmp_dir)) {
-            rmdir($tmp_dir);
+            PHPFrame_Filesystem::rm($tmp_dir, true);
         }
         
         $var_dir = $this->_app->getInstallDir().DS."var";
@@ -49,9 +49,6 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         }
         if (is_file($data_db)) {
             unlink($data_db);
-        }
-        if (is_dir($var_dir)) {
-            rmdir($var_dir);
         }
     }
     

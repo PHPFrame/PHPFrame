@@ -42,9 +42,6 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
         if (is_file($data_db)) {
             unlink($data_db);
         }
-        if (is_dir($var_dir)) {
-            rmdir($var_dir);
-        }
     }
     
     public function test_execute()

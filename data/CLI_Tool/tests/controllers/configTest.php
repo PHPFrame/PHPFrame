@@ -9,6 +9,7 @@ class ConfigControllerTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         PHPFrame::testMode(true);
+        PHPFrame::dataDir(preg_replace("/CLI_Tool\/.*/", "", __FILE__));
         
         $install_dir = preg_replace("/tests\/.*/", "", __FILE__);
         

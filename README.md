@@ -58,20 +58,11 @@ Dependencies
 Installing PHPFrame with the PEAR command line installer
 --------------------------------------------------------
 
-1. Tell the installer about our PEAR channel:
-   `pear channel-discover pear.phpframe.org`
-
-2. Tell the PEAR installer that you want to install alpha packages:
-   `pear config-set preferred_state alpha`
-
-3. Download and install the latest successful build:
-   `pear install phpframe/PHPFrame`
-
-4. Run post installation scripts:
-   `pear run-scripts phpframe/PHPFrame`
-
-5. Set your preferred state for packages back to stable:
-   `pear config-set preferred_state stable`
+1. `pear channel-discover pear.phpframe.org`
+2. `pear config-set preferred_state alpha`
+3. `pear install phpframe/PHPFrame`
+4. `pear run-scripts phpframe/PHPFrame`
+5. `pear config-set preferred_state stable`
 
 
 Command line tool examples
@@ -85,7 +76,7 @@ Command line tool examples
   
     mkdir newapp
     cd newapp
-    phpframe app create app_name="My cool app
+    phpframe app create app_name="My cool app"
 
 ### Remove an app
 

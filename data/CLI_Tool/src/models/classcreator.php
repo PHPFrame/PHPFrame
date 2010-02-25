@@ -1,8 +1,40 @@
 <?php
+/**
+ * data/CLITool/src/models/classcreator.php
+ * 
+ * PHP version 5
+ * 
+ * @category  PHPFrame
+ * @package   PHPFrame_CLITool
+ * @author    Lupo Montero <lupo@e-noise.com>
+ * @copyright 2010 The PHPFrame Group
+ * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link      http://github.com/PHPFrame/PHPFrame
+ */
+
+/**
+ * This class is used to create new classes based on provided class templates.
+ * 
+ * @category PHPFrame
+ * @package  PHPFrame_CLITool
+ * @author   Lupo Montero <lupo@e-noise.com>
+ * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @link     http://github.com/PHPFrame/PHPFrame
+ * @since    1.0
+ */
 class ClassCreator
 {
     private $_tmpl_path;
     
+    /**
+     * Constructor.
+     * 
+     * @param string $tmpl_path Absolute path to directory containings class 
+     *                          templates.
+     * 
+     * @return void
+     * @since  1.0
+     */
     public function __construct($tmpl_path)
     {
         if (!is_dir($tmpl_path)) {
@@ -15,6 +47,16 @@ class ClassCreator
         $this->_tmpl_path = $tmpl_path;
     }
     
+    /**
+     * Create class code.
+     * 
+     * @param string $tmpl    The template name.
+     * @param array  $replace [Optional] Associative array where keys are 
+     *                        patterns and values are replacements.
+     * 
+     * @return string
+     * @since  1.0
+     */
     public function create($tmpl, array $replace=null)
     {
         $tmpl = $this->_tmpl_path.DS.$tmpl.".php";

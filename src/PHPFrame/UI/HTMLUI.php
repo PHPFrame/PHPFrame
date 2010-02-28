@@ -29,6 +29,125 @@
 class PHPFrame_HTMLUI
 {
     /**
+     * Create an HTML input field.
+     * 
+     * @param string $name      The input name.
+     * @param string $value     [Optional] The initial value for the field.
+     * @param string $type      [Optional] The input type.
+     * @param int    $size      [Optional] The field's display width.
+     * @param int    $maxlength [Optional] The maximum length allowed by field.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public static function input(
+        $name,
+        $value=null, 
+        $type="text", 
+        $size=null, 
+        $maxlength=null
+    ) {
+        $str  = '<input type="'.$type.'" name="'.$name.'"';
+        $str .= ' value="'.$value.'"';
+        
+        if (!is_null($size)) {
+            $str .= ' size="'.$size.'"';
+        }
+        
+        if (!is_null($maxlength)) {
+            $str .= ' maxlength="'.$maxlength.'"';
+        } elseif (!is_null($size)) {
+            $str .= ' maxlength="'.$size.'"';
+        }
+        
+        $str .= " />\n";
+        
+        return $str;
+    }
+    
+    /**
+     * Create an HTML text area.
+     * 
+     * @param string $name  The name for the text area.
+     * @param string $value [Optional] 
+     * @param int    $cols  [Optional] 
+     * @param int    $rows  [Optional] 
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public static function textarea(
+        $name, 
+        $value=null, 
+        $cols=50, 
+        $rows=10
+    ) {
+        $str  = '<textarea name="'.$name.'"';
+        $str .= ' cols="'.(int) $cols.'"';
+        $str .= ' rows="'.(int) $rows.'"';
+        $str .= ">".$value."</textarea>\n";
+        
+        return $str;
+    }
+    
+    /**
+     * Create an HTML radio button.
+     * 
+     * @param string $name    The name for the radio button.
+     * @param array  $options [Optional] 
+     * @param string $value   [Optional] 
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public static function radio(
+        $name, 
+        array $options=array(), 
+        $value=null
+    ) {
+        $str = "";
+        
+        foreach ($options as $k=>$v) {
+            $str .= $k." <input type=\"radio\" name=\"".$name."\"";
+            $str .= " value=\"".$v."\"";
+            
+            if ($v == $value) {
+                $str .= " checked";
+            }
+            
+            $str .= " />";
+        }
+        
+        return $str;
+    }
+    
+    /**
+     * Create an HTML select tag.
+     * 
+     * @param string $name    The name for the select field.
+     * @param array  $options [Optional] 
+     * @param string $value   [Optional] 
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public static function select(
+        $name, 
+        array $options=array(), 
+        $value=null
+    ) {
+        $str  = "<select name=\"".$name."\">";
+        
+        foreach ($options as $option) {
+            $str .= "<option value=\"".$option."\">".$option."</option>";
+        }
+        
+        $str .= "</select>";
+        
+        return $str;
+    }
+
+    /**
      * Add jQuery validation behaviour to a given form.
      * 
      * @param string $formid The form's id attribute.

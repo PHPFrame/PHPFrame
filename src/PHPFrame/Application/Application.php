@@ -713,8 +713,8 @@ class PHPFrame_Application
         
         // Register installed plugins with plugin handler
         foreach ($this->plugins() as $plugin) {
-            if ($plugin->isEnabled()) {
-                $plugin_name = $plugin->getName();
+            if ($plugin->enabled()) {
+                $plugin_name = $plugin->name();
                 $this->_plugin_handler->registerPlugin(new $plugin_name($this));
             }
         }

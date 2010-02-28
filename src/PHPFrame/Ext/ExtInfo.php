@@ -41,14 +41,13 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      */
     public function __construct(array $options=null)
     {
-        
         // before we construct the parent we add the necessary fields
         $this->addField(
             "name", 
             "", 
             false, 
             new PHPFrame_RegexpFilter(array(
-                "regexp"=>'/^[a-zA-Z\.]{3,20}$/', 
+                "regexp"=>'/^[a-zA-Z\._]{3,20}$/', 
                 "min_length"=>3, 
                 "max_length"=>20
             ))
@@ -100,6 +99,12 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
             null, 
             true, 
             new PHPFrame_StringFilter()
+        );
+        $this->addField(
+            "enabled", 
+            false, 
+            false, 
+            new PHPFrame_BoolFilter()
         );
         
         parent::__construct($options);
@@ -261,24 +266,18 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
     /**
      * Is enabled?
      * 
-     * @return bool
-     * @since  1.0
-     */
-    public function isEnabled()
-    {
-        return (bool) $this->enabled;
-    }
-    
-    /**
-     * Set enabled
-     * 
-     * @param bool $bool Boolean indicating whether extension is enabled.
+     * @param bool $bool [Optional] Boolean indicating whether extension is 
+     *                              enabled.
      * 
      * @return bool
      * @since  1.0
      */
-    public function setEnabled($bool)
+    public function enabled($bool=null)
     {
-        $this->enabled = (bool) $bool;
+        if (!is_null($bool)) {
+            $this->fields["enabled"] = $this->validate("enabled", $bool);
+        }
+        
+        return $this->fields["enabled"];
     }
 }

@@ -76,7 +76,7 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
     final public function getInfo($name) 
     {
         foreach ($this->_extensions as $extension) {
-            if ($extension->getName() == $name) {
+            if ($extension->name() == $name) {
                 return $extension;
             }
         }
@@ -98,7 +98,7 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
     final public function isEnabled($name) 
     {
         foreach ($this->_extensions as $extension) {
-            if ($extension->getName() == $name && $extension->isEnabled()) {
+            if ($extension->name() == $name && $extension->enabled()) {
                 return true;
             }
         }
@@ -118,7 +118,7 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
     final public function isInstalled($name)
     {
         foreach ($this->_extensions as $extension) {
-            if ($extension->getName() == $name && $extension->isInstalled()) {
+            if ($extension->name() == $name && $extension->isInstalled()) {
                 return true;
             }
         }

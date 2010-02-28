@@ -29,7 +29,8 @@ class PHPFrame_PersistentObjectFactory
     /**
      * Constructor
      * 
-     * @param string $target_class The target class for this object factory.
+     * @param PHPFrame_PersistenceFactory $factory Instance of persistence 
+     *                                             factory.
      * 
      * @return void
      * @since  1.0

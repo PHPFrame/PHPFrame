@@ -36,15 +36,24 @@ class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
      *                             mapping the persistent objects. If omitted 
      *                             the table name will be assumed to be the same 
      *                             as the target class.
-     * @param string $path         [Optional] Path to directory where to store 
-     *                             the XML file.
+     * @param string $path         Path to directory where to store the XML file.
+     * @param string $type_column  [Optional] Name of column storing the subtype 
+     *                             if any. When storing subtypes in the same 
+     *                             table the subtype class name needs to be 
+     *                             stored in a column in order to instantiate 
+     *                             the correct objects when retrievin data from 
+     *                             storage.
      * 
      * @return void
      * @since  1.0
      */
-    public function __construct($target_class, $table_name, $path=null)
-    {
-        parent::__construct($target_class, $table_name);
+    public function __construct(
+        $target_class, 
+        $table_name, 
+        $path, 
+        $type_column=null
+    ) {
+        parent::__construct($target_class, $table_name, $type_column);
         
         if (!is_null($path)) {
             $this->_path = trim((string) $path);

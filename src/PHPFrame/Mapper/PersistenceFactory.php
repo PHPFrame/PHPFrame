@@ -29,13 +29,19 @@ abstract class PHPFrame_PersistenceFactory
      * 
      * @var string
      */
-    private $_target_class = null;
+    private $_target_class;
     /**
      * Target class
      * 
      * @var string
      */
-    private $_table_name = null;
+    private $_table_name;
+    /**
+     * Type column
+     * 
+     * @var string
+     */
+    private $_type_column;
     
     /**
      * Constructor
@@ -45,13 +51,22 @@ abstract class PHPFrame_PersistenceFactory
      * @param string $table_name   [Optional] The table name where we will be 
      *                             mapping the persistent objects. If omitted 
      *                             the table name will be assumed to be the same 
-     *                             as the target class. 
+     *                             as the target class.
+     * @param string $type_column  [Optional] Name of column storing the subtype 
+     *                             if any. When storing subtypes in the same 
+     *                             table the subtype class name needs to be 
+     *                             stored in a column in order to instantiate 
+     *                             the correct objects when retrievin data from 
+     *                             storage.
      * 
      * @return void
      * @since  1.0
      */
-    public function __construct($target_class, $table_name=null)
-    {
+    public function __construct(
+        $target_class, 
+        $table_name=null, 
+        $type_column=null
+    ) {
         $this->_target_class = trim((string) $target_class);
         
         if (!is_null($table_name)) {
@@ -59,43 +74,10 @@ abstract class PHPFrame_PersistenceFactory
         } else {
             $this->_table_name = $this->_target_class;
         }
-    }
-    
-    /**
-     * Get concrete persistence factory
-     * 
-     * @param string $target_class The persistent object class this factory will
-     *                             work with.
-     * @param string $table_name   The table name where we will be mapping the 
-     *                             persistent objects.
-     * @param int    $storage      [Optional] Storage mechanism. If omitted SQL 
-     *                             storage will be used. For supported storage 
-     *                             mechanisms see class constants.
-     * 
-     * @return PHPFrame_PersistenceFactory
-     * @since  1.0
-     */
-    public static function getFactory(
-        $target_class, 
-        $table_name, 
-        $storage=self::STORAGE_SQL
-    ) {
-        switch ($storage) {
-        case self::STORAGE_SQL :
-            $class_name = "PHPFrame_SQLPersistenceFactory";
-            break;
-            
-        case self::STORAGE_XML :
-            $class_name = "PHPFrame_XMLPersistenceFactory";
-            break;
         
-        default :
-            throw new RuntimeException("Storage mechanism not supported");
+        if (!is_null($type_column)) {
+            $this->_type_column = trim((string) $type_column);
         }
-        
-        $factory = new $class_name($target_class, $table_name);
-        
-        return $factory;
     }
     
     /**
@@ -106,7 +88,7 @@ abstract class PHPFrame_PersistenceFactory
      */
     public function getPersistentObjectFactory()
     {
-        return new PHPFrame_PersistentObjectFactory($this->_target_class);
+        return new PHPFrame_PersistentObjectFactory($this);
     }
     
     /**
@@ -163,6 +145,17 @@ abstract class PHPFrame_PersistenceFactory
     public function getTableName()
     {
         return $this->_table_name;
+    }
+    
+    /**
+     * Get type column
+     * 
+     * @return string|null
+     * @since  1.0
+     */
+    public function getTypeColumn()
+    {
+        return $this->_type_column;
     }
     
     /**

@@ -24,6 +24,8 @@
  */
 class PHPFrame_PersistentObjectFactory
 {
+	private $_factory;
+	
     /**
      * Constructor
      * 
@@ -32,9 +34,9 @@ class PHPFrame_PersistentObjectFactory
      * @return void
      * @since  1.0
      */
-    public function __construct($target_class)
+    public function __construct(PHPFrame_PersistenceFactory $factory)
     {
-        $this->_target_class = trim((string) $target_class);
+        $this->_factory = $factory;
     }
     
     /**
@@ -48,8 +50,13 @@ class PHPFrame_PersistentObjectFactory
      */
     public function createObject(array $array)
     {
-        $class_name = $this->_target_class;
-        
+    	$type_column = $this->_factory->getTypeColumn();
+    	if (!is_null($type_column) && array_key_exists($type_column, $array)) {
+    	    $class_name = $array[$type_column];
+    	} else {
+    	    $class_name = $this->_factory->getTargetClass();
+    	}
+    	
         $reflectionObj = new ReflectionClass($class_name);
         if (!$reflectionObj->isSubclassOf("PHPFrame_PersistentObject")) {
             $msg = "Domain Object '".$class_name."' not supported.";

@@ -51,6 +51,15 @@ class PHPFrame_Mapper
      *                                               either the supplied table 
      *                                               name or the target class.
      * @param string                   $table_name   [Optional]
+     * @param string                   $type_column  [Optional] Name of column 
+     *                                               storing the subtype if any. 
+     *                                               When storing subtypes in 
+     *                                               the same table the subtype 
+     *                                               class name needs to be 
+     *                                               stored in a column in order 
+     *                                               to instantiate the correct 
+     *                                               objects when retrievin data 
+     *                                               from storage.
      * 
      * @return void
      * @since  1.0
@@ -58,7 +67,8 @@ class PHPFrame_Mapper
     public function __construct(
         $target_class, 
         $db_or_path, 
-        $table_name=null
+        $table_name=null,
+        $type_column=null
     ) {
         if ($db_or_path instanceof PHPFrame_Database) {
             $factory_class = "PHPFrame_SQLPersistenceFactory";
@@ -72,7 +82,8 @@ class PHPFrame_Mapper
         $this->_factory = new $factory_class(
             $target_class, 
             $table_name, 
-            $db_or_path
+            $db_or_path,
+            $type_column
         );
     }
     

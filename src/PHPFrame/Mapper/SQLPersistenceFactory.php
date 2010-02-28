@@ -34,6 +34,13 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
      * @param string            $table_name   The table name the target class is 
      *                                        mapped to.
      * @param PHPFrame_Database $db           Reference to the databse object.
+     * @param string            $type_column  [Optional] Name of column storing 
+     *                                        the subtype if any. When storing 
+     *                                        subtypes in the same table the 
+     *                                        subtype class name needs to be 
+     *                                        stored in a column in order to 
+     *                                        instantiate the correct objects 
+     *                                        when retrievin data from storage.
      * 
      * @return void
      * @since  1.0
@@ -41,9 +48,10 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
     public function __construct(
         $target_class, 
         $table_name, 
-        PHPFrame_Database $db
+        PHPFrame_Database $db,
+        $type_column=null
     ) {
-        parent::__construct($target_class, $table_name);
+        parent::__construct($target_class, $table_name, $type_column);
         
         $this->_db = $db;
     }

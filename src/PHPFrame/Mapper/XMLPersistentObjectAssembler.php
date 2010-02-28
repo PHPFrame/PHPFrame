@@ -26,8 +26,8 @@
 class PHPFrame_XMLPersistentObjectAssembler 
     extends PHPFrame_PersistentObjectAssembler
 {
-    private $_path_info = null;
-    private $_file_info = null;
+    private $_path_info;
+    private $_file_name;
     
     /**
      * Constructor
@@ -52,17 +52,8 @@ class PHPFrame_XMLPersistentObjectAssembler
         $this->_path_info = new SplFileInfo($path);
         
         // Build full path to XML file
-        $file_name = $this->_path_info->getRealPath();
-        $file_name .= DS.$this->factory->getTableName().".xml";
-        
-        // Create FileInfo object for XML file
-        // Create XML file if it doesnt exist
-        if (!is_file($file_name)) {
-            $file_obj = new SplFileObject($file_name, "w");
-            $this->_file_info = $file_obj->getFileInfo();
-        } else {
-            $this->_file_info = new SplFileInfo($file_name);
-        }
+        $this->_file_name  = $this->_path_info->getRealPath();
+        $this->_file_name .= DS.$this->factory->getTableName().".xml";
     }
     
     /**
@@ -107,11 +98,15 @@ class PHPFrame_XMLPersistentObjectAssembler
      */
     public function find(PHPFrame_IdObject $id_obj=null)
     {
-        $file_contents = file_get_contents($this->_file_info->getRealPath());
-        if (!empty($file_contents)) {
-            $raw_tmp = PHPFrame_XMLSerialiser::unserialise($file_contents);
-        } else {
+        if (!is_file($this->_file_name)) {
             $raw_tmp = array();
+        } else {
+            $file_contents = file_get_contents($this->_file_name);
+            if (!empty($file_contents)) {
+                $raw_tmp = PHPFrame_XMLSerialiser::unserialise($file_contents);
+            } else {
+                $raw_tmp = array();
+            }
         }
         
         $raw = array();
@@ -168,7 +163,7 @@ class PHPFrame_XMLPersistentObjectAssembler
         }
         
         // Open the file in "write" mode
-        $file_obj = $this->_file_info->openFile("w");
+        $file_obj = $this->_getFileInfo()->openFile("w");
         $file_obj->fwrite($this->_serializeCollection($collection));
         
         $obj->markClean();
@@ -197,7 +192,7 @@ class PHPFrame_XMLPersistentObjectAssembler
         $collection->removeElement($obj);
         
         // Open the file in "write" mode
-        $file_obj = $this->_file_info->openFile("w");
+        $file_obj = $this->_getFileInfo()->openFile("w");
         $file_obj->fwrite($this->_serializeCollection($collection));
         
         $obj->markClean();
@@ -244,5 +239,23 @@ class PHPFrame_XMLPersistentObjectAssembler
         }
         
         return ($newid+1);
+    }
+    
+    /**
+     * Get SplFileInfo object for XML file.
+     * 
+     * @return SplFileInfo
+     * @since  1.0
+     */
+    private function _getFileInfo()
+    {
+        // Create FileInfo object for XML file
+        // Create XML file if it doesnt exist
+        if (!is_file($this->_file_name)) {
+            $file_obj = new SplFileObject($this->_file_name, "w");
+            return $file_obj->getFileInfo();
+        } else {
+            return new SplFileInfo($this->_file_name);
+        }
     }
 }

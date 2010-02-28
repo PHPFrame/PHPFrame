@@ -244,7 +244,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Get/set email.
      * 
-     * 
      * @param string $str [Optional] The email.
      * 
      * @return string

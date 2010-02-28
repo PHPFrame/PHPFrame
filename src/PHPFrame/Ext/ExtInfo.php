@@ -181,7 +181,7 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      * @return string
      * @since  1.0
      */
-    public function author($str=nul)
+    public function author($str=null)
     {
         if (!is_null($str)) {
             $this->fields["author"] = $this->validate("author", $str);

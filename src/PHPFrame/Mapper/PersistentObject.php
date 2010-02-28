@@ -43,18 +43,17 @@
  *  [firstname] =>
  *  [lastname] => 
  *  [email] => 
- *  [photo] =>
- *  [notifications] => 1
- *  [show_email] => 1
  *  [block] =>
  *  [last_visit] =>
- *  [activation] =>
  *  [params] => a:0:{}
  *  [deleted] => 
- *  [openid_urls] => a:0:{}
  *  [id] =>
- *  [created] =>
- *  [modified] => 
+ *  [atime] => 
+ *  [ctime] => 
+ *  [mtime] => 
+ *  [owner] => 0
+ *  [group] => 0
+ *  [perms] => 664
  *  )
  * </pre>
  * 

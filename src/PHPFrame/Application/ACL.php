@@ -128,7 +128,7 @@ class PHPFrame_ACL extends PHPFrame_PersistentObject
     public function action($str=null)
     {
         if (!is_null($str)) {
-           $this->fields["action"] = $this->validate("action", $str);
+            $this->fields["action"] = $this->validate("action", $str);
         }
         
         return $this->fields["action"];

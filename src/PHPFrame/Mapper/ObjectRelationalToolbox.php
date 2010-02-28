@@ -106,7 +106,9 @@ class PHPFrame_ObjectRelationalToolbox
             $column->setNull($obj->allowsNull($key));
             
             $def_values = iterator_to_array($obj);
-            if (!is_null($def_values[$key])) {
+            if (!is_null($def_values[$key]) 
+                && !$filter instanceof PHPFrame_StringFilter
+            ) {
                 $column->setDefault($def_values[$key]);
             }
             

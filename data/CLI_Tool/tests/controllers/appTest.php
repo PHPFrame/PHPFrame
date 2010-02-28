@@ -44,12 +44,9 @@ class AppControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/SUCCESS: App created successfully/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/SUCCESS: App created successfully/", $output);
         
         PHPFrame_Filesystem::rm($this->_newapp_dir, true);
     }
@@ -72,12 +69,9 @@ class AppControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/SUCCESS: App created successfully/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/SUCCESS: App created successfully/", $output);
         
         PHPFrame_Filesystem::rm($this->_newapp_dir, true);
     }
@@ -99,12 +93,9 @@ class AppControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/ERROR: Target directory is not empty/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/ERROR: Target directory is not empty/", $output);
     }
     
     public function test_createFailureUnknownTemplate()
@@ -118,12 +109,9 @@ class AppControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/ERROR: Unknown app template 'blah'/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/ERROR: Unknown app template 'blah'/", $output);
     }
     
     public function test_remove()
@@ -136,12 +124,9 @@ class AppControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/SUCCESS: App created successfully/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/SUCCESS: App created successfully/", $output);
         
         // Now that we have installed we can test the 'remove' action
         $request = new PHPFrame_Request();
@@ -151,11 +136,8 @@ class AppControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/SUCCESS: App removed successfully/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/SUCCESS: App removed successfully/", $output);
     }
 }

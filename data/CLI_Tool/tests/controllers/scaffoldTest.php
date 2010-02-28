@@ -53,12 +53,9 @@ class ScaffoldControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/db.enable: 1/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/db.enable: 1/", $output);
         
         // Create a table for the base User class
         $request = new PHPFrame_Request();
@@ -70,12 +67,9 @@ class ScaffoldControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/SUCCESS: Database table successfully created/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/SUCCESS: Database table successfully created/", $output);
     }
     
     public function test_persistent()
@@ -88,12 +82,9 @@ class ScaffoldControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/SUCCESS: Class file created/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/SUCCESS: Class file created/", $output);
     }
     
 //    public function test_mapper()
@@ -106,12 +97,9 @@ class ScaffoldControllerTest extends PHPUnit_Framework_TestCase
 //        
 //        ob_start();
 //        $this->_app->dispatch($request);
-//        ob_end_clean();
+//        $output = ob_get_clean();
 //        
-//        $this->assertRegExp(
-//            "/SUCCESS: Class file created/", 
-//            (string) $this->_app->response()
-//        );
+//        $this->assertRegExp("/SUCCESS: Class file created/", $output);
 //    }
     
     public function test_controller()
@@ -124,12 +112,9 @@ class ScaffoldControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/SUCCESS: Class file created/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/SUCCESS: Class file created/", $output);
     }
     
     public function test_helper()
@@ -142,12 +127,9 @@ class ScaffoldControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/SUCCESS: Class file created/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/SUCCESS: Class file created/", $output);
     }
     
     public function test_plugin()
@@ -160,11 +142,8 @@ class ScaffoldControllerTest extends PHPUnit_Framework_TestCase
         
         ob_start();
         $this->_app->dispatch($request);
-        ob_end_clean();
+        $output = ob_get_clean();
         
-        $this->assertRegExp(
-            "/SUCCESS: Class file created/", 
-            (string) $this->_app->response()
-        );
+        $this->assertRegExp("/SUCCESS: Class file created/", $output);
     }
 }

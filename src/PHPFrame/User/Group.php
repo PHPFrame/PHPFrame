@@ -46,26 +46,19 @@ class PHPFrame_Group extends PHPFrame_PersistentObject
     }
     
     /**
-     * Get group name.
+     * Get/set group name.
+     * 
+     * @param string $str [Optional] The group name.
      * 
      * @return string
      * @since  1.0
      */
-    public function getName()
+    public function name($str=null)
     {
+        if (!is_null($str)) {
+            $this->fields["name"] = $this->validate("name", $str);
+        }
+        
         return $this->fields["name"];
-    }
-    
-    /**
-     * Set group name.
-     * 
-     * @param string $str The group name.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setName($str)
-    {
-        $this->fields["name"] = $this->validate("name", $str);
     }
 }

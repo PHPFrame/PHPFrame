@@ -129,8 +129,8 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
             
             // Acquire session user object
             $this->_data['user'] = new PHPFrame_User();
-            $this->_data['user']->setId(0);
-            $this->_data['user']->setGroupId(0);
+            $this->_data['user']->id(0);
+            $this->_data['user']->groupId(0);
             
             // Acquire sysevents object
             $this->_data['sysevents'] = new PHPFrame_Sysevents();
@@ -339,7 +339,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         if (isset($this->_data['user'])
             && $this->_data['user'] instanceof PHPFrame_User
         ) {
-            return (int) $this->_data['user']->getId();
+            return (int) $this->_data['user']->id();
         }
 
         return 0;
@@ -356,7 +356,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         if (isset($this->_data['user'])
             && $this->_data['user'] instanceof PHPFrame_User
         ) {
-            return (int) $this->_data['user']->getGroupId();
+            return (int) $this->_data['user']->groupId();
         }
 
         return 0;
@@ -372,7 +372,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     {
         if (isset($this->_data['user'])
             && $this->_data['user'] instanceof PHPFrame_User
-            && $this->_data['user']->getId() > 0
+            && $this->_data['user']->id() > 0
         ) {
             return true;
         }
@@ -389,7 +389,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     public function isAdmin()
     {
         if ($this->isAuth()) {
-            return ($this->_data['user']->getGroupId() == 1);
+            return ($this->_data['user']->groupId() == 1);
         }
 
         return false;

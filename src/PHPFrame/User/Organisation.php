@@ -45,26 +45,19 @@ class PHPFrame_Organisation extends PHPFrame_PersistentObject
     }
     
     /**
-     * Get the organisation name.
+     * Get/set the organisation name.
+     * 
+     * @param string $str [Optional] The organisation name.
      * 
      * @return string
      * @since  1.0
      */
-    public function getName()
+    public function name($str=null)
     {
+        if (!is_null($str)) {
+            $this->fields["name"] = $this->validate("name", $str);
+        }
+        
         return $this->fields["name"];
-    }
-    
-    /**
-     * Set the organisation name.
-     * 
-     * @param string $str The organisation name.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setName($str)
-    {
-        $this->fields["name"] = $this->validate("name", $str);
     }
 }

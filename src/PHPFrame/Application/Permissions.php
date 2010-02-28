@@ -72,9 +72,9 @@ class PHPFrame_Permissions
         }
         
         foreach ($this->_acl as $acl) {
-            if ($acl->getGroupid() == $groupid 
-                && $acl->getController() == $controller 
-                && ($acl->getAction() == $action || $acl->getAction() == '*')
+            if ($acl->groupid() == $groupid 
+                && $acl->controller() == $controller 
+                && ($acl->action() == $action || $acl->action() == '*')
             ) {
                 return true;
             }

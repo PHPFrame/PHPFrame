@@ -34,7 +34,7 @@ class PHPFrame_XMLMapperTest extends PHPUnit_Framework_TestCase
     public function test_insert()
     {
         $this->_mapper->insert($this->_obj);
-        $this->assertEquals(1, $this->_obj->getID());
+        $this->assertEquals(1, $this->_obj->id());
     }
     
     public function test_delete()
@@ -83,14 +83,14 @@ class PHPFrame_XMLMapperTest extends PHPUnit_Framework_TestCase
         // Insert some objects
         $this->_mapper->insert($this->_obj);
         $obj2 = clone $this->_obj;
-        $obj2->setController("login");
+        $obj2->controller("login");
         $this->_mapper->insert($obj2);
         
         // And now we find the second one with the mapper
         $obj3 = $this->_mapper->findOne(2);
         
         $this->assertType($this->_target_class, $obj3);
-        $this->assertEquals("login", $obj3->getController());
+        $this->assertEquals("login", $obj3->controller());
     }
     
     public function test_isXML()

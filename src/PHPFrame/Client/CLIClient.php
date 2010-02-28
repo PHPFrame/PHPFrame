@@ -68,11 +68,11 @@ class PHPFrame_CLIClient extends PHPFrame_Client
     {
         // Automatically log in as system user
         $user = new PHPFrame_User();
-        $user->setId(1);
-        $user->setGroupId(1);
-        $user->setUserName('system');
-        $user->setFirstName('System');
-        $user->setLastName('User');
+        $user->id(1);
+        $user->groupId(1);
+        $user->userName('system');
+        $user->firstName('System');
+        $user->lastName('User');
         
         // Store user in session
         $session = PHPFrame::getSession();

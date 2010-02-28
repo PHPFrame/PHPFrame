@@ -66,6 +66,8 @@ class PHPFrame_PlainDocument extends PHPFrame_Document
             $str .= "\n";
         }
         
+        $sysevents->clear();
+        
         $body = $this->body();
         if (!empty($body)) {
             $str .= $body."\n";

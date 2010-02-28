@@ -799,6 +799,7 @@ class PHPFrame_Application
                 $sysevents = PHPFrame::getSession()->getSysevents();
                 $sysevents = $response->renderer()->render($sysevents);
                 $document->prependBody($sysevents);
+                PHPFrame::getSession()->getSysevents()->clear();
                 
                 // Set "body only" mode for AJAX requests when HTML document
                 $document->bodyOnly(true);

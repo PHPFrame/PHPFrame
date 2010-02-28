@@ -141,14 +141,14 @@ class PHPFrame_SQLPersistentObjectAssembler
     {
         $obj->validateAll();
         
-        if ($obj->getId() <= 0) {
-            $obj->setCTime(time());
+        if ($obj->id() <= 0) {
+            $obj->ctime(time());
             $build_query_method = "_buildInsertQuery";
         } else {
             $build_query_method = "_buildUpdateQuery";
         }
         
-        $obj->setMTime(time());
+        $obj->mtime(time());
         
         $sql    = $this->$build_query_method(iterator_to_array($obj));
         $params = $this->_buildQueryParams(iterator_to_array($obj));
@@ -156,8 +156,8 @@ class PHPFrame_SQLPersistentObjectAssembler
         
         $db->query($sql, $params);
         
-        if ($obj->getId() <= 0) {
-            $obj->setId($db->lastInsertId());
+        if ($obj->id() <= 0) {
+            $obj->id($db->lastInsertId());
         }
         
         $obj->markClean();
@@ -176,7 +176,7 @@ class PHPFrame_SQLPersistentObjectAssembler
     public function delete($id_or_obj)
     {
         if ($id_or_obj instanceof PHPFrame_PersistentObject) {
-            $id = $id_or_obj->getId();
+            $id = $id_or_obj->id();
         } else {
             $id = (int) $id_or_obj;
         }

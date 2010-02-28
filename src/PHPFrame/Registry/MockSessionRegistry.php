@@ -45,9 +45,9 @@ class PHPFrame_MockSessionRegistry extends PHPFrame_SessionRegistry
             
         // Acquire session user object
         $user = new PHPFrame_User();
-        $user->setId(1);
-        $user->setGroupId(1);
-        $user->setUserName("testuser");
+        $user->id(1);
+        $user->groupId(1);
+        $user->userName("testuser");
         $this->set('user', $user);
             
         // Acquire sysevents object

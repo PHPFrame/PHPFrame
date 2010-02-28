@@ -78,11 +78,11 @@ class PHPFrame_XMLSerialiserTest extends PHPUnit_Framework_TestCase
     public function test_serialiseUser()
     {
         $user  = new PHPFrame_User();
-        $user->setUserName("someone");
-        $user->setPassword("password");
-        $user->setFirstName("Jimi");
-        $user->setLastName("Hendrix");
-        $user->setEmail("jimi@hendrix.com");
+        $user->userName("someone");
+        $user->password("password");
+        $user->firstName("Jimi");
+        $user->lastName("Hendrix");
+        $user->email("jimi@hendrix.com");
         $user->validateAll();
         
         $array = iterator_to_array($user);
@@ -98,50 +98,15 @@ class PHPFrame_XMLSerialiserTest extends PHPUnit_Framework_TestCase
     public function test_serialisePluginInfo()
     {
         $plugin = new PHPFrame_PluginInfo();
-        $plugin->setName("Users");
-        $plugin->setChannel("dist.phpframe.org");
-        $plugin->setSummary("This is the summary");
-        $plugin->setDescription("This is the description");
-        $plugin->setAuthor("Luis Montero");
-        $plugin->setDate("2009-08-27");
-        $plugin->setTime("00:47");
-        $plugin->setVersion(array("release"=>"0.1.1", "api"=>"1.0"));
-        $plugin->setStability(array("release"=>"beta", "api"=>"beta"));
-        $plugin->setLicense(array(
-            "name" => "BSD Style", 
-            "uri"  => "http://www.opensource.org/licenses/bsd-license.php"
-        ));
-        $plugin->setNotes("This are the notes....");
-        $plugin->setDependencies(array(
-            "required" => null,
-            "optional" => array(
-                "feature" => array(
-                    array(
-                        "name"    => "Login",
-                        "channel" => "dist.phpframe.org",
-                        "min"     => "0.0.1",
-                        "max"     => "0.0.1"
-                    ),
-                    array(
-                        "name"    => "Admin",
-                        "channel" => "dist.phpframe.org",
-                        "min"     => "0.0.1",
-                        "max"     => "0.0.1"
-                    ),
-                    array(
-                        "name"    => "Dashboard",
-                        "channel" => "dist.phpframe.org",
-                        "min"     => "0.0.1",
-                        "max"     => "0.0.1"
-                    )
-                )
-            )
-        ));
-        $plugin->setContents(array(
-            array("path"=>"src/controllers/users.php", "role"=>"php"),
-            array("path"=>"src/controllers/users.php", "role"=>"php"),
-            array("path"=>"src/models/users.php", "role"=>"php")
-        ));
+        $plugin->name("Users");
+        $plugin->channel("dist.phpframe.org");
+        $plugin->summary("This is the summary");
+        $plugin->description("This is the description");
+        $plugin->author("Luis Montero");
+        $plugin->date("2009-08-27");
+        $plugin->version("0.1.1");
+        $plugin->license("BSD Style");
+        $plugin->licenseURL("http://www.opensource.org/licenses/bsd-license.php");
         
         $plugin->validateAll();
         

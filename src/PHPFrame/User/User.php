@@ -30,12 +30,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      * @var string
      */
     private $_groupname;
-    /**
-     * vCard object used to store user details 
-     * 
-     * @var PHPFrame_VCard
-     */
-    private $_vcard=null;
     
     /**
      * Constructor
@@ -117,115 +111,236 @@ class PHPFrame_User extends PHPFrame_PersistentObject
             new PHPFrame_IntFilter()
         );
         
-        // If we are passed a vCard object we deal with this first
-        if (isset($options['vcard'])
-            && $options['vcard'] instanceof PHPFrame_VCard
-        ) {
-            $this->_vcard = $options['vcard'];
-            unset($options['vcard']);
-        } else {
-            $this->_vcard = new PHPFrame_VCard();
-        }
-        
-        // Once we have set the vCard object we call the parent's constructor
-        // to process the options array
         parent::__construct($options);
     }
     
     /**
-     * Get groupid
+     * Return object as associative array.
+     * 
+     * @return array
+     * @since  1.0
+     */
+    public function getIterator()
+    {
+        $array = array();
+        
+        foreach ($this->fields as $key=>$value) {
+            if (($key == "params")) {
+                if (is_array($value) && count($value) > 0) {
+                    $value = serialize($value);
+                } else {
+                    $value = "";
+                }
+            }
+            
+            $array[$key] = $value;
+        }
+        
+        return new ArrayIterator($array);
+    }
+    
+    /**
+     * Get/set groupid.
+     * 
+     * @param int $int [Optional] The group ID.
      * 
      * @return int
      * @since  1.0
      */
-    public function getGroupId()
+    public function groupId($int=null)
     {
+        if (!is_null($int)) {
+            $this->fields["groupid"] = $this->validate("groupid", $int);
+        }
+        
         return $this->fields["groupid"];
     }
     
     /**
-     * Set groupid
+     * Get/set groupname.
      * 
-     * @param int $int The group ID.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setGroupId($int)
-    {
-        $this->fields["groupid"] = $this->validate("groupid", $int);
-    }
-    
-    /**
-     * Get groupname
+     * @param string $str [Optional] The group name.
      * 
      * @return string
      * @since  1.0
      */
-    public function getGroupName()
+    public function groupName($str=null)
     {
+        if (!is_null($str)) {
+            $this->_groupname = trim((string) $str);
+        }
+        
         return $this->_groupname;
     }
     
     /**
-     * Set groupname
+     * Get/set username.
      * 
-     * @param string $str The group name.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setGroupName($str)
-    {
-        $this->_groupname = trim((string) $str);
-    }
-    
-    /**
-     * Get username
+     * @param string $str [Optional] The username.
      * 
      * @return string
      * @since  1.0
      */
-    public function getUserName()
+    public function userName($str=null)
     {
+        if (!is_null($str)) {
+            $this->fields["username"] = $this->validate("username", $str);
+        }
+        
         return $this->fields["username"];
     }
     
     /**
-     * Set username
+     * Get/set password.
      * 
-     * @param string $str The username.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setUserName($str)
-    {
-        $this->fields["username"] = $this->validate("username", $str);
-    }
-    
-    /**
-     * Get password
+     * @param string $str [Optional] The password.
      * 
      * @return string
      * @since  1.0
      */
-    public function getPassword()
+    public function password($str=null)
     {
+        if (!is_null($str)) {
+            $this->fields["password"] = $this->validate("password", $str);
+        }
+        
         return $this->fields["password"];
     }
     
     /**
-     * Set password
+     * Get/set first name.
      * 
-     * @param string $str The password.
+     * @param string $str [Optional] The first name.
      * 
-     * @return void
+     * @return string
      * @since  1.0
      */
-    public function setPassword($str)
+    public function firstName($str=null)
     {
-        $this->fields["password"] = $this->validate("password", $str);
+        if (!is_null($str)) {
+            $this->fields["firstname"] = $this->validate("firstname", $str);
+        }
+        
+        return $this->fields["firstname"];
+    }
+    
+    /**
+     * Get/set last name.
+     * 
+     * @param string $str [Optional] The last name.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public function lastName($str)
+    {
+        if (!is_null($str)) {
+            $this->fields["lastname"] = $this->validate("lastname", $str);
+        }
+        
+        return $this->fields["lastname"];
+    }
+    
+    /**
+     * Get/set email.
+     * 
+     * 
+     * @param string $str [Optional] The email.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public function email($str=null)
+    {
+        if (!is_null($str)) {
+            $this->fields["email"] = $this->validate("email", $str);
+        }
+        
+        return $this->fields["email"];
+    }
+    
+    /**
+     * Get/set block flag.
+     * 
+     * @param bool $bool [Optional] Flag indicating whether user is blocked 
+     *                              (no access).
+     * 
+     * @return bool
+     * @since  1.0
+     */
+    public function block($bool=null)
+    {
+        if (!is_null($bool)) {
+            $this->fields["block"] = (bool) $this->validate("block", $bool);
+        }
+        
+        return $this->fields["block"];
+    }
+    
+    /**
+     * Get/set last visit timestamp.
+     * 
+     * @param int $int [Optional] UNIX timestamp.
+     * 
+     * @return int
+     * @since  1.0
+     */
+    public function lastVisit($int=null)
+    {
+        if (!is_null($int)) {
+            $this->fields["last_visit"] = $this->validate("last_visit", $int);
+        }
+        
+        return $this->fields["last_visit"];
+    }
+    
+    /**
+     * Get/set params.
+     * 
+     * @param string|array $params [Optional] Either a serialised string or an 
+     *                             array.
+     * 
+     * @return string
+     * @since  1.0
+     */
+    public function params($params=null)
+    {
+        if (!is_null($params)) {
+            if (is_string($params) && !empty($params)) {
+                $params = unserialize($params);
+            }
+            
+            if (!is_array($params)) {
+                    $params = array();
+            }
+            
+            if (!is_array($params)) {
+                $msg  = "Argument \$params must be either a serialised string or ";
+                $msg .= "an array";
+                throw new InvalidArgumentException($msg);
+            }
+            
+            $this->fields["params"] = $params;
+        }
+        
+        return $this->fields["params"];
+    }
+    
+    /**
+     * Get/set deleted timestamp.
+     * 
+     * @param int $int [Optional]
+     * 
+     * @return int
+     * @since  1.0
+     */
+    public function deleted($int=null)
+    {
+        if (!is_null($int)) {
+            $this->fields["deleted"] = $this->validate("deleted", $int);
+        }
+        
+        return $this->fields["deleted"];
     }
     
     /**
@@ -247,263 +362,5 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         
         // Set password to encrypted string
         return $crypt.':'.$salt;
-    }
-    
-    /**
-     * Get first name
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function getFirstName()
-    {
-        return $this->_vcard->getName("FIRST");
-    }
-    
-    /**
-     * Set first name
-     * 
-     * @param string $str The first name.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setFirstName($str)
-    {
-        $str = $this->validate("firstname", $str);
-        
-        // Set first name in vCard object making sure we dont overwrite last name)
-        $this->_vcard->setName($this->getLastName(), $str, null, null, null);
-        
-        // Set property
-        $this->fields["firstname"] = $str;
-    }
-    
-    /**
-     * Get last name
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function getLastName()
-    {
-        return $this->_vcard->getName("LAST");
-    }
-    
-    /**
-     * Set last name
-     * 
-     * @param string $str The last name.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setLastName($str)
-    {
-        $str = $this->validate("lastname", $str);
-        
-        // Set last name in vCard object making sure we dont overwrite first name)
-        $this->_vcard->setName($str, $this->getFirstName(), null, null, null);
-        
-        // Set property
-        $this->fields["lastname"] = $str;
-    }
-    
-    /**
-     * Get email
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function getEmail()
-    {
-        return $this->fields["email"];
-    }
-
-    /**
-     * Set email
-     * 
-     * @param string $str The email.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setEmail($str)
-    {
-        $str = $this->validate("email", $str);
-        
-        // Set last name in vCard object making sure we dont overwrite first name)
-        $this->_vcard->addEmail($str);
-        
-        // Set property
-        $this->fields["email"] = $str;
-    }
-    
-    /**
-     * Get block flag
-     * 
-     * @return bool
-     * @since  1.0
-     */
-    public function getBlock()
-    {
-        return $this->fields["block"];
-    }
-    
-    /**
-     * Set block flag
-     * 
-     * @param bool $bool Flag indicating whether user is blocked (no access).
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setBlock($bool)
-    {
-        $bool = $this->validate("block", $bool);
-        
-        // Set property
-        $this->fields["block"] = (bool) $bool;
-    }
-    
-    /**
-     * Get last visit timestamp
-     * 
-     * @return int
-     * @since  1.0
-     */
-    public function getLastVisit()
-    {
-        return $this->fields["last_visit"];
-    }
-    
-    /**
-     * Set last visit datetime
-     * 
-     * @param int $int UNIX timestamp.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setLastVisit($int)
-    {
-        $this->fields["last_visit"] = $this->validate("last_visit", $int);
-    }
-    
-    /**
-     * Get params
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function getParams()
-    {
-        return $this->fields["params"];
-    }
-    
-    /**
-     * Set params
-     * 
-     * @param string|array $params Either a serialised string or an array.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setParams($params)
-    {
-        if (is_string($params) && !empty($params)) {
-            $params = unserialize($params);
-        }
-        
-        if (!is_array($params)) {
-                $params = array();
-        }
-        
-        if (!is_array($params)) {
-            $msg  = "Argument \$params must be either a serialised string or ";
-            $msg .= "an array";
-            throw new InvalidArgumentException($msg);
-        }
-        
-        $this->fields["params"] = $params;
-    }
-    
-    /**
-     * Get deleted timestamp
-     * 
-     * @return int
-     * @since  1.0
-     */
-    public function getDeleted()
-    {
-        return $this->fields["deleted"];
-    }
-    
-    /**
-     * Set deleted datetime
-     * 
-     * @param int $int Either 0 (deleted) or 1.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setDeleted($int)
-    {
-        if (empty($int)) {
-            return;
-        }
-        
-        $this->fields["deleted"] = $this->validate("deleted", $int);
-    }
-    
-    /**
-     * Get vCard object for this user
-     * 
-     * @return PHPFrame_VCard
-     * @since  1.0
-     */
-    public function getVCard()
-    {
-        return $this->_vcard;
-    }
-    
-    /**
-     * Set vCard object for this user
-     * 
-     * @param PHPFrame_VCard $vcard An instance of PHPFrame_VCard.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setVCard(PHPFrame_VCard $vcard)
-    {
-        //TODO: Here we have to parse the vCard data 
-        // and update the firstname and lastname proerties
-        $this->_vcard = $vcard;
-    }
-    
-    /**
-     * Return Row object as associative array
-     * 
-     * @return array
-     * @since  1.0
-     */
-    public function getIterator()
-    {
-        $array = array();
-        
-        foreach ($this->fields as $key=>$value) {
-            if (($key == "params" || $key == "openid_urls")) {
-                if (is_array($value) && count($value) > 0) {
-                    $value = serialize($value);
-                } else {
-                    $value = "";
-                }
-            }
-            
-            $array[$key] = $value;
-        }
-        
-        return new ArrayIterator($array);
     }
 }

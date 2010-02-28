@@ -565,11 +565,11 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
             if ($x_api_signature === $test_signature) {
                 // Login the user as group API
                 $user = new PHPFrame_User();
-                $user->setId(2);
-                $user->setGroupId(4);
-                $user->setUserName("api");
-                $user->setFirstName('API');
-                $user->setLastName('User');
+                $user->id(2);
+                $user->groupId(4);
+                $user->userName("api");
+                $user->firstName('API');
+                $user->lastName('User');
                 
                 // Store user in session
                 $session = PHPFrame::getSession();

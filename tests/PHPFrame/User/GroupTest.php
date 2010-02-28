@@ -19,7 +19,7 @@ class PHPFrame_GroupTest extends PHPUnit_Framework_TestCase
     public function test_populate()
     {
         $group = new PHPFrame_Group();
-        $group->setName(1234);
+        $group->name(1234);
         
         //var_dump(iterator_to_array($group));
     }

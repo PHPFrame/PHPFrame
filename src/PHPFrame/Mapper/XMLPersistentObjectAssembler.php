@@ -91,7 +91,7 @@ class PHPFrame_XMLPersistentObjectAssembler
         }
         
         foreach ($this->find() as $obj) {
-            if ($obj->getId() == $id) {
+            if ($obj->id() == $id) {
                 return $obj;
             }
         }
@@ -148,12 +148,12 @@ class PHPFrame_XMLPersistentObjectAssembler
         $collection = $this->find();
         
         // Update modified time
-        $obj->setMTime(time());
+        $obj->mtime(time());
         
         // Prepare new elements (insert)
-        if ($obj->getId() <= 0) {
-            $obj->setId($this->_getNewId());
-            $obj->setCTime(time());
+        if ($obj->id() <= 0) {
+            $obj->id($this->_getNewId());
+            $obj->ctime(time());
             
             // Add new element to collection
             $collection->addElement($obj);
@@ -161,7 +161,7 @@ class PHPFrame_XMLPersistentObjectAssembler
         } else {
             // Prepare existing elements (update)
             foreach ($collection as $item) {
-                if ($item->getId() == $obj->getId()) {
+                if ($item->id() == $obj->id()) {
                     $item = iterator_to_array($obj);
                 }
             }
@@ -238,8 +238,8 @@ class PHPFrame_XMLPersistentObjectAssembler
         $collection = $this->find();
         
         foreach ($collection as $item) {
-            if ($item->getId() > $newid) {
-                $newid = $item->getId();
+            if ($item->id() > $newid) {
+                $newid = $item->id();
             }
         }
         

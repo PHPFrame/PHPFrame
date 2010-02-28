@@ -25,84 +25,6 @@
 abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
 {
     /**
-     * The name of the addon
-     * 
-     * @var string
-     */
-    protected $name;
-    /**
-     * The dist channel
-     * 
-     * @var string
-     */
-    protected $channel;
-    /**
-     * The summary
-     * 
-     * @var string
-     */
-    protected $summary;
-    /**
-     * The description
-     * 
-     * @var string
-     */
-    protected $description;
-    /**
-     * The author
-     * 
-     * @var string
-     */
-    protected $author;
-    /**
-     * The release date
-     * 
-     * @var string
-     */
-    protected $date;
-    /**
-     * The release time
-     * 
-     * @var string
-     */
-    protected $time;
-    /**
-     * The release and api version
-     * 
-     * @var array
-     */
-    protected $version = array("release"=>null, "api"=>null);
-    /**
-     * Stability info for release and api (alpha, beta or stable)
-     * 
-     * @var array
-     */
-    protected $stability = array("release"=>null, "api"=>null);
-    /**
-     * License name and URI
-     * 
-     * @var array
-     */
-    protected $license = array("name"=>null, "uri"=>null);
-    /**
-     * Notes
-     * 
-     * @var string
-     */
-    protected $notes;
-    /**
-     * The addon dependencies
-     * 
-     * @var array
-     */
-    protected $dependencies = array("required"=>array(), "optional"=>array());
-    /**
-     * Package contents
-     * 
-     * @var array
-     */
-    protected $contents = array();
-    /**
      * Boolean indicating whether addon is enabled
      * 
      * @var bool
@@ -119,348 +41,221 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
      */
     public function __construct(array $options=null)
     {
+        
+        // before we construct the parent we add the necessary fields
+        $this->addField(
+            "name", 
+            "", 
+            false, 
+            new PHPFrame_RegexpFilter(array(
+                "regexp"=>'/^[a-zA-Z\.]{3,20}$/', 
+                "min_length"=>3, 
+                "max_length"=>20
+            ))
+        );
+        $this->addField(
+            "channel", 
+            null, 
+            true, 
+            new PHPFrame_StringFilter()
+        );
+        $this->addField(
+            "summary", 
+            null, 
+            true, 
+            new PHPFrame_StringFilter()
+        );
+        $this->addField(
+            "description", 
+            null, 
+            true, 
+            new PHPFrame_StringFilter()
+        );
+        $this->addField(
+            "author", 
+            null, 
+            true, 
+            new PHPFrame_StringFilter()
+        );
+        $this->addField(
+            "date", 
+            null, 
+            true, 
+            new PHPFrame_StringFilter()
+        );
+        $this->addField(
+            "version", 
+            null, 
+            true, 
+            new PHPFrame_StringFilter()
+        );
+        $this->addField(
+            "license", 
+            null, 
+            true, 
+            new PHPFrame_StringFilter()
+        );
+        $this->addField(
+            "license_url", 
+            null, 
+            true, 
+            new PHPFrame_StringFilter()
+        );
+        
         parent::__construct($options);
     }
     
     /**
-     * Implementation of IteratorAgreggate interface
+     * Get/set name.
      * 
-     * @return ArrayIterator
-     * @see PHPFrame/Mapper/PHPFrame_PersistentObject#getIterator()
+     * @param string $str [Optional] The extension name.
+     * 
+     * @return string
      * @since  1.0
      */
-    public function getIterator()
+    public function name($str=null)
     {
-        $properties = get_object_vars($this);
+        if (!is_null($str)) {
+            $this->fields["name"] = $this->validate("name", $str);
+        }
         
-        return new ArrayIterator(array_merge($this->fields, $properties));
+        return $this->fields["name"];
     }
     
     /**
-     * Get name
+     * Get/set channel.
+     * 
+     * @param string $str [Optional] The extenion's channel.
      * 
      * @return string
      * @since  1.0
      */
-    public function getName()
+    public function channel($str=null)
     {
-        return $this->name;
+        if (!is_null($str)) {
+            $this->fields["channel"] = $this->validate("channel", $str);
+        }
+        
+        return $this->fields["channel"];
     }
     
     /**
-     * Set name
+     * Get/set summary.
      * 
-     * @param string $str The extension name.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setName($str)
-    {
-        $this->name = (string) $str;
-    }
-    
-    /**
-     * Get channel
+     * @param string $str [Optional] The extenion's summary.
      * 
      * @return string
      * @since  1.0
      */
-    public function getChannel()
+    public function summary($str=null)
     {
-        return $this->channel;
+        if (!is_null($str)) {
+            $this->fields["summary"] = $this->validate("summary", $str);
+        }
+        
+        return $this->fields["summary"];
     }
     
     /**
-     * Set channel
+     * Get/set description.
      * 
-     * @param string $str The extenion's channel.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setChannel($str)
-    {
-        $this->channel = $str;
-    }
-    
-    /**
-     * Get summary
+     * @param string $str [Optional] The extenion's description.
      * 
      * @return string
      * @since  1.0
      */
-    public function getSummary()
+    public function description($str=null)
     {
-        return $this->summary;
+        if (!is_null($str)) {
+            $this->fields["description"] = $this->validate("description", $str);
+        }
+        
+        return $this->fields["description"];
     }
     
     /**
-     * Set summary
+     * Get/set author.
      * 
-     * @param string $str The extenion's summary.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setSummary($str)
-    {
-        $this->summary = $str;
-    }
-    
-    /**
-     * Get description
+     * @param string $str [Optional] The extenion's author.
      * 
      * @return string
      * @since  1.0
      */
-    public function getDescription()
+    public function author($str=nul)
     {
-        return $this->description;
+        if (!is_null($str)) {
+            $this->fields["author"] = $this->validate("author", $str);
+        }
+        
+        return $this->fields["author"];
     }
     
     /**
-     * Set description
+     * Get/set date.
      * 
-     * @param string $str The extenion's description.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setDescription($str)
-    {
-        $this->description = $str;
-    }
-    
-    /**
-     * Get author
+     * @param string $str [Optional] The extenion's build date.
      * 
      * @return string
      * @since  1.0
      */
-    public function getAuthor()
+    public function date($str=null)
     {
-        return $this->author;
+        if (!is_null($str)) {
+            $this->fields["date"] = $this->validate("date", $str);
+        }
+        
+        return $this->fields["date"];
     }
     
     /**
-     * Set author
+     * Get/set version.
      * 
-     * @param string $str The extenion's author.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setAuthor($str)
-    {
-        $this->author = $str;
-    }
-    
-    /**
-     * Get date
+     * @param string $str [Optional] The extenion's version.
      * 
      * @return string
      * @since  1.0
      */
-    public function getDate()
+    public function version($str=null)
     {
-        return $this->date;
+        if (!is_null($str)) {
+            $this->fields["version"] = $this->validate("version", $str);
+        }
+        
+        return $this->fields["version"];
     }
     
     /**
-     * Set date
+     * Set license.
      * 
-     * @param string $str The extenion's build date.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setDate($str)
-    {
-        $this->date = $str;
-    }
-    
-    /**
-     * Get time
+     * @param string $str [Optional] The extenion's license.
      * 
      * @return string
      * @since  1.0
      */
-    public function getTime()
+    public function license($str=null)
     {
-        return $this->time;
+        if (!is_null($str)) {
+            $this->fields["license"] = $this->validate("license", $str);
+        }
+        
+        return $this->fields["license"];
     }
     
     /**
-     * Set time
+     * Set license URL.
      * 
-     * @param string $str The extenion's build time.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setTime($str)
-    {
-        $this->time = $str;
-    }
-    
-    /**
-     * Get release version
+     * @param string $str [Optional] The extenion's license URL.
      * 
      * @return string
      * @since  1.0
      */
-    public function getReleaseVersion()
+    public function licenseURL($str=null)
     {
-        return $this->version["release"];
-    }
-    
-    /**
-     * Set version
-     * 
-     * @param array $array The extenion's version.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setVersion(array $array)
-    {
-        $this->version = $array;
-    }
-    
-    /**
-     * Set stability
-     * 
-     * @param array $array The extenion's stability.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setStability(array $array)
-    {
-        $this->stability = $array;
-    }
-    
-    /**
-     * Set license
-     * 
-     * @param array $array The extenion's license.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setLicense(array $array)
-    {
-        $this->license = $array;
-    }
-    
-    /**
-     * Set notes
-     * 
-     * @param string $str The extenion's release notes.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setNotes($str)
-    {
-        $this->notes = $str;
-    }
-    
-    /**
-     * Get dependencies
-     * 
-     * @return array
-     * @since  1.0
-     */
-    public function getDependencies()
-    {
-        return $this->dependencies;
-    }
-    
-    /**
-     * Set dependencies
-     * 
-     * @param array $array The extenion's dependencies.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setDependencies(array $array)
-    {
-        $this->dependencies = $array;
-    }
-    
-    /**
-     * Get contents
-     * 
-     * @return array
-     * @since  1.0
-     */
-    public function getContents()
-    {
-        return $this->contents;
-    }
-    
-    /**
-     * Add content
-     * 
-     * @param array $array The extenion's content array.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setContents(array $array)
-    {
-        $this->contents = $array;
-    }
-    
-    /**
-     * Get install scripts
-     * 
-     * @return array
-     * @since  1.0
-     */
-    public function getInstallScripts()
-    {
-        return $this->install;
-    }
-    
-    /**
-     * Add install script
-     * 
-     * @param string $str Path to script.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function addInstallScript($str)
-    {
-        $this->install[] = array("path"=>$str, "role"=>"php");
-    }
-    
-    /**
-     * Get uninstall scripts
-     * 
-     * @return array
-     * @since  1.0
-     */
-    public function getUninstallScripts()
-    {
-        return $this->uninstall;
-    }
-    
-    /**
-     * Add uninstall script
-     * 
-     * @param string $str Path to script.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function addUninstallScript($str)
-    {
-        $this->uninstall[] = array("path"=>$str, "role"=>"php");
+        if (!is_null($str)) {
+            $this->fields["license_url"] = $this->validate("license_url", $str);
+        }
+        
+        return $this->fields["license_url"];
     }
     
     /**

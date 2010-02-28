@@ -84,99 +84,71 @@ class PHPFrame_ACL extends PHPFrame_PersistentObject
     }
     
     /**
-     * Get the group ID.
+     * Get/set the group ID.
+     * 
+     * @param int $int [Optional] An integer representing the group ID.
      * 
      * @return int
      * @since  1.0
      */
-    public function getGroupId()
+    public function groupId($int=null)
     {
+        if (!is_null($int)) {
+            $this->fields["groupid"] = $this->validate("groupid", $int);
+        }
+        
         return $this->fields["groupid"];
     }
     
     /**
-     * Set the group ID
+     * Get/set controller name for which this access level applies.
      * 
-     * @param int $int An integer representing the group ID.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setGroupId($int)
-    {
-        $this->fields["groupid"] = $this->validate("groupid", $int);
-    }
-    
-    /**
-     * Get controller name for which this access level applies.
+     * @param string $str [Optional] The controller name.
      * 
      * @return string
      * @since  1.0
      */
-    public function getController()
+    public function controller($str=null)
     {
+        if (!is_null($str)) {
+            $this->fields["controller"] = $this->validate("controller", $str);
+        }
+        
         return $this->fields["controller"];
     }
     
     /**
-     * Set controller name for which this access level applies.
+     * Get/set action.
      * 
-     * @param string $str The controller name.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setController($str)
-    {
-        $this->fields["controller"] = $this->validate("controller", $str);
-    }
-    
-    /**
-     * Get action.
+     * @param string $str [Optional] The action name.
      * 
      * @return string
      * @since  1.0
      */
-    public function getAction()
+    public function action($str=null)
     {
+        if (!is_null($str)) {
+           $this->fields["action"] = $this->validate("action", $str);
+        }
+        
         return $this->fields["action"];
     }
     
     /**
-     * Set action.
+     * Get/set value.
      * 
-     * @param string $str The action name.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setAction($str)
-    {
-        $this->fields["action"] = $this->validate("action", $str);
-    }
-    
-    /**
-     * Get value.
+     * @param string $str [Optional] The value for the access level. Values can 
+     *                    be either "own" or "all".
      * 
      * @return string
      * @since  1.0
      */
-    public function getValue()
+    public function value($str=null)
     {
+        if (!is_null($str)) {
+            $this->fields["value"] = $this->validate("value", $str);
+        }
+        
         return $this->fields["value"];
-    }
-    
-    /**
-     * Set value.
-     * 
-     * @param string $str The value for the access level. Values can be either 
-     *                    "own" or "all".
-     *                    
-     * @return string
-     * @since  1.0
-     */
-    public function setValue($str)
-    {
-        $this->fields["value"] = $this->validate("value", $str);
     }
 }

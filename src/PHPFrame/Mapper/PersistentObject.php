@@ -108,14 +108,12 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $this->addField("mtime", null, true, new PHPFrame_IntFilter());
         $this->addField(
             "owner", 
-            //PHPFrame::getSession()->getUserId(),
             0, 
             false, 
             new PHPFrame_IntFilter()
         );
         $this->addField(
             "group", 
-            //PHPFrame::getSession()->getGroupId(),
             0, 
             false, 
             new PHPFrame_IntFilter()
@@ -327,7 +325,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
             }
             
             // Build string with setter name
-            $setter_name = "set".ucwords(str_replace("_", " ", $key));
+            $setter_name = ucwords(str_replace("_", " ", $key));
             $setter_name = str_replace(" ", "", $setter_name);
             
             if ($reflectionObj->hasMethod($setter_name)) {
@@ -341,8 +339,8 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
                     continue;
                 }
                 
-                // Invoke setter if it takes only one required argument
-                if ($setter_method->getNumberOfRequiredParameters() == 1) {
+                // Invoke setter if it takes at least one argument
+                if ($setter_method->getNumberOfParameters() > 0) {
                     $this->$setter_name($value);
                 }
             }
@@ -350,179 +348,122 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     }
     
     /**
-     * Get id
+     * Get/set id.
+     * 
+     * @param int $int [Optional] The object ID.
      * 
      * @return int
      * @since  1.0
      */
-    public function getId()
+    public function id($int=null)
     {
+        if (!is_null($int)) {
+            $this->fields["id"] = $this->validate("id", $int);
+        }
+        
         return $this->fields["id"];   
     }
     
     /**
-     * Set id
+     * Get/set accessed timestamp.
      * 
-     * @param int $int The object ID.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setId($int)
-    {
-        if (empty($int)) {
-            return;
-        }
-        
-        $this->fields["id"] = $this->validate("id", $int);
-    }
-    
-    /**
-     * Get accessed timestamp
+     * @param int $int [Optional] The access time as a UNIX timestamp.
      * 
      * @return int
      * @since  1.0
      */
-    public function getATime()
+    public function atime($int=null)
     {
+        if (!is_null($int)) {
+            $this->fields["atime"] = $this->validate("atime", $int);
+        }
+        
         return $this->fields["atime"];
     }
     
     /**
-     * Set accessed timestamp
+     * Get/set created timestamp.
      * 
-     * @param int $int The access time as a UNIX timestamp.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setATime($int)
-    {
-        if (empty($int)) {
-            $int = 0;
-        }
-        
-        $this->fields["atime"] = $this->validate("atime", $int);
-    }
-    
-    /**
-     * Get created timestamp
+     * @param int $int [Optional] The created time as a UNIX timestamp.
      * 
      * @return int
      * @since  1.0
      */
-    public function getCTime()
+    public function ctime($int=null)
     {
+        if (!is_null($int)) {
+            $this->fields["ctime"] = $this->validate("ctime", $int);
+        }
+        
         return $this->fields["ctime"];
     }
     
     /**
-     * Set created timestamp
+     * Get/set last modified timestamp.
      * 
-     * @param int $int The created time as a UNIX timestamp.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setCTime($int)
-    {
-        $this->fields["ctime"] = $this->validate("ctime", $int);
-    }
-    
-    /**
-     * Get last modified timestamp
+     * @param int $int The modified time as a UNIX timestamp.
      * 
      * @return int
      * @since  1.0
      */
-    public function getMTime()
+    public function mtime($int=null)
     {
+        if (!is_null($int)) {
+            $this->fields["mtime"] = $this->validate("mtime", $int);
+        }
+        
         return $this->fields["mtime"];
     }
     
     /**
-     * Set last modified timestamp
+     * Get/set owner.
      * 
-     * @param int $int The modified time as a UNIX timestamp.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setMTime($int)
-    {
-        $this->fields["mtime"] = $this->validate("mtime", $int);
-    }
-    
-    /**
-     * Get owner
+     * @param int $int [Optional] The user ID of the object's owner.
      * 
      * @return int
      * @since  1.0
      */
-    public function getOwner()
+    public function owner($int=null)
     {
+        if (!is_null($int)) {
+            $this->fields["owner"] = $this->validate("owner", $int);
+        }
+        
         return $this->fields["owner"];
     }
     
     /**
-     * Set owner
+     * Get/set group ownership.
      * 
-     * @param int $int The user ID of the object's owner.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setOwner($int)
-    {
-        $this->fields["owner"] = $this->validate("owner", $int);
-    }
-    
-    /**
-     * Get group ownership
+     * @param int $int [Optional] The group ID of the object's group.
      * 
      * @return int
      * @since  1.0
      */
-    public function getGroup()
+    public function group($int=null)
     {
+        if (!is_null($int)) {
+            $this->fields["group"] = $this->validate("group", $int);
+        }
+        
         return $this->fields["group"];
     }
     
     /**
-     * Set group ownership
+     * Get/set permissions.
      * 
-     * @param int $int The group ID of the object's group.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setGroup($int)
-    {
-        $this->fields["group"] = $this->validate("group", $int);
-    }
-    
-    /**
-     * Get permissions
+     * @param int $int [Optional] UNIX style permissions.
      * 
      * @return int
      * @since  1.0
      */
-    public function getPerms()
+    public function perms($int=null)
     {
+        if (!is_null($int)) {
+            $this->fields["perms"] = $this->validate("perms", $int);
+        }
+        
         return $this->fields["perms"];
-    }
-    
-    /**
-     * Set permissions
-     * 
-     * @param int $int UNIX style permissions.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function setPerms($int)
-    {
-        $this->fields["perms"] = $this->validate("perms", $int);
     }
     
     /**
@@ -552,13 +493,13 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
      */
     private function _checkPerms(PHPFrame_user $user, $access_level)
     {
-        preg_match('/^(\d)(\d)(\d)$/', $this->getPerms(), $matches);
+        preg_match('/^(\d)(\d)(\d)$/', $this->perms(), $matches);
         $owner_access = $matches[1];
         $group_access = $matches[2];
         $world_access = $matches[3];
         
         // Bypass check for admin group
-        if ($user->getGroupId() == 1) {
+        if ($user->groupId() == 1) {
             return true;
         }
         
@@ -568,14 +509,14 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         }
         
         // Check user access
-        if ($user->getId() == $this->getOwner() 
+        if ($user->id() == $this->owner() 
             && $owner_access >= $access_level
         ) {
             return true;
         }
         
         // Check group access
-        if ($user->getGroupId() == $this->getGroup() 
+        if ($user->groupId() == $this->group() 
             && $group_access >= $access_level
         ) {
             return true;

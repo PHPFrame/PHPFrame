@@ -539,7 +539,7 @@ class PHPFrame_HTMLUI
         $str .= "<br />\n";
         $str .= "<input type=\"submit\" value=\"".$submit_label."\" />\n";
         $str .= "<input type=\"hidden\" name=\"id\" ";
-        $str .= "value=\"".$obj->getId()."\" />\n";
+        $str .= "value=\"".$obj->id()."\" />\n";
         $str .= "</form>\n";
         
         return $str;

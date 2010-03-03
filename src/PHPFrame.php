@@ -187,6 +187,10 @@ class PHPFrame
             $file_path = "phpmailer".DS."phpmailer.php";
             include $lib_dir.DS.$file_path;
             return;
+        } elseif ($class_name == "SMTP") {
+            $file_path = "phpmailer".DS."smtp.php";
+            include $lib_dir.DS.$file_path;
+            return;
         }
     }
     

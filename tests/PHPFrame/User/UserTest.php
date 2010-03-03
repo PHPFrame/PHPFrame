@@ -36,8 +36,6 @@ class PHPFrame_UserTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("groupid", $array);
         $this->assertArrayHasKey("username", $array);
         $this->assertArrayHasKey("password", $array);
-        $this->assertArrayHasKey("firstname", $array);
-        $this->assertArrayHasKey("lastname", $array);
         $this->assertArrayHasKey("email", $array);
         $this->assertArrayHasKey("block", $array);
         $this->assertArrayHasKey("last_visit", $array);

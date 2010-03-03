@@ -80,8 +80,6 @@ class PHPFrame_XMLSerialiserTest extends PHPUnit_Framework_TestCase
         $user  = new PHPFrame_User();
         $user->userName("someone");
         $user->password("password");
-        $user->firstName("Jimi");
-        $user->lastName("Hendrix");
         $user->email("jimi@hendrix.com");
         $user->validateAll();
         

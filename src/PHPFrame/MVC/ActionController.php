@@ -239,7 +239,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function session()
     {
-        return PHPFrame::getSession();
+        return $this->app()->session();
     }
     
     /**

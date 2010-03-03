@@ -312,6 +312,17 @@ class PHPFrame_Application
     }
     
     /**
+     * Get reference to application's session object.
+     * 
+     * @return PHPFrame_SessionRegistry
+     * @since  1.0
+     */
+    public function session()
+    {
+        return PHPFrame::getSession();
+    }
+    
+    /**
      * Get/set Request object.
      * 
      * @param PHPFrame_Request $request [Optional] Request object.

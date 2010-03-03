@@ -98,7 +98,6 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
     \"params\": \"\",
     \"deleted\": 0,
     \"id\": ,
-    \"atime\": ,
     \"ctime\": ,
     \"mtime\": ,
     \"owner\": 0,

@@ -593,7 +593,6 @@ class PHPFrame_HTMLUI
         foreach ($filters as $key=>$value) {
             $ignore = array(
               "id", 
-              "atime", 
               "ctime", 
               "mtime", 
               "owner", 

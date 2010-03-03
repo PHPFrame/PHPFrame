@@ -46,7 +46,6 @@
  *  [params] => a:0:{}
  *  [deleted] => 
  *  [id] =>
- *  [atime] => 
  *  [ctime] => 
  *  [mtime] => 
  *  [owner] => 0
@@ -100,7 +99,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     {
         // Add the base fields
         $this->addField("id", null, true, new PHPFrame_IntFilter());
-        $this->addField("atime", null, true, new PHPFrame_IntFilter());
         $this->addField("ctime", null, true, new PHPFrame_IntFilter());
         $this->addField("mtime", null, true, new PHPFrame_IntFilter());
         $this->addField(
@@ -134,7 +132,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     public function __clone()
     {
         $this->fields["id"]    = null;
-        $this->fields["atime"] = null;
         $this->fields["ctime"] = null;
         $this->fields["mtime"] = null;
     }
@@ -390,23 +387,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         }
         
         return $this->fields["id"];   
-    }
-    
-    /**
-     * Get/set accessed timestamp.
-     * 
-     * @param int $int [Optional] The access time as a UNIX timestamp.
-     * 
-     * @return int
-     * @since  1.0
-     */
-    public function atime($int=null)
-    {
-        if (!is_null($int)) {
-            $this->fields["atime"] = $this->validate("atime", $int);
-        }
-        
-        return $this->fields["atime"];
     }
     
     /**

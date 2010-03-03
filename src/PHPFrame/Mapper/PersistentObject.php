@@ -40,8 +40,6 @@
  *  [groupid] => 0
  *  [username] => lupo
  *  [password] =>
- *  [firstname] =>
- *  [lastname] => 
  *  [email] => 
  *  [block] =>
  *  [last_visit] =>
@@ -141,7 +139,38 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $this->fields["mtime"] = null;
     }
     
-
+    /**
+     * Magic method to handle calls to undeclared getter/setter methods.
+     * 
+     * @param string $name The method name invoked.
+     * @param array  $args Array containing arguments passed to the method.
+     * 
+     * @return mixed Return type will depend on the 'actual' method being invoked
+     * @throws BadMethodCallException if can not resolve method name.
+     * @since  1.0
+     */
+    public function __call($name, $args)
+    {
+        // Convert camel case to underscores
+        $field = strtolower(preg_replace("/([A-Z][a-z]+)/", "_$1", $name));
+        
+        if (!array_key_exists($field, $this->fields)) {
+            $msg  = "Wrong method call. ".get_class($this)." does not have ";
+            $msg .= "any method called '".$name."' or field with the ";
+            $msg .= "name of '".$field."'.";
+            throw new BadMethodCallException($msg);
+        }
+        
+        if (is_array($args) && count($args) > 0) {
+            if (array_key_exists($field, $this->getFilters())) {
+                $this->fields[$field] = $this->validate($field, $args[0]);
+            } else {
+                $this->fields[$field] = $args[0];
+            }
+        }
+        
+        return $this->fields[$field];
+    }
     
     /**
      * Add a field in persistent object (stored in internal array)

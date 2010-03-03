@@ -71,8 +71,6 @@ class PHPFrame_CLIClient extends PHPFrame_Client
         $user->id(1);
         $user->groupId(1);
         $user->userName('system');
-        $user->firstName('System');
-        $user->lastName('User');
         
         // Store user in session
         $session = PHPFrame::getSession();

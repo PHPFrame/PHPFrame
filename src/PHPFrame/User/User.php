@@ -69,18 +69,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
             ))
         );
         $this->addField(
-            "firstname", 
-            null, 
-            true, 
-            new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>50))
-        );
-        $this->addField(
-            "lastname", 
-            null, 
-            true, 
-            new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>50))
-        );
-        $this->addField(
             "email", 
             null, 
             false, 
@@ -205,40 +193,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         }
         
         return $this->fields["password"];
-    }
-    
-    /**
-     * Get/set first name.
-     * 
-     * @param string $str [Optional] The first name.
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function firstName($str=null)
-    {
-        if (!is_null($str)) {
-            $this->fields["firstname"] = $this->validate("firstname", $str);
-        }
-        
-        return $this->fields["firstname"];
-    }
-    
-    /**
-     * Get/set last name.
-     * 
-     * @param string $str [Optional] The last name.
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function lastName($str)
-    {
-        if (!is_null($str)) {
-            $this->fields["lastname"] = $this->validate("lastname", $str);
-        }
-        
-        return $this->fields["lastname"];
     }
     
     /**

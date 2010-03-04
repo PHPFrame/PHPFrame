@@ -47,7 +47,7 @@ class PHPFrame_EnumFilter extends PHPFrame_Filter
      * 
      * @param mixed $value The value to filter.
      * 
-     * @return void
+     * @return mixed Either the filtered value or FALSE on failure
      * @see src/PHPFrame/Filter/PHPFrame_Filter#process($value)
      * @since  1.0
      */

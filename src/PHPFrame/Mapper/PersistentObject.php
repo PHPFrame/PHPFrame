@@ -360,7 +360,10 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
                 // Get parameters and ignore if parameter is array and the 
                 // value is not
                 $params = $setter_method->getParameters();
-                if ($params[0]->isArray() && !is_array($value)) {
+                if ($params instanceof ReflectionParameter 
+                    && $params[0]->isArray() 
+                    && !is_array($value)
+                ) {
                     continue;
                 }
                 

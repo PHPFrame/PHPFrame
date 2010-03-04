@@ -93,6 +93,7 @@
    <file baseinstalldir="/" name="PHPFrame/Ext/PluginHandler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/PluginInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/BoolFilter.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Filter/DateFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/EmailFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/EnumFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/Filter.php" role="php" />

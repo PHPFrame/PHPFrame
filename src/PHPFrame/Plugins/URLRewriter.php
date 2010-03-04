@@ -32,8 +32,9 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
      */
     public function routeStartup() 
     {
-        $request_uri = $this->app()->request()->requestURI();
-        $script_name = $this->app()->request()->scriptName();
+        $request     = $this->app()->request();
+        $request_uri = $request->requestURI();
+        $script_name = $request->scriptName();
         
         // If there is no request uri (ie: we are on the command line) we do 
         // not rewrite
@@ -44,7 +45,7 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
         // Get path to script
         $path = substr($script_name, 0, (strrpos($script_name, '/')+1));
         
-        // If script name doesnt appear in the request URI we need to rewrite
+        // If script name doesn't appear in the request URI we need to rewrite
         if (strpos($request_uri, $script_name) === false
             && $request_uri != $path
             && $request_uri != $path."index.php"
@@ -58,34 +59,31 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
                 $params = substr($request_uri, 1);
             }
             
-            // Get component and action name using regex
-            preg_match('/^([a-zA-Z]+)\/([a-zA-Z_]+)?/', $params, $matches);
-            
-            if (isset($matches[1])) {
-                $this->app()->request()->controllerName($matches[1]);
-                
-                // Prepend component to query string
-                $rewritten_query_string = "controller=".$matches[1];
-                
-                if (isset($matches[2])) {
-                    $this->app()->request()->action($matches[2]);
-                    
-                    // Prepend component and action to query string
-                    $rewritten_query_string .= "&action=".$matches[2];
-                
-                }
-                
-                if (!empty($_SERVER['QUERY_STRING'])) {
-                    $rewritten_query_string .= "&".$_SERVER['QUERY_STRING'];
-                }
-                
-                $_SERVER['QUERY_STRING'] = $rewritten_query_string;
-                
-                // Update request uri
-                $_SERVER['REQUEST_URI']  = $path."index.php?";
-                $_SERVER['REQUEST_URI'] .= $_SERVER['QUERY_STRING'];
-                
+            $array = explode("?", $params);
+            $command = $array[0];
+            if (isset($array[1])) {
+                $query_string = $array[1];
+            } else {
+                $query_string = "";
             }
+            
+            $array = explode("/", $command);
+            $request->controllerName($array[0]);
+            $rewritten_query_string = "controller=".$array[0];
+            if (isset($array[1])) {
+                $request->action($array[1]);
+                $rewritten_query_string .= "&action=".$array[1];
+            }
+            
+            if (!empty($_SERVER['QUERY_STRING'])) {
+                $rewritten_query_string .= "&".$_SERVER['QUERY_STRING'];
+            }
+                
+            $_SERVER['QUERY_STRING'] = $rewritten_query_string;
+                
+            // Update request uri
+            $_SERVER['REQUEST_URI']  = $path."index.php?";
+            $_SERVER['REQUEST_URI'] .= $_SERVER['QUERY_STRING'];
         }
     }
     

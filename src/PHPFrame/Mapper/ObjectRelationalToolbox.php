@@ -78,6 +78,7 @@ class PHPFrame_ObjectRelationalToolbox
             
             if ($filter instanceof PHPFrame_BoolFilter) {
                 $column->setType(PHPFrame_DatabaseColumn::TYPE_BOOL);
+                
             } elseif ($filter instanceof PHPFrame_IntFilter) {
                 $range = $options["max_range"] - $options["min_range"];
                 if ($range <= 255) { // 1 byte int
@@ -93,8 +94,20 @@ class PHPFrame_ObjectRelationalToolbox
                 }
             } elseif ($filter instanceof PHPFrame_FloatFilter) {
                 $column->setType(PHPFrame_DatabaseColumn::TYPE_FLOAT);
+                
             } elseif ($filter instanceof PHPFrame_EnumFilter) {
                 $column->setType(PHPFrame_DatabaseColumn::TYPE_ENUM);
+                
+            } elseif ($filter instanceof PHPFrame_DateFilter) {
+                $format = $options["format"];
+                if ($format == PHPFrame_DateFilter::FORMAT_DATE) {
+                    $column->setType(PHPFrame_DatabaseColumn::TYPE_DATE);
+                } elseif ($format == PHPFrame_DateFilter::FORMAT_DATETIME) {
+                    $column->setType(PHPFrame_DatabaseColumn::TYPE_DATETIME);
+                } elseif ($format == PHPFrame_DateFilter::FORMAT_TIME) {
+                    $column->setType(PHPFrame_DatabaseColumn::TYPE_TIME);
+                }
+                
             } elseif ($filter instanceof PHPFrame_StringFilter) {
                 if ($options["max_length"] > 0) {
                     $column->setType(PHPFrame_DatabaseColumn::TYPE_VARCHAR);

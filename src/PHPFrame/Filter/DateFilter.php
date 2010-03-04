@@ -43,7 +43,7 @@ class PHPFrame_DateFilter extends PHPFrame_Filter
      */
     public function __construct(array $options=null)
     {
-        $this->registerOption('format', array());
+        $this->registerOption('format', self::FORMAT_DATE);
         parent::__construct($options);
     }
     

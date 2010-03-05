@@ -371,6 +371,8 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
                 if ($setter_method->getNumberOfParameters() > 0) {
                     $this->$setter_name($value);
                 }
+            } elseif (array_key_exists($key, $this->fields)) {
+                $this->$key($value);
             }
         }
     }

@@ -103,6 +103,10 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
                 $sql      .= "(100)";
                 $def_value = (string) $col->getDefault();
                 break;
+            case "enum" :
+                $sql      .= "('".implode("', '", $col->getEnums())."')";
+                $def_value = (string) $col->getDefault();
+                break;
             default :
                 $def_value = (string) $col->getDefault();
                 break;
@@ -131,7 +135,7 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
         }
         
         $sql .= "\n) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci\n";
-        //echo $sql; exit;
+        //echo $sql;
         $this->query($sql);
     }
     

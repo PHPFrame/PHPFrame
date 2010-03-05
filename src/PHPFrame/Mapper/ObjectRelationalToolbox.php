@@ -92,11 +92,13 @@ class PHPFrame_ObjectRelationalToolbox
                 } else { // 8 byte int
                     $column->setType(PHPFrame_DatabaseColumn::TYPE_BIGINT);
                 }
+                
             } elseif ($filter instanceof PHPFrame_FloatFilter) {
                 $column->setType(PHPFrame_DatabaseColumn::TYPE_FLOAT);
                 
             } elseif ($filter instanceof PHPFrame_EnumFilter) {
                 $column->setType(PHPFrame_DatabaseColumn::TYPE_ENUM);
+                $column->setEnums($filter->getOption("enums"));
                 
             } elseif ($filter instanceof PHPFrame_DateFilter) {
                 $format = $options["format"];

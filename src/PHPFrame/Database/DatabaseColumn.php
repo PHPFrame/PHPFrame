@@ -86,6 +86,12 @@ class PHPFrame_DatabaseColumn implements IteratorAggregate
      */
     private $_extra;
     /**
+     * Array containig possible values for columns of type 'enum'.
+     * 
+     * @var array
+     */
+    private $_enums;
+    /**
      * A reflection of object of this class used to check allowed values in 
      * setters accoring to class constants.
      * 
@@ -226,6 +232,17 @@ class PHPFrame_DatabaseColumn implements IteratorAggregate
     }
     
     /**
+     * Get enums array.
+     *
+     * @return array
+     * @since  1.0
+     */
+    public function getEnums()
+    {
+        return $this->_enums;
+    }
+    
+    /**
      * Set the column name.
      * 
      * @param string $str The column name.
@@ -338,5 +355,34 @@ class PHPFrame_DatabaseColumn implements IteratorAggregate
         }
         
         $this->_extra = $str;
+    }
+    
+    /**
+     * Set enums. This is only allowed in columns of type 'enum'.
+     * 
+     * @param array $array Array containing enum values.
+     * 
+     * @return void
+     * @throws LogicException, InvalidArgumentException
+     * @since  1.0
+     */
+    public function setEnums(array $array)
+    {
+        $type = $this->getType();
+        if ($type != self::TYPE_ENUM) {
+            $msg  = get_class($this)."::".__FUNCTION__."() called on a ";
+            $msg .= "column object of type '".$type."' and should only be ";
+            $msg .= "called when type is set to '".self::TYPE_ENUM."'.";
+            throw new LogicException($msg);
+        }
+        
+        $array_obj = new PHPFrame_Array($array);
+        
+        if ($array_obj->isAssoc() || $array_obj->depth() > 1) {
+            $msg = "";
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $this->_enums = $array;
     }
 }

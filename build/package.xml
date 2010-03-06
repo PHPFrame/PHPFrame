@@ -135,7 +135,6 @@
    <file baseinstalldir="/" name="PHPFrame/Registry/SessionRegistry.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/UI/HTMLUI.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/Group.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/User/Organisation.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/User/User.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Crypt.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/Exec.php" role="php" />

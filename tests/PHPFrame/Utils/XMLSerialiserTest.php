@@ -78,9 +78,8 @@ class PHPFrame_XMLSerialiserTest extends PHPUnit_Framework_TestCase
     public function test_serialiseUser()
     {
         $user  = new PHPFrame_User();
-        $user->userName("someone");
+        $user->email("someone@somewher.com");
         $user->password("password");
-        $user->email("jimi@hendrix.com");
         $user->validateAll();
         
         $array = iterator_to_array($user);

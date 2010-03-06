@@ -131,6 +131,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
             $this->_data['user'] = new PHPFrame_User();
             $this->_data['user']->id(0);
             $this->_data['user']->groupId(0);
+            $this->_data['user']->email("guest@localhost.local");
             
             // Acquire sysevents object
             $this->_data['sysevents'] = new PHPFrame_Sysevents();

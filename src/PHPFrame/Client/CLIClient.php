@@ -70,7 +70,7 @@ class PHPFrame_CLIClient extends PHPFrame_Client
         $user = new PHPFrame_User();
         $user->id(1);
         $user->groupId(1);
-        $user->userName('system');
+        $user->email('cli@localhost.local');
         
         // Store user in session
         $session = PHPFrame::getSession();

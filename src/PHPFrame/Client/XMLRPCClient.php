@@ -567,7 +567,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
                 $user = new PHPFrame_User();
                 $user->id(2);
                 $user->groupId(4);
-                $user->userName("api");
+                $user->email("api@localhost.local");
                 
                 // Store user in session
                 $session = PHPFrame::getSession();

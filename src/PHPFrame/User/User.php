@@ -49,14 +49,10 @@ class PHPFrame_User extends PHPFrame_PersistentObject
             new PHPFrame_IntFilter()
         );
         $this->addField(
-            "username", 
-            "guest", 
+            "email", 
+            null, 
             false, 
-            new PHPFrame_RegexpFilter(array(
-                "regexp"=>'/^[a-zA-Z\.]{3,20}$/', 
-                "min_length"=>3, 
-                "max_length"=>20
-            ))
+            new PHPFrame_EmailFilter(array("min_length"=>7, "max_length"=>100))
         );
         $this->addField(
             "password", 
@@ -69,34 +65,10 @@ class PHPFrame_User extends PHPFrame_PersistentObject
             ))
         );
         $this->addField(
-            "email", 
-            null, 
-            false, 
-            new PHPFrame_EmailFilter(array("min_length"=>7, "max_length"=>100))
-        );
-        $this->addField(
-            "block", 
-            false, 
-            false, 
-            new PHPFrame_BoolFilter()
-        );
-        $this->addField(
-            "last_visit", 
-            null, 
-            true, 
-            new PHPFrame_IntFilter()
-        );
-        $this->addField(
             "params", 
             array(), 
             true, 
             new PHPFrame_StringFilter()
-        );
-        $this->addField(
-            "deleted", 
-            0, 
-            true, 
-            new PHPFrame_IntFilter()
         );
         
         parent::__construct($options);
@@ -162,40 +134,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     }
     
     /**
-     * Get/set username.
-     * 
-     * @param string $str [Optional] The username.
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function userName($str=null)
-    {
-        if (!is_null($str)) {
-            $this->fields["username"] = $this->validate("username", $str);
-        }
-        
-        return $this->fields["username"];
-    }
-    
-    /**
-     * Get/set password.
-     * 
-     * @param string $str [Optional] The password.
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function password($str=null)
-    {
-        if (!is_null($str)) {
-            $this->fields["password"] = $this->validate("password", $str);
-        }
-        
-        return $this->fields["password"];
-    }
-    
-    /**
      * Get/set email.
      * 
      * @param string $str [Optional] The email.
@@ -213,38 +151,20 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     }
     
     /**
-     * Get/set block flag.
+     * Get/set password.
      * 
-     * @param bool $bool [Optional] Flag indicating whether user is blocked 
-     *                              (no access).
+     * @param string $str [Optional] The password.
      * 
-     * @return bool
+     * @return string
      * @since  1.0
      */
-    public function block($bool=null)
+    public function password($str=null)
     {
-        if (!is_null($bool)) {
-            $this->fields["block"] = (bool) $this->validate("block", $bool);
+        if (!is_null($str)) {
+            $this->fields["password"] = $this->validate("password", $str);
         }
         
-        return $this->fields["block"];
-    }
-    
-    /**
-     * Get/set last visit timestamp.
-     * 
-     * @param int $int [Optional] UNIX timestamp.
-     * 
-     * @return int
-     * @since  1.0
-     */
-    public function lastVisit($int=null)
-    {
-        if (!is_null($int)) {
-            $this->fields["last_visit"] = $this->validate("last_visit", $int);
-        }
-        
-        return $this->fields["last_visit"];
+        return $this->fields["password"];
     }
     
     /**
@@ -277,23 +197,6 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         }
         
         return $this->fields["params"];
-    }
-    
-    /**
-     * Get/set deleted timestamp.
-     * 
-     * @param int $int [Optional]
-     * 
-     * @return int
-     * @since  1.0
-     */
-    public function deleted($int=null)
-    {
-        if (!is_null($int)) {
-            $this->fields["deleted"] = $this->validate("deleted", $int);
-        }
-        
-        return $this->fields["deleted"];
     }
     
     /**

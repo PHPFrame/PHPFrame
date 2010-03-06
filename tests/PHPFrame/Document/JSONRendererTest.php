@@ -90,13 +90,9 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             "{
     \"groupid\": 0,
-    \"username\": \"guest\",
-    \"password\": ,
     \"email\": ,
-    \"block\": ,
-    \"last_visit\": ,
+    \"password\": ,
     \"params\": \"\",
-    \"deleted\": 0,
     \"id\": ,
     \"ctime\": ,
     \"mtime\": ,

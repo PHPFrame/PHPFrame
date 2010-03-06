@@ -84,9 +84,8 @@ class PHPFrame_PlainRendererTest extends PHPUnit_Framework_TestCase
     {
         $user = new PHPFrame_User();
         $this->assertEquals(
-            "PHPFrame_User\n(\n    [groupid] => 0\n    [username] => guest\n"
-           ."    [password] => \n    [email] => \n    [block] => \n"
-           ."    [last_visit] => \n    [params] => \n    [deleted] => 0\n"
+            "PHPFrame_User\n(\n    [groupid] => 0\n"
+           ."    [email] => \n    [password] => \n    [params] => \n"
            ."    [id] => \n    [ctime] => \n    [mtime] => \n"
            ."    [owner] => 0\n    [group] => 0\n    [perms] => 664\n)\n", 
             $this->_renderer->render($user)

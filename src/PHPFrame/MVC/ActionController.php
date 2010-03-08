@@ -243,6 +243,17 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
     
     /**
+     * Get reference to session's user object.
+     * 
+     * @return PHPFrame_User
+     * @since  1.0
+     */
+    protected function user()
+    {
+        return $this->app()->user();
+    }
+    
+    /**
      * Get a named view
      *
      * @param string $name The name of the view to create.

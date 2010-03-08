@@ -323,6 +323,17 @@ class PHPFrame_Application
     }
     
     /**
+     * Get reference to session's user object.
+     * 
+     * @return PHPFrame_User
+     * @since  1.0
+     */
+    public function user()
+    {
+        return PHPFrame::getSession()->getUser();
+    }
+    
+    /**
      * Get/set Request object.
      * 
      * @param PHPFrame_Request $request [Optional] Request object.

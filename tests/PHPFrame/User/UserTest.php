@@ -21,7 +21,10 @@ class PHPFrame_UserTest extends PHPUnit_Framework_TestCase
         $serialised   = serialize($this->_user);
         $unserialised = unserialize($serialised);
         
-        $this->assertEquals($unserialised, $this->_user);
+        $this->assertEquals(
+            iterator_to_array($unserialised), 
+            iterator_to_array($this->_user)
+        );
     }
     
     public function test_validateAll()

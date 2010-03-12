@@ -103,6 +103,19 @@ class PHPFrame_Validator
         
         $this->_filters[$field_name] = $filter;
         
+        // Before adding the field to the allow null fields array we remove to 
+        // avoid duplicated and start clean
+        if (in_array($field_name, $this->_allow_null_fields)) {
+            $this->_allow_null_fields = array_diff(
+                $this->_allow_null_fields, 
+                array($field_name)
+            );
+            
+            // reindex the array
+            $this->_allow_null_fields = array_values($this->_allow_null_fields);
+            
+        }
+        
         if ($allow_null) {
             $this->_allow_null_fields[]  = $field_name;
         }

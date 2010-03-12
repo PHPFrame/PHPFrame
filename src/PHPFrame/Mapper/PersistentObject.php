@@ -124,6 +124,17 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     }
     
     /**
+     * Magic method to handle the unserialisation of objects
+     * 
+     * @return void
+     * @since  1.0
+     */
+    public function __wakeup()
+    {
+        $this->__construct($this->fields);
+    }
+    
+    /**
      * Magic method to handle the cloning of Persistent Objects
      * 
      * @return void

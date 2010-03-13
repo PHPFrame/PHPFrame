@@ -81,6 +81,22 @@ class PHPFrame_Mailer extends PHPMailer
     }
     
     /**
+     * Magic method invoked when object is serialised.
+     * 
+     * @return array
+     * @since  1.0
+     */
+    public function __sleep()
+    {
+        $this->ClearAllRecipients();
+        $this->ClearAttachments();
+        $this->ClearCustomHeaders();
+        $this->ClearReplyTos();
+        
+        return array_keys(get_object_vars($this));
+    }
+    
+    /**
      * This method allows to add a suffix to the message id.
      * 
      * This can be very useful when adding data to the message id for processing of 

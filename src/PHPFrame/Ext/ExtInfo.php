@@ -44,7 +44,7 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
         // before we construct the parent we add the necessary fields
         $this->addField(
             "name", 
-            "", 
+            null, 
             false, 
             new PHPFrame_RegexpFilter(array(
                 "regexp"=>'/^[a-zA-Z\._]{3,20}$/', 

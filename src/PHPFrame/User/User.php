@@ -66,7 +66,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
         );
         $this->addField(
             "params", 
-            array(), 
+            null, 
             true, 
             new PHPFrame_StringFilter()
         );

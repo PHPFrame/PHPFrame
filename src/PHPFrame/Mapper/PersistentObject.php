@@ -228,7 +228,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         $this->_getValidator()->setFilter($name, $filter, $allow_null);
         
         // Set key with default value in internal array
-        if (!empty($def_value)) {
+        if (!is_null($def_value)) {
             $this->fields[$name] = $this->validate($name, $def_value);
         } else {
             $this->fields[$name] = null;

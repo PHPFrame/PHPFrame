@@ -124,6 +124,19 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     }
     
     /**
+     * Magic method to handle the serialisation of objects
+     * 
+     * @return array
+     * @since  1.0
+     */
+    public function __sleep()
+    {
+        $this->markClean();
+        
+        return array("fields");
+    }
+    
+    /**
      * Magic method to handle the unserialisation of objects
      * 
      * @return void
@@ -211,10 +224,15 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
             $filter = new PHPFrame_StringFilter();
         }
         
-        // Set key with default value in internal array
-        $this->fields[$name] = $def_value;
         // Store filter in validator
         $this->_getValidator()->setFilter($name, $filter, $allow_null);
+        
+        // Set key with default value in internal array
+        if (!empty($def_value)) {
+            $this->fields[$name] = $this->validate($name, $def_value);
+        } else {
+            $this->fields[$name] = null;
+        }
     }
     
     /**

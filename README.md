@@ -1,8 +1,8 @@
 [PHPFrame](http://www.phpframe.org/)
 ====================================
 
-PHPFrame is a minimal and object oriented PHP MVC framework written for PHP 
-version 5. 
+PHPFrame is a minimal and object oriented PHP MVC framework written for PHP
+version 5.
 
 This project is still work in progress...
 
@@ -54,6 +54,10 @@ Dependencies
 * php-gd
 * php-json
 
+#### PECL
+
+* docblock
+
 
 Installing PHPFrame with the PEAR command line installer
 --------------------------------------------------------
@@ -73,7 +77,7 @@ Command line tool examples
     phpframe
 
 ### Create a new app
-  
+
     mkdir newapp
     cd newapp
     phpframe app create app_name="My cool app"
@@ -81,16 +85,16 @@ Command line tool examples
 ### Remove an app
 
 This will delete all app files and database if any.
-  
+
     cd myapp
     phpframe app remove
 
 ### Set a config param
 
-In this example we set the base_url config parameter to 'CLI'. Note that the 
-base_url config parameter is required. If your app will only run on the command 
+In this example we set the base_url config parameter to 'CLI'. Note that the
+base_url config parameter is required. If your app will only run on the command
 line you can use 'CLI' instead of a valid URL.
-  
+
     cd myapp
     phpframe config set key=base_url value=CLI
 
@@ -103,7 +107,7 @@ In this example we use the base User class.
 
 ### Create an empty persistent object class
 
-In this example the resulting class will be called 'Post' and will be stored 
+In this example the resulting class will be called 'Post' and will be stored
 under src/models.
 
     cd myapp
@@ -111,9 +115,9 @@ under src/models.
 
 ### Create an empty mapper class for a PersistentObject class
 
-In this example we create a mapper for the Post class created in the previous 
-example. Note that the PersistentObject has to exist and has to extend 
-PHPFrame_PersistentObject. The resulting class will be called 'PostsMapper' and 
+In this example we create a mapper for the Post class created in the previous
+example. Note that the PersistentObject has to exist and has to extend
+PHPFrame_PersistentObject. The resulting class will be called 'PostsMapper' and
 will be stored under src/models.
 
     cd myapp
@@ -121,7 +125,7 @@ will be stored under src/models.
 
 ### Create an empty action controller
 
-The resulting class will be called 'BlogController' and will be stored under 
+The resulting class will be called 'BlogController' and will be stored under
 src/controllers.
 
     cd myapp
@@ -129,7 +133,7 @@ src/controllers.
 
 ### Create an empty view helper class
 
-The resulting class will be called 'BlogHelper' and will be stored under 
+The resulting class will be called 'BlogHelper' and will be stored under
 src/helpers.
 
     cd myapp
@@ -137,7 +141,7 @@ src/helpers.
 
 ### Create a new plugin class called
 
-The resulting class will be called 'BlogRouter' and will be stored under 
+The resulting class will be called 'BlogRouter' and will be stored under
 src/plugins.
 
     cd myapp

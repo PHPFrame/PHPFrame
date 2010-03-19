@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Documentor/ControllerDoc.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Documentor
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -15,7 +15,7 @@
 
 /**
  * Controller Documentor Class
- * 
+ *
  * @category PHPFrame
  * @package  Documentor
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -28,40 +28,54 @@ class PHPFrame_ControllerDoc extends PHPFrame_ClassDoc
 {
     /**
      * Convert object to string.
-     * 
+     *
      * @return string
      * @since  1.0
      */
     public function __toString()
     {
-        $str = "";
-        
-        $actions = $this->getOwnMethods();
+        $str     = "";
+        $actions = $this->getActions();
+
         if (count($actions) > 0) {
             $str .= "Actions:";
             foreach ($actions as $action) {
-                if ($action->getName() == "__construct") {
-                    continue;
-                }
-                
                 $str .= "\n".$action->getName();
                 $str .= "(";
                 $count = 0;
-                foreach ($action->getParams() as $param) {
+                foreach ($action->getParameters() as $param) {
                     if ($count > 0) {
                         $str .= ", ";
                     }
-                    if ($param->getType()) {
-                        $str .= $param->getType()." ";
-                    }
+
                     $str .= "$".$param->getName();
-                    
+
                     $count++;
                 }
                 $str .= ")";
             }
         }
-        
+
         return $str;
+    }
+
+    public function getActions()
+    {
+        $methods = $this->getMethods();
+        $actions = array();
+
+        if (count($methods) > 0) {
+            foreach ($methods as $method) {
+                $declaring_class = $method->getDeclaringClass()->getName();
+                if ($method->getName() != "__construct"
+                    && $method->isPublic()
+                    && $declaring_class == $this->getName()
+                ) {
+                    $actions[] = $method;
+                }
+            }
+        }
+
+        return $actions;
     }
 }

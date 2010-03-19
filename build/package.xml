@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package 
-    packagerversion="1.8.1" 
-    version="2.0" 
-    xmlns="http://pear.php.net/dtd/package-2.0" 
-    xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     
-         http://pear.php.net/dtd/tasks-1.0.xsd     
-         http://pear.php.net/dtd/package-2.0     
+<package
+    packagerversion="1.8.1"
+    version="2.0"
+    xmlns="http://pear.php.net/dtd/package-2.0"
+    xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+         http://pear.php.net/dtd/tasks-1.0.xsd
+         http://pear.php.net/dtd/package-2.0
          http://pear.php.net/dtd/package-2.0.xsd">
-         
+
  <name>@PROJECT_NAME@</name>
  <channel>@CHANNEL@</channel>
  <summary>@SUMMARY@</summary>
@@ -80,7 +80,6 @@
    <file baseinstalldir="/" name="PHPFrame/Documentor/ClassDoc.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Documentor/ControllerDoc.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Documentor/MethodDoc.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Documentor/ParamDoc.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Documentor/PropertyDoc.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/AccessDeniedException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/DatabaseException.php" role="php" />
@@ -146,7 +145,7 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/VCard.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Utils/XMLSerialiser.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
-   
+
    <file baseinstalldir="/" name="CLI_Tool/etc/phpframe.ini" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/public/index.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/app.php" role="data" />
@@ -156,22 +155,22 @@
    <file baseinstalldir="/" name="CLI_Tool/src/helpers/cli.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/models/apptemplate.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/models/classcreator.php" role="data" />
-   
+
    <file baseinstalldir="/" name="lib/phpmailer/language/phpmailer.lang-en.php" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/LICENSE" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/phpmailer.php" role="data" />
    <file baseinstalldir="/" name="lib/phpmailer/smtp.php" role="data" />
-   
+
    <file baseinstalldir="/" name="CREDITS" role="data" />
    <file baseinstalldir="/" name="LICENSE" role="data" />
    <file baseinstalldir="/" name="README.md" role="data" />
-   
+
    <file baseinstalldir="" name="CLI_Tool.php" role="script">
     <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@package_version@" to="version" type="package-info" />
   </file>
-  
+
   <file baseinstalldir="" name="PHPFrame_Postinstall.php" role="php">
     <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
@@ -182,8 +181,8 @@
       <tasks:param>
           <tasks:name>CONFIRM</tasks:name>
        <tasks:prompt>
-The postinstall script will make log files writable to all users. Only do 
-this if you will be running PHPFrame as a different user to the one 
+The postinstall script will make log files writable to all users. Only do
+this if you will be running PHPFrame as a different user to the one
 installing the PEAR package. If you want to continue type "yes".
        </tasks:prompt>
        <tasks:type>string</tasks:type>
@@ -270,6 +269,10 @@ installing the PEAR package. If you want to continue type "yes".
    <extension>
     <name>xdebug</name>
     <min>2.0.3</min>
+   </extension>
+   <extension>
+    <name>docblock</name>
+    <min>0.2.0</min>
    </extension>
   </optional>
  </dependencies>

@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Client/XMLRPCClient.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Client
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -15,7 +15,7 @@
 
 /**
  * XMLRPC Client implementation
- * 
+ *
  * @category PHPFrame
  * @package  Client
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -26,65 +26,103 @@
  */
 class PHPFrame_XMLRPCClient extends PHPFrame_Client
 {
-    /**    
-     * Get client name
-     * 
-     * @return string Name to identify client type.
-     * @since  1.0
-     */
-    public function getName() 
-    {
-        return "xmlrpc";
-    }
-    
+    private $_request_dom;
+
     /**
-     * Check if this is the correct helper for the client being used
-     * 
-     * @return PHPFrame_Client|boolean Object instance of this class if correct 
-     *                                 helper for client or FALSE otherwise.
-     * @since  1.0
-     */
-    public static function detect() 
-    {
-        global $HTTP_RAW_POST_DATA;
-        
-        //check existance of $_HTTP_RAW_POST_DATA array
-        if (count($HTTP_RAW_POST_DATA) > 0) {
-            //check for a valid XML structure
-            $domDocument = new DOMDocument;
-            if ($domDocument->loadXML($HTTP_RAW_POST_DATA)) {
-                $domXPath = new DOMXPath($domDocument);
-                //check for valid RPC
-                $query       = "//methodCall/methodName";
-                $method_node = $domXPath->query($query)->item(0);
-                if ($method_node->nodeValue != null) {
-                    return new self;
-                }
-            } else {
-                throw new RuntimeException("Given xml is invalid!");
-            }
-        }
-        
-        return false;
-    }
-    
-    /**    
-     * Populate the Request object.
-     * 
-     * @param PHPFrame_Request $request Reference to the request object.
-     * 
+     * Constructor.
+     *
+     * @param DOMDocument $request_dom [Optional]
+     *
      * @return void
      * @since  1.0
      */
-    public function populateRequest(PHPFrame_Request $request) 
+    public function __construct(DOMDocument $request_dom=null)
     {
-        global $HTTP_RAW_POST_DATA;
-        
-        $this->_parseXMLRPC($HTTP_RAW_POST_DATA, $request);
-        
+        if (is_null($request_dom)) {
+            $request_body = file_get_contents("php://input");
+            $request_dom  = new DOMDocument();
+            $request_dom->preserveWhiteSpace = false;
+            if (@$request_dom->loadXML($request_body)) {
+                $xpath = new DOMXPath($dom);
+                //check for valid RPC
+                $query       = "//methodCall/methodName";
+                $method_node = $xpath->query($query)->item(0);
+                if ($method_node->nodeValue == null) {
+                    $msg = "Invalid XML payload.";
+                    throw new InvalidArgumentException($msg);
+                }
+            }
+        }
+
+        $this->_request_dom = $request_dom;
+    }
+
+    /**
+     * Magic method invoked when serialising object.
+     *
+     * @return araay
+     * @since  1.0
+     */
+    public function __sleep()
+    {
+        return array();
+    }
+
+    /**
+     * Get client name
+     *
+     * @return string Name to identify client type.
+     * @since  1.0
+     */
+    public function getName()
+    {
+        return "xmlrpc";
+    }
+
+    /**
+     * Check if this is the correct helper for the client being used
+     *
+     * @return PHPFrame_Client|boolean Object instance of this class if correct
+     *                                 helper for client or FALSE otherwise.
+     * @since  1.0
+     */
+    public static function detect()
+    {
+        $request_body = file_get_contents("php://input");
+
+        if (!empty($request_body)) {
+            //check for a valid XML structure
+            $dom = new DOMDocument();
+            $dom->preserveWhiteSpace = false;
+            if (@$dom->loadXML($request_body)) {
+                $xpath = new DOMXPath($dom);
+                //check for valid RPC
+                $query       = "//methodCall/methodName";
+                $method_node = $xpath->query($query)->item(0);
+                if ($method_node->nodeValue != null) {
+                    return new self($dom);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Populate the Request object.
+     *
+     * @param PHPFrame_Request $request Reference to the request object.
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function populateRequest(PHPFrame_Request $request)
+    {
+        $this->_parseXMLRPCRequest($request);
+
         $request->requestTime(time());
         $request->quiet(false);
-        
+
         foreach ($_SERVER as $key=>$value) {
             if (substr($key, 0, 5) == "HTTP_") {
                 $key = str_replace('_', ' ', substr($key, 5));
@@ -105,45 +143,34 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
             }
         }
     }
-    
+
     /**
      * Prepare response
-     * 
-     * This method is invoked by the front controller before invoking the 
-     * requested action in the action controller. It gives the client an 
+     *
+     * This method is invoked by the front controller before invoking the
+     * requested action in the action controller. It gives the client an
      * opportunity to do something before the controller is executed.
-     * 
+     *
      * @param PHPFrame_Response $response   The response object to prepare.
      * @param string            $views_path Absolute path to vies dir.
-     * 
+     *
      * @return void
      * @since  1.0
      */
     public function prepareResponse(PHPFrame_Response $response, $views_path)
     {
-        global $HTTP_RAW_POST_DATA;
-        
-        // Before we proceed to prepare the response we authenticate
-        try {
-            $this->_authenticate($HTTP_RAW_POST_DATA);
-            $this->_checkAPIPermisssions();
-        } catch (PHPFrame_XMLRPCException $e) {
-            echo $e->getXMLRPCFault();
-            exit;
-        }
-        
         // Set document as response content
-        $response->document(new PHPFrame_RPCDocument());
-        
+        $response->document(new PHPFrame_XMLDocument());
+
         // Set response renderer
-        $response->renderer(new PHPFrame_RPCRenderer());     
+        $response->renderer(new PHPFrame_RPCRenderer($response->document()));
     }
-    
+
     /**
      * Handle controller redirection
-     * 
+     *
      * @param string $url The URL we want to redirect to.
-     * 
+     *
      * @return void
      * @since  1.0
      * @todo   This method needs to be implemented.
@@ -152,471 +179,148 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     {
         // ...
     }
-    
+
     /**
      * This method is used to parse an XML remote procedure call
-     * 
-     * @param string           $xml     A string containing the XML call.
+     *
      * @param PHPFrame_Request $request Reference to the request object.
-     * 
+     *
      * @return array A nice asociative array with all the data.
      * @since  1.0
      */
-    private function _parseXMLRPC($xml, PHPFrame_Request $request) 
+    private function _parseXMLRPCRequest(PHPFrame_Request $request)
     {
         $array = array();
-        
-        $domDocument = new DOMDocument;
-        $domDocument->preserveWhiteSpace = false;
-        $domDocument->loadXML($xml);
-        $domXPath = new DOMXPath($domDocument);
-        
-        $query = "//methodCall/methodName";
-        $query_result = $domXPath->query($query);
-        $methodName = $query_result->item(0)->nodeValue;
-        //look for 'controller.action' format 
-        preg_match('/^([a-zA-Z]+)(\.([a-zA-Z_]+))?$/', $methodName, $matches);
-        
+        $xpath = new DOMXPath($this->_request_dom);
+        $query_result = $xpath->query("//methodCall/methodName");
+        $method_name = $query_result->item(0)->nodeValue;
+        //look for 'controller.action' format
+        preg_match('/^([a-zA-Z]+)(\.([a-zA-Z_]+))?$/', $method_name, $matches);
+
         //matches?
         if (count($matches) > 0) {
             //first match is controller
             $request->controllerName($matches[1]);
-            //third match is action (if it exists) 
+            //third match is action (if it exists)
             if (count($matches) > 2) {
-                $request->action($matches[3]);   
-            }
-        }
-        
-        $query = '//methodCall/params/param/value';
-        $query_result = $domXPath->query($query);
-        //look at the first struct element members to identify parameter values
-        if ($query_result instanceof DOMNodeList 
-            && $query_result->length!=0 
-            && $query_result->item(0)->hasChildNodes()
-        ) {
-            $parameters = array();
-            foreach ($query_result as $parameter) {
-                $parameters[] = $this->_parseXMLRPCRecurse($domXPath, $parameter);
-            }
-            try {
-                //check if controller action request is valid:
-                $paramMap = $this->_getComponentActionParameterMapping(
-                    $matches[1], 
-                    $matches[3], 
-                    $parameters
-                );
-            } catch (PHPFrame_XMLRPCException $e) {
-                echo $e->getXMLRPCFault();
-                exit;
-            }
-            
-            foreach ($paramMap as $key=>$value) {
-                $request->param($key, $value);
-            }
-        } else {
-            try {
-                //check if controller action request is valid:
-                $paramMap = $this->_getComponentActionParameterMapping(
-                    $matches[1], 
-                    $matches[3], 
-                    array()
-                );
-            } catch (PHPFrame_XMLRPCException $e) {
-                echo $e->getXMLRPCFault();
-                exit;
+                $request->action($matches[3]);
             }
         }
 
-        return $array;
+        $controller_class = ucfirst($matches[1])."Controller";
+        $controller_reflector = new ReflectionClass($controller_class);
+        if (!$controller_reflector instanceof ReflectionClass) {
+            return;
+        }
+
+        $action_reflector = $controller_reflector->getMethod($matches[3]);
+        if (!$action_reflector instanceof ReflectionMethod) {
+            return;
+        }
+
+        $value_nodes  = $xpath->query("//methodCall/params/param/value");
+        $param_values = array();
+        foreach ($value_nodes as $value_node) {
+            $param_values[] = $this->_parseXMLRPCValue($value_node, $xpath);
+        }
+
+        $param_count = 0;
+        foreach ($action_reflector->getParameters() as $param_reflector) {
+            if (array_key_exists($param_count, $param_values)) {
+                $request->param(
+                    $param_reflector->getName(),
+                    $param_values[$param_count]
+                );
+                $param_count++;
+            }
+        }
     }
-       
+
     /**
      * Parses an xml-rpc value node and returns the correct data type.
-     * 
-     * @param object  $domXPath The DOMXPath object used for parsing the XML. 
-     *                          This object is created in _parseXMLResponse().
-     * @param DOMNode $node     The value DOMNode to parse.
-     * 
-     * @return Various if the given node is a scalar value, the scalar value is 
-     *         returned, if the node is a struct, an associative array with key 
+     *
+     * @param DOMNode  $node  The value DOMNode to parse.
+     * @param DOMXPath $xpath The DOMXPath object used for parsing the XML.
+     *
+     * @return Various if the given node is a scalar value, the scalar value is
+     *         returned, if the node is a struct, an associative array with key
      *         value pairs is returned, if the node is an array
      * @since  1.0
      */
-    private function _parseXMLRPCRecurse($domXPath, $node)
+    private function _parseXMLRPCValue(DOMNode $node, DOMXPath $xpath)
     {
-        if (!(($node instanceof DOMNode) && $node->nodeName=='value')) {
+        if ($node->nodeName != "value") {
             $msg  = "Invalid parameter type, nodes must be of type DOMNode ";
             $msg .= "and must be a value node!";
             throw new InvalidArgumentException($msg);
         }
-         
-        //check if current value is a struct, array or scalar type
-        if ($node->firstChild->nodeName=='struct') {
-            $newStruct = array();
-            $query = 'struct/member';
-            $members = $domXPath->query($query, $node);
-            foreach ($members as $member) {
-                $query = 'name';
-                $key   = $domXPath->query($query, $member)->item(0)->nodeValue;
-                $query = 'value';
-                $value = $this->_parseXMLRPCRecurse(
-                    $domXPath, 
-                    $domXPath->query($query, $member)->item(0)
-                );
-                
-                $newStruct[$key] = $value;
-            }
-            
-            return $newStruct;
-            
-        } else if ($node->firstChild->nodeName=='array') {
-            $newArray = array();
-            $query    = 'array/data/value';
-            $values   = $domXPath->query($query, $node);
-            
-            foreach ($values as $value) {
-                $newArray[] = $this->_parseXMLRPCRecurse($domXPath, $value);
-            }
-            
-            return $newArray;
-            
-        } else {//value node must a scalar type
-            $leafValue = $node->firstChild;
-            return $this->_nodeScalarValue($leafValue);
-        }
-    }
-    
-    /**
-     * Returns an associative array mapping the given parameters for a 
-     * controller action, first checking if the call is valid.
-     * This method first checks if the controller is valid, then 
-     * continues to check if the action name is valid and finally, 
-     * whether the parameters are valid. If all the checks pass, an 
-     * associative array mapping the real controller action parameters names 
-     * to the user specified parameters.
-     * 
-     * @param string $controller The name of the controller
-     * @param string $action     The name of the action to check on the controller
-     * @param array  $params     The indexed array of parameters required for 
-     *                           the controller action.
-     * 
-     * @return mixed Either an array containing paramter mapping or void 
-     *               with thrown PHPFrame_XMLRPCException if controller, action 
-     *               or parameters are invalid
-     * @since  1.0
-     */
-    private function _getComponentActionParameterMapping(
-        $controller, 
-        $action, 
-        $params
-    ) {
-        $reflectionClass = $this->_getControllerClass($controller);
-        if (!$reflectionClass) {
-            throw new PHPFrame_XMLRPCException(
-                'No such controller exists: '.$controller, 
-                PHPFrame_XMLRPCException::INVALID_COMPONENT
-            );
-            return;
-        }
-        
-        if (!$reflectionClass->hasMethod($action)) {
-            $msg  = 'No such action: '.$action.' exists in controller: ';
-            $msg .= $controller;
-            throw new PHPFrame_XMLRPCException(
-                $msg, 
-                PHPFrame_XMLRPCException::INVALID_ACTION
-            );
-            return;
-        }
-        
-        $actionMethod = $reflectionClass->getMethod($action);
-        if (!$actionMethod->isPublic()) {
-            $msg  = 'Action: '.$action.' is inaccessible in controller: ';
-            $msg .= $controller;
-            throw new PHPFrame_XMLRPCException(
-                $msg, 
-                PHPFrame_XMLRPCException::INVALID_ACTION
-            );
-            return;
-        }
-        
-        $reflectionParameters = $actionMethod->getParameters();
-        $numParams = count($reflectionParameters);
-        $minReqParams = $actionMethod->getNumberOfRequiredParameters();
-        if (count($params) > $numParams) {
-            $msg  = 'Too many parameters for action: '.$action;
-            $msg .= ' in controller: '.$controller;
-            throw new PHPFrame_XMLRPCException(
-                $msg, 
-                PHPFrame_XMLRPCException::INVALID_NUMBER_PARAMETERS
-            );
-            
-            return;
-            
-        } elseif (count($params) < $minReqParams) {
-            $msg  = 'Too few parameters for action: '.$action;
-            $msg .= ' in controller: '.$controller;
-            throw new PHPFrame_XMLRPCException(
-                $msg,
-                PHPFrame_XMLRPCException::INVALID_NUMBER_PARAMETERS
-            );
-        }
-        
-        $paramMap = array();
-        $paramIndex = 0;
-        foreach ($reflectionParameters as $reflectionParam) {
-            if ($paramIndex<count($params)) {
-                $class = $reflectionParam->getClass();
-                $paramPosition = $reflectionParam->getPosition();
-                if ($reflectionParam->isArray() 
-                    && !is_array($params[$paramPosition])
-                ) {
-                    $msg  = 'Parameter type mis-match for parameter ';
-                    $msg .= $paramPosition.', expected an array, got ';
-                    $msg .= 'primitive type';
-                    throw new PHPFrame_XMLRPCException(
-                        $msg, 
-                        PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE
-                    );
-                    return;
-                } elseif (!empty($class) && !is_array($params[$paramPosition])) {
-                    $msg  = 'Parameter type mis-match for parameter ';
-                    $msg .= $paramPosition.', expected a struct, got ';
-                    $msg .= 'primitive type';
-                    throw new PHPFrame_XMLRPCException(
-                        $msg, 
-                        PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE
-                    );
-                    return;
-                } elseif (
-                    !$reflectionParam->isArray() 
-                    && empty($class) 
-                    && is_array($params[$paramPosition])
-                ) {
-                    $msg  = 'Parameter type mis-match for parameter ';
-                    $msg .= $paramPosition.', expected a primitive, got a ';
-                    $msg .= "struct/array";
-                    throw new PHPFrame_XMLRPCException(
-                        $msg, 
-                        PHPFrame_XMLRPCException::INVALID_PARAMETER_TYPE
-                    );
-                    return;
-                } else {
-                    $param_name = $reflectionParam->getName();
-                    $paramMap[$param_name] = $params[$paramPosition];
-                }
-                $paramIndex++;
-            } else {
-                break;
-            }   
-        }
-        
-        return $paramMap;
-    }
-    
-    /**
-     * Gets the specified controller controller class if it exists. 
-     * This returns the ReflectionClass object if there is an instantiable 
-     * controller class for the specified controller.
-     * 
-     * @param string $controller The controller name.
-     * 
-     * @return mixed ReflectionClass if a controller with this name exists, 
-     *               FALSE otherwise.
-     * @since  1.0
-     */
-    private function _getControllerClass($controller)
-    {
-        $class_name = ucfirst($controller)."Controller";
-        
-        // make a reflection object
-        try{
-            $reflectionObj = new ReflectionClass($class_name);
-        } catch (Exception $e){
-            return false;
-        }
-        
-        // Check if class is instantiable
-        if ($reflectionObj->isInstantiable()) {
-            // Try to get the constructor
-            $constructor = $reflectionObj->getConstructor();
-            // Check to see if we have a valid constructor method
-            if ($constructor instanceof ReflectionMethod) {
-                // If constructor is public we create a new instance
-                if ($constructor->isPublic()) {
-                    return $reflectionObj;
-                }
-            }
-        }
-        
-        //check if the class has a static getInstance method
-        if ($reflectionObj->hasMethod('getInstance')) {
-            $get_instance = $reflectionObj->getMethod('getInstance');
-            if ($get_instance->isPublic() && $get_instance->isStatic()) {
-                return $reflectionObj;
-            }
-        }
-    }    
-    
-    
-    /**
-     * This method is used to return the scalar value of a DOMNode. 
-     * The node must be one of the scalar values as specified by the 
-     * xml rpc (i4, int, boolean, string, double, dateTime.iso8601, base64).
-     * 
-     * @param DOMNode $node DOMNode object containing value to return.
-     * 
-     * @return mixed int for i4, int or dateTime.iso8601 (unix timestamp) nodes, 
-     *               boolean for boolean, string for string or base64 and float 
-     *               for double.
-     * @since  1.0
-     */
-    private function _nodeScalarValue($node)
-    {
-        if (!($node instanceof DOMNode)) {
-            $msg = "Invalid parameter, node must be of type DOMNode!";
-            throw new InvalidArgumentException($msg);
-        }
-        
-        $nodeName  = $node->nodeName;
-        $time_reg  = '/(^[0-9]{4})([0-9]{2})([0-9]{2})T';
-        $time_reg .='([0-9]{2}):([0-9]{2}):([0-9]{2}$)/';
-        switch ($nodeName){
-        case 'i4':
-        case 'int':
-            $value = (int) $node->nodeValue;
-            break;
-            
-        case 'boolean':
-            $value = (boolean) $node->nodeValue;
-            break;
-                
-        case 'string':
-        case 'base64':
-            $value = (string) $node->nodeValue;
-            break;
-                
-        case 'double':
-            $value = (float) $node->nodeValue;
-            break;
-                
-        case 'dateTime.iso8601':
-            $matches = array();
-            $isValidTime = preg_match($time_reg, $node->nodeValue, $matches);
-            
-            if ($isValidTime!=1) {
+
+        $type_node = $node->firstChild;
+
+        switch ($type_node->nodeName) {
+        case "boolean":
+            return (bool) $type_node->nodeValue;
+
+        case "i4" :
+        case "int" :
+            return (int) $type_node->nodeValue;
+
+        case "double" :
+            return (float) $type_node->nodeValue;
+
+        case "string" :
+        case "base64" :
+            return (string) $type_node->nodeValue;
+
+        case "dateTime.iso8601" :
+            $pattern  = "/(^[0-9]{4})([0-9]{2})([0-9]{2})T";
+            $pattern .= "([0-9]{2}):([0-9]{2}):([0-9]{2}$)/";
+            $matches  = array();
+
+            if (!preg_match($pattern, $type_node->nodeValue, $matches)) {
                 $msg  = "Invalid dateTime format found for value ";
-                $msg .= $node->nodeValue."!";
+                $msg .= $type_node->nodeValue."!";
                 throw new DomainException($msg);
             } else {
-                $value = mktime(
-                    $matches[4], 
-                    $matches[5], 
-                    $matches[6], 
-                    $matches[2], 
-                    $matches[3], 
+                return mktime(
+                    $matches[4],
+                    $matches[5],
+                    $matches[6],
+                    $matches[2],
+                    $matches[3],
                     $matches[1]
                 );
             }
-            
-            break;
-            
-        default:
-            $value = "";
-        }
-    
-        return $value;
-    }
-    
-    /**
-     * Checks whether the current request is from a valid XMLRPC API client. 
-     * This method inspects the request header keys for X-API-USERNAME and 
-     * X-API-SIGNATURE. If the API user is a valid user and the signature 
-     * matches the special hashing function (using the private API key shared 
-     * by both the client and server) of the xml payload, then the client is 
-     * deemed to authenticated. Otherwise a <code>PHPFrame_XMLRPCException</code> 
-     * exception with fault code <code>INVALID_API_KEY_OR_USER</code> is thrown.
-     *  
-     * @param string $xml_payload The complete XML-RPC call string used to test 
-     *                            the api signature against.
-     *                             
-     * @return void or throws Exception if api authentication fails.
-     * @since  1.0
-     */
-    private function _authenticate($xml_payload)
-    {
-        if (isset($_SERVER["HTTP_X_API_USERNAME"])) {
-            $x_api_user = $_SERVER["HTTP_X_API_USERNAME"];
-        }
-        
-        if (isset($_SERVER["HTTP_X_API_SIGNATURE"])) {
-            $x_api_signature = $_SERVER["HTTP_X_API_SIGNATURE"];
-        }
-        
-        // Get API user's key
-        try {
-            $sql     = "SELECT `key` FROM #__api_users ";
-            $sql    .= " WHERE user = '".$x_api_user."'";
-            $params  = array(":user"=>$x_api_user);
-            $api_key = PHPFrame::DB()->fetchColumn($sql, $params);
-            
-            $test_signature = md5(md5($xml_payload.$api_key).$api_key);
-            
-            if ($x_api_signature === $test_signature) {
-                // Login the user as group API
-                $user = new PHPFrame_User();
-                $user->id(2);
-                $user->groupId(4);
-                $user->email("api@localhost.local");
-                
-                // Store user in session
-                $session = PHPFrame::getSession();
-                $session->setUser($user);
-                
-                // Automatically set session token in request so that forms will 
-                // be allowed
-                PHPFrame::Request()->param($session->getToken(), 1);
-                
-                return;
-                
-            } else {
-                $msg  = "XMLRPC API authentication failed. ";
-                $msg .= "API key not valid.";
-                throw new RuntimeException($msg);
+
+        case "struct" :
+            $new_struct = array();
+            $members    = $xpath->query("struct/member", $node);
+            foreach ($members as $member) {
+                $query = "name";
+                $key   = $xpath->query($query, $member)->item(0)->nodeValue;
+                $query = "value";
+                $value = $this->_parseXMLRPCRecurse(
+                    $xpath,
+                    $xpath->query($query, $member)->item(0)
+                );
+
+                $new_struct[$key] = $value;
             }
-            
-        } catch (Exception $e) {
-            $msg  = "XMLRPC API authentication failed";
-            $code = PHPFrame_XMLRPCException::INVALID_API_KEY_OR_USER;
-            throw new PHPFrame_XMLRPCException($msg, $code);
-        }
-    }
-    
-    /**
-     * Checks whether the XMLRPC client is able to perform the requested action, 
-     * throws a <code>PHPFrame_XMLRPCException</code> with fault code 
-     * <code>INVALID_PERMISSIONS</code> if not authorized.
-     * 
-     * @return void or throws PHPFrame_XMLRPCException if XMLRPC client is not 
-     *         authorized to perform the requested action
-     * @since  1.0
-     */
-    private function _checkAPIPermisssions()
-    {
-        // Check permissions before we execute
-        $controller  = PHPFrame::Request()->controllerName();
-        $action      = PHPFrame::Request()->action();
-        $groupid     = PHPFrame::getSession()->getGroupId();
-        $permissions = PHPFrame::AppRegistry()->permissions();
-        
-        if ($permissions->authorise($controller, $action, $groupid) !== true) {
-            $msg  = "Insufficient XMLRPC API permissions to perform action. ";
-            $msg .= "XMLRPC client is not allowed to ";
-            $msg .= "perform the action: $action on controller: $controller.";
-            throw new PHPFrame_XMLRPCException(
-                $msg, 
-                PHPFrame_XMLRPCException::INVALID_PERMISSIONS
-            );
+
+            return $new_struct;
+
+        case "array" :
+            $new_array = array();
+            $values    = $xpath->query("array/data/value", $node);
+
+            foreach ($values as $value) {
+                $new_array[] = $this->_parseXMLRPCRecurse($xpath, $value);
+            }
+
+            return $new_array;
+
+        default :
+            return "";
         }
     }
 }

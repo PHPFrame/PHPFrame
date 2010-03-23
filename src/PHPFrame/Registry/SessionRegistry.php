@@ -13,11 +13,11 @@
  */
 
 /**
- * The Session Registry class produces a singleton object that encapsulates and 
+ * The Session Registry class produces a singleton object that encapsulates and
  * centralises access to session data.
- * 
+ *
  * The session object is accessed from the PHPFrame facade class as follows:
- * 
+ *
  * <code>
  * $session = PHPFrame::getSession();
  * </code>
@@ -89,14 +89,14 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     private $_cookie_httponly = true;
     /**
      * Array containing the session data
-     * 
+     *
      * @var array
      */
     private $_data = array();
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -106,67 +106,67 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         $uri                  = new PHPFrame_URI();
         $this->_cookie_path   = $uri->getDirname()."/";
         $this->_cookie_domain = $uri->getHost();
-        
+
         // Set custom session name
         ini_set("session.name", $this->_session_name);
-        
+
         // Initialise cookie
         ini_set("session.cookie_lifetime", $this->_cookie_lifetime);
         ini_set("session.cookie_path", $this->_cookie_path);
         ini_set("session.cookie_secure", $this->_cookie_secure);
         ini_set("session.cookie_httponly", $this->_cookie_httponly);
-        
+
         // start php session
         session_start();
-        
+
         // Get reference to session super global
         $this->_data =& $_SESSION;
-        
+
         // If new session we initialise
         if (!isset($this->_data['id']) || $this->_data['id'] != session_id()) {
             // Store session id in session array
             $this->_data['id'] = session_id();
-            
+
             // Acquire session user object
             $this->_data['user'] = new PHPFrame_User();
             $this->_data['user']->id(0);
             $this->_data['user']->groupId(0);
             $this->_data['user']->email("guest@localhost.local");
-            
+
             // Acquire sysevents object
             $this->_data['sysevents'] = new PHPFrame_Sysevents();
-            
+
             // Generate session token
             $this->getToken(true);
-            
+
             // Detect client for this session
             $this->detectClient();
-            
+
         } elseif (
             isset($_SERVER["HTTP_X_API_USERNAME"])
             && isset($_SERVER["HTTP_X_API_SIGNATURE"])
             && !($this->_data['client'] instanceof PHPFrame_XMLRPCClient)
         ) {
             /*
-             * If we are dealing with an api request that already has an 
-             * existing session but the client object is not set to XMLRPC we 
-             * instantiate a new client object replace it in the session, store 
-             * the old one in another var as well as the  user object so that 
-             * we can put them back in place when the next non-api request is 
+             * If we are dealing with an api request that already has an
+             * existing session but the client object is not set to XMLRPC we
+             * instantiate a new client object replace it in the session, store
+             * the old one in another var as well as the  user object so that
+             * we can put them back in place when the next non-api request is
              * received
              */
             $this->_data['overriden_client'] = $this->_data['client'];
             $this->_data['overriden_user']   = $this->_data['user'];
             $this->_data['client']           = new PHPFrame_XMLRPCClient();
-            
+
         } elseif (
             !isset($_SERVER["HTTP_X_API_USERNAME"])
             && !isset($_SERVER["HTTP_X_API_SIGNATURE"])
-            && isset($this->_data['overriden_client']) 
+            && isset($this->_data['overriden_client'])
             && $this->_data['overriden_client'] instanceof PHPFrame_Client
         ) {
-            // If we already have a session with an xmlrpc client object but no 
-            // api headers are included in request we then revert the client 
+            // If we already have a session with an xmlrpc client object but no
+            // api headers are included in request we then revert the client
             // and user objects
             $this->_data['client'] = $this->_data['overriden_client'];
             $this->_data['user']   = $this->_data['overriden_user'];
@@ -177,7 +177,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get Instance
-     * 
+     *
      * @return PHPFrame_Registry
      * @since  1.0
      */
@@ -189,10 +189,10 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
         return self::$_instance;
     }
-    
+
     /**
      * Implementation of the IteratorAggregate interface.
-     * 
+     *
      * @return ArrayIterator
      * @since  1.0
      */
@@ -208,7 +208,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      *                              variable we want to retrieve.
      * @param mixed  $default_value An optional default value to assign if
      *                              the given key is not set.
-     * 
+     *
      * @return mixed
      * @since  1.0
      */
@@ -233,7 +233,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      * @param string $key   A string used to identify the session variable we
      *                      want to set.
      * @param mixed  $value The value we want to store in the specified key.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -244,7 +244,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get session id
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -255,7 +255,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get session name
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -266,7 +266,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get client object
-     * 
+     *
      * @return PHPFrame_Environment_IClient|null
      * @since  1.0
      */
@@ -284,7 +284,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get client object's name
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -303,7 +303,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      * Set session user
      *
      * @param PHPFrame_User $user User object of type PHPFrame_User
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -314,7 +314,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get session's user object
-     * 
+     *
      * @return PHPFrame_User|null
      * @since  1.0
      */
@@ -331,7 +331,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get session user id
-     * 
+     *
      * @return int
      * @since  1.0
      */
@@ -348,7 +348,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get session user groupid
-     * 
+     *
      * @return int
      * @since  1.0
      */
@@ -365,7 +365,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Is the current session authenticated?
-     * 
+     *
      * @return bool Returns TRUE if user is authenticated or FALSE otherwise.
      * @since  1.0
      */
@@ -383,7 +383,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Is the current session an admin session?
-     * 
+     *
      * @return bool Returns TRUE if current user is admin or FALSE otherwise.
      * @since  1.0
      */
@@ -398,7 +398,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Get system events object
-     * 
+     *
      * @return PHPFrame_Sysevents
      * @since  1.0
      */
@@ -421,7 +421,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      * it is present, if not it will invalidate the session.
      *
      * @param bool $force_new If true, force a new token to be created
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -437,7 +437,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Checks for a form token in the request
-     * 
+     *
      * @return bool TRUE if found and valid, FALSE otherwise
      * @since  1.0
      */
@@ -454,7 +454,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Destroy session
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -467,7 +467,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         // used when creating the cookie
         setcookie(
             $this->_session_name,
-            "", 
+            "",
             time() - 3600,
             $this->_cookie_path,
             null,
@@ -478,7 +478,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Detect and set client object
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -486,17 +486,17 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     {
         // Build array with available clients
         //TODO: This should be read from directory
-        $available_clients = array("CLI", "Mobile", "XMLRPC", "Default");
+        $available_clients = array("CLI", "XMLRPC", "Mobile", "Default");
 
         //loop through files
         foreach ($available_clients as $client) {
             //build class names
             $className = "PHPFrame_".$client."Client";
-            if (is_callable(array($className, 'detect'))) {
+            if (is_callable(array($className, "detect"))) {
                 //call class's detect() to check if this is the helper we need
                 $client = call_user_func(array($className, "detect"));
                 if ($client instanceof PHPFrame_Client) {
-                    // store instance and break out of the function if we found 
+                    // store instance and break out of the function if we found
                     // our helper
                     $this->set("client", $client);
                     return;
@@ -510,9 +510,9 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
     /**
      * Create a token-string
-     * 
+     *
      * @param int $length Lenght of string.
-     * 
+     *
      * @return string Generated token.
      * @since  1.0
      */

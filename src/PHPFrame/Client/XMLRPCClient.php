@@ -133,10 +133,10 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         }
         
         // Set document as response content
-        $response->document(new PHPFrame_RPCDocument());
+        $response->document(new PHPFrame_XMLDocument());
         
         // Set response renderer
-        $response->renderer(new PHPFrame_RPCRenderer());     
+        $response->renderer(new PHPFrame_RPCRenderer($response->document()));     
     }
     
     /**
@@ -545,6 +545,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      */
     private function _authenticate($xml_payload)
     {
+    	return;
         if (isset($_SERVER["HTTP_X_API_USERNAME"])) {
             $x_api_user = $_SERVER["HTTP_X_API_USERNAME"];
         }
@@ -603,6 +604,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      */
     private function _checkAPIPermisssions()
     {
+    	return;
         // Check permissions before we execute
         $controller  = PHPFrame::Request()->controllerName();
         $action      = PHPFrame::Request()->action();

@@ -44,6 +44,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     public function __construct(PHPFrame_XMLDocument $document)
     {
         $this->_document = $document;
+        $document->addNode("methodResponse", $document->dom());
     }
     
     /**
@@ -56,14 +57,13 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      */
     public function render($value)
     {
-        if (is_array($value)) {
-            $this->_makeParamPayload($value);
-            
-        } elseif ($value instanceof PHPFrame_View) {
+        if ($value instanceof PHPFrame_View) {
             $value = $this->renderView($value);
+        } else {
+            $this->_makeParamPayload($value);
         }
         
-        return strip_tags(trim((string) $value));
+        return $this->_document;
     }
     
     /**

@@ -55,9 +55,6 @@ class PHPFrame_SQLPersistentObjectAssembler
         if (is_int($id_or_id_obj)) {
             $id = $id_or_id_obj;
             
-            // Get table name
-            $table_name = $this->factory->getTableName();
-            
             // Create new IdObject
             $id_obj = $this->factory->getIdObject();
             $id_obj->where("id", "=", ":id")->params(":id", $id);

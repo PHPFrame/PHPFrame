@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Documentor/ClassDoc.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Documentor
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -15,7 +15,7 @@
 
 /**
  * Class Documentor Class
- * 
+ *
  * @category PHPFrame
  * @package  Documentor
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -24,171 +24,64 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_ClassDoc implements IteratorAggregate
+class PHPFrame_ClassDoc extends ReflectionClass
 {
-    const VISIBILITY_PUBLIC    = 1;
-    const VISIBILITY_PROTECTED = 2;
-    const VISIBILITY_PRIVATE   = 4;
-    
-    private $_visibility = self::VISIBILITY_PUBLIC;
-    private $_array = array(
-        "class_name" => null,
-        "props" => array(),
-        "methods" => array("own"=>array(), "inherited"=>array())
-    );
-    
-    /**
-     * Constructor.
-     * 
-     * @param ReflectionClass $reflection_obj Reflection object of the class to 
-     *                                        document.
-     * @param int             $visibility     [Optional] The visibility level 
-     *                                        to include in documentation. 
-     *                                        Default value is 1 (public). See 
-     *                                        class constants for possible 
-     *                                        values.
-     * 
-     * @return void
-     * @since  1.0
-     */
-    public function __construct(
-        ReflectionClass $reflection_obj, 
-        $visibility=self::VISIBILITY_PUBLIC
-    ) {
-        $this->_visibility = $visibility;
-        
-        $this->_array["class_name"] = $reflection_obj->getName();
-        
-        foreach ($reflection_obj->getProperties() as $reflection_prop) {
-            if (($reflection_prop->isProtected() 
-                && $this->_visibility < PHPFrame_ClassDoc::VISIBILITY_PROTECTED)
-                || ($reflection_prop->isPrivate()
-                && $this->_visibility < PHPFrame_ClassDoc::VISIBILITY_PRIVATE)
-            ) {
-                continue;
-            }
-            
-            $this->_array["props"][] = new PHPFrame_PropertyDoc($reflection_prop);
-        }
-        
-        foreach ($reflection_obj->getMethods() as $reflection_method) {
-            if (($reflection_method->isProtected() 
-                && $this->_visibility < PHPFrame_ClassDoc::VISIBILITY_PROTECTED)
-                || ($reflection_method->isPrivate()
-                && $this->_visibility < PHPFrame_ClassDoc::VISIBILITY_PRIVATE)
-            ) {
-                continue;
-            }
-            
-            $method_doc = new PHPFrame_MethodDoc($reflection_method);
-            
-            if ($method_doc->getDeclaringClass() == $this->getClassName()) {
-                $this->_array["methods"]["own"][] = $method_doc;
-            } else {
-                $this->_array["methods"]["inherited"][] = $method_doc;
-            }
-        }
-    }
-    
     /**
      * Convert object to string.
-     * 
+     *
      * @return string
      * @since  1.0
      */
     public function __toString()
     {
-        $str  = "Class: ".$this->getClassName()."\n";
-        for ($i=0; $i<(strlen($this->getClassName())+7); $i++) {
+        $str  = "Class: ".$this->getName()."\n";
+        for ($i=0; $i<(strlen($this->getName())+7); $i++) {
             $str .= "-";
         }
-        
-        if (count($this->getProps()) > 0) {
-            $str .= "\n\nProperties:\n";
-            $str .= "-----------\n\n";
-            $str .= implode("\n\n", $this->getProps());
+
+        if (count($this->getConstants()) > 0) {
+            $str .= "\n\n### Constants ###\n\n";
+            $str .= implode("\n\n", $this->getConstants());
         }
-        
-        if (count($this->getOwnMethods()) > 0) {
-            $str .= "\nMethods:\n";
-            $str .= "--------\n\n";
-            $str .= implode("\n\n", $this->getOwnMethods());
+
+        if (count($this->getProperties(ReflectionProperty::IS_PUBLIC)) > 0) {
+            $str .= "\n\n### Properties ###\n\n";
+            $str .= implode("\n\n", $this->getProperties());
         }
-        
-        if (count($this->getInheritedMethods()) > 0) {
-            $str .= "\n\nInherited Methods:\n";
-            $str .= "------------------\n\n";
-            $str .= implode("\n\n", $this->getInheritedMethods());
+
+        if (count($this->getMethods()) > 0) {
+            $str .= "\n\n### Methods ###\n\n";
+            $str .= implode("\n\n", $this->getMethods());
         }
-        
+
         return $str;
     }
-    
-    /**
-     * Implementation of the IteratorAggregate interface.
-     * 
-     * @return ArrayIterator
-     * @since  1.0
-     */
-    public function getIterator()
+
+    public function getProperties($filter=null)
     {
-        return new ArrayIterator($this->_array);
+        $props = array();
+
+        foreach (parent::getProperties($filter) as $prop) {
+            $props[] = new PHPFrame_PropertyDoc(
+                $this->getName(),
+                $prop->getName()
+            );
+        }
+
+        return $props;
     }
-    
-    /**
-     * Get class name.
-     * 
-     * @return string
-     * @since  1.0
-     */
-    public function getClassName()
-    {
-        return $this->_array["class_name"];
-    }
-    
-    /**
-     * Get class name.
-     * 
-     * @return array An associative array with the following keys:
-     *               - own: An array containig methods defined by the class.
-     *               - inherited: An array containing inherited methods.
-     * @since  1.0
-     */
+
     public function getMethods()
     {
-        return $this->_array["methods"];
-    }
-    
-    /**
-     * Get own methods.
-     * 
-     * @return array An array containing objects of type PHPFrame_MethodDoc.
-     * @since  1.0
-     */
-    public function getOwnMethods()
-    {
-        return $this->_array["methods"]["own"];
-    }
-    
-    /**
-     * Get inherited methods.
-     * 
-     * @return array An array containing objects of type PHPFrame_MethodDoc.
-     * @since  1.0
-     */
-    public function getInheritedMethods()
-    {
-        return $this->_array["methods"]["inherited"];
-    }
-    
-    /**
-     * Get properties.
-     * 
-     * @return array
-     * @since  1.0
-     */
-    public function getProps()
-    {
-        return $this->_array["props"];
+        $methods = array();
+
+        foreach (parent::getMethods() as $method) {
+            $methods[] = new PHPFrame_MethodDoc(
+                $this->getName(),
+                $method->getName()
+            );
+        }
+
+        return $methods;
     }
 }

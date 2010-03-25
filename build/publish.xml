@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="PHPFrame" basedir="../" default="build">
-    
+
     <!-- File paths used in packaging process -->
     <property name="build.dir" value="${basedir}/build"/>
     <property name="dist.dir" value="${build.dir}/dist"/>
     <property name="tmp.dir" value="${build.dir}/tmp"/>
     <property name="logs.dir" value="${build.dir}/logs"/>
-    
+
     <!-- Package info  -->
     <property name="channel" value="pear.phpframe.org" />
     <property name="summary" value="PHPFrame MVC Framework" />
     <property name="description" value="PHPFrame is a minimal and object oriented PHP MVC framework." />
-    
+
     <!-- Release info -->
     <property name="api.version" value="1.0" />
     <property name="api.stability" value="beta" />
-    <property name="release.version" value="0.0.18" />
+    <property name="release.version" value="0.0.19" />
     <property name="release.stability" value="beta" />
-    <property name="notes" value="This is the first alpha release aimed at developers." />
-    
+    <property name="notes" value="This is a beta release aimed at developers." />
+
     <!-- Lead/Author -->
     <property name="lead.name" value="Lupo Montero" />
     <property name="lead.user" value="lupomontero" />
     <property name="lead.email" value="lupo@e-noise.com" />
     <property name="lead.active" value="yes" />
-    
+
     <!-- License -->
     <property name="license" value="BSD Style" />
     <property name="license.uri" value="http://www.opensource.org/licenses/bsd-license.php" />
-    
+
     <!-- Date and time -->
     <tstamp>
         <format property="date" pattern="yyyy-MM-dd" locale="en,UK"/>
@@ -36,16 +36,16 @@
     <tstamp>
         <format property="time" pattern="HH:mm:ss" locale="en,UK"/>
     </tstamp>
-    
+
     <!-- Prepare directories before we start -->
     <target name="prepare">
         <mkdir dir="${dist.dir}" />
         <mkdir dir="${logs.dir}" />
-        
+
         <delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
         <mkdir dir="${tmp.dir}"/>
     </target>
-    
+
     <!-- copy files to tmp dir for publishing -->
     <target name="copy" depends="prepare">
         <!-- copy data files -->
@@ -65,21 +65,21 @@
                 <include name="**" />
             </fileset>
         </copy>
-        
+
         <!-- copy example files -->
         <copy todir="${tmp.dir}/examples" overwrite="true">
             <fileset dir="${basedir}/examples">
                 <include name="**" />
             </fileset>
         </copy>
-        
+
         <!-- copy scripts files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${basedir}/scripts">
                 <include name="**" />
             </fileset>
         </copy>
-        
+
         <!-- copy src files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <!-- Replace tokens -->
@@ -97,7 +97,7 @@
                 <include name="**" />
             </fileset>
         </copy>
-        
+
         <!-- copy info files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${basedir}">
@@ -106,7 +106,7 @@
                 <include name="README.md" />
             </fileset>
         </copy>
-        
+
         <!-- copy package.xml to use as template -->
         <copy todir="${tmp.dir}" overwrite="true">
             <!-- Replace tokens -->
@@ -116,60 +116,60 @@
                     <token key="CHANNEL" value="${channel}" />
                     <token key="SUMMARY" value="${summary}" />
                     <token key="DESCRIPTION" value="${description}" />
-                    
+
                     <token key="RELEASE_VERSION" value="${release.version}" />
                     <token key="RELEASE_STABILITY" value="${release.stability}" />
                     <token key="API_VERSION" value="${api.version}" />
                     <token key="API_STABILITY" value="${api.stability}" />
-                    
+
                     <token key="DATE" value="${date}" />
                     <token key="TIME" value="${time}" />
-                    
+
                     <token key="LEAD_NAME" value="${lead.name}" />
                     <token key="LEAD_USER" value="${lead.user}" />
                     <token key="LEAD_EMAIL" value="${lead.email}" />
                     <token key="LEAD_ACTIVE" value="${lead.active}" />
-                    
+
                     <token key="LICENSE" value="${license}" />
                     <token key="LICENSE_URI" value="${license.uri}" />
-                    
+
                     <token key="NOTES" value="${notes}" />
                 </replacetokens>
             </filterchain>
-            
+
             <fileset dir="${build.dir}">
                 <include name="package.xml" />
             </fileset>
         </copy>
-        
+
     </target>
-    
+
     <!-- Create archive for distribution -->
     <target name="tar" depends="copy">
         <!-- create tar using pear package command -->
-        <exec executable="pear" 
-              dir="${tmp.dir}" 
-              failonerror="on" 
+        <exec executable="pear"
+              dir="${tmp.dir}"
+              failonerror="on"
               output="${logs.dir}/pear_package.log">
             <arg line="package" />
         </exec>
-        
+
         <!-- Move created package to dist directory -->
-        <move file="${tmp.dir}/${ant.project.name}-${release.version}.tgz" 
-              tofile="${dist.dir}/${ant.project.name}-${release.version}-${label}.tgz" 
+        <move file="${tmp.dir}/${ant.project.name}-${release.version}.tgz"
+              tofile="${dist.dir}/${ant.project.name}-${release.version}-${label}.tgz"
               overwrite="true"/>
-        
+
         <!-- Upload deliverable to live server -->
-        <exec executable="scp" 
-              dir="${dist.dir}" 
-              failonerror="on" 
+        <exec executable="scp"
+              dir="${dist.dir}"
+              failonerror="on"
               output="${logs.dir}/scp.log">
             <arg line="-P 2222 ${dist.dir}/${ant.project.name}-${release.version}-${label}.tgz
                        phpframe@e-noise.com:~/dist/ " />
         </exec>
-        
+
     </target>
-    
+
     <target name="build" depends="prepare, copy, tar" />
-    
+
 </project>

@@ -104,6 +104,7 @@ class PHPFrame_PluginHandler
 
         if (is_file($file_name)) {
             include $file_name;
+            return;
         }
 
         // If file not found try lowercase file name for backward compatibility
@@ -112,6 +113,7 @@ class PHPFrame_PluginHandler
 
         if (is_file($file_name)) {
             include $file_name;
+            return;
         }
     }
 

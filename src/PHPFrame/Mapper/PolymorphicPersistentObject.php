@@ -136,7 +136,7 @@ abstract class PHPFrame_PolymorphicPersistentObject
 
         if (!is_null($value)) {
             if (!array_key_exists($key, $param_keys)) {
-                $msg = "Unknown product parameter.";
+                $msg = "Unknown parameter.";
                 throw new InvalidArgumentException($msg);
             }
 
@@ -147,7 +147,7 @@ abstract class PHPFrame_PolymorphicPersistentObject
         }
 
         if (!array_key_exists($key, $param_keys)) {
-            $msg = "Unknown product parameter.";
+            $msg = "Unknown parameter.";
             throw new InvalidArgumentException($msg);
         }
 

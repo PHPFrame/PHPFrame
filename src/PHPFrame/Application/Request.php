@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Application/Request.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Application
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * This class encapsulates a request made to a {@link PHPFrame_Application}.
- *             
+ *
  * @category PHPFrame
  * @package  Application
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -26,7 +26,7 @@ class PHPFrame_Request implements IteratorAggregate
 {
     /**
      * Array holding request data
-     * 
+     *
      * @var array
      */
     private $_array = array(
@@ -47,25 +47,25 @@ class PHPFrame_Request implements IteratorAggregate
     );
     /**
      * Flag indicating whether the request has been dispatched
-     * 
+     *
      * @var bool
      */
     private $_dispatched = false;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @return void
      * @since  1.0
      */
-    public function __construct() 
+    public function __construct()
     {
-        
+
     }
-    
+
     /**
      * Convert object to string
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -73,10 +73,10 @@ class PHPFrame_Request implements IteratorAggregate
     {
         return print_r($this, true);
     }
-    
+
     /**
      * Implementation of IteratorAggregate interface
-     * 
+     *
      * @return ArrayIterator
      * @since  1.0
      */
@@ -84,24 +84,24 @@ class PHPFrame_Request implements IteratorAggregate
     {
         return new ArrayIterator($this->_array);
     }
-    
+
     /**
      * Get/set controller name.
-     * 
+     *
      * @param string $str [Optional] The value to set the controller name to.
-     * 
+     *
      * @return string
      * @since  1.0
      */
-    public function controllerName($str=null) 
+    public function controllerName($str=null)
     {
         if (!is_null($str)) {
             $filter = new PHPFrame_RegexpFilter(array(
-                "regexp"     => '/^[a-z_]+$/', 
-                "min_length" => 1, 
+                "regexp"     => '/^[a-z_\-]+$/',
+                "min_length" => 1,
                 "max_length" => 50
             ));
-            
+
             if (!$this->_array['controller'] = $filter->process($str)) {
                 $msg  = "Invalid controller name '".$str."'. Controller ";
                 $msg .= "names can only contain alphabetic characters plus ";
@@ -109,75 +109,75 @@ class PHPFrame_Request implements IteratorAggregate
                 throw new InvalidArgumentException($msg);
             }
         }
-        
+
         return $this->_array['controller'];
     }
-    
+
     /**
      * Get action name.
-     * 
+     *
      * @param string $str [Optional] The value to set the action to.
-     * 
+     *
      * @return string
      * @since  1.0
      */
-    public function action($str=null) 
+    public function action($str=null)
     {
         if (!is_null($str)) {
             // Filter value before assigning to variable
             $filter = new PHPFrame_RegexpFilter(array(
-                "regexp"     => '/^[a-z_]+$/', 
-                "min_length" => 1, 
+                "regexp"     => '/^[a-z_]+$/',
+                "min_length" => 1,
                 "max_length" => 50
             ));
-            
+
             $this->_array['action'] = $filter->process($str);
         }
-        
+
         return $this->_array['action'];
     }
-    
+
     /**
      * Get request/post array
-     * 
+     *
      * @return array
      * @since  1.0
      */
-    public function params() 
+    public function params()
     {
         return $this->_array['params'];
     }
-    
+
     /**
      * Get/set a request variable
-     * 
+     *
      * @param string $key   The param key.
-     * @param mixed  $value [Optional] If provided and no value has been set 
-     *                      for the given key yet it wil be set to this 
+     * @param mixed  $value [Optional] If provided and no value has been set
+     *                      for the given key yet it wil be set to this
      *                      value.
-     * 
+     *
      * @return mixed
      * @since  1.0
      */
-    public function param($key, $value=null) 
+    public function param($key, $value=null)
     {
         $key = trim((string) $key);
-        
+
         if (!isset($this->_array['params'][$key]) && !is_null($value)) {
             $this->_array['params'][$key] = $value;
         }
-        
+
         // Return null if index is not defined
         if (!isset($this->_array['params'][$key])) {
             return null;
         }
-        
+
         return $this->_array['params'][$key];
     }
-    
+
     /**
      * Get request headers
-     * 
+     *
      * @return array
      * @since  1.0
      */
@@ -185,37 +185,37 @@ class PHPFrame_Request implements IteratorAggregate
     {
         return $this->_array["headers"];
     }
-    
+
     /**
      * Get/set a request header
-     * 
+     *
      * @param string $key   The header name.
      * @param string $value [Optional] The header value.
-     * 
+     *
      * @return string|null
      * @since  1.0
      */
     public function header($key, $value=null)
     {
         $key = trim((string) $key);
-        
+
         if (!is_null($value)) {
             $value = trim((string) $value);
             $this->_array["headers"][$key] = $value;
         }
-        
+
         if (!isset($this->_array["headers"][$key])) {
             return null;
         }
-        
+
         return $this->_array["headers"][$key];
     }
-    
+
     /**
      * Get request method. Either "GET", "POST" or "CLI".
-     * 
+     *
      * @param string $str [Optional] Allowed values are "GET", "POST" and "CLI".
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -224,20 +224,20 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($str)) {
             // Filter value before assigning to variable
             $filter = new PHPFrame_RegexpFilter(array(
-                "regexp"     => '/^(GET|POST|CLI)$/', 
-                "min_length" => 3, 
+                "regexp"     => '/^(GET|POST|CLI)$/',
+                "min_length" => 3,
                 "max_length" => 4
             ));
-            
+
             $this->_array['method'] = $filter->process($str);
         }
-        
+
         return $this->_array['method'];
     }
-    
+
     /**
      * Is the request method POST?
-     * 
+     *
      * @return bool
      * @since  1.0
      */
@@ -245,10 +245,10 @@ class PHPFrame_Request implements IteratorAggregate
     {
         return ($this->_array['method'] == "POST");
     }
-    
+
     /**
      * Is the request method GET?
-     * 
+     *
      * @return bool
      * @since  1.0
      */
@@ -256,18 +256,18 @@ class PHPFrame_Request implements IteratorAggregate
     {
         return ($this->_array['method'] == "GET");
     }
-    
+
     /**
      * Get/set file in the request.
-     * 
-     * @param string $key   Key used to store file. Normally the name of the 
+     *
+     * @param string $key   Key used to store file. Normally the name of the
      *                      form field to be used for posting the file.
      * @param array  $array [Optional] File data.
      *                      - tmp_name
      *                      - name
      *                      - size
      *                      - type- error
-     * 
+     *
      * @return array|null
      * @since  1.0
      */
@@ -276,17 +276,17 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($array)) {
             $this->_array["files"][$key] = $array;
         }
-        
+
         if (!isset($this->_array["files"][$key])) {
             return null;
         }
-        
+
         return $this->_array["files"][$key];
     }
-    
+
     /**
      * Get files attached to request
-     * 
+     *
      * @return array
      * @since  1.0
      */
@@ -294,12 +294,12 @@ class PHPFrame_Request implements IteratorAggregate
     {
         return $this->_array["files"];
     }
-    
+
     /**
      * Get/set remote address (IP)
-     * 
+     *
      * @param string $str [Optional] Requested IP address.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -308,15 +308,15 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($str)) {
             $this->_array["remote_addr"] = (string) $str;
         }
-        
+
         return $this->_array["remote_addr"];
     }
-    
+
     /**
      * Get/set request URI
-     * 
+     *
      * @param string $str [Optional] Requested URI.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -325,15 +325,15 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($str)) {
             $this->_array["request_uri"] = $str;
         }
-        
+
         return $this->_array["request_uri"];
     }
-    
+
     /**
      * Get/set request script name.
-     * 
+     *
      * @param string $str [Optional] The name of the requested script.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -342,15 +342,15 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($str)) {
             $this->_array["script_name"] = (string) $str;
         }
-        
+
         return $this->_array["script_name"];
     }
-    
+
     /**
      * Get/set request query string.
-     * 
+     *
      * @param string $str [Optional] The query string.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -359,15 +359,15 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($str)) {
             $this->_array["query_string"] = $str;
         }
-        
+
         return $this->_array["query_string"];
     }
-    
+
     /**
      * Get the request time (unix timestamp).
-     * 
+     *
      * @param int $int [Optional] Unix timestamp.
-     * 
+     *
      * @return int
      * @since  1.0
      */
@@ -376,16 +376,16 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($int)) {
             $this->_array["request_time"] = (int) $int;
         }
-        
+
         return $this->_array["request_time"];
     }
-    
+
     /**
-     * Get/set output file absolute path. If not set no output will not be 
+     * Get/set output file absolute path. If not set no output will not be
      * written to file, which is the normal behaviour.
-     * 
+     *
      * @param string $str Absolute path for file to write output.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -394,15 +394,15 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($str)) {
             $this->_array["outfile"] = (string) $str;
         }
-        
+
         return $this->_array["outfile"];
     }
-    
+
     /**
      * Is Quiet request? (no output)
-     * 
+     *
      * @param bool $bool [Optional] TRUE or FALSE.
-     * 
+     *
      * @return bool
      * @since  1.0
      */
@@ -411,15 +411,15 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($bool)) {
             $this->_array["quiet"] = (bool) $bool;
         }
-        
+
         return $this->_array["quiet"];
     }
-    
+
     /**
      * Is AJAX request?
-     * 
+     *
      * @param bool $bool [Optional] TRUE or FALSE.
-     * 
+     *
      * @return bool
      * @since  1.0
      */
@@ -428,15 +428,15 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($bool)) {
             $this->_array["ajax"] = (bool) $bool;
         }
-        
+
         return $this->_array["ajax"];
     }
-    
+
     /**
      * Has request already been dispatched?
-     * 
+     *
      * @param bool $bool TRUE or FALSE.
-     * 
+     *
      * @return bool
      * @since  1.0
      */
@@ -445,7 +445,7 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($bool)) {
             $this->_dispatched = (bool) $bool;
         }
-        
+
         return $this->_dispatched;
     }
 }

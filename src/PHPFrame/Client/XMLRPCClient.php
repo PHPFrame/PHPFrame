@@ -41,6 +41,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         if (is_null($request_dom)) {
             $request_dom = $this->_initDom();
         }
+
         $this->_request_dom = $request_dom;
     }
 
@@ -75,10 +76,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     private function _initDom()
     {
         $request_body = file_get_contents("php://input");
-        $logger = new PHPFrame_TextLogger('/Users/chris/Desktop/log.txt');
-
-        $logger->write("Init dom called");
-        $request_dom = new DOMDocument();
+        $request_dom  = new DOMDocument();
         $request_dom->preserveWhiteSpace = false;
         if ($request_dom->loadXML($request_body)) {
             $xpath = new DOMXPath($request_dom);

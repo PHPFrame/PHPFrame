@@ -39,7 +39,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     public function __construct(DOMDocument $request_dom=null)
     {
         if (is_null($request_dom)) {
-        	$request_dom = $this->_initDom();
+            $request_dom = $this->_initDom();
         }
         $this->_request_dom = $request_dom;
     }
@@ -54,7 +54,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     {
         return array();
     }
-    
+
     /**
      * Magic method invoked when unserialising object.
      *
@@ -65,12 +65,18 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     {
         $this->_request_dom = $this->_initDom();
     }
-    
+
+    /**
+     * Initialise DOM object with XML passed in request body.
+     *
+     * @return DOMDocument
+     * @since  1.0
+     */
     private function _initDom()
     {
         $request_body = file_get_contents("php://input");
         $logger = new PHPFrame_TextLogger('/Users/chris/Desktop/log.txt');
-            
+
         $logger->write("Init dom called");
         $request_dom = new DOMDocument();
         $request_dom->preserveWhiteSpace = false;
@@ -84,10 +90,10 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
                 throw new InvalidArgumentException($msg);
             }
         } else {
-        	$msg = 'Invalid XML-RPC request';
-        	throw new RuntimeException($msg);
+            $msg = 'Invalid XML-RPC request';
+            throw new RuntimeException($msg);
         }
-        
+
         return $request_dom;
     }
 
@@ -184,9 +190,9 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     {
         // Set document as response content
         $response->document(new PHPFrame_XMLDocument());
-        
+
         // Set response renderer
-        $response->renderer(new PHPFrame_RPCRenderer($response->document()));     
+        $response->renderer(new PHPFrame_RPCRenderer($response->document()));
 
     }
 

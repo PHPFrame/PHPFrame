@@ -104,7 +104,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     {
         // Get path and domain to use for cookie
         $uri                  = new PHPFrame_URI();
-        $this->_cookie_path   = $uri->getDirname();
+        $this->_cookie_path   = $uri->getDirname()."/";
         $this->_cookie_domain = $uri->getHost();
 
         // Set custom session name
@@ -122,11 +122,8 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         // Get reference to session super global
         $this->_data =& $_SESSION;
         
-        $logger = new PHPFrame_TextLogger('/Users/chris/Desktop/log.txt');
-
         // If new session we initialise
         if (!isset($this->_data['id']) || $this->_data['id'] != session_id()) {
-        	$logger->write('Initialising new session, detecting client..');
             // Store session id in session array
             $this->_data['id'] = session_id();
 
@@ -150,7 +147,6 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
             && isset($_SERVER["HTTP_X_API_SIGNATURE"])
             && !($this->_data['client'] instanceof PHPFrame_XMLRPCClient)
         ) {
-        	$logger->write('Session exists, switching to XMLRPC client');
             /*
              * If we are dealing with an api request that already has an
              * existing session but the client object is not set to XMLRPC we
@@ -169,7 +165,6 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
             && isset($this->_data['overriden_client'])
             && $this->_data['overriden_client'] instanceof PHPFrame_Client
         ) {
-        	$logger->write('Session exists, switching to default client');
             // If we already have a session with an xmlrpc client object but no
             // api headers are included in request we then revert the client
             // and user objects

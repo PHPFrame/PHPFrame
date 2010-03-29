@@ -43,7 +43,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
             $request_dom  = new DOMDocument();
             $request_dom->preserveWhiteSpace = false;
             if (@$request_dom->loadXML($request_body)) {
-                $xpath = new DOMXPath($dom);
+                $xpath = new DOMXPath($request_dom);
                 //check for valid RPC
                 $query       = "//methodCall/methodName";
                 $method_node = $xpath->query($query)->item(0);

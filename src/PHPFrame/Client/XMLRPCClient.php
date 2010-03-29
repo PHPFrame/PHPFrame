@@ -39,21 +39,8 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     public function __construct(DOMDocument $request_dom=null)
     {
         if (is_null($request_dom)) {
-            $request_body = file_get_contents("php://input");
-            $request_dom  = new DOMDocument();
-            $request_dom->preserveWhiteSpace = false;
-            if (@$request_dom->loadXML($request_body)) {
-                $xpath = new DOMXPath($request_dom);
-                //check for valid RPC
-                $query       = "//methodCall/methodName";
-                $method_node = $xpath->query($query)->item(0);
-                if ($method_node->nodeValue == null) {
-                    $msg = "Invalid XML payload.";
-                    throw new InvalidArgumentException($msg);
-                }
-            }
+        	$request_dom = $this->_initDom();
         }
-
         $this->_request_dom = $request_dom;
     }
 
@@ -66,6 +53,42 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     public function __sleep()
     {
         return array();
+    }
+    
+    /**
+     * Magic method invoked when unserialising object.
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function __wakeup()
+    {
+        $this->_request_dom = $this->_initDom();
+    }
+    
+    private function _initDom()
+    {
+        $request_body = file_get_contents("php://input");
+        $logger = new PHPFrame_TextLogger('/Users/chris/Desktop/log.txt');
+            
+        $logger->write("Init dom called");
+        $request_dom = new DOMDocument();
+        $request_dom->preserveWhiteSpace = false;
+        if ($request_dom->loadXML($request_body)) {
+            $xpath = new DOMXPath($request_dom);
+            //check for valid RPC
+            $query       = "//methodCall/methodName";
+            $method_node = $xpath->query($query)->item(0);
+            if ($method_node->nodeValue == null) {
+                $msg = "Invalid XML payload.";
+                throw new InvalidArgumentException($msg);
+            }
+        } else {
+        	$msg = 'Invalid XML-RPC request';
+        	throw new RuntimeException($msg);
+        }
+        
+        return $request_dom;
     }
 
     /**

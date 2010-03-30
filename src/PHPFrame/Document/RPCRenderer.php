@@ -31,7 +31,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      * @var PHPFrame_XMLDocument
      */
     private $_document;
-
+    
     /**
      * Constructor.
      *
@@ -160,10 +160,8 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     private function _buildNode($parent_node, $node_name, $node_value)
     {
         $doc = $this->_document;
-
         if (!is_null($node_value)) {
             $parent_node = $doc->addNode($node_name, $parent_node);
-
             if ($node_value instanceof PHPFrame_RPCObject) {
                 $node_value = $node_value->getRPCFields();
             } elseif ($node_value instanceof Traversable) {
@@ -180,12 +178,12 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
                 if ($parent_node->nodeName == 'value') {
                     $parent_node = $this->_addType($parent_node, $node_value);
                 }
-                $doc->addNodeContent($parent_node, $node_value);
+                $doc->addNodeContent($parent_node, $node_value, false);
             }
         } else {
             if ($node_name == 'value') {
                 $parent_node = $doc->addNode('value', $parent_node);
-                $doc->addNodeContent($parent_node, 'NULL');
+                $doc->addNodeContent($parent_node, 'NULL', false);
             }
         }
     }
@@ -298,7 +296,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
         $parent_node = $doc->addNode('array', $parent_node);
         $parent_node = $doc->addNode('data', $parent_node);
 
-        foreach ($index_array as $value) {
+        foreach ($index_array as $key=>$value) {
             $this->_buildNode($parent_node, 'value', $value);
         }
     }

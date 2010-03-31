@@ -195,7 +195,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      *
      * @param array $test_array The array to be tested.
      *
-     * @return boolean True if array is associative or empty.
+     * @return boolean True if array is associative and not empty.
      * @since  1.0
      */
     private function _isAssoc($test_array)
@@ -203,7 +203,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
         $assoc = false;
 
         if (empty($test_array)) {
-            return true;
+            return false;
         }
 
         $indexes = array_keys($test_array);

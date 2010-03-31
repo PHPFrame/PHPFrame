@@ -1,5 +1,8 @@
+.gitignore
 var/
 tmp/
 .buildpath
 .project
 .settings/
+PHPFrame.tmproj
+

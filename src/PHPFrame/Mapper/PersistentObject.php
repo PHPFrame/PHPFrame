@@ -566,8 +566,7 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
 
         // Check secondary group
         $user_params = $user->params();
-        if (
-            is_array($user_params)
+        if (is_array($user_params)
             && array_key_exists("secondary_groups", $user_params)
         ) {
             $secondary_groups = explode(",", $user_params["secondary_groups"]);

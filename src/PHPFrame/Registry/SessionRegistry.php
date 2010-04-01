@@ -104,7 +104,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     {
         // Get path and domain to use for cookie
         $uri                  = new PHPFrame_URI();
-        $this->_cookie_path   = $uri->getDirname()."/";
+        $this->_cookie_path   = $uri->getDirname();
         $this->_cookie_domain = $uri->getHost();
 
         // Set custom session name
@@ -168,6 +168,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
             // If we already have a session with an xmlrpc client object but no
             // api headers are included in request we then revert the client
             // and user objects
+            unset($this->_data['client']);
             $this->_data['client'] = $this->_data['overriden_client'];
             $this->_data['user']   = $this->_data['overriden_user'];
             unset($this->_data['overriden_client']);

@@ -78,7 +78,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         $request_body = file_get_contents("php://input");
         $request_dom  = new DOMDocument();
         $request_dom->preserveWhiteSpace = false;
-        if ($request_dom->loadXML($request_body)) {
+        if (!empty($request_body) && $request_dom->loadXML($request_body)) {
             $xpath = new DOMXPath($request_dom);
             //check for valid RPC
             $query       = "//methodCall/methodName";
@@ -188,6 +188,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     {
         // Set document as response content
         $response->document(new PHPFrame_XMLDocument());
+        $response->document()->useBeautifier(false);
 
         // Set response renderer
         $response->renderer(new PHPFrame_RPCRenderer($response->document()));

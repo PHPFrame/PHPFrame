@@ -87,10 +87,8 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     public function execute(PHPFrame_Application $app) 
     {
         $this->_app = $app;
-        
         // Get action from the request
         $request_action = $app->request()->action();
-        
         // If no specific action has been requested we use default action
         if (empty($request_action)) {
             $action = $this->_default_action;

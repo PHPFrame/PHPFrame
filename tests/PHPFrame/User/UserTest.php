@@ -47,4 +47,22 @@ class PHPFrame_UserTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("group", $array);
         $this->assertArrayHasKey("perms", $array);
     }
+
+    public function test_issue5()
+    {
+        $user = new PHPFrame_User();
+        $this->assertTrue($user->isDirty());
+
+        $user = new PHPFrame_User(array(
+            "group_id" => 2,
+            "email"    => "root@phpframe.org",
+            "password" => "Passw0rd"
+        ));
+
+        $this->assertTrue($user->isDirty());
+
+        $user = new PHPFrame_User();
+        $user->email("root@phpframe.org");
+        $this->assertTrue($user->isDirty());
+    }
 }

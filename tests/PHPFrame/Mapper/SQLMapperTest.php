@@ -52,7 +52,11 @@ class PHPFrame_SQLMapperTest extends PHPUnit_Framework_TestCase
 
     public function test_insert()
     {
+        $this->assertTrue($this->_obj->isDirty());
+
         $this->_mapper->insert($this->_obj);
+
+        $this->assertFalse($this->_obj->isDirty());
         $this->assertEquals(1, $this->_obj->id());
     }
 
@@ -98,16 +102,22 @@ class PHPFrame_SQLMapperTest extends PHPUnit_Framework_TestCase
     public function test_findOne()
     {
         // Insert some objects
+        $this->assertTrue($this->_obj->isDirty());
         $this->_mapper->insert($this->_obj);
+        $this->assertFalse($this->_obj->isDirty());
+
         $obj2 = clone $this->_obj;
+        $this->assertTrue($obj2->isDirty());
         $obj2->name("staff");
         $this->_mapper->insert($obj2);
+        $this->assertFalse($obj2->isDirty());
 
         // And now we find the second one with the mapper
         $obj3 = $this->_mapper->findOne(2);
 
         $this->assertType($this->_target_class, $obj3);
         $this->assertEquals("staff", $obj3->name());
+        $this->assertFalse($obj3->isDirty());
     }
 
     public function test_isXML()

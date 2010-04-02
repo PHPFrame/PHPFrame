@@ -97,14 +97,17 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     /**
      * Constructor
      *
+     * @param string $base_url Base URL used for creating the cookie path and
+     *                         domain.
+     *
      * @return void
      * @since  1.0
      */
-    protected function __construct()
+    protected function __construct($base_url)
     {
         // Get path and domain to use for cookie
-        $uri                  = new PHPFrame_URI();
-        $this->_cookie_path   = $uri->getDirname()."/";
+        $uri                  = new PHPFrame_URI($base_url);
+        $this->_cookie_path   = $uri->getDirname();
         $this->_cookie_domain = $uri->getHost();
 
         // Set custom session name
@@ -121,7 +124,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
         // Get reference to session super global
         $this->_data =& $_SESSION;
-        
+
         // If new session we initialise
         if (!isset($this->_data['id']) || $this->_data['id'] != session_id()) {
             // Store session id in session array
@@ -178,13 +181,16 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     /**
      * Get Instance
      *
+     * @param string $base_url [Optional] Base URL used for creating the cookie
+    *                          path and domain.
+     *
      * @return PHPFrame_Registry
      * @since  1.0
      */
-    public static function getInstance()
+    public static function getInstance($base_url=null)
     {
         if (!isset(self::$_instance)) {
-            self::$_instance = new self;
+            self::$_instance = new self($base_url);
         }
 
         return self::$_instance;

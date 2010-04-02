@@ -29,7 +29,7 @@
  * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Application
+class PHPFrame_Application extends PHPFrame_Observer
 {
     /**
      * Absolute path to application in filesystem
@@ -186,6 +186,9 @@ class PHPFrame_Application
         //Register MVC autoload function
         spl_autoload_register(array($this, "autoload"));
 
+        // Attach app to Exception handler to observe uncaught exceptions
+        PHPFrame_ExceptionHandler::instance()->attach($this);
+
         // Set profiler milestone
         $profiler = $this->profiler();
         if ($profiler instanceof PHPFrame_Profiler) {
@@ -282,6 +285,24 @@ class PHPFrame_Application
         }
     }
 
+    protected function doUpdate(PHPFrame_Subject $subject)
+    {
+        if ($subject instanceof PHPFrame_ExceptionHandler) {
+            $this->response()->statusCode(500);
+            $this->response()->title("Oooops... an error occurred");
+
+            $display_exceptions = $this->config()->get("debug.display_exceptions");
+            if ($display_exceptions) {
+                $this->response()->body($subject->lastException());
+            } else {
+                $this->response()->body("Ooooops... An error occurred.");
+            }
+
+            $this->response()->send();
+            exit;
+        }
+    }
+
     /**
      * Get absolute path to installation directory
      *
@@ -319,7 +340,7 @@ class PHPFrame_Application
      */
     public function session()
     {
-        return PHPFrame::getSession();
+        return PHPFrame::getSession($this->config()->get("base_url"));
     }
 
     /**
@@ -330,7 +351,7 @@ class PHPFrame_Application
      */
     public function user()
     {
-        return PHPFrame::getSession()->getUser();
+        return $this->session()->getUser();
     }
 
     /**
@@ -351,7 +372,7 @@ class PHPFrame_Application
             $request = new PHPFrame_Request();
 
             // populate request using client
-            PHPFrame::getSession()->getClient()->populateRequest($request);
+            $this->session()->getClient()->populateRequest($request);
 
             $this->_request = $request;
         }
@@ -381,7 +402,7 @@ class PHPFrame_Application
             );
 
             // Prepare response using client
-            $client     = PHPFrame::getSession()->getClient();
+            $client     = $this->session()->getClient();
             $views_path = $this->getInstallDir().DS."src".DS."views";
             $client->prepareResponse($response, $views_path);
 
@@ -779,7 +800,7 @@ class PHPFrame_Application
             $controller  = $mvc_factory->getActionController($controller_name);
 
             // Attach observers to the action controller
-            $controller->attach(PHPFrame::getSession()->getSysevents());
+            $controller->attach($this->session()->getSysevents());
 
             $log_level = $this->config()->get("debug.log_level");
             if ($log_level > 0) {
@@ -818,10 +839,10 @@ class PHPFrame_Application
                 $document->applyTheme($theme_url, $theme_path, $this);
             } else {
                 // Append system events when no theme
-                $sysevents = PHPFrame::getSession()->getSysevents();
+                $sysevents = $this->session()->getSysevents();
                 $sysevents = $response->renderer()->render($sysevents);
                 $document->prependBody($sysevents);
-                PHPFrame::getSession()->getSysevents()->clear();
+                $this->session()->getSysevents()->clear();
 
                 // Set "body only" mode for AJAX requests when HTML document
                 $document->bodyOnly(true);
@@ -857,7 +878,7 @@ class PHPFrame_Application
 
             // Display output if set in config
             if ($profiler_display) {
-                if (PHPFrame::getSession()->getClientName() != "cli") {
+                if ($this->session()->getClientName() != "cli") {
                     echo "<pre>";
                 }
 

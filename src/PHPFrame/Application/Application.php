@@ -285,6 +285,15 @@ class PHPFrame_Application extends PHPFrame_Observer
         }
     }
 
+    /**
+     * Implementation of PHPFrame_Observer abstract class.
+     *
+     * @param PHPFrame_Subject $subject Reference to instance of subject being
+     *                                  observed.
+     *
+     * @return void
+     * @since  1.0
+     */
     protected function doUpdate(PHPFrame_Subject $subject)
     {
         if ($subject instanceof PHPFrame_ExceptionHandler) {
@@ -518,36 +527,6 @@ class PHPFrame_Application extends PHPFrame_Observer
         }
 
         return $this->registry()->get("imap");
-    }
-
-    /**
-     * Get/set Permissions object.
-     *
-     * @param PHPFrame_Permissions $permissions [Optional] Permissions object.
-     *
-     * @return PHPFrame_Permissions
-     * @since  1.0
-     */
-    public function permissions(PHPFrame_Permissions $permissions=null)
-    {
-        if (!is_null($permissions)) {
-            $this->registry()->set("permissions", $permissions);
-
-        } elseif (is_null($this->registry()->get("permissions"))) {
-            // Create mapper for ACL objects
-            $mapper = new PHPFrame_Mapper(
-                "PHPFrame_ACL",
-                $this->_config_dir,
-                "acl"
-            );
-
-            $this->registry()->set(
-                "permissions",
-                new PHPFrame_Permissions($mapper)
-            );
-        }
-
-        return $this->_registry->get("permissions");
     }
 
     /**

@@ -152,6 +152,14 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
         }
     }
 
+    /**
+     * Get/set HTTP status code
+     *
+     * @param int $int [Optional]
+     *
+     * @return int
+     * @since  1.0
+     */
     public function statusCode($int=null)
     {
         if (!is_null($int)) {

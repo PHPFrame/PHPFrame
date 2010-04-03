@@ -297,12 +297,13 @@ class PHPFrame_Application extends PHPFrame_Observer
     protected function doUpdate(PHPFrame_Subject $subject)
     {
         if ($subject instanceof PHPFrame_ExceptionHandler) {
-            $this->response()->statusCode(500);
+            $exception = $subject->lastException();
+            $this->response()->statusCode($exception->getCode());
             $this->response()->title("Oooops... an error occurred");
 
             $display_exceptions = $this->config()->get("debug.display_exceptions");
             if ($display_exceptions) {
-                $this->response()->body($subject->lastException());
+                $this->response()->body($exception);
             } else {
                 $this->response()->body("Ooooops... An error occurred.");
             }
@@ -807,7 +808,10 @@ class PHPFrame_Application extends PHPFrame_Observer
         $this->_plugin_handler->handle("preApplyTheme");
 
         // Apply theme if needed
-        $document = $response->document();
+        $document  = $response->document();
+        $renderer  = $response->renderer();
+        $sysevents = $this->session()->getSysevents();
+
         if ($document instanceof PHPFrame_HTMLDocument) {
             if (!$request->ajax()) {
                 $theme       = $this->config()->get("theme");
@@ -818,13 +822,17 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $document->applyTheme($theme_url, $theme_path, $this);
             } else {
                 // Append system events when no theme
-                $sysevents = $this->session()->getSysevents();
-                $sysevents = $response->renderer()->render($sysevents);
-                $document->prependBody($sysevents);
-                $this->session()->getSysevents()->clear();
+                $document->prependBody($renderer->render($sysevents));
+                $sysevents->clear();
 
                 // Set "body only" mode for AJAX requests when HTML document
                 $document->bodyOnly(true);
+            }
+
+        } elseif ($renderer instanceof PHPFrame_RPCRenderer) {
+            if (count($sysevents) > 0) {
+                $sysevents->statusCode($this->response()->statusCode());
+                $renderer->render($sysevents);
             }
         }
 

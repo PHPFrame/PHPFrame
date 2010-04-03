@@ -83,7 +83,6 @@
    <file baseinstalldir="/" name="PHPFrame/Exception/DatabaseException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/ErrorException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/ExceptionHandler.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Exception/XMLRPCException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/ExtInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/LibInfo.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Ext/Plugin.php" role="php" />
@@ -115,7 +114,6 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectCollection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PolymorphicPersistentObject.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/RPCObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistentObjectAssembler.php" role="php" />

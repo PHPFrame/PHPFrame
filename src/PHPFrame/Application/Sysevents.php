@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Application/Sysevents.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Application
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * System Events Class
- * 
+ *
  * @category PHPFrame
  * @package  Application
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -22,19 +22,20 @@
  * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Sysevents extends PHPFrame_Observer 
+class PHPFrame_Sysevents extends PHPFrame_Observer
     implements IteratorAggregate, Countable
 {
     /**
      * Internal array to store the system events
-     * 
+     *
      * @var array
      */
     private $_events;
-    
+    private $_status_code = 200;
+
     /**
      * Constructor
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -42,17 +43,17 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
     {
         $this->_events = array();
     }
-    
+
     /**
      * Magic method invoked when Sysevents object is used as string
-     * 
+     *
      * @return string
      * @since  1.0
      */
     public function __toString()
     {
         $str = "";
-        
+
         foreach ($this->_events as $event) {
             switch ($event[1]) {
             case PHPFrame_Subject::EVENT_TYPE_ERROR :
@@ -71,19 +72,19 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
                 $event_type = "Success";
                 break;
             }
-            
+
             $str .= strtoupper($event_type).": ".$event[0]."\n";
         }
-        
+
         return $str;
     }
-    
+
     /**
      * Get iterator object
-     * 
-     * Note that we reverse the order of the elements in order to iterate starting 
+     *
+     * Note that we reverse the order of the elements in order to iterate starting
      * from the latest entry.
-     * 
+     *
      * @return Iterator
      * @since  1.0
      */
@@ -91,10 +92,10 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
     {
         return new ArrayIterator(array_reverse($this->_events));
     }
-    
+
     /**
      * Count elements in internal array
-     * 
+     *
      * @return int
      * @since  1.0
      */
@@ -102,14 +103,14 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
     {
         return count($this->_events);
     }
-    
+
     /**
      * Append a system event
-     * 
+     *
      * @param string $msg  The message we want to append.
-     * @param int    $type The event type. See constants in 
+     * @param int    $type The event type. See constants in
      *                     {@link PHPFrame_Subject} class.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -117,26 +118,27 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
     {
         $this->_events[] = array($msg, $type);
     }
-    
+
     /**
      * Clear system events from object and session.
-     * 
+     *
      * This should be done after displaying the messages to the user.
-     * 
+     *
      * @return void
      * @since  1.0
      */
-    public function clear() 
+    public function clear()
     {
         // Clear private vars
         $this->_events = array();
+        $this->statusCode(200);
     }
-    
+
     /**
      * Implementation of update method triggered by observed objects
-     * 
-     * @param PHPFrame_Subject $subject Reference to the observed subject. 
-     * 
+     *
+     * @param PHPFrame_Subject $subject Reference to the observed subject.
+     *
      * @return void
      * @see    PHPFrame_Observer::doUpdate()
      * @since  1.0
@@ -144,9 +146,18 @@ class PHPFrame_Sysevents extends PHPFrame_Observer
     protected function doUpdate(PHPFrame_Subject $subject)
     {
         list($msg, $type) = $subject->getLastEvent();
-        
+
         if (isset($msg) && !empty($msg)) {
             $this->append($msg, $type);
         }
+    }
+
+    public function statusCode($int=null)
+    {
+        if (!is_null($int)) {
+            $this->_status_code = (int) $int;
+        }
+
+        return $this->_status_code;
     }
 }

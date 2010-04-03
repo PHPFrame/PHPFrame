@@ -172,7 +172,6 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
 
         // Notify event to observers
         self::instance()->notify();
-        exit;
 
         // Display the exception details if applicable
         if (self::instance()->_display_exceptions) {

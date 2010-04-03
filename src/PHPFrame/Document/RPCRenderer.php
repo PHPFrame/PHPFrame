@@ -31,7 +31,7 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
      * @var PHPFrame_XMLDocument
      */
     private $_document;
-    
+
     /**
      * Constructor.
      *
@@ -58,9 +58,26 @@ class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
     public function render($value)
     {
         if ($value instanceof PHPFrame_View) {
-            $value = $this->renderView($value);
+            foreach ($value->getData() as $data) {
+                if ($data instanceof PHPFrame_PersistentObject) {
+                    $this->_makeParamPayload($data);
+                }
+            }
+        } elseif ($value instanceof Exception) {
+            $this->_makeFaultPayload($value->getCode(), $value->getMessage());
+
+        } elseif ($value instanceof PHPFrame_Sysevents) {
+            foreach ($value as $event) {
+                if ($event[1] == 1) {
+                    $this->_makeFaultPayload($value->statusCode(), $event[0]);
+                    return;
+                }
+            }
+
+            $this->_makeParamPayload($event[0]);
+
         } else {
-            $value = $this->_makeParamPayload($value);
+            $this->_makeParamPayload($value);
         }
     }
 

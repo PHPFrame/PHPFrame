@@ -146,35 +146,31 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
             $this->detectClient();
 
         } elseif (
-            isset($_SERVER["HTTP_X_API_USERNAME"])
-            && isset($_SERVER["HTTP_X_API_SIGNATURE"])
-            && !($this->_data['client'] instanceof PHPFrame_XMLRPCClient)
+            isset($_SERVER["CONTENT_TYPE"])
+            && $_SERVER["CONTENT_TYPE"] == "text/xml"
+            && !$this->_data['client'] instanceof PHPFrame_XMLRPCClient
         ) {
             /*
              * If we are dealing with an api request that already has an
              * existing session but the client object is not set to XMLRPC we
-             * instantiate a new client object replace it in the session, store
-             * the old one in another var as well as the  user object so that
-             * we can put them back in place when the next non-api request is
-             * received
+             * instantiate a new client object replace it in the session
              */
-            $this->_data['overriden_client'] = $this->_data['client'];
-            $this->_data['overriden_user']   = $this->_data['user'];
-            $this->_data['client']           = new PHPFrame_XMLRPCClient();
+            $this->detectClient();
 
         } elseif (
-            !isset($_SERVER["HTTP_X_API_USERNAME"])
-            && !isset($_SERVER["HTTP_X_API_SIGNATURE"])
-            && isset($this->_data['overriden_client'])
-            && $this->_data['overriden_client'] instanceof PHPFrame_Client
+            (
+                !isset($_SERVER["CONTENT_TYPE"])
+                || (
+                    isset($_SERVER["CONTENT_TYPE"])
+                    && $_SERVER["CONTENT_TYPE"] != "text/xml"
+                )
+            )
+            && $this->_data['client'] instanceof PHPFrame_XMLRPCClient
         ) {
             // If we already have a session with an xmlrpc client object but no
             // api headers are included in request we then revert the client
             // and user objects
-            $this->_data['client'] = $this->_data['overriden_client'];
-            $this->_data['user']   = $this->_data['overriden_user'];
-            unset($this->_data['overriden_client']);
-            unset($this->_data['overriden_user']);
+            $this->detectClient();
         }
     }
 
@@ -502,7 +498,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
                 //call class's detect() to check if this is the helper we need
                 $client = call_user_func(array($className, "detect"));
                 if ($client instanceof PHPFrame_Client) {
-                    // store instance and break out of the function if we found
+                    // store instance and break out of the method if we found
                     // our helper
                     $this->set("client", $client);
                     return;

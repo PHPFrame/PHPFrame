@@ -386,6 +386,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         // Get reflection object for action's method
         try {
             $reflection_method = new ReflectionMethod($this, $action);
+
         } catch (ReflectionException $e) {
             $reflection_class  = new ReflectionClass($this);
             $parent_class      = $reflection_class->getParentClass();
@@ -406,7 +407,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
             $msg  = get_class($this)." does NOT support an action called '";
             $msg .= $action."'. ".get_class($this)." supports the following ";
             $msg .= "actions: '".implode("','", $supported_methods)."'.";
-            throw new BadMethodCallException($msg, 501);
+            throw new BadMethodCallException($msg, 400);
         }
 
         if (!$reflection_method->isPublic()) {

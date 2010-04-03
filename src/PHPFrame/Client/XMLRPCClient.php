@@ -64,6 +64,12 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      */
     public function __wakeup()
     {
+        if (!isset($_SERVER["CONTENT_TYPE"])
+            || $_SERVER["CONTENT_TYPE"] != "text/xml"
+        ) {
+            return;
+        }
+
         $this->_request_dom = $this->_initDom();
     }
 
@@ -115,21 +121,10 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      */
     public static function detect()
     {
-        $request_body = file_get_contents("php://input");
-
-        if (!empty($request_body)) {
-            //check for a valid XML structure
-            $dom = new DOMDocument();
-            $dom->preserveWhiteSpace = false;
-            if (@$dom->loadXML($request_body)) {
-                $xpath = new DOMXPath($dom);
-                //check for valid RPC
-                $query       = "//methodCall/methodName";
-                $method_node = $xpath->query($query)->item(0);
-                if ($method_node->nodeValue != null) {
-                    return new self($dom);
-                }
-            }
+        if (isset($_SERVER["CONTENT_TYPE"])
+            && $_SERVER["CONTENT_TYPE"] == "text/xml"
+        ) {
+            return new self();
         }
 
         return false;
@@ -214,7 +209,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
      *
      * @param PHPFrame_Request $request Reference to the request object.
      *
-     * @return array A nice asociative array with all the data.
+     * @return array A nice associative array with all the data.
      * @since  1.0
      */
     private function _parseXMLRPCRequest(PHPFrame_Request $request)
@@ -239,6 +234,10 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         $controller_class = ucfirst($matches[1])."Controller";
         $controller_reflector = new ReflectionClass($controller_class);
         if (!$controller_reflector instanceof ReflectionClass) {
+            return;
+        }
+
+        if (!$controller_reflector->hasMethod($matches[3])) {
             return;
         }
 

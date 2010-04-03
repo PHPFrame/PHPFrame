@@ -5,17 +5,17 @@ require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
 {
     private $_renderer;
-    
+
     public function setUp()
     {
         $this->_renderer = new PHPFrame_JSONRenderer();
     }
-    
+
     public function tearDown()
     {
         //...
     }
-    
+
     public function test_render()
     {
         $array = array(
@@ -29,25 +29,25 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
             array(-3.14, "-3.14"),
             array("some string", "\"some string\"")
         );
-        
+
         foreach ($array as $test_pair) {
             $this->assertEquals($test_pair[1], $this->_renderer->render($test_pair[0]));
         }
     }
-    
+
     public function test_renderArray()
     {
         $array = array(
-            array(array(), "[]"), 
-            array(array(1), "[\n    1\n]"), 
+            array(array(), "[]"),
+            array(array(1), "[\n    1\n]"),
             array(array(1,2,3), "[\n    1,\n    2,\n    3\n]")
         );
-        
+
         foreach ($array as $test_pair) {
             $this->assertEquals($test_pair[1], $this->_renderer->render($test_pair[0]));
         }
     }
-    
+
     public function test_renderAssoc()
     {
         $array = array(
@@ -76,20 +76,20 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
     \"another key\": 3.14
 }"
             )
-            
+
         );
-        
+
         foreach ($array as $test_pair) {
             $this->assertEquals($test_pair[1], $this->_renderer->render($test_pair[0]));
         }
     }
-    
+
     public function test_renderTraversable()
     {
         $user = new PHPFrame_User();
         $this->assertEquals(
             "{
-    \"groupid\": 0,
+    \"group_id\": 0,
     \"email\": ,
     \"password\": ,
     \"params\": \"\",
@@ -99,18 +99,18 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
     \"owner\": 0,
     \"group\": 0,
     \"perms\": 664
-}", 
+}",
             $this->_renderer->render($user)
         );
     }
-    
+
     public function test_renderObject()
     {
         $obj = new stdClass();
         $obj->somevar = "some value";
         $obj->int = 1234;
         $obj->array = array(1,2,3);
-        
+
         //print_r($this->_renderer->render($obj));
     }
 }

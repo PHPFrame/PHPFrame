@@ -1,9 +1,9 @@
 <?php
 /**
  * data/CLITool/src/controllers/man.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   PHPFrame_CLITool
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * Manual controller.
- * 
+ *
  * @category PHPFrame
  * @package  PHPFrame_CLITool
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -26,7 +26,7 @@ class ManController extends PHPFrame_ActionController
 {
     /**
      * Constructor.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -34,20 +34,20 @@ class ManController extends PHPFrame_ActionController
     {
         parent::__construct("index");
     }
-    
+
     /**
      * Show manual.
-     * 
+     *
      * @return void
      * @since  1.0
      */
     public function index()
     {
         $app_doc = new PHPFrame_AppDoc($this->app()->getInstallDir());
-        
+
         $str  = PHPFrame::version()."\n\n";
         $str .= "\n".$this->helper("cli")->formatH2("Usage instructions")."\n";
-        
+
         $str .= "To use the command line tool you will need to specify at ";
         $str .= "least a controller,\nand normally also an action and a number";
         $str .= " of parameters. For example, to get\na configuration parameter";
@@ -56,9 +56,9 @@ class ManController extends PHPFrame_ActionController
         $str .= "phpframe config get key=db.enable\n\n";
         $str .= "The above command will show the value of db.enable as defined ";
         $str .= "in the config\nfile.\n\n";
-        
+
         $str .= (string) $app_doc;
-        
+
         $this->response()->title($this->config()->get("app_name"));
         $this->response()->body($str);
     }

@@ -5,25 +5,25 @@
 </refnamediv>
 
 <!-- {@toc} -->
-    
+
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
-    The Config package consists only of one class ({@link PHPFrame_Config}) that 
+    The Config package consists only of one class ({@link PHPFrame_Config}) that
     provides allows to read, parse and write ini files.
     </para>
-    
+
     <para>
-    Config objects are primary used to work with the default configuration file 
+    Config objects are primary used to work with the default configuration file
     normally stored in etc/phpframe.ini
     </para>
 
 </refsect1>
-    
+
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <example>
         <title>The config object as a string</title>
         <programlisting>{@example Config/example-1.php 3}</programlisting>
@@ -34,15 +34,14 @@
 
 [general]
 
-app_name = 
-version = 
-base_url = 
+app_name =
+version =
+base_url =
 theme = default
 default_lang = en-GB
 secret = ChangeMeToSomethingRandomAndComplicated
 timezone = Europe/London
 default_controller = dummy
-ignore_acl = 1
 
 [filesystem]
 
@@ -52,7 +51,7 @@ upload_accept = text/plain,image/jpeg,image/pjpeg,image/jpg,image/png,image/bmp,
 
 [debug]
 
-enable = 
+enable =
 log_level = 1
 
 [sources]
@@ -62,37 +61,37 @@ preferred_state = stable
 
 [db]
 
-enable = 
+enable =
 driver = MySQL
 host = localhost
-user = 
-pass = 
-name = 
+user =
+pass =
+name =
 prefix = phpframe_
 
 [smtp]
 
-enable = 
+enable =
 mailer = smtp
 auth = 1
-host = 
+host =
 port = 25
-user = 
-pass = 
+user =
+pass =
 fromaddress = someone@example.com
 fromname = Someone
 
 [imap]
 
-enable = 
-host = 
+enable =
+host =
 port = 143
-user = 
-pass = 
+user =
+pass =
 ]]>
         </screen>
     </example>
-    
+
     <example>
         <title>Lets see what keys are available in current config object</title>
         <programlisting>{@example Config/example-2.php 3}</programlisting>
@@ -108,60 +107,58 @@ Array
     [5] => secret
     [6] => timezone
     [7] => default_controller
-    [8] => ignore_acl
-    [9] => filesystem.upload_dir
-    [10] => filesystem.max_upload_size
-    [11] => filesystem.upload_accept
-    [12] => debug.enable
-    [13] => debug.log_level
-    [14] => sources.preferred_mirror
-    [15] => sources.preferred_state
-    [16] => db.enable
-    [17] => db.driver
-    [18] => db.host
-    [19] => db.user
-    [20] => db.pass
-    [21] => db.name
-    [22] => db.prefix
-    [23] => smtp.enable
-    [24] => smtp.mailer
-    [25] => smtp.auth
-    [26] => smtp.host
-    [27] => smtp.port
-    [28] => smtp.user
-    [29] => smtp.pass
-    [30] => smtp.fromaddress
-    [31] => smtp.fromname
-    [32] => imap.enable
-    [33] => imap.host
-    [34] => imap.port
-    [35] => imap.user
-    [36] => imap.pass
+    [8] => filesystem.upload_dir
+    [9] => filesystem.max_upload_size
+    [10] => filesystem.upload_accept
+    [11] => debug.enable
+    [12] => debug.log_level
+    [13] => sources.preferred_mirror
+    [14] => sources.preferred_state
+    [15] => db.enable
+    [16] => db.driver
+    [17] => db.host
+    [18] => db.user
+    [19] => db.pass
+    [20] => db.name
+    [21] => db.prefix
+    [22] => smtp.enable
+    [23] => smtp.mailer
+    [24] => smtp.auth
+    [25] => smtp.host
+    [26] => smtp.port
+    [27] => smtp.user
+    [28] => smtp.pass
+    [29] => smtp.fromaddress
+    [30] => smtp.fromname
+    [31] => imap.enable
+    [32] => imap.host
+    [33] => imap.port
+    [34] => imap.user
+    [35] => imap.pass
 )
 ]]>
         </screen>
     </example>
-    
+
     <example>
         <title>Set config keys</title>
         <programlisting>{@example Config/example-3.php 3}</programlisting>
         <screen>The new name of our app is: New app name</screen>
     </example>
-    
+
     <example>
         <title>Iterating the config object</title>
         <programlisting>{@example Config/example-4.php 3}</programlisting>
         <screen>
 <![CDATA[
 app_name: New app name
-version: 
-base_url: 
+version:
+base_url:
 theme: default
 default_lang: en-GB
 secret: ChangeMeToSomethingRandomAndComplicated
 timezone: Europe/London
 default_controller: dummy
-ignore_acl: 1
 filesystem.upload_dir: uploads
 filesystem.max_upload_size: 2
 filesystem.upload_accept: text/plain,image/jpeg,image/pjpeg,image/jpg,image/png,image/bmp,image/gif,application/pdf,application/octet-stream,application/msword,application/excel,application/vnd.ms-excel,application/x-excel,application/x-msexcel,application/vnd.ms-powerpoint,application/mspowerpoint,application/powerpoint
@@ -169,31 +166,31 @@ debug.enable: 1
 debug.log_level: 3
 sources.preferred_mirror: http://dist.phpframe.org
 sources.preferred_state: stable
-db.enable: 
+db.enable:
 db.driver: MySQL
 db.host: localhost
-db.user: 
-db.pass: 
-db.name: 
+db.user:
+db.pass:
+db.name:
 db.prefix: phpframe_
-smtp.enable: 
+smtp.enable:
 smtp.mailer: smtp
 smtp.auth: 1
-smtp.host: 
+smtp.host:
 smtp.port: 25
-smtp.user: 
-smtp.pass: 
+smtp.user:
+smtp.pass:
 smtp.fromaddress: someone@example.com
 smtp.fromname: Someone
-imap.enable: 
-imap.host: 
+imap.enable:
+imap.host:
 imap.port: 143
-imap.user: 
-imap.pass: 
+imap.user:
+imap.pass:
 ]]>
         </screen>
     </example>
-    
+
     <example>
         <title>Converting the config object to array</title>
         <programlisting>{@example Config/example-5.php 3}</programlisting>
@@ -202,14 +199,13 @@ imap.pass:
 Array
 (
     [app_name] => New app name
-    [version] => 
-    [base_url] => 
+    [version] =>
+    [base_url] =>
     [theme] => default
     [default_lang] => en-GB
     [secret] => ChangeMeToSomethingRandomAndComplicated
     [timezone] => Europe/London
     [default_controller] => dummy
-    [ignore_acl] => 1
     [filesystem.upload_dir] => uploads
     [filesystem.max_upload_size] => 2
     [filesystem.upload_accept] => text/plain,image/jpeg,image/pjpeg,image/jpg,image/png,image/bmp,image/gif,application/pdf,application/octet-stream,application/msword,application/excel,application/vnd.ms-excel,application/x-excel,application/x-msexcel,application/vnd.ms-powerpoint,application/mspowerpoint,application/powerpoint
@@ -217,32 +213,32 @@ Array
     [debug.log_level] => 3
     [sources.preferred_mirror] => http://dist.phpframe.org
     [sources.preferred_state] => stable
-    [db.enable] => 
+    [db.enable] =>
     [db.driver] => MySQL
     [db.host] => localhost
-    [db.user] => 
-    [db.pass] => 
-    [db.name] => 
+    [db.user] =>
+    [db.pass] =>
+    [db.name] =>
     [db.prefix] => phpframe_
-    [smtp.enable] => 
+    [smtp.enable] =>
     [smtp.mailer] => smtp
     [smtp.auth] => 1
-    [smtp.host] => 
+    [smtp.host] =>
     [smtp.port] => 25
-    [smtp.user] => 
-    [smtp.pass] => 
+    [smtp.user] =>
+    [smtp.pass] =>
     [smtp.fromaddress] => someone@example.com
     [smtp.fromname] => Someone
-    [imap.enable] => 
-    [imap.host] => 
+    [imap.enable] =>
+    [imap.host] =>
     [imap.port] => 143
-    [imap.user] => 
-    [imap.pass] => 
+    [imap.user] =>
+    [imap.pass] =>
 )
 ]]>
-        </screen>      
+        </screen>
     </example>
-    
+
 </refsect1>
-    
+
 </refentry>

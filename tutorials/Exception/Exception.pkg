@@ -10,8 +10,8 @@
     <title>Package decription</title>
 
     <para>
-    Exception handling in PHPFrame heavily relies on the built in SPL exception 
-    classes. The Exception package only adds a few specialised Exception classes 
+    Exception handling in PHPFrame heavily relies on the built in SPL exception
+    classes. The Exception package only adds a few specialised Exception classes
     and provides the exception "handler" itself.
     </para>
 
@@ -20,185 +20,179 @@
 
 <refsect1 id="{@id spl-exceptions}">
     <title>SPL Exception types used in PHPFrame</title>
-    
+
     <refsect2 id="{@id Exception}">
         <title>{@link Exception}</title>
         <para>
-        This is the root Exception class from which all other exceptions will 
-        inherit. This class defines the exception interface that will apply to all 
+        This is the root Exception class from which all other exceptions will
+        inherit. This class defines the exception interface that will apply to all
         exception objects.
         </para>
     </refsect2>
-    
+
     <refsect2 id="{@id LogicException}">
         <title>{@link LogicException}</title>
         <para>
-        Logic exceptions should be used to differienciate "compile time" exceptions 
+        Logic exceptions should be used to differienciate "compile time" exceptions
         from "runtime" exceptions due to bad data being passed to the application.
         </para>
         <para>
-        Logic excpetions should be thrown when a programming error occurs. For 
-        example, if you try to call a method that needs another method to be 
-        called first you woud get a logic exception, this is purely a 
-        programming error and nothing to do with the data that was passed to 
+        Logic excpetions should be thrown when a programming error occurs. For
+        example, if you try to call a method that needs another method to be
+        called first you woud get a logic exception, this is purely a
+        programming error and nothing to do with the data that was passed to
         the app.
         </para>
-        
+
         <para>LogicException sub-classes:</para>
-        
+
         <itemizedlist>
             <listitem>
             <para>{@link BadFunctionCallException}</para>
             <para>
-            BadFunctionCallExceptions should be thrown when a function is invoked 
-            incorrectly. The most common scenario is when a function is invoked 
+            BadFunctionCallExceptions should be thrown when a function is invoked
+            incorrectly. The most common scenario is when a function is invoked
             either with too many or too few arguments.
             </para>
             </listitem>
-            
+
             <listitem>
             <para>{@link BadMethodCallException}</para>
             <para>
             The same as BadFunctionCallException but in the context of a method.
             </para>
             </listitem>
-            
+
             <listitem>
             <para>{@link InvalidArgumentException}</para>
             <para>
-            This kind of exception is used when an invalid argument is passed into 
+            This kind of exception is used when an invalid argument is passed into
             function or method.
             </para>
             </listitem>
-            
+
             <listitem>
             <para>{@link DomainException}</para>
             <para>
-            Domain exceptions are thrown when a value passed into a function doesn't 
+            Domain exceptions are thrown when a value passed into a function doesn't
             belong to a set of possible values. (Not to confuse with RangeException).
             </para>
             </listitem>
-            
+
             <listitem>
             <para>{@link LengthException}</para>
             <para>
-            LengthException refers to exeptions that are to do with length, normally 
+            LengthException refers to exeptions that are to do with length, normally
             either string length or array length.
             </para>
             </listitem>
-            
+
             <listitem>
             <para>{@link OutOfRangeException}</para>
             <para>
             Exception thrown when a value does not match with a range.
             </para>
             </listitem>
-        
+
         </itemizedlist>
-        
+
     </refsect2>
-    
+
     <refsect2 id="{@id RuntimeException}">
         <title>{@link RuntimeException}</title>
         <para>
-        Runtime exceptions are designed to handle everything that is not a 
-        LogicException. Runtime exceptions apply when the problem they report only 
+        Runtime exceptions are designed to handle everything that is not a
+        LogicException. Runtime exceptions apply when the problem they report only
         happens at runtime and because of the data that was passed to the app.
         </para>
-        
+
         <para>RuntimeException sub-classes:</para>
-        
+
         <itemizedlist>
             <listitem>
             <para>{@link OutOfBoundsException}</para>
             <para>
-            OutOfBoundsException is raised when a request for a given key is made 
-            to an array or object implementing ArrayAccess and the requested index 
-            is not in the data. 
+            OutOfBoundsException is raised when a request for a given key is made
+            to an array or object implementing ArrayAccess and the requested index
+            is not in the data.
             </para>
             </listitem>
-            
+
             <listitem>
             <para>{@link OverflowException}</para>
             <para>
-            OverflowException is normally used when the contents of a variable would 
-            overflow its storage location. For example, when having to write into a 
+            OverflowException is normally used when the contents of a variable would
+            overflow its storage location. For example, when having to write into a
             database.
             </para>
             </listitem>
-            
+
             <listitem>
             <para>{@link UnderflowException}</para>
             <para>
-            UnderflowException handles arithmetical underflow that may occur when 
-            the result of an operation would imply a loss of accuracy. This kind of 
+            UnderflowException handles arithmetical underflow that may occur when
+            the result of an operation would imply a loss of accuracy. This kind of
             problems can happen when working with floats.
             </para>
             </listitem>
-            
+
             <listitem>
             <para>{@link RangeException}</para>
             <para>
-            RangeException are similar to DomainException but instead of looking at 
-            input it looks at the return of a function being withing a set of 
-            possible values. 
+            RangeException are similar to DomainException but instead of looking at
+            input it looks at the return of a function being withing a set of
+            possible values.
             </para>
             </listitem>
-            
+
             <listitem>
             <para>{@link UnexpectedValueException}</para>
             </listitem>
         </itemizedlist>
     </refsect2>
-    
+
 </refsect1>
 
 <refsect1 id="{@id classes}">
     <title>Classes in Exception Package</title>
-    
+
     <itemizedlist>
-    
+
         <listitem>
         <para>
         {@link PHPFrame_ExceptionHandler}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_ErrorException}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_DatabaseException}
         </para>
         </listitem>
-        
-        <listitem>
-        <para>
-        {@link PHPFrame_XMLRPCException}
-        </para>
-        </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_AccessDeniedException}
         </para>
         </listitem>
-        
+
     </itemizedlist>
 
 </refsect1>
 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <para>
     For usage examples please check the individual exception classes.
     </para>
-    
+
 </refsect1>
 
 </refentry>

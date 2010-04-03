@@ -106,9 +106,14 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     protected function __construct($base_url)
     {
         // Get path and domain to use for cookie
-        $uri                  = new PHPFrame_URI($base_url);
-        $this->_cookie_path   = $uri->getDirname();
-        $this->_cookie_domain = $uri->getHost();
+        if ($base_url == "CLI") {
+            $this->_cookie_domain = "CLI";
+            $this->_cookie_path   = "/";
+        } else {
+            $uri                  = new PHPFrame_URI($base_url);
+            $this->_cookie_domain = $uri->getHost();
+            $this->_cookie_path   = $uri->getDirname();
+        }
 
         // Set custom session name
         ini_set("session.name", $this->_session_name);

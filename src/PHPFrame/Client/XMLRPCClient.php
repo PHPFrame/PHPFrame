@@ -327,10 +327,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
                 $query = "name";
                 $key   = $xpath->query($query, $member)->item(0)->nodeValue;
                 $query = "value";
-                $value = $this->_parseXMLRPCRecurse(
-                    $xpath,
-                    $xpath->query($query, $member)->item(0)
-                );
+                $value = $this->_parseXMLRPCValue($xpath->query($query, $member)->item(0), $xpath);
 
                 $new_struct[$key] = $value;
             }
@@ -342,7 +339,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
             $values    = $xpath->query("array/data/value", $node);
 
             foreach ($values as $value) {
-                $new_array[] = $this->_parseXMLRPCRecurse($xpath, $value);
+                $new_array[] = $this->_parseXMLRPCValue($value, $xpath);
             }
 
             return $new_array;

@@ -43,7 +43,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     {
         // before we construct the parent we add the necessary fields
         $this->addField(
-            "groupid",
+            "group_id",
             0,
             false,
             new PHPFrame_IntFilter()
@@ -110,10 +110,10 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     public function groupId($int=null)
     {
         if (!is_null($int)) {
-            $this->fields["groupid"] = $this->validate("groupid", $int);
+            $this->fields["group_id"] = $this->validate("group_id", $int);
         }
 
-        return $this->fields["groupid"];
+        return $this->fields["group_id"];
     }
 
     /**

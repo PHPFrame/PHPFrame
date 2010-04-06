@@ -8,16 +8,16 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
-    The mapper package provides a set of objects to easily get your "domain" objects 
+    The mapper package provides a set of objects to easily get your "domain" objects
     in and out of the database (or whatever storage mechanism).
     </para>
-    
+
     <para>
-    Mappers are designed to be used with "persistent objects" that descend from the 
-    {@link PHPFrame_PersistentObject} class. You will normally be creating 
-    your app models by extending this class, making it really easy to persist 
+    Mappers are designed to be used with "persistent objects" that descend from the
+    {@link PHPFrame_PersistentObject} class. You will normally be creating
+    your app models by extending this class, making it really easy to persist
     these objects.
     </para>
 
@@ -25,7 +25,7 @@
 
 <refsect1 id="{@id classes}">
     <title>Mapper classes</title>
-    
+
     <itemizedlist>
         <listitem>
         <para>
@@ -70,20 +70,20 @@
 <!--
 <refsect1 id="{@id extending-domainobject}">
     <title>Extending the PersistentObject class</title>
-    
+
     <para>
-    Domain objects are designed so that they can be easily mapped using the mapper 
-    package, so in order to make use of the mappig tools you will need to make your 
+    Domain objects are designed so that they can be easily mapped using the mapper
+    package, so in order to make use of the mappig tools you will need to make your
     "persistent objects" extend the PersistentObject base class.
     </para>
-    
+
     <para>
-    Domain objects, also known as business objects, are objects that represent the 
-    entities in the business domain that the program is designed to support. For 
-    example, an order entry program might have business objects to represent each 
+    Domain objects, also known as business objects, are objects that represent the
+    entities in the business domain that the program is designed to support. For
+    example, an order entry program might have business objects to represent each
     order, customer and invoice.
     </para>
-    
+
     <example>
         <title>Custom PersistentObject example</title>
         <para></para>
@@ -94,15 +94,15 @@ Array
 (
     [first_field] => Blah blah
     [second_field] => Another value
-    [third_field] => 
-    [id] => 
-    [created] => 
-    [modified] => 
+    [third_field] =>
+    [id] =>
+    [created] =>
+    [modified] =>
 )
 ]]>
         </screen>
     </example>
-    
+
     <example>
         <title>The built-in User object is a PersistentObject</title>
         <para></para>
@@ -113,38 +113,38 @@ Array
 (
     [groupid] => 0
     [username] => lupo
-    [password] => 
-    [email] => 
-    [block] => 
-    [last_visit] => 
+    [password] =>
+    [email] =>
+    [block] =>
+    [last_visit] =>
     [params] => a:0:{}
-    [deleted] => 
-    [id] => 
-    [created] => 
-    [modified] => 
+    [deleted] =>
+    [id] =>
+    [created] =>
+    [modified] =>
 )
 ]]>
         </screen>
     </example>
-    
-    
+
+
 </refsect1>
 
 <refsect1 id="{@id extending-mapper}">
     <title>Extending the Mapper</title>
-    
+
     <para>
-    When working with your own persistent objects you will often find it useful to 
+    When working with your own persistent objects you will often find it useful to
     create your own specialised mappers by extending the {@link PHPFrame_Mapper}
     class.
     </para>
-    
+
     <example>
         <title>Custom Mapper example</title>
         <para>
-        In this example we define a Customer class that extends PersistentObject and 
-        then write a specialised mapper to map this class to a database table called 
-        "#__customers". 
+        In this example we define a Customer class that extends PersistentObject and
+        then write a specialised mapper to map this class to a database table called
+        "#__customers".
         </para>
         <para>
         This examples assumes that:
@@ -155,74 +155,43 @@ Array
             </listitem>
             <listitem>
             <para>
-            You have set up a database connection in your application specific 
+            You have set up a database connection in your application specific
             etc/phpframe.ini file
             </para>
             </listitem>
             <listitem>
             <para>
-            You have created a database table called "#__customers", where the "#__" 
-            will be replaced with the "db.prefix" as configured in your 
+            You have created a database table called "#__customers", where the "#__"
+            will be replaced with the "db.prefix" as configured in your
             etc/phpframe.ini file.
             </para>
             </listitem>
         </orderedlist>
-        
+
         <para>You should put this file in src/controllers/customers.php</para>
         <programlisting>{@example Mapper/example-3/controller.php}</programlisting>
-        
+
         <para>You should put this file in src/models/customer.php</para>
         <programlisting>{@example Mapper/example-3/customer.php}</programlisting>
-        
+
         <para>You should put this file in src/models/customermapper.php</para>
         <programlisting>{@example Mapper/example-3/customermapper.php}</programlisting>
-        
+
         <para>You should put this file in src/views/customers/list.php</para>
         <programlisting>{@example Mapper/example-3/view.php}</programlisting>
-        
+
         <para>
-        If you run your app specifying the "customers" controller 
-        (http://localhost/myapp/customers) we should see a table with the customer 
+        If you run your app specifying the "customers" controller
+        (http://localhost/myapp/customers) we should see a table with the customer
         data we saved using the mapper.
         </para>
-        
+
         <note>
-        If no database connection is available the persistent objects will be 
+        If no database connection is available the persistent objects will be
         automatically stored in var/domain.objects/#__customers.xml.
         </note>
     </example>
-    
-</refsect1>
 
-
-<refsect1 id="{@id examples}">
-    <title>Examples</title>
-    
-    <example>
-        <title>Find a persistent object using the a generic mapper</title>
-        <para>
-        In this example we create an instance of PHPFrame_ACL, which 
-        extends PHPFrame_PersistentObject, so that we can use it with the 
-        mapper.
-        </para>
-        <programlisting>{@example Mapper/example-4.php 3}</programlisting>
-        <screen>
-<![CDATA[
-PHPFrame_ACL Object
-(
-    [groupid:protected] => 1
-    [controller:protected] => dummy
-    [action:protected] => *
-    [value:protected] => all
-    [id:protected] => 1
-    [created:protected] => 2009-09-07 15:06:18
-    [modified:protected] => 2009-09-07 15:06:18
-    [_dirty:private] => 
-)
-]]>
-        </screen>
-    </example>
-    
 </refsect1>
 -->
 

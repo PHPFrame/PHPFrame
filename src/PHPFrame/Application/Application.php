@@ -29,7 +29,7 @@
  * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
-class PHPFrame_Application
+class PHPFrame_Application extends PHPFrame_Observer
 {
     /**
      * Absolute path to application in filesystem
@@ -186,6 +186,9 @@ class PHPFrame_Application
         //Register MVC autoload function
         spl_autoload_register(array($this, "autoload"));
 
+        // Attach app to Exception handler to observe uncaught exceptions
+        PHPFrame_ExceptionHandler::instance()->attach($this);
+
         // Set profiler milestone
         $profiler = $this->profiler();
         if ($profiler instanceof PHPFrame_Profiler) {
@@ -283,6 +286,34 @@ class PHPFrame_Application
     }
 
     /**
+     * Implementation of PHPFrame_Observer abstract class.
+     *
+     * @param PHPFrame_Subject $subject Reference to instance of subject being
+     *                                  observed.
+     *
+     * @return void
+     * @since  1.0
+     */
+    protected function doUpdate(PHPFrame_Subject $subject)
+    {
+        if ($subject instanceof PHPFrame_ExceptionHandler) {
+            $exception = $subject->lastException();
+            $this->response()->statusCode($exception->getCode());
+            $this->response()->title("Oooops... an error occurred");
+
+            $display_exceptions = $this->config()->get("debug.display_exceptions");
+            if ($display_exceptions) {
+                $this->response()->body($exception);
+            } else {
+                $this->response()->body("Ooooops... An error occurred.");
+            }
+
+            $this->response()->send();
+            exit;
+        }
+    }
+
+    /**
      * Get absolute path to installation directory
      *
      * @return string
@@ -319,7 +350,7 @@ class PHPFrame_Application
      */
     public function session()
     {
-        return PHPFrame::getSession();
+        return PHPFrame::getSession($this->config()->get("base_url"));
     }
 
     /**
@@ -330,7 +361,7 @@ class PHPFrame_Application
      */
     public function user()
     {
-        return PHPFrame::getSession()->getUser();
+        return $this->session()->getUser();
     }
 
     /**
@@ -351,7 +382,7 @@ class PHPFrame_Application
             $request = new PHPFrame_Request();
 
             // populate request using client
-            PHPFrame::getSession()->getClient()->populateRequest($request);
+            $this->session()->getClient()->populateRequest($request);
 
             $this->_request = $request;
         }
@@ -381,7 +412,7 @@ class PHPFrame_Application
             );
 
             // Prepare response using client
-            $client     = PHPFrame::getSession()->getClient();
+            $client     = $this->session()->getClient();
             $views_path = $this->getInstallDir().DS."src".DS."views";
             $client->prepareResponse($response, $views_path);
 
@@ -497,36 +528,6 @@ class PHPFrame_Application
         }
 
         return $this->registry()->get("imap");
-    }
-
-    /**
-     * Get/set Permissions object.
-     *
-     * @param PHPFrame_Permissions $permissions [Optional] Permissions object.
-     *
-     * @return PHPFrame_Permissions
-     * @since  1.0
-     */
-    public function permissions(PHPFrame_Permissions $permissions=null)
-    {
-        if (!is_null($permissions)) {
-            $this->registry()->set("permissions", $permissions);
-
-        } elseif (is_null($this->registry()->get("permissions"))) {
-            // Create mapper for ACL objects
-            $mapper = new PHPFrame_Mapper(
-                "PHPFrame_ACL",
-                $this->_config_dir,
-                "acl"
-            );
-
-            $this->registry()->set(
-                "permissions",
-                new PHPFrame_Permissions($mapper)
-            );
-        }
-
-        return $this->_registry->get("permissions");
     }
 
     /**
@@ -779,7 +780,7 @@ class PHPFrame_Application
             $controller  = $mvc_factory->getActionController($controller_name);
 
             // Attach observers to the action controller
-            $controller->attach(PHPFrame::getSession()->getSysevents());
+            $controller->attach($this->session()->getSysevents());
 
             $log_level = $this->config()->get("debug.log_level");
             if ($log_level > 0) {
@@ -807,7 +808,10 @@ class PHPFrame_Application
         $this->_plugin_handler->handle("preApplyTheme");
 
         // Apply theme if needed
-        $document = $response->document();
+        $document  = $response->document();
+        $renderer  = $response->renderer();
+        $sysevents = $this->session()->getSysevents();
+
         if ($document instanceof PHPFrame_HTMLDocument) {
             if (!$request->ajax()) {
                 $theme       = $this->config()->get("theme");
@@ -818,13 +822,17 @@ class PHPFrame_Application
                 $document->applyTheme($theme_url, $theme_path, $this);
             } else {
                 // Append system events when no theme
-                $sysevents = PHPFrame::getSession()->getSysevents();
-                $sysevents = $response->renderer()->render($sysevents);
-                $document->prependBody($sysevents);
-                PHPFrame::getSession()->getSysevents()->clear();
+                $document->prependBody($renderer->render($sysevents));
+                $sysevents->clear();
 
                 // Set "body only" mode for AJAX requests when HTML document
                 $document->bodyOnly(true);
+            }
+
+        } elseif ($renderer instanceof PHPFrame_RPCRenderer) {
+            if (count($sysevents) > 0) {
+                $sysevents->statusCode($this->response()->statusCode());
+                $renderer->render($sysevents);
             }
         }
 
@@ -857,7 +865,7 @@ class PHPFrame_Application
 
             // Display output if set in config
             if ($profiler_display) {
-                if (PHPFrame::getSession()->getClientName() != "cli") {
+                if ($this->session()->getClientName() != "cli") {
                     echo "<pre>";
                 }
 

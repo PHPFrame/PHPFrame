@@ -119,8 +119,6 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
         if (!is_null($options)) {
             $this->bind($options);
         }
-
-        $this->markClean();
     }
 
     /**

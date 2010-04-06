@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Mapper/SQLPersistentObjectAssembler.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Mapper
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * SQL Domain Object Assembler Class
- * 
+ *
  * @category PHPFrame
  * @package  Mapper
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -23,16 +23,16 @@
  * @since    1.0
  * @ignore
  */
-class PHPFrame_SQLPersistentObjectAssembler 
+class PHPFrame_SQLPersistentObjectAssembler
     extends PHPFrame_PersistentObjectAssembler
 {
     /**
      * Constructor
-     * 
-     * @param PHPFrame_PersistenceFactory $factory Instance of persistence 
-     *                                             factory to be used with the 
+     *
+     * @param PHPFrame_PersistenceFactory $factory Instance of persistence
+     *                                             factory to be used with the
      *                                             assembler.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -40,13 +40,13 @@ class PHPFrame_SQLPersistentObjectAssembler
     {
         parent::__construct($factory);
     }
-    
+
     /**
      * Find a persistent object using an IdObject
-     * 
-     * @param int|PHPFrame_IdObject $id_or_id_obj Either a numeric id or an 
+     *
+     * @param int|PHPFrame_IdObject $id_or_id_obj Either a numeric id or an
      *                                            instance of IdObject.
-     * 
+     *
      * @return PHPFrame_PersistentObject
      * @since  1.0
      */
@@ -54,14 +54,14 @@ class PHPFrame_SQLPersistentObjectAssembler
     {
         if (is_int($id_or_id_obj)) {
             $id = $id_or_id_obj;
-            
+
             // Create new IdObject
             $id_obj = $this->factory->getIdObject();
             $id_obj->where("id", "=", ":id")->params(":id", $id);
         } else {
             $id_obj = $id_or_id_obj;
         }
-        
+
         if (!$id_obj instanceof PHPFrame_IdObject) {
             $msg  = "Wrong argument type. ";
             $msg .= get_class($this);
@@ -69,17 +69,17 @@ class PHPFrame_SQLPersistentObjectAssembler
             $msg .= "PHPFrame_IdObject or integer.";
             throw new RuntimeException($msg);
         }
-        
+
         $collection = $this->find($id_obj);
-        
+
         return $collection->getElement(0);
     }
-    
+
     /**
      * Find a collection of persistent objects using an IdObject
-     * 
+     *
      * @param PHPFrame_IdObject|int $id_obj Instance of {@link PHPFrame_IdObject}.
-     * 
+     *
      * @return PHPFrame_PersistentObjectCollection
      * @since  1.0
      */
@@ -89,11 +89,11 @@ class PHPFrame_SQLPersistentObjectAssembler
         if (is_null($id_obj)) {
             $id_obj = $this->factory->getIdObject();
         }
-        
+
         // Get raw data as array from db
         $db  = $this->factory->getDB();
         $raw = $db->fetchAssocList($id_obj->getSQL(), $id_obj->getParams());
-        
+
         // Get total number of entries without taking limits into account
         // This is used to build pagination for the collection objects
         $sql_from   = $id_obj->getFromSQL();
@@ -113,60 +113,60 @@ class PHPFrame_SQLPersistentObjectAssembler
         if ($id_obj->getGroupBySQL()) {
             $sql .= "\n".$id_obj->getGroupBySQL();
         }
-        
+
         $superset_total = $db->fetchColumn($sql, $id_obj->getParams());
-        
+
         // Create collectioj object
         return $this->factory->getCollection(
-            $raw, 
-            $superset_total, 
-            $id_obj->getLimit(), 
+            $raw,
+            $superset_total,
+            $id_obj->getLimit(),
             $id_obj->getLimitstart()
         );
     }
-    
+
     /**
      * Persist persistent object
-     * 
-     * @param PHPFrame_PersistentObject $obj The persistent object we want to 
+     *
+     * @param PHPFrame_PersistentObject $obj The persistent object we want to
      *                                       store with the mapper.
-     * 
+     *
      * @return void
      * @since  1.0
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
         $obj->validateAll();
-        
+
         if ($obj->id() <= 0) {
             $obj->ctime(time());
             $build_query_method = "_buildInsertQuery";
         } else {
             $build_query_method = "_buildUpdateQuery";
         }
-        
+
         $obj->mtime(time());
-        
+
         $sql    = $this->$build_query_method(iterator_to_array($obj));
         $params = $this->_buildQueryParams(iterator_to_array($obj));
         $db     = $this->factory->getDB();
-        
+
         $db->query($sql, $params);
-        
+
         if ($obj->id() <= 0) {
             $obj->id($db->lastInsertId());
         }
-        
+
         $obj->markClean();
     }
-    
+
     /**
      * Delete persistent object from the database
-     * 
-     * @param int|PHPFrame_PersistentObject $id_or_obj Either a numeric id or 
-     *                                                 an instance of the 
+     *
+     * @param int|PHPFrame_PersistentObject $id_or_obj Either a numeric id or
+     *                                                 an instance of the
      *                                                 persistence object.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -177,19 +177,19 @@ class PHPFrame_SQLPersistentObjectAssembler
         } else {
             $id = (int) $id_or_obj;
         }
-        
+
         $sql    = "DELETE FROM `".$this->factory->getTableName()."`";
         $sql   .= " WHERE id = :id";
         $params = array(":id"=>$id);
-        
+
         $this->factory->getDB()->query($sql, $params);
     }
-    
+
     /**
      * Build the INSERT SQL query
-     * 
+     *
      * @param array $array Associative array containing the object's data.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -200,50 +200,50 @@ class PHPFrame_SQLPersistentObjectAssembler
         $sql .= "`) VALUES (:";
         $sql .= implode(", :", array_keys($array));
         $sql .= ")";
-        
+
         foreach ($array as $key=>$value) {
             $params[":".$key] = $value;
         }
-        
+
         return $sql;
     }
-    
+
     /**
      * Build the UPDATE SQL query
-     * 
+     *
      * @param array $array Associative array containing the object's data.
-     * 
+     *
      * @return string
      * @since  1.0
      */
     private function _buildUpdateQuery(array $array)
     {
         $sql = "UPDATE ".$this->factory->getTableName()." SET ";
-        
+
         $count = 0;
         foreach (array_keys($array) as $key) {
             if ($key == "id") {
                 continue;
             }
-            
+
             if ($count > 0) {
                 $sql .= ", ";
             }
-            
+
             $sql .= "`".$key."` = :".$key;
             $count++;
         }
-        
+
         $sql .= " WHERE id = :id";
-        
+
         return $sql;
     }
-    
+
     /**
      * Build SQL query parameters
-     * 
+     *
      * @param array $array Associative array containing the query parameters.
-     * 
+     *
      * @return array
      * @since  1.0
      */
@@ -252,7 +252,7 @@ class PHPFrame_SQLPersistentObjectAssembler
         foreach ($array as $key=>$value) {
             $params[":".$key] = $value;
         }
-        
+
         return $params;
     }
 }

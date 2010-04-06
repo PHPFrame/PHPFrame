@@ -185,7 +185,7 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
                 $response->statusCode(500);
             }
 
-            $response->body($str, false);
+            $response->body($exception->getMessage(), false);
             $response->send();
         }
 

@@ -117,6 +117,14 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
         return preg_replace("/^Array/", get_class($obj), $str);
     }
 
+    /**
+     * Render exception object.
+     *
+     * @param Exception $e Instance of Exception.
+     *
+     * @return string
+     * @since  1.0
+     */
     private function _renderException(Exception $e)
     {
         $str  = "Uncaught ".get_class($e).": ";

@@ -327,7 +327,10 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
                 $query = "name";
                 $key   = $xpath->query($query, $member)->item(0)->nodeValue;
                 $query = "value";
-                $value = $this->_parseXMLRPCValue($xpath->query($query, $member)->item(0), $xpath);
+                $value = $this->_parseXMLRPCValue(
+                    $xpath->query($query, $member)->item(0),
+                    $xpath
+                );
 
                 $new_struct[$key] = $value;
             }

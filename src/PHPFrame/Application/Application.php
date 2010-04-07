@@ -189,6 +189,17 @@ class PHPFrame_Application extends PHPFrame_Observer
         // Attach app to Exception handler to observe uncaught exceptions
         PHPFrame_ExceptionHandler::instance()->attach($this);
 
+        // Acquire instance of Plugin Handler
+        $this->_plugin_handler = new PHPFrame_PluginHandler($this);
+
+        // Register installed plugins with plugin handler
+        foreach ($this->plugins() as $plugin) {
+            if ($plugin->enabled()) {
+                $plugin_name = $plugin->name();
+                $this->_plugin_handler->registerPlugin(new $plugin_name($this));
+            }
+        }
+
         // Set profiler milestone
         $profiler = $this->profiler();
         if ($profiler instanceof PHPFrame_Profiler) {
@@ -308,26 +319,51 @@ class PHPFrame_Application extends PHPFrame_Observer
      */
     protected function doUpdate(PHPFrame_Subject $subject)
     {
+        $response = $this->response();
+
         if ($subject instanceof PHPFrame_ExceptionHandler) {
             $exception = $subject->lastException();
 
             $code = $exception->getCode();
-            if (!in_array($code, array(400, 401, 403, 404, 500, 501))) {
+            if (!in_array($code, array(400, 401, 403, 404, 500))) {
                 $code = 500;
             }
 
-            $this->response()->statusCode($code);
-            $this->response()->title("Oooops... an error occurred");
+            $response->statusCode($code);
+            $response->title("Oooops... an error occurred");
 
             $display_exceptions = $this->config()->get("debug.display_exceptions");
             if ($display_exceptions) {
-                $this->response()->body($exception);
+                $response->body($exception);
             } else {
-                $this->response()->body("Ooooops... An error occurred.");
+                switch ($code) {
+                case 400 :
+                    $msg = "Bad Request";
+                    break;
+                case 401 :
+                    $msg = "Unauthorised";
+                    break;
+                case 403 :
+                    $msg = "Forbidden";
+                    break;
+                case 404 :
+                    $msg = "Not Found";
+                    break;
+                case 500 :
+                    $msg = "Internal Server Error";
+                    break;
+                }
+
+                if ($response->renderer() instanceof PHPFrame_RPCRenderer) {
+                    $msg = new Exception($msg, $code);
+                }
+
+                $response->body($msg);
             }
 
-            $this->response()->send();
-            exit;
+            $this->output();
+
+            exit($code);
         }
     }
 
@@ -749,17 +785,6 @@ class PHPFrame_Application extends PHPFrame_Observer
             $this->request($request);
         }
 
-        // Acquire instance of Plugin Handler
-        $this->_plugin_handler = new PHPFrame_PluginHandler($this);
-
-        // Register installed plugins with plugin handler
-        foreach ($this->plugins() as $plugin) {
-            if ($plugin->enabled()) {
-                $plugin_name = $plugin->name();
-                $this->_plugin_handler->registerPlugin(new $plugin_name($this));
-            }
-        }
-
         // Invoke route startup hook before request object is initialised
         $this->_plugin_handler->handle("routeStartup");
 
@@ -820,6 +845,12 @@ class PHPFrame_Application extends PHPFrame_Observer
         // Invoke dispatchLoopShutdown hook
         $this->_plugin_handler->handle("dispatchLoopShutdown");
 
+        $this->output();
+    }
+
+    protected function output()
+    {
+        $request  = $this->request();
         $response = $this->response();
 
         // Invoke dispatchLoopShutdown hook
@@ -849,7 +880,7 @@ class PHPFrame_Application extends PHPFrame_Observer
 
         } elseif ($renderer instanceof PHPFrame_RPCRenderer) {
             if (count($sysevents) > 0) {
-                $sysevents->statusCode($this->response()->statusCode());
+                $sysevents->statusCode($response->statusCode());
                 $renderer->render($sysevents);
             }
         }
@@ -883,7 +914,8 @@ class PHPFrame_Application extends PHPFrame_Observer
 
             // Display output if set in config
             if ($profiler_display) {
-                if ($this->session()->getClientName() != "cli") {
+                $client = $this->session()->getClient();
+                if (!$client instanceof PHPFrame_CLIClient) {
                     echo "<pre>";
                 }
 

@@ -183,7 +183,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      * Get Instance
      *
      * @param string $base_url [Optional] Base URL used for creating the cookie
-    *                          path and domain.
+     *                          path and domain.
      *
      * @return PHPFrame_Registry
      * @since  1.0

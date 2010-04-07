@@ -84,7 +84,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         $request_body = file_get_contents("php://input");
         $request_dom  = new DOMDocument();
         $request_dom->preserveWhiteSpace = false;
-        if ($request_dom->loadXML($request_body)) {
+        if (!empty($request_body) && $request_dom->loadXML($request_body)) {
             $xpath = new DOMXPath($request_dom);
             //check for valid RPC
             $query       = "//methodCall/methodName";
@@ -183,6 +183,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     {
         // Set document as response content
         $response->document(new PHPFrame_XMLDocument());
+        $response->document()->useBeautifier(false);
 
         // Set response renderer
         $response->renderer(new PHPFrame_RPCRenderer($response->document()));
@@ -326,10 +327,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
                 $query = "name";
                 $key   = $xpath->query($query, $member)->item(0)->nodeValue;
                 $query = "value";
-                $value = $this->_parseXMLRPCRecurse(
-                    $xpath,
-                    $xpath->query($query, $member)->item(0)
-                );
+                $value = $this->_parseXMLRPCValue($xpath->query($query, $member)->item(0), $xpath);
 
                 $new_struct[$key] = $value;
             }
@@ -341,7 +339,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
             $values    = $xpath->query("array/data/value", $node);
 
             foreach ($values as $value) {
-                $new_array[] = $this->_parseXMLRPCRecurse($xpath, $value);
+                $new_array[] = $this->_parseXMLRPCValue($value, $xpath);
             }
 
             return $new_array;

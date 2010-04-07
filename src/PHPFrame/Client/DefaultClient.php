@@ -103,7 +103,7 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
         
         foreach ($_FILES as $key=>$value) {
             if (is_array($value) && !empty($value["name"])) {
-                $request->attachFile($key, $value);
+            	$request->file($key, $value);
             }
         }
         

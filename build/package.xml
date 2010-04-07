@@ -114,6 +114,7 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectCollection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PolymorphicPersistentObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/RPCObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistentObjectAssembler.php" role="php" />

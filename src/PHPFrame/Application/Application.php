@@ -298,7 +298,13 @@ class PHPFrame_Application extends PHPFrame_Observer
     {
         if ($subject instanceof PHPFrame_ExceptionHandler) {
             $exception = $subject->lastException();
-            $this->response()->statusCode($exception->getCode());
+
+            $code = $exception->getCode();
+            if (!in_array($code, array(400, 401, 403, 404, 500, 501))) {
+                $code = 500;
+            }
+
+            $this->response()->statusCode($code);
             $this->response()->title("Oooops... an error occurred");
 
             $display_exceptions = $this->config()->get("debug.display_exceptions");

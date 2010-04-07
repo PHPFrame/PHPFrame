@@ -28,17 +28,6 @@
 class PHPFrame_DefaultClient extends PHPFrame_Client
 {
     /**
-     * Get client name.
-     *
-     * @return string Name to identify client type.
-     * @since  1.0
-     */
-    public function getName()
-    {
-        return "default";
-    }
-
-    /**
      * Check if this is the correct helper for the client being used
      *
      * @static
@@ -153,7 +142,5 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
         } else {
             echo '<meta http-equiv="refresh" content="1; URL='.$url.'">';
         }
-
-        exit(0);
     }
 }

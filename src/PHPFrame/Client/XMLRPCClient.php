@@ -94,22 +94,12 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
                 throw new InvalidArgumentException($msg);
             }
         } else {
-            $msg = 'Invalid XML-RPC request';
+            $msg  = "Invalid XML-RPC request. The request body doesn't ";
+            $msg .= "contain valid XML.";
             throw new RuntimeException($msg);
         }
 
         return $request_dom;
-    }
-
-    /**
-     * Get client name
-     *
-     * @return string Name to identify client type.
-     * @since  1.0
-     */
-    public function getName()
-    {
-        return "xmlrpc";
     }
 
     /**
@@ -232,8 +222,10 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
         }
 
         $controller_class = ucfirst($matches[1])."Controller";
-        $controller_reflector = new ReflectionClass($controller_class);
-        if (!$controller_reflector instanceof ReflectionClass) {
+
+        try {
+            $controller_reflector = new ReflectionClass($controller_class);
+        } catch (ReflectionException $e) {
             return;
         }
 

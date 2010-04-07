@@ -183,7 +183,7 @@ class PHPFrame_Application extends PHPFrame_Observer
         // Acquire and store instance of MVC Factory class
         $this->factory(new PHPFrame_MVCFactory($this));
 
-        //Register MVC autoload function
+        // Register Application's autoload function
         spl_autoload_register(array($this, "autoload"));
 
         // Attach app to Exception handler to observe uncaught exceptions
@@ -194,6 +194,18 @@ class PHPFrame_Application extends PHPFrame_Observer
         if ($profiler instanceof PHPFrame_Profiler) {
             $profiler->addMilestone();
         }
+    }
+
+    /**
+     * Application's destructor.
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function __destruct()
+    {
+        // Register Application's autoload function
+        spl_autoload_unregister(array($this, "autoload"));
     }
 
     /**

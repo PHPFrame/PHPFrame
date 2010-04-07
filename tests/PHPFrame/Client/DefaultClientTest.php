@@ -2,7 +2,7 @@
 // Include framework if not inculded yet
 require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 
-class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
+class PHPFrame_DefaultClientTest extends PHPUnit_Framework_TestCase
 {
     private $_client;
 
@@ -10,7 +10,7 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
     {
         PHPFrame::testMode(true);
 
-        $this->_client = new PHPFrame_CLIClient();
+        $this->_client = new PHPFrame_DefaultClient();
     }
 
     public function tearDown()
@@ -20,22 +20,12 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
 
     public function test_detect()
     {
-        $this->assertType("PHPFrame_CLIClient", PHPFrame_CLIClient::detect());
+        $this->assertType("PHPFrame_DefaultClient", PHPFrame_DefaultClient::detect());
     }
 
     public function test_detectFailure()
     {
-        global $argv;
-
-        // Backup global $argv before we set it to null to pretend this is not
-        // a cli request
-        $argv_bk = $argv;
-        $argv    = null;
-
-        $this->assertFalse(PHPFrame_CLIClient::detect());
-
-        // restore the original value of $argv
-        $argv = $argv_bk;
+        //
     }
 
     public function test_populateRequest()
@@ -51,33 +41,31 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
         $request_time = $request->requestTime();
         $this->assertTrue(empty($request_time));
 
-        // Backup global $argv and $argc before we set fake values for testing
-        global $argv, $argc;
-        $argv_bk = $argv;
-        $argc_bk = $argc;
-        $argv = array(
-            "/path/to/bootstrapper",
-            "app",
-            "create",
-            "app_name=MyApp"
-        );
-        $argc = count($argv);
+        // Populate PHP super globals to fake request
+        $_REQUEST["controller"] = "app";
+        $_REQUEST["action"] = "create";
+        $_REQUEST["app_name"] = "MyApp";
+        $_SERVER["REQUEST_METHOD"] = "GET";
+        $_SERVER["REMOTE_ADDR"] = "127.0.0.1";
+        $_SERVER["REQUEST_URI"] = "/";
+        $_SERVER["SCRIPT_NAME"] = "/index.php";
+        $_SERVER["QUERY_STRING"] = "";
+        $_SERVER["REQUEST_TIME"] = "1270658640";
 
         // Populate the request
         $this->_client->populateRequest($request);
 
        // Now check that we got some values
        $this->assertType("array", $request->params());
-       $this->assertEquals(2, count($request->params()));
+       $this->assertEquals(1, count($request->params()));
 
        $script_name = $request->scriptName();
        $this->assertTrue(!empty($script_name));
-
        $this->assertType("int", $request->requestTime());
 
-       // restore the original value of $argv and $argc
-       $argv = $argv_bk;
-       $argc = $argc_bk;
+       // Reset php superglobals used for test
+       $_REQUEST = array();
+       $_SERVER = array();
    }
 
     public function test_prepareResponse()
@@ -91,9 +79,8 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
 
         $this->_client->prepareResponse($response, "");
 
-        $this->assertType("PHPFrame_PlainDocument", $response->document());
-        $this->assertType("PHPFrame_PlainRenderer", $response->renderer());
-
+        $this->assertType("PHPFrame_HTMLDocument", $response->document());
+        $this->assertType("PHPFrame_HTMLRenderer", $response->renderer());
     }
 
     public function test_redirect()

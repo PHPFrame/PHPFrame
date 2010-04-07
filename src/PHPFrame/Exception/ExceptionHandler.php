@@ -176,8 +176,15 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
     {
         self::instance()->lastException($exception);
 
+        // Set msg body depending on _display_exceptions flag
+        if (self::instance()->_display_exceptions) {
+            $body = $exception;
+        } else {
+            $body = "I'm afraid something went wrong.";
+        }
+
         // Notify event to observers
-        self::instance()->notify();
+        self::instance()->notifyEvent($body, PHPFrame_Subject::EVENT_TYPE_ERROR);
 
         // Create a new response to return the error
         $response = new PHPFrame_Response();
@@ -191,14 +198,7 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
         }
 
         $response->title("Ooops... an error occurred!");
-
-        // Display the exception details if applicable
-        if (self::instance()->_display_exceptions) {
-            $response->body($exception);
-        } else {
-            $response->body("I'm afraid something went wrong.");
-        }
-
+        $response->body($body);
         $response->send();
     }
 

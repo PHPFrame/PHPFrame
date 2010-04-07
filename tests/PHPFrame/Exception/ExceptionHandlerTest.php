@@ -93,4 +93,21 @@ class PHPFrame_ExceptionHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("This is a test exception", $this->_handler->lastException()->getMessage());
         $this->assertEquals(500, $this->_handler->lastException()->getCode());
     }
+
+    public function test_observer()
+    {
+        $tmp_log_file = PHPFrame_Filesystem::getSystemTempDir()."PHPFrame_ExceptionHandlerTest.log";
+        $this->_handler->attach(new PHPFrame_TextLogger($tmp_log_file));
+
+        ob_start();
+        $this->_handler->handleException(new Exception("This is a test exception", 500));
+        ob_end_clean();
+
+        $this->assertTrue(file_exists($tmp_log_file));
+        $file_contents = file_get_contents($tmp_log_file);
+        $this->assertRegExp("/This is a test exception/", $file_contents);
+        $this->assertRegExp("/Stack trace/", $file_contents);
+
+        PHPFrame_Filesystem::rm($tmp_log_file);
+    }
 }

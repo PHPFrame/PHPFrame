@@ -848,6 +848,12 @@ class PHPFrame_Application extends PHPFrame_Observer
         $this->output();
     }
 
+    /**
+     * Process response and send output.
+     *
+     * @return void
+     * @since  1.0
+     */
     protected function output()
     {
         $request  = $this->request();

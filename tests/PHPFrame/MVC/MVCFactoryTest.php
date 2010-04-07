@@ -56,7 +56,7 @@ class PHPFrame_MVCFactoryTest extends PHPUnit_Framework_TestCase
 
     public function test_getActionControllerReflectionException()
     {
-        $this->setExpectedException("ReflectionException");
+        $this->setExpectedException("RuntimeException");
 
         $controller = $this->_factory->getActionController("apppp");
     }

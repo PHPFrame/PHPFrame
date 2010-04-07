@@ -156,6 +156,15 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
      */
     public function renderException(Exception $e)
     {
-        return $e->getMessage();
+        $str  = "<pre>\n";
+        $str .= "Uncaught ".get_class($e).": ";
+        $str .= $e->getMessage()."\n";
+        $str .= "File: ".$e->getFile()."\n";
+        $str .= "Line: ".$e->getLine()."\n";
+        $str .= "Code: ".$e->getCode()."\n";
+        $str .= $e->getTraceAsString();
+        $str .= "</pre>\n";
+
+        return $str;
     }
 }

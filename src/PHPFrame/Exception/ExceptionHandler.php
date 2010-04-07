@@ -13,7 +13,12 @@
  */
 
 /**
- * Exception and Error Handler Class
+ * The Exception handler class is a singleton as it applies to the whole
+ * framework. The handler is initialised in {@link PHPFrame::boot()}.
+ *
+ * This class extends {@link PHPFrame_Subject} allowing objects descending from
+ * SplObserver to subscribe for updates. This updates are issued when an
+ * exception is handled.
  *
  * @category PHPFrame
  * @package  Exception
@@ -96,6 +101,7 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
     {
         restore_error_handler();
         restore_exception_handler();
+        self::$_instance = null;
     }
 
     /**
@@ -173,24 +179,27 @@ class PHPFrame_ExceptionHandler extends PHPFrame_Subject
         // Notify event to observers
         self::instance()->notify();
 
-        // Display the exception details if applicable
-        if (self::instance()->_display_exceptions) {
-            $response = new PHPFrame_Response();
-            $response->document(new PHPFrame_PlainDocument());
+        // Create a new response to return the error
+        $response = new PHPFrame_Response();
+        $response->document(new PHPFrame_PlainDocument());
 
-            $status_code = $exception->getCode();
-            if (!empty($status_code) && $status_code > 0) {
-                $response->statusCode($status_code);
-            } else {
-                $response->statusCode(500);
-            }
-
-            $response->body($exception->getMessage(), false);
-            $response->send();
+        $status_code = $exception->getCode();
+        if (!empty($status_code) && $status_code > 0) {
+            $response->statusCode($status_code);
+        } else {
+            $response->statusCode(500);
         }
 
-        // Exit with error status
-        exit(1);
+        $response->title("Ooops... an error occurred!");
+
+        // Display the exception details if applicable
+        if (self::instance()->_display_exceptions) {
+            $response->body($exception);
+        } else {
+            $response->body("I'm afraid something went wrong.");
+        }
+
+        $response->send();
     }
 
     /**

@@ -50,12 +50,38 @@ class PHPFrame_URITest extends PHPUnit_Framework_TestCase
         $this->assertEquals("", (string) $uri);
     }
 
+    public function test_getRequestURIHttpNoPath()
+    {
+        $_SERVER['HTTP_HOST'] = "localhost";
+        $_SERVER['HTTPS'] = "off";
+        $_SERVER['SERVER_PORT'] = "80";
+        $_SERVER["REQUEST_URI"] = "";
+
+        $uri = new PHPFrame_URI();
+        $this->assertRegExp("/http:\/\/localhost\//", (string) $uri);
+
+        $_SERVER = array();
+    }
+
+    public function test_getRequestURIHttpNoFilename()
+    {
+        $_SERVER['HTTP_HOST'] = "localhost";
+        $_SERVER['HTTPS'] = "off";
+        $_SERVER['SERVER_PORT'] = "80";
+        $_SERVER["REQUEST_URI"] = "/beta/";
+
+        $uri = new PHPFrame_URI();
+        $this->assertRegExp("/http:\/\/localhost\/beta\//", (string) $uri);
+
+        $_SERVER = array();
+    }
+
     public function test_getRequestURIHttpPort80()
     {
         $_SERVER['HTTP_HOST'] = "localhost";
         $_SERVER['HTTPS'] = "off";
         $_SERVER['SERVER_PORT'] = "80";
-        $_SERVER["REQUEST_URI"] = "/index.php?controller=dummy";
+        $_SERVER["REQUEST_URI"] = "/index.php?controller=dummy&action=index";
 
         $uri = new PHPFrame_URI();
         $this->assertRegExp("/http:\/\/localhost\/index\.php\?controller=dummy/", (string) $uri);

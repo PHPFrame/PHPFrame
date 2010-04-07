@@ -364,14 +364,14 @@ class PHPFrame_Request implements IteratorAggregate
     }
 
     /**
-     * Get the request time (unix timestamp).
+     * Get/set the request time (unix timestamp).
      *
      * @param int $int [Optional] Unix timestamp.
      *
      * @return int
      * @since  1.0
      */
-    public function requestTime($int)
+    public function requestTime($int=null)
     {
         if (!is_null($int)) {
             $this->_array["request_time"] = (int) $int;

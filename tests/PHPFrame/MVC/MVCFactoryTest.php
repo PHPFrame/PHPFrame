@@ -103,4 +103,13 @@ class PHPFrame_MVCFactoryTest extends PHPUnit_Framework_TestCase
         $helper = $this->_factory->getViewHelper("cli");
         $this->assertType("CliHelper", $helper);
     }
+
+    public function test_getViewHelperWithClassPrefixFailured()
+    {
+        $this->_app->classPrefix("SomePrefix_");
+
+        $this->setExpectedException("ReflectionException");
+
+        $helper = $this->_factory->getViewHelper("cli");
+    }
 }

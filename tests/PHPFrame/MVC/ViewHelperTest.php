@@ -47,6 +47,11 @@ class PHPFrame_ViewHelperTest extends PHPUnit_Framework_TestCase
         $this->_app->__destruct();
     }
 
+    public function test_app()
+    {
+        $this->assertEquals($this->_app, $this->_helper->app());
+    }
+
     public function test_()
     {
         $this->assertEquals(

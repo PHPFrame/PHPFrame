@@ -576,11 +576,20 @@ class PHPFrame_Application extends PHPFrame_Observer
      */
     public function imap(PHPFrame_IMAP $imap=null)
     {
+        $imap_enabled = (bool) $this->config()->get("imap.enable");
+
         if (!is_null($imap)) {
             $this->registry()->set("imap", $imap);
 
-        } elseif (is_null($this->registry()->get("imap"))) {
-            $this->registry()->set("imap", new PHPFrame_IMAP());
+        } elseif (is_null($this->registry()->get("imap")) && $imap_enabled) {
+            $this->registry()->set(
+                "imap",
+                new PHPFrame_IMAP(
+                    $this->config()->get("imap.host"),
+                    $this->config()->get("imap.user"),
+                    $this->config()->get("imap.pass")
+                )
+            );
         }
 
         return $this->registry()->get("imap");

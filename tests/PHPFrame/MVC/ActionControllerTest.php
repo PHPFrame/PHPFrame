@@ -4,7 +4,7 @@ require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 
 class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
 {
-    private $_app, $_factory, $_controller;
+    private $_app, $_controller;
 
     public function setUp()
     {
@@ -16,7 +16,9 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
             array("install_dir"=>$install_dir)
         );
 
-        $this->_controller = $this->_app->factory()->getActionController("man");
+        $this->_app->request(new PHPFrame_Request());
+
+        $this->_controller = new PHPFrame_TestableActionController();
     }
 
     public function tearDown()
@@ -49,18 +51,130 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
 
     public function test_execute()
     {
-        // We HAVE TO pass a new request, otherwise the app will try to
-        // populate a new one using the CLIClient and this creates a conflict
-        // with PHPUnit.
-        $request = new PHPFrame_Request();
-        $this->_app->request($request)->controllerName("man");
-
         $this->assertEquals("", (string) $this->_app->response()->document());
+        $this->assertNull($this->_app->request()->action());
 
         $this->_controller->execute($this->_app);
 
-        $pattern = "/PHPFrame Command Line Tool/";
+        $pattern = "/The page title\n==============\n\nLorem ipsum.../";
         $this->assertRegExp($pattern, (string) $this->_app->response()->document());
-        $this->assertTrue($this->_controller->getSuccess());
+        $this->assertEquals("index", $this->_app->request()->action());
+        $this->assertEquals(200, $this->_app->response()->statusCode());
+    }
+
+    public function test_app()
+    {
+        $this->_controller->execute($this->_app);
+
+        $this->assertType("PHPFrame_Application", $this->_controller->app());
+    }
+
+    public function test_config()
+    {
+        $this->_controller->execute($this->_app);
+
+        $this->assertType("PHPFrame_Config", $this->_controller->config());
+    }
+
+    public function test_request()
+    {
+        $this->_controller->execute($this->_app);
+
+        $this->assertType("PHPFrame_Request", $this->_controller->request());
+    }
+
+    public function test_response()
+    {
+        $this->_controller->execute($this->_app);
+
+        $this->assertType("PHPFrame_Response", $this->_controller->response());
+    }
+
+    public function test_registry()
+    {
+        $this->_controller->execute($this->_app);
+
+        $this->assertType("PHPFrame_Registry", $this->_controller->registry());
+    }
+
+    public function test_mailer()
+    {
+        $this->_controller->execute($this->_app);
+
+        $this->assertNull($this->_controller->mailer());
+    }
+
+    public function test_imap()
+    {
+        $this->_controller->execute($this->_app);
+
+        $this->assertFalse((bool) $this->_app->config()->get("imap.enable"));
+        $this->assertNull($this->_controller->imap());
+    }
+
+    public function test_logger()
+    {
+        $this->_controller->execute($this->_app);
+
+        $this->assertType("PHPFrame_Logger", $this->_controller->logger());
+    }
+
+    public function test_session()
+    {
+        $this->_controller->execute($this->_app);
+
+        $this->assertType("PHPFrame_SessionRegistry", $this->_controller->session());
+    }
+
+    public function test_user()
+    {
+        $this->_controller->execute($this->_app);
+
+        $this->assertType("PHPFrame_User", $this->_controller->user());
+    }
+
+    public function test_view()
+    {
+
+    }
+
+    public function test_helper()
+    {
+
+    }
+
+    public function test_cancel()
+    {
+
+    }
+
+    public function test_setRedirect()
+    {
+
+    }
+
+    public function test_redirect()
+    {
+
+    }
+
+    public function test_raiseError()
+    {
+
+    }
+
+    public function test_raiseWarning()
+    {
+
+    }
+
+    public function test_notifySuccess()
+    {
+
+    }
+
+    public function test_notifyInfo()
+    {
+
     }
 }

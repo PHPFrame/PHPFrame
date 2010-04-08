@@ -53,13 +53,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * @var string
      */
     private $_redirect_url = null;
-    /**
-     * This is a flag we use to indicate whether the controller's executed task
-     * was successful or not.
-     *
-     * @var boolean
-     */
-    private $_success = true;
 
     /**
      * Constructor
@@ -103,17 +96,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
 
         // Redirect if set by the controller
         $this->redirect();
-    }
-
-    /**
-     * Get controller's success flag
-     *
-     * @return boolean
-     * @since  1.0
-     */
-    public function getSuccess()
-    {
-        return $this->_success;
     }
 
     /**
@@ -325,7 +307,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function raiseError($msg)
     {
-        $this->_success = false;
         $this->notifyEvent($msg, PHPFrame_Subject::EVENT_TYPE_ERROR);
     }
 
@@ -339,7 +320,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function raiseWarning($msg)
     {
-        $this->_success = false;
         $this->notifyEvent($msg, PHPFrame_Subject::EVENT_TYPE_WARNING);
     }
 
@@ -353,7 +333,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function notifySuccess($msg="")
     {
-        $this->_success = true;
         $this->notifyEvent($msg, PHPFrame_Subject::EVENT_TYPE_SUCCESS);
     }
 
@@ -407,7 +386,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
             $msg  = get_class($this)." does NOT support an action called '";
             $msg .= $action."'. ".get_class($this)." supports the following ";
             $msg .= "actions: '".implode("','", $supported_methods)."'.";
-            throw new BadMethodCallException($msg, 400);
+            throw new BadMethodCallException($msg, 404);
         }
 
         if (!$reflection_method->isPublic()) {

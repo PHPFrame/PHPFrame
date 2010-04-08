@@ -288,24 +288,6 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         return null;
     }
 
-
-    /**
-     * Get client object's name
-     *
-     * @return string
-     * @since  1.0
-     */
-    public function getClientName()
-    {
-        if (isset($this->_data['client'])
-            && $this->_data['client'] instanceof PHPFrame_Client
-        ) {
-            return $this->_data['client']->getName();
-        }
-
-        return null;
-    }
-
     /**
      * Set session user
      *
@@ -334,40 +316,6 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         }
 
         return null;
-    }
-
-    /**
-     * Get session user id
-     *
-     * @return int
-     * @since  1.0
-     */
-    public function getUserId()
-    {
-        if (isset($this->_data['user'])
-            && $this->_data['user'] instanceof PHPFrame_User
-        ) {
-            return (int) $this->_data['user']->id();
-        }
-
-        return 0;
-    }
-
-    /**
-     * Get session user groupid
-     *
-     * @return int
-     * @since  1.0
-     */
-    public function getGroupId()
-    {
-        if (isset($this->_data['user'])
-            && $this->_data['user'] instanceof PHPFrame_User
-        ) {
-            return (int) $this->_data['user']->groupId();
-        }
-
-        return 0;
     }
 
     /**

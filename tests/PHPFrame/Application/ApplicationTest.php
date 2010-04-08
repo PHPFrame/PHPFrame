@@ -50,6 +50,9 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         if (is_file($data_db)) {
             unlink($data_db);
         }
+
+        // Destroy application
+        $this->_app->__destruct();
     }
 
     public function test_config()

@@ -19,9 +19,9 @@ class PHPFrame_URLFilterTest extends PHPUnit_Framework_TestCase
     public function test_process()
     {
         $values = array(
-            "http://www.e-noise.com",
+            "http://www.phpframe.org",
             "ftp://ftp.example.com",
-            "ssl://www.e-noise.com/clients"
+            "ssl://www.phpframe.org/api"
         );
 
         foreach ($values as $value) {
@@ -42,7 +42,7 @@ class PHPFrame_URLFilterTest extends PHPUnit_Framework_TestCase
             -3,
             3.14,
             "http:/w.cccc.com",
-            "www.e-noise.com",
+            "www.phpframe.org",
             ".com",
             array(),
             new stdClass()
@@ -64,10 +64,10 @@ class PHPFrame_URLFilterTest extends PHPUnit_Framework_TestCase
         $this->_filter->setPathRequired(true);
 
         $values = array(
-            "http://www.e-noise.com/clients",
-            "http://www.e-noise.com/index.php",
-            "http://www.e-noise.com/",
-            "ftp://www.e-noise.com/downloads/somefile.tgz"
+            "http://www.phpframe.org/api",
+            "http://www.phpframe.org/index.php",
+            "http://www.phpframe.org/",
+            "ftp://www.phpframe.org/downloads/somefile.tgz"
         );
 
         foreach ($values as $value) {
@@ -87,10 +87,10 @@ class PHPFrame_URLFilterTest extends PHPUnit_Framework_TestCase
         $this->_filter->setPathRequired(true);
 
         $values = array(
-            "http://www.e-noise.com",
-            "http://e-noise.com",
+            "http://www.phpframe.org",
+            "http://phpframe.org",
             "http://localhost",
-            "ftp://www.e-noise.com"
+            "ftp://www.phpframe.org"
         );
 
         for ($i=0; $i<count($values); $i++) {
@@ -109,10 +109,10 @@ class PHPFrame_URLFilterTest extends PHPUnit_Framework_TestCase
         $this->_filter->setQueryRequired(true);
 
         $values = array(
-            "http://www.e-noise.com/clients/index.php?controller=dummy",
-            "http://e-noise.com/index.php?id=1&cat=2&section=21",
-            "https://www.e-noise.com/?some_var=something",
-            "http://www.e-noise.com/downloads?file=somefile.tgz"
+            "http://www.phpframe.org/api/index.php?controller=dummy",
+            "http://phpframe.org/index.php?id=1&cat=2&section=21",
+            "https://www.phpframe.org/?some_var=something",
+            "http://www.phpframe.org/downloads?file=somefile.tgz"
         );
 
         foreach ($values as $value) {
@@ -132,11 +132,11 @@ class PHPFrame_URLFilterTest extends PHPUnit_Framework_TestCase
         $this->_filter->setQueryRequired(true);
 
         $values = array(
-            "http://www.e-noise.com/clients/index.php/controller=dummy",
-            "http://e-noise.com/index.php&id=1&cat=2&section=21",
-            "https://www.e-noise.com/",
-            "http://www.e-noise.com/downloads",
-            "http://www.e-noise.com/index.php"
+            "http://www.phpframe.org/api/index.php/controller=dummy",
+            "http://phpframe.org/index.php&id=1&cat=2&section=21",
+            "https://www.phpframe.org/",
+            "http://www.phpframe.org/downloads",
+            "http://www.phpframe.org/index.php"
         );
 
         for ($i=0; $i<count($values); $i++) {

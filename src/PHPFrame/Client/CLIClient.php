@@ -27,17 +27,6 @@
 class PHPFrame_CLIClient extends PHPFrame_Client
 {
     /**
-     * Get client name
-     *
-     * @return string Name to identify client type.
-     * @since  1.0
-     */
-    public function getName()
-    {
-        return "cli";
-    }
-
-    /**
      * Check if this is the correct helper for the client being used
      *
      * @static
@@ -141,19 +130,17 @@ class PHPFrame_CLIClient extends PHPFrame_Client
         );
 
         try {
+            global $argv, $argc;
+
             // Parse input options
-            $result = $parser->parse();
+            $result = $parser->parse($argc, $argv);
 
             $request->controllerName($result->args["controller"]);
             $request->action($result->args["action"]);
-
-            global $argv;
             $request->scriptName($argv[0]);
-
             $request->requestTime(time());
             $request->quiet($result->options["quiet"]);
             $request->method("CLI");
-
             $request->outfile($result->options["outfile"]);
 
             if ($result->options["infile"]) {

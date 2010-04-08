@@ -10,6 +10,9 @@ class PHPFrame_MVCFactoryTest extends PHPUnit_Framework_TestCase
     {
         PHPFrame::testMode(true);
 
+        $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
+        PHPFrame::dataDir($data_dir);
+
         $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
 
         $this->_app = new PHPFrame_Application(
@@ -76,7 +79,7 @@ class PHPFrame_MVCFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertType("PHPFrame_View", $view);
     }
 
-    public function test_getViewPassData()
+    public function test_viewPassData()
     {
         $view = $this->_factory->view("index", array("key"=>"value"));
         $data = $view->getData();
@@ -88,10 +91,16 @@ class PHPFrame_MVCFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("value", $data["key"]);
     }
 
-    public function test_getViewPassDataFailure()
+    public function test_viewPassDataFailure()
     {
         $this->setExpectedException("InvalidArgumentException");
 
         $view = $this->_factory->view("index", array("value"));
+    }
+
+    public function test_getViewHelper()
+    {
+        $helper = $this->_factory->getViewHelper("cli");
+        $this->assertType("CliHelper", $helper);
     }
 }

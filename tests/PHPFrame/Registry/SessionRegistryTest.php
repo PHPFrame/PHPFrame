@@ -26,12 +26,7 @@ class PHPFrame_SessionRegistryTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("user", $array);
     }
 
-    public function test_get()
-    {
-        $this->assertType("PHPFrame_User", $this->_session->get("user"));
-    }
-
-    public function test_set()
+    public function test_getSet()
     {
         $this->_session->set("some_var", "some_value");
         $this->assertEquals("some_value", $this->_session->get("some_var"));

@@ -109,17 +109,118 @@ class PHPFrame_HTMLUITest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function test_dialogWithOptionalArgs()
+    {
+        $dialog = PHPFrame_HTMLUI::dialog(
+            "Open a dialog",
+            "index.php",
+            400,
+            300,
+            true,
+            "#some_id"
+        );
+
+        $this->assertRegExp(
+            "/var dialog_div = '<div style=\"position: absolute\" ';/",
+            $dialog
+        );
+
+        $this->assertRegExp(
+            "/width: 400,\s+height: 300,/",
+            $dialog
+        );
+
+        $this->assertRegExp(
+            "/var ajax_cont = \\$\(\"#some_id\"\);/",
+            $dialog
+        );
+    }
+
     public function test_confirm()
     {
         $this->assertRegExp(
             "/var dialog_html = '<div id=\"confirm_dialog_([a-zA-Z0-9]+)\" ';/",
-            PHPFrame_HTMLUI::confirm("confirm_link", "Confirm box", "Some message...")
+            PHPFrame_HTMLUI::confirm(
+                "confirm_link",
+                "Confirm box",
+                "Some message..."
+            )
+        );
+    }
+
+    public function test_confirmWithOptionalArgs()
+    {
+        $confirm = PHPFrame_HTMLUI::confirm(
+            "confirm_link",
+            "Confirm box",
+            "Some message...",
+            "#some_id"
+        );
+
+        $this->assertRegExp(
+            "/var dialog_html = '<div id=\"confirm_dialog_([a-zA-Z0-9]+)\" ';/",
+            $confirm
+        );
+
+        $this->assertRegExp(
+            "/var confirm_response_container_id_[a-zA-Z0-9]+;/",
+            $confirm
         );
     }
 
     public function test_calendar()
     {
-        $this->assertRegExp("/\('#date_datePicker'\)\.datepicker\(\{/", PHPFrame_HTMLUI::calendar("date"));
+        $this->assertRegExp(
+            "/\\$\('#date_datePicker'\)\.datepicker\(\{/",
+            PHPFrame_HTMLUI::calendar("date")
+        );
+    }
+
+    public function test_calendarWithOptionalArgs()
+    {
+        $calendar = PHPFrame_HTMLUI::calendar(
+            "date",
+            "date",
+            date("Y-m-d"),
+            "dd/mm/yy",
+            array("class"=>"some_class"),
+            true
+        );
+
+        $this->assertRegExp(
+            "/\\$\('#date_datePicker'\)\.datepicker\(\{/",
+            $calendar
+        );
+
+        $this->assertRegExp(
+            "/name=\"date\"/",
+            $calendar
+        );
+
+        $this->assertRegExp(
+            "/id=\"date\"/",
+            $calendar
+        );
+
+        $this->assertRegExp(
+            "/value=\"".date("Y-m-d")."\"/",
+            $calendar
+        );
+
+        $this->assertRegExp(
+            "/dateFormat: 'dd\/mm\/yy',/",
+            $calendar
+        );
+
+        $this->assertRegExp(
+            "/name=\"date_datePicker\" class=\"some_class\"/",
+            $calendar
+        );
+
+        $this->assertRegExp(
+            "/appendText: '\(dd\/mm\/yyyy\)',/",
+            $calendar
+        );
     }
 
     public function test_formToken()

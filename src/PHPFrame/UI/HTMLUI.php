@@ -440,9 +440,9 @@ class PHPFrame_HTMLUI
      */
     public static function calendar(
         $name,
-        $id='',
-        $selected='',
-        $format='dd/mm/yy',
+        $id="",
+        $selected="",
+        $format="dd/mm/yy",
         $attribs=array(),
         $show_format_hint=false
     ) {

@@ -28,6 +28,8 @@ class PHPFrame_SessionRegistryTest extends PHPUnit_Framework_TestCase
 
     public function test_get()
     {
+        $this->assertNull($this->_session->get("nonexistant_var"));
+
         $this->assertEquals(
             "some_value",
             $this->_session->get("some_var", "some_value")

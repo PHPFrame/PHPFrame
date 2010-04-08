@@ -8,7 +8,7 @@ class PHPFrame_ClassDocTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_class_doc = new PHPFrame_ClassDoc("PHPFrame_Application");
+        $this->_class_doc = new PHPFrame_ClassDoc("PHPFrame_User");
     }
 
     public function tearDown()
@@ -16,8 +16,26 @@ class PHPFrame_ClassDocTest extends PHPUnit_Framework_TestCase
         //...
     }
 
-    public function test_()
+    public function test_toString()
     {
-        //echo $this->_class_doc;
+        $str = (string) $this->_class_doc;
+        $this->assertType("string", $str);
+        $this->assertRegExp(
+            "/Class: PHPFrame_User\n--------------/",
+            $str
+        );
+    }
+
+    public function test_getProperties()
+    {
+        $this->assertType("array", $this->_class_doc->getProperties());
+    }
+
+    public function test_getMethods()
+    {
+        $methods = $this->_class_doc->getMethods();
+        $this->assertType("array", $methods);
+        $this->assertTrue(count($methods) > 0);
+        $this->assertType("PHPFrame_MethodDoc", $methods[0]);
     }
 }

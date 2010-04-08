@@ -57,6 +57,14 @@ class PHPFrame_ClassDoc extends ReflectionClass
         return $str;
     }
 
+    /**
+     * Get class properties as objects of type PHPFrame_PropertyDoc.
+     *
+     * @param string $filter [Optional]
+     *
+     * @return array containing objects of type PHPFrame_PropertyDoc.
+     * @since  1.0
+     */
     public function getProperties($filter=null)
     {
         $props = array();
@@ -71,11 +79,31 @@ class PHPFrame_ClassDoc extends ReflectionClass
         return $props;
     }
 
-    public function getMethods()
+    /**
+     * Get class methods as objects of type PHPFrame_MethodDoc.
+     *
+     * @param string $filter [Optional] Any combination of
+     *                       ReflectionMethod::IS_STATIC,
+     *                       ReflectionMethod::IS_PUBLIC,
+     *                       ReflectionMethod::IS_PROTECTED,
+     *                       ReflectionMethod::IS_PRIVATE,
+     *                       ReflectionMethod::IS_ABSTRACT,
+     *                       ReflectionMethod::IS_FINAL.
+     *
+     * @return array containing objects of type PHPFrame_MethodDoc.
+     * @since  1.0
+     */
+    public function getMethods($filter=null)
     {
         $methods = array();
 
-        foreach (parent::getMethods() as $method) {
+        if (!is_null($filter)) {
+            $raw = parent::getMethods($filter);
+        } else {
+            $raw = parent::getMethods();
+        }
+
+        foreach ($raw as $method) {
             $methods[] = new PHPFrame_MethodDoc(
                 $this->getName(),
                 $method->getName()

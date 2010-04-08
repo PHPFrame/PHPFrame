@@ -228,6 +228,8 @@ class PHPFrame_Application extends PHPFrame_Observer
      *
      * @return void
      * @since  1.0
+     * @todo   Need to look at implementation of classPrefix() feature and how
+     *         it affects the autoloader.
      */
     public function autoload($class_name)
     {
@@ -255,7 +257,7 @@ class PHPFrame_Application extends PHPFrame_Observer
         $class_name = str_replace($super_class, "", $class_name);
 
         // Remove class prefix if applicable
-        $class_name = str_replace($this->classPrefix(), "", $class_name);
+        //$class_name = str_replace($this->classPrefix(), "", $class_name);
 
         // Build dir path by breaking camel case class name
         $pattern = '/[A-Z]{1}[a-zA-Z0-9]+/';

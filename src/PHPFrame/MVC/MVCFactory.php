@@ -68,7 +68,7 @@ class PHPFrame_MVCFactory
         // Get reflection object to inspect class before instantiating it
         try {
             $reflection_obj = new ReflectionClass($controller_class);
-        } catch (ReflectionException $e) {
+        } catch (Exception $e) {
             throw new RuntimeException($e->getMessage(), 404);
         }
 

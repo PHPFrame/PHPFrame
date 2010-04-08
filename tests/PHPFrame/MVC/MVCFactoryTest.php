@@ -54,6 +54,14 @@ class PHPFrame_MVCFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertType("AppController", $controller);
     }
 
+    public function test_getActionControllerWithClassPrefixFailure()
+    {
+        $this->_app->classPrefix("SomePrefix_");
+
+        $this->setExpectedException("RuntimeException");
+        $controller = $this->_factory->getActionController("app");
+    }
+
     public function test_getActionControllerReflectionException()
     {
         $this->setExpectedException("RuntimeException");

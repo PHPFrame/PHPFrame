@@ -26,9 +26,9 @@ class PHPFrameTest extends PHPUnit_Framework_TestCase
 
     public function test_autoload()
     {
-        $this->assertFalse(class_exists("PHPFrame_HTMLUI", false));
-        PHPFrame::autoload("PHPFrame_HTMLUI");
-        $this->assertTrue(class_exists("PHPFrame_HTMLUI", false));
+        $this->assertFalse(class_exists("PHPFrame_Exec", false));
+        PHPFrame::autoload("PHPFrame_Exec");
+        $this->assertTrue(class_exists("PHPFrame_Exec", false));
     }
 
     public function test_getSession()

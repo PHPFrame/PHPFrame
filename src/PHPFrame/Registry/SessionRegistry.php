@@ -414,7 +414,6 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     protected function detectClient()
     {
         // Build array with available clients
-        //TODO: This should be read from directory
         $available_clients = array("CLI", "XMLRPC", "Mobile", "Default");
 
         //loop through files
@@ -432,9 +431,6 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
                 }
             }
         }
-
-        //throw error if no helper is found
-        throw new RuntimeException("ERROR: No client could be found!");
     }
 
     /**

@@ -26,7 +26,15 @@ class PHPFrame_SessionRegistryTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("user", $array);
     }
 
-    public function test_getSet()
+    public function test_get()
+    {
+        $this->assertEquals(
+            "some_value",
+            $this->_session->get("some_var", "some_value")
+        );
+    }
+
+    public function test_set()
     {
         $this->_session->set("some_var", "some_value");
         $this->assertEquals("some_value", $this->_session->get("some_var"));
@@ -54,23 +62,36 @@ class PHPFrame_SessionRegistryTest extends PHPUnit_Framework_TestCase
 
     public function test_setUser()
     {
-
+        //...
     }
 
     public function test_isAuth()
     {
         $this->assertTrue($this->_session->isAuth());
+
+        $user = $this->_session->getUser();
+        $this->_session->setUser(new PHPFrame_User);
+
+        $this->assertFalse($this->_session->isAuth());
+
+        $this->_session->setUser($user);
     }
 
     public function test_isAdmin()
     {
         $this->assertTrue($this->_session->isAdmin());
+
+        $user = $this->_session->getUser();
+        $this->_session->setUser(new PHPFrame_User);
+
+        $this->assertFalse($this->_session->isAdmin());
+
+        $this->_session->setUser($user);
     }
 
     public function test_getSysevents()
     {
         $this->assertType("PHPFrame_Sysevents", $this->_session->getSysevents());
-
     }
 
     public function test_getToken()

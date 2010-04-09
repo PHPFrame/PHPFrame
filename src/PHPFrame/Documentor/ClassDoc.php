@@ -44,7 +44,9 @@ class PHPFrame_ClassDoc extends ReflectionClass
             $str .= implode("\n\n", $this->getConstants());
         }
 
-        if (count($this->getProperties(ReflectionProperty::IS_PUBLIC + ReflectionProperty::IS_PROTECTED)) > 0) {
+        $prop_filter  = ReflectionProperty::IS_PUBLIC;
+        $prop_filter += ReflectionProperty::IS_PROTECTED;
+        if (count($this->getProperties($prop_filter)) > 0) {
             $str .= "\n\n### Properties ###\n\n";
             $str .= implode("\n\n", $this->getProperties());
         }

@@ -732,6 +732,18 @@ class PHPFrame_Application extends PHPFrame_Observer
         return $this->registry()->get("profiler");
     }
 
+    public function crypt(PHPFrame_Crypt $crypt=null)
+    {
+        if (!is_null($crypt)) {
+            $this->registry()->set("crypt", $crypt);
+        } elseif (is_null($this->registry()->get("crypt"))) {
+            $secret = $this->config()->get("secret");
+            $this->registry()->set("crypt", new PHPFrame_Crypt($secret));
+        }
+
+        return $this->registry()->get("crypt");
+    }
+
     /**
      * Get/set reference to MVC factory object.
      *

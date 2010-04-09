@@ -198,6 +198,17 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
 
     /**
+     * Get reference to application's crypt object.
+     *
+     * @return PHPFrame_Crypt
+     * @since  1.0
+     */
+    protected function crypt()
+    {
+        return $this->app()->crypt();
+    }
+
+    /**
      * Get reference to application's session object.
      *
      * @return PHPFrame_SessionRegistry

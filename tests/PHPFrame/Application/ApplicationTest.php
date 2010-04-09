@@ -185,6 +185,11 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertType("PHPFrame_Profiler", $this->_app->profiler());
     }
 
+    public function test_crypt()
+    {
+        $this->assertType("PHPFrame_Crypt", $this->_app->crypt());
+    }
+
     public function test_db()
     {
         $this->assertType("PHPFrame_Database", $this->_app->db());

@@ -59,6 +59,13 @@ class PHPFrame_ControllerDoc extends PHPFrame_ClassDoc
         return $str;
     }
 
+    /**
+     * Get array containing controller actions as objects of type
+     * PHPFrame_MethodDoc.
+     *
+     * @return array
+     * @since  1.0
+     */
     public function getActions()
     {
         $methods = $this->getMethods();

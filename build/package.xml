@@ -50,7 +50,6 @@
    <file baseinstalldir="/" name="PHPFrame/Client/CLIClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/Client.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/DefaultClient.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Client/MobileClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/XMLRPCClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Config/Config.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/Database.php" role="php" />

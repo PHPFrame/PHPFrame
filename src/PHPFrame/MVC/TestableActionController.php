@@ -62,4 +62,24 @@ class PHPFrame_TestableActionController extends PHPFrame_ActionController
     {
         return parent::user();
     }
+
+    public function raiseError($msg)
+    {
+        parent::raiseError($msg);
+    }
+
+    public function raiseWarning($msg)
+    {
+        parent::raiseWarning($msg);
+    }
+
+    public function notifyInfo($msg)
+    {
+        parent::notifyInfo($msg);
+    }
+
+    public function notifySuccess($msg)
+    {
+        parent::notifySuccess($msg);
+    }
 }

@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Application/Extensions.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Application
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * Extensions abstract class
- * 
+ *
  * @category PHPFrame
  * @package  Application
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -36,27 +36,27 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
      * @var PHPFrame_PersistentObjectCollection
      */
     private $_extensions;
-    
+
     /**
      * Constructor.
-     * 
-     * @param PHPFrame_Mapper $mapper Mapper object used to persist the ACL 
+     *
+     * @param PHPFrame_Mapper $mapper Mapper object used to persist the ACL
      *                                objects.
-     * 
+     *
      * @return void
      * @since  1.0
      */
-    public function __construct(PHPFrame_Mapper $mapper) 
+    public function __construct(PHPFrame_Mapper $mapper)
     {
         // Get installed features from file
         $this->_mapper = $mapper;
-        
+
         $this->_extensions = $this->_mapper->find();
     }
-    
+
     /**
      * Implementation of IteratorAggregate interface.
-     * 
+     *
      * @return Iterator
      * @since  1.0
      */
@@ -64,65 +64,65 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
     {
         return $this->_extensions;
     }
-    
+
     /**
      * Get extension info by name
-     * 
+     *
      * @param string $name The feature name.
-     * 
+     *
      * @return array
      * @since  1.0
      */
-    final public function getInfo($name) 
+    final public function getInfo($name)
     {
         foreach ($this->_extensions as $extension) {
             if ($extension->name() == $name) {
                 return $extension;
             }
         }
-        
+
         $msg = "Feature '".$name."' is not installed";
         throw new RuntimeException($msg);
     }
-    
+
     /**
-     * This methods tests whether the specified extension is installed and 
+     * This methods tests whether the specified extension is installed and
      * enabled.
      *
-     * @param string $name The extension name to check (ie: dashboard, user, 
+     * @param string $name The extension name to check (ie: dashboard, user,
      *                     projects, ...).
-     * 
+     *
      * @return bool
      * @since  1.0
      */
-    final public function isEnabled($name) 
+    final public function isEnabled($name)
     {
         foreach ($this->_extensions as $extension) {
             if ($extension->name() == $name && $extension->enabled()) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Check whether a given extension is installed.
-     * 
-     * @param string $name The extension name to check (ie: dashboard, user, 
+     *
+     * @param string $name The extension name to check (ie: dashboard, user,
      *                     projects, ...).
-     *                     
+     *
      * @return bool
      * @since  1.0
      */
     final public function isInstalled($name)
     {
         foreach ($this->_extensions as $extension) {
-            if ($extension->name() == $name && $extension->isInstalled()) {
+            if ($extension->name() == $name) {
                 return true;
             }
         }
-        
+
         return false;
     }
 }

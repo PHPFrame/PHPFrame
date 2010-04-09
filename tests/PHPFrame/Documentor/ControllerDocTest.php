@@ -8,6 +8,11 @@ class PHPFrame_ControllerDocTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        PHPFrame::testMode(true);
+
+        $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
+        PHPFrame::dataDir($data_dir);
+
         $install_dir = preg_replace("/tests.*/", "data/CLI_Tool", __FILE__);
         $this->_app  = new PHPFrame_Application(array("install_dir"=>$install_dir));
 

@@ -114,17 +114,16 @@ class PHPFrame_Application extends PHPFrame_Observer
     /**
      * Constructor
      *
-     * @param array $options [Optional] An associative array with the following
-     *                                  keys:
-     *                                  - install_dir [Required]
-     *                                  - config_dir  [Optional]
-     *                                  - var_dir     [Optional]
-     *                                  - tmp_dir     [Optional]
+     * @param array $options An associative array with the following keys:
+     *                       - install_dir [Required]
+     *                       - config_dir  [Optional]
+     *                       - var_dir     [Optional]
+     *                       - tmp_dir     [Optional]
      *
      * @return void
      * @since  1.0
      */
-    public function __construct(array $options=null)
+    public function __construct(array $options)
     {
         if (!isset($options["install_dir"])) {
             $msg  = "Otions array passed to ".get_class($this)."::";
@@ -162,7 +161,8 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $this->$prop_name = $this->_install_dir.DS.$value;
             }
 
-            if ((!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
+            if (
+                ( !is_dir($this->$prop_name) && !mkdir($this->$prop_name) )
                 || !is_writable($this->$prop_name)
             ) {
                 $msg = "Directory ".$this->$prop_name." is not writable.";

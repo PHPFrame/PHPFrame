@@ -6,7 +6,7 @@ class PHPFrame_PluginTest extends PHPUnit_Framework_TestCase
 {
     private $_app, $_plugin;
 
-    public function __construct()
+    public function setUp()
     {
         PHPFrame::testMode(true);
 
@@ -20,17 +20,14 @@ class PHPFrame_PluginTest extends PHPUnit_Framework_TestCase
         );
 
         $this->_app->request(new PHPFrame_Request());
+
+        $this->_plugin = new TestablePlugin($this->_app);
     }
 
-    public function __destruct()
+    public function tearDown()
     {
         // Destroy application
         $this->_app->__destruct();
-    }
-
-    public function setUp()
-    {
-        $this->_plugin = new TestablePlugin($this->_app);
     }
 
     public function test_interface()
@@ -54,15 +51,15 @@ class PHPFrame_PluginTest extends PHPUnit_Framework_TestCase
         $plugin_info->enabled(true);
 
         $this->_app->plugins()->insert($plugin_info);
-        $this->_app->request(new PHPFrame_Request());
+        $request = new PHPFrame_Request();
 
-        $this->assertTrue(count($this->_app->request()->params()) == 0);
+        $this->assertTrue(count($request->params()) == 0);
 
         ob_start();
-        $this->_app->dispatch();
+        $this->_app->dispatch($request);
         ob_end_clean();
 
-        $params = $this->_app->request()->params();
+        $params = $request->params();
         $this->assertTrue(count($params) == 8);
         $this->assertArrayHasKey("routeStartup", $params);
         $this->assertArrayHasKey("routeShutdown", $params);

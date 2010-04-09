@@ -49,6 +49,7 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
     public function __construct(PHPFrame_Mapper $mapper)
     {
         $this->mapper($mapper);
+        $this->reload();
     }
 
     /**

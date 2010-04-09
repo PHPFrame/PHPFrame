@@ -191,14 +191,6 @@ class PHPFrame_Application extends PHPFrame_Observer
         // Acquire instance of Plugin Handler
         $this->_plugin_handler = new PHPFrame_PluginHandler($this);
 
-        // Register installed plugins with plugin handler
-        foreach ($this->plugins() as $plugin) {
-            if ($plugin->enabled()) {
-                $plugin_name = $plugin->name();
-                $this->_plugin_handler->registerPlugin(new $plugin_name($this));
-            }
-        }
-
         // Set profiler milestone
         $profiler = $this->profiler();
         if ($profiler instanceof PHPFrame_Profiler) {
@@ -793,6 +785,14 @@ class PHPFrame_Application extends PHPFrame_Observer
             $request = $this->request();
         } else {
             $this->request($request);
+        }
+
+        // Register installed plugins with plugin handler
+        foreach ($this->plugins() as $plugin) {
+            if ($plugin->enabled()) {
+                $plugin_name = $plugin->name();
+                $this->_plugin_handler->registerPlugin(new $plugin_name($this));
+            }
         }
 
         // Invoke route startup hook before request object is initialised

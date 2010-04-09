@@ -14,6 +14,13 @@ class PHPFrame_StringTest extends PHPUnit_Framework_TestCase
         //...
     }
 
+    public function test_toString()
+    {
+        $str = new PHPFrame_String("some string");
+
+        $this->assertEquals("some string", (string) $str);
+    }
+
     public function test_len()
     {
         $str = new PHPFrame_String("some string");
@@ -54,11 +61,6 @@ class PHPFrame_StringTest extends PHPUnit_Framework_TestCase
 
         $str = new PHPFrame_String("somE StrING");
         $this->assertEquals("Some String", $str->upperWords());
-    }
-
-    public function test_html()
-    {
-
     }
 
     public function test_limitChars()

@@ -112,21 +112,6 @@ class PHPFrame_String
     }
 
     /**
-     * Format a string for html output.
-     *
-     * @param bool $javascript_safe [Optional] A boolean used to indicate
-     *                              whether we should make the string safe for
-     *                              javascript.
-     *
-     * @return string
-     * @since  1.0
-     */
-    public function html($javascript_safe=false)
-    {
-        return htmlspecialchars($this->_str);
-    }
-
-    /**
      * Limit string to a set number of characters
      *
      * @param int  $max_chars         Number of characters we want to limit to.

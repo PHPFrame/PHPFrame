@@ -732,6 +732,14 @@ class PHPFrame_Application extends PHPFrame_Observer
         return $this->registry()->get("profiler");
     }
 
+    /**
+     * Get/set Crypt object.
+     *
+     * @param PHPFrame_Crypt $crypt [Optional]
+     *
+     * @return PHPFrame_Crypt
+     * @since  1.0
+     */
     public function crypt(PHPFrame_Crypt $crypt=null)
     {
         if (!is_null($crypt)) {

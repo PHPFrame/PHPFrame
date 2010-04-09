@@ -26,7 +26,7 @@ class PHPFrame_AppDocTest extends PHPUnit_Framework_TestCase
     public function test_toString()
     {
         $this->assertRegExp(
-            "/Controllers:[.\s]+app\s+---\s+Actions:\s+create\(\\\$app_name, \\\$template, \\\$allow_non_empty_dir, \\\$install_dir\)\s+remove\(\\\$install_dir\)/",
+            "/app\s+---\s+Actions:\s+create\(\\\$app_name, \\\$template, \\\$allow_non_empty_dir, \\\$install_dir\)\s+remove\(\\\$install_dir\)/",
             (string) $this->_app_doc
         );
     }

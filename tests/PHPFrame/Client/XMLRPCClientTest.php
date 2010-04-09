@@ -18,6 +18,24 @@ class PHPFrame_XMLRPCClientTest extends PHPUnit_Framework_TestCase
         //...
     }
 
+    public function test_serialise()
+    {
+        $serialised = serialize($this->_client);
+        $unserialised = unserialize($serialised);
+        $this->assertType("PHPFrame_XMLRPCClient", $unserialised);
+    }
+
+    public function test_unserialiseFailureNoXMLInput()
+    {
+        $serialised = serialize($this->_client);
+
+        $this->setExpectedException("RuntimeException");
+
+        $_SERVER["CONTENT_TYPE"] = "text/xml";
+        $unserialised = unserialize($serialised);
+        unset($_SERVER["CONTENT_TYPE"]);
+    }
+
     public function test_detectFailure()
     {
         $this->setExpectedException("RuntimeException");
@@ -42,16 +60,35 @@ class PHPFrame_XMLRPCClientTest extends PHPUnit_Framework_TestCase
         $request_time = $request->requestTime();
         $this->assertTrue(empty($request_time));
 
+        $_SERVER["REQUEST_METHOD"] = "POST";
+        $_SERVER["REMOTE_ADDR"] = "127.0.0.1";
+        $_SERVER["REQUEST_URI"] = "index.php";
+        $_SERVER["SCRIPT_NAME"] = "index.php";
+        $_SERVER["QUERY_STRING"] = "";
+        $_SERVER["REQUEST_TIME"] = time();
+
         $dom = new DOMDocument();
         $dom->loadXML("<?xml version=\"1.0\"?>
-        <methodCall>
-           <methodName>dummy.index</methodName>
-           <params>
-              <param>
-                 <value><i4>41</i4></value>
-                 </param>
-              </params>
-           </methodCall>");
+            <methodCall>
+                <methodName>app.create</methodName>
+                <params>
+                    <param>
+                        <value><string>MyApp</string></value>
+                    </param>
+                    <param>
+                        <value><string>basic</string></value>
+                    </param>
+                    <param>
+                        <value><boolean>false</boolean></value>
+                    </param>
+                </params>
+            </methodCall>");
+
+        require_once preg_replace(
+            "/tests.*/",
+            "data/CLI_Tool/src/controllers/app.php",
+            __FILE__
+        );
 
         $client = new PHPFrame_XMLRPCClient($dom);
 
@@ -59,9 +96,11 @@ class PHPFrame_XMLRPCClientTest extends PHPUnit_Framework_TestCase
         $client->populateRequest($request);
 
         // Now check that we got some values
-        $this->assertEquals("dummy", $request->controllerName());
-        $this->assertEquals("index", $request->action());
+        $this->assertEquals("app", $request->controllerName());
+        $this->assertEquals("create", $request->action());
         $this->assertType("int", $request->requestTime());
+
+        $_SERVER = array();
    }
 
     public function test_prepareResponse()

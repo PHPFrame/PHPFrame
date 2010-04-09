@@ -79,7 +79,6 @@
    <file baseinstalldir="/" name="PHPFrame/Documentor/ControllerDoc.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Documentor/MethodDoc.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Documentor/PropertyDoc.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Exception/AccessDeniedException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/DatabaseException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/ErrorException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/ExceptionHandler.php" role="php" />

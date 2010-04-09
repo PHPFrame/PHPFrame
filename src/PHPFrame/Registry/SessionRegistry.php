@@ -389,20 +389,28 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     public function destroy()
     {
-        // this destroys the session and generates a new session id
-        session_regenerate_id(true);
+        $this->data = array();
 
-        // Delete cookie. This has to be done using the same parameters
-        // used when creating the cookie
-        setcookie(
-            $this->_session_name,
-            "",
-            time() - 3600,
-            $this->_cookie_path,
-            null,
-            $this->_cookie_secure,
-            $this->_cookie_httponly
-        );
+        // this destroys the session and generates a new session id
+        if (!headers_sent()) {
+            session_regenerate_id(true);
+
+            // Delete cookie. This has to be done using the same parameters
+            // used when creating the cookie
+            setcookie(
+                $this->_session_name,
+                "",
+                time() - 3600,
+                $this->_cookie_path,
+                null,
+                $this->_cookie_secure,
+                $this->_cookie_httponly
+            );
+        }
+
+        if (session_id()) {
+            session_destroy();
+        }
     }
 
     /**

@@ -33,8 +33,10 @@ class PHPFrame_CryptTest extends PHPUnit_Framework_TestCase
     public function test_getSalt()
     {
         $this->assertEquals(2, strlen($this->_crypt->getSalt("crypt")));
-        $this->assertEquals(4, strlen($this->_crypt->getSalt("ssha")));
-        $this->assertEquals(4, strlen($this->_crypt->getSalt("smd5")));
+        if (function_exists("mhash_keygen_s2k")) {
+            $this->assertEquals(4, strlen($this->_crypt->getSalt("ssha")));
+            $this->assertEquals(4, strlen($this->_crypt->getSalt("smd5")));
+        }
         $this->assertEquals(8, strlen($this->_crypt->getSalt("aprmd5")));
         $this->assertEquals(12, strlen($this->_crypt->getSalt("crypt-md5")));
         $this->assertEquals(16, strlen($this->_crypt->getSalt("crypt-blowfish")));

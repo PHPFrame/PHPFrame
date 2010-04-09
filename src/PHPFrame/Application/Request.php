@@ -263,10 +263,11 @@ class PHPFrame_Request implements IteratorAggregate
      * @param string $key   Key used to store file. Normally the name of the
      *                      form field to be used for posting the file.
      * @param array  $array [Optional] File data.
-     *                      - tmp_name
      *                      - name
+     *                      - type
+     *                      - tmp_name
+     *                      - error
      *                      - size
-     *                      - type- error
      *
      * @return array|null
      * @since  1.0

@@ -25,12 +25,24 @@ class PHPFrame_SyseventsTest extends PHPUnit_Framework_TestCase
             PHPFrame_Subject::EVENT_TYPE_ERROR
         );
         $this->_sysevents->append(
+            "Some message...",
+            PHPFrame_Subject::EVENT_TYPE_WARNING
+        );
+        $this->_sysevents->append(
+            "Some message...",
+            PHPFrame_Subject::EVENT_TYPE_NOTICE
+        );
+        $this->_sysevents->append(
             "Another message...",
             PHPFrame_Subject::EVENT_TYPE_INFO
         );
+        $this->_sysevents->append(
+            "Some message...",
+            PHPFrame_Subject::EVENT_TYPE_SUCCESS
+        );
 
         $this->assertRegExp(
-            "/ERROR: Some message\.\.\.\nINFO: Another message\.\.\./",
+            "/NOTICE: Some message\.\.\.\nINFO: Another message\.\.\./",
             (string) $this->_sysevents
         );
     }

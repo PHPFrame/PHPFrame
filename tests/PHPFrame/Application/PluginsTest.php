@@ -66,13 +66,25 @@ class PHPFrame_PluginsTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function test_getInfoFailure()
+    {
+        $this->setExpectedException("RuntimeException");
+
+        $this->_plugins->getInfo("aaaa");
+    }
+
     public function test_isEnabled()
     {
         $this->assertFalse($this->_plugins->isEnabled("PHPFrame_URLRewriter"));
+
+        $this->_plugins->getInfo("PHPFrame_URLRewriter")->enabled(true);
+
+        $this->assertTrue($this->_plugins->isEnabled("PHPFrame_URLRewriter"));
     }
 
     public function test_isInstalled()
     {
         $this->assertTrue($this->_plugins->isInstalled("PHPFrame_URLRewriter"));
+        $this->assertFalse($this->_plugins->isInstalled("aaaa"));
     }
 }

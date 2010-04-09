@@ -13,6 +13,10 @@ class PHPFrame_MockObject extends PHPFrame_Object
     public function foo($str, $bool, $int)
     {
         $this->enforceArgumentTypes();
+
+        $return = true;
+        $this->enforceReturnType($return);
+        return $return;
     }
 
     /**

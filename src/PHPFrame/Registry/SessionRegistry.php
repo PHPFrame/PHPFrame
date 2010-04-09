@@ -92,14 +92,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      *
      * @var array
      */
-    protected $data = array(
-        "id"        => null,
-        "token"     => null,
-        "user"      => null,
-        "client"    => null,
-        "sysevents" => null,
-        "params"    => array()
-    );
+    protected $data = array();
 
     /**
      * Constructor
@@ -139,23 +132,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
 
         // If new session we initialise
         if (!isset($this->data["id"]) || $this->data["id"] != session_id()) {
-            // Store session id in session array
-            $this->data["id"] = session_id();
-
-            // Acquire session user object
-            $this->data["user"] = new PHPFrame_User();
-            $this->data["user"]->id(0);
-            $this->data["user"]->groupId(0);
-            $this->data["user"]->email("guest@localhost.local");
-
-            // Acquire sysevents object
-            $this->data["sysevents"] = new PHPFrame_Sysevents();
-
-            // Generate session token
-            $this->getToken(true);
-
-            // Detect client for this session
-            $this->detectClient();
+            $this->_initSession();
 
         } elseif (
             isset($_SERVER["CONTENT_TYPE"])
@@ -184,6 +161,42 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
             // and user objects
             $this->detectClient();
         }
+    }
+
+    /**
+     * Initialise session data.
+     *
+     * @return void
+     * @since  1.0
+     */
+    private function _initSession()
+    {
+        $this->data = array(
+            "id"        => null,
+            "token"     => null,
+            "user"      => null,
+            "client"    => null,
+            "sysevents" => null,
+            "params"    => array()
+        );
+
+        // Store session id in session array
+        $this->data["id"] = session_id();
+
+        // Acquire session user object
+        $this->data["user"] = new PHPFrame_User();
+        $this->data["user"]->id(0);
+        $this->data["user"]->groupId(0);
+        $this->data["user"]->email("guest@localhost.local");
+
+        // Acquire sysevents object
+        $this->data["sysevents"] = new PHPFrame_Sysevents();
+
+        // Generate session token
+        $this->getToken(true);
+
+        // Detect client for this session
+        $this->detectClient();
     }
 
     /**
@@ -411,6 +424,8 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         if (session_id()) {
             session_destroy();
         }
+
+        $this->_initSession();
     }
 
     /**

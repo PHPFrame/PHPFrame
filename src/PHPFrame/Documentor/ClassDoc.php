@@ -44,7 +44,7 @@ class PHPFrame_ClassDoc extends ReflectionClass
             $str .= implode("\n\n", $this->getConstants());
         }
 
-        if (count($this->getProperties(ReflectionProperty::IS_PUBLIC)) > 0) {
+        if (count($this->getProperties(ReflectionProperty::IS_PUBLIC + ReflectionProperty::IS_PROTECTED)) > 0) {
             $str .= "\n\n### Properties ###\n\n";
             $str .= implode("\n\n", $this->getProperties());
         }
@@ -60,7 +60,12 @@ class PHPFrame_ClassDoc extends ReflectionClass
     /**
      * Get class properties as objects of type PHPFrame_PropertyDoc.
      *
-     * @param string $filter [Optional]
+     * @param string $filter [Optional] Any combination of:
+     *                       ReflectionProperty::IS_PUBLIC
+     *                       ReflectionProperty::IS_PROTECTED
+     *                       ReflectionProperty::IS_PRIVATE
+     *                       To combine filters simply add them with the "+"
+     *                       operator.
      *
      * @return array containing objects of type PHPFrame_PropertyDoc.
      * @since  1.0
@@ -69,7 +74,13 @@ class PHPFrame_ClassDoc extends ReflectionClass
     {
         $props = array();
 
-        foreach (parent::getProperties($filter) as $prop) {
+        if (!is_null($filter)) {
+            $raw = parent::getProperties($filter);
+        } else {
+            $raw = parent::getProperties();
+        }
+
+        foreach ($raw as $prop) {
             $props[] = new PHPFrame_PropertyDoc(
                 $this->getName(),
                 $prop->getName()
@@ -89,6 +100,8 @@ class PHPFrame_ClassDoc extends ReflectionClass
      *                       ReflectionMethod::IS_PRIVATE,
      *                       ReflectionMethod::IS_ABSTRACT,
      *                       ReflectionMethod::IS_FINAL.
+     *                       To combine filters simply add them with the "+"
+     *                       operator.
      *
      * @return array containing objects of type PHPFrame_MethodDoc.
      * @since  1.0

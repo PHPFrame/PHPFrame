@@ -48,10 +48,7 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
      */
     public function __construct(PHPFrame_Mapper $mapper)
     {
-        // Get installed features from file
-        $this->_mapper = $mapper;
-
-        $this->_extensions = $this->_mapper->find();
+        $this->mapper($mapper);
     }
 
     /**
@@ -63,6 +60,34 @@ abstract class PHPFrame_Extensions implements IteratorAggregate
     public function getIterator()
     {
         return $this->_extensions;
+    }
+
+    /**
+     * Get/set mapper to be used for storing plugin objects.
+     *
+     * @param PHPFrame_Mapper $mapper [Optional]
+     *
+     * @return PHPFrame_Mapper
+     * @since  1.0
+     */
+    public function mapper(PHPFrame_Mapper $mapper=null)
+    {
+        if (!is_null($mapper)) {
+            $this->_mapper = $mapper;
+        }
+
+        return $this->_mapper;
+    }
+
+    /**
+     * This method reloads the plugin info data using the mapper.
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function reload()
+    {
+        $this->_extensions = $this->mapper()->find();
     }
 
     /**

@@ -13,10 +13,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
         PHPFrame::dataDir($data_dir);
 
-        // Get application install dir (we use CLI Tool for tests)
-        $pattern     = '/(.*)(\/|\\\)tests(\/|\\\)PHPFrame(\/|\\\)(.*)/';
-        $replacement = '$1$2data$3CLI_Tool';
-        $install_dir = preg_replace($pattern, $replacement, __FILE__);
+        $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
 
         exec("chmod +w ".$install_dir.DS."var");
 

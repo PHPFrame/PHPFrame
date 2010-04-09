@@ -99,7 +99,6 @@
    <file baseinstalldir="/" name="PHPFrame/Filter/URLFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/Validator.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/DownloadRequestListener.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/HTTP/FeedReader.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/HTTPRequest.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />

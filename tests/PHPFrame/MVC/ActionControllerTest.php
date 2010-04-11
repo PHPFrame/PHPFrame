@@ -65,6 +65,24 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $this->_app->response()->statusCode());
     }
 
+    public function test_executeUnknownActionFailure()
+    {
+        $this->_app->request()->action("aaa");
+
+        $this->setExpectedException("BadMethodCallException");
+
+        $this->_controller->execute($this->_app);
+    }
+
+    public function test_executeProtectedActionFailure()
+    {
+        $this->_app->request()->action("config");
+
+        $this->setExpectedException("LogicException");
+
+        $this->_app->dispatch();
+    }
+
     public function test_app()
     {
         $this->_controller->execute($this->_app);
@@ -150,29 +168,71 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
     {
         $this->_controller->execute($this->_app);
 
-        $this->_controller->setRedirect("index.php?controller=dummy&action=index&param1=1");
+        $redirect_url = "index.php?controller=dummy&action=index&param1=1";
+        $this->_controller->setRedirect($redirect_url);
 
-        var_dump($this->_app->response());
+        $this->assertEquals(303, $this->_app->response()->statusCode());
+        $this->assertEquals($redirect_url, $this->_app->response()->header("Location"));
     }
 
     public function test_raiseError()
     {
+        $this->_controller->attach($this->_app->session()->getSysevents());
 
+        $this->_controller->raiseError("I am an error message");
+
+        $array = iterator_to_array($this->_app->session()->getSysevents());
+        $this->assertTrue(count($array) == 1);
+        $this->assertType("array", $array[0]);
+        $this->assertEquals("I am an error message", $array[0][0]);
+        $this->assertEquals(PHPFrame_Subject::EVENT_TYPE_ERROR, $array[0][1]);
+
+        $this->_app->session()->getSysevents()->clear();
     }
 
     public function test_raiseWarning()
     {
+        $this->_controller->attach($this->_app->session()->getSysevents());
 
+        $this->_controller->raiseWarning("I am a warning");
+
+        $array = iterator_to_array($this->_app->session()->getSysevents());
+        $this->assertTrue(count($array) == 1);
+        $this->assertType("array", $array[0]);
+        $this->assertEquals("I am a warning", $array[0][0]);
+        $this->assertEquals(PHPFrame_Subject::EVENT_TYPE_WARNING, $array[0][1]);
+
+        $this->_app->session()->getSysevents()->clear();
     }
 
     public function test_notifySuccess()
     {
+        $this->_controller->attach($this->_app->session()->getSysevents());
 
+        $this->_controller->notifySuccess("Yay!");
+
+        $array = iterator_to_array($this->_app->session()->getSysevents());
+        $this->assertTrue(count($array) == 1);
+        $this->assertType("array", $array[0]);
+        $this->assertEquals("Yay!", $array[0][0]);
+        $this->assertEquals(PHPFrame_Subject::EVENT_TYPE_SUCCESS, $array[0][1]);
+
+        $this->_app->session()->getSysevents()->clear();
     }
 
     public function test_notifyInfo()
     {
+        $this->_controller->attach($this->_app->session()->getSysevents());
 
+        $this->_controller->notifyInfo("Some info...");
+
+        $array = iterator_to_array($this->_app->session()->getSysevents());
+        $this->assertTrue(count($array) == 1);
+        $this->assertType("array", $array[0]);
+        $this->assertEquals("Some info...", $array[0][0]);
+        $this->assertEquals(PHPFrame_Subject::EVENT_TYPE_INFO, $array[0][1]);
+
+        $this->_app->session()->getSysevents()->clear();
     }
 }
 

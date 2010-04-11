@@ -21,7 +21,7 @@ class PHPFrame_PluginTest extends PHPUnit_Framework_TestCase
 
         $this->_app->request(new PHPFrame_Request());
 
-        $this->_plugin = new TestablePlugin($this->_app);
+        $this->_plugin = new MockPlugin($this->_app);
     }
 
     public function tearDown()
@@ -47,7 +47,7 @@ class PHPFrame_PluginTest extends PHPUnit_Framework_TestCase
     public function test_Hooks()
     {
         $plugin_info = new PHPFrame_PluginInfo();
-        $plugin_info->name("TestablePlugin");
+        $plugin_info->name("MockPlugin");
         $plugin_info->enabled(true);
 
         $this->_app->plugins()->insert($plugin_info);
@@ -146,7 +146,7 @@ class PHPFrame_PluginTest extends PHPUnit_Framework_TestCase
     }
 }
 
-class TestablePlugin extends PHPFrame_Plugin
+class MockPlugin extends PHPFrame_Plugin
 {
     public function routeStartup()
     {

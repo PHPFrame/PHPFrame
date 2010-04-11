@@ -146,17 +146,7 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
 
     }
 
-    public function test_cancel()
-    {
-
-    }
-
-    public function test_setRedirect()
-    {
-
-    }
-
-    public function test_redirect()
+    public function test_redirectURL()
     {
 
     }

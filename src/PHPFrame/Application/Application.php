@@ -870,6 +870,12 @@ class PHPFrame_Application extends PHPFrame_Observer
 
             // Invoke postDispatch hook for every iteration of the dispatch loop
             $this->_plugin_handler->handle("postDispatch");
+
+            // Redirect if set in controller
+            $redirect_url = $controller->redirectURL();
+            if ($redirect_url) {
+                $this->session->getClient()->redirect($redirect_url);
+            }
         }
 
         // Invoke dispatchLoopShutdown hook

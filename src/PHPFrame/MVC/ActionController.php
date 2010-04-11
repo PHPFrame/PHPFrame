@@ -93,9 +93,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
         }
 
         $this->_invokeAction($action);
-
-        // Redirect if set by the controller
-        $this->redirect();
     }
 
     /**
@@ -258,54 +255,21 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
 
     /**
-     * Cancel and set redirect to index.
+     * Get/set the redirection URL.
      *
-     * @return void
+     * @param string $url [Optional] URL to redirect to after action has been
+     *                    executed.
+     *
+     * @return string|null
      * @since  1.0
      */
-    protected function cancel()
+    public function redirectURL($url=null)
     {
-        $this->setRedirect('index.php');
-    }
-
-    /**
-     * Set the redirection URL.
-     *
-     * @param string $url The URL we want to redirect to when we call
-     *                    PHPFrame_ActionController::redirect()
-     *
-     * @return void
-     * @since  1.0
-     */
-    protected function setRedirect($url)
-    {
-        $this->_redirect_url = $url;
-    }
-
-    /**
-     * Redirect browser to redirect URL.
-     *
-     * @return void
-     * @since  1.0
-     * @todo   Rewrite URL using plugin
-     */
-    protected function redirect()
-    {
-        // Get client object from session
-        $client = PHPFrame::getSession()->getClient();
-
-        // Check that we got the right type
-        if (!$client instanceof PHPFrame_Client) {
-            $msg = "Action controller could not redirect using client object";
-            throw new RuntimeException($msg);
+        if (!is_null($url)) {
+            $this->_redirect_url = trim((string) $url);
         }
 
-        // Delegate redirection to client object if it is of the right type
-        if (!empty($this->_redirect_url)) {
-            //echo $this->_redirect_url; exit;
-            //$url = PHPFrame_URLRewriter::rewriteURL($url);
-            $client->redirect($this->_redirect_url);
-        }
+        return $this->_redirect_url;
     }
 
     /**

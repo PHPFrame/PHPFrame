@@ -155,7 +155,7 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
     {
         $str = "";
 
-        if (isset($matches[2]) && $matches[2] == "\"") {
+        if (isset($matches[2]) && !empty($matches[2])) {
             $str .= $matches[2];
         }
 

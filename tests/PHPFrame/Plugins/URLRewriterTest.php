@@ -32,6 +32,64 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
 
     public function test_routeStartup()
     {
+        $_SERVER['QUERY_STRING'] = "";
+        $_SERVER['REQUEST_URI'] = "/dummy/index";
+
+        $request = new PHPFrame_Request();
+        $request->requestURI("/dummy/index");
+        $request->scriptName("/index.php");
+
+        $this->assertEquals("", $request->controllerName());
+        $this->assertEquals("", $request->action());
+
+        $this->_app->request($request);
+        $this->_plugin->routeStartup();
+
+        $this->assertEquals("dummy", $request->controllerName());
+        $this->assertEquals("index", $request->action());
+        $this->assertEquals(
+            "controller=dummy&action=index",
+            $_SERVER['QUERY_STRING']
+        );
+        $this->assertEquals(
+            "/index.php?controller=dummy&action=index",
+            $_SERVER['REQUEST_URI']
+        );
+
+        $_SERVER = array();
+    }
+
+    public function test_routeStartupWithRequestParams()
+    {
+        $_SERVER['QUERY_STRING'] = "somevar=1";
+        $_SERVER['REQUEST_URI'] = "/user/index?somevar=1";
+
+        $request = new PHPFrame_Request();
+        $request->requestURI("/user/index?somevar=1");
+        $request->scriptName("/index.php");
+
+        $this->assertEquals("", $request->controllerName());
+        $this->assertEquals("", $request->action());
+
+        $this->_app->request($request);
+        $this->_plugin->routeStartup();
+
+        $this->assertEquals("user", $request->controllerName());
+        $this->assertEquals("index", $request->action());
+        $this->assertEquals(
+            "controller=user&action=index&somevar=1",
+            $_SERVER['QUERY_STRING']
+        );
+        $this->assertEquals(
+            "/index.php?controller=user&action=index&somevar=1",
+            $_SERVER['REQUEST_URI']
+        );
+
+        $_SERVER = array();
+    }
+
+    public function test_routeStartupNonWebRoot()
+    {
         $_SERVER['QUERY_STRING'] = "somevar=1";
         $_SERVER['REQUEST_URI'] = "/v5/user/index?somevar=1";
 
@@ -57,6 +115,17 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
         );
 
         $_SERVER = array();
+    }
+
+    public function test_routeStartupNoRequestURI()
+    {
+        $this->_app->request(new PHPFrame_Request());
+
+        $req_str = (string) $this->_app->request();
+
+        $this->_plugin->routeStartup();
+
+        $this->assertEquals($req_str, (string) $this->_app->request());
     }
 
     public function test_postDispatch()

@@ -11,10 +11,7 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
         $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
         PHPFrame::dataDir($data_dir);
 
-        // Get application install dir (we use CLI Tool for tests)
-        $pattern     = '/(.*)(\/|\\\)tests(\/|\\\)PHPFrame(\/|\\\)(.*)/';
-        $replacement = '$1$2data$3CLI_Tool';
-        $install_dir = preg_replace($pattern, $replacement, __FILE__);
+        $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
 
         if (is_dir($install_dir.DS."tmp")) {
             PHPFrame_Filesystem::rm($install_dir.DS."tmp", true);
@@ -35,8 +32,6 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
 
     public function test_routeStartup()
     {
-        // http://localhost/v5/user/index?somevar=1
-
         $_SERVER['QUERY_STRING'] = "somevar=1";
         $_SERVER['REQUEST_URI'] = "/v5/user/index?somevar=1";
 
@@ -60,16 +55,110 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
             "/v5/index.php?controller=user&action=index&somevar=1",
             $_SERVER['REQUEST_URI']
         );
+
+        $_SERVER = array();
+    }
+
+    public function test_postDispatch()
+    {
+        $response = $this->_app->response();
+        $base_url = "http://localhost/";
+        $this->_app->config()->set("base_url", $base_url);
+
+        $data = array(
+            array(
+                "index.php",
+                $base_url
+            ),
+            array(
+                "index.php?controller=user",
+                $base_url."user"
+            ),
+            array(
+                "index.php?controller=user&action=index",
+                $base_url."user/index"
+            ),
+            array(
+                "index.php?controller=user&action=index&somevar=1",
+                $base_url."user/index?somevar=1"
+            ),
+            array(
+                $base_url,
+                $base_url
+            ),
+            array(
+                $base_url."index.php",
+                $base_url
+            ),
+            array(
+                $base_url."index.php?controller=user",
+                $base_url."user"
+            ),
+            array(
+                $base_url."index.php?controller=user&action=index",
+                $base_url."user/index"
+            ),
+            array(
+                $base_url."index.php?controller=user&action=index&somevar=1",
+                $base_url."user/index?somevar=1"
+            ),
+            array(
+                "http://google.com/index.php?controller=user",
+                "http://google.com/index.php?controller=user"
+            ),
+            array(
+                "http://google.com",
+                "http://google.com"
+            ),
+            array(
+                "a string",
+                "a string"
+            )
+        );
+
+        foreach ($data as $item) {
+            $response->header("Location", $item[0]);
+
+            $this->_plugin->postDispatch();
+
+            $this->assertEquals($item[1], $response->header("Location"));
+            //echo "Expected: ".$item[1]." => Got: ".$response->header("Location")."\n";
+        }
     }
 
     public function test_postApplyTheme()
     {
-        $this->_app->config()->set("base_url", "http://localhost/");
-        $response = $this->_app->response();
-        $response->body("\"index.php?controller=user&action=index&somevar=1\"");
+        $base_url = "http://localhost/";
+        $this->_app->config()->set("base_url", $base_url);
+
+        // Create mock body with many different kinds of links
+        $body  = "<div>\n";
+        $body .= "<a href=\"index.php?controller=user&action=index&somevar=1\">\n";
+        $body .= "<a href=\"index.php?controller=user&action=form&id=1\">\n";
+        $body .= "<a href=\"index.php?controller=user\">\n";
+        $body .= "<a href=\"index.php?controller=user&action=form\">\n";
+        $body .= "<a href=\"".$base_url."index.php?controller=user\">\n";
+        $body .= "<a href=\"".$base_url."index.php?controller=user&action=form\">\n";
+        $body .= "<a href=\"http://notlocalhost/index.php?controller=user\">\n";
+        $body .= "<a href=\"http://www.google.com\">\n";
+        $body .= "</a></div>\n";
+
+        $this->_app->response()->body($body);
 
         $this->_plugin->postApplyTheme();
 
-        $this->assertRegExp("/http:\/\/localhost\/user\/index\?somevar=1/", $response->body());
+        $this->assertEquals(
+            "<div>\n"
+            ."<a href=\"http://localhost/user/index?somevar=1\">\n"
+            ."<a href=\"http://localhost/user/form?id=1\">\n"
+            ."<a href=\"http://localhost/user\">\n"
+            ."<a href=\"http://localhost/user/form\">\n"
+            ."<a href=\"http://localhost/user\">\n"
+            ."<a href=\"http://localhost/user/form\">\n"
+            ."<a href=\"http://notlocalhost/index.php?controller=user\">\n"
+            ."<a href=\"http://www.google.com\">\n"
+            ."</a></div>",
+            $this->_app->response()->body()
+        );
     }
 }

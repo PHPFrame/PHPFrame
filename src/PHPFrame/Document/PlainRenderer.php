@@ -71,7 +71,7 @@ class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
             return (string) $float;
         }
 
-        return strip_tags(trim((string) $value));
+        return trim((string) $value);
     }
 
     /**

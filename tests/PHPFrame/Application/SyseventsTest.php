@@ -106,7 +106,15 @@ class PHPFrame_SyseventsTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue(count($this->_sysevents) == 0);
 
-        $subject = new PHPFrame_TestableActionController();
+        // Include testable controller
+        require_once preg_replace(
+            "/Application\/.+/",
+            "MVC/ActionControllerTest.php",
+            __FILE__
+        );
+
+        $subject = new TestableActionController();
+
         $subject->raiseError("some error occurred...");
         $this->_sysevents->update($subject);
 

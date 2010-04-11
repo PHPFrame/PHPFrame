@@ -872,9 +872,18 @@ class PHPFrame_Application extends PHPFrame_Observer
             $this->_plugin_handler->handle("postDispatch");
 
             // Redirect if set in controller
-            $redirect_url = $controller->redirectURL();
-            if ($redirect_url) {
-                $this->session->getClient()->redirect($redirect_url);
+            $status_code  = $this->response()->statusCode();
+            $redirect_url = $this->response()->header("Location");
+
+            if (in_array($status_code, array(301, 303, 307))) {
+                if (!$redirect_url) {
+                    $msg  = "HTTP status code was set to ".$status_code." but ";
+                    $msg .= "no redirect URL was specified in the Location ";
+                    $msg .= "header.";
+                    throw new LogicException($msg);
+                }
+
+                $this->session()->getClient()->redirect($redirect_url);
             }
         }
 

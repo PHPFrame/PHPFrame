@@ -88,6 +88,22 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
     }
 
     /**
+     * Rewrite redirect URL if it has been set after dispatching controller.
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function postDispatch()
+    {
+        $response = $this->app()->response();
+        $location = $response->header("Location");
+
+        if ($location) {
+            $response->header("Location", $this->_rewriteURLs($location));
+        }
+    }
+
+    /**
      * Rewrite URLs after controllers have run in dispatch loop and theme has
      * been applied.
      *
@@ -97,90 +113,57 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
     public function postApplyTheme()
     {
         // Get response body
-        $body     = $this->app()->response()->document()->body();
-        $base_url = $this->app()->config()->get("base_url");
-
-        // Build sub patterns
-        $controller = 'controller=([a-zA-Z]+)';
-        $action     = 'action=([a-zA-Z_]+)';
-        $amp        = '(&amp;|&)';
-
-        // Build patterns and replacements
-        $patterns[]     = '/"index.php\?'.$controller.$amp.$action.$amp.'/';
-        $replacements[] = '"'.$base_url.'${1}/${3}?';
-
-        $patterns[]     = '/"index.php\?'.$controller.$amp.$action.'"/';
-        $replacements[] = '"'.$base_url.'${1}/${3}"';
-
-        $patterns[]     = '/"index.php\?'.$controller.$amp.'/';
-        $replacements[] = '"'.$base_url.'${1}?';
-
-        $patterns[]     = '/"index.php\?'.$controller.'"/';
-        $replacements[] = '"'.$base_url.'${1}"';
-
-        // Replace the patterns in response body
-        $body = preg_replace($patterns, $replacements, $body);
+        $body = $this->app()->response()->document()->body();
 
         // Set the processed body back in the response
-        $this->app()->response()->document()->body($body);
+        $this->app()->response()->document()->body($this->_rewriteURLs($body));
     }
 
     /**
-     * Rewrite a given URL.
+     * Rewrite URLs contained in given string.
      *
-     * @param string $url   The URL to rewrite.
-     * @param bool   $xhtml [Optional] Default value is TRUE.
+     * @param string $str String containing text to search for URLs to rewrite.
      *
-     * @return string The rewritten URL
+     * @return string
      * @since  1.0
      */
-    public static function rewriteURL($url, $xhtml=true)
+    private function _rewriteURLs($str)
     {
-        $uri = new PHPFrame_URI(self::$_app->config()->get("base_url"));
+        $base_url = $this->app()->config()->get("base_url");
 
-        if (!preg_match('/^http/i', $url)) {
-            $url = $uri->getBase().$url;
+        $pattern  = "/(".preg_quote($base_url, "/")."index\.php";
+        $pattern .= "|([^\/]{1}|^)index\.php)";
+        $pattern .= "(\?controller=([a-z_\-]+)(&action=([a-z_]+)(&)?)?)?/";
+
+        return preg_replace_callback(
+            $pattern,
+            array($this, "_replaceMatches"),
+            $str
+        );
+    }
+
+    private function _replaceMatches(array $matches)
+    {
+        $str = "";
+
+        if (isset($matches[2]) && $matches[2] == "\"") {
+            $str .= $matches[2];
         }
 
-        // Parse URL string
-        $url_array = parse_url($url);
-        $query_array = array();
-        if (isset($url_array['query'])) {
-            parse_str($url_array['query'], $query_array);
+        $str .= $this->app()->config()->get("base_url");
+
+        if (isset($matches[4])) {
+            $str .= $matches[4];
         }
 
-
-        // If there are no query parameters we don't need to rewrite anything
-        if (count($query_array) == 0) {
-            return $url;
+        if (isset($matches[6])) {
+            $str .= "/".$matches[6];
         }
 
-        $rewritten_url = "";
-
-        if (isset($query_array['controller'])
-            && !empty($query_array['controller'])
-        ) {
-            $rewritten_url .= $query_array['controller'];
-            unset($query_array['controller']);
+        if (isset($matches[7])) {
+            $str .= "?";
         }
 
-        if (isset($query_array['action']) && !empty($query_array['action'])) {
-            $rewritten_url .= "/".$query_array['action'];
-            unset($query_array['action']);
-        }
-
-        if (is_array($query_array) && count($query_array) > 0) {
-            $rewritten_url .= "?";
-            $i=0;
-            foreach ($query_array as $key=>$value) {
-                if ($i>0) {
-                    $rewritten_url .= $xhtml ? "&amp;" : "&";
-                }
-                $rewritten_url .= $key."=".urlencode($value);
-                $i++;
-            }
-        }
-
-        return $uri->getBase().$rewritten_url;
+        return $str;
     }
 }

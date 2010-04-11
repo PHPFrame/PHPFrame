@@ -46,13 +46,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      * @var PHPFrame_Application
      */
     private $_app;
-    /**
-     * A string containing a url to be redirected to. Leave empty for no
-     * redirection.
-     *
-     * @var string
-     */
-    private $_redirect_url = null;
 
     /**
      * Constructor
@@ -255,21 +248,19 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
 
     /**
-     * Get/set the redirection URL.
+     * Set redirection location.
      *
-     * @param string $url [Optional] URL to redirect to after action has been
-     *                    executed.
+     * @param string $location    URL to redirect to after action has been
+     *                            executed.
+     * @param int    $status_code [Optional] Default value is 303.
      *
-     * @return string|null
+     * @return void
      * @since  1.0
      */
-    public function redirectURL($url=null)
+    public function setRedirect($location, $status_code=303)
     {
-        if (!is_null($url)) {
-            $this->_redirect_url = trim((string) $url);
-        }
-
-        return $this->_redirect_url;
+        $this->response()->header("Location", trim((string) $location));
+        $this->response()->statusCode($status_code);
     }
 
     /**

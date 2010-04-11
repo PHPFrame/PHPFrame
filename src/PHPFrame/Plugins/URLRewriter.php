@@ -142,6 +142,15 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
         );
     }
 
+    /**
+     * This method is passed as callback to preg_replace_callback and it builds
+     * the replacement string based on the pattern matches.
+     *
+     * @param array $matches Array containing the regex matches.
+     *
+     * @return string
+     * @since  1.0
+     */
     private function _replaceMatches(array $matches)
     {
         $str = "";

@@ -133,7 +133,8 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
 
         $pattern  = "/(".preg_quote($base_url, "/")."index\.php";
         $pattern .= "|([^\/]{1}|^)index\.php)";
-        $pattern .= "(\?controller=([a-z_\-]+)(&action=([a-z_]+)(&)?)?)?/";
+        $pattern .= "(\?controller=([a-z_\-]+)";
+        $pattern .= "((&amp;|&)action=([a-z_]+)(&amp;|&)?)?)?/";
 
         return preg_replace_callback(
             $pattern,
@@ -165,11 +166,11 @@ class PHPFrame_URLRewriter extends PHPFrame_Plugin
             $str .= $matches[4];
         }
 
-        if (isset($matches[6])) {
-            $str .= "/".$matches[6];
+        if (isset($matches[7])) {
+            $str .= "/".$matches[7];
         }
 
-        if (isset($matches[7])) {
+        if (isset($matches[8])) {
             $str .= "?";
         }
 

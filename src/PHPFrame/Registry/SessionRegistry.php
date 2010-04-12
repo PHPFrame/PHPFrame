@@ -437,7 +437,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     protected function detectClient()
     {
         // Build array with available clients
-        $available_clients = array("CLI", "XMLRPC", "Mobile", "Default");
+        $available_clients = array("CLI", "XMLRPC", "Default");
 
         //loop through files
         foreach ($available_clients as $client) {

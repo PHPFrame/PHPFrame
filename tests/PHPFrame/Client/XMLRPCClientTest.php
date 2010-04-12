@@ -25,28 +25,6 @@ class PHPFrame_XMLRPCClientTest extends PHPUnit_Framework_TestCase
         $this->assertType("PHPFrame_XMLRPCClient", $unserialised);
     }
 
-    public function test_unserialiseFailureNoXMLInput()
-    {
-        $serialised = serialize($this->_client);
-
-        $this->setExpectedException("RuntimeException");
-
-        $_SERVER["CONTENT_TYPE"] = "text/xml";
-        $unserialised = unserialize($serialised);
-        unset($_SERVER["CONTENT_TYPE"]);
-    }
-
-    public function test_detectFailure()
-    {
-        $this->setExpectedException("RuntimeException");
-
-        $_SERVER["CONTENT_TYPE"] = "text/xml";
-
-        PHPFrame_XMLRPCClient::detect();
-
-        unset($_SERVER["CONTENT_TYPE"]);
-    }
-
     public function test_populateRequest()
     {
         $request = new PHPFrame_Request();
@@ -67,8 +45,7 @@ class PHPFrame_XMLRPCClientTest extends PHPUnit_Framework_TestCase
         $_SERVER["QUERY_STRING"] = "";
         $_SERVER["REQUEST_TIME"] = time();
 
-        $dom = new DOMDocument();
-        $dom->loadXML("<?xml version=\"1.0\"?>
+        $request->body("<?xml version=\"1.0\"?>
             <methodCall>
                 <methodName>app.create</methodName>
                 <params>
@@ -90,7 +67,7 @@ class PHPFrame_XMLRPCClientTest extends PHPUnit_Framework_TestCase
             __FILE__
         );
 
-        $client = new PHPFrame_XMLRPCClient($dom);
+        $client = new PHPFrame_XMLRPCClient();
 
         // Populate the request
         $client->populateRequest($request);

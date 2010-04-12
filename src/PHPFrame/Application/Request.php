@@ -51,6 +51,7 @@ class PHPFrame_Request implements IteratorAggregate
      * @var bool
      */
     private $_dispatched = false;
+    private $_raw_body;
 
     /**
      * Constructor
@@ -60,7 +61,7 @@ class PHPFrame_Request implements IteratorAggregate
      */
     public function __construct()
     {
-
+        $this->_raw_body = file_get_contents("php://input");
     }
 
     /**
@@ -448,5 +449,22 @@ class PHPFrame_Request implements IteratorAggregate
         }
 
         return $this->_dispatched;
+    }
+
+    /**
+     * Get/set request's raw body.
+     *
+     * @param string $str [Optional] The raw request body.
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function body($str=null)
+    {
+        if (!is_null($str)) {
+            $this->_raw_body = (string) $str;
+        }
+
+        return $this->_raw_body;
     }
 }

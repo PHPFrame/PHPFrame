@@ -268,25 +268,26 @@ class PHPFrame_Application extends PHPFrame_Observer
         }
 
         // Autoload models
-        $models_dir   = $this->_install_dir.DS."src".DS."models";
-        $dir_iterator = new RecursiveDirectoryIterator($models_dir);
-        $filter       = array("php");
-        $iterator     = new RecursiveIteratorIterator(
-            $dir_iterator,
-            RecursiveIteratorIterator::SELF_FIRST
-        );
+        $models_dir = $this->_install_dir.DS."src".DS."models";
+        if (is_dir($models_dir)) {
+            $dir_iterator = new RecursiveDirectoryIterator($models_dir);
+            $filter       = array("php");
+            $iterator     = new RecursiveIteratorIterator(
+                $dir_iterator,
+                RecursiveIteratorIterator::SELF_FIRST
+            );
 
-        foreach ($iterator as $file) {
-            //echo $file->getRealPath(); continue;
-            if (in_array(end(explode('.', $file->getFileName())), $filter)) {
-                $file_name_no_ext = substr(
-                    $file->getFileName(),
-                    0,
-                    strpos($file->getFileName(), ".")
-                );
+            foreach ($iterator as $file) {
+                if (in_array(end(explode('.', $file->getFileName())), $filter)) {
+                    $file_name_no_ext = substr(
+                        $file->getFileName(),
+                        0,
+                        strpos($file->getFileName(), ".")
+                    );
 
-                if (strtolower($class_name) == strtolower($file_name_no_ext)) {
-                    include $file->getRealPath();
+                    if (strtolower($class_name) == strtolower($file_name_no_ext)) {
+                        include $file->getRealPath();
+                    }
                 }
             }
         }

@@ -164,7 +164,13 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
 
         // If no response has been loaded from cache we get the it via HTTP
         if (!$this->_response instanceof HTTP_Request2_Response) {
-            $this->_response = parent::send();
+            try {
+                $this->_response = parent::send();
+            } catch (HTTP_Request2_Exception $e) {
+                $msg  = "An error occurred while sending HTTP request to '";
+                $msg .= $this->getUrl()->getURL()."'.";
+                throw new RuntimeException($msg);
+            }
 
             // If cache is turned on we store the fetched data
             if ($this->cacheTime() > 0) {

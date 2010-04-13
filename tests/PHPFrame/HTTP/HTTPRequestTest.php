@@ -73,7 +73,7 @@ class PHPFrame_HTTPRequestTest extends PHPUnit_Framework_TestCase
     {
         $http_request = new PHPFrame_HTTPRequest("sdjncds");
 
-        $this->setExpectedException("HTTP_Request2_Exception");
+        $this->setExpectedException("RuntimeException");
 
         $http_request->send();
     }
@@ -82,7 +82,7 @@ class PHPFrame_HTTPRequestTest extends PHPUnit_Framework_TestCase
     {
         $http_request = new PHPFrame_HTTPRequest();
 
-        $this->setExpectedException("HTTP_Request2_Exception");
+        $this->setExpectedException("RuntimeException");
 
         $http_request->send();
     }

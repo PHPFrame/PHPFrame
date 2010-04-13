@@ -167,8 +167,12 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
             try {
                 $this->_response = parent::send();
             } catch (HTTP_Request2_Exception $e) {
-                $msg  = "An error occurred while sending HTTP request to '";
-                $msg .= $this->getUrl()."'.";
+                $msg = $e->getMessage();
+                if (!$msg) {
+                    $msg  = "An error occurred while sending HTTP request to '";
+                    $msg .= $this->getUrl()."'.";
+                }
+
                 throw new RuntimeException($msg);
             }
 

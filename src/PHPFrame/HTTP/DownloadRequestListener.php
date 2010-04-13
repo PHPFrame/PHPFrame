@@ -147,7 +147,7 @@ class PHPFrame_DownloadRequestListener implements SplObserver
                 79,
                 (
                 isset($content_length)
-                    ? round($content_length / 1024)
+                    ? ceil($content_length / 1024)
                     : 100
                 )
             );

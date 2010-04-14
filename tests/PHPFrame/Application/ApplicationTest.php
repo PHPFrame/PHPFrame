@@ -13,14 +13,13 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
         PHPFrame::dataDir($data_dir);
 
-        // Get application install dir (we use CLI Tool for tests)
-        $pattern     = '/(.*)(\/|\\\)tests(\/|\\\)PHPFrame(\/|\\\)(.*)/';
-        $replacement = '$1$2data$3CLI_Tool';
-        $install_dir = preg_replace($pattern, $replacement, __FILE__);
+        $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
 
-        // Delete app registry if it exists
-        if (is_file($install_dir.DS."tmp".DS."app.reg")) {
-            unlink($install_dir.DS."tmp".DS."app.reg");
+        exec("chmod +w ".$install_dir.DS."var");
+
+        if (is_dir($install_dir.DS."tmp")) {
+            exec("chmod +w ".$install_dir.DS."tmp");
+            PHPFrame_Filesystem::rm($install_dir.DS."tmp", true);
         }
 
         // Instantiate application
@@ -30,6 +29,8 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
+        exec("chmod +w ".$this->_app->getInstallDir().DS."tmp");
+
         $tmp_dir = $this->_app->getInstallDir().DS."tmp";
         $app_reg = $tmp_dir.DS."app.reg";
 
@@ -50,6 +51,75 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         if (is_file($data_db)) {
             unlink($data_db);
         }
+
+        // Destroy application
+        $this->_app->__destruct();
+    }
+
+    public function test_constructNoInstallDirFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+
+        $app = new PHPFrame_Application(array());
+    }
+
+    public function test_constructInstallDirWrongTypeFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+
+        $app = new PHPFrame_Application(array("install_dir"=>1));
+    }
+
+    public function test_constructInstallDirNotExistsFailure()
+    {
+        $this->setExpectedException("RuntimeException");
+
+        $app = new PHPFrame_Application(array("install_dir"=>"lalalal"));
+    }
+
+    // The following tests have been commented out because they will not pass
+    // on the build server as the build runs as "root" user and we will not
+    // be able to make PHP fail for not having parmission to write in a dir.
+
+    // public function test_constructVarDirNotWriteableFailure()
+    // {
+    //     exec("chmod -w ".$this->_app->getInstallDir().DS."var");
+    //
+    //     $this->setExpectedException("RuntimeException");
+    //
+    //     $app = new PHPFrame_Application(
+    //         array(
+    //             "install_dir" => $this->_app->getInstallDir()
+    //         )
+    //     );
+    // }
+    //
+    // public function test_constructTmpDirNotWriteableFailure()
+    // {
+    //     exec("chmod -w ".$this->_app->getInstallDir().DS."tmp");
+    //
+    //     $this->setExpectedException("RuntimeException");
+    //
+    //     $app = new PHPFrame_Application(
+    //         array(
+    //             "install_dir" => $this->_app->getInstallDir()
+    //         )
+    //     );
+    // }
+
+    public function test_constructTmpDirMkdir()
+    {
+        PHPFrame_Filesystem::rm($this->_app->getInstallDir().DS."tmp", true);
+
+        $this->assertFalse(is_dir($this->_app->getInstallDir().DS."tmp"));
+
+        $app = new PHPFrame_Application(
+            array(
+                "install_dir" => $this->_app->getInstallDir()
+            )
+        );
+
+        $this->assertTrue(is_dir($this->_app->getInstallDir().DS."tmp"));
     }
 
     public function test_config()
@@ -115,6 +185,11 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertType("PHPFrame_Profiler", $this->_app->profiler());
     }
 
+    public function test_crypt()
+    {
+        $this->assertType("PHPFrame_Crypt", $this->_app->crypt());
+    }
+
     public function test_db()
     {
         $this->assertType("PHPFrame_Database", $this->_app->db());
@@ -159,7 +234,13 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
 
     public function test_dispatch()
     {
-        //$request = new PHPFrame_Request();
-        //$this->_app->dispatch($request);
+        ob_start();
+        $this->_app->dispatch(new PHPFrame_Request());
+        ob_end_clean();
+
+        $this->assertRegExp(
+            "/PHPFrame Command Line Tool/",
+            (string) $this->_app->response()->document()
+        );
     }
 }

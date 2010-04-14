@@ -9,7 +9,7 @@ class PHPFrame_MethodDocTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_method_doc = new PHPFrame_MethodDoc(
-            "PHPFrame_ClassDoc",
+            "PHPFrame_User",
             "__construct"
         );
     }
@@ -19,8 +19,11 @@ class PHPFrame_MethodDocTest extends PHPUnit_Framework_TestCase
         //...
     }
 
-    public function test_()
+    public function test_toString()
     {
-
+        $this->assertRegExp(
+            "/".preg_quote("__construct([\$options])")."/",
+            (string) $this->_method_doc
+        );
     }
 }

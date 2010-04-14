@@ -114,17 +114,16 @@ class PHPFrame_Application extends PHPFrame_Observer
     /**
      * Constructor
      *
-     * @param array $options [Optional] An associative array with the following
-     *                                  keys:
-     *                                  - install_dir [Required]
-     *                                  - config_dir  [Optional]
-     *                                  - var_dir     [Optional]
-     *                                  - tmp_dir     [Optional]
+     * @param array $options An associative array with the following keys:
+     *                       - install_dir [Required]
+     *                       - config_dir  [Optional]
+     *                       - var_dir     [Optional]
+     *                       - tmp_dir     [Optional]
      *
      * @return void
      * @since  1.0
      */
-    public function __construct(array $options=null)
+    public function __construct(array $options)
     {
         if (!isset($options["install_dir"])) {
             $msg  = "Otions array passed to ".get_class($this)."::";
@@ -183,17 +182,32 @@ class PHPFrame_Application extends PHPFrame_Observer
         // Acquire and store instance of MVC Factory class
         $this->factory(new PHPFrame_MVCFactory($this));
 
-        //Register MVC autoload function
+        // Register Application's autoload function
         spl_autoload_register(array($this, "autoload"));
 
         // Attach app to Exception handler to observe uncaught exceptions
         PHPFrame_ExceptionHandler::instance()->attach($this);
+
+        // Acquire instance of Plugin Handler
+        $this->_plugin_handler = new PHPFrame_PluginHandler($this);
 
         // Set profiler milestone
         $profiler = $this->profiler();
         if ($profiler instanceof PHPFrame_Profiler) {
             $profiler->addMilestone();
         }
+    }
+
+    /**
+     * Application's destructor.
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function __destruct()
+    {
+        // Register Application's autoload function
+        spl_autoload_unregister(array($this, "autoload"));
     }
 
     /**
@@ -205,6 +219,8 @@ class PHPFrame_Application extends PHPFrame_Observer
      *
      * @return void
      * @since  1.0
+     * @todo   Need to look at implementation of classPrefix() feature and how
+     *         it affects the autoloader.
      */
     public function autoload($class_name)
     {
@@ -232,7 +248,7 @@ class PHPFrame_Application extends PHPFrame_Observer
         $class_name = str_replace($super_class, "", $class_name);
 
         // Remove class prefix if applicable
-        $class_name = str_replace($this->classPrefix(), "", $class_name);
+        //$class_name = str_replace($this->classPrefix(), "", $class_name);
 
         // Build dir path by breaking camel case class name
         $pattern = '/[A-Z]{1}[a-zA-Z0-9]+/';
@@ -252,25 +268,26 @@ class PHPFrame_Application extends PHPFrame_Observer
         }
 
         // Autoload models
-        $models_dir   = $this->_install_dir.DS."src".DS."models";
-        $dir_iterator = new RecursiveDirectoryIterator($models_dir);
-        $filter       = array("php");
-        $iterator     = new RecursiveIteratorIterator(
-            $dir_iterator,
-            RecursiveIteratorIterator::SELF_FIRST
-        );
+        $models_dir = $this->_install_dir.DS."src".DS."models";
+        if (is_dir($models_dir)) {
+            $dir_iterator = new RecursiveDirectoryIterator($models_dir);
+            $filter       = array("php");
+            $iterator     = new RecursiveIteratorIterator(
+                $dir_iterator,
+                RecursiveIteratorIterator::SELF_FIRST
+            );
 
-        foreach ($iterator as $file) {
-            //echo $file->getRealPath(); continue;
-            if (in_array(end(explode('.', $file->getFileName())), $filter)) {
-                $file_name_no_ext = substr(
-                    $file->getFileName(),
-                    0,
-                    strpos($file->getFileName(), ".")
-                );
+            foreach ($iterator as $file) {
+                if (in_array(end(explode('.', $file->getFileName())), $filter)) {
+                    $file_name_no_ext = substr(
+                        $file->getFileName(),
+                        0,
+                        strpos($file->getFileName(), ".")
+                    );
 
-                if (strtolower($class_name) == strtolower($file_name_no_ext)) {
-                    include $file->getRealPath();
+                    if (strtolower($class_name) == strtolower($file_name_no_ext)) {
+                        include $file->getRealPath();
+                    }
                 }
             }
         }
@@ -296,20 +313,51 @@ class PHPFrame_Application extends PHPFrame_Observer
      */
     protected function doUpdate(PHPFrame_Subject $subject)
     {
+        $response = $this->response();
+
         if ($subject instanceof PHPFrame_ExceptionHandler) {
             $exception = $subject->lastException();
-            $this->response()->statusCode($exception->getCode());
-            $this->response()->title("Oooops... an error occurred");
+
+            $code = $exception->getCode();
+            if (!in_array($code, array(400, 401, 403, 404, 500))) {
+                $code = 500;
+            }
+
+            $response->statusCode($code);
+            $response->title("Oooops... an error occurred");
 
             $display_exceptions = $this->config()->get("debug.display_exceptions");
             if ($display_exceptions) {
-                $this->response()->body($exception);
+                $response->body($exception);
             } else {
-                $this->response()->body("Ooooops... An error occurred.");
+                switch ($code) {
+                case 400 :
+                    $msg = "Bad Request";
+                    break;
+                case 401 :
+                    $msg = "Unauthorised";
+                    break;
+                case 403 :
+                    $msg = "Forbidden";
+                    break;
+                case 404 :
+                    $msg = "Not Found";
+                    break;
+                case 500 :
+                    $msg = "Internal Server Error";
+                    break;
+                }
+
+                if ($response->renderer() instanceof PHPFrame_RPCRenderer) {
+                    $msg = new Exception($msg, $code);
+                }
+
+                $response->body($msg);
             }
 
-            $this->response()->send();
-            exit;
+            $this->output();
+
+            exit($code);
         }
     }
 
@@ -520,11 +568,20 @@ class PHPFrame_Application extends PHPFrame_Observer
      */
     public function imap(PHPFrame_IMAP $imap=null)
     {
+        $imap_enabled = (bool) $this->config()->get("imap.enable");
+
         if (!is_null($imap)) {
             $this->registry()->set("imap", $imap);
 
-        } elseif (is_null($this->registry()->get("imap"))) {
-            $this->registry()->set("imap", new PHPFrame_IMAP());
+        } elseif (is_null($this->registry()->get("imap")) && $imap_enabled) {
+            $this->registry()->set(
+                "imap",
+                new PHPFrame_IMAP(
+                    $this->config()->get("imap.host"),
+                    $this->config()->get("imap.user"),
+                    $this->config()->get("imap.pass")
+                )
+            );
         }
 
         return $this->registry()->get("imap");
@@ -677,6 +734,26 @@ class PHPFrame_Application extends PHPFrame_Observer
     }
 
     /**
+     * Get/set Crypt object.
+     *
+     * @param PHPFrame_Crypt $crypt [Optional]
+     *
+     * @return PHPFrame_Crypt
+     * @since  1.0
+     */
+    public function crypt(PHPFrame_Crypt $crypt=null)
+    {
+        if (!is_null($crypt)) {
+            $this->registry()->set("crypt", $crypt);
+        } elseif (is_null($this->registry()->get("crypt"))) {
+            $secret = $this->config()->get("secret");
+            $this->registry()->set("crypt", new PHPFrame_Crypt($secret));
+        }
+
+        return $this->registry()->get("crypt");
+    }
+
+    /**
      * Get/set reference to MVC factory object.
      *
      * @param PHPFrame_MVCFactory $mvc_factory [Optional] Reference to
@@ -730,9 +807,6 @@ class PHPFrame_Application extends PHPFrame_Observer
         } else {
             $this->request($request);
         }
-
-        // Acquire instance of Plugin Handler
-        $this->_plugin_handler = new PHPFrame_PluginHandler($this);
 
         // Register installed plugins with plugin handler
         foreach ($this->plugins() as $plugin) {
@@ -797,11 +871,38 @@ class PHPFrame_Application extends PHPFrame_Observer
 
             // Invoke postDispatch hook for every iteration of the dispatch loop
             $this->_plugin_handler->handle("postDispatch");
+
+            // Redirect if set in controller
+            $status_code  = $this->response()->statusCode();
+            $redirect_url = $this->response()->header("Location");
+
+            if (in_array($status_code, array(301, 303, 307))) {
+                if (!$redirect_url) {
+                    $msg  = "HTTP status code was set to ".$status_code." but ";
+                    $msg .= "no redirect URL was specified in the Location ";
+                    $msg .= "header.";
+                    throw new LogicException($msg);
+                }
+
+                $this->session()->getClient()->redirect($redirect_url);
+            }
         }
 
         // Invoke dispatchLoopShutdown hook
         $this->_plugin_handler->handle("dispatchLoopShutdown");
 
+        $this->output();
+    }
+
+    /**
+     * Process response and send output.
+     *
+     * @return void
+     * @since  1.0
+     */
+    protected function output()
+    {
+        $request  = $this->request();
         $response = $this->response();
 
         // Invoke dispatchLoopShutdown hook
@@ -831,7 +932,7 @@ class PHPFrame_Application extends PHPFrame_Observer
 
         } elseif ($renderer instanceof PHPFrame_RPCRenderer) {
             if (count($sysevents) > 0) {
-                $sysevents->statusCode($this->response()->statusCode());
+                $sysevents->statusCode($response->statusCode());
                 $renderer->render($sysevents);
             }
         }
@@ -865,7 +966,8 @@ class PHPFrame_Application extends PHPFrame_Observer
 
             // Display output if set in config
             if ($profiler_display) {
-                if ($this->session()->getClientName() != "cli") {
+                $client = $this->session()->getClient();
+                if (!$client instanceof PHPFrame_CLIClient) {
                     echo "<pre>";
                 }
 

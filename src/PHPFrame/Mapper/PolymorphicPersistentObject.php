@@ -151,7 +151,9 @@ abstract class PHPFrame_PolymorphicPersistentObject
             throw new InvalidArgumentException($msg);
         }
 
-        if (!array_key_exists($key, $this->fields["params"])) {
+        if (!is_array($this->fields["params"])
+            || !array_key_exists($key, $this->fields["params"])
+        ) {
             return null;
         }
 
@@ -159,7 +161,16 @@ abstract class PHPFrame_PolymorphicPersistentObject
     }
 
     /**
-     * Get array containing subtype parameter definition.
+     * Get array containing subtype parameter definition. This should return
+     * an array containing associative arrays describing each parameter.
+     * Parameters are defined using associative arrays with the following
+     * structure:
+     *
+     * "myParam" => array(
+     *       "def_value"  => null,
+     *       "allow_null" => false,
+     *       "filter"     => new PHPFrame_StringFilter()
+     *   )
      *
      * @return array
      * @since  1.0

@@ -92,7 +92,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      *
      * @var array
      */
-    private $_data = array();
+    protected $data = array();
 
     /**
      * Constructor
@@ -128,32 +128,16 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
         session_start();
 
         // Get reference to session super global
-        $this->_data =& $_SESSION;
+        $this->data =& $_SESSION;
 
         // If new session we initialise
-        if (!isset($this->_data['id']) || $this->_data['id'] != session_id()) {
-            // Store session id in session array
-            $this->_data['id'] = session_id();
-
-            // Acquire session user object
-            $this->_data['user'] = new PHPFrame_User();
-            $this->_data['user']->id(0);
-            $this->_data['user']->groupId(0);
-            $this->_data['user']->email("guest@localhost.local");
-
-            // Acquire sysevents object
-            $this->_data['sysevents'] = new PHPFrame_Sysevents();
-
-            // Generate session token
-            $this->getToken(true);
-
-            // Detect client for this session
-            $this->detectClient();
+        if (!isset($this->data["id"]) || $this->data["id"] != session_id()) {
+            $this->_initSession();
 
         } elseif (
             isset($_SERVER["CONTENT_TYPE"])
             && $_SERVER["CONTENT_TYPE"] == "text/xml"
-            && !$this->_data['client'] instanceof PHPFrame_XMLRPCClient
+            && !$this->data["client"] instanceof PHPFrame_XMLRPCClient
         ) {
             /*
              * If we are dealing with an api request that already has an
@@ -170,13 +154,49 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
                     && $_SERVER["CONTENT_TYPE"] != "text/xml"
                 )
             )
-            && $this->_data['client'] instanceof PHPFrame_XMLRPCClient
+            && $this->data["client"] instanceof PHPFrame_XMLRPCClient
         ) {
             // If we already have a session with an xmlrpc client object but no
             // api headers are included in request we then revert the client
             // and user objects
             $this->detectClient();
         }
+    }
+
+    /**
+     * Initialise session data.
+     *
+     * @return void
+     * @since  1.0
+     */
+    private function _initSession()
+    {
+        $this->data = array(
+            "id"        => null,
+            "token"     => null,
+            "user"      => null,
+            "client"    => null,
+            "sysevents" => null,
+            "params"    => array()
+        );
+
+        // Store session id in session array
+        $this->data["id"] = session_id();
+
+        // Acquire session user object
+        $this->data["user"] = new PHPFrame_User();
+        $this->data["user"]->id(0);
+        $this->data["user"]->groupId(0);
+        $this->data["user"]->email("guest@localhost.local");
+
+        // Acquire sysevents object
+        $this->data["sysevents"] = new PHPFrame_Sysevents();
+
+        // Generate session token
+        $this->getToken(true);
+
+        // Detect client for this session
+        $this->detectClient();
     }
 
     /**
@@ -205,7 +225,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->_data);
+        return new ArrayIterator($this->data);
     }
 
     /**
@@ -222,16 +242,16 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     public function get($key, $default_value=null)
     {
         // Set default value if applicable
-        if (!isset($this->_data[$key]) && !is_null($default_value)) {
-            $this->_data[$key] = $default_value;
+        if (!isset($this->data["params"][$key]) && !is_null($default_value)) {
+            $this->data["params"][$key] = $default_value;
         }
 
         // If key is not set in session super global we return null
-        if (!isset($this->_data[$key])) {
+        if (!isset($this->data["params"][$key])) {
             return null;
         }
 
-        return $this->_data[$key];
+        return $this->data["params"][$key];
     }
 
     /**
@@ -246,7 +266,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     public function set($key, $value)
     {
-        $this->_data[$key] = $value;
+        $this->data["params"][$key] = $value;
     }
 
     /**
@@ -257,7 +277,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     public function getId()
     {
-        return $this->_data['id'];
+        return $this->data["id"];
     }
 
     /**
@@ -279,31 +299,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     public function getClient()
     {
-        if (isset($this->_data['client'])
-            && $this->_data['client'] instanceof PHPFrame_Client
-        ) {
-            return $this->_data['client'];
-        }
-
-        return null;
-    }
-
-
-    /**
-     * Get client object's name
-     *
-     * @return string
-     * @since  1.0
-     */
-    public function getClientName()
-    {
-        if (isset($this->_data['client'])
-            && $this->_data['client'] instanceof PHPFrame_Client
-        ) {
-            return $this->_data['client']->getName();
-        }
-
-        return null;
+        return $this->data["client"];
     }
 
     /**
@@ -316,7 +312,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     public function setUser(PHPFrame_User $user)
     {
-        $this->_data['user'] = $user;
+        $this->data["user"] = $user;
     }
 
     /**
@@ -327,47 +323,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     public function getUser()
     {
-        if (isset($this->_data['user'])
-            && $this->_data['user'] instanceof PHPFrame_User
-        ) {
-            return $this->_data['user'];
-        }
-
-        return null;
-    }
-
-    /**
-     * Get session user id
-     *
-     * @return int
-     * @since  1.0
-     */
-    public function getUserId()
-    {
-        if (isset($this->_data['user'])
-            && $this->_data['user'] instanceof PHPFrame_User
-        ) {
-            return (int) $this->_data['user']->id();
-        }
-
-        return 0;
-    }
-
-    /**
-     * Get session user groupid
-     *
-     * @return int
-     * @since  1.0
-     */
-    public function getGroupId()
-    {
-        if (isset($this->_data['user'])
-            && $this->_data['user'] instanceof PHPFrame_User
-        ) {
-            return (int) $this->_data['user']->groupId();
-        }
-
-        return 0;
+        return $this->data["user"];
     }
 
     /**
@@ -378,9 +334,9 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     public function isAuth()
     {
-        if (isset($this->_data['user'])
-            && $this->_data['user'] instanceof PHPFrame_User
-            && $this->_data['user']->id() > 0
+        if (isset($this->data["user"])
+            && $this->data["user"] instanceof PHPFrame_User
+            && $this->data["user"]->id() > 0
         ) {
             return true;
         }
@@ -397,7 +353,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     public function isAdmin()
     {
         if ($this->isAuth()) {
-            return ($this->_data['user']->groupId() == 1);
+            return ($this->data["user"]->groupId() == 1);
         }
 
         return false;
@@ -411,13 +367,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      */
     public function getSysevents()
     {
-        if (isset($this->_data['sysevents'])
-            && $this->_data['sysevents'] instanceof PHPFrame_Sysevents
-        ) {
-            return $this->_data['sysevents'];
-        }
-
-        return null;
+        return $this->data["sysevents"];
     }
 
     /**
@@ -435,28 +385,11 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     public function getToken($force_new=false)
     {
         //create a token
-        if (!isset($this->_data['token']) || $force_new) {
-            $this->_data['token'] = $this->_createToken(12);
+        if (!isset($this->data["token"]) || $force_new) {
+            $this->data["token"] = $this->_createToken(12);
         }
 
-        return $this->_data['token'];
-    }
-
-    /**
-     * Checks for a form token in the request
-     *
-     * @return bool TRUE if found and valid, FALSE otherwise
-     * @since  1.0
-     */
-    public function checkToken()
-    {
-        $request_token = PHPFrame::Request()->getParam($this->getToken(), '');
-
-        if ($request_token == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->data["token"];
     }
 
     /**
@@ -464,23 +397,35 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
      *
      * @return void
      * @since  1.0
+     * @todo   This method needs to clear the session state and all its data as
+     *         well as initialising the object as a new session.
      */
     public function destroy()
     {
-        // this destroys the session and generates a new session id
-        session_regenerate_id(true);
+        $this->data = array();
 
-        // Delete cookie. This has to be done using the same parameters
-        // used when creating the cookie
-        setcookie(
-            $this->_session_name,
-            "",
-            time() - 3600,
-            $this->_cookie_path,
-            null,
-            $this->_cookie_secure,
-            $this->_cookie_httponly
-        );
+        // this destroys the session and generates a new session id
+        if (!headers_sent()) {
+            session_regenerate_id(true);
+
+            // Delete cookie. This has to be done using the same parameters
+            // used when creating the cookie
+            setcookie(
+                $this->_session_name,
+                "",
+                time() - 3600,
+                $this->_cookie_path,
+                null,
+                $this->_cookie_secure,
+                $this->_cookie_httponly
+            );
+        }
+
+        if (session_id()) {
+            session_destroy();
+        }
+
+        $this->_initSession();
     }
 
     /**
@@ -492,8 +437,7 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     protected function detectClient()
     {
         // Build array with available clients
-        //TODO: This should be read from directory
-        $available_clients = array("CLI", "XMLRPC", "Mobile", "Default");
+        $available_clients = array("CLI", "XMLRPC", "Default");
 
         //loop through files
         foreach ($available_clients as $client) {
@@ -505,14 +449,11 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
                 if ($client instanceof PHPFrame_Client) {
                     // store instance and break out of the method if we found
                     // our helper
-                    $this->set("client", $client);
+                    $this->data["client"] = $client;
                     return;
                 }
             }
         }
-
-        //throw error if no helper is found
-        throw new RuntimeException("ERROR: No client could be found!");
     }
 
     /**

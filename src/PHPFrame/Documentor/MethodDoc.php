@@ -26,6 +26,12 @@
  */
 class PHPFrame_MethodDoc extends ReflectionMethod
 {
+    /**
+     * Convert object to string.
+     *
+     * @return string
+     * @since  1.0
+     */
     public function __toString()
     {
         $str = $this->getName()."(";

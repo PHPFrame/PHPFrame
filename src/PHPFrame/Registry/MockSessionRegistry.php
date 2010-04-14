@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Registry/MockSessionRegistry.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Registry
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * Mock Session Registry Class
- * 
+ *
  * @category PHPFrame
  * @package  Registry
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -34,35 +34,35 @@ class PHPFrame_MockSessionRegistry extends PHPFrame_SessionRegistry
 
     /**
      * Constructor.
-     * 
+     *
      * @return void
      * @since  1.0
      */
     protected function __construct()
     {
         // Store session id in session array
-        $this->set('id', session_id());
-            
+        $this->data["id"] = session_id();
+
         // Acquire session user object
         $user = new PHPFrame_User();
         $user->id(1);
         $user->groupId(1);
         $user->email("test@localhost.local");
-        $this->set('user', $user);
-            
+        $this->data["user"] = $user;
+
         // Acquire sysevents object
-        $this->set('sysevents', new PHPFrame_Sysevents());
-            
+        $this->data["sysevents"] = new PHPFrame_Sysevents();
+
         // Generate session token
         $this->getToken(true);
-            
+
         // Detect client for this session
         $this->detectClient();
     }
-    
+
     /**
      * Get Instance
-     * 
+     *
      * @return PHPFrame_Registry
      * @since  1.0
      */

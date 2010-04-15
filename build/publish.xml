@@ -67,13 +67,6 @@
             </fileset>
         </copy>
 
-        <!-- copy example files -->
-        <copy todir="${tmp.dir}/examples" overwrite="true">
-            <fileset dir="${basedir}/examples">
-                <include name="**" />
-            </fileset>
-        </copy>
-
         <!-- copy scripts files -->
         <copy todir="${tmp.dir}" overwrite="true">
             <fileset dir="${basedir}/scripts">

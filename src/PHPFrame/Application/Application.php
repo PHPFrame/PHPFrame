@@ -161,8 +161,9 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $this->$prop_name = $this->_install_dir.DS.$value;
             }
 
-            if ((!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
-                || !is_writable($this->$prop_name)
+            if ($key != "config_dir"
+                && ((!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
+                || !is_writable($this->$prop_name))
             ) {
                 $msg = "Directory ".$this->$prop_name." is not writable.";
                 throw new RuntimeException($msg);

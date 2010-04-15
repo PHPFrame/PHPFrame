@@ -198,25 +198,4 @@ class PHPFrame_User extends PHPFrame_PersistentObject
 
         return $this->fields["params"];
     }
-
-    /**
-     * Create enrypted password
-     *
-     * @param string $str The unencrypted password.
-     *
-     * @return string
-     * @since  1.0
-     */
-    public function encryptPassword($str)
-    {
-        $str = $this->validate("password", $str);
-
-        // Get random 32 char salt
-        $salt = PHPFrame_Crypt::genRandomPassword(32);
-        // Encrypt password using salt
-        $crypt = PHPFrame_Crypt::getCryptedPassword($str, $salt);
-
-        // Set password to encrypted string
-        return $crypt.':'.$salt;
-    }
 }

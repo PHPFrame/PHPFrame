@@ -26,67 +26,22 @@
  */
 class PHPFrame_XMLRPCClient extends PHPFrame_Client
 {
-    private $_request_dom;
-
-    /**
-     * Constructor.
-     *
-     * @param DOMDocument $request_dom [Optional]
-     *
-     * @return void
-     * @since  1.0
-     */
-    public function __construct(DOMDocument $request_dom=null)
-    {
-        if (is_null($request_dom)) {
-            $request_dom = $this->_initDom();
-        }
-
-        $this->_request_dom = $request_dom;
-    }
-
-    /**
-     * Magic method invoked when serialising object.
-     *
-     * @return araay
-     * @since  1.0
-     */
-    public function __sleep()
-    {
-        return array();
-    }
-
-    /**
-     * Magic method invoked when unserialising object.
-     *
-     * @return void
-     * @since  1.0
-     */
-    public function __wakeup()
-    {
-        if (!isset($_SERVER["CONTENT_TYPE"])
-            || $_SERVER["CONTENT_TYPE"] != "text/xml"
-        ) {
-            return;
-        }
-
-        $this->_request_dom = $this->_initDom();
-    }
-
     /**
      * Initialise DOM object with XML passed in request body.
      *
+     * @param string $xml_payload String containing the request XML.
+     *
      * @return DOMDocument
+     * @throws InvalidArgumentException, RuntimeException
      * @since  1.0
      */
-    private function _initDom()
+    private function _createDom($xml_payload)
     {
-        $request_body = file_get_contents("php://input");
         $request_dom  = new DOMDocument();
         $request_dom->preserveWhiteSpace = false;
-        if (!empty($request_body) && $request_dom->loadXML($request_body)) {
+        if ($request_dom->loadXML($xml_payload)) {
             $xpath = new DOMXPath($request_dom);
-            //check for valid RPC
+            //check for valid RPC structure
             $query       = "//methodCall/methodName";
             $method_node = $xpath->query($query)->item(0);
             if ($method_node->nodeValue == null) {
@@ -205,7 +160,7 @@ class PHPFrame_XMLRPCClient extends PHPFrame_Client
     private function _parseXMLRPCRequest(PHPFrame_Request $request)
     {
         $array = array();
-        $xpath = new DOMXPath($this->_request_dom);
+        $xpath = new DOMXPath($this->_createDom($request->body()));
         $query_result = $xpath->query("//methodCall/methodName");
         $method_name = $query_result->item(0)->nodeValue;
         //look for 'controller.action' format

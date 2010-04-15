@@ -142,5 +142,7 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
         } else {
             echo '<meta http-equiv="refresh" content="1; URL='.$url.'">';
         }
+
+        exit(0);
     }
 }

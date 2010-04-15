@@ -114,17 +114,16 @@ class PHPFrame_Application extends PHPFrame_Observer
     /**
      * Constructor
      *
-     * @param array $options [Optional] An associative array with the following
-     *                                  keys:
-     *                                  - install_dir [Required]
-     *                                  - config_dir  [Optional]
-     *                                  - var_dir     [Optional]
-     *                                  - tmp_dir     [Optional]
+     * @param array $options An associative array with the following keys:
+     *                       - install_dir [Required]
+     *                       - config_dir  [Optional]
+     *                       - var_dir     [Optional]
+     *                       - tmp_dir     [Optional]
      *
      * @return void
      * @since  1.0
      */
-    public function __construct(array $options=null)
+    public function __construct(array $options)
     {
         if (!isset($options["install_dir"])) {
             $msg  = "Otions array passed to ".get_class($this)."::";
@@ -162,8 +161,9 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $this->$prop_name = $this->_install_dir.DS.$value;
             }
 
-            if ((!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
-                || !is_writable($this->$prop_name)
+            if ($key != "config_dir"
+                && ((!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
+                || !is_writable($this->$prop_name))
             ) {
                 $msg = "Directory ".$this->$prop_name." is not writable.";
                 throw new RuntimeException($msg);
@@ -191,14 +191,6 @@ class PHPFrame_Application extends PHPFrame_Observer
 
         // Acquire instance of Plugin Handler
         $this->_plugin_handler = new PHPFrame_PluginHandler($this);
-
-        // Register installed plugins with plugin handler
-        foreach ($this->plugins() as $plugin) {
-            if ($plugin->enabled()) {
-                $plugin_name = $plugin->name();
-                $this->_plugin_handler->registerPlugin(new $plugin_name($this));
-            }
-        }
 
         // Set profiler milestone
         $profiler = $this->profiler();
@@ -277,25 +269,26 @@ class PHPFrame_Application extends PHPFrame_Observer
         }
 
         // Autoload models
-        $models_dir   = $this->_install_dir.DS."src".DS."models";
-        $dir_iterator = new RecursiveDirectoryIterator($models_dir);
-        $filter       = array("php");
-        $iterator     = new RecursiveIteratorIterator(
-            $dir_iterator,
-            RecursiveIteratorIterator::SELF_FIRST
-        );
+        $models_dir = $this->_install_dir.DS."src".DS."models";
+        if (is_dir($models_dir)) {
+            $dir_iterator = new RecursiveDirectoryIterator($models_dir);
+            $filter       = array("php");
+            $iterator     = new RecursiveIteratorIterator(
+                $dir_iterator,
+                RecursiveIteratorIterator::SELF_FIRST
+            );
 
-        foreach ($iterator as $file) {
-            //echo $file->getRealPath(); continue;
-            if (in_array(end(explode('.', $file->getFileName())), $filter)) {
-                $file_name_no_ext = substr(
-                    $file->getFileName(),
-                    0,
-                    strpos($file->getFileName(), ".")
-                );
+            foreach ($iterator as $file) {
+                if (in_array(end(explode('.', $file->getFileName())), $filter)) {
+                    $file_name_no_ext = substr(
+                        $file->getFileName(),
+                        0,
+                        strpos($file->getFileName(), ".")
+                    );
 
-                if (strtolower($class_name) == strtolower($file_name_no_ext)) {
-                    include $file->getRealPath();
+                    if (strtolower($class_name) == strtolower($file_name_no_ext)) {
+                        include $file->getRealPath();
+                    }
                 }
             }
         }
@@ -378,6 +371,28 @@ class PHPFrame_Application extends PHPFrame_Observer
     public function getInstallDir()
     {
         return $this->_install_dir;
+    }
+
+    /**
+     * Get absolute path to var directory
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function getVarDir()
+    {
+        return $this->_var_dir;
+    }
+
+    /**
+     * Get absolute path to tmp directory
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function getTmpDir()
+    {
+        return $this->_tmp_dir;
     }
 
     /**
@@ -742,6 +757,26 @@ class PHPFrame_Application extends PHPFrame_Observer
     }
 
     /**
+     * Get/set Crypt object.
+     *
+     * @param PHPFrame_Crypt $crypt [Optional]
+     *
+     * @return PHPFrame_Crypt
+     * @since  1.0
+     */
+    public function crypt(PHPFrame_Crypt $crypt=null)
+    {
+        if (!is_null($crypt)) {
+            $this->registry()->set("crypt", $crypt);
+        } elseif (is_null($this->registry()->get("crypt"))) {
+            $secret = $this->config()->get("secret");
+            $this->registry()->set("crypt", new PHPFrame_Crypt($secret));
+        }
+
+        return $this->registry()->get("crypt");
+    }
+
+    /**
      * Get/set reference to MVC factory object.
      *
      * @param PHPFrame_MVCFactory $mvc_factory [Optional] Reference to
@@ -794,6 +829,14 @@ class PHPFrame_Application extends PHPFrame_Observer
             $request = $this->request();
         } else {
             $this->request($request);
+        }
+
+        // Register installed plugins with plugin handler
+        foreach ($this->plugins() as $plugin) {
+            if ($plugin->enabled()) {
+                $plugin_name = $plugin->name();
+                $this->_plugin_handler->registerPlugin(new $plugin_name($this));
+            }
         }
 
         // Invoke route startup hook before request object is initialised
@@ -851,6 +894,21 @@ class PHPFrame_Application extends PHPFrame_Observer
 
             // Invoke postDispatch hook for every iteration of the dispatch loop
             $this->_plugin_handler->handle("postDispatch");
+
+            // Redirect if set in controller
+            $status_code  = $this->response()->statusCode();
+            $redirect_url = $this->response()->header("Location");
+
+            if (in_array($status_code, array(301, 303, 307))) {
+                if (!$redirect_url) {
+                    $msg  = "HTTP status code was set to ".$status_code." but ";
+                    $msg .= "no redirect URL was specified in the Location ";
+                    $msg .= "header.";
+                    throw new LogicException($msg);
+                }
+
+                $this->session()->getClient()->redirect($redirect_url);
+            }
         }
 
         // Invoke dispatchLoopShutdown hook

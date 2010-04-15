@@ -522,8 +522,6 @@ class PHPFrame_HTMLUI
     /**
      * Displays a hidden token field to reduce the risk of CSRF exploits.
      *
-     * Use in conjuction with PHPFrame_Crypt::checkToken
-     *
      * @return string
      * @since  1.0
      */

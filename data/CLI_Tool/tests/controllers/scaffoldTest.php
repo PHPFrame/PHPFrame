@@ -14,9 +14,16 @@ class ScaffoldControllerTest extends PHPUnit_Framework_TestCase
         PHPFrame::getSession()->getSysevents()->clear();
 
         $install_dir = preg_replace("/tests\/.*/", "", __FILE__);
+        $home_dir    = PHPFrame_Filesystem::getUserHomeDir();
+        $var_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."var";
+        $tmp_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."tmp";
+
+        PHPFrame_Filesystem::ensureWritableDir($home_dir.DS.".PHPFrame_CLI_Tool");
 
         $this->_app = new PHPFrame_Application(array(
-            "install_dir" => $install_dir
+            "install_dir" => $install_dir,
+            "var_dir"     => $var_dir,
+            "tmp_dir"     => $tmp_dir
         ));
 
         // Create an new app to run the tests on

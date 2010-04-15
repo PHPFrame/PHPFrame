@@ -2,15 +2,15 @@
 // Include framework if not inculded yet
 require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 
-class PHPFrame_MethodDocTest extends PHPUnit_Framework_TestCase
+class PHPFrame_PropertyDocTest extends PHPUnit_Framework_TestCase
 {
-    private $_method_doc;
+    private $_prop_doc;
 
     public function setUp()
     {
-        $this->_method_doc = new PHPFrame_MethodDoc(
+        $this->_prop_doc = new PHPFrame_PropertyDoc(
             "PHPFrame_User",
-            "__construct"
+            "fields"
         );
     }
 
@@ -21,9 +21,6 @@ class PHPFrame_MethodDocTest extends PHPUnit_Framework_TestCase
 
     public function test_toString()
     {
-        $this->assertRegExp(
-            "/".preg_quote("__construct([\$options])")."/",
-            (string) $this->_method_doc
-        );
+        $this->assertEquals("fields", (string) $this->_prop_doc);
     }
 }

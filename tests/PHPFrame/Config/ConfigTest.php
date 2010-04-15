@@ -23,6 +23,35 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
         //...
     }
 
+    public function test_constructFailureNoFile()
+    {
+        $this->setExpectedException("RuntimeException");
+
+        $config = new PHPFrame_Config("aaa");
+    }
+
+    public function test_constructFailureBadData()
+    {
+        $this->setExpectedException("RuntimeException");
+
+        $tmp_file = PHPFrame_Filesystem::getSystemTempDir().DS."phpframe.ini.tmp";
+        if (is_file($tmp_file)) {
+            PHPFrame_Filesystem::rm($tmp_file);
+        }
+
+        file_put_contents($tmp_file, "lskjdnskjnskdjkj");
+
+        $config = new PHPFrame_Config($tmp_file);
+    }
+
+    public function test_toString()
+    {
+        $this->assertRegExp(
+            "/\[general\]\s+app_name = PHPFrame Command Line Tool/",
+            (string) $this->_config
+        );
+    }
+
     public function test_getIterator()
     {
         $array = iterator_to_array($this->_config);
@@ -62,6 +91,21 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals($imap_pass, $imap_pass_updated);
     }
 
+    public function test_bindUnderscores()
+    {
+        $app_name  = $this->_config->get("app_name");
+        $imap_pass = $this->_config->get("imap.pass");
+
+        $array = array("app_name"=>"New app name", "imap_pass"=>"somepassword");
+        $this->_config->bind($array);
+
+        $app_name_updated  = $this->_config->get("app_name");
+        $imap_pass_updated = $this->_config->get("imap.pass");
+
+        $this->assertNotEquals($app_name, $app_name_updated);
+        $this->assertNotEquals($imap_pass, $imap_pass_updated);
+    }
+
     public function test_getSections()
     {
         $sections = $this->_config->getSections();
@@ -91,6 +135,13 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("fromname", $section);
     }
 
+    public function test_getSectionFailure()
+    {
+        $this->setExpectedException("RuntimeException");
+
+        $section = $this->_config->getSection("aaaa");
+    }
+
     public function test_getKeys()
     {
         $keys = $this->_config->getKeys();
@@ -111,11 +162,51 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function test_keyExists()
     {
+        $this->assertFalse($this->_config->keyExists("sss"));
 
+        $this->assertTrue($this->_config->keyExists("app_name"));
+        $this->assertTrue($this->_config->keyExists("imap.enable"));
+    }
+
+    public function test_keyExistsEnsureFailure()
+    {
+        $this->setExpectedException("LogicException");
+
+        $this->_config->keyExists("sss", true);
+    }
+
+    public function test_getPath()
+    {
+        $this->assertTrue(is_file($this->_config->getPath()));
     }
 
     public function test_store()
     {
+        $this->assertEquals("PHPFrame Command Line Tool", $this->_config->get("app_name"));
 
+        $this->_config->set("app_name", "aaa");
+
+        $this->assertEquals("aaa", $this->_config->get("app_name"));
+
+        // Store somewhere else
+        $tmp_file = PHPFrame_Filesystem::getSystemTempDir().DS."phpframe.ini.tmp";
+        if (is_file($tmp_file)) {
+            PHPFrame_Filesystem::rm($tmp_file);
+        }
+        $this->_config->store($tmp_file);
+
+        $config2 = new PHPFrame_Config($tmp_file);
+
+        $this->assertEquals("aaa", $config2->get("app_name"));
+
+        $config2->set("app_name", "bbb");
+
+        $this->assertEquals("bbb", $config2->get("app_name"));
+
+        $config2->store();
+
+        $config3 = new PHPFrame_Config($tmp_file);
+
+        $this->assertEquals("bbb", $config3->get("app_name"));
     }
 }

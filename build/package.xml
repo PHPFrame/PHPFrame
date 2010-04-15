@@ -50,7 +50,6 @@
    <file baseinstalldir="/" name="PHPFrame/Client/CLIClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/Client.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/DefaultClient.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Client/MobileClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/XMLRPCClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Config/Config.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/Database.php" role="php" />
@@ -79,7 +78,6 @@
    <file baseinstalldir="/" name="PHPFrame/Documentor/ControllerDoc.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Documentor/MethodDoc.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Documentor/PropertyDoc.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Exception/AccessDeniedException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/DatabaseException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/ErrorException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/ExceptionHandler.php" role="php" />
@@ -101,7 +99,6 @@
    <file baseinstalldir="/" name="PHPFrame/Filter/URLFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/Validator.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/DownloadRequestListener.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/HTTP/FeedReader.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/HTTPRequest.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />

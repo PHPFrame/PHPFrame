@@ -14,7 +14,18 @@ class PHPFrame_AppDocTest extends PHPUnit_Framework_TestCase
         PHPFrame::dataDir($data_dir);
 
         $install_dir    = preg_replace("/tests.*/", "data/CLI_Tool", __FILE__);
-        $this->_app     = new PHPFrame_Application(array("install_dir"=>$install_dir));
+        $home_dir    = PHPFrame_Filesystem::getUserHomeDir();
+        $var_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."var";
+        $tmp_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."tmp";
+
+        PHPFrame_Filesystem::ensureWritableDir($home_dir.DS.".PHPFrame_CLI_Tool");
+
+        $this->_app = new PHPFrame_Application(array(
+            "install_dir" => $install_dir,
+            "var_dir"     => $var_dir,
+            "tmp_dir"     => $tmp_dir
+        ));
+
         $this->_app_doc = new PHPFrame_AppDoc($install_dir);
     }
 

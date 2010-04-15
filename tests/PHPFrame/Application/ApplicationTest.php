@@ -14,24 +14,36 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         PHPFrame::dataDir($data_dir);
 
         $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
+        $home_dir    = PHPFrame_Filesystem::getUserHomeDir();
+        $var_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."var";
+        $tmp_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."tmp";
 
-        exec("chmod +w ".$install_dir.DS."var");
+        PHPFrame_Filesystem::ensureWritableDir($home_dir.DS.".PHPFrame_CLI_Tool");
 
-        if (is_dir($install_dir.DS."tmp")) {
-            exec("chmod +w ".$install_dir.DS."tmp");
-            PHPFrame_Filesystem::rm($install_dir.DS."tmp", true);
+        if (is_dir($var_dir)) {
+            exec("chmod +w ".$var_dir);
+        }
+
+        if (is_dir($tmp_dir)) {
+            exec("chmod +w ".$tmp_dir);
+            PHPFrame_Filesystem::rm($tmp_dir, true);
         }
 
         // Instantiate application
-        $options    = array("install_dir"=>$install_dir);
-        $this->_app = new PHPFrame_Application($options);
+        $this->_app = new PHPFrame_Application(array(
+            "install_dir" => $install_dir,
+            "var_dir"     => $var_dir,
+            "tmp_dir"     => $tmp_dir
+        ));
     }
 
     public function tearDown()
     {
-        exec("chmod +w ".$this->_app->getInstallDir().DS."tmp");
+        if (is_dir($this->_app->getTmpDir())) {
+            exec("chmod +w ".$this->_app->getTmpDir());
+        }
 
-        $tmp_dir = $this->_app->getInstallDir().DS."tmp";
+        $tmp_dir = $this->_app->getTmpDir();
         $app_reg = $tmp_dir.DS."app.reg";
 
         if (is_file($app_reg)) {
@@ -41,7 +53,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
             PHPFrame_Filesystem::rm($tmp_dir, true);
         }
 
-        $var_dir = $this->_app->getInstallDir().DS."var";
+        $var_dir = $this->_app->getVarDir();
         $app_log = $var_dir.DS."app.log";
         $data_db = $var_dir.DS."data.db";
 
@@ -83,7 +95,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
 
     // public function test_constructVarDirNotWriteableFailure()
     // {
-    //     exec("chmod -w ".$this->_app->getInstallDir().DS."var");
+    //     exec("chmod -w ".$this->_app->getVarDir());
     //
     //     $this->setExpectedException("RuntimeException");
     //
@@ -96,7 +108,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
     //
     // public function test_constructTmpDirNotWriteableFailure()
     // {
-    //     exec("chmod -w ".$this->_app->getInstallDir().DS."tmp");
+    //     exec("chmod -w ".$this->_app->getTmpDir());
     //
     //     $this->setExpectedException("RuntimeException");
     //
@@ -109,17 +121,19 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
 
     public function test_constructTmpDirMkdir()
     {
-        PHPFrame_Filesystem::rm($this->_app->getInstallDir().DS."tmp", true);
+        PHPFrame_Filesystem::rm($this->_app->getTmpDir(), true);
 
-        $this->assertFalse(is_dir($this->_app->getInstallDir().DS."tmp"));
+        $this->assertFalse(is_dir($this->_app->getTmpDir()));
 
         $app = new PHPFrame_Application(
             array(
-                "install_dir" => $this->_app->getInstallDir()
+                "install_dir" => $this->_app->getInstallDir(),
+                "var_dir"     => $this->_app->getVarDir(),
+                "tmp_dir"     => $this->_app->getTmpDir()
             )
         );
 
-        $this->assertTrue(is_dir($this->_app->getInstallDir().DS."tmp"));
+        $this->assertTrue(is_dir($this->_app->getTmpDir()));
     }
 
     public function test_config()

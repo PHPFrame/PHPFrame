@@ -161,7 +161,17 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $theme_url   = "http://testrunner";
         $theme_path  = dirname(__FILE__).DS."html".DS."theme.html";
         $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
-        $app         = new PHPFrame_Application(array("install_dir"=>$install_dir));
+        $home_dir    = PHPFrame_Filesystem::getUserHomeDir();
+        $var_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."var";
+        $tmp_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."tmp";
+
+        PHPFrame_Filesystem::ensureWritableDir($home_dir.DS.".PHPFrame_CLI_Tool");
+
+        $app = new PHPFrame_Application(array(
+            "install_dir" => $install_dir,
+            "var_dir"     => $var_dir,
+            "tmp_dir"     => $tmp_dir
+        ));
 
         $this->_document->applyTheme($theme_url, $theme_path, $app);
 
@@ -179,7 +189,7 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp($pattern, (string) $this->_document);
 
         // Clean up CLI_Tool's cache and var dirs
-        $tmp_dir = $app->getInstallDir().DS."tmp";
+        $tmp_dir = $app->getTmpDir();
         $app_reg = $tmp_dir.DS."app.reg";
 
         if (is_file($app_reg)) {
@@ -189,7 +199,7 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
             rmdir($tmp_dir);
         }
 
-        $var_dir = $app->getInstallDir().DS."var";
+        $var_dir = $app->getVarDir();
         $app_log = $var_dir.DS."app.log";
         $data_db = $var_dir.DS."data.db";
 

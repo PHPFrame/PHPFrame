@@ -374,6 +374,28 @@ class PHPFrame_Application extends PHPFrame_Observer
     }
 
     /**
+     * Get absolute path to var directory
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function getVarDir()
+    {
+        return $this->_var_dir;
+    }
+
+    /**
+     * Get absolute path to tmp directory
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function getTmpDir()
+    {
+        return $this->_tmp_dir;
+    }
+
+    /**
      * Get/set configuration object.
      *
      * @param PHPFrame_Config $config [Optional] The new configuration object

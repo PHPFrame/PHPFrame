@@ -14,10 +14,17 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
         PHPFrame::dataDir($data_dir);
 
         $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
+        $home_dir    = PHPFrame_Filesystem::getUserHomeDir();
+        $var_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."var";
+        $tmp_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."tmp";
 
-        $this->_app = new PHPFrame_Application(
-            array("install_dir"=>$install_dir)
-        );
+        PHPFrame_Filesystem::ensureWritableDir($home_dir.DS.".PHPFrame_CLI_Tool");
+
+        $this->_app = new PHPFrame_Application(array(
+            "install_dir" => $install_dir,
+            "var_dir"     => $var_dir,
+            "tmp_dir"     => $tmp_dir
+        ));
 
         $this->_app->request(new PHPFrame_Request());
 
@@ -27,7 +34,7 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         //...
-        $tmp_dir = $this->_app->getInstallDir().DS."tmp";
+        $tmp_dir = $this->_app->getTmpDir();
         $app_reg = $tmp_dir.DS."app.reg";
 
         if (is_file($app_reg)) {
@@ -37,7 +44,7 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
             rmdir($tmp_dir);
         }
 
-        $var_dir = $this->_app->getInstallDir().DS."var";
+        $var_dir = $this->_app->getVarDir();
         $app_log = $var_dir.DS."app.log";
         $data_db = $var_dir.DS."data.db";
 

@@ -165,27 +165,6 @@
     <tasks:replace from="@package_version@" to="version" type="package-info" />
   </file>
 
-  <file baseinstalldir="" name="PHPFrame_Postinstall.php" role="php">
-    <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
-    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
-    <tasks:replace from="@package_version@" to="version" type="package-info" />
-    <tasks:postinstallscript>
-     <tasks:paramgroup>
-      <tasks:id>Log files</tasks:id>
-      <tasks:param>
-          <tasks:name>CONFIRM</tasks:name>
-       <tasks:prompt>
-The postinstall script will make log files writable to all users. Only do
-this if you will be running PHPFrame as a different user to the one
-installing the PEAR package. If you want to continue type "yes".
-       </tasks:prompt>
-       <tasks:type>string</tasks:type>
-       <tasks:default></tasks:default>
-      </tasks:param>
-     </tasks:paramgroup>
-    </tasks:postinstallscript>
-  </file>
-
   </dir>
  </contents>
  <dependencies>

@@ -63,6 +63,7 @@
             </filterchain>
             <fileset dir="${basedir}/data">
                 <include name="**" />
+                <exclude name="tests/"/>
             </fileset>
         </copy>
 

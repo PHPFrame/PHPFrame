@@ -60,7 +60,6 @@
    <file baseinstalldir="/" name="PHPFrame/Database/SQLiteDatabase.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Informer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Logger.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Debug/Profiler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/TextLogger.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/Document.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/HTMLDocument.php" role="php" />

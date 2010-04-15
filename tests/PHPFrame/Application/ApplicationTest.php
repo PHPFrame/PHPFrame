@@ -193,12 +193,6 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertType("PHPFrame_Informer", $this->_app->informer());
     }
 
-    public function test_profiler()
-    {
-        $this->_app->config()->set("debug.profiler_enable", 1);
-        $this->assertType("PHPFrame_Profiler", $this->_app->profiler());
-    }
-
     public function test_crypt()
     {
         $this->assertType("PHPFrame_Crypt", $this->_app->crypt());

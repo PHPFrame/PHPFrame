@@ -8,7 +8,7 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
     The Debug package ...
     </para>
@@ -17,40 +17,34 @@
 
 <refsect1 id="{@id classes}">
     <title>Classes in Debug Package</title>
-    
+
     <itemizedlist>
         <listitem>
         <para>
         {@link PHPFrame_Informer}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_Logger}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_TextLogger}
         </para>
         </listitem>
-        
-        <listitem>
-        <para>
-        {@link PHPFrame_Profiler}
-        </para>
-        </listitem>
-        
+
     </itemizedlist>
 
 </refsect1>
 
-<!-- 
+<!--
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <example>
         <title></title>
         <para>
@@ -60,15 +54,15 @@
 
 ]]>
         </programlisting>
-        
+
         <screen>
 <![CDATA[
 
 ]]>
         </screen>
-       
+
     </example>
-    
+
 </refsect1>
 -->
 

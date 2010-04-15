@@ -4,6 +4,8 @@ require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 
 class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
 {
+    private $_app, $_plugin;
+
     public function setUp()
     {
         PHPFrame::testMode(true);
@@ -63,7 +65,8 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
             $_SERVER['REQUEST_URI']
         );
 
-        $_SERVER = array();
+        unset($_SERVER['QUERY_STRING']);
+        unset($_SERVER['REQUEST_URI']);
     }
 
     public function test_routeStartupWithRequestParams()
@@ -92,7 +95,8 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
             $_SERVER['REQUEST_URI']
         );
 
-        $_SERVER = array();
+        unset($_SERVER['QUERY_STRING']);
+        unset($_SERVER['REQUEST_URI']);
     }
 
     public function test_routeStartupNonWebRoot()
@@ -121,7 +125,8 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
             $_SERVER['REQUEST_URI']
         );
 
-        $_SERVER = array();
+        unset($_SERVER['QUERY_STRING']);
+        unset($_SERVER['REQUEST_URI']);
     }
 
     public function test_routeStartupNoRequestURI()

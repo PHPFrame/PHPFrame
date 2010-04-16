@@ -23,24 +23,14 @@ class PHPFrame_CryptTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(strlen($hash) == 32);
     }
 
-    public function test_getCryptedPassword()
+    public function test_encryptPassword()
     {
-        $pass = $this->_crypt->getCryptedPassword("MyPassword");
+        $salt = $this->_crypt->genRandomPassword(32);
+        $pass = $this->_crypt->encryptPassword("MyPassword", $salt);
+
         $this->assertType("string", $pass);
         $this->assertTrue(strlen($pass) == 32);
-    }
-
-    public function test_getSalt()
-    {
-        $this->assertEquals(2, strlen($this->_crypt->getSalt("crypt")));
-        if (function_exists("mhash_keygen_s2k")) {
-            $this->assertEquals(4, strlen($this->_crypt->getSalt("ssha")));
-            $this->assertEquals(4, strlen($this->_crypt->getSalt("smd5")));
-        }
-        $this->assertEquals(8, strlen($this->_crypt->getSalt("aprmd5")));
-        $this->assertEquals(12, strlen($this->_crypt->getSalt("crypt-md5")));
-        $this->assertEquals(16, strlen($this->_crypt->getSalt("crypt-blowfish")));
-        $this->assertEquals(32, strlen($this->_crypt->getSalt()));
+        $this->assertEquals(md5("MyPassword".$salt), $pass);
     }
 
     public function test_genRandomPassword()
@@ -56,20 +46,5 @@ class PHPFrame_CryptTest extends PHPUnit_Framework_TestCase
         $pass = $this->_crypt->genRandomPassword(32);
         $this->assertType("string", $pass);
         $this->assertTrue(strlen($pass) == 32);
-    }
-
-    public function test_encryptPassword()
-    {
-        $plain_text = "Passw0rd";
-        $encrypted  = $this->_crypt->encryptPassword($plain_text);
-
-        $this->assertTrue(strlen($encrypted) == 65);
-
-        $parts     = explode(':', $encrypted);
-        $crypt     = $parts[0];
-        $salt      = @$parts[1];
-        $testcrypt = $this->_crypt->getCryptedPassword($plain_text, $salt);
-
-        $this->assertEquals($crypt, $testcrypt);
     }
 }

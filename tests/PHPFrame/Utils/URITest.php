@@ -60,7 +60,10 @@ class PHPFrame_URITest extends PHPUnit_Framework_TestCase
         $uri = new PHPFrame_URI();
         $this->assertRegExp("/http:\/\/localhost\//", (string) $uri);
 
-        $_SERVER = array();
+        unset($_SERVER["HTTP_HOST"]);
+        unset($_SERVER["HTTPS"]);
+        unset($_SERVER["SERVER_PORT"]);
+        unset($_SERVER["REQUEST_URI"]);
     }
 
     public function test_getRequestURIHttpNoFilename()
@@ -73,7 +76,10 @@ class PHPFrame_URITest extends PHPUnit_Framework_TestCase
         $uri = new PHPFrame_URI();
         $this->assertRegExp("/http:\/\/localhost\/beta\//", (string) $uri);
 
-        $_SERVER = array();
+        unset($_SERVER["HTTP_HOST"]);
+        unset($_SERVER["HTTPS"]);
+        unset($_SERVER["SERVER_PORT"]);
+        unset($_SERVER["REQUEST_URI"]);
     }
 
     public function test_getRequestURIHttpPort80()
@@ -86,7 +92,10 @@ class PHPFrame_URITest extends PHPUnit_Framework_TestCase
         $uri = new PHPFrame_URI();
         $this->assertRegExp("/http:\/\/localhost\/index\.php\?controller=dummy/", (string) $uri);
 
-        $_SERVER = array();
+        unset($_SERVER["HTTP_HOST"]);
+        unset($_SERVER["HTTPS"]);
+        unset($_SERVER["SERVER_PORT"]);
+        unset($_SERVER["REQUEST_URI"]);
     }
 
     public function test_getRequestURIHttpsPort443()
@@ -99,7 +108,10 @@ class PHPFrame_URITest extends PHPUnit_Framework_TestCase
         $uri = new PHPFrame_URI();
         $this->assertRegExp("/https:\/\/localhost\/index\.php\?controller=dummy/", (string) $uri);
 
-        $_SERVER = array();
+        unset($_SERVER["HTTP_HOST"]);
+        unset($_SERVER["HTTPS"]);
+        unset($_SERVER["SERVER_PORT"]);
+        unset($_SERVER["REQUEST_URI"]);
     }
 
     public function test_getRequestURIHttpPort8080()
@@ -112,6 +124,9 @@ class PHPFrame_URITest extends PHPUnit_Framework_TestCase
         $uri = new PHPFrame_URI();
         $this->assertRegExp("/http:\/\/localhost:8080\/index\.php\?controller=dummy/", (string) $uri);
 
-        $_SERVER = array();
+        unset($_SERVER["HTTP_HOST"]);
+        unset($_SERVER["HTTPS"]);
+        unset($_SERVER["SERVER_PORT"]);
+        unset($_SERVER["REQUEST_URI"]);
     }
 }

@@ -92,8 +92,8 @@ class PHPFrame_Filesystem
                     );
 
                 } else {
-                    if (!is_dir($dest) && !mkdir($dest)) {
-                        $msg = "Could not create directory '".$new_dir."'.";
+                    if (!is_dir($dest) && !@mkdir($dest)) {
+                        $msg = "Could not create directory '".$dest."'.";
                         throw new RuntimeException($msg);
                     }
 

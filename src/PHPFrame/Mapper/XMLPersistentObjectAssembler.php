@@ -45,9 +45,6 @@ class PHPFrame_XMLPersistentObjectAssembler
     {
         parent::__construct($factory);
 
-        // Make sure the directory is writable
-        PHPFrame_Filesystem::ensureWritableDir($path);
-
         // Create FileInfo object for dir path
         $this->_path_info = new SplFileInfo($path);
 

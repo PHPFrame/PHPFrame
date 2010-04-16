@@ -36,15 +36,27 @@ class PHPFrame_TextLoggerTest extends PHPUnit_Framework_TestCase
     public function test_constructFileCreateFailure()
     {
         $tmp_dir = PHPFrame_Filesystem::getSystemTempDir().DS."aaa";
+
+        if (is_dir($tmp_dir)) {
+            chmod($tmp_dir, 0775);
+            rmdir($tmp_dir);
+        }
+
         mkdir($tmp_dir);
         chmod($tmp_dir, 0555);
+
+        $caught = false;
 
         try {
             $logger = new PHPFrame_TextLogger($tmp_dir.DS."test.log");
         } catch (PHPUnit_Framework_Error $e) {
-            chmod($tmp_dir, 0775);
-            rmdir($tmp_dir);
+            $caught = true;
         }
+
+        $this->assertTrue($caught);
+
+        chmod($tmp_dir, 0775);
+        rmdir($tmp_dir);
     }
 
     public function test_constructFileNotWriteableFailure()

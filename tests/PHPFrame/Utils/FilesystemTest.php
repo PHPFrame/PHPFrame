@@ -267,9 +267,39 @@ class PHPFrame_FilesystemTest extends PHPUnit_Framework_TestCase
         PHPFrame_Filesystem::rm($dir, true);
     }
 
-    public function test_uploadFile()
+    public function test_uploadFileAttackFailure()
     {
+        $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
 
+        if (is_file($tmp_file)) {
+            unlink($tmp_file);
+        }
+
+        touch($tmp_file);
+        file_put_contents($tmp_file, "Lorem ipsum...");
+
+        $this->assertTrue(is_file($tmp_file));
+
+        $file_array = array(
+            "name" => "MyUploadedFile.txt",
+            "type" => "text/plain",
+            "tmp_name" => $tmp_file,
+            "error" => UPLOAD_ERR_OK,
+            "size" => filesize($tmp_file)
+        );
+
+        $caught = false;
+        try {
+            PHPFrame_Filesystem::upload($file_array, $this->_sys_tmp_dir);
+        } catch (RuntimeException $e) {
+            $caught = true;
+        }
+
+        $this->assertTrue($caught);
+
+        if (is_file($tmp_file)) {
+            unlink($tmp_file);
+        }
     }
 
     public function test_getSystemTempDir()

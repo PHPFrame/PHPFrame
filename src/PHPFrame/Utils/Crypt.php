@@ -56,8 +56,8 @@ class PHPFrame_Crypt
     /**
      * Encrypt password using given salt and md5-hex algorithm.
      *
-     * @param string $plaintext    The plaintext password to encrypt.
-     * @param string $salt         The salt to use to encrypt the password.
+     * @param string $plaintext The plaintext password to encrypt.
+     * @param string $salt      The salt to use to encrypt the password.
      *
      * @return string The encrypted password.
      * @since  1.0

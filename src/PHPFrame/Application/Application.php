@@ -700,7 +700,9 @@ class PHPFrame_Application extends PHPFrame_Observer
      */
     public function informer(PHPFrame_Informer $informer=null)
     {
-        if ($this->config()->get("debug.informer_level") <= 0) {
+        $informer_level = $this->config()->get("debug.informer_level");
+
+        if ($informer_level <= 0) {
             return;
         }
 
@@ -720,7 +722,9 @@ class PHPFrame_Application extends PHPFrame_Observer
                 throw new LogicException($msg);
             }
 
-            $this->_setInformer(new PHPFrame_Informer($mailer, $recipients));
+            $this->_setInformer(
+                new PHPFrame_Informer($mailer, $recipients, $informer_level)
+            );
         }
 
         return $this->registry()->get("informer");

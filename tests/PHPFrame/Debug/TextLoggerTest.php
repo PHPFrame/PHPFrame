@@ -39,7 +39,7 @@ class PHPFrame_TextLoggerTest extends PHPUnit_Framework_TestCase
 
         if (is_dir($tmp_dir)) {
             chmod($tmp_dir, 0775);
-            rmdir($tmp_dir);
+            PHPFrame_Filesystem::rm($tmp_dir, true);
         }
 
         mkdir($tmp_dir);
@@ -56,7 +56,7 @@ class PHPFrame_TextLoggerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($caught);
 
         chmod($tmp_dir, 0775);
-        rmdir($tmp_dir);
+        PHPFrame_Filesystem::rm($tmp_dir, true);
     }
 
     public function test_constructFileNotWriteableFailure()

@@ -39,7 +39,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      *
      * @var string
      */
-    private $_default_action = null;
+    private $_def_action = null;
     /**
      * Reference to application object for which controller will execute action
      *
@@ -50,37 +50,34 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     /**
      * Constructor
      *
-     * @param string $default_action A string with the default action for a
-     *                               concrete action controller.
+     * @param PHPFrame_Application $app        Reference to application object.
+     * @param string               $def_action A string with the default action
+     *                                         for a concrete controller.
      *
      * @return void
      * @since  1.0
      */
-    public function __construct($default_action)
+    public function __construct(PHPFrame_Application $app, $def_action)
     {
-        // Set default action property
-        $this->_default_action = (string) $default_action;
+        $this->_app = $app;
+        $this->_def_action = (string) $def_action;
     }
 
     /**
      * This method executes a given action (invokes a named member method).
      *
-     * @param PHPFrame_Application $app Reference to application object.
-     *
      * @return void
      * @since  1.0
      */
-    public function execute(PHPFrame_Application $app)
+    public function execute()
     {
-        $this->_app = $app;
-
         // Get action from the request
-        $request_action = $app->request()->action();
+        $request_action = $this->app()->request()->action();
 
         // If no specific action has been requested we use default action
         if (empty($request_action)) {
-            $action = $this->_default_action;
-            $app->request()->action($action);
+            $action = $this->_def_action;
+            $this->app()->request()->action($action);
         } else {
             $action = $request_action;
         }

@@ -78,7 +78,7 @@ class PHPFrame_MVCFactory
             throw new LogicException($msg);
         }
 
-        return $reflection_obj->newInstance();
+        return $reflection_obj->newInstance($this->_app);
     }
 
     /**

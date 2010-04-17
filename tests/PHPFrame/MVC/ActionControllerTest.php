@@ -28,7 +28,7 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
 
         $this->_app->request(new PHPFrame_Request());
 
-        $this->_controller = new TestableActionController();
+        $this->_controller = new TestableActionController($this->_app);
     }
 
     public function tearDown()
@@ -64,7 +64,7 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("", (string) $this->_app->response()->document());
         $this->assertNull($this->_app->request()->action());
 
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $pattern = "/The page title\n==============\n\nLorem ipsum.../";
         $this->assertRegExp($pattern, (string) $this->_app->response()->document());
@@ -78,7 +78,7 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException("BadMethodCallException");
 
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
     }
 
     public function test_executeProtectedActionFailure()
@@ -92,49 +92,49 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
 
     public function test_app()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $this->assertType("PHPFrame_Application", $this->_controller->app());
     }
 
     public function test_config()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $this->assertType("PHPFrame_Config", $this->_controller->config());
     }
 
     public function test_request()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $this->assertType("PHPFrame_Request", $this->_controller->request());
     }
 
     public function test_response()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $this->assertType("PHPFrame_Response", $this->_controller->response());
     }
 
     public function test_registry()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $this->assertType("PHPFrame_Registry", $this->_controller->registry());
     }
 
     public function test_mailer()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $this->assertNull($this->_controller->mailer());
     }
 
     public function test_imap()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $this->assertFalse((bool) $this->_app->config()->get("imap.enable"));
         $this->assertNull($this->_controller->imap());
@@ -142,21 +142,21 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
 
     public function test_logger()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $this->assertType("PHPFrame_Logger", $this->_controller->logger());
     }
 
     public function test_session()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $this->assertType("PHPFrame_SessionRegistry", $this->_controller->session());
     }
 
     public function test_user()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $this->assertType("PHPFrame_User", $this->_controller->user());
     }
@@ -173,7 +173,7 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
 
     public function test_setRedirect()
     {
-        $this->_controller->execute($this->_app);
+        $this->_controller->execute();
 
         $redirect_url = "index.php?controller=dummy&action=index&param1=1";
         $this->_controller->setRedirect($redirect_url);
@@ -245,9 +245,9 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
 
 class TestableActionController extends PHPFrame_ActionController
 {
-    public function __construct()
+    public function __construct(PHPFrame_Application $app)
     {
-        parent::__construct("index");
+        parent::__construct($app, "index");
     }
 
     public function index()

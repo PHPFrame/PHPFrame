@@ -58,7 +58,6 @@ class PHPFrame_DateFilter extends PHPFrame_Filter
      */
     public function process($value)
     {
-        $value = @filter_var($value);
         if (!is_string($value)) {
             $msg  = "Value passed to ".get_class($this)."::".__FUNCTION__."()";
             $msg .= " must be of type string.";

@@ -864,7 +864,7 @@ class PHPFrame_Application extends PHPFrame_Observer
             }
 
             // Execute the action in the given controller
-            $controller->execute($this);
+            $controller->execute();
 
             // Invoke postDispatch hook for every iteration of the dispatch loop
             $this->_plugin_handler->handle("postDispatch");

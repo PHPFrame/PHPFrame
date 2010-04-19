@@ -10,6 +10,9 @@ class PHPFrame_SyseventsTest extends PHPUnit_Framework_TestCase
     {
         PHPFrame::testMode(true);
 
+        $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
+        PHPFrame::dataDir($data_dir);
+
         $this->_sysevents = new PHPFrame_Sysevents();
     }
 
@@ -106,6 +109,19 @@ class PHPFrame_SyseventsTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue(count($this->_sysevents) == 0);
 
+        $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
+        $home_dir    = PHPFrame_Filesystem::getUserHomeDir();
+        $var_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."var";
+        $tmp_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."tmp";
+
+        PHPFrame_Filesystem::ensureWritableDir($home_dir.DS.".PHPFrame_CLI_Tool");
+
+        $app = new PHPFrame_Application(array(
+            "install_dir" => $install_dir,
+            "var_dir"     => $var_dir,
+            "tmp_dir"     => $tmp_dir
+        ));
+
         // Include testable controller
         require_once preg_replace(
             "/Application\/.+/",
@@ -113,12 +129,14 @@ class PHPFrame_SyseventsTest extends PHPUnit_Framework_TestCase
             __FILE__
         );
 
-        $subject = new TestableActionController();
+        $subject = new TestableActionController($app);
 
         $subject->raiseError("some error occurred...");
         $this->_sysevents->update($subject);
 
         $this->assertTrue(count($this->_sysevents) == 1);
+
+        $app->__destruct();
     }
 
     public function test_statusCode()

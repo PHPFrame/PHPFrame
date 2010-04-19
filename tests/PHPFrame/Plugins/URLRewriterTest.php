@@ -4,6 +4,8 @@ require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 
 class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
 {
+    private $_app, $_plugin;
+
     public function setUp()
     {
         PHPFrame::testMode(true);
@@ -12,14 +14,21 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
         PHPFrame::dataDir($data_dir);
 
         $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
+        $home_dir    = PHPFrame_Filesystem::getUserHomeDir();
+        $var_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."var";
+        $tmp_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."tmp";
 
-        if (is_dir($install_dir.DS."tmp")) {
-            PHPFrame_Filesystem::rm($install_dir.DS."tmp", true);
+        PHPFrame_Filesystem::ensureWritableDir($home_dir.DS.".PHPFrame_CLI_Tool");
+
+        if (is_dir($tmp_dir)) {
+            PHPFrame_Filesystem::rm($tmp_dir, true);
         }
 
-        // Instantiate application
-        $options    = array("install_dir"=>$install_dir);
-        $this->_app = new PHPFrame_Application($options);
+        $this->_app = new PHPFrame_Application(array(
+            "install_dir" => $install_dir,
+            "var_dir"     => $var_dir,
+            "tmp_dir"     => $tmp_dir
+        ));
 
         $this->_plugin = new PHPFrame_URLRewriter($this->_app);
     }
@@ -56,7 +65,8 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
             $_SERVER['REQUEST_URI']
         );
 
-        $_SERVER = array();
+        unset($_SERVER['QUERY_STRING']);
+        unset($_SERVER['REQUEST_URI']);
     }
 
     public function test_routeStartupWithRequestParams()
@@ -85,7 +95,8 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
             $_SERVER['REQUEST_URI']
         );
 
-        $_SERVER = array();
+        unset($_SERVER['QUERY_STRING']);
+        unset($_SERVER['REQUEST_URI']);
     }
 
     public function test_routeStartupNonWebRoot()
@@ -114,7 +125,8 @@ class PHPFrame_URLRewriterTest extends PHPUnit_Framework_TestCase
             $_SERVER['REQUEST_URI']
         );
 
-        $_SERVER = array();
+        unset($_SERVER['QUERY_STRING']);
+        unset($_SERVER['REQUEST_URI']);
     }
 
     public function test_routeStartupNoRequestURI()

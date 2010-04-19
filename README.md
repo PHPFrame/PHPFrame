@@ -65,8 +65,7 @@ Installing PHPFrame with the PEAR command line installer
 1. `pear channel-discover pear.phpframe.org`
 2. `pear config-set preferred_state alpha`
 3. `pear install phpframe/PHPFrame`
-4. `pear run-scripts phpframe/PHPFrame`
-5. `pear config-set preferred_state stable`
+4. `pear config-set preferred_state stable`
 
 
 Command line tool examples

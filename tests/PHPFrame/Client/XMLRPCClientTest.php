@@ -77,7 +77,12 @@ class PHPFrame_XMLRPCClientTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("create", $request->action());
         $this->assertType("int", $request->requestTime());
 
-        $_SERVER = array();
+        unset($_SERVER["REQUEST_METHOD"]);
+        unset($_SERVER["REMOTE_ADDR"]);
+        unset($_SERVER["REQUEST_URI"]);
+        unset($_SERVER["SCRIPT_NAME"]);
+        unset($_SERVER["QUERY_STRING"]);
+        unset($_SERVER["REQUEST_TIME"]);
    }
 
     public function test_prepareResponse()

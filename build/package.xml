@@ -60,7 +60,6 @@
    <file baseinstalldir="/" name="PHPFrame/Database/SQLiteDatabase.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Informer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Logger.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Debug/Profiler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/TextLogger.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/Document.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/HTMLDocument.php" role="php" />
@@ -140,6 +139,11 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/XMLSerialiser.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
 
+   <file baseinstalldir="/" name="CLI_Tool/data/class-templates/ActionController.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/data/class-templates/Mapper.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/data/class-templates/PersistentObject.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/data/class-templates/Plugin.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/data/class-templates/ViewHelper.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/etc/phpframe.ini" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/public/index.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/app.php" role="data" />
@@ -163,27 +167,6 @@
     <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@package_version@" to="version" type="package-info" />
-  </file>
-
-  <file baseinstalldir="" name="PHPFrame_Postinstall.php" role="php">
-    <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
-    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
-    <tasks:replace from="@package_version@" to="version" type="package-info" />
-    <tasks:postinstallscript>
-     <tasks:paramgroup>
-      <tasks:id>Log files</tasks:id>
-      <tasks:param>
-          <tasks:name>CONFIRM</tasks:name>
-       <tasks:prompt>
-The postinstall script will make log files writable to all users. Only do
-this if you will be running PHPFrame as a different user to the one
-installing the PEAR package. If you want to continue type "yes".
-       </tasks:prompt>
-       <tasks:type>string</tasks:type>
-       <tasks:default></tasks:default>
-      </tasks:param>
-     </tasks:paramgroup>
-    </tasks:postinstallscript>
   </file>
 
   </dir>

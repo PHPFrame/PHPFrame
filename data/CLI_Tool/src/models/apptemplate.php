@@ -1,9 +1,9 @@
 <?php
 /**
  * data/CLITool/src/models/apptemplate.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   PHPFrame_CLITool
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * Application Template manager class.
- * 
+ *
  * @category PHPFrame
  * @package  PHPFrame_CLITool
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -27,59 +27,59 @@ class AppTemplate
     private $_install_dir = null;
     private $_preferred_mirror = null;
     private $_preferred_state = null;
-    
+
     /**
      * Constructor.
-     * 
+     *
      * @param string $install_dir      Absolute path to installation directory.
-     * @param string $preferred_mirror [Optional] Default value is 
+     * @param string $preferred_mirror [Optional] Default value is
      *                                 'http://dist.phpframe.org'.
-     * 
+     *
      * @return void
      * @since  1.0
      */
     public function __construct(
-        $install_dir, 
+        $install_dir,
         $preferred_mirror="http://dist.phpframe.org"
     ) {
         $this->_install_dir       = trim((string) $install_dir);
         $this->_preferred_mirror  = trim((string) $preferred_mirror);
         $this->_preferred_mirror .= "/app_templates";
     }
-    
+
     /**
      * Install a new application using app template in current install dir.
-     * 
+     *
      * @param string $app_name            The name for the new app.
      * @param string $template            [Optional] Default value is 'basic'.
      * @param bool   $allow_non_empty_dir [Optional]
-     * 
+     *
      * @return void
      * @throws RuntimeException
      * @since  1.0
      */
     public function install(
-        $app_name, 
-        $template="basic", 
+        $app_name,
+        $template="basic",
         $allow_non_empty_dir=false
     ) {
         // before anything else we check that the directory is writable
         PHPFrame_Filesystem::ensureWritableDir($this->_install_dir);
-        
+
         // Fetch package from dist server
         $this->_fetchSource($template, $allow_non_empty_dir);
-        
+
         // Create configuration xml files based on distro templates
         $this->_createConfig(array("app_name"=>(string) $app_name));
-        
+
         //Create writable tmp and var folders for app
         PHPFrame_Filesystem::ensureWritableDir($this->_install_dir.DS."tmp");
         PHPFrame_Filesystem::ensureWritableDir($this->_install_dir.DS."var");
     }
-    
+
     /**
      * Remove application from current install dir.
-     * 
+     *
      * @return void
      * @throws RuntimeException
      * @since  1.0
@@ -88,13 +88,18 @@ class AppTemplate
     {
         PHPFrame_Filesystem::rm($this->_install_dir, true);
     }
-    
+
     /**
      * Fetch app template source from remote server and extract in install dir.
-     * 
-     * @param string $template            [Optional]
+     *
+     * @param string $template            [Optional] The application template
+     *                                    to use. The default value is "basic".
+     *                                    Possible values are:
+     *                                    - "basic"
+     *                                    - "cms"
+     *                                    - "cli"
      * @param bool   $allow_non_empty_dir [Optional]
-     *  
+     *
      * @return void
      * @throws RuntimeException
      * @since  1.0
@@ -109,42 +114,44 @@ class AppTemplate
             $msg .= "allow_non_empty_dir=true\" to force install";
             throw new RuntimeException($msg);
         }
-        
-        //TODO: before we download we should check whether local files exists
-        // for current version
-        
+
+        if (!in_array($template, array("basic", "cms", "cli"))) {
+            $msg = "Unknown app template '".$template."'.";
+            throw new InvalidArgumentException($msg);
+        }
+
         // download package from preferred mirror
-        $file_name     = "PHPFrame_AppTemplate-1.0.tgz";
+        $file_name     = "PHPFrame_".ucfirst($template)."AppTemplate-1.0.tgz";
         $url           = $this->_preferred_mirror."/".$file_name;
         $download_tmp  = PHPFrame_Filesystem::getSystemTempDir();
         $download_tmp .= DS."PHPFrame".DS."download";
-        
+
         // Make sure we can write in download directory
         PHPFrame_Filesystem::ensureWritableDir($download_tmp);
-        
+
         // Create the http request
         $request  = new PHPFrame_HTTPRequest($url);
         $response = $request->download($download_tmp, $file_name);
-        
+
         echo "\n";
-        
+
         // If response is not OK we throw exception
         if ($response->getStatus() != 200) {
             $msg  = "Error downloading package. ";
             $msg .= "Reason: ".$response->getReasonPhrase();
             throw new RuntimeException($msg);
         }
-        
+
         // Extract archive in install dir
         $archive = new Archive_Tar($download_tmp.DS.$file_name, "gz");
         $archive->extract($this->_install_dir);
     }
-    
+
     /**
      * Create config file.
-     * 
+     *
      * @param array $array Array containing config data.
-     * 
+     *
      * @return void
      * @throws InvalidArgumentException
      * @since  1.0
@@ -156,15 +163,15 @@ class AppTemplate
             $msg .= " expected an array as only argument.";
             throw new InvalidArgumentException($msg);
         }
-        
+
         // Instantiate new config object
         $config = new PHPFrame_Config(
             $this->_install_dir.DS."etc".DS."phpframe.ini"
         );
-        
+
         // Bind to array
         $config->bind($array);
-        
+
         // Create random secret string
         $config->set("secret", md5(uniqid()));
         $config->store();

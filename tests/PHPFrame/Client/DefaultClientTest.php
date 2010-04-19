@@ -65,7 +65,12 @@ class PHPFrame_DefaultClientTest extends PHPUnit_Framework_TestCase
 
        // Reset php superglobals used for test
        $_REQUEST = array();
-       $_SERVER = array();
+       unset($_SERVER["REQUEST_METHOD"]);
+       unset($_SERVER["REMOTE_ADDR"]);
+       unset($_SERVER["REQUEST_URI"]);
+       unset($_SERVER["SCRIPT_NAME"]);
+       unset($_SERVER["QUERY_STRING"]);
+       unset($_SERVER["REQUEST_TIME"]);
    }
 
     public function test_prepareResponse()

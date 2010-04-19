@@ -161,8 +161,9 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $this->$prop_name = $this->_install_dir.DS.$value;
             }
 
-            if ((!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
-                || !is_writable($this->$prop_name)
+            if ($key != "config_dir"
+                && ((!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
+                || !is_writable($this->$prop_name))
             ) {
                 $msg = "Directory ".$this->$prop_name." is not writable.";
                 throw new RuntimeException($msg);
@@ -190,12 +191,6 @@ class PHPFrame_Application extends PHPFrame_Observer
 
         // Acquire instance of Plugin Handler
         $this->_plugin_handler = new PHPFrame_PluginHandler($this);
-
-        // Set profiler milestone
-        $profiler = $this->profiler();
-        if ($profiler instanceof PHPFrame_Profiler) {
-            $profiler->addMilestone();
-        }
     }
 
     /**
@@ -370,6 +365,28 @@ class PHPFrame_Application extends PHPFrame_Observer
     public function getInstallDir()
     {
         return $this->_install_dir;
+    }
+
+    /**
+     * Get absolute path to var directory
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function getVarDir()
+    {
+        return $this->_var_dir;
+    }
+
+    /**
+     * Get absolute path to tmp directory
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function getTmpDir()
+    {
+        return $this->_tmp_dir;
     }
 
     /**
@@ -683,7 +700,9 @@ class PHPFrame_Application extends PHPFrame_Observer
      */
     public function informer(PHPFrame_Informer $informer=null)
     {
-        if ($this->config()->get("debug.informer_level") <= 0) {
+        $informer_level = $this->config()->get("debug.informer_level");
+
+        if ($informer_level <= 0) {
             return;
         }
 
@@ -703,34 +722,12 @@ class PHPFrame_Application extends PHPFrame_Observer
                 throw new LogicException($msg);
             }
 
-            $this->_setInformer(new PHPFrame_Informer($mailer, $recipients));
+            $this->_setInformer(
+                new PHPFrame_Informer($mailer, $recipients, $informer_level)
+            );
         }
 
         return $this->registry()->get("informer");
-    }
-
-    /**
-     * Get/set Profiler object.
-     *
-     * @param PHPFrame_Profiler $profiler [Optional] Profiler object to be used
-     *                                    in application.
-     *
-     * @return PHPFrame_Profiler
-     * @since  1.0
-     */
-    public function profiler(PHPFrame_Profiler $profiler=null)
-    {
-        if ($this->config()->get("debug.profiler_enable") != 1) {
-            return;
-        }
-
-        if (!is_null($profiler)) {
-            $this->registry()->set("profiler", $profiler);
-        } elseif (is_null($this->registry()->get("profiler"))) {
-            $this->registry()->set("profiler", new PHPFrame_Profiler());
-        }
-
-        return $this->registry()->get("profiler");
     }
 
     /**
@@ -867,7 +864,7 @@ class PHPFrame_Application extends PHPFrame_Observer
             }
 
             // Execute the action in the given controller
-            $controller->execute($this);
+            $controller->execute();
 
             // Invoke postDispatch hook for every iteration of the dispatch loop
             $this->_plugin_handler->handle("postDispatch");
@@ -950,38 +947,6 @@ class PHPFrame_Application extends PHPFrame_Observer
         if (!empty($outfile)) {
             $file_obj = new SplFileObject($outfile, "w");
             $file_obj->fwrite((string) $response);
-        }
-
-        // Handle profiler
-        $profiler_enable  = $this->config()->get("debug.profiler_enable");
-        $profiler_display = $this->config()->get("debug.profiler_display");
-        $profiler_outdir  = $this->config()->get("debug.profiler_outdir");
-
-        if ($profiler_enable) {
-            // Add final milestone
-            $this->profiler()->addMilestone();
-
-            // Get profiler output by casting object to string
-            $profiler_out = (string) $this->profiler();
-
-            // Display output if set in config
-            if ($profiler_display) {
-                $client = $this->session()->getClient();
-                if (!$client instanceof PHPFrame_CLIClient) {
-                    echo "<pre>";
-                }
-
-                // Display output
-                echo "Profiler Output:\n\n";
-                echo $profiler_out;
-            }
-
-            // Dump profiler output to file if outdir is specified in config
-            if (!empty($profiler_outdir)) {
-                $profiler_outfile = $profiler_outdir.DS.time().".ppo";
-                $file_obj = new SplFileObject($profiler_outfile, "w");
-                $file_obj->fwrite($profiler_out);
-            }
         }
     }
 

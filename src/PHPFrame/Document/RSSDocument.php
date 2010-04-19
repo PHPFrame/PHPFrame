@@ -329,7 +329,6 @@ class PHPFrame_RSSDocument extends PHPFrame_Document
      *
      * @return void
      * @since  1.0
-     * @todo   This method needs to be implemented.
      */
     private function _parseRSS2(SimpleXMLElement $xml)
     {

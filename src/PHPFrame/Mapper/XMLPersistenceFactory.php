@@ -72,15 +72,15 @@ class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
     }
 
     /**
-     * Create a new IdObject to work with the target class
+     * Create a new IdObject to work with the target class. THIS METHOD WILL
+     * ALWAYS THROW AN EXCEPTION BECAUSE XML DOESN'T SUPPORT ID OBJECTS.
      *
-     * @return PHPFrame_IdObject
+     * @return void
+     * @throws LogicException
      * @since  1.0
      */
     public function getIdObject()
     {
-        $options = array("select"=>"*", "from"=>$this->getTableName());
-
-        return new PHPFrame_XMLIdObject($options);
+        throw new LogicException("XML doesn't support IdObject!");
     }
 }

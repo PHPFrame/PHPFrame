@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/MVC/ViewHelper.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   MVC
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * View helper...
- * 
+ *
  * @category PHPFrame
  * @package  MVC
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -27,16 +27,16 @@ abstract class PHPFrame_ViewHelper
 {
     /**
      * Reference to the application object.
-     * 
+     *
      * @var PHPFrame_Application
      */
     private $_app = null;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param string $app Reference to the application object.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -44,10 +44,10 @@ abstract class PHPFrame_ViewHelper
     {
         $this->_app = $app;
     }
-    
+
     /**
      * Get reference to application object
-     * 
+     *
      * @return PHPFrame_Application
      * @since  1.0
      */

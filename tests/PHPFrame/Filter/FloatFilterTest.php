@@ -5,24 +5,24 @@ require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 class PHPFrame_FloatFilterTest extends PHPUnit_Framework_TestCase
 {
     private $_filter;
-    
+
     public function setUp()
     {
         $this->_filter = new PHPFrame_FloatFilter();
     }
-    
+
     public function tearDown()
     {
         //...
     }
-    
+
     public function test_process()
     {
         $values = array(0.0, 1.0, 3.14, 1, 182765, -2323, "12", "-34");
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertTrue($result !== false);
             $this->assertType("float", $result);
             $this->assertEquals((float) $value, $result);
@@ -30,21 +30,21 @@ class PHPFrame_FloatFilterTest extends PHPUnit_Framework_TestCase
             $this->assertTrue((count($messages) == 0));
         }
     }
-    
+
     public function test_processFailure()
     {
         $values = array(true, false, "some string", array(), new stdClass());
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertFalse($result);
             $this->assertType("bool", $result);
             $this->assertType("array", $messages);
             $this->assertTrue((count($messages) > 0));
         }
     }
-    
+
     public function test_processDecimal()
     {
         $this->_filter->setDecimal(",");
@@ -52,7 +52,7 @@ class PHPFrame_FloatFilterTest extends PHPUnit_Framework_TestCase
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertTrue($result !== false);
             $this->assertType("float", $result);
             $this->assertEquals(str_replace(",", ".", $value), $result);
@@ -60,7 +60,7 @@ class PHPFrame_FloatFilterTest extends PHPUnit_Framework_TestCase
             $this->assertTrue((count($messages) == 0));
         }
     }
-    
+
     public function test_processDecimalFailure()
     {
         $this->_filter->setDecimal(",");
@@ -68,14 +68,14 @@ class PHPFrame_FloatFilterTest extends PHPUnit_Framework_TestCase
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertFalse($result);
             $this->assertType("bool", $result);
             $this->assertType("array", $messages);
             $this->assertTrue((count($messages) > 0));
         }
     }
-    
+
     public function test_processAllowThousand()
     {
         $this->_filter->setAllowThousand(true);
@@ -83,7 +83,7 @@ class PHPFrame_FloatFilterTest extends PHPUnit_Framework_TestCase
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertTrue($result !== false);
             $this->assertType("float", $result);
             $this->assertEquals(str_replace(",", "", $value), $result);
@@ -91,7 +91,7 @@ class PHPFrame_FloatFilterTest extends PHPUnit_Framework_TestCase
             $this->assertTrue((count($messages) == 0));
         }
     }
-    
+
     public function test_processAllowThousandFailure()
     {
         $this->_filter->setAllowThousand(false);
@@ -99,14 +99,14 @@ class PHPFrame_FloatFilterTest extends PHPUnit_Framework_TestCase
         for ($i=0; $i<count($values); $i++) {
             $result   = $this->_filter->process($values[$i]);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertFalse($result);
             $this->assertType("bool", $result);
             $this->assertType("array", $messages);
             $this->assertTrue((count($messages) == ($i+1)));
         }
     }
-    
+
     public function test_processStrictFailure()
     {
         $this->_filter->setStrict(true);
@@ -114,7 +114,7 @@ class PHPFrame_FloatFilterTest extends PHPUnit_Framework_TestCase
         for ($i=0; $i<count($values); $i++) {
             $result   = $this->_filter->process($values[$i]);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertFalse($result);
             $this->assertType("bool", $result);
             $this->assertType("array", $messages);

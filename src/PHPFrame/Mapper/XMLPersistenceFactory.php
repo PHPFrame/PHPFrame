@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Mapper/XMLPersistenceFactory.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Mapper
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * XML Persistence Factory Class
- * 
+ *
  * @category PHPFrame
  * @package  Mapper
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -26,43 +26,43 @@
 class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
 {
     private $_path = null;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param string $target_class The persistent object class this factory will
      *                             work with.
-     * @param string $table_name   [Optional] The table name where we will be 
-     *                             mapping the persistent objects. If omitted 
-     *                             the table name will be assumed to be the same 
+     * @param string $table_name   [Optional] The table name where we will be
+     *                             mapping the persistent objects. If omitted
+     *                             the table name will be assumed to be the same
      *                             as the target class.
      * @param string $path         Path to directory where to store the XML file.
-     * @param string $type_column  [Optional] Name of column storing the subtype 
-     *                             if any. When storing subtypes in the same 
-     *                             table the subtype class name needs to be 
-     *                             stored in a column in order to instantiate 
-     *                             the correct objects when retrievin data from 
+     * @param string $type_column  [Optional] Name of column storing the subtype
+     *                             if any. When storing subtypes in the same
+     *                             table the subtype class name needs to be
+     *                             stored in a column in order to instantiate
+     *                             the correct objects when retrievin data from
      *                             storage.
-     * 
+     *
      * @return void
      * @since  1.0
      */
     public function __construct(
-        $target_class, 
-        $table_name, 
-        $path, 
+        $target_class,
+        $table_name,
+        $path,
         $type_column=null
     ) {
         parent::__construct($target_class, $table_name, $type_column);
-        
+
         if (!is_null($path)) {
             $this->_path = trim((string) $path);
         }
     }
-    
+
     /**
      * Get object assembler
-     * 
+     *
      * @return PHPFrame_PersistentObjectAssembler
      * @since  1.0
      */
@@ -70,17 +70,17 @@ class PHPFrame_XMLPersistenceFactory extends PHPFrame_PersistenceFactory
     {
         return new PHPFrame_XMLPersistentObjectAssembler($this, $this->_path);
     }
-    
+
     /**
      * Create a new IdObject to work with the target class
-     * 
+     *
      * @return PHPFrame_IdObject
      * @since  1.0
      */
     public function getIdObject()
     {
         $options = array("select"=>"*", "from"=>$this->getTableName());
-        
+
         return new PHPFrame_XMLIdObject($options);
     }
 }

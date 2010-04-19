@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Mapper/IdObject.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Mapper
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -15,7 +15,7 @@
 
 /**
  * Identity Object class for XML implementation
- * 
+ *
  * @category PHPFrame
  * @package  Mapper
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -29,24 +29,24 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
 {
     /**
      * Constructor
-     * 
-     * @param array $options [Optional] An associative array with initialisation 
-     *                       options. For a list of available options invoke 
+     *
+     * @param array $options [Optional] An associative array with initialisation
+     *                       options. For a list of available options invoke
      *                       {@link PHPFrame_IdObject::getOptions()}.
-     * 
+     *
      * @return void
      * @since  1.0
      */
     public function __construct(array $options=null)
     {
         throw new LogicException("This class has not been implemented yet!");
-        
+
         parent::__construct($options);
     }
-    
+
     /**
      * Magic method invoked when trying to use object as string.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -54,10 +54,10 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
     {
         return "";
     }
-    
+
     /**
      * Return an array with the list of available options in this object.
-     * 
+     *
      * @return array
      * @since  1.0
      */
@@ -65,12 +65,12 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
     {
         parent::getOptions();
     }
-    
+
     /**
      * Set the fields array used in select statement
-     * 
+     *
      * @param string|array $fields A string or array of strings with field names.
-     * 
+     *
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -78,12 +78,12 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
     {
         //...
     }
-    
+
     /**
      * Set the table from which to select rows
-     * 
+     *
      * @param string $table A string with the table name.
-     * 
+     *
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -91,14 +91,14 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
     {
         //...
     }
-    
+
     /**
      * Add "where" condition
-     * 
+     *
      * @param string $left     The left operand.
      * @param string $operator The comparison operator. Ie: '=' or '<'.
      * @param string $right    The right operand.
-     * 
+     *
      * @return PHPFrame_IdObject
      * @since  1.0
      */
@@ -106,10 +106,10 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
     {
         //...
     }
-    
+
     /**
      * Get the an array with the fields in the SELECT query
-     * 
+     *
      * @return array
      * @since  1.0
      */
@@ -117,10 +117,10 @@ class PHPFrame_XMLIdObject extends PHPFrame_IdObject
     {
         //...
     }
-    
+
     /**
      * Get the table name in the FROM part of the query
-     * 
+     *
      * @return string
      * @since  1.0
      */

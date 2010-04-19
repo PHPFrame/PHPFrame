@@ -5,24 +5,24 @@ require_once preg_replace("/tests\/.*/", "src/PHPFrame.php", __FILE__);
 class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
 {
     private $_filter;
-    
+
     public function setUp()
     {
         $this->_filter = new PHPFrame_IntFilter();
     }
-    
+
     public function tearDown()
     {
         //...
     }
-    
+
     public function test_process()
     {
         $values = array(1, 182765, -2323, "12", "-34");
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertTrue($result !== false);
             $this->assertType("int", $result);
             $this->assertEquals((int) $value, $result);
@@ -30,21 +30,21 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
             $this->assertTrue((count($messages) == 0));
         }
     }
-    
+
     public function test_processFailure()
     {
         $values = array(true, false, 0.0, 1.0, 3.14, "some string", array(), new stdClass());
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertFalse($result);
             $this->assertType("bool", $result);
             $this->assertType("array", $messages);
             $this->assertTrue((count($messages) > 0));
         }
     }
-    
+
     public function test_processRange()
     {
         $this->_filter->setMinRange(-5);
@@ -53,7 +53,7 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertTrue($result !== false);
             $this->assertType("int", $result);
             $this->assertEquals((int) $value, $result);
@@ -61,7 +61,7 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
             $this->assertTrue((count($messages) == 0));
         }
     }
-    
+
     public function test_processRangeFailure()
     {
         $this->_filter->setMinRange(-5);
@@ -70,14 +70,14 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertFalse($result);
             $this->assertType("bool", $result);
             $this->assertType("array", $messages);
             $this->assertTrue((count($messages) > 0));
         }
     }
-    
+
     public function test_processHex()
     {
         $this->_filter->setAllowHex(true);
@@ -85,7 +85,7 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertTrue($result !== false);
             $this->assertType("int", $result);
             $this->assertEquals($value, $result);
@@ -93,7 +93,7 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
             $this->assertTrue((count($messages) == 0));
         }
     }
-    
+
     public function test_processHexFailure()
     {
         $this->_filter->setAllowHex(false);
@@ -101,14 +101,14 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
         for ($i=0; $i<count($values); $i++) {
             $result   = $this->_filter->process($values[$i]);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertFalse($result);
             $this->assertType("bool", $result);
             $this->assertType("array", $messages);
             $this->assertTrue((count($messages) == ($i+1)));
         }
     }
-    
+
     public function test_processOctal()
     {
         $this->_filter->setAllowOctal(true);
@@ -116,7 +116,7 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
         foreach ($values as $value) {
             $result   = $this->_filter->process($value);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertTrue($result !== false);
             $this->assertType("int", $result);
             // equality test commented out because converted integer value will
@@ -126,7 +126,7 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
             $this->assertTrue((count($messages) == 0));
         }
     }
-    
+
     public function test_processOctalFailure()
     {
         $this->_filter->setAllowOctal(false);
@@ -134,14 +134,14 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
         for ($i=0; $i<count($values); $i++) {
             $result   = $this->_filter->process($values[$i]);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertFalse($result);
             $this->assertType("bool", $result);
             $this->assertType("array", $messages);
             $this->assertTrue((count($messages) == ($i+1)));
         }
     }
-    
+
     public function test_processStrictFailure()
     {
         $this->_filter->setStrict(true);
@@ -149,7 +149,7 @@ class PHPFrame_IntFilterTest extends PHPUnit_Framework_TestCase
         for ($i=0; $i<count($values); $i++) {
             $result   = $this->_filter->process($values[$i]);
             $messages = $this->_filter->getMessages();
-            
+
             $this->assertFalse($result);
             $this->assertType("bool", $result);
             $this->assertType("array", $messages);

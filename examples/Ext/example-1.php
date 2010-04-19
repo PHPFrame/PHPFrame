@@ -12,14 +12,14 @@ $ext->setTime("00:47");
 $ext->setVersion(array("release"=>"0.1.1", "api"=>"1.0"));
 $ext->setStability(array("release"=>"beta", "api"=>"beta"));
 $ext->setLicense(array(
-    "name" => "BSD Style", 
+    "name" => "BSD Style",
     "uri"  => "http://www.opensource.org/licenses/bsd-license.php"
 ));
 $ext->setNotes("This are the notes....");
 
 $mapper = new PHPFrame_Mapper(
     "PHPFrame_PluginInfo",
-    dirname(__FILE__),  
+    dirname(__FILE__),
     "features"
 );
 

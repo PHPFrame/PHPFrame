@@ -1,7 +1,7 @@
 <?php
 require_once "PHPFrame.php";
 
-// Get instance of database object, if SQLite database doesn't exist it will be 
+// Get instance of database object, if SQLite database doesn't exist it will be
 // created automatically
 $db = PHPFrame_Database::getInstance("sqlite:".dirname(__FILE__).DS."data.sql3");
 
@@ -13,7 +13,7 @@ if ($db->hasTable("t1")) {
 // Create new table object and add two columns to it
 $table = new PHPFrame_DatabaseTable($db, "t1");
 $table->addColumn(new PHPFrame_DatabaseColumn(array(
-    "name"    => "id", 
+    "name"    => "id",
     "type"    => PHPFrame_DatabaseColumn::TYPE_INT,
     "null"    => false,
     "key"     => PHPFrame_DatabaseColumn::KEY_PRIMARY,
@@ -21,7 +21,7 @@ $table->addColumn(new PHPFrame_DatabaseColumn(array(
     "extra"   => PHPFrame_DatabaseColumn::EXTRA_AUTOINCREMENT
 )));
 $table->addColumn(new PHPFrame_DatabaseColumn(array(
-    "name"    => "name", 
+    "name"    => "name",
     "type"    => PHPFrame_DatabaseColumn::TYPE_VARCHAR,
     "null"    => false,
     "default" => null

@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Filter/EmailFilter.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Filter
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * Email Filter
- * 
+ *
  * @category PHPFrame
  * @package  Filter
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -26,18 +26,18 @@ class PHPFrame_EmailFilter extends PHPFrame_StringFilter
 {
     /**
      * Constructor
-     * 
+     *
      * Optionas are inherited from parent PHPFrame_StringFilter
-     * 
-     * @param array $options [Optional] An associative array with the filter 
-     *                                  options. The FloatFilter supports the 
+     *
+     * @param array $options [Optional] An associative array with the filter
+     *                                  options. The FloatFilter supports the
      *                                  following options:
-     *                                  
+     *
      *                                  - min_length (int)
      *                                  - max_length (int)
      *                                  - truncate (bool)
      *                                  - strict (bool)
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -45,12 +45,12 @@ class PHPFrame_EmailFilter extends PHPFrame_StringFilter
     {
         parent::__construct($options);
     }
-    
+
     /**
      * Process the given value using the filter
-     * 
+     *
      * @param string $value The value to process
-     * 
+     *
      * @return mixed Either the filtered value or FALSE on failure
      * @see    src/PHPFrame/Filter/PHPFrame_Filter#process($value)
      * @since  1.0
@@ -58,7 +58,7 @@ class PHPFrame_EmailFilter extends PHPFrame_StringFilter
     public function process($value)
     {
         $value = parent::process($value);
-        
+
         // Delegate to filter_var function
         $value = filter_var($value, FILTER_VALIDATE_EMAIL);
         if ($value === false) {
@@ -66,7 +66,7 @@ class PHPFrame_EmailFilter extends PHPFrame_StringFilter
             $msg .= ")' with filter ".get_class($this);
             $this->fail($msg);
         }
-        
+
         return $value;
     }
 }

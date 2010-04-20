@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Registry/Registry.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Registry
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * Abstract Registry Class
- * 
+ *
  * @category PHPFrame
  * @package  Registry
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -25,5 +25,5 @@
  */
 abstract class PHPFrame_Registry implements IteratorAggregate
 {
-    
+
 }

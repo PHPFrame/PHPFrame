@@ -8,13 +8,13 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
-    The aim of the UI package is to provide "client specific" UI implementations 
-    that hide behind a common interface, so that user interfaces can be abstracted 
-    into its most common elements (forms, prompts, tables, ...).    
+    The aim of the UI package is to provide "client specific" UI implementations
+    that hide behind a common interface, so that user interfaces can be abstracted
+    into its most common elements (forms, prompts, tables, ...).
     </para>
-    
+
     <para>
     This package is still work in progress...
     </para>
@@ -23,34 +23,34 @@
 
 <refsect1 id="{@id classes}">
     <title>Classes in UI Package</title>
-    
+
     <itemizedlist>
         <listitem>
         <para>
         {@link PHPFrame_IUI}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_CLIUI}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_HTMLUI}
         </para>
         </listitem>
-        
+
     </itemizedlist>
 
 </refsect1>
 
-<!-- 
+<!--
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <example>
         <title></title>
         <para>
@@ -60,15 +60,15 @@
 
 ]]>
         </programlisting>
-        
+
         <screen>
 <![CDATA[
 
 ]]>
         </screen>
-       
+
     </example>
-    
+
 </refsect1>
 -->
 

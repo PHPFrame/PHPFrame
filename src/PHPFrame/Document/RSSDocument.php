@@ -329,10 +329,23 @@ class PHPFrame_RSSDocument extends PHPFrame_Document
      *
      * @return void
      * @since  1.0
-     * @todo   This method needs to be implemented.
      */
     private function _parseRSS2(SimpleXMLElement $xml)
     {
+        $this->title($xml->channel->title);
+        $this->link($xml->channel->link);
+        $this->description($xml->channel->description);
 
+        if (count($xml->channel->item)) {
+            foreach ($xml->channel->item as $item) {
+                $this->addItem(
+                    $item->title,
+                    $item->link,
+                    $item->description,
+                    $item->pubDate,
+                    $item->author
+                );
+            }
+        }
     }
 }

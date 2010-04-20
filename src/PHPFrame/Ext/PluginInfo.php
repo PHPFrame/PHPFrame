@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Ext/PluginInfo.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Ext
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -15,7 +15,7 @@
 
 /**
  * PluginInfo Class
- * 
+ *
  * @category PHPFrame
  * @package  Ext
  * @author   Lupo Montero <lupo@e-noise.com>

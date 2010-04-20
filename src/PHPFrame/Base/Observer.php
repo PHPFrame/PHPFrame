@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Base/Observer.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Base
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -15,9 +15,9 @@
 
 /**
  * This class provides an abstract implementation of the SplObserver interface.
- * 
+ *
  * This class is designed to work together with the PHPFrame_Subject class.
- * 
+ *
  * @category PHPFrame
  * @package  Base
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -29,10 +29,10 @@
 abstract class PHPFrame_Observer extends PHPFrame_Object implements SplObserver
 {
     /**
-     * Update 
-     * 
+     * Update
+     *
      * @param PHPFrame_Subject $subject Instance of subject notifying the update
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -40,12 +40,12 @@ abstract class PHPFrame_Observer extends PHPFrame_Object implements SplObserver
     {
         $this->doUpdate($subject);
     }
-    
+
     /**
      * Template method
-     * 
+     *
      * @param PHPFrame_Subject $subject Instance of subject notifying the update
-     * 
+     *
      * @abstract
      * @return void
      * @since  1.0

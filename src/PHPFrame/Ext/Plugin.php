@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Ext/Plugin.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Ext
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -13,20 +13,20 @@
  */
 
 /**
- * All plugins handled by the {@link PHPFrame_PluginHandler} will have to 
+ * All plugins handled by the {@link PHPFrame_PluginHandler} will have to
  * descend from this abstract class.
- * 
- * Methods in this class are the hooks that are called during the application 
- * dispatch process ({@link PHPFrame_Application::dispatch()}) and allow 
- * plugins to modify the state of any of the objects contained in an app 
- * the request ({@link PHPFrame_Request}), reponse ({@link PHPFrame_Response}) 
+ *
+ * Methods in this class are the hooks that are called during the application
+ * dispatch process ({@link PHPFrame_Application::dispatch()}) and allow
+ * plugins to modify the state of any of the objects contained in an app
+ * the request ({@link PHPFrame_Request}), reponse ({@link PHPFrame_Response})
  * and so on.
- * 
- * All methods in this class are declared as concreto methods that don't do 
- * anything. This is so that implementing classed are not required to implement 
- * any of them. It is up to each plugin to choose which methods to 
+ *
+ * All methods in this class are declared as concreto methods that don't do
+ * anything. This is so that implementing classed are not required to implement
+ * any of them. It is up to each plugin to choose which methods to
  * implement/override.
- * 
+ *
  * @category PHPFrame
  * @package  Ext
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -38,16 +38,16 @@ abstract class PHPFrame_Plugin
 {
     /**
      * Static reference to application object.
-     * 
+     *
      * @var PHPFrame_Application
      */
     private static $_app;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param PHPFrame_Application $app Reference to application object.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -55,10 +55,10 @@ abstract class PHPFrame_Plugin
     {
         self::$_app = $app;
     }
-    
+
     /**
      * Get reference to application object.
-     * 
+     *
      * @return PHPFrame_Application
      * @since  1.0
      */
@@ -66,11 +66,11 @@ abstract class PHPFrame_Plugin
     {
         return self::$_app;
     }
-    
+
     /**
-     * This method is called BEFORE THE REQUEST IS ROUTED to a specific 
+     * This method is called BEFORE THE REQUEST IS ROUTED to a specific
      * controller and action.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -78,11 +78,11 @@ abstract class PHPFrame_Plugin
     {
         //...
     }
-    
+
     /**
-     * This method is called AFTER THE REQUEST IS ROUTED to a specific 
+     * This method is called AFTER THE REQUEST IS ROUTED to a specific
      * controller and action.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -90,12 +90,12 @@ abstract class PHPFrame_Plugin
     {
         //...
     }
-    
+
     /**
-     * This method is called BEFORE THE DISPATCH LOOP is started. So it will 
-     * only run once, regardless of whow many iterations through the dispatch 
+     * This method is called BEFORE THE DISPATCH LOOP is started. So it will
+     * only run once, regardless of whow many iterations through the dispatch
      * loop.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -103,12 +103,12 @@ abstract class PHPFrame_Plugin
     {
         //...
     }
-    
+
     /**
-     * This method is called AFTER THE DISPATCH LOOP has finished iterating.  
-     * It will only run once, regardless of whow many iterations through the 
+     * This method is called AFTER THE DISPATCH LOOP has finished iterating.
+     * It will only run once, regardless of whow many iterations through the
      * dispatch loop.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -116,11 +116,11 @@ abstract class PHPFrame_Plugin
     {
         //...
     }
-    
+
     /**
-     * This method is called AT THE BEGINNING OF EVERY ITERATION OF THE 
+     * This method is called AT THE BEGINNING OF EVERY ITERATION OF THE
      * DISPATCH LOOP. It will run once for every iteration of the loop.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -128,11 +128,11 @@ abstract class PHPFrame_Plugin
     {
         //...
     }
-    
+
     /**
      * This method is called AT THE END OF EVERY ITERATION OF THE DISPATCH
      * LOOP. It will run once for every iteration of the loop.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -140,11 +140,11 @@ abstract class PHPFrame_Plugin
     {
         //...
     }
-    
+
     /**
      * This method is called AFTER THE DISPATCH LOOP AND BEFORE THE THEME IS
      * APPLIED TO THE RESPONSE BODY.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -152,12 +152,12 @@ abstract class PHPFrame_Plugin
     {
         //...
     }
-    
+
     /**
-     * This method is called AFTER THE THEME IS APPLIED TO THE RESPONSE BODY 
-     * and it is the last hook to be called before the application ends 
+     * This method is called AFTER THE THEME IS APPLIED TO THE RESPONSE BODY
+     * and it is the last hook to be called before the application ends
      * execution.
-     * 
+     *
      * @return void
      * @since  1.0
      */

@@ -17,6 +17,12 @@
             verbose="true"
             failonerror="false"
         />
+        <delete
+            dir="${basedir}/build/tmp"
+            includeemptydirs="true"
+            verbose="true"
+            failonerror="false"
+        />
 
         <mkdir dir="${logs.dir}"/>
         <mkdir dir="${coverage.dir}"/>

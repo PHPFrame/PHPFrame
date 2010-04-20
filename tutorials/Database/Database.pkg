@@ -8,12 +8,12 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
-    The Database package contains a number of classes that abstract the main 
-    elements involved in database interaction. The abstract 
-    {@link PHPFrame_Database} class provides a consistent interface for 
-    different databases (MySQL, SQLite, ...) and relies on the PHP Data Objects 
+    The Database package contains a number of classes that abstract the main
+    elements involved in database interaction. The abstract
+    {@link PHPFrame_Database} class provides a consistent interface for
+    different databases (MySQL, SQLite, ...) and relies on the PHP Data Objects
     (PDO) extension.
     </para>
 
@@ -21,57 +21,57 @@
 
 <refsect1 id="{@id classes}">
     <title>Classes in Database Package</title>
-    
+
     <itemizedlist>
-    
+
         <listitem>
         <para>
         {@link PHPFrame_Database}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_MySQLDatabase}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_SQLiteDatabase}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_DatabaseTable}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_DatabaseColumn}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_DatabaseFactory}
         </para>
         </listitem>
-        
+
     </itemizedlist>
 
 </refsect1>
 
 <refsect1 id="{@id class_diagram">
     <title>Class diagram</title>
-    
+
 </refsect1>
 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <example>
         <title>Interacting with a SQLite database</title>
         <programlisting>{@example Database/example-1.php 3}</programlisting>
@@ -83,9 +83,9 @@ Array
         (
             [_name:private] => id
             [_type:private] => int
-            [_null:private] => 
+            [_null:private] =>
             [_key:private] => PRI
-            [_default:private] => 
+            [_default:private] =>
             [_extra:private] => auto_increment
             [_reflection_obj:private] => ReflectionClass Object
                 (
@@ -98,10 +98,10 @@ Array
         (
             [_name:private] => name
             [_type:private] => varchar
-            [_null:private] => 
-            [_key:private] => 
-            [_default:private] => 
-            [_extra:private] => 
+            [_null:private] =>
+            [_key:private] =>
+            [_default:private] =>
+            [_extra:private] =>
             [_reflection_obj:private] => ReflectionClass Object
                 (
                     [name] => PHPFrame_DatabaseColumn
@@ -134,7 +134,7 @@ Array
 ]]>
         </screen>
     </example>
-    
+
 </refsect1>
 
 </refentry>

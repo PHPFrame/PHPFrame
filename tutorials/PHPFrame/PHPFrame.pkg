@@ -8,9 +8,9 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
-    PHPFrame is organised into "packages" as listed on the left column. 
+    PHPFrame is organised into "packages" as listed on the left column.
     At the root of the package structure is the PHPFrame class.
     </para>
 
@@ -18,35 +18,35 @@
 
 <refsect1 id="{@id classes}">
     <title>The {@link PHPFrame} class</title>
-    
+
     <para>
-    This class encapsulates information about the installed version of the 
+    This class encapsulates information about the installed version of the
     framework.
     </para>
-    
+
     <para>
-    The PHPFrame class also provides access to the global Session object. The 
-    Session class will be refactored to be decoupled from the global scope. In 
-    the meantime the PHPFrame class has the PHPFrame::testMode() used to 
+    The PHPFrame class also provides access to the global Session object. The
+    Session class will be refactored to be decoupled from the global scope. In
+    the meantime the PHPFrame class has the PHPFrame::testMode() used to
     replace the "live" session with a mock session for unit testing.
     </para>
 </refsect1>
 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <example>
         <title>
         Accessing version information using {@link PHPFrame::version()}
         </title>
         <para>
-        PHPFrame::version() returns a string with verbose info about the 
+        PHPFrame::version() returns a string with verbose info about the
         installed version of PHPFrame.
         </para>
         <programlisting>{@example PHPFrame/example-1.php 3}</programlisting>
         <screen>
 <![CDATA[
-PHPFrame 0.0.10 alpha (build.25: 2010-02-20) 
+PHPFrame 0.0.10 alpha (build.25: 2010-02-20)
 API version: 1.0 beta
 Copyright (c) 2010 The PHPFrame Group
 ]]>

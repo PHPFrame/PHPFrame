@@ -6,7 +6,7 @@ auth = 1
 host = mail.phpframe.org
 port = 25
 user = tests@phpframe.org
-pass = 
+pass =
 fromaddress = tests@phpframe.org
 fromname = PHPFrame Unit tests
 
@@ -16,4 +16,4 @@ enable = on
 host = mail.phpframe.org
 port = 143
 user = tests@phpframe.org
-pass = 
+pass =

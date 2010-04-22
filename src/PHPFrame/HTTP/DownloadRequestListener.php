@@ -108,19 +108,23 @@ class PHPFrame_DownloadRequestListener implements SplObserver
 
         switch ($event["name"]) {
         case "receivedHeaders" :
-            // Try to get file name from headers
-            $response     = $event["data"];
-            $content_disp = $response->getHeader("content-disposition");
-            if (!empty($content_disp)) {
-                preg_match('/filename="(.*)"/', $content_disp, $matches);
-                if (isset($matches[1])) {
-                    $this->setFileName($matches[1]);
-                }
-            }
+            $response = $event["data"];
 
             // If status is not OK we return (important for redirects)
             if ($response->getStatus() != 200) {
                 return;
+            }
+
+            // Try to get file name from headers if not set yet
+            if (!$this->_filename) {
+                $content_disp = $response->getHeader("content-disposition");
+                if (!empty($content_disp)) {
+                    $pattern = "/filename=['\"]?(.*)['\"]?/";
+                    preg_match($pattern, $content_disp, $matches);
+                    if (isset($matches[1])) {
+                        $this->setFileName($matches[1]);
+                    }
+                }
             }
 
             // If no target has been specified so far we use URLs file name

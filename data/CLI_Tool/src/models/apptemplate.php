@@ -121,8 +121,8 @@ class AppTemplate
         }
 
         // download package from preferred mirror
-        $file_name     = "PHPFrame_".ucfirst($template)."AppTemplate-1.0.tgz";
-        $url           = $this->_preferred_mirror."/".$file_name;
+        $url           = $this->_preferred_mirror."/".$template;
+        $url          .= "/latest-release/?get=download";
         $download_tmp  = PHPFrame_Filesystem::getSystemTempDir();
         $download_tmp .= DS."PHPFrame".DS."download";
 
@@ -131,7 +131,7 @@ class AppTemplate
 
         // Create the http request
         $request  = new PHPFrame_HTTPRequest($url);
-        $response = $request->download($download_tmp, $file_name);
+        $response = $request->download($download_tmp);
 
         echo "\n";
 
@@ -141,6 +141,12 @@ class AppTemplate
             $msg .= "Reason: ".$response->getReasonPhrase();
             throw new RuntimeException($msg);
         }
+
+        $file_name = preg_replace(
+            "/(.*filename=([a-zA-Z0-9_\-\.]+).*)/",
+            "$2",
+            $response->getHeader("content-disposition")
+        );
 
         // Extract archive in install dir
         $archive = new Archive_Tar($download_tmp.DS.$file_name, "gz");

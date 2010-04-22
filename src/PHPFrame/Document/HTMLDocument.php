@@ -348,9 +348,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $theme_path,
         PHPFrame_Application $app
     ) {
-        // Add theme stylesheets
-        $this->addStyleSheet($theme_url."/css/styles.css");
-
         // Start buffering
         ob_start();
         include_once $theme_path;
@@ -358,6 +355,9 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         $str = ob_get_contents();
         // clean output buffer
         ob_end_clean();
+
+        // Add theme stylesheets last
+        $this->addStyleSheet($theme_url."/css/styles.css");
 
         $this->body($str);
     }

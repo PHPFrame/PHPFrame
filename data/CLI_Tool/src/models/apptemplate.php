@@ -170,9 +170,9 @@ class AppTemplate
             throw new InvalidArgumentException($msg);
         }
 
-        // Instantiate new config object
+        // Instantiate new config object from dist template
         $config = new PHPFrame_Config(
-            $this->_install_dir.DS."etc".DS."phpframe.ini"
+            $this->_install_dir.DS."etc".DS."phpframe.ini-dist"
         );
 
         // Bind to array
@@ -180,6 +180,8 @@ class AppTemplate
 
         // Create random secret string
         $config->set("secret", md5(uniqid()));
-        $config->store();
+
+        // Store new configuration file
+        $config->store($this->_install_dir.DS."etc".DS."phpframe.ini");
     }
 }

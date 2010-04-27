@@ -287,7 +287,7 @@ class PHPFrame_HTMLUI
      *
      * <code>
      * <?php
-     * PHPFrame_HTMLUI::confirm(
+     * echo PHPFrame_HTMLUI::confirm(
      *     'delete_entry',
      *     'Delete entry',
      *     'Are you sure you want to delete entry'
@@ -501,15 +501,21 @@ class PHPFrame_HTMLUI
             });
         });
         </script>
-        <input id="<?php echo $id; ?>_datePicker"
-               type="text"
-               name="<?php echo $name; ?>_datePicker" <?php echo $attribs_str; ?>
-               value="<?php echo $formatted_date; ?>"
-               autocomplete="off" />
-        <input id="<?php echo $id; ?>"
-               type="hidden"
-               name="<?php echo $name; ?>"
-               value="<?php echo $selected; ?>" />
+        <input
+            id="<?php echo $id; ?>_datePicker"
+            type="text"
+            name="<?php echo $name; ?>_datePicker" <?php echo $attribs_str; ?>
+            value="<?php echo $formatted_date; ?>"
+            autocomplete="off"
+            size="10"
+            maxlength="10"
+        />
+        <input
+            id="<?php echo $id; ?>"
+            type="hidden"
+            name="<?php echo $name; ?>"
+            value="<?php echo $selected; ?>"
+        />
         <?php
         // Save buffer
         $str = ob_get_contents();

@@ -121,8 +121,8 @@ class AppTemplate
         }
 
         // download package from preferred mirror
-        $file_name     = "PHPFrame_".ucfirst($template)."AppTemplate-1.0.tgz";
-        $url           = $this->_preferred_mirror."/".$file_name;
+        $url           = $this->_preferred_mirror."/".$template;
+        $url          .= "/latest-release/?get=download";
         $download_tmp  = PHPFrame_Filesystem::getSystemTempDir();
         $download_tmp .= DS."PHPFrame".DS."download";
 
@@ -131,7 +131,7 @@ class AppTemplate
 
         // Create the http request
         $request  = new PHPFrame_HTTPRequest($url);
-        $response = $request->download($download_tmp, $file_name);
+        $response = $request->download($download_tmp);
 
         echo "\n";
 
@@ -141,6 +141,12 @@ class AppTemplate
             $msg .= "Reason: ".$response->getReasonPhrase();
             throw new RuntimeException($msg);
         }
+
+        $file_name = preg_replace(
+            "/(.*filename=([a-zA-Z0-9_\-\.]+).*)/",
+            "$2",
+            $response->getHeader("content-disposition")
+        );
 
         // Extract archive in install dir
         $archive = new Archive_Tar($download_tmp.DS.$file_name, "gz");
@@ -164,9 +170,9 @@ class AppTemplate
             throw new InvalidArgumentException($msg);
         }
 
-        // Instantiate new config object
+        // Instantiate new config object from dist template
         $config = new PHPFrame_Config(
-            $this->_install_dir.DS."etc".DS."phpframe.ini"
+            $this->_install_dir.DS."etc".DS."phpframe.ini-dist"
         );
 
         // Bind to array
@@ -174,6 +180,8 @@ class AppTemplate
 
         // Create random secret string
         $config->set("secret", md5(uniqid()));
-        $config->store();
+
+        // Store new configuration file
+        $config->store($this->_install_dir.DS."etc".DS."phpframe.ini");
     }
 }

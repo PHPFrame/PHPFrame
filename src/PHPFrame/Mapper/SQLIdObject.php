@@ -288,7 +288,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     {
         // Validate input types and set internal property
         $pattern1 = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:]+$/";
-        $pattern2  = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN)$/";
+        $pattern2 = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN|IN)$/";
         if (!preg_match($pattern1, $left)
             || !preg_match($pattern1, $right)
             || !preg_match($pattern2, $operator)

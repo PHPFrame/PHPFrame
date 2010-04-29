@@ -58,13 +58,13 @@
 
         <listitem>
         <para>
-        {@link PHPFrame_RPCDocument}
+        {@link PHPFrame_RPCRenderer}
         </para>
         </listitem>
 
         <listitem>
         <para>
-        {@link PHPFrame_RPCRenderer}
+        {@link PHPFrame_RSSDocument}
         </para>
         </listitem>
 

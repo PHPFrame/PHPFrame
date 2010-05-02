@@ -31,12 +31,6 @@
         </para>
         </listitem>
 
-        <listitem>
-        <para>
-        {@link PHPFrame_FeedReader}
-        </para>
-        </listitem>
-
     </itemizedlist>
 
 </refsect1>

@@ -47,9 +47,9 @@ abstract class PHPFrame_ExtInfo extends PHPFrame_PersistentObject
             null,
             false,
             new PHPFrame_RegexpFilter(array(
-                "regexp"=>'/^[a-zA-Z\._]{3,20}$/',
+                "regexp"=>'/^[a-zA-Z\._]{3,50}$/',
                 "min_length"=>3,
-                "max_length"=>20
+                "max_length"=>50
             ))
         );
         $this->addField(

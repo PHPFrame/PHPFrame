@@ -29,8 +29,8 @@ class PHPFrame_DatabaseFactory
     /**
      * Get instance of DB object based on options array.
      *
-     * @param array $options An associative array containing the following
-     *                       options:
+     * @param array $options [Optional] An associative array containing the
+     *                       following options:
      *                         - driver (required)
      *                         - name (required)
      *                         - host

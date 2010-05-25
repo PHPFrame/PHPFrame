@@ -901,6 +901,7 @@ class PHPFrame_Application extends PHPFrame_Observer
                 }
 
                 $this->session()->getClient()->redirect($redirect_url);
+                return;
             }
         }
 

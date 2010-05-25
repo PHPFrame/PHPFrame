@@ -36,6 +36,7 @@ class PHPFrame_DatabaseFactory
      *                         - host
      *                         - user
      *                         - pass
+     *                         - prefix
      *                         - mysql_unix_socket
      *
      * @return PHPFrame_Database

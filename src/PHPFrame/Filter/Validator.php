@@ -252,8 +252,9 @@ class PHPFrame_Validator
             && (($this->_filtered_values[$field_name] === false && !$null_on_fail)
             || (is_null($this->_filtered_values[$field_name]) && $null_on_fail))
         ) {
+            $msg = "Failed to validate field '".$field_name."'. ";
             $last_message = end($filter->getMessages());
-            $this->fail($last_message[0], $last_message[1]);
+            $this->fail($msg.$last_message[0], $last_message[1]);
             return false;
         }
 

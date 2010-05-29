@@ -61,9 +61,9 @@ class PHPFrame_EnumFilter extends PHPFrame_Filter
             }
         }
         if (!$found) {
-            $err_msg = "Argument \$value in ".get_class($this)."::process() is
-            not one of the stored enums";
-            $this->fail($err_msg, 'InvalidArgumentException');
+            $msg  = "Argument \$value in ".get_class($this)."::process() is ";
+            $msg .= "not one of the stored enums.";
+            $this->fail($msg, 'InvalidArgumentException');
             return false;
         } else {
             return $value;

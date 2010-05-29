@@ -97,7 +97,7 @@ class PHPFrame_Validator
         if (!is_string($field_name) || strlen($field_name) < 1) {
             $msg  = get_class($this)."::setFilter() expects argument ";
             $msg .= "\$name to be of type string and not empty and got value ";
-            $msg .= "'".$field_name."' of type ".gettype($field_name);
+            $msg .= "'".$field_name."' of type ".gettype($field_name).".";
             throw new InvalidArgumentException($msg);
         }
 
@@ -135,7 +135,7 @@ class PHPFrame_Validator
         if (!is_string($field_name) || strlen($field_name) < 1) {
             $msg  = get_class($this)."::getFilter() expects argument ";
             $msg .= "\$name to be of type string and not empty and got value ";
-            $msg .= "'".$field_name."' of type ".gettype($field_name);
+            $msg .= "'".$field_name."' of type ".gettype($field_name).".";
             throw new InvalidArgumentException($msg);
         } elseif (!isset($this->_filters[$field_name])) {
             return null;
@@ -182,7 +182,7 @@ class PHPFrame_Validator
     {
         if (!is_bool($bool)) {
             $msg  = get_class($this)."::throwExceptions() expected argument ";
-            $msg .= "\$bool to be of type 'bool' and got '".gettype($bool)."'";
+            $msg .= "\$bool to be of type 'bool' and got '".gettype($bool)."'.";
             throw new InvalidArgumentException($msg);
         }
 
@@ -201,7 +201,7 @@ class PHPFrame_Validator
     {
         if (!is_string($str)) {
             $msg  = get_class($this)."::setExceptionClass() expected argument ";
-            $msg .= "\$str to be of type 'string' and got '".gettype($str)."'";
+            $msg .= "\$str to be of type 'string' and got '".gettype($str)."'.";
             throw new InvalidArgumentException($msg);
         }
 
@@ -222,7 +222,7 @@ class PHPFrame_Validator
         if (!is_string($field_name)) {
             $msg  = get_class($this)."::validate() expected argument ";
             $msg .= "\$field_name to be of type 'string' and got '";
-            $msg .= gettype($field_name)."'";
+            $msg .= gettype($field_name)."'.";
             throw new InvalidArgumentException($msg);
         }
 
@@ -366,7 +366,7 @@ class PHPFrame_Validator
     {
         if (!is_string($str)) {
             $msg  = get_class($this)."::fail() expected argument \$str ";
-            $msg .= "to be of type 'string' and got '".gettype($str)."'";
+            $msg .= "to be of type 'string' and got '".gettype($str)."'.";
             throw new InvalidArgumentException($msg);
         }
 

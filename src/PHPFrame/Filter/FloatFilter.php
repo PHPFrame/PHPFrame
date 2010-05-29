@@ -149,7 +149,7 @@ class PHPFrame_FloatFilter extends PHPFrame_Filter
         $filtered_value = filter_var($value, FILTER_VALIDATE_FLOAT, $options);
         if ($filtered_value === false) {
             $msg  = "Failed to validate value '".gettype($value)."(".$value;
-            $msg .= ")' with filter ".get_class($this);
+            $msg .= ")' with filter ".get_class($this).".";
             $this->fail($msg);
         }
 

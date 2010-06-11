@@ -18,11 +18,11 @@
  *
  * Methods in this class are the hooks that are called during the application
  * dispatch process ({@link PHPFrame_Application::dispatch()}) and allow
- * plugins to modify the state of any of the objects contained in an app
- * the request ({@link PHPFrame_Request}), reponse ({@link PHPFrame_Response})
- * and so on.
+ * plugins to modify the state of any of the objects contained in an app,
+ * including the request ({@link PHPFrame_Request}), response
+ * ({@link PHPFrame_Response}) and so on.
  *
- * All methods in this class are declared as concreto methods that don't do
+ * All methods in this class are declared as concrete methods that don't do
  * anything. This is so that implementing classed are not required to implement
  * any of them. It is up to each plugin to choose which methods to
  * implement/override.

@@ -292,6 +292,7 @@ class PHPFrame_Application extends PHPFrame_Observer
 
                     if (strtolower($class_name) == strtolower($file_name_no_ext)) {
                         include $file->getRealPath();
+                        return;
                     }
                 }
             }
@@ -303,6 +304,7 @@ class PHPFrame_Application extends PHPFrame_Observer
             $lib_file = $lib_path.DS.$class_name.".php";
             if (is_file($lib_file)) {
                 include $lib_file;
+                return;
             }
         }
     }
@@ -899,6 +901,7 @@ class PHPFrame_Application extends PHPFrame_Observer
                 }
 
                 $this->session()->getClient()->redirect($redirect_url);
+                return;
             }
         }
 

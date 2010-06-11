@@ -189,7 +189,7 @@ class PHPFrame_IntFilter extends PHPFrame_Filter
         $filtered_value = filter_var($value, FILTER_VALIDATE_INT, $options);
         if ($filtered_value === false) {
             $msg  = "Failed to validate value '".$value."' of type ";
-            $msg .= gettype($value)." with filter ".get_class($this);
+            $msg .= gettype($value)." with filter ".get_class($this).".";
             $this->fail($msg);
         }
 

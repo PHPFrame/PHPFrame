@@ -21,7 +21,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
- * @ignore
  */
 class PHPFrame_SQLPersistentObjectAssembler
     extends PHPFrame_PersistentObjectAssembler
@@ -136,6 +135,10 @@ class PHPFrame_SQLPersistentObjectAssembler
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
+        if (!$obj->isDirty()) {
+            return;
+        }
+
         $obj->validateAll();
 
         if ($obj->id() <= 0) {
@@ -151,7 +154,13 @@ class PHPFrame_SQLPersistentObjectAssembler
         $params = $this->buildQueryParams(iterator_to_array($obj));
         $db     = $this->factory->getDB();
 
-        $db->query($sql, $params);
+        $stmt = $db->query($sql, $params);
+        if ($build_query_method = "buildUpdateQuery"
+            && $stmt->rowCount() == 0
+        ) {
+            $sql = $this->buildInsertQuery(iterator_to_array($obj));
+            $stmt = $db->query($sql, $params);
+        }
 
         if ($obj->id() <= 0) {
             $obj->id($db->lastInsertId());

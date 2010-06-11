@@ -199,7 +199,7 @@ abstract class PHPFrame_Filter
     {
         if (!is_string($str)) {
             $msg  = get_class($this)."::fail() expected argument \$str ";
-            $msg .= "to be of type 'string' and got '".gettype($str)."'";
+            $msg .= "to be of type 'string' and got '".gettype($str)."'.";
             throw new InvalidArgumentException($msg);
         }
 

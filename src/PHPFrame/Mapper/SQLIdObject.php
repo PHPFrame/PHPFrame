@@ -248,7 +248,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     {
         $join       = trim((string) $join);
         $join_array = explode(" ON ", $join);
-        $pattern    = '/^(JOIN|INNER JOIN|OUTER JOIN|LEFT JOIN|RIGHT JOIN)';
+        $pattern    = '/^(JOIN|INNER JOIN|OUTER JOIN|LEFT JOIN|RIGHT JOIN|LEFT OUTER JOIN)';
         $pattern   .= '\s+(.*)$/';
 
         preg_match($pattern, $join_array[0], $matches);
@@ -287,8 +287,8 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function where($left, $operator, $right)
     {
         // Validate input types and set internal property
-        $pattern1 = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:]+$/";
-        $pattern2 = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN|IN)$/";
+        $pattern1 = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:,]+$/";
+        $pattern2 = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN|IN|IS|IS NOT)$/";
         if (!preg_match($pattern1, $left)
             || !preg_match($pattern1, $right)
             || !preg_match($pattern2, $operator)

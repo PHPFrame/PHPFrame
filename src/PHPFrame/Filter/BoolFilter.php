@@ -142,7 +142,7 @@ class PHPFrame_BoolFilter extends PHPFrame_Filter
             || (is_null($filtered_value) && $null_on_failure)
         ) {
             $msg  = "Failed to validate value '".$value."' of type ";
-            $msg .= gettype($value)." with filter ".get_class($this);
+            $msg .= gettype($value)." with filter ".get_class($this).".";
             $this->fail($msg);
         }
 

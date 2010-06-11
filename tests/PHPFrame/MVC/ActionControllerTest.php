@@ -72,6 +72,21 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $this->_app->response()->statusCode());
     }
 
+    public function test_doRedirect()
+    {
+        $request = $this->_app->request();
+        $request->controllerName("testableaction");
+        $request->action("doRedirect");
+
+        ob_start();
+        $this->_app->dispatch($request);
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        $pattern = "/The page title\n==============\n\nLorem ipsum.../";
+        $this->assertRegExp($pattern, $output);
+    }
+
     public function test_executeUnknownActionFailure()
     {
         $this->_app->request()->action("aaa");
@@ -254,6 +269,13 @@ class TestableActionController extends PHPFrame_ActionController
     {
         $this->response()->title("The page title");
         $this->response()->body("Lorem ipsum...");
+    }
+
+    public function doRedirect()
+    {
+        $this->request()->controllerName("user");
+        $this->request()->action("index");
+        $this->request()->dispatched(false);
     }
 
     public function app()

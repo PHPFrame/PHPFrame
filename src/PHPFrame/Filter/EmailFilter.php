@@ -63,7 +63,7 @@ class PHPFrame_EmailFilter extends PHPFrame_StringFilter
         $value = filter_var($value, FILTER_VALIDATE_EMAIL);
         if ($value === false) {
             $msg  = "Failed to validate value '".gettype($value)."(".$value;
-            $msg .= ")' with filter ".get_class($this);
+            $msg .= ")' with filter ".get_class($this).".";
             $this->fail($msg);
         }
 

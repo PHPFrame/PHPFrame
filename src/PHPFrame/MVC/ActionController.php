@@ -39,81 +39,50 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      *
      * @var string
      */
-    private $_default_action = null;
+    private $_def_action = null;
     /**
      * Reference to application object for which controller will execute action
      *
      * @var PHPFrame_Application
      */
     private $_app;
-    /**
-     * A string containing a url to be redirected to. Leave empty for no
-     * redirection.
-     *
-     * @var string
-     */
-    private $_redirect_url = null;
-    /**
-     * This is a flag we use to indicate whether the controller's executed task
-     * was successful or not.
-     *
-     * @var boolean
-     */
-    private $_success = true;
 
     /**
      * Constructor
      *
-     * @param string $default_action A string with the default action for a
-     *                               concrete action controller.
+     * @param PHPFrame_Application $app        Reference to application object.
+     * @param string               $def_action A string with the default action
+     *                                         for a concrete controller.
      *
      * @return void
      * @since  1.0
      */
-    public function __construct($default_action)
+    public function __construct(PHPFrame_Application $app, $def_action)
     {
-        // Set default action property
-        $this->_default_action = (string) $default_action;
+        $this->_app = $app;
+        $this->_def_action = (string) $def_action;
     }
 
     /**
      * This method executes a given action (invokes a named member method).
      *
-     * @param PHPFrame_Application $app Reference to application object.
-     *
      * @return void
      * @since  1.0
      */
-    public function execute(PHPFrame_Application $app)
+    public function execute()
     {
-        $this->_app = $app;
-
         // Get action from the request
-        $request_action = $app->request()->action();
+        $request_action = $this->app()->request()->action();
 
         // If no specific action has been requested we use default action
         if (empty($request_action)) {
-            $action = $this->_default_action;
-            $app->request()->action($action);
+            $action = $this->_def_action;
+            $this->app()->request()->action($action);
         } else {
             $action = $request_action;
         }
 
         $this->_invokeAction($action);
-
-        // Redirect if set by the controller
-        $this->redirect();
-    }
-
-    /**
-     * Get controller's success flag
-     *
-     * @return boolean
-     * @since  1.0
-     */
-    public function getSuccess()
-    {
-        return $this->_success;
     }
 
     /**
@@ -216,6 +185,17 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
 
     /**
+     * Get reference to application's crypt object.
+     *
+     * @return PHPFrame_Crypt
+     * @since  1.0
+     */
+    protected function crypt()
+    {
+        return $this->app()->crypt();
+    }
+
+    /**
      * Get reference to application's session object.
      *
      * @return PHPFrame_SessionRegistry
@@ -265,54 +245,19 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
 
     /**
-     * Cancel and set redirect to index.
+     * Set redirection location.
+     *
+     * @param string $location    URL to redirect to after action has been
+     *                            executed.
+     * @param int    $status_code [Optional] Default value is 303.
      *
      * @return void
      * @since  1.0
      */
-    protected function cancel()
+    public function setRedirect($location, $status_code=303)
     {
-        $this->setRedirect('index.php');
-    }
-
-    /**
-     * Set the redirection URL.
-     *
-     * @param string $url The URL we want to redirect to when we call
-     *                    PHPFrame_ActionController::redirect()
-     *
-     * @return void
-     * @since  1.0
-     */
-    protected function setRedirect($url)
-    {
-        $this->_redirect_url = $url;
-    }
-
-    /**
-     * Redirect browser to redirect URL.
-     *
-     * @return void
-     * @since  1.0
-     * @todo   Rewrite URL using plugin
-     */
-    protected function redirect()
-    {
-        // Get client object from session
-        $client = PHPFrame::getSession()->getClient();
-
-        // Check that we got the right type
-        if (!$client instanceof PHPFrame_Client) {
-            $msg = "Action controller could not redirect using client object";
-            throw new RuntimeException($msg);
-        }
-
-        // Delegate redirection to client object if it is of the right type
-        if (!empty($this->_redirect_url)) {
-            //echo $this->_redirect_url; exit;
-            //$url = PHPFrame_URLRewriter::rewriteURL($url);
-            $client->redirect($this->_redirect_url);
-        }
+        $this->response()->header("Location", trim((string) $location));
+        $this->response()->statusCode($status_code);
     }
 
     /**
@@ -325,7 +270,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function raiseError($msg)
     {
-        $this->_success = false;
         $this->notifyEvent($msg, PHPFrame_Subject::EVENT_TYPE_ERROR);
     }
 
@@ -339,7 +283,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function raiseWarning($msg)
     {
-        $this->_success = false;
         $this->notifyEvent($msg, PHPFrame_Subject::EVENT_TYPE_WARNING);
     }
 
@@ -353,7 +296,6 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
      */
     protected function notifySuccess($msg="")
     {
-        $this->_success = true;
         $this->notifyEvent($msg, PHPFrame_Subject::EVENT_TYPE_SUCCESS);
     }
 
@@ -407,7 +349,7 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
             $msg  = get_class($this)." does NOT support an action called '";
             $msg .= $action."'. ".get_class($this)." supports the following ";
             $msg .= "actions: '".implode("','", $supported_methods)."'.";
-            throw new BadMethodCallException($msg, 400);
+            throw new BadMethodCallException($msg, 404);
         }
 
         if (!$reflection_method->isPublic()) {

@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="PHPFrame" default="build" basedir="../">
 
-    <target name="build" 
-            depends="prepare, phpcs, phpcs-clitool, phpunit, phpunit-clitool" />
-            
+    <property name="logs.dir" value="${basedir}/build/logs"/>
+    <property name="coverage.dir" value="${basedir}/build/coverage"/>
+
     <target name="prepare">
-        <exec executable="rm" dir="${basedir}">
-            <arg line="-rf build/logs build/coverage" />
-        </exec>
-        <exec executable="mkdir" dir="${basedir}">
-            <arg line="build/logs build/coverage" />
-        </exec>
+        <delete
+            dir="${logs.dir}"
+            includeemptydirs="true"
+            verbose="true"
+            failonerror="false"
+        />
+        <delete
+            dir="${coverage.dir}"
+            includeemptydirs="true"
+            verbose="true"
+            failonerror="false"
+        />
+        <delete
+            dir="${basedir}/build/tmp"
+            includeemptydirs="true"
+            verbose="true"
+            failonerror="false"
+        />
+
+        <mkdir dir="${logs.dir}"/>
+        <mkdir dir="${coverage.dir}"/>
     </target>
-    
-    <target name="phpcs">
-        <exec executable="phpcs"
-              dir="${basedir}/src"
-              output="${basedir}/build/logs/checkstyle.xml">
-            <arg line="--report=checkstyle --standard=PEAR ." />
-        </exec>
-    </target>
-    
-    <target name="phpcs-clitool">
-        <exec executable="phpcs"
-              dir="${basedir}/data/CLI_Tool/src"
-              output="${basedir}/build/logs/clitool.checkstyle.xml">
-            <arg line="--report=checkstyle --standard=PEAR ." />
+
+    <target name="phpunit" depends="prepare">
+        <exec executable="phpunit" dir="${basedir}" failonerror="on">
+            <arg line="--log-junit ${logs.dir}/phpunit.xml
+                       --coverage-clover ${logs.dir}/phpunit.coverage.xml
+                       --coverage-html ${coverage.dir}
+                       ./" />
         </exec>
     </target>
 
-    <target name="phpunit">
-        <exec executable="phpunit" dir="${basedir}" failonerror="on">
-            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml
-                       --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml 
-                       --coverage-html ${basedir}/build/coverage 
-                       tests/" />
+    <target name="phpcs" depends="phpunit">
+        <exec executable="phpcs"
+              dir="${basedir}"
+              output="${logs.dir}/checkstyle.xml">
+            <arg line="--report=checkstyle --standard=PEAR src data/CLI_Tool/src" />
         </exec>
     </target>
-    
-    <target name="phpunit-clitool">
-        <exec executable="phpunit" dir="${basedir}/data/CLI_Tool" failonerror="on">
-            <arg line="--log-junit ${basedir}/build/logs/clitool.phpunit.xml
-                       --coverage-clover ${basedir}/build/logs/clitool.phpunit.coverage.xml 
-                       --coverage-html ${basedir}/build/clitool-coverage 
-                       tests/" />
-        </exec>
-    </target>
+
+    <target name="build" depends="prepare, phpunit, phpcs" />
 
 </project>

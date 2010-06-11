@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Ext/LibInfo.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Ext
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -15,7 +15,7 @@
 
 /**
  * Addons Lib Class
- * 
+ *
  * @category PHPFrame
  * @package  Ext
  * @author   Lupo Montero <lupo@e-noise.com>

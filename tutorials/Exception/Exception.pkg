@@ -176,12 +176,6 @@
         </para>
         </listitem>
 
-        <listitem>
-        <para>
-        {@link PHPFrame_AccessDeniedException}
-        </para>
-        </listitem>
-
     </itemizedlist>
 
 </refsect1>

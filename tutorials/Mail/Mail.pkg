@@ -8,43 +8,43 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
-    The Mail package provides two classes, one to deal with outgoing email 
-    ({@link PHPFrame_Mailer}) and one to handle incoming email 
-    ({@link PHPFrame_IMAP}).   
+    The Mail package provides two classes, one to deal with outgoing email
+    ({@link PHPFrame_Mailer}) and one to handle incoming email
+    ({@link PHPFrame_IMAP}).
     </para>
 
 </refsect1>
 
 <refsect1 id="{@id classes}">
     <title>Classes in Mail Package</title>
-    
+
     <itemizedlist>
         <listitem>
         <para>
         {@link PHPFrame_IMAP}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_Mailer}
         </para>
-        
+
         <para>
         The Mailer class extends PHPMailer.
         </para>
         </listitem>
-        
+
     </itemizedlist>
 
 </refsect1>
 
-<!-- 
+<!--
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <example>
         <title></title>
         <para>
@@ -54,15 +54,15 @@
 
 ]]>
         </programlisting>
-        
+
         <screen>
 <![CDATA[
 
 ]]>
         </screen>
-       
+
     </example>
-    
+
 </refsect1>
 -->
 

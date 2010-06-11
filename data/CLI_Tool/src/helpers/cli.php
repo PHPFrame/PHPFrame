@@ -1,9 +1,9 @@
 <?php
 /**
  * data/CLITool/src/helpers/cli.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   PHPFrame_CLITool
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * CLI helper.
- * 
+ *
  * @category PHPFrame
  * @package  PHPFrame_CLITool
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -26,9 +26,9 @@ class CliHelper extends PHPFrame_ViewHelper
 {
     /**
      * Format string into 'mark down' underlined title.
-     * 
+     *
      * @param string $str The string we want to format.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -36,11 +36,11 @@ class CliHelper extends PHPFrame_ViewHelper
     {
         $title     = (string) $str;
         $underline = "";
-        
+
         for ($i=0; $i<strlen($title); $i++) {
             $underline .= "-";
         }
-        
+
         return $title."\n".$underline;
     }
 }

@@ -51,6 +51,7 @@ class PHPFrame_Request implements IteratorAggregate
      * @var bool
      */
     private $_dispatched = false;
+    private $_raw_body;
 
     /**
      * Constructor
@@ -60,7 +61,7 @@ class PHPFrame_Request implements IteratorAggregate
      */
     public function __construct()
     {
-
+        $this->_raw_body = file_get_contents("php://input");
     }
 
     /**
@@ -263,10 +264,11 @@ class PHPFrame_Request implements IteratorAggregate
      * @param string $key   Key used to store file. Normally the name of the
      *                      form field to be used for posting the file.
      * @param array  $array [Optional] File data.
-     *                      - tmp_name
      *                      - name
+     *                      - type
+     *                      - tmp_name
+     *                      - error
      *                      - size
-     *                      - type- error
      *
      * @return array|null
      * @since  1.0
@@ -364,14 +366,14 @@ class PHPFrame_Request implements IteratorAggregate
     }
 
     /**
-     * Get the request time (unix timestamp).
+     * Get/set the request time (unix timestamp).
      *
      * @param int $int [Optional] Unix timestamp.
      *
      * @return int
      * @since  1.0
      */
-    public function requestTime($int)
+    public function requestTime($int=null)
     {
         if (!is_null($int)) {
             $this->_array["request_time"] = (int) $int;
@@ -447,5 +449,22 @@ class PHPFrame_Request implements IteratorAggregate
         }
 
         return $this->_dispatched;
+    }
+
+    /**
+     * Get/set request's raw body.
+     *
+     * @param string $str [Optional] The raw request body.
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function body($str=null)
+    {
+        if (!is_null($str)) {
+            $this->_raw_body = (string) $str;
+        }
+
+        return $this->_raw_body;
     }
 }

@@ -27,12 +27,14 @@ class ManController extends PHPFrame_ActionController
     /**
      * Constructor.
      *
+     * @param PHPFrame_Application $app Reference to application object.
+     *
      * @return void
      * @since  1.0
      */
-    public function __construct()
+    public function __construct(PHPFrame_Application $app)
     {
-        parent::__construct("index");
+        parent::__construct($app, "index");
     }
 
     /**

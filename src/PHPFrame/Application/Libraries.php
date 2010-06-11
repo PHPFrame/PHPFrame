@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Application/Libraries.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Application
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * Application Libraries Class
- * 
+ *
  * @category PHPFrame
  * @package  Application
  * @author   Lupo Montero <lupo@e-noise.com>

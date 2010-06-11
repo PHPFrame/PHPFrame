@@ -50,7 +50,6 @@
    <file baseinstalldir="/" name="PHPFrame/Client/CLIClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/Client.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/DefaultClient.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Client/MobileClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Client/XMLRPCClient.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Config/Config.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Database/Database.php" role="php" />
@@ -61,7 +60,6 @@
    <file baseinstalldir="/" name="PHPFrame/Database/SQLiteDatabase.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Informer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/Logger.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Debug/Profiler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Debug/TextLogger.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/Document.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/HTMLDocument.php" role="php" />
@@ -79,7 +77,6 @@
    <file baseinstalldir="/" name="PHPFrame/Documentor/ControllerDoc.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Documentor/MethodDoc.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Documentor/PropertyDoc.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Exception/AccessDeniedException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/DatabaseException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/ErrorException.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Exception/ExceptionHandler.php" role="php" />
@@ -101,7 +98,6 @@
    <file baseinstalldir="/" name="PHPFrame/Filter/URLFilter.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Filter/Validator.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/DownloadRequestListener.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/HTTP/FeedReader.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/HTTP/HTTPRequest.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />
@@ -114,10 +110,10 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectCollection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PolymorphicPersistentObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/RPCObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistentObjectAssembler.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Mapper/XMLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistentObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
@@ -142,6 +138,11 @@
    <file baseinstalldir="/" name="PHPFrame/Utils/XMLSerialiser.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame.php" role="php" />
 
+   <file baseinstalldir="/" name="CLI_Tool/data/class-templates/ActionController.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/data/class-templates/Mapper.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/data/class-templates/PersistentObject.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/data/class-templates/Plugin.php" role="data" />
+   <file baseinstalldir="/" name="CLI_Tool/data/class-templates/ViewHelper.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/etc/phpframe.ini" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/public/index.php" role="data" />
    <file baseinstalldir="/" name="CLI_Tool/src/controllers/app.php" role="data" />
@@ -165,27 +166,6 @@
     <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@package_version@" to="version" type="package-info" />
-  </file>
-
-  <file baseinstalldir="" name="PHPFrame_Postinstall.php" role="php">
-    <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
-    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
-    <tasks:replace from="@package_version@" to="version" type="package-info" />
-    <tasks:postinstallscript>
-     <tasks:paramgroup>
-      <tasks:id>Log files</tasks:id>
-      <tasks:param>
-          <tasks:name>CONFIRM</tasks:name>
-       <tasks:prompt>
-The postinstall script will make log files writable to all users. Only do
-this if you will be running PHPFrame as a different user to the one
-installing the PEAR package. If you want to continue type "yes".
-       </tasks:prompt>
-       <tasks:type>string</tasks:type>
-       <tasks:default></tasks:default>
-      </tasks:param>
-     </tasks:paramgroup>
-    </tasks:postinstallscript>
   </file>
 
   </dir>

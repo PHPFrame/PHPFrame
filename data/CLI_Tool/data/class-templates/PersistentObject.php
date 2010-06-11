@@ -6,24 +6,24 @@ class MyPersistentObject extends PHPFrame_PersistentObject
         // Some example fields...
         // Add fields before calling parent's constructor
         $this->addField(
-            "name", 
-            null, 
-            false, 
+            "name",
+            null,
+            false,
             new PHPFrame_StringFilter(array("min_length"=>0, "max_length"=>50))
         );
         $this->addField(
-            "amount", 
-            false, 
-            false, 
+            "amount",
+            false,
+            false,
             new PHPFrame_FloatFilter()
         );
         $this->addField(
-            "email", 
-            false, 
-            false, 
+            "email",
+            false,
+            false,
             new PHPFrame_EmailFilter()
         );
-        
+
         parent::__construct($options);
     }
 }

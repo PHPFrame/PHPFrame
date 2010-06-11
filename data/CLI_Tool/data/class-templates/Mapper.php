@@ -5,9 +5,9 @@ class MyExtendedMapper extends PHPFrame_Mapper
     {
         parent::__construct("target_class", $db, "table_name")
     }
-    
+
     public function insert(target_class $db)
     {
-        
+
     }
 }

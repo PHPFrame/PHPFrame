@@ -8,55 +8,55 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
-    The "Utils" or utilities package contains a set of classes that do not 
-    fall into any other specific package and that are normally used from many 
-    different contexts.    
+    The "Utils" or utilities package contains a set of classes that do not
+    fall into any other specific package and that are normally used from many
+    different contexts.
     </para>
 
 </refsect1>
 
 <refsect1 id="{@id classes}">
     <title>Classes in Utils Package</title>
-    
+
     <itemizedlist>
         <listitem>
         <para>
         {@link PHPFrame_Crypt}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_Exec}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_Filesystem}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_ImageProcessor}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_URI}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_VCard}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_XMLSerialiser}
@@ -66,10 +66,10 @@
 
 </refsect1>
 
-<!-- 
+<!--
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <example>
         <title></title>
         <para>
@@ -79,15 +79,15 @@
 
 ]]>
         </programlisting>
-        
+
         <screen>
 <![CDATA[
 
 ]]>
         </screen>
-       
+
     </example>
-    
+
 </refsect1>
 -->
 

@@ -13,24 +13,37 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $data_dir = preg_replace("/tests\/.*/", "data", __FILE__);
         PHPFrame::dataDir($data_dir);
 
-        // Get application install dir (we use CLI Tool for tests)
-        $pattern     = '/(.*)(\/|\\\)tests(\/|\\\)PHPFrame(\/|\\\)(.*)/';
-        $replacement = '$1$2data$3CLI_Tool';
-        $install_dir = preg_replace($pattern, $replacement, __FILE__);
+        $install_dir = preg_replace("/tests\/.*/", "data/CLI_Tool", __FILE__);
+        $home_dir    = PHPFrame_Filesystem::getUserHomeDir();
+        $var_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."var";
+        $tmp_dir     = $home_dir.DS.".PHPFrame_CLI_Tool".DS."tmp";
 
-        // Delete app registry if it exists
-        if (is_file($install_dir.DS."tmp".DS."app.reg")) {
-            unlink($install_dir.DS."tmp".DS."app.reg");
+        PHPFrame_Filesystem::ensureWritableDir($home_dir.DS.".PHPFrame_CLI_Tool");
+
+        if (is_dir($var_dir)) {
+            exec("chmod +w ".$var_dir);
+        }
+
+        if (is_dir($tmp_dir)) {
+            exec("chmod +w ".$tmp_dir);
+            PHPFrame_Filesystem::rm($tmp_dir, true);
         }
 
         // Instantiate application
-        $options    = array("install_dir"=>$install_dir);
-        $this->_app = new PHPFrame_Application($options);
+        $this->_app = new PHPFrame_Application(array(
+            "install_dir" => $install_dir,
+            "var_dir"     => $var_dir,
+            "tmp_dir"     => $tmp_dir
+        ));
     }
 
     public function tearDown()
     {
-        $tmp_dir = $this->_app->getInstallDir().DS."tmp";
+        if (is_dir($this->_app->getTmpDir())) {
+            exec("chmod +w ".$this->_app->getTmpDir());
+        }
+
+        $tmp_dir = $this->_app->getTmpDir();
         $app_reg = $tmp_dir.DS."app.reg";
 
         if (is_file($app_reg)) {
@@ -40,7 +53,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
             PHPFrame_Filesystem::rm($tmp_dir, true);
         }
 
-        $var_dir = $this->_app->getInstallDir().DS."var";
+        $var_dir = $this->_app->getVarDir();
         $app_log = $var_dir.DS."app.log";
         $data_db = $var_dir.DS."data.db";
 
@@ -50,6 +63,77 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         if (is_file($data_db)) {
             unlink($data_db);
         }
+
+        // Destroy application
+        $this->_app->__destruct();
+    }
+
+    public function test_constructNoInstallDirFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+
+        $app = new PHPFrame_Application(array());
+    }
+
+    public function test_constructInstallDirWrongTypeFailure()
+    {
+        $this->setExpectedException("InvalidArgumentException");
+
+        $app = new PHPFrame_Application(array("install_dir"=>1));
+    }
+
+    public function test_constructInstallDirNotExistsFailure()
+    {
+        $this->setExpectedException("RuntimeException");
+
+        $app = new PHPFrame_Application(array("install_dir"=>"lalalal"));
+    }
+
+    // The following tests have been commented out because they will not pass
+    // on the build server as the build runs as "root" user and we will not
+    // be able to make PHP fail for not having parmission to write in a dir.
+
+    // public function test_constructVarDirNotWriteableFailure()
+    // {
+    //     exec("chmod -w ".$this->_app->getVarDir());
+    //
+    //     $this->setExpectedException("RuntimeException");
+    //
+    //     $app = new PHPFrame_Application(
+    //         array(
+    //             "install_dir" => $this->_app->getInstallDir()
+    //         )
+    //     );
+    // }
+    //
+    // public function test_constructTmpDirNotWriteableFailure()
+    // {
+    //     exec("chmod -w ".$this->_app->getTmpDir());
+    //
+    //     $this->setExpectedException("RuntimeException");
+    //
+    //     $app = new PHPFrame_Application(
+    //         array(
+    //             "install_dir" => $this->_app->getInstallDir()
+    //         )
+    //     );
+    // }
+
+    public function test_constructTmpDirMkdir()
+    {
+        PHPFrame_Filesystem::rm($this->_app->getTmpDir(), true);
+
+        $this->assertFalse(is_dir($this->_app->getTmpDir()));
+
+        $app = new PHPFrame_Application(
+            array(
+                "install_dir" => $this->_app->getInstallDir(),
+                "var_dir"     => $this->_app->getVarDir(),
+                "tmp_dir"     => $this->_app->getTmpDir()
+            )
+        );
+
+        $this->assertTrue(is_dir($this->_app->getTmpDir()));
     }
 
     public function test_config()
@@ -109,15 +193,20 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertType("PHPFrame_Informer", $this->_app->informer());
     }
 
-    public function test_profiler()
+    public function test_crypt()
     {
-        $this->_app->config()->set("debug.profiler_enable", 1);
-        $this->assertType("PHPFrame_Profiler", $this->_app->profiler());
+        $this->assertType("PHPFrame_Crypt", $this->_app->crypt());
     }
 
     public function test_db()
     {
+        $db_enable = $this->_app->config()->get("db.enable");
+
+        $this->_app->config()->set("db.enable", true);
+
         $this->assertType("PHPFrame_Database", $this->_app->db());
+
+        $this->_app->config()->set("db.enable", $db_enable);
     }
 
     public function test_libraries()
@@ -159,7 +248,13 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
 
     public function test_dispatch()
     {
-        //$request = new PHPFrame_Request();
-        //$this->_app->dispatch($request);
+        ob_start();
+        $this->_app->dispatch(new PHPFrame_Request());
+        ob_end_clean();
+
+        $this->assertRegExp(
+            "/PHPFrame Command Line Tool/",
+            (string) $this->_app->response()->document()
+        );
     }
 }

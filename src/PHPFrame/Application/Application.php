@@ -114,17 +114,16 @@ class PHPFrame_Application extends PHPFrame_Observer
     /**
      * Constructor
      *
-     * @param array $options [Optional] An associative array with the following
-     *                                  keys:
-     *                                  - install_dir [Required]
-     *                                  - config_dir  [Optional]
-     *                                  - var_dir     [Optional]
-     *                                  - tmp_dir     [Optional]
+     * @param array $options An associative array with the following keys:
+     *                       - install_dir [Required]
+     *                       - config_dir  [Optional]
+     *                       - var_dir     [Optional]
+     *                       - tmp_dir     [Optional]
      *
      * @return void
      * @since  1.0
      */
-    public function __construct(array $options=null)
+    public function __construct(array $options)
     {
         if (!isset($options["install_dir"])) {
             $msg  = "Otions array passed to ".get_class($this)."::";
@@ -162,8 +161,9 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $this->$prop_name = $this->_install_dir.DS.$value;
             }
 
-            if ((!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
-                || !is_writable($this->$prop_name)
+            if ($key != "config_dir"
+                && ((!is_dir($this->$prop_name) && !mkdir($this->$prop_name))
+                || !is_writable($this->$prop_name))
             ) {
                 $msg = "Directory ".$this->$prop_name." is not writable.";
                 throw new RuntimeException($msg);
@@ -183,17 +183,36 @@ class PHPFrame_Application extends PHPFrame_Observer
         // Acquire and store instance of MVC Factory class
         $this->factory(new PHPFrame_MVCFactory($this));
 
-        //Register MVC autoload function
+        // Register Application's autoload function
         spl_autoload_register(array($this, "autoload"));
 
-        // Attach app to Exception handler to observe uncaught exceptions
+        // Attach observers to Exception handler
+        $logger = $this->logger();
+        if ($logger instanceof PHPFrame_Logger) {
+            PHPFrame_ExceptionHandler::instance()->attach($logger);
+        }
+
+        $informer = $this->informer();
+        if ($informer instanceof PHPFrame_Logger) {
+            PHPFrame_ExceptionHandler::instance()->attach($informer);
+        }
+
         PHPFrame_ExceptionHandler::instance()->attach($this);
 
-        // Set profiler milestone
-        $profiler = $this->profiler();
-        if ($profiler instanceof PHPFrame_Profiler) {
-            $profiler->addMilestone();
-        }
+        // Acquire instance of Plugin Handler
+        $this->_plugin_handler = new PHPFrame_PluginHandler($this);
+    }
+
+    /**
+     * Application's destructor.
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function __destruct()
+    {
+        // Register Application's autoload function
+        spl_autoload_unregister(array($this, "autoload"));
     }
 
     /**
@@ -205,6 +224,8 @@ class PHPFrame_Application extends PHPFrame_Observer
      *
      * @return void
      * @since  1.0
+     * @todo   Need to look at implementation of classPrefix() feature and how
+     *         it affects the autoloader.
      */
     public function autoload($class_name)
     {
@@ -232,7 +253,7 @@ class PHPFrame_Application extends PHPFrame_Observer
         $class_name = str_replace($super_class, "", $class_name);
 
         // Remove class prefix if applicable
-        $class_name = str_replace($this->classPrefix(), "", $class_name);
+        //$class_name = str_replace($this->classPrefix(), "", $class_name);
 
         // Build dir path by breaking camel case class name
         $pattern = '/[A-Z]{1}[a-zA-Z0-9]+/';
@@ -252,25 +273,26 @@ class PHPFrame_Application extends PHPFrame_Observer
         }
 
         // Autoload models
-        $models_dir   = $this->_install_dir.DS."src".DS."models";
-        $dir_iterator = new RecursiveDirectoryIterator($models_dir);
-        $filter       = array("php");
-        $iterator     = new RecursiveIteratorIterator(
-            $dir_iterator,
-            RecursiveIteratorIterator::SELF_FIRST
-        );
+        $models_dir = $this->_install_dir.DS."src".DS."models";
+        if (is_dir($models_dir)) {
+            $dir_iterator = new RecursiveDirectoryIterator($models_dir);
+            $filter       = array("php");
+            $iterator     = new RecursiveIteratorIterator(
+                $dir_iterator,
+                RecursiveIteratorIterator::SELF_FIRST
+            );
 
-        foreach ($iterator as $file) {
-            //echo $file->getRealPath(); continue;
-            if (in_array(end(explode('.', $file->getFileName())), $filter)) {
-                $file_name_no_ext = substr(
-                    $file->getFileName(),
-                    0,
-                    strpos($file->getFileName(), ".")
-                );
+            foreach ($iterator as $file) {
+                if (in_array(end(explode('.', $file->getFileName())), $filter)) {
+                    $file_name_no_ext = substr(
+                        $file->getFileName(),
+                        0,
+                        strpos($file->getFileName(), ".")
+                    );
 
-                if (strtolower($class_name) == strtolower($file_name_no_ext)) {
-                    include $file->getRealPath();
+                    if (strtolower($class_name) == strtolower($file_name_no_ext)) {
+                        include $file->getRealPath();
+                    }
                 }
             }
         }
@@ -296,20 +318,51 @@ class PHPFrame_Application extends PHPFrame_Observer
      */
     protected function doUpdate(PHPFrame_Subject $subject)
     {
+        $response = $this->response();
+
         if ($subject instanceof PHPFrame_ExceptionHandler) {
             $exception = $subject->lastException();
-            $this->response()->statusCode($exception->getCode());
-            $this->response()->title("Oooops... an error occurred");
+
+            $code = $exception->getCode();
+            if (!in_array($code, array(400, 401, 403, 404, 500))) {
+                $code = 500;
+            }
+
+            $response->statusCode($code);
+            $response->title("Oooops... an error occurred");
 
             $display_exceptions = $this->config()->get("debug.display_exceptions");
             if ($display_exceptions) {
-                $this->response()->body($exception);
+                $response->body($exception);
             } else {
-                $this->response()->body("Ooooops... An error occurred.");
+                switch ($code) {
+                case 400 :
+                    $msg = "Bad Request";
+                    break;
+                case 401 :
+                    $msg = "Unauthorised";
+                    break;
+                case 403 :
+                    $msg = "Forbidden";
+                    break;
+                case 404 :
+                    $msg = "Not Found";
+                    break;
+                case 500 :
+                    $msg = "Internal Server Error";
+                    break;
+                }
+
+                if ($response->renderer() instanceof PHPFrame_RPCRenderer) {
+                    $msg = new Exception($msg, $code);
+                }
+
+                $response->body($msg);
             }
 
-            $this->response()->send();
-            exit;
+            $this->output();
+
+            exit($code);
         }
     }
 
@@ -322,6 +375,28 @@ class PHPFrame_Application extends PHPFrame_Observer
     public function getInstallDir()
     {
         return $this->_install_dir;
+    }
+
+    /**
+     * Get absolute path to var directory
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function getVarDir()
+    {
+        return $this->_var_dir;
+    }
+
+    /**
+     * Get absolute path to tmp directory
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function getTmpDir()
+    {
+        return $this->_tmp_dir;
     }
 
     /**
@@ -466,6 +541,12 @@ class PHPFrame_Application extends PHPFrame_Observer
         } elseif (is_null($this->_db)) {
             $options = $this->config()->getSection("db");
 
+            if (!array_key_exists("enable", $options) || !$options["enable"]) {
+                $msg  = "Can not get database object because database is not ";
+                $msg .= "enabled in configuration file.";
+                throw new LogicException($msg);
+            }
+
             if (!array_key_exists("driver", $options)
                 || !array_key_exists("name", $options)
             ) {
@@ -520,11 +601,20 @@ class PHPFrame_Application extends PHPFrame_Observer
      */
     public function imap(PHPFrame_IMAP $imap=null)
     {
+        $imap_enabled = (bool) $this->config()->get("imap.enable");
+
         if (!is_null($imap)) {
             $this->registry()->set("imap", $imap);
 
-        } elseif (is_null($this->registry()->get("imap"))) {
-            $this->registry()->set("imap", new PHPFrame_IMAP());
+        } elseif (is_null($this->registry()->get("imap")) && $imap_enabled) {
+            $this->registry()->set(
+                "imap",
+                new PHPFrame_IMAP(
+                    $this->config()->get("imap.host"),
+                    $this->config()->get("imap.user"),
+                    $this->config()->get("imap.pass")
+                )
+            );
         }
 
         return $this->registry()->get("imap");
@@ -609,7 +699,7 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $log_level
             );
 
-            $this->_setLogger($logger);
+            $this->registry()->set("logger", $logger);
         }
 
         return $this->registry()->get("logger");
@@ -626,7 +716,9 @@ class PHPFrame_Application extends PHPFrame_Observer
      */
     public function informer(PHPFrame_Informer $informer=null)
     {
-        if ($this->config()->get("debug.informer_level") <= 0) {
+        $informer_level = $this->config()->get("debug.informer_level");
+
+        if ($informer_level <= 0) {
             return;
         }
 
@@ -646,34 +738,33 @@ class PHPFrame_Application extends PHPFrame_Observer
                 throw new LogicException($msg);
             }
 
-            $this->_setInformer(new PHPFrame_Informer($mailer, $recipients));
+            $this->registry()->set(
+                "informer",
+                new PHPFrame_Informer($mailer, $recipients, $informer_level)
+            );
         }
 
         return $this->registry()->get("informer");
     }
 
     /**
-     * Get/set Profiler object.
+     * Get/set Crypt object.
      *
-     * @param PHPFrame_Profiler $profiler [Optional] Profiler object to be used
-     *                                    in application.
+     * @param PHPFrame_Crypt $crypt [Optional]
      *
-     * @return PHPFrame_Profiler
+     * @return PHPFrame_Crypt
      * @since  1.0
      */
-    public function profiler(PHPFrame_Profiler $profiler=null)
+    public function crypt(PHPFrame_Crypt $crypt=null)
     {
-        if ($this->config()->get("debug.profiler_enable") != 1) {
-            return;
+        if (!is_null($crypt)) {
+            $this->registry()->set("crypt", $crypt);
+        } elseif (is_null($this->registry()->get("crypt"))) {
+            $secret = $this->config()->get("secret");
+            $this->registry()->set("crypt", new PHPFrame_Crypt($secret));
         }
 
-        if (!is_null($profiler)) {
-            $this->registry()->set("profiler", $profiler);
-        } elseif (is_null($this->registry()->get("profiler"))) {
-            $this->registry()->set("profiler", new PHPFrame_Profiler());
-        }
-
-        return $this->registry()->get("profiler");
+        return $this->registry()->get("crypt");
     }
 
     /**
@@ -730,9 +821,6 @@ class PHPFrame_Application extends PHPFrame_Observer
         } else {
             $this->request($request);
         }
-
-        // Acquire instance of Plugin Handler
-        $this->_plugin_handler = new PHPFrame_PluginHandler($this);
 
         // Register installed plugins with plugin handler
         foreach ($this->plugins() as $plugin) {
@@ -793,15 +881,42 @@ class PHPFrame_Application extends PHPFrame_Observer
             }
 
             // Execute the action in the given controller
-            $controller->execute($this);
+            $controller->execute();
 
             // Invoke postDispatch hook for every iteration of the dispatch loop
             $this->_plugin_handler->handle("postDispatch");
+
+            // Redirect if set in controller
+            $status_code  = $this->response()->statusCode();
+            $redirect_url = $this->response()->header("Location");
+
+            if (in_array($status_code, array(301, 303, 307))) {
+                if (!$redirect_url) {
+                    $msg  = "HTTP status code was set to ".$status_code." but ";
+                    $msg .= "no redirect URL was specified in the Location ";
+                    $msg .= "header.";
+                    throw new LogicException($msg);
+                }
+
+                $this->session()->getClient()->redirect($redirect_url);
+            }
         }
 
         // Invoke dispatchLoopShutdown hook
         $this->_plugin_handler->handle("dispatchLoopShutdown");
 
+        $this->output();
+    }
+
+    /**
+     * Process response and send output.
+     *
+     * @return void
+     * @since  1.0
+     */
+    protected function output()
+    {
+        $request  = $this->request();
         $response = $this->response();
 
         // Invoke dispatchLoopShutdown hook
@@ -831,7 +946,7 @@ class PHPFrame_Application extends PHPFrame_Observer
 
         } elseif ($renderer instanceof PHPFrame_RPCRenderer) {
             if (count($sysevents) > 0) {
-                $sysevents->statusCode($this->response()->statusCode());
+                $sysevents->statusCode($response->statusCode());
                 $renderer->render($sysevents);
             }
         }
@@ -849,37 +964,6 @@ class PHPFrame_Application extends PHPFrame_Observer
         if (!empty($outfile)) {
             $file_obj = new SplFileObject($outfile, "w");
             $file_obj->fwrite((string) $response);
-        }
-
-        // Handle profiler
-        $profiler_enable  = $this->config()->get("debug.profiler_enable");
-        $profiler_display = $this->config()->get("debug.profiler_display");
-        $profiler_outdir  = $this->config()->get("debug.profiler_outdir");
-
-        if ($profiler_enable) {
-            // Add final milestone
-            $this->profiler()->addMilestone();
-
-            // Get profiler output by casting object to string
-            $profiler_out = (string) $this->profiler();
-
-            // Display output if set in config
-            if ($profiler_display) {
-                if ($this->session()->getClientName() != "cli") {
-                    echo "<pre>";
-                }
-
-                // Display output
-                echo "Profiler Output:\n\n";
-                echo $profiler_out;
-            }
-
-            // Dump profiler output to file if outdir is specified in config
-            if (!empty($profiler_outdir)) {
-                $profiler_outfile = $profiler_outdir.DS.time().".ppo";
-                $file_obj = new SplFileObject($profiler_outfile, "w");
-                $file_obj->fwrite($profiler_out);
-            }
         }
     }
 
@@ -916,38 +1000,5 @@ class PHPFrame_Application extends PHPFrame_Observer
         // Set display_exceptions in exception handler
         $display_exceptions = $config->get("debug.display_exceptions");
         PHPFrame_ExceptionHandler::displayExceptions($display_exceptions);
-    }
-
-    /**
-     * Set Logger object
-     *
-     * @param PHPFrame_Logger $logger Logger object to be used in application.
-     *
-     * @return void
-     * @since  1.0
-     */
-    private function _setLogger(PHPFrame_Logger $logger)
-    {
-        $this->registry()->set("logger", $logger);
-
-        // Attach logger observer to exception handler
-        PHPFrame_ExceptionHandler::instance()->attach($logger);
-    }
-
-    /**
-     * Set Informer object
-     *
-     * @param PHPFrame_Informer $informer Informer object to be used in
-     *                                    application.
-     *
-     * @return void
-     * @since  1.0
-     */
-    private function _setInformer(PHPFrame_Informer $informer)
-    {
-        $this->registry()->set("informer", $informer);
-
-        // Attach informer to exception handler
-        PHPFrame_ExceptionHandler::instance()->attach($informer);
     }
 }

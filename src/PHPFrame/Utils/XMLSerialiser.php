@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Utils/XMLSerialiser.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Utils
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * XMLSerialiser
- * 
+ *
  * @category PHPFrame
  * @package  Utils
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -26,10 +26,10 @@ class PHPFrame_XMLSerialiser
 {
     /**
      * Serialise a value to XML
-     * 
+     *
      * @param mixed  $value          The value we want to serialise to XML.
      * @param string $root_node_name [Optional]
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -38,19 +38,19 @@ class PHPFrame_XMLSerialiser
         // Build serialised string
         $str = self::_doSerialise($value);
         $str = "<".$root_node_name.">".$str."</".$root_node_name.">";
-        
+
         // Get instance of beautifier to make string look pretty ;-)
         $xml_beautifier = new XML_Beautifier();
-        
+
         // Return beautified string
         return $xml_beautifier->formatString($str);
     }
-    
+
     /**
      * Unserialise a string as a PHP value.
-     * 
+     *
      * @param string $str The XML string we want to unserialise.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -58,12 +58,12 @@ class PHPFrame_XMLSerialiser
     {
         return self::_unserialiseNode(new SimpleXMLElement($str));
     }
-    
+
     /**
      * Serialise value.
-     * 
+     *
      * @param mixed $value The value we want to serialise to XML.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -74,39 +74,39 @@ class PHPFrame_XMLSerialiser
         } elseif (is_object($value)) {
             $value = get_object_vars($value);
         }
-        
+
         if (is_array($value)) {
             return self::_serialiseArray($value);
         }
-        
+
         if (is_null($value)) {
             return "NULL";
         }
-        
+
         return (string) $value;
     }
-    
+
     /**
      * Serialise array.
-     * 
+     *
      * @param array $array The array.
-     * 
+     *
      * @return string
      * @since  1.0
      */
     private static function _serialiseArray(array $array)
     {
         $str = "";
-        
+
         $array_obj = new PHPFrame_Array($array);
-        
-        if ($array_obj->isAssoc() 
-            && count($array_obj) == 1 
+
+        if ($array_obj->isAssoc()
+            && count($array_obj) == 1
             && is_array(end($array))
         ) {
             $key   = end(array_keys($array));
             $child = end($array);
-            
+
             if (is_array($child)) {
                 $child_obj = new PHPFrame_Array($child);
                 if (!$child_obj->isAssoc()) {
@@ -134,22 +134,22 @@ class PHPFrame_XMLSerialiser
                 $str .= "</array>\n";
             }
         }
-        
+
         return $str;
     }
-    
+
     /**
      * Unserialise SimpleXMLElement node.
-     * 
+     *
      * @param SimpleXMLElement $node The node.
-     * 
+     *
      * @return string|null
      * @since  1.0
      */
     private static function _unserialiseNode(SimpleXMLElement $node)
     {
         $children = $node->children();
-        
+
         if (count($children) > 0) {
             $value = array();
             foreach ($children as $child) {
@@ -174,11 +174,11 @@ class PHPFrame_XMLSerialiser
         } else {
             $value = (string) $node;
         }
-        
+
         if ($value == "NULL") {
             return null;
         }
-        
+
         return $value;
     }
 }

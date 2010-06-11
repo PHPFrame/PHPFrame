@@ -8,7 +8,7 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
     The Base package provides a set of basic "types".
     </para>
@@ -17,57 +17,57 @@
 
 <refsect1 id="{@id classes}">
     <title>Classes in Base Package</title>
-    
+
     <itemizedlist>
-    
+
         <listitem>
         <para>
         {@link PHPFrame_String}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_Array}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_Collection}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_Object}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_Observer}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_Subject}
         </para>
         </listitem>
-        
+
     </itemizedlist>
 
 </refsect1>
 
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <example>
         <title>Using Array objects</title>
         <para>
-        In this example we instantiate a couple of array objects, print them,  
-        test using the {@link PHPFrame_Array::isAssoc()} method and finally echo the 
+        In this example we instantiate a couple of array objects, print them,
+        test using the {@link PHPFrame_Array::isAssoc()} method and finally echo the
         array depths.
         </para>
         <programlisting>{@example Base/array.php 3}</programlisting>
@@ -98,9 +98,9 @@ $array_obj has a depth of 1
 $assoc_array_obj has a depth of 2
 ]]>
         </screen>
-       
+
     </example>
-    
+
         <example>
         <title>Using String objects</title>
         <para>
@@ -116,9 +116,9 @@ I am a string & and object... (Upper case first character)
 I Am A String & And Object... (Upper case first character of every word)
 ]]>
         </screen>
-       
+
     </example>
-    
+
 </refsect1>
 
 </refentry>

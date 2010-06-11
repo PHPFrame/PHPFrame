@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Filter/EnumFilter.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Filter
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * Enum Filter
- * 
+ *
  * @category PHPFrame
  * @package  Filter
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -26,13 +26,13 @@ class PHPFrame_EnumFilter extends PHPFrame_Filter
 {
     /**
      * Constructor.
-     * 
-     * @param array $options [Optional] An associative array with the filter 
-     *                       options. The FloatFilter supports the following 
+     *
+     * @param array $options [Optional] An associative array with the filter
+     *                       options. The FloatFilter supports the following
      *                       options:
-     *                       
+     *
      *                       - enums (array)
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -41,12 +41,12 @@ class PHPFrame_EnumFilter extends PHPFrame_Filter
         $this->registerOption('enums', array());
         parent::__construct($options);
     }
-    
+
     /**
      * Processes the given enum value against the allowed enums.
-     * 
+     *
      * @param mixed $value The value to filter.
-     * 
+     *
      * @return mixed Either the filtered value or FALSE on failure
      * @see src/PHPFrame/Filter/PHPFrame_Filter#process($value)
      * @since  1.0
@@ -61,7 +61,7 @@ class PHPFrame_EnumFilter extends PHPFrame_Filter
             }
         }
         if (!$found) {
-            $err_msg = "Argument \$value in ".get_class($this)."::process() is 
+            $err_msg = "Argument \$value in ".get_class($this)."::process() is
             not one of the stored enums";
             $this->fail($err_msg, 'InvalidArgumentException');
             return false;
@@ -69,12 +69,12 @@ class PHPFrame_EnumFilter extends PHPFrame_Filter
             return $value;
         }
     }
-    
+
     /**
      * Set enums.
-     * 
+     *
      * @param array $enums An array containing the values allowed by the filter.
-     * 
+     *
      * @return void
      * @since  1.0
      */

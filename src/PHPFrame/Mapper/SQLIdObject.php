@@ -174,7 +174,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
 
         foreach ($fields as $field) {
             // Parse table.field format if needed
-            $pattern = "/^([a-zA-Z_\#]+)\.([a-zA-Z_\*]+)( AS ([a-zA-Z_]+))?$/";
+            $pattern = "/^([a-zA-Z0-9_\#]+)\.([a-zA-Z_\*]+)( AS ([a-zA-Z_]+))?$/";
             preg_match($pattern, $field, $matches);
 
             if (is_array($matches) && count($matches) == 5) {
@@ -220,13 +220,13 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function from($table)
     {
         // Check if input contaings alias
-        preg_match("/([a-zA-Z_\#\.]+) (as) ([a-zA-Z_]+)/i", $table, $matches);
+        preg_match("/([a-zA-Z0-9_\#\.]+) (as) ([a-zA-Z_]+)/i", $table, $matches);
         if (count($matches) == 4) {
             $table = array($matches[1], $matches[3]);
         }
 
         // Validate input type and set internal property
-        if (is_string($table) && !preg_match("/^[a-zA-Z_\#\.]+$/", $table)) {
+        if (is_string($table) && !preg_match("/^[a-zA-Z0-9_\#\.]+$/", $table)) {
             $msg = "Argument \$table contains ilegal characters";
             throw new InvalidArgumentException($msg);
         }
@@ -288,7 +288,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     {
         // Validate input types and set internal property
         $pattern1 = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:]+$/";
-        $pattern2  = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN)$/";
+        $pattern2 = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN|IN)$/";
         if (!preg_match($pattern1, $left)
             || !preg_match($pattern1, $right)
             || !preg_match($pattern2, $operator)

@@ -1,9 +1,9 @@
 <?php
 /**
  * data/CLITool/src/models/classcreator.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   PHPFrame_CLITool
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * This class is used to create new classes based on provided class templates.
- * 
+ *
  * @category PHPFrame
  * @package  PHPFrame_CLITool
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -25,13 +25,13 @@
 class ClassCreator
 {
     private $_tmpl_path;
-    
+
     /**
      * Constructor.
-     * 
-     * @param string $tmpl_path Absolute path to directory containings class 
+     *
+     * @param string $tmpl_path Absolute path to directory containings class
      *                          templates.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -43,17 +43,17 @@ class ClassCreator
             $msg .= "not readable.";
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_tmpl_path = $tmpl_path;
     }
-    
+
     /**
      * Create class code.
-     * 
+     *
      * @param string $tmpl    The template name.
-     * @param array  $replace [Optional] Associative array where keys are 
+     * @param array  $replace [Optional] Associative array where keys are
      *                        patterns and values are replacements.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -64,30 +64,30 @@ class ClassCreator
             $msg = "Template file not found.";
             throw new RuntimeException($msg);
         }
-        
+
         if (!is_null($replace)) {
             $array_obj = new PHPFrame_Array($replace);
             if (!$array_obj->isAssoc()) {
                 $msg  = "Argument 'replace' passed to ".get_class($this)."::";
-                $msg .= __FUNCTION__."() must be an asociative array."; 
+                $msg .= __FUNCTION__."() must be an asociative array.";
                 throw new InvalidArgumentException($msg);
             }
         }
-        
+
         $class = file_get_contents($tmpl);
-        
+
         if (is_array($replace) && count($replace) > 0) {
             $patterns     = array();
             $replacements = array();
-            
+
             foreach ($replace as $key=>$value) {
                 $patterns[]     = "/".$key."/s";
                 $replacements[] = $value;
             }
-            
+
             $class = preg_replace($patterns, $replacements, $class);
         }
-        
+
         return $class;
     }
 }

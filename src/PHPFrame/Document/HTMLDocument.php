@@ -306,7 +306,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      * @todo   This method should check whether the script has already been
      *         added to avoid loading the same script twice.
      */
-    public function addScript($src, $type='text/javascript')
+    public function addScript($src, $type="text/javascript")
     {
         $this->_scripts[] = array(
             "src"  => (string) $src,
@@ -315,20 +315,24 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     }
 
     /**
-     * Attach external stylesheet
+     * Attach external stylesheet.
      *
-     * @param string $href The relative or absolute URL to the link source.
-     * @param string $type The link type. Default is text/css.
+     * @param string $href  The relative or absolute URL to the link source.
+     * @param string $type  The link type. Default is text/css.
+     * @param string $media This attribute specifies the intended device. It 
+     *                      may be a single media descriptor or a csv list. The 
+     *                      default value for this attribute is "screen".
      *
      * @return void
      * @since  1.0
      */
-    public function addStyleSheet($href, $type='text/css')
+    public function addStyleSheet($href, $type="text/css", $media="screen")
     {
         $this->_style_sheets[] = array(
-            "rel"  => "stylesheet",
-            "href" => (string) $href,
-            "type" => (string) $type
+            "rel"   => "stylesheet",
+            "href"  => (string) $href,
+            "type"  => (string) $type,
+            "media" => (string) $media
         );
     }
 

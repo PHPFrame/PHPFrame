@@ -12,6 +12,13 @@
  * @link      http://github.com/PHPFrame/PHPFrame
  */
 
+if (!function_exists("gd_info")) {
+    $msg  = "PHPFrame_ImageProcessor requires the GD extension for PHP. For ";
+    $msg .= "more info check the PHP <a href=\"http://www.php.net/manual/en/";
+    $msg .= "book.image.php\">documentation</a>.";
+    throw new Exception($msg);
+}
+
 /**
  * This class creates objects used to process images. So far the only thing
  * it does is resize.

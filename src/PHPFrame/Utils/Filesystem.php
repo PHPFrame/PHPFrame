@@ -235,7 +235,7 @@ class PHPFrame_Filesystem
      * @param int    $max_upload_size [Optional]
      * @param bool   $overwrite       [Optional]
      *
-     * @return PHPFrame_FileInfo
+     * @return SplFileInfo
      * @throws Exception on failure
      * @since  1.0
      */
@@ -261,16 +261,16 @@ class PHPFrame_Filesystem
         if ($file_error > 0) {
             switch ($file_error) {
             case 1 :
-                $msg = "ERROR: PHP upload maximum file size exceeded!";
+                $msg = "PHP upload maximum file size exceeded!";
                 break;
             case 2 :
-                $msg = "ERROR: PHP maximum file size exceeded!";
+                $msg = "PHP maximum file size exceeded!";
                 break;
             case 3 :
-                $msg = "ERROR: Partial upload!";
+                $msg = "Partial upload!";
                 break;
             case 4 :
-                $msg = "ERROR: No file submitted for upload!";
+                $msg = "No file submitted for upload!";
                 break;
             }
 
@@ -279,58 +279,121 @@ class PHPFrame_Filesystem
 
         // check custom max_upload_size passed into the function
         if (!empty($max_upload_size) && $max_upload_size < $file_size) {
-            $msg  = "ERROR: Maximum file size exceeded!";
+            $msg  = "Maximum file size exceeded!";
             $msg .= ' max_upload_size: '.$max_upload_size;
             $msg .= ' | file_size: '.$file_size;
             throw new RuntimeException($msg);
         }
 
         // Check if file is of valid mime type
+        $file_type = self::getMimeType($file_tmp);
         if ($accept != "*") {
             $valid_file_types = explode(",", $accept);
             if (!in_array($file_type, $valid_file_types)) {
-                $msg = "ERROR: File type not valid!";
+                $msg = "File type not valid!";
                 throw new RuntimeException($msg);
             }
         }
 
-        // Check for special chars
-        $special_chars = array(
-            'ñ','$','%','^','&','*','?','!','(',')','[',']','{','}',',','/','\\'
-        );
-        foreach ($special_chars as $special_char) {
-            $file_name = str_replace($special_char, '', $file_name);
-        }
+        // Sanitise file name
+        $file_name = self::filterFilename($file_name);
 
         // Avoid overwriting if $overwrite is set to false
-        if ($overwrite === false) {
-            $check_if_file_exists = file_exists($dir.DS.$file_name);
-            if ($check_if_file_exists === true) {
-                // split file name into name and extension
-                $split_point = strrpos($file_name, '.');
-                $file_n      = substr($file_name, 0, $split_point);
-                $file_ext    = substr($file_name, $split_point);
-                $i=0;
-                while (true === file_exists($dir.DS.$file_n.$i.$file_ext)) {
-                    $i++;
-                }
-                $file_name = $file_n.$i.$file_ext;
+        if (!$overwrite && file_exists($dir.DS.$file_name)) {
+            // split file name into name and extension
+            $split_point = strrpos($file_name, '.');
+            $file_n      = substr($file_name, 0, $split_point);
+            $file_ext    = substr($file_name, $split_point);
+            $i=0;
+            while (true === file_exists($dir.DS.$file_n.$i.$file_ext)) {
+                $i++;
             }
+            $file_name = $file_n.$i.$file_ext;
         }
 
         // put the file where we'd like it
         $path = $dir.DS.$file_name;
-        if (is_uploaded_file($file_tmp)) {
-            if (!move_uploaded_file($file_tmp, $path)) {
-                $msg = "ERROR: Could not move file to destination directory!";
-                throw new RuntimeException($msg);
-            }
-        } else {
+        if (!is_uploaded_file($file_tmp)) {
             $msg = "ERROR: Possible file attack!".' '.$file_name;
             throw new RuntimeException($msg);
         }
 
-        return new PHPFrame_FileInfo($dir.DS.$file_name);
+        if (!move_uploaded_file($file_tmp, $path)) {
+            $msg = "ERROR: Could not move file to destination directory!";
+            throw new RuntimeException($msg);
+        }
+
+        return array(
+            "finfo"    => new SplFileInfo($dir.DS.$file_name),
+            "mimetype" => $file_type
+        );
+    }
+
+    /**
+     * Filter dir or file name.
+     *
+     * @param string $str      The string to filter.
+     * @param bool   $sanitise [Optional] Flag indicating whether or not to
+     *                         sanitise (remove dodgy characters).
+     *
+     * @return string
+     * @throws InvalidArgumentException
+     * @since  2.0
+     */
+    public static function filterFilename($str, $sanitise=false)
+    {
+        // Disallow dot files, alias to home and root
+        if (preg_match("/(^(\.|~|\/)|(\/|\\\))/", $str)) {
+            $msg = "Invalid file or directory name.";
+            throw new InvalidArgumentException($msg);
+        }
+
+        // Replace dodgy characters
+        if ($sanitise) {
+            $pattern = array("/[^ -\w\.]/");
+            $replace = array("");
+            return preg_replace($pattern, $replace, $str);
+        }
+
+        return $str;
+    }
+
+    /**
+     * Check file type.
+     *
+     * @param string $fname Absolute path to file.
+     *
+     * @return bool|string
+     * @since  2.0
+     */
+    public static function getMimeType($fname)
+    {
+        if (function_exists("finfo_open")) {
+            $finfo = finfo_open(FILEINFO_MIME);
+
+            if (!$finfo) {
+                return false;
+            }
+
+            $mime = finfo_file($finfo, $fname);
+            finfo_close($finfo);
+
+            $mime = strtolower($mime);
+            $pattern = "/^([a-z0-9]+\/[a-z0-9]+);\s+charset=(.*)$/";
+            if (!preg_match($pattern, $mime, $matches)) {
+                throw new Exception("Error parsing MIME type.");
+            }
+
+            return $matches[1];
+
+        } elseif (function_exists("mime_content_type")) {
+            $mime = mime_content_type($fname);
+            return $mime;
+        }
+
+        $msg  = "PHPFrame_Filesystem::getMimeType() requires either php-finfo ";
+        $msg .= "module or mime_content_type function and none could be found.";
+        throw new Exception($msg);
     }
 
     /**

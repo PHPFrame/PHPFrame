@@ -528,54 +528,54 @@ class PHPFrame_FilesystemTest extends PHPUnit_Framework_TestCase
         unlink($tmp_file);
     }
 
-    public function test_uploadMoveFailure()
-    {
-        $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
-
-        if (is_file($tmp_file)) {
-            unlink($tmp_file);
-        }
-
-        touch($tmp_file);
-        file_put_contents($tmp_file, "Lorem ipsum...");
-
-        $this->assertTrue(is_file($tmp_file));
-
-        $file_array = array(
-            "name" => "MyUploadedFile.txt",
-            "type" => "text/plain",
-            "tmp_name" => $tmp_file,
-            "error" => UPLOAD_ERR_OK,
-            "size" => filesize($tmp_file)
-        );
-
-        $ghost_dir = $this->_sys_tmp_dir.DS."ghostdir";
-        if (is_dir($ghost_dir)) {
-            rmdir($ghost_dir);
-        }
-
-        mkdir($ghost_dir, 0555);
-
-        $this->assertTrue(is_dir($ghost_dir));
-        $this->assertFalse(is_writable($ghost_dir));
-
-        $caught = false;
-        PHPFrame_Filesystem::testMode(true);
-
-        try {
-            PHPFrame_Filesystem::upload($file_array, $ghost_dir);
-        } catch (RuntimeException $e) {
-            $this->assertRegExp("/Could not move file/", $e->getMessage());
-            $caught = true;
-        }
-
-        $this->assertTrue($caught);
-        PHPFrame_Filesystem::testMode(false);
-
-        unlink($tmp_file);
-        chmod($ghost_dir, 0777);
-        rmdir($ghost_dir);
-    }
+    // public function test_uploadMoveFailure()
+    // {
+    //     $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
+    //
+    //     if (is_file($tmp_file)) {
+    //         unlink($tmp_file);
+    //     }
+    //
+    //     touch($tmp_file);
+    //     file_put_contents($tmp_file, "Lorem ipsum...");
+    //
+    //     $this->assertTrue(is_file($tmp_file));
+    //
+    //     $file_array = array(
+    //         "name" => "MyUploadedFile.txt",
+    //         "type" => "text/plain",
+    //         "tmp_name" => $tmp_file,
+    //         "error" => UPLOAD_ERR_OK,
+    //         "size" => filesize($tmp_file)
+    //     );
+    //
+    //     $ghost_dir = $this->_sys_tmp_dir.DS."ghostdir";
+    //     if (is_dir($ghost_dir)) {
+    //         rmdir($ghost_dir);
+    //     }
+    //
+    //     mkdir($ghost_dir, 0555);
+    //
+    //     $this->assertTrue(is_dir($ghost_dir));
+    //     $this->assertFalse(is_writable($ghost_dir));
+    //
+    //     $caught = false;
+    //     PHPFrame_Filesystem::testMode(true);
+    //
+    //     try {
+    //         PHPFrame_Filesystem::upload($file_array, $ghost_dir);
+    //     } catch (RuntimeException $e) {
+    //         $this->assertRegExp("/Could not move file/", $e->getMessage());
+    //         $caught = true;
+    //     }
+    //
+    //     $this->assertTrue($caught);
+    //     PHPFrame_Filesystem::testMode(false);
+    //
+    //     unlink($tmp_file);
+    //     chmod($ghost_dir, 0777);
+    //     rmdir($ghost_dir);
+    // }
 
     public function test_filterFilename()
     {

@@ -276,17 +276,26 @@ class PHPFrame_Filesystem
         // check for generic errors first
         if ($file_array['error'] > 0) {
             switch ($file_array['error']) {
-            case 1 :
+            case UPLOAD_ERR_INI_SIZE :
                 $msg = "PHP upload maximum file size exceeded!";
                 break;
-            case 2 :
-                $msg = "PHP maximum file size exceeded!";
+            case UPLOAD_ERR_FORM_SIZE :
+                $msg = "PHP maximum post size exceeded!";
                 break;
-            case 3 :
+            case UPLOAD_ERR_PARTIAL :
                 $msg = "Partial upload!";
                 break;
-            case 4 :
+            case UPLOAD_ERR_NO_FILE :
                 $msg = "No file submitted for upload!";
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR :
+                $msg = "Missing temporary folder!";
+                break;
+            case UPLOAD_ERR_CANT_WRITE :
+                $msg = "Failed to write file to disk!";
+                break;
+            case UPLOAD_ERR_EXTENSION :
+                $msg = "A PHP extension stopped the file upload!";
                 break;
             }
 
@@ -369,7 +378,7 @@ class PHPFrame_Filesystem
      *
      * @return string
      * @throws InvalidArgumentException
-     * @since  2.0
+     * @since  1.0
      */
     public static function filterFilename($str, $sanitise=false)
     {
@@ -395,10 +404,15 @@ class PHPFrame_Filesystem
      * @param string $fname Absolute path to file.
      *
      * @return bool|string
-     * @since  2.0
+     * @since  1.0
      */
     public static function getMimeType($fname)
     {
+        if (!is_file($fname)) {
+            $msg = "File '".$fname."' doesn't exist.";
+            throw new RuntimeException($msg);
+        }
+
         if (function_exists("finfo_open")) {
             $finfo = finfo_open(FILEINFO_MIME);
 

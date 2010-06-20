@@ -267,6 +267,199 @@ class PHPFrame_FilesystemTest extends PHPUnit_Framework_TestCase
         PHPFrame_Filesystem::rm($dir, true);
     }
 
+    public function test_upload()
+    {
+        $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
+
+        if (is_file($tmp_file)) {
+            unlink($tmp_file);
+        }
+
+        touch($tmp_file);
+        file_put_contents($tmp_file, "Lorem ipsum...");
+
+        $this->assertTrue(is_file($tmp_file));
+
+        $file_array = array(
+            "name" => "MyUploadedFile.txt",
+            "type" => "text/plain",
+            "tmp_name" => $tmp_file,
+            "error" => UPLOAD_ERR_OK,
+            "size" => filesize($tmp_file)
+        );
+
+        PHPFrame_Filesystem::testMode(true);
+        $array = PHPFrame_Filesystem::upload($file_array, $this->_sys_tmp_dir);
+        PHPFrame_Filesystem::testMode(false);
+
+        $this->assertType("array", $array);
+        $this->assertArrayHasKey("finfo", $array);
+        $this->assertArrayHasKey("mimetype", $array);
+        $this->assertType("SplFileInfo", $array["finfo"]);
+        $this->assertEquals("text/plain", $array["mimetype"]);
+
+        unlink($array["finfo"]->getRealPath());
+        unlink($tmp_file);
+    }
+
+    public function test_uploadFileArrayFailure()
+    {
+        $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
+        $file_array = array(
+            "name" => "MyUploadedFile.txt",
+            "type" => "text/plain",
+            "tmp_name" => $tmp_file,
+            "error" => UPLOAD_ERR_OK
+        );
+
+        $caught = false;
+        try {
+            PHPFrame_Filesystem::upload($file_array, $this->_sys_tmp_dir);
+        } catch (InvalidArgumentException $e) {
+            $this->assertRegExp("/file_array/", $e->getMessage());
+            $caught = true;
+        }
+
+        $this->assertTrue($caught);
+    }
+
+    public function test_uploadMimeTypeFailure()
+    {
+        $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
+
+        if (is_file($tmp_file)) {
+            unlink($tmp_file);
+        }
+
+        touch($tmp_file);
+        file_put_contents($tmp_file, "Lorem ipsum...");
+
+        $this->assertTrue(is_file($tmp_file));
+
+        $file_array = array(
+            "name" => "MyUploadedFile.txt",
+            "type" => "text/plain",
+            "tmp_name" => $tmp_file,
+            "error" => UPLOAD_ERR_OK,
+            "size" => filesize($tmp_file)
+        );
+
+        $caught = false;
+        try {
+            PHPFrame_Filesystem::upload($file_array, $this->_sys_tmp_dir, "image/png");
+        } catch (RuntimeException $e) {
+            $this->assertRegExp("/File type not valid/", $e->getMessage());
+            $caught = true;
+        }
+
+        $this->assertTrue($caught);
+
+        unlink($tmp_file);
+    }
+
+    public function test_uploadMaliciousScriptFailure()
+    {
+        $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
+
+        if (is_file($tmp_file)) {
+            unlink($tmp_file);
+        }
+
+        touch($tmp_file);
+        file_put_contents($tmp_file, "Lorem ipsum...");
+
+        $this->assertTrue(is_file($tmp_file));
+
+        $file_array = array(
+            "name" => "MyUploadedFile.jpg.php",
+            "type" => "image/jpg",
+            "tmp_name" => $tmp_file,
+            "error" => UPLOAD_ERR_OK,
+            "size" => filesize($tmp_file)
+        );
+
+        $caught = false;
+        try {
+            PHPFrame_Filesystem::upload($file_array, $this->_sys_tmp_dir);
+        } catch (RuntimeException $e) {
+            $this->assertRegExp("/file attack/", $e->getMessage());
+            $caught = true;
+        }
+
+        $this->assertTrue($caught);
+
+        unlink($tmp_file);
+    }
+
+    public function test_uploadMaxFileSizeFailure()
+    {
+        $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
+
+        if (is_file($tmp_file)) {
+            unlink($tmp_file);
+        }
+
+        touch($tmp_file);
+        file_put_contents($tmp_file, "Lorem ipsum...");
+
+        $this->assertTrue(is_file($tmp_file));
+
+        $file_array = array(
+            "name" => "MyUploadedFile.txt",
+            "type" => "text/plain",
+            "tmp_name" => $tmp_file,
+            "error" => UPLOAD_ERR_OK,
+            "size" => (2*1024*1024)
+        );
+
+        $caught = false;
+        try {
+            PHPFrame_Filesystem::upload($file_array, $this->_sys_tmp_dir, "*", 1);
+        } catch (RuntimeException $e) {
+            $this->assertRegExp("/Maximum file size exceeded/", $e->getMessage());
+            $caught = true;
+        }
+
+        $this->assertTrue($caught);
+
+        unlink($tmp_file);
+    }
+
+    public function test_uploadDestinationDirNotExistsFailure()
+    {
+        $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
+
+        if (is_file($tmp_file)) {
+            unlink($tmp_file);
+        }
+
+        touch($tmp_file);
+        file_put_contents($tmp_file, "Lorem ipsum...");
+
+        $this->assertTrue(is_file($tmp_file));
+
+        $file_array = array(
+            "name" => "MyUploadedFile.txt",
+            "type" => "text/plain",
+            "tmp_name" => $tmp_file,
+            "error" => UPLOAD_ERR_OK,
+            "size" => filesize($tmp_file)
+        );
+
+        $caught = false;
+        try {
+            PHPFrame_Filesystem::testMode(true);
+            PHPFrame_Filesystem::upload($file_array, $this->_sys_tmp_dir.DS."ghostdir");
+        } catch (InvalidArgumentException $e) {
+            $this->assertRegExp("/Destination directory/", $e->getMessage());
+            $caught = true;
+        }
+
+        $this->assertTrue($caught);
+
+        unlink($tmp_file);
+    }
+
     public function test_uploadFileAttackFailure()
     {
         $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
@@ -290,6 +483,7 @@ class PHPFrame_FilesystemTest extends PHPUnit_Framework_TestCase
 
         $caught = false;
         try {
+            PHPFrame_Filesystem::testMode(false);
             PHPFrame_Filesystem::upload($file_array, $this->_sys_tmp_dir);
         } catch (RuntimeException $e) {
             $caught = true;
@@ -297,9 +491,56 @@ class PHPFrame_FilesystemTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($caught);
 
+        unlink($tmp_file);
+    }
+
+    public function test_uploadMoveFailure()
+    {
+        $tmp_file = $this->_sys_tmp_dir.DS."uploadedfile";
+
         if (is_file($tmp_file)) {
             unlink($tmp_file);
         }
+
+        touch($tmp_file);
+        file_put_contents($tmp_file, "Lorem ipsum...");
+
+        $this->assertTrue(is_file($tmp_file));
+
+        $file_array = array(
+            "name" => "MyUploadedFile.txt",
+            "type" => "text/plain",
+            "tmp_name" => $tmp_file,
+            "error" => UPLOAD_ERR_OK,
+            "size" => filesize($tmp_file)
+        );
+
+        $ghost_dir = $this->_sys_tmp_dir.DS."ghostdir";
+        if (is_dir($ghost_dir)) {
+            rmdir($ghost_dir);
+        }
+
+        mkdir($ghost_dir, 0555);
+
+        $this->assertTrue(is_dir($ghost_dir));
+        $this->assertFalse(is_writable($ghost_dir));
+
+        $caught = false;
+        PHPFrame_Filesystem::testMode(true);
+
+        try {
+            PHPFrame_Filesystem::upload($file_array, $ghost_dir);
+        } catch (RuntimeException $e) {
+            $this->assertRegExp("/Could not move file/", $e->getMessage());
+            $caught = true;
+        }
+
+        $this->assertTrue($caught);
+        PHPFrame_Filesystem::testMode(false);
+
+        unlink($tmp_file);
+        chmod($ghost_dir, 0777);
+        rmdir($ghost_dir);
     }
 
     public function test_getSystemTempDir()

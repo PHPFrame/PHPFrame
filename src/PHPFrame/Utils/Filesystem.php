@@ -260,26 +260,22 @@ class PHPFrame_Filesystem
      * @since  1.0
      */
     public static function upload(
-        $file_array,
+        array $file_array,
         $dir,
         $accept="*",
         $max_upload_size=0,
         $overwrite=false
     ) {
-        // $file_tmp is where file went on webserver
-        $file_tmp   = $file_array['tmp_name'];
-        // $file_tmp_name is original file name
-        $file_name  = $file_array['name'];
-        // $file_size is size in bytes
-        $file_size  = $file_array['size'];
-        // $file_type is mime type e.g. image/gif
-        $file_type  = $file_array['type'];
-        // $file_error is any error encountered
-        $file_error = $file_array['error'];
+        $keys = array("tmp_name", "name", "size", "type", "error");
+        if (count(array_diff($keys, array_keys($file_array))) > 0) {
+            $msg  = "file_array argument must contain the following keys: ";
+            $msg .= "'".implode("', '", $keys)."'";
+            throw new InvalidArgumentException($msg);
+        }
 
         // check for generic errors first
-        if ($file_error > 0) {
-            switch ($file_error) {
+        if ($file_array['error'] > 0) {
+            switch ($file_array['error']) {
             case 1 :
                 $msg = "PHP upload maximum file size exceeded!";
                 break;
@@ -298,15 +294,28 @@ class PHPFrame_Filesystem
         }
 
         // check custom max_upload_size passed into the function
-        if (!empty($max_upload_size) && $max_upload_size < $file_size) {
+        if (!empty($max_upload_size) && $max_upload_size < $file_array['size']) {
             $msg  = "Maximum file size exceeded!";
             $msg .= ' max_upload_size: '.$max_upload_size;
-            $msg .= ' | file_size: '.$file_size;
+            $msg .= ' | file_size: '.$file_array['size'];
             throw new RuntimeException($msg);
         }
 
+        // Check that the destination directory exists
+        if (!is_dir($dir)) {
+            $msg = "Destination directory doesn't exist!";
+            throw new InvalidArgumentException($msg);
+        }
+
+        // $file_tmp is where file went on webserver
+        $file_tmp = $file_array['tmp_name'];
+
         // Check if file is of valid mime type
         $file_type = self::getMimeType($file_tmp);
+        if ($file_type != $file_array['type']) {
+
+        }
+
         if ($accept != "*") {
             $valid_file_types = explode(",", $accept);
             if (!in_array($file_type, $valid_file_types)) {
@@ -316,7 +325,7 @@ class PHPFrame_Filesystem
         }
 
         // Sanitise file name
-        $file_name = self::filterFilename($file_name);
+        $file_name = self::filterFilename($file_array['name']);
 
         // Avoid overwriting if $overwrite is set to false
         if (!$overwrite && file_exists($dir.DS.$file_name)) {
@@ -334,14 +343,14 @@ class PHPFrame_Filesystem
         // put the file where we'd like it
         $path = $dir.DS.$file_name;
         if (!self::testMode() && !is_uploaded_file($file_tmp)) {
-            $msg = "ERROR: Possible file attack!".' '.$file_name;
+            $msg = "Possible file attack!".' '.$file_name;
             throw new RuntimeException($msg);
         }
 
         if (!move_uploaded_file($file_tmp, $path)
-            && (self::testMode() && !copy($file_tmp, $path))
+            && (self::testMode() && !@copy($file_tmp, $path))
         ) {
-            $msg = "ERROR: Could not move file to destination directory!";
+            $msg = "Could not move file to destination directory!";
             throw new RuntimeException($msg);
         }
 
@@ -413,8 +422,8 @@ class PHPFrame_Filesystem
             return $mime;
         }
 
-        $msg  = "PHPFrame_Filesystem::getMimeType() requires either php-finfo ";
-        $msg .= "module or mime_content_type function and none could be found.";
+        $msg  = "PHPFrame_Filesystem::getMimeType() requires either the ";
+        $msg .= "php-finfo module or mime_content_type and none could be found.";
         throw new Exception($msg);
     }
 

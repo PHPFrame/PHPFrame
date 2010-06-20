@@ -480,10 +480,15 @@ class PHPFrame_FilesystemTest extends PHPUnit_Framework_TestCase
             "size" => filesize($tmp_file)
         );
 
+        $ghost_dir = $this->_sys_tmp_dir.DS."ghostdir";
+        if (is_dir($ghost_dir)) {
+            PHPFrame_Filesystem::rm($ghost_dir, true);
+        }
+
         $caught = false;
         try {
             PHPFrame_Filesystem::testMode(true);
-            PHPFrame_Filesystem::upload($file_array, $this->_sys_tmp_dir.DS."ghostdir");
+            PHPFrame_Filesystem::upload($file_array, $ghost_dir);
         } catch (InvalidArgumentException $e) {
             $this->assertRegExp("/Destination directory/", $e->getMessage());
             $caught = true;

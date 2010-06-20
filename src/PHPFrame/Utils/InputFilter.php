@@ -59,13 +59,31 @@ class PHPFrame_InputFilter
     /**
      * Process/filter a value.
      *
-     * @param string $var The value to filter.
+     * @param string $str The value to filter.
      *
      * @return void
      * @since  1.0
      */
-    public function process($var)
+    public function process($str)
     {
-        return $var;
+        $patterns = array();
+        $replacements = array();
+
+        foreach ($this->_tag_blacklist as $tag) {
+            $patterns[] = "/<".$tag.".*(\/>|<\/".$tag.">)/i";
+            $replacements[] = "";
+        }
+
+        foreach ($this->_attr_blacklist as $attr) {
+            $patterns[] = "/\s?$attr=['\"]?[^\s'\">]+['\"]?/i";
+            $replacements[] = "";
+        }
+
+        $patterns[] = "/<(\?|%)(php)?.*(\?|%)>/i";
+        $replacements[] = "";
+
+        $str = preg_replace($patterns, $replacements, $str);
+
+        return $str;
     }
 }

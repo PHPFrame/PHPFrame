@@ -70,20 +70,18 @@ class PHPFrame_InputFilter
         $replacements = array();
 
         foreach ($this->_tag_blacklist as $tag) {
-            $patterns[] = "/<".$tag.".*(\/>|<\/".$tag.">)/i";
+            $patterns[] = "/<".$tag.".*(\/>|<\/".$tag.">)/is";
             $replacements[] = "";
         }
 
         foreach ($this->_attr_blacklist as $attr) {
-            $patterns[] = "/\s?$attr=['\"]?[^\s'\">]+['\"]?/i";
+            $patterns[] = "/\s?$attr=['\"]?[^\s'\">]+['\"]?/is";
             $replacements[] = "";
         }
 
-        $patterns[] = "/<(\?|%)(php)?.*(\?|%)>/i";
+        $patterns[] = "/<(\?|%)(php)?.*(\?|%)>/is";
         $replacements[] = "";
 
-        $str = preg_replace($patterns, $replacements, $str);
-
-        return $str;
+        return trim(preg_replace($patterns, $replacements, $str));
     }
 }

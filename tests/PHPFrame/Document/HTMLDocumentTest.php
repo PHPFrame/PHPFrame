@@ -149,7 +149,7 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $href = "http://www.e-noise.com/templates/enoise_iv/css/template.css";
         $this->_document->addStyleSheet($href);
 
-        $pattern = '/<link href="http:\/\/www\.e-noise\.com\/templates\/enoise_iv\/css\/template\.css" media="screen" rel="stylesheet" type="text\/css" \/>/'
+        $pattern = '/<link href="http:\/\/www\.e-noise\.com\/templates\/enoise_iv\/css\/template\.css" media="screen" rel="stylesheet" type="text\/css" \/>/';
         $this->assertRegExp($pattern, (string) $this->_document);
     }
 

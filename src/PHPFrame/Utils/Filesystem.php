@@ -25,6 +25,26 @@
  */
 class PHPFrame_Filesystem
 {
+    private static $_test_mode = false;
+
+    /**
+     * Is test mode?
+     *
+     * @param bool $bool [Optional] TRUE to run in test mode. This allows file
+     *                   uploads for files not uploaded via the web server.
+     *
+     * @return bool
+     * @since  1.0
+     */
+    public static function testMode($bool=null)
+    {
+        if (!is_null($bool)) {
+            self::$_test_mode = (bool) $bool;
+        }
+
+        return (bool) self::$_test_mode;
+    }
+
     /**
      * Copy file or directory.
      *
@@ -313,12 +333,14 @@ class PHPFrame_Filesystem
 
         // put the file where we'd like it
         $path = $dir.DS.$file_name;
-        if (!is_uploaded_file($file_tmp)) {
+        if (!self::testMode() && !is_uploaded_file($file_tmp)) {
             $msg = "ERROR: Possible file attack!".' '.$file_name;
             throw new RuntimeException($msg);
         }
 
-        if (!move_uploaded_file($file_tmp, $path)) {
+        if (!move_uploaded_file($file_tmp, $path)
+            && (self::testMode() && !copy($file_tmp, $path))
+        ) {
             $msg = "ERROR: Could not move file to destination directory!";
             throw new RuntimeException($msg);
         }
@@ -379,7 +401,7 @@ class PHPFrame_Filesystem
             finfo_close($finfo);
 
             $mime = strtolower($mime);
-            $pattern = "/^([a-z0-9]+\/[a-z0-9]+);\s+charset=(.*)$/";
+            $pattern = "/^([a-z0-9]+\/[a-z0-9\-\.]+);\s+charset=(.*)$/";
             if (!preg_match($pattern, $mime, $matches)) {
                 throw new Exception("Error parsing MIME type.");
             }

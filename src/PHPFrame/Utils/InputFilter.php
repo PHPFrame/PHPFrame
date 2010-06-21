@@ -70,7 +70,7 @@ class PHPFrame_InputFilter
             return $this->_processArray($mixed);
         }
 
-        return $this->_processString($str);
+        return $this->_processString($mixed);
     }
 
     /**

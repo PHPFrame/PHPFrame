@@ -477,4 +477,25 @@ class PHPFrame_Filesystem
             throw new RuntimeException($msg);
         }
     }
+
+    /**
+     * Format int representing bytes as a human readable string.
+     *
+     * @param int $int The number of bytes.
+     *
+     * @return string
+     * @since  1.0
+     */
+    public static function bytes2human($int)
+    {
+        $int = (int) $int;
+
+        if ($int < 1024) {
+            return $int." bytes";
+        } elseif ($int < (1024*1024)) {
+            return round($int/1024, 2)."KB";
+        } else {
+            return round($int/(1024*1024), 2)."MB";
+        }
+    }
 }

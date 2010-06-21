@@ -690,4 +690,12 @@ class PHPFrame_FilesystemTest extends PHPUnit_Framework_TestCase
             $this->assertTrue($caught);
         }
     }
+
+    public function test_bytes2Human()
+    {
+        $this->assertEquals("10 bytes", PHPFrame_Filesystem::bytes2human(10));
+        $this->assertEquals("1KB", PHPFrame_Filesystem::bytes2human(1024));
+        $this->assertEquals("13.2KB", PHPFrame_Filesystem::bytes2human(13.2*1024));
+        $this->assertEquals("3.23MB", PHPFrame_Filesystem::bytes2human(3.23*1024*1024));
+    }
 }

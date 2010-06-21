@@ -51,6 +51,41 @@ class PHPFrame_ImageProcessorTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function test_memAllocFailure()
+    {
+        foreach ($this->_images as $image) {
+            $thumb = preg_replace("/\.(jpg|png|gif)/", "-resized.$1", $image);
+
+            if (is_file($thumb)) {
+                unlink($thumb);
+            }
+
+            $this->assertTrue(!is_file($thumb));
+
+            $dest[] = $thumb;
+        }
+
+        $memory_limit = ini_get("memory_limit");
+        ini_set("memory_limit", "16M");
+
+        $this->assertFalse($this->_fixture->resize($this->_images, $dest));
+
+        ini_set("memory_limit", $memory_limit);
+
+        $this->assertEquals(
+            "Image resizing halted to avoid running out of memory.",
+            end($this->_fixture->getMessages())
+        );
+
+
+
+        foreach ($dest as $thumb) {
+            if (is_file($thumb)) {
+                unlink($thumb);
+            }
+        }
+    }
+
     public function test_estimateMemoryAllocation()
     {
         $this->assertTrue($this->_fixture->estimateMemoryAllocation($this->_images) > 0);

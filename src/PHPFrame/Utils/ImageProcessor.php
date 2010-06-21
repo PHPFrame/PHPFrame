@@ -35,6 +35,8 @@ class PHPFrame_ImageProcessor
     private $_max_width = 85;
     private $_max_height = 60;
     private $_imgcomp = 0;
+    private $_messages = array();
+    private $_verbose = false;
 
     /**
      * Constructor.
@@ -42,15 +44,22 @@ class PHPFrame_ImageProcessor
      * @param int $max_width  [Optional] Default max_width.
      * @param int $max_height [Optional] Default max_height.
      * @param int $imgcomp    [Optional] Default image compression.
+     * @param bool $verbose   [Optional] Whether to log all messages instead of
+     *                        only errors in the internal messages array.
      *
      * @return void
      * @since  1.0
      */
-    public function __construct($max_width=85, $max_height=60, $imgcomp=0)
-    {
+    public function __construct(
+        $max_width=85,
+        $max_height=60,
+        $imgcomp=0,
+        $verbose=false
+    ) {
         $this->_max_width = (int) $max_width;
         $this->_max_height = (int) $max_height;
         $this->_imgcomp = (int) $imgcomp;
+        $this->_verbose = (bool) $verbose;
     }
 
     /**
@@ -64,7 +73,7 @@ class PHPFrame_ImageProcessor
      *                                   Default value is 60.
      * @param int          $imgcomp      [Optional] 0 best quality, 100 worst quality.
      *
-     * @return void
+     * @return bool Returns TRUE on success or FALSE on failure.
      * @throws Exception on failure
      * @since  1.0
      */
@@ -104,20 +113,73 @@ class PHPFrame_ImageProcessor
 
         $imgcomp = (100 - $imgcomp);
 
-        foreach ($src_filename as $key=>$value) {
-            $this->_resizeImage($value, $dst_filename[$key], $max_width, $max_height, $imgcomp);
+        foreach ($src_filename as $key=>$source) {
+            if (!file_exists($source)) {
+                $msg = "Can not resize image. File '".$source."' doesn't exist.";
+                throw new RuntimeException($msg);
+            }
+
+            $resize_ok = $this->_resizeImage(
+                $source,
+                $dst_filename[$key],
+                $max_width,
+                $max_height,
+                $imgcomp
+            );
+
+            if (!$resize_ok) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     /**
+     * Get messages array.
      *
-     *
-     * @param array $images Array containing absolute paths to image files.
-     *
-     * @return int
+     * @return array
      * @since  1.0
      */
-    public function estimateMemoryAllocation(array $images)
+    public function getMessages()
+    {
+        return $this->_messages;
+    }
+
+    /**
+     * Get/set verbose operation.
+     *
+     * @param bool $bool [Optional]
+     *
+     * @return bool
+     * @since  1.0
+     */
+    public function verbose($bool=null)
+    {
+        if (!is_null($bool)) {
+            $this->_verbose = (bool) $bool;
+        }
+
+        return $this->_verbose;
+    }
+
+    /**
+     * Estimate the amount of memory it will be needed to process the given
+     * images.
+     *
+     * @param array $images       Array containing absolute paths to image files.
+     * @param float $fudge_factor [Optional] Default value is 1.8. This default
+     *                            value is the result of experimentation in my
+     *                            development environment. In your own environment
+     *                            you may need to tweak it, so experiment as
+     *                            needed. In order to experiment with the fudge
+     *                            factor you may use the provided method:
+     *                            {@link PHPFrame_ImageProcessor::calculateFudgeFactor()}
+     *
+     * @return int The amount of memory in bytes.
+     * @since  1.0
+     */
+    public function estimateMemoryAllocation(array $images, $fudge_factor=1.8)
     {
         $mem = 0;
 
@@ -135,18 +197,25 @@ class PHPFrame_ImageProcessor
 
             $bpp = ($info["bits"]/8) * $info["channels"];
 
-            $mem += ($info[0] * $info[1] * $bpp * 1.8);
+            $mem += ($info[0] * $info[1] * $bpp * $fudge_factor);
         }
 
         return (int) $mem;
     }
 
     /**
-     * Calculate fudge factor based on a sample set of images.
+     * Calculate fudge factor based on a sample set of images. This method will
+     * need to create the images in memory in order to figure out the fudge
+     * factor so it shouldn't be called to determine it before invoking
+     * {@link PHPFrame_ImageProcessor::estimateMemoryAllocation()} if you are
+     * trying to avoid a memory allocation error.
+     *
+     * This method can be used to determine the fudge factor based on a known
+     * set of images.
      *
      * @param array $images Array containing the absolute paths to the images.
      *
-     * @return float
+     * @return float The 'mean fudge factor'.
      * @since  1.0
      */
     public function calculateFudgeFactor(array $images)
@@ -178,7 +247,15 @@ class PHPFrame_ImageProcessor
     /**
      * Resize a single image.
      *
-     * @return void
+     * @param string $src_filename Absolute path to source image.
+     * @param string $dst_filename Absolute path to destination image.
+     * @param int    $max_width    [Optional] Maximum allowed width in pixels.
+     *                             Default value is 85.
+     * @param int    $max_height   [Optional] Maximum allowed height in pixels.
+     *                             Default value is 60.
+     * @param int    $imgcomp      [Optional] 0 best quality, 100 worst quality.
+     *
+     * @return bool Returns TRUE on success or FALSE on failure.
      * @since  1.0
      */
     private function _resizeImage(
@@ -188,45 +265,69 @@ class PHPFrame_ImageProcessor
         $max_height,
         $imgcomp
     ) {
-        if (!file_exists($src_filename)) {
-            $msg = "Can not resize image. File doesn't exist";
+        if (!preg_match("/^(\d+)M$/", ini_get("memory_limit"), $matches)) {
+            $msg = "Could not parse memory_limit from PHP configuration.";
             throw new RuntimeException($msg);
-        } else {
-            $size_array = getimagesize($src_filename);
-            $src_width  = $size_array[0];
-            $src_height = $size_array[1];
-            $src_type   = $size_array[2]; // 1 = GIF, 2 = JPG, 3 = PNG
-
-            if (($src_width - $max_width) >= ($src_height - $max_height)) {
-                $dst_width  = $max_width;
-                $dst_height = ($max_width/$src_width) * $src_height;
-            } else {
-                $dst_height = $max_height;
-                $dst_width  = ($dst_height/$src_height)*$src_width;
-            }
-
-            $src_img = $this->_createFromFile($src_filename, $src_type);
-            $dst_img = $this->_create($dst_width, $dst_height, $src_type);
-
-            imagecopyresampled(
-                $dst_img,
-                $src_img,
-                0,
-                0,
-                0,
-                0,
-                $dst_width,
-                $dst_height,
-                $src_width,
-                $src_height
-            );
-
-            $this->_output($dst_img, $dst_filename, $imgcomp, $src_type);
-
-            imagedestroy($dst_img);
-
-            //$this->_drawBorder($dst_filename, $src_type);
         }
+
+        $memory_limit = ((int) $matches[1]) * 1024 * 1024;
+        $needed_memory = $this->estimateMemoryAllocation(array($src_filename));
+        $available_memory = $memory_limit - memory_get_usage() - (1024*1024*8);
+
+        if ($needed_memory > $available_memory) {
+            $msg = "Image resizing halted to avoid running out of memory.";
+            $this->_messages[] = $msg;
+            return false;
+        }
+
+        $size_array = getimagesize($src_filename);
+        $src_width  = $size_array[0];
+        $src_height = $size_array[1];
+        $src_type   = $size_array[2]; // 1 = GIF, 2 = JPG, 3 = PNG
+
+        if (($src_width - $max_width) >= ($src_height - $max_height)) {
+            $dst_width  = $max_width;
+            $dst_height = ($max_width/$src_width) * $src_height;
+        } else {
+            $dst_height = $max_height;
+            $dst_width  = ($dst_height/$src_height)*$src_width;
+        }
+
+        $src_img = $this->_createFromFile($src_filename, $src_type);
+        $dst_img = $this->_create($dst_width, $dst_height, $src_type);
+
+        $resample_ok = @imagecopyresampled(
+            $dst_img,
+            $src_img,
+            0,
+            0,
+            0,
+            0,
+            $dst_width,
+            $dst_height,
+            $src_width,
+            $src_height
+        );
+
+        if (!$resample_ok) {
+            $msg = "Error resampling image '".$src_filename."'.";
+            $this->_messages[] = $msg;
+            return false;
+        }
+
+        $this->_output($dst_img, $dst_filename, $imgcomp, $src_type);
+
+        imagedestroy($dst_img);
+
+        //$this->_drawBorder($dst_filename, $src_type);
+
+        if ($this->verbose()) {
+            $msg  = "Image '".$src_filename."' resized successfully and stored as ";
+            $msg .= "'".$dst_filename."'.";
+            $this->_messages[] = $msg;
+        }
+
+        return true;
     }
 
     /**

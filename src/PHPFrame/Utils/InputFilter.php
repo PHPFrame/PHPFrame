@@ -59,12 +59,53 @@ class PHPFrame_InputFilter
     /**
      * Process/filter a value.
      *
-     * @param string $str The value to filter.
+     * @param string|array $mixed The value to filter.
      *
-     * @return void
+     * @return string|array
      * @since  1.0
      */
-    public function process($str)
+    public function process($mixed)
+    {
+        if (is_array($mixed)) {
+            return $this->_processArray($mixed);
+        }
+
+        return $this->_processString($str);
+    }
+
+    /**
+     * Process input array.
+     *
+     * @param array $array The array containing the data to filter.
+     *
+     * @return array
+     * @since  1.0
+     */
+    private function _processArray(array $array)
+    {
+        $filtered = array();
+        foreach ($array as $key=>$value) {
+            if (is_array($value)) {
+                $filtered[$key] = $this->_processArray($value);
+            } elseif (!is_object($value) && !is_resource($value)) {
+                $filtered[$key] = $this->_processString($value);
+            } else {
+                $filtered[$key] = $value;
+            }
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * Process input string.
+     *
+     * @param string $str The str to filter.
+     *
+     * @return string
+     * @since  1.0
+     */
+    private function _processString($str)
     {
         $patterns = array();
         $replacements = array();

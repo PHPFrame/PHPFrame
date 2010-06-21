@@ -32,16 +32,37 @@ if (!function_exists("gd_info")) {
  */
 class PHPFrame_ImageProcessor
 {
+    private $_max_width = 85;
+    private $_max_height = 60;
+    private $_imgcomp = 0;
+
+    /**
+     * Constructor.
+     *
+     * @param int $max_width  [Optional] Default max_width.
+     * @param int $max_height [Optional] Default max_height.
+     * @param int $imgcomp    [Optional] Default image compression.
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function __construct($max_width=85, $max_height=60, $imgcomp=0)
+    {
+        $this->_max_width = (int) $max_width;
+        $this->_max_height = (int) $max_height;
+        $this->_imgcomp = (int) $imgcomp;
+    }
+
     /**
      * Resize image
      *
-     * @param string $src_filename Absolute path to source image.
-     * @param string $dst_filename Absolute path to destination image.
-     * @param int    $max_width    [Optional] Maximum allowed width in pixels.
-     *                             Default value is 85.
-     * @param int    $max_height   [Optional] Maximum allowed height in pixels.
-     *                             Default value is 60.
-     * @param int    $imgcomp      [Optional] 0 best quality, 100 worst quality.
+     * @param string|array $src_filename Absolute path to source image.
+     * @param string|array $dst_filename Absolute path to destination image.
+     * @param int          $max_width    [Optional] Maximum allowed width in pixels.
+     *                                   Default value is 85.
+     * @param int          $max_height   [Optional] Maximum allowed height in pixels.
+     *                                   Default value is 60.
+     * @param int          $imgcomp      [Optional] 0 best quality, 100 worst quality.
      *
      * @return void
      * @throws Exception on failure
@@ -50,12 +71,123 @@ class PHPFrame_ImageProcessor
     public function resize(
         $src_filename,
         $dst_filename,
-        $max_width=85,
-        $max_height=60,
-        $imgcomp=0
+        $max_width=null,
+        $max_height=null,
+        $imgcomp=null
     ) {
+        if (is_string($src_filename)) {
+            $src_filename = array($src_filename);
+        } elseif (!is_array($src_filename)) {
+            $msg = "Source file name parameter must be either a string with ";
+            $msg .= "the absolute path to the image or an array containing ";
+            $msg .= "paths to many images.";
+            throw new InvalidArgumentException($msg);
+        }
+
+        if (is_string($dst_filename)) {
+            $dst_filename = array($dst_filename);
+        } elseif (!is_array($src_filename)) {
+            $msg = "Destination file name parameter must be either a string with ";
+            $msg .= "the absolute path to the resized image or an array ";
+            $msg .= "containing many paths.";
+            throw new InvalidArgumentException($msg);
+        }
+
+        foreach (array("max_width", "max_height", "imgcomp") as $option) {
+            if (!is_null($$option)) {
+                $$option = (int) $$option;
+            } else {
+                $prop_name = "_".$option;
+                $$option = $this->$prop_name;
+            }
+        }
+
         $imgcomp = (100 - $imgcomp);
 
+        foreach ($src_filename as $key=>$value) {
+            $this->_resizeImage($value, $dst_filename[$key], $max_width, $max_height, $imgcomp);
+        }
+    }
+
+    /**
+     *
+     *
+     * @param array $images Array containing absolute paths to image files.
+     *
+     * @return int
+     * @since  1.0
+     */
+    public function estimateMemoryAllocation(array $images)
+    {
+        $mem = 0;
+
+        foreach ($images as $image) {
+            if (!is_file($image)) {
+                $msg = "File ".$image." does not exist!";
+                throw new RuntimeException($msg);
+            }
+
+            $info = getimagesize($image);
+
+            if (!array_key_exists("channels", $info)) {
+                $info["channels"] = 3;
+            }
+
+            $bpp = ($info["bits"]/8) * $info["channels"];
+
+            $mem += ($info[0] * $info[1] * $bpp * 1.8);
+        }
+
+        return (int) $mem;
+    }
+
+    /**
+     * Calculate fudge factor based on a sample set of images.
+     *
+     * @param array $images Array containing the absolute paths to the images.
+     *
+     * @return float
+     * @since  1.0
+     */
+    public function calculateFudgeFactor(array $images)
+    {
+        $start_mem = memory_get_usage();
+        $ffs = array();
+
+        foreach ($images as $image) {
+            $info     = getimagesize($image);
+            $im       = $this->_createFromFile($image, $info[2]);
+            $mem_diff = (memory_get_usage() - $start_mem);
+
+            if (!array_key_exists("channels", $info)) {
+                $info["channels"] = 3;
+            }
+
+            $bpp = ($info["bits"]/8) * $info["channels"];
+
+            $ff = ($mem_diff / ($info[0] * $info[1] * $bpp));
+            $ffs[] = $ff;
+
+            imagedestroy($im);
+            $start_mem = memory_get_usage();
+        }
+
+        return (array_sum($ffs) / count($ffs));
+    }
+
+    /**
+     * Resize a single image.
+     *
+     * @return void
+     * @since  1.0
+     */
+    private function _resizeImage(
+        $src_filename,
+        $dst_filename,
+        $max_width,
+        $max_height,
+        $imgcomp
+    ) {
         if (!file_exists($src_filename)) {
             $msg = "Can not resize image. File doesn't exist";
             throw new RuntimeException($msg);
@@ -65,9 +197,9 @@ class PHPFrame_ImageProcessor
             $src_height = $size_array[1];
             $src_type   = $size_array[2]; // 1 = GIF, 2 = JPG, 3 = PNG
 
-            if (($src_width-$max_width) >= ($src_height-$max_height)) {
+            if (($src_width - $max_width) >= ($src_height - $max_height)) {
                 $dst_width  = $max_width;
-                $dst_height = ($max_width/$src_width)*$src_height;
+                $dst_height = ($max_width/$src_width) * $src_height;
             } else {
                 $dst_height = $max_height;
                 $dst_width  = ($dst_height/$src_height)*$src_width;
@@ -108,8 +240,6 @@ class PHPFrame_ImageProcessor
      */
     private function _createFromFile($src_filename, $src_type)
     {
-        ini_set('memory_limit', '32M');
-
         switch ($src_type) {
         case 1: // for gif
             return imagecreatefromgif($src_filename);

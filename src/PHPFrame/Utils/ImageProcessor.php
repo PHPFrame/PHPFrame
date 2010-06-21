@@ -319,8 +319,6 @@ class PHPFrame_ImageProcessor
 
         imagedestroy($dst_img);
 
-        //$this->_drawBorder($dst_filename, $src_type);
-
         if ($this->verbose()) {
             $msg  = "Image '".$src_filename."' resized successfully and stored as ";
             $msg .= "'".$dst_filename."'.";
@@ -399,68 +397,5 @@ class PHPFrame_ImageProcessor
             imagepng($dst_img, $dst_filename, $imgcomp); // for png
             break;
         }
-    }
-
-    /**
-     * Draw image border.
-     *
-     * @param string $img_file Absolute path to image file.
-     * @param int    $type     Image type. 1 = gif, 2 = jpeg, 3 = png.
-     * @param int    $colour   [Optional] Border colour. Default value is 127.
-     * @param int    $quality  [Optional] 0 best quality, 100 worst quality.
-     *
-     * @return void
-     * @since  1.0
-     */
-    private function _drawBorder($img_file, $type, $colour=127, $quality=100)
-    {
-        /*
-            a                        b
-            +-------------------------+
-            |
-            |          IMAGE
-            |
-            +-------------------------+
-            c                        d
-        */
-
-        $scr_img = $this->_createFromFile($img_file, $type);
-        $width   = imagesx($scr_img);
-        $height  = imagesy($scr_img);
-
-        // line a - b
-        $abX  = 0;
-        $abY  = 0;
-        $abX1 = $width;
-        $abY1 = 0;
-
-        // line a - c
-        $acX  = 0;
-        $acY  = 0;
-        $acX1 = 0;
-        $acY1 = $height;
-
-        // line b - d
-        $bdX  = $width-1;
-        $bdY  = 0;
-        $bdX1 = $width-1;
-        $bdY1 = $height;
-
-        // line c - d
-        $cdX  = 0;
-        $cdY  = $height-1;
-        $cdX1 = $width;
-        $cdY1 = $height-1;
-
-        // DRAW LINES
-        imageline($scr_img, $abX, $abY, $abX1, $abY1, $colour);
-        imageline($scr_img, $acX, $acY, $acX1, $acY1, $colour);
-        imageline($scr_img, $bdX, $bdY, $bdX1, $bdY1, $colour);
-        imageline($scr_img, $cdX, $cdY, $cdX1, $cdY1, $colour);
-
-        // create copy from image
-        $this->_output($scr_img, $img_file, $quality, $type);
-
-        imagedestroy($scr_img);
     }
 }

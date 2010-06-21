@@ -93,6 +93,6 @@ class PHPFrame_ImageProcessorTest extends PHPUnit_Framework_TestCase
 
     public function test_calculateFudgeFactor()
     {
-        $this->assertRegExp("/1\.\d+/", (string) $this->_fixture->calculateFudgeFactor($this->_images));
+        $this->assertType("float", $this->_fixture->calculateFudgeFactor($this->_images));
     }
 }

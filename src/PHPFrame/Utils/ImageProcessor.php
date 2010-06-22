@@ -275,7 +275,10 @@ class PHPFrame_ImageProcessor
         $available_memory = $memory_limit - memory_get_usage() - (1024*1024*8);
 
         if ($needed_memory > $available_memory) {
-            $msg = "Image resizing halted to avoid running out of memory.";
+            $msg  = "Image resizing halted to avoid running out of memory. ";
+            $msg .= "PHP memory limit is set to ".ini_get("memory_limit").". ";
+            $msg .= "To avoid this problem you can increase the memory limit ";
+            $msg .= "by changing this setting in your php.ini file";
             $this->_messages[] = $msg;
             return false;
         }

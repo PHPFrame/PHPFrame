@@ -72,12 +72,10 @@ class PHPFrame_ImageProcessorTest extends PHPUnit_Framework_TestCase
 
         ini_set("memory_limit", $memory_limit);
 
-        $this->assertEquals(
-            "Image resizing halted to avoid running out of memory.",
+        $this->assertRegExp(
+            "/Image resizing halted to avoid running out of memory\./",
             end($this->_fixture->getMessages())
         );
-
-
 
         foreach ($dest as $thumb) {
             if (is_file($thumb)) {

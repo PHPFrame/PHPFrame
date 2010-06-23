@@ -41,11 +41,11 @@ class PHPFrame_ImageProcessor
     /**
      * Constructor.
      *
-     * @param int $max_width  [Optional] Default max_width.
-     * @param int $max_height [Optional] Default max_height.
-     * @param int $imgcomp    [Optional] Default image compression.
-     * @param bool $verbose   [Optional] Whether to log all messages instead of
-     *                        only errors in the internal messages array.
+     * @param int  $max_width  [Optional] Default max_width.
+     * @param int  $max_height [Optional] Default max_height.
+     * @param int  $imgcomp    [Optional] Default image compression.
+     * @param bool $verbose    [Optional] Whether to log all messages instead of
+     *                         only errors in the internal messages array.
      *
      * @return void
      * @since  1.0
@@ -67,11 +67,12 @@ class PHPFrame_ImageProcessor
      *
      * @param string|array $src_filename Absolute path to source image.
      * @param string|array $dst_filename Absolute path to destination image.
-     * @param int          $max_width    [Optional] Maximum allowed width in pixels.
-     *                                   Default value is 85.
-     * @param int          $max_height   [Optional] Maximum allowed height in pixels.
-     *                                   Default value is 60.
-     * @param int          $imgcomp      [Optional] 0 best quality, 100 worst quality.
+     * @param int          $max_width    [Optional] Maximum allowed width in
+     *                                   pixels. Default value is 85.
+     * @param int          $max_height   [Optional] Maximum allowed height in
+     *                                   pixels. Default value is 60.
+     * @param int          $imgcomp      [Optional] 0 best quality, 100 worst
+     *                                   quality.
      *
      * @return bool Returns TRUE on success or FALSE on failure.
      * @throws Exception on failure
@@ -173,10 +174,11 @@ class PHPFrame_ImageProcessor
      *                            development environment. In your own environment
      *                            you may need to tweak it, so experiment as
      *                            needed. In order to experiment with the fudge
-     *                            factor you may use the provided method:
-     *                            {@link PHPFrame_ImageProcessor::calculateFudgeFactor()}
+     *                            factor you may use the provided
+     *                            calculateFudgeFactor() method.
      *
      * @return int The amount of memory in bytes.
+     * @see    PHPFrame_ImageProcessor::calculateFudgeFactor()
      * @since  1.0
      */
     public function estimateMemoryAllocation(array $images, $fudge_factor=1.8)

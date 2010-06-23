@@ -122,7 +122,13 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $this->assertType("DOMDocumentType", $doc_type);
         $this->assertEquals("html", $doc_type->name);
 
-        $new_doctype = new DOMDocumentType();
+        $imp = new DOMImplementation();
+        $new_doctype = $imp->createDocumentType(
+            "html",
+            "-//W3C//DTD XHTML 1.0 Strict//EN",
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+        );
+
         $this->_document->doctype($new_doctype);
         $this->assertEquals($new_doctype, $this->_document->doctype());
     }

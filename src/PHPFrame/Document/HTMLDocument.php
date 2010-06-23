@@ -83,34 +83,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // Call parent's constructor to set mime type
         parent::__construct($mime, $charset);
 
-        // Get default doctype if not passed
-        if (is_null($doctype)) {
-            $doctype = $this->doctype();
-        }
-
-        // Acquire DOM object of HTML type
-        $imp = new DOMImplementation();
-        $this->dom($imp->createDocument(null, "html", $doctype));
-
-        // Get root node
-        $html_node = $this->dom()->getElementsByTagName("html")->item(0);
-
-        // Add head
-        $head_node = $this->addNode("head", $html_node);
-        // Add body
-        $this->addNode("body", $html_node, null, "\n{content}\n");
-
-        // Add meta tags
+        // Add generator meta tag
         $this->addMetaTag("generator", "PHPFrame");
-        $this->addMetaTag(
-            null,
-            $this->mime()."; charset=".$this->charset(),
-            "Content-Type"
-        );
 
-        // Add base url
-        $uri = new PHPFrame_URI();
-        $this->addNode("base", $head_node, array("href"=>$uri->getBase()));
+        // Get default doctype if not passed
+        $this->doctype($doctype);
     }
 
     /**
@@ -250,6 +227,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     {
         if (!is_null($doctype)) {
             $this->_doctype = $doctype;
+            $this->_initDOM($this->_doctype);
         }
 
         // Create new doc type object if we don't have one yet
@@ -260,6 +238,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
                 "-//W3C//DTD XHTML 1.0 Strict//EN",
                 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
             );
+            $this->_initDOM($this->_doctype);
         }
 
         return $this->_doctype;
@@ -319,8 +298,8 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      *
      * @param string $href  The relative or absolute URL to the link source.
      * @param string $type  The link type. Default is text/css.
-     * @param string $media This attribute specifies the intended device. It 
-     *                      may be a single media descriptor or a csv list. The 
+     * @param string $media This attribute specifies the intended device. It
+     *                      may be a single media descriptor or a csv list. The
      *                      default value for this attribute is "screen".
      *
      * @return void
@@ -382,5 +361,58 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         }
 
         return $this->_body_only;
+    }
+
+    /**
+     * Initialise DOM. This needs to be done every time the doctype is set.
+     *
+     * @param DOMDocumentType $doctype Doctype object.
+     *
+     * @return void
+     * @since  1.0
+     */
+    private function _initDOM(DOMDocumentType $doctype)
+    {
+        $html5 = false;
+
+        if ($doctype->name == "html"
+            && empty($doctype->publicId)
+            && empty($doctype->systemId)
+        ) {
+            $html5 = true;
+        }
+
+        // Acquire DOM object of HTML type
+        $imp = new DOMImplementation();
+        $this->dom($imp->createDocument(null, "html", $doctype));
+
+        // Get root node
+        $html_node = $this->dom()->getElementsByTagName("html")->item(0);
+
+        // Add head
+        $head_node = $this->addNode("head", $html_node);
+        // Add body
+        $this->addNode("body", $html_node, null, "\n{content}\n");
+
+        // Add charset meta tag
+        foreach ($this->_meta_tags as $key=>$value) {
+            if ($value["http_equiv"] == "Content-Type") {
+                unset($this->_meta_tags[$key]);
+            }
+        }
+
+        if ($html5) {
+            $this->addNode("meta", $head_node, array("charset"=>$this->charset()));
+        } else {
+            $this->addMetaTag(
+                null,
+                $this->mime()."; charset=".$this->charset(),
+                "Content-Type"
+            );
+        }
+
+        // Add base url
+        $uri = new PHPFrame_URI();
+        $this->addNode("base", $head_node, array("href"=>$uri->getBase()));
     }
 }

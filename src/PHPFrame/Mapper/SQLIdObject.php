@@ -248,8 +248,8 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     {
         $join       = trim((string) $join);
         $join_array = explode(" ON ", $join);
-        $pattern    = '/^(JOIN|INNER JOIN|OUTER JOIN|LEFT JOIN|RIGHT JOIN|LEFT OUTER JOIN)';
-        $pattern   .= '\s+(.*)$/';
+        $pattern    = '/^(JOIN|INNER JOIN|OUTER JOIN|LEFT JOIN|RIGHT JOIN';
+        $pattern   .= '|LEFT OUTER JOIN)\s+(.*)$/';
 
         preg_match($pattern, $join_array[0], $matches);
 

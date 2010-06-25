@@ -39,6 +39,15 @@ class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
      */
     public function render($value)
     {
+        if (function_exists("json_encode")) {
+            return json_encode($value);
+        } else {
+            return $this->_renderWithoutJsonExtension($value);
+        }
+    }
+
+    private function _renderWithoutJsonExtension($value)
+    {
         if (is_null($value)) {
             return;
 

@@ -34,7 +34,7 @@ class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
      *
      * @param mixed $value The value we want to render.
      *
-     * @return void
+     * @return string|null
      * @since  1.0
      */
     public function render($value)
@@ -46,6 +46,15 @@ class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
         }
     }
 
+    /**
+     * Render value as JSON string. This is used as fallback when php-json is
+     * not installed.
+     *
+     * @param mixed $value The value we want to render.
+     *
+     * @return string|null
+     * @since  1.0
+     */
     private function _renderWithoutJsonExtension($value)
     {
         if (is_null($value)) {

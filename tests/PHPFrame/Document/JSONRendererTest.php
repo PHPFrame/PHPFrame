@@ -8,7 +8,7 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_renderer = new PHPFrame_JSONRenderer();
+        $this->_renderer = new PHPFrame_JSONRenderer(false);
     }
 
     public function tearDown()
@@ -112,5 +112,20 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
         $obj->array = array(1,2,3);
 
         //print_r($this->_renderer->render($obj));
+    }
+
+    public function test_renderWithPhpJson()
+    {
+        $array = array(
+            array(array(), "[]"),
+            array(array(1), "[1]"),
+            array(array(1,2,3), "[1,2,3]")
+        );
+
+        $this->_renderer->usePhpJson(true);
+
+        foreach ($array as $test_pair) {
+            $this->assertEquals($test_pair[1], $this->_renderer->render($test_pair[0]));
+        }
     }
 }

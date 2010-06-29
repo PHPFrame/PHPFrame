@@ -28,21 +28,79 @@ class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
 {
     private $_indent = "";
     private $_nl = "\n";
+    private $_use_php_json = true;
+
+    /**
+     * Constructor.
+     *
+     * @param bool $use_php_json [Optional] Flag indicating whether renderer
+     *                           should try to use php's JSON extension if
+     *                           available. If the extension is not available
+     *                           the renderer will fall back to its own JSON
+     *                           rendering functions (still a bit wonky). The
+     *                           default value is TRUE. For more info about the
+     *                           JSON extension check:
+     *                           http://www.php.net/manual/en/book.json.php
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function __construct($use_php_json=true)
+    {
+        $this->usePhpJson($use_php_json);
+    }
+
+    /**
+     * Get/set flag indicating whether renderer should try to use PHP's JSON
+     * extension if available.
+     *
+     * @param bool $bool [Optional]
+     *
+     * @return bool
+     * @since  1.0
+     */
+    public function usePhpJson($bool=null)
+    {
+        if (!is_null($bool)) {
+            $this->_use_php_json = (bool) $bool;
+        }
+
+        return $this->_use_php_json;
+    }
 
     /**
      * Render a given value.
      *
      * @param mixed $value The value we want to render.
      *
-     * @return void
+     * @return string|null
      * @since  1.0
      */
     public function render($value)
     {
         if (is_null($value)) {
             return;
+        }
 
-        } elseif (is_array($value)) {
+        if (function_exists("json_encode") && $this->usePhpJson()) {
+            return json_encode($value);
+        } else {
+            return $this->_renderWithoutJsonExtension($value);
+        }
+    }
+
+    /**
+     * Render value as JSON string. This is used as fallback when php-json is
+     * not installed.
+     *
+     * @param mixed $value The value we want to render.
+     *
+     * @return string|null
+     * @since  1.0
+     */
+    private function _renderWithoutJsonExtension($value)
+    {
+        if (is_array($value)) {
             return $this->_renderArray($value);
 
         } elseif ($value instanceof Traversable) {

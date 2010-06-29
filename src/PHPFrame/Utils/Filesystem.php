@@ -25,6 +25,26 @@
  */
 class PHPFrame_Filesystem
 {
+    private static $_test_mode = false;
+
+    /**
+     * Is test mode?
+     *
+     * @param bool $bool [Optional] TRUE to run in test mode. This allows file
+     *                   uploads for files not uploaded via the web server.
+     *
+     * @return bool
+     * @since  1.0
+     */
+    public static function testMode($bool=null)
+    {
+        if (!is_null($bool)) {
+            self::$_test_mode = (bool) $bool;
+        }
+
+        return (bool) self::$_test_mode;
+    }
+
     /**
      * Copy file or directory.
      *
@@ -235,42 +255,47 @@ class PHPFrame_Filesystem
      * @param int    $max_upload_size [Optional]
      * @param bool   $overwrite       [Optional]
      *
-     * @return PHPFrame_FileInfo
+     * @return SplFileInfo
      * @throws Exception on failure
      * @since  1.0
      */
     public static function upload(
-        $file_array,
+        array $file_array,
         $dir,
         $accept="*",
         $max_upload_size=0,
         $overwrite=false
     ) {
-        // $file_tmp is where file went on webserver
-        $file_tmp   = $file_array['tmp_name'];
-        // $file_tmp_name is original file name
-        $file_name  = $file_array['name'];
-        // $file_size is size in bytes
-        $file_size  = $file_array['size'];
-        // $file_type is mime type e.g. image/gif
-        $file_type  = $file_array['type'];
-        // $file_error is any error encountered
-        $file_error = $file_array['error'];
+        $keys = array("tmp_name", "name", "size", "type", "error");
+        if (count(array_diff($keys, array_keys($file_array))) > 0) {
+            $msg  = "file_array argument must contain the following keys: ";
+            $msg .= "'".implode("', '", $keys)."'";
+            throw new InvalidArgumentException($msg);
+        }
 
         // check for generic errors first
-        if ($file_error > 0) {
-            switch ($file_error) {
-            case 1 :
-                $msg = "ERROR: PHP upload maximum file size exceeded!";
+        if ($file_array['error'] > 0) {
+            switch ($file_array['error']) {
+            case UPLOAD_ERR_INI_SIZE :
+                $msg = "PHP upload maximum file size exceeded!";
                 break;
-            case 2 :
-                $msg = "ERROR: PHP maximum file size exceeded!";
+            case UPLOAD_ERR_FORM_SIZE :
+                $msg = "PHP maximum post size exceeded!";
                 break;
-            case 3 :
-                $msg = "ERROR: Partial upload!";
+            case UPLOAD_ERR_PARTIAL :
+                $msg = "Partial upload!";
                 break;
-            case 4 :
-                $msg = "ERROR: No file submitted for upload!";
+            case UPLOAD_ERR_NO_FILE :
+                $msg = "No file submitted for upload!";
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR :
+                $msg = "Missing temporary folder!";
+                break;
+            case UPLOAD_ERR_CANT_WRITE :
+                $msg = "Failed to write file to disk!";
+                break;
+            case UPLOAD_ERR_EXTENSION :
+                $msg = "A PHP extension stopped the file upload!";
                 break;
             }
 
@@ -278,59 +303,142 @@ class PHPFrame_Filesystem
         }
 
         // check custom max_upload_size passed into the function
-        if (!empty($max_upload_size) && $max_upload_size < $file_size) {
-            $msg  = "ERROR: Maximum file size exceeded!";
+        if (!empty($max_upload_size) && $max_upload_size < $file_array['size']) {
+            $msg  = "Maximum file size exceeded!";
             $msg .= ' max_upload_size: '.$max_upload_size;
-            $msg .= ' | file_size: '.$file_size;
+            $msg .= ' | file_size: '.$file_array['size'];
             throw new RuntimeException($msg);
         }
 
+        // Check that the destination directory exists
+        if (!is_dir($dir)) {
+            $msg = "Destination directory doesn't exist!";
+            throw new InvalidArgumentException($msg);
+        }
+
+        // $file_tmp is where file went on webserver
+        $file_tmp = $file_array['tmp_name'];
+
         // Check if file is of valid mime type
+        $file_type = self::getMimeType($file_tmp);
+        if ($file_type != $file_array['type']) {
+
+        }
+
         if ($accept != "*") {
             $valid_file_types = explode(",", $accept);
             if (!in_array($file_type, $valid_file_types)) {
-                $msg = "ERROR: File type not valid!";
+                $msg = "File type not valid!";
                 throw new RuntimeException($msg);
             }
         }
 
-        // Check for special chars
-        $special_chars = array(
-            'ñ','$','%','^','&','*','?','!','(',')','[',']','{','}',',','/','\\'
-        );
-        foreach ($special_chars as $special_char) {
-            $file_name = str_replace($special_char, '', $file_name);
-        }
+        // Sanitise file name
+        $file_name = self::filterFilename($file_array['name']);
 
         // Avoid overwriting if $overwrite is set to false
-        if ($overwrite === false) {
-            $check_if_file_exists = file_exists($dir.DS.$file_name);
-            if ($check_if_file_exists === true) {
-                // split file name into name and extension
-                $split_point = strrpos($file_name, '.');
-                $file_n      = substr($file_name, 0, $split_point);
-                $file_ext    = substr($file_name, $split_point);
-                $i=0;
-                while (true === file_exists($dir.DS.$file_n.$i.$file_ext)) {
-                    $i++;
-                }
-                $file_name = $file_n.$i.$file_ext;
+        if (!$overwrite && file_exists($dir.DS.$file_name)) {
+            // split file name into name and extension
+            $split_point = strrpos($file_name, '.');
+            $file_n      = substr($file_name, 0, $split_point);
+            $file_ext    = substr($file_name, $split_point);
+            $i=0;
+            while (true === file_exists($dir.DS.$file_n.$i.$file_ext)) {
+                $i++;
             }
+            $file_name = $file_n.$i.$file_ext;
         }
 
         // put the file where we'd like it
         $path = $dir.DS.$file_name;
-        if (is_uploaded_file($file_tmp)) {
-            if (!move_uploaded_file($file_tmp, $path)) {
-                $msg = "ERROR: Could not move file to destination directory!";
-                throw new RuntimeException($msg);
-            }
-        } else {
-            $msg = "ERROR: Possible file attack!".' '.$file_name;
+        if (!self::testMode() && !is_uploaded_file($file_tmp)) {
+            $msg = "Possible file attack!".' '.$file_name;
             throw new RuntimeException($msg);
         }
 
-        return new PHPFrame_FileInfo($dir.DS.$file_name);
+        if (!move_uploaded_file($file_tmp, $path)
+            && (self::testMode() && !@copy($file_tmp, $path))
+        ) {
+            $msg = "Could not move file to destination directory!";
+            throw new RuntimeException($msg);
+        }
+
+        return array(
+            "finfo"    => new SplFileInfo($dir.DS.$file_name),
+            "mimetype" => $file_type
+        );
+    }
+
+    /**
+     * Filter dir or file name.
+     *
+     * @param string $str      The string to filter.
+     * @param bool   $sanitise [Optional] Flag indicating whether or not to
+     *                         sanitise (remove dodgy characters).
+     *
+     * @return string
+     * @throws InvalidArgumentException
+     * @since  1.0
+     */
+    public static function filterFilename($str, $sanitise=false)
+    {
+        // Disallow dot files, alias to home and root
+        if (preg_match("/(^(\.|~|\/)|(\/|\\\))/", $str)) {
+            $msg = "Invalid file or directory name.";
+            throw new InvalidArgumentException($msg);
+        }
+
+        // Replace dodgy characters
+        if ($sanitise) {
+            $pattern = array("/[^ -\w\.]/");
+            $replace = array("");
+            return preg_replace($pattern, $replace, $str);
+        }
+
+        return $str;
+    }
+
+    /**
+     * Check file type.
+     *
+     * @param string $fname Absolute path to file.
+     *
+     * @return bool|string
+     * @since  1.0
+     */
+    public static function getMimeType($fname)
+    {
+        if (!is_file($fname)) {
+            $msg = "File '".$fname."' doesn't exist.";
+            throw new RuntimeException($msg);
+        }
+
+        if (function_exists("finfo_open")) {
+            $finfo = finfo_open(FILEINFO_MIME);
+
+            if (!$finfo) {
+                return false;
+            }
+
+            $mime = finfo_file($finfo, $fname);
+            finfo_close($finfo);
+
+            $mime = strtolower($mime);
+            $pattern = "/^([a-z0-9]+\/[a-z0-9\-\.]+);\s+charset=(.*)$/";
+            if (!preg_match($pattern, $mime, $matches)) {
+                throw new Exception("Error parsing MIME type.");
+            }
+
+            return $matches[1];
+
+        } elseif (function_exists("mime_content_type")) {
+            $mime = mime_content_type($fname);
+            return $mime;
+        }
+
+        $msg  = "PHPFrame_Filesystem::getMimeType() requires either the ";
+        $msg .= "php-finfo module or mime_content_type and none could be found.";
+        throw new Exception($msg);
     }
 
     /**
@@ -367,6 +475,27 @@ class PHPFrame_Filesystem
         } else {
             $msg = "Could not determine path to user home directory.";
             throw new RuntimeException($msg);
+        }
+    }
+
+    /**
+     * Format int representing bytes as a human readable string.
+     *
+     * @param int $int The number of bytes.
+     *
+     * @return string
+     * @since  1.0
+     */
+    public static function bytes2human($int)
+    {
+        $int = (int) $int;
+
+        if ($int < 1024) {
+            return $int." bytes";
+        } elseif ($int < (1024*1024)) {
+            return round($int/1024, 2)."KB";
+        } else {
+            return round($int/(1024*1024), 2)."MB";
         }
     }
 }

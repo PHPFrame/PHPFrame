@@ -8,12 +8,12 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
-    The MVC package provides a set of classes used to implement the 
+    The MVC package provides a set of classes used to implement the
     Model-View-Controller pattern.
     </para>
-    
+
     <link linkend="http://www.phpframe.org/uploads/content/MVC.png">
     <graphic fileref="http://www.phpframe.org/uploads/content/MVC-min.png" />
     </link>
@@ -22,27 +22,27 @@
 
 <refsect1 id="{@id classes}">
     <title>Classes in MVC Package</title>
-    
+
     <itemizedlist>
-    
+
         <listitem>
         <para>
         {@link PHPFrame_ActionController}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_View}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_MVCFactory}
         </para>
         </listitem>
-        
+
     </itemizedlist>
 
 </refsect1>
@@ -50,64 +50,64 @@
 <refsect1 id="{@id controllers}">
 
     <title>Creating your own controllers</title>
-    
+
     <example>
         <title></title>
         <para>
         </para>
         <programlisting></programlisting>
-        
+
         <screen>
 <![CDATA[
 
 ]]>
         </screen>
     </example>
-    
+
 </refsect1>
 
 <refsect1 id="{@id views}">
 
     <title>Creating views</title>
-    
+
     <example>
         <title></title>
         <para>
         </para>
         <programlisting></programlisting>
-        
+
         <screen>
 <![CDATA[
 
 ]]>
         </screen>
     </example>
-    
+
 </refsect1>
 
 <refsect1 id="{@id models}">
 
     <title>Creating models</title>
-    
+
     <example>
         <title></title>
         <para>
         </para>
         <programlisting></programlisting>
-        
+
         <screen>
 <![CDATA[
 
 ]]>
         </screen>
     </example>
-    
+
 </refsect1>
 
-<!-- 
+<!--
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <example>
         <title></title>
         <para>
@@ -117,15 +117,15 @@
 
 ]]>
         </programlisting>
-        
+
         <screen>
 <![CDATA[
 
 ]]>
         </screen>
-       
+
     </example>
-    
+
 </refsect1>
 -->
 

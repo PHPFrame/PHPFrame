@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Document/IRenderer.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Document
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,7 +14,7 @@
 
 /**
  * Renderer interface
- * 
+ *
  * @category PHPFrame
  * @package  Document
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -26,9 +26,9 @@ interface PHPFrame_IRenderer
 {
     /**
      * Render a given value.
-     * 
+     *
      * @param mixed $value The value we want to render.
-     * 
+     *
      * @return void
      * @since  1.0
      */

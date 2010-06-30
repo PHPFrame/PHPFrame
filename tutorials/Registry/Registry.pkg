@@ -8,7 +8,7 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
     The Registry package ...
     </para>
@@ -17,7 +17,7 @@
 
 <refsect1 id="{@id classes}">
     <title>Registry classes</title>
-    
+
     <itemizedlist>
         <listitem>
             <para>
@@ -42,5 +42,5 @@
     </itemizedlist>
 
 </refsect1>
- 
+
 </refentry>

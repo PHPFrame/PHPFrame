@@ -1,9 +1,9 @@
 <?php
 /**
  * PHPFrame/Document/Document.php
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  PHPFrame
  * @package   Document
  * @author    Lupo Montero <lupo@e-noise.com>
@@ -14,14 +14,14 @@
 
 /**
  * This is an abstract class that all "Document" objects extend.
- * 
+ *
  * PHPFrame provides 4 implementations of this abstract class:
- * 
+ *
  * - Plaintext
  * - XML
  * - HTML (specialised XML document for HTML responses).
  * - RPC (specialised XML document used for XML-RPC responses.)
- * 
+ *
  * @category PHPFrame
  * @package  Document
  * @author   Lupo Montero <lupo@e-noise.com>
@@ -46,47 +46,47 @@ abstract class PHPFrame_Document implements IteratorAggregate
     private $_charset = "UTF-8";
     /**
      * The document title
-     * 
+     *
      * @var string
      */
     private $_title = "";
     /**
      * The document body
-     * 
+     *
      * @var string
      */
     private $_body = "";
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param string $mime    The document's MIME type.
-     * @param string $charset [Optional] The document's character set. Default 
+     * @param string $charset [Optional] The document's character set. Default
      *                        value is 'UTF-8'.
-     * 
+     *
      * @return void
      * @since  1.0
      */
-    public function __construct($mime, $charset=null) 
+    public function __construct($mime, $charset=null)
     {
         $this->mime($mime);
-        
+
         if (!is_null($charset)) {
             $this->charset($charset);
         }
     }
-    
+
     /**
      * Magic method used when object is used as string
-     * 
+     *
      * @return string
      * @since  1.0
      */
     abstract public function __toString();
-    
+
     /**
      * Implementation of the IteratorAggregate interface.
-     * 
+     *
      * @return Iterator
      * @since  1.0
      */
@@ -98,15 +98,15 @@ abstract class PHPFrame_Document implements IteratorAggregate
             "title"     => $this->title(),
             "body"      => $this->body()
         );
-        
+
         return new ArrayIterator($array);
     }
-    
+
     /**
      * Get/set the document's character set
-     * 
+     *
      * @param string $str [Optional] The character set to use for the document.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -115,15 +115,15 @@ abstract class PHPFrame_Document implements IteratorAggregate
         if (!is_null($str)) {
             $this->_charset = (string) $str;
         }
-        
+
         return $this->_charset;
     }
-    
+
     /**
      * Get/set document's mime type
-     * 
+     *
      * @param string $str [Optional] The MIME type to use for the document.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -132,15 +132,15 @@ abstract class PHPFrame_Document implements IteratorAggregate
         if (!is_null($str)) {
             $this->_mime_type = (string) $str;
         }
-        
+
         return $this->_mime_type;
     }
-    
+
     /**
      * Get/set the document title
-     * 
+     *
      * @param string $str [Optional] The string to set as document title.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -149,15 +149,15 @@ abstract class PHPFrame_Document implements IteratorAggregate
         if (!is_null($str)) {
             $this->_title = (string) $str;
         }
-        
+
         return $this->_title;
     }
-    
+
     /**
      * Append string to the document title
-     * 
+     *
      * @param string $str The string to append.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -165,12 +165,12 @@ abstract class PHPFrame_Document implements IteratorAggregate
     {
         $this->_title .= $str;
     }
-    
+
     /**
      * Get/set the document body.
-     * 
+     *
      * @param string $str String containing the document body.
-     * 
+     *
      * @return string
      * @since  1.0
      */
@@ -179,15 +179,15 @@ abstract class PHPFrame_Document implements IteratorAggregate
         if (!is_null($str)) {
             $this->_body = (string) $str;
         }
-        
+
         return (string) $this->_body;
     }
-    
+
     /**
      * Append string to the document body
-     * 
+     *
      * @param string $str String to append the document body.
-     * 
+     *
      * @return void
      * @since  1.0
      */
@@ -195,12 +195,12 @@ abstract class PHPFrame_Document implements IteratorAggregate
     {
         $this->_body .= (string) $str;
     }
-    
+
     /**
      * Prepend string to the document body
-     * 
+     *
      * @param string $str String to prepend to the document body.
-     * 
+     *
      * @return void
      * @since  1.0
      */

@@ -10,7 +10,6 @@
  * @copyright 2010 The PHPFrame Group
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link      http://github.com/PHPFrame/PHPFrame
- * @ignore
  */
 
 /**
@@ -22,7 +21,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
- * @ignore
  */
 class PHPFrame_XMLRPCClient extends PHPFrame_Client
 {

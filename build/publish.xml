@@ -15,7 +15,7 @@
     <!-- Release info -->
     <property name="api.version" value="1.0" />
     <property name="api.stability" value="stable" />
-    <property name="release.version" value="1.0" />
+    <property name="release.version" value="1.0.6" />
     <property name="release.stability" value="beta" />
     <property name="notes" value="This is a beta release aimed at developers." />
 
@@ -42,8 +42,13 @@
         <mkdir dir="${dist.dir}" />
         <mkdir dir="${logs.dir}" />
 
-        <delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
-        <mkdir dir="${tmp.dir}"/>
+        <delete
+            dir="${tmp.dir}"
+            includeemptydirs="true"
+            verbose="true"
+            failonerror="true"
+        />
+        <mkdir dir="${tmp.dir}" />
     </target>
 
     <!-- copy files to tmp dir for publishing -->
@@ -141,29 +146,38 @@
     <!-- Create archive for distribution -->
     <target name="tar" depends="copy">
         <!-- create tar using pear package command -->
-        <exec executable="pear"
-              dir="${tmp.dir}"
-              failonerror="on"
-              output="${logs.dir}/pear_package.log">
+        <exec
+            executable="pear"
+            dir="${tmp.dir}"
+            failonerror="on"
+            output="${logs.dir}/pear_package.log"
+        >
             <arg line="package" />
         </exec>
 
         <!-- Move created package to dist directory -->
-        <move file="${tmp.dir}/${ant.project.name}-${release.version}.tgz"
-              tofile="${dist.dir}/${ant.project.name}-${release.version}-${label}.tgz"
-              overwrite="true"/>
-
-        <!-- Upload deliverable to live server -->
-        <exec executable="scp"
-              dir="${dist.dir}"
-              failonerror="on"
-              output="${logs.dir}/scp.log">
-            <arg line="-P 2222 ${dist.dir}/${ant.project.name}-${release.version}-${label}.tgz
-                       phpframe@e-noise.com:~/dist/ " />
-        </exec>
-
+        <move
+            file="${tmp.dir}/${ant.project.name}-${release.version}.tgz"
+            tofile="${dist.dir}/${ant.project.name}-${release.version}-${label}.tgz"
+            overwrite="true"
+        />
     </target>
 
-    <target name="build" depends="prepare, copy, tar" />
+    <!-- Upload deliverable to live server -->
+    <target name="upload" depends="tar">
+        <exec
+            executable="scp"
+            dir="${dist.dir}"
+            failonerror="on"
+            output="${logs.dir}/scp.log"
+        >
+            <arg
+                line="-P 2222 ${dist.dir}/${ant.project.name}-${release.version}-${label}.tgz
+                       phpframe@e-noise.com:~/dist/ "
+            />
+        </exec>
+    </target>
+
+    <target name="build" depends="prepare, copy, tar, upload" />
 
 </project>

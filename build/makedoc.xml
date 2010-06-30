@@ -5,17 +5,17 @@
     <property name="logs.dir" value="${build.dir}/logs"/>
     <property name="doc.dir" value="${build.dir}/doc"/>
     <property name="tmp.dir" value="${build.dir}/tmp/doc"/>
-    
+
     <!-- Prepare directories -->
     <target name="prepare">
         <mkdir dir="${logs.dir}"/>
         <delete dir="${doc.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
         <mkdir dir="${doc.dir}"/>
-        
+
         <delete dir="${tmp.dir}" includeemptydirs="true" verbose="true" failonerror="true" />
         <mkdir dir="${tmp.dir}"/>
     </target>
-    
+
     <!-- copy files to tmp doc dir for parsing documentation -->
     <target name="copy" depends="prepare">
         <!-- copy files -->
@@ -37,33 +37,33 @@
             </fileset>
         </copy>
     </target>
-    
+
     <target name="phpdoc" depends="copy">
-        <exec executable="phpdoc" 
-              dir="${basedir}" 
+        <exec executable="phpdoc"
+              dir="${basedir}"
               output="${logs.dir}/phpdoc.log">
-            <arg line="-d ${tmp.dir} 
-                       -t ${doc.dir} 
+            <arg line="-d ${tmp.dir}
+                       -t ${doc.dir}
                        -ric README.md,LICENSE,CREDITS
                        -i examples/
                        -s on
-                       -dn PHPFrame 
-                       -ct type 
-                       -ue on 
-                       -o HTML:Smarty:PHP 
+                       -dn PHPFrame
+                       -ct type
+                       -ue on
+                       -o HTML:Smarty:PHP
                        -ti 'PHPFrame 1.0 API Documentation'" />
         </exec>
     </target>
-    
+
     <target name="sync" depends="phpdoc">
-        <exec executable="rsync" 
-              dir="${basedir}" 
+        <exec executable="rsync"
+              dir="${basedir}"
               output="${logs.dir}/rsync_doc.log">
-            <arg line="-vru -e 'ssh -p 2222' --delete 
+            <arg line="-vru -e 'ssh -p 2222' --delete
                        ${doc.dir}/ phpframe@e-noise.com:~/doc/1.0/api/" />
         </exec>
     </target>
-    
+
     <target name="build" depends="prepare, copy, phpdoc, sync" />
-    
+
 </project>

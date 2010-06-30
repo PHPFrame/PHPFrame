@@ -200,7 +200,13 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
 
     public function test_db()
     {
+        $db_enable = $this->_app->config()->get("db.enable");
+
+        $this->_app->config()->set("db.enable", true);
+
         $this->assertType("PHPFrame_Database", $this->_app->db());
+
+        $this->_app->config()->set("db.enable", $db_enable);
     }
 
     public function test_libraries()

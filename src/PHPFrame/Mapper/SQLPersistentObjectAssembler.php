@@ -21,7 +21,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
- * @ignore
  */
 class PHPFrame_SQLPersistentObjectAssembler
     extends PHPFrame_PersistentObjectAssembler
@@ -136,22 +135,32 @@ class PHPFrame_SQLPersistentObjectAssembler
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
+        if (!$obj->isDirty()) {
+            return;
+        }
+
         $obj->validateAll();
 
         if ($obj->id() <= 0) {
             $obj->ctime(time());
-            $build_query_method = "_buildInsertQuery";
+            $build_query_method = "buildInsertQuery";
         } else {
-            $build_query_method = "_buildUpdateQuery";
+            $build_query_method = "buildUpdateQuery";
         }
 
         $obj->mtime(time());
 
         $sql    = $this->$build_query_method(iterator_to_array($obj));
-        $params = $this->_buildQueryParams(iterator_to_array($obj));
+        $params = $this->buildQueryParams(iterator_to_array($obj));
         $db     = $this->factory->getDB();
 
-        $db->query($sql, $params);
+        $stmt = $db->query($sql, $params);
+        if ($build_query_method = "buildUpdateQuery"
+            && $stmt->rowCount() == 0
+        ) {
+            $sql = $this->buildInsertQuery(iterator_to_array($obj));
+            $stmt = $db->query($sql, $params);
+        }
 
         if ($obj->id() <= 0) {
             $obj->id($db->lastInsertId());
@@ -193,7 +202,7 @@ class PHPFrame_SQLPersistentObjectAssembler
      * @return string
      * @since  1.0
      */
-    private function _buildInsertQuery(array $array)
+    public function buildInsertQuery(array $array)
     {
         $sql  = "INSERT INTO ".$this->factory->getTableName()." (`";
         $sql .= implode("`, `", array_keys($array));
@@ -216,7 +225,7 @@ class PHPFrame_SQLPersistentObjectAssembler
      * @return string
      * @since  1.0
      */
-    private function _buildUpdateQuery(array $array)
+    public function buildUpdateQuery(array $array)
     {
         $sql = "UPDATE ".$this->factory->getTableName()." SET ";
 
@@ -247,7 +256,7 @@ class PHPFrame_SQLPersistentObjectAssembler
      * @return array
      * @since  1.0
      */
-    private function _buildQueryParams(array $array)
+    public function buildQueryParams(array $array)
     {
         foreach ($array as $key=>$value) {
             $params[":".$key] = $value;

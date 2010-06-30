@@ -34,7 +34,18 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     /**
      * Constructor
      *
-     * @param array $options [Optional]
+     * @param array $options [Optional] An associative array containing the
+     *                       following options:
+     *                         - id (int)
+     *                         - ctime (int)
+     *                         - mtime (int)
+     *                         - owner (int)
+     *                         - group (int)
+     *                         - perms (int)
+     *                         - group_id (int)
+     *                         - email (string)
+     *                         - password (string)
+     *                         - params (string|array)
      *
      * @return void
      * @since  1.0

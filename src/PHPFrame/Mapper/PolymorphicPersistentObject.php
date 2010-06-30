@@ -21,7 +21,6 @@
  * @author   Lupo Montero <lupo@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
- * @uses     IteratorAggregate
  * @since    1.0
  */
 abstract class PHPFrame_PolymorphicPersistentObject

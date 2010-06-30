@@ -8,7 +8,7 @@
 
 <refsect1 id="{@id description}">
     <title>Package decription</title>
-    
+
     <para>
     The Document package ...
     </para>
@@ -17,77 +17,77 @@
 
 <refsect1 id="{@id classes}">
     <title>Classes in Document Package</title>
-    
+
     <itemizedlist>
-    
+
         <listitem>
         <para>
         {@link PHPFrame_Document}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_IRenderer}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_HTMLDocument}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_HTMLRenderer}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_PlainDocument}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_PlainRenderer}
         </para>
         </listitem>
-        
-        <listitem>
-        <para>
-        {@link PHPFrame_RPCDocument}
-        </para>
-        </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_RPCRenderer}
         </para>
         </listitem>
-        
+
+        <listitem>
+        <para>
+        {@link PHPFrame_RSSDocument}
+        </para>
+        </listitem>
+
         <listitem>
         <para>
         {@link PHPFrame_XMLDocument}
         </para>
         </listitem>
-        
+
         <listitem>
         <para>
         {@link PHPFrame_XMLRenderer}
         </para>
         </listitem>
-        
+
     </itemizedlist>
 
 </refsect1>
 
-<!-- 
+<!--
 <refsect1 id="{@id examples}">
     <title>Examples</title>
-    
+
     <example>
         <title></title>
         <para>
@@ -97,15 +97,15 @@
 
 ]]>
         </programlisting>
-        
+
         <screen>
 <![CDATA[
 
 ]]>
         </screen>
-       
+
     </example>
-    
+
 </refsect1>
 -->
 

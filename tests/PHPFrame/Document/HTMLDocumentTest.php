@@ -122,7 +122,13 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $this->assertType("DOMDocumentType", $doc_type);
         $this->assertEquals("html", $doc_type->name);
 
-        $new_doctype = new DOMDocumentType();
+        $imp = new DOMImplementation();
+        $new_doctype = $imp->createDocumentType(
+            "html",
+            "-//W3C//DTD XHTML 1.0 Strict//EN",
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+        );
+
         $this->_document->doctype($new_doctype);
         $this->assertEquals($new_doctype, $this->_document->doctype());
     }
@@ -149,7 +155,7 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $href = "http://www.e-noise.com/templates/enoise_iv/css/template.css";
         $this->_document->addStyleSheet($href);
 
-        $pattern = '/<link href="http:\/\/www\.e-noise\.com\/templates\/enoise_iv\/css\/template\.css" rel="stylesheet" type="text\/css" \/>/';
+        $pattern = '/<link href="http:\/\/www\.e-noise\.com\/templates\/enoise_iv\/css\/template\.css" media="screen" rel="stylesheet" type="text\/css" \/>/';
         $this->assertRegExp($pattern, (string) $this->_document);
     }
 

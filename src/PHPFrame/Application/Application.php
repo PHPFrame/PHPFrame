@@ -186,7 +186,17 @@ class PHPFrame_Application extends PHPFrame_Observer
         // Register Application's autoload function
         spl_autoload_register(array($this, "autoload"));
 
-        // Attach app to Exception handler to observe uncaught exceptions
+        // Attach observers to Exception handler
+        $logger = $this->logger();
+        if ($logger instanceof PHPFrame_Logger) {
+            PHPFrame_ExceptionHandler::instance()->attach($logger);
+        }
+
+        $informer = $this->informer();
+        if ($informer instanceof PHPFrame_Logger) {
+            PHPFrame_ExceptionHandler::instance()->attach($informer);
+        }
+
         PHPFrame_ExceptionHandler::instance()->attach($this);
 
         // Acquire instance of Plugin Handler
@@ -282,6 +292,7 @@ class PHPFrame_Application extends PHPFrame_Observer
 
                     if (strtolower($class_name) == strtolower($file_name_no_ext)) {
                         include $file->getRealPath();
+                        return;
                     }
                 }
             }
@@ -293,6 +304,7 @@ class PHPFrame_Application extends PHPFrame_Observer
             $lib_file = $lib_path.DS.$class_name.".php";
             if (is_file($lib_file)) {
                 include $lib_file;
+                return;
             }
         }
     }
@@ -531,6 +543,12 @@ class PHPFrame_Application extends PHPFrame_Observer
         } elseif (is_null($this->_db)) {
             $options = $this->config()->getSection("db");
 
+            if (!array_key_exists("enable", $options) || !$options["enable"]) {
+                $msg  = "Can not get database object because database is not ";
+                $msg .= "enabled in configuration file.";
+                throw new LogicException($msg);
+            }
+
             if (!array_key_exists("driver", $options)
                 || !array_key_exists("name", $options)
             ) {
@@ -683,7 +701,7 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $log_level
             );
 
-            $this->_setLogger($logger);
+            $this->registry()->set("logger", $logger);
         }
 
         return $this->registry()->get("logger");
@@ -722,7 +740,8 @@ class PHPFrame_Application extends PHPFrame_Observer
                 throw new LogicException($msg);
             }
 
-            $this->_setInformer(
+            $this->registry()->set(
+                "informer",
                 new PHPFrame_Informer($mailer, $recipients, $informer_level)
             );
         }
@@ -882,6 +901,7 @@ class PHPFrame_Application extends PHPFrame_Observer
                 }
 
                 $this->session()->getClient()->redirect($redirect_url);
+                return;
             }
         }
 
@@ -983,38 +1003,5 @@ class PHPFrame_Application extends PHPFrame_Observer
         // Set display_exceptions in exception handler
         $display_exceptions = $config->get("debug.display_exceptions");
         PHPFrame_ExceptionHandler::displayExceptions($display_exceptions);
-    }
-
-    /**
-     * Set Logger object
-     *
-     * @param PHPFrame_Logger $logger Logger object to be used in application.
-     *
-     * @return void
-     * @since  1.0
-     */
-    private function _setLogger(PHPFrame_Logger $logger)
-    {
-        $this->registry()->set("logger", $logger);
-
-        // Attach logger observer to exception handler
-        PHPFrame_ExceptionHandler::instance()->attach($logger);
-    }
-
-    /**
-     * Set Informer object
-     *
-     * @param PHPFrame_Informer $informer Informer object to be used in
-     *                                    application.
-     *
-     * @return void
-     * @since  1.0
-     */
-    private function _setInformer(PHPFrame_Informer $informer)
-    {
-        $this->registry()->set("informer", $informer);
-
-        // Attach informer to exception handler
-        PHPFrame_ExceptionHandler::instance()->attach($informer);
     }
 }

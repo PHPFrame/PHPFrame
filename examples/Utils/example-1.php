@@ -39,7 +39,7 @@ print_r($unserialised);
 
 $array = array(array(
     "first"=>1,
-    "second"=>array(1,2,3), 
+    "second"=>array(1,2,3),
     "dependencies"=>array(
         "required"=>array(),
         "optional"=>array(

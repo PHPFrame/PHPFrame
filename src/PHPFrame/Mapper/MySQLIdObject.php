@@ -28,6 +28,15 @@
  class PHPFrame_MySQLIdObject extends PHPFrame_SQLIdObject
  {
  	
+ 	/**
+     * An array with the names of any real tables used for this query, used as 
+     * a reference for sub part of a query that requires backtick quoting for 
+     * table names.
+     *
+     * @var array
+     */
+    private $_table_names = array();
+ 	
     /**
      * Constructor
      *
@@ -41,6 +50,60 @@
     public function __construct(array $options=null)
     {
         parent::__construct($options);
+    }
+    
+    /**
+     * Set the table from which to select rows
+     *
+     * This method supports only one table in the from clause.
+     * Please use the join() method to add join tables.
+     *
+     * Tables may be passed with an alias. Ie: "table_name AS tn".
+     * There is no need to quote table names with backticks, these will be  
+     * added and handled internally.
+     * Overrides SQLIdObject.from() to handle recording of real table names used 
+     * for determining any table references to be backtick quoted.
+     *
+     * @param string $table A string with the table name.
+     *
+     * @return PHPFrame_IdObject
+     * @since  1.0
+     */
+    public function from($table)
+    {
+    	parent::from($table);
+    	
+    	if (is_array($this->_from)){
+    		$this->_table_names[] = $this->_from[0];
+    	} else {
+    		$this->_table_names[] = $this->_from;
+    	}
+    	
+        return $this;
+    }
+    
+    /**
+     * Add a join clause to the select statement. There is no need to use 
+     * backtick quotes for table names, these will be added and handled 
+     * internally. 
+     * Overrides SQLIdObject.join() to handle recording of real table names used 
+     * for determining any table references to be backtick quoted.
+     *
+     * @param sting $join A join statement
+     *
+     * @return PHPFrame_IdObject
+     * @since  1.0
+     */
+    public function join($join)
+    {
+        parent::join($join);
+
+        $last_join = $this->_join[count($this->_join) - 1];
+        if (array_key_exists("table_name", $last_join)){
+	        $this->_table_names[] = $last_join["table_name"];
+        }
+        
+        return $this;
     }
     
     /**
@@ -65,10 +128,20 @@
             }
 
             if (!empty($this->_select[$i]["table_name"])) {
-                $sql .= "`".$this->_select[$i]["table_name"]."`.";
+            	if (
+            	   in_array($this->_select[$i]["table_name"], 
+            	           $this->_table_names)
+            	) {
+            		$sql .= "`".$this->_select[$i]["table_name"]."`.";
+            	} else {
+            		$sql .= $this->_select[$i]["table_name"].".";
+            	}
             }
-
-            $sql .= "`".$this->_select[$i]["field_name"]."`";
+            if ($this->_select[$i]["field_name"] == '*'){
+            	$sql .= $this->_select[$i]["field_name"];
+            } else {
+                $sql .= "`".$this->_select[$i]["field_name"]."`";
+            }
 
             if (!empty($this->_select[$i]["field_alias"])) {
                 $sql .= " AS ".$this->_select[$i]["field_alias"];
@@ -111,13 +184,55 @@
     public function getJoinsSQL()
     {
         $sql = "";
+        
+        $bt_tables = array();
+        foreach ($this->_table_names as $table){
+        	$bt_tables[] = "`$table`";
+        }
 
         foreach ($this->_join as $join) {
             $sql .= " ".$join["type"]." `".$join["table_name"]."` ";
             if (isset($join["table_alias"])) {
                 $sql .= $join["table_alias"]." ";
             }
-            $sql .= "ON ".$join["on"][0]." ".$join["on"][1]." ".$join["on"][2];
+            $sql .= "ON ";
+            $on = str_replace($this->_table_names, $bt_tables, $join["on"]);
+            $sql .= $on["on"][0]." ".$on["on"][1]." ".$on["on"][2];
+        }
+
+        return $sql;
+    }
+    
+    /**
+     * Get GROUP BY SQL
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function getGroupBySQL()
+    {
+        $sql = "";
+
+        if (!empty($this->_groupby)) {
+            $sql = "GROUP BY `".$this->_groupby."`";
+        }
+
+        return $sql;
+    }
+
+    /**
+     * Get ORDER BY SQL statement
+     *
+     * @return string
+     * @since  1.0
+     */
+    public function getOrderBySQL()
+    {
+        $sql = "";
+
+        if (is_string($this->_orderby) && $this->_orderby != "") {
+            $sql .= " ORDER BY `".$this->_orderby."` ";
+            $sql .= ($this->_orderdir == "DESC") ? $this->_orderdir : "ASC";
         }
 
         return $sql;

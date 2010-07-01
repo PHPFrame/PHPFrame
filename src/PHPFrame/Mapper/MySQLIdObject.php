@@ -203,7 +203,7 @@
             }
             $sql .= "ON ";
             $on = str_replace($this->_table_names, $bt_tables, $join["on"]);
-            $sql .= $on["on"][0]." ".$on["on"][1]." ".$on["on"][2];
+            $sql .= $on[0]." ".$on[1]." ".$on[2];
         }
 
         return $sql;

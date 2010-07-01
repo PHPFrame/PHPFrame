@@ -191,7 +191,13 @@
         }
 
         foreach ($this->_join as $join) {
-            $sql .= " ".$join["type"]." `".$join["table_name"]."` ";
+            $sql .= " ".$join["type"]." ";
+            $join_table = explode(" ", $join["table_name"]);
+            if (in_array($join_table[0], $this->_table_names)){
+            	$sql .= "`".$join_table[0]."` ".$join_table[1];
+            } else {
+	            $sql .= $join["table_name"]." ";
+            }
             if (isset($join["table_alias"])) {
                 $sql .= $join["table_alias"]." ";
             }

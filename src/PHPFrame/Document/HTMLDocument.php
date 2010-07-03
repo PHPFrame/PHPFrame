@@ -132,15 +132,19 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
             $this->addNodeAttr($meta_node, "content", $meta_tag["content"]);
         }
 
-        // Add scripts
-        foreach ($this->_scripts as $script_attr) {
-            // Create script tag node
-            $this->addNode("script", $head_node, $script_attr, "//");
-        }
-
         // Add styles
         foreach ($this->_style_sheets as $style_sheet_attr) {
             $this->addNode("link", $head_node, $style_sheet_attr);
+        }
+
+        // Add scripts
+        foreach ($this->_scripts as $script_attr) {
+            // Create script tag node
+            if ($this->isHTML5()) {
+                unset($script_attr["type"]);
+            }
+
+            $this->addNode("script", $head_node, $script_attr, "//");
         }
 
         // Render dom using parent's __toString() method
@@ -364,6 +368,26 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
     }
 
     /**
+     * Is the document HTML5?
+     *
+     * @return bool
+     * @since  1.0
+     */
+    public function isHTML5()
+    {
+        $doctype = $this->doctype();
+
+        if ($doctype->name == "html"
+            && empty($doctype->publicId)
+            && empty($doctype->systemId)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Initialise DOM. This needs to be done every time the doctype is set.
      *
      * @param DOMDocumentType $doctype Doctype object.
@@ -373,15 +397,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     private function _initDOM(DOMDocumentType $doctype)
     {
-        $html5 = false;
-
-        if ($doctype->name == "html"
-            && empty($doctype->publicId)
-            && empty($doctype->systemId)
-        ) {
-            $html5 = true;
-        }
-
         // Acquire DOM object of HTML type
         $imp = new DOMImplementation();
         $this->dom($imp->createDocument(null, "html", $doctype));
@@ -401,7 +416,7 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
             }
         }
 
-        if ($html5) {
+        if ($this->isHTML5()) {
             $this->addNode("meta", $head_node, array("charset"=>$this->charset()));
         } else {
             $this->addMetaTag(

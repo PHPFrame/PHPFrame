@@ -331,7 +331,9 @@ class PHPFrame_Application extends PHPFrame_Observer
             }
 
             $response->statusCode($code);
-            $response->title("Oooops... an error occurred");
+            if (!$this->request()->ajax()) {
+                $response->title("Oooops... an error occurred");
+            }
 
             $display_exceptions = $this->config()->get("debug.display_exceptions");
             if ($display_exceptions) {

@@ -82,6 +82,14 @@ class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
             return;
         }
 
+        if ($value instanceof Exception) {
+            $e = new StdClass();
+            $e->msg  = $value->getMessage();
+            $e->code = $value->getCode();
+
+            $value = $e;
+        }
+
         if (function_exists("json_encode") && $this->usePhpJson()) {
             return json_encode($value);
         } else {

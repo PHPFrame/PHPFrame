@@ -105,7 +105,8 @@ class PHPFrame_DownloadRequestListener implements SplObserver
     public function update(SplSubject $subject)
     {
         $event = $subject->getLastEvent();
-
+print_r($event["name"]);
+echo "\n";
         switch ($event["name"]) {
         case "receivedHeaders" :
             $response = $event["data"];
@@ -160,6 +161,7 @@ class PHPFrame_DownloadRequestListener implements SplObserver
             break;
 
         case "receivedBodyPart" :
+        case "receivedEncodedBodyPart" :
             $this->_size += strlen($event["data"]);
             @$this->_bar->update(round($this->_size / 1024));
             fwrite($this->_fp, $event["data"]);
@@ -176,7 +178,7 @@ class PHPFrame_DownloadRequestListener implements SplObserver
             break;
 
         default:
-            $msg = "Unhandled event '".$subject->getLastEvent()."'";
+            $msg = "Unhandled event '".$event["name"]."'";
             throw new RuntimeException($msg);
         }
     }

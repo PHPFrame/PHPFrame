@@ -570,7 +570,9 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
             $secondary_groups = explode(",", $user_params["secondary_groups"]);
             if (is_array($secondary_groups) && count($secondary_groups) > 0) {
                 foreach ($secondary_groups as $secondary_group) {
-                    if ($secondary_group == $this->group()) {
+                    if ($secondary_group == $this->group()
+                        && $group_access >= $access_level
+                    ) {
                         return true;
                     }
                 }

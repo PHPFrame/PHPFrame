@@ -56,6 +56,12 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     private $_style_sheets = array();
     /**
+     * An array containing links to RSS/Atom feeds.
+     *
+     * @var array
+     */
+    private $_feed_links = array();
+    /**
      * If set to TRUE object will only include contents of the body tag. This
      * is used for AJAX output.
      *
@@ -130,6 +136,11 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
 
             // Add content attribute
             $this->addNodeAttr($meta_node, "content", $meta_tag["content"]);
+        }
+
+        // Add feed links
+        foreach ($this->_feed_links as $feed_link_attr) {
+            $this->addNode("link", $head_node, $feed_link_attr);
         }
 
         // Add styles
@@ -316,6 +327,26 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
             "href"  => (string) $href,
             "type"  => (string) $type,
             "media" => (string) $media
+        );
+    }
+
+    /**
+     * Add link to RSS/Atom feed.
+     *
+     * @param string $href  The relative or absolute URL to the link source.
+     * @param string $title The feed title.
+     * @param string $type  The link type. Default is application/rss+xml.
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function addRSSLink($href, $title, $type="application/rss+xml")
+    {
+        $this->_feed_links[] = array(
+            "rel"   => "alternate",
+            "href"  => $href,
+            "title" => $title,
+            "type"  => $type
         );
     }
 

@@ -144,7 +144,7 @@ class ScaffoldController extends PHPFrame_ActionController
             "PersistentObject",
             array("MyPersistentObject"=>$name),
             "src".DS."models",
-            strtolower($name).".php",
+            $name.".php",
             $install_dir
         );
     }

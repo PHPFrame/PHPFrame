@@ -76,7 +76,11 @@ class PHPFrame_SQLPersistenceFactory extends PHPFrame_PersistenceFactory
     {
         $options = array("select"=>"*", "from"=>$this->getTableName());
 
-        return new PHPFrame_SQLIdObject($options);
+        if ($this->getDB()->isMySQL()){
+            return new PHPFrame_MySQLIdObject($options);
+        } else {
+	        return new PHPFrame_SQLIdObject($options);
+        }
     }
 
     /**

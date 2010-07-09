@@ -313,6 +313,68 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
 
     /**
+     * Fetch persistent object by ID and check read access.
+     *
+     * @param PHPFrame_Mapper $mapper The persistent object mapper.
+     * @param int             $id The user id.
+     * @param bool            $w [Optional] Ensure write access? Default is FALSE.
+     *
+     * @return PHPFrame_PersistentObject
+     * @since  1.0
+     */
+    protected function fetchObj(PHPFrame_Mapper $mapper, $id, $w=false)
+    {
+        $target_class = $mapper->getFactory()->getTargetClass();
+
+        $id = filter_var($id, FILTER_VALIDATE_INT);
+        if ($id === false) {
+            $this->response()->statusCode(400);
+            $this->raiseError("Invalid ".$target_class." id.");
+            return false;
+        }
+
+        $obj = $mapper->findOne($id);
+
+        if (!$obj instanceof $target_class) {
+            $this->response()->statusCode(400);
+            $this->raiseError($target_class." not found.");
+            return false;
+        }
+
+        if ($w && !$obj->canWrite($this->user())) {
+            $msg = "Permission denied.";
+            $this->raiseError($msg);
+            $this->response()->statusCode(401);
+            return;
+        }
+
+        if (!$obj->canRead($this->user())) {
+            $this->response()->statusCode(401);
+            $this->raiseError("Unauthorised.");
+            return false;
+        }
+
+        return $obj;
+    }
+
+    /**
+     * Ensure that current user is member of staff.
+     *
+     * @return bool
+     * @since  1.0
+     */
+    protected function ensureIsStaff()
+    {
+        if (!$this->session()->isAuth() || $this->user()->groupId() > 2) {
+            $this->response()->statusCode(401);
+            $this->raiseError("Unauthorised.");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Invoke action in concrete controller
      *
      * This method thows an exception if the action is not supported by the

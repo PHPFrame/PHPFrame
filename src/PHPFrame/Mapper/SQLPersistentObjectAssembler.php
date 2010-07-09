@@ -187,8 +187,13 @@ class PHPFrame_SQLPersistentObjectAssembler
             $id = (int) $id_or_obj;
         }
 
-        $sql    = "DELETE FROM `".$this->factory->getTableName()."`";
-        $sql   .= " WHERE id = :id";
+        $sql = "DELETE FROM ";
+        if ($this->factory->getDB()->isMySQL()){
+            $sql .= "`".$this->factory->getTableName()."`";	
+        } else {
+        	$sql .= $this->factory->getTableName();
+        }
+        $sql .= " WHERE id = :id";
         $params = array(":id"=>$id);
 
         $this->factory->getDB()->query($sql, $params);
@@ -204,8 +209,13 @@ class PHPFrame_SQLPersistentObjectAssembler
      */
     public function buildInsertQuery(array $array)
     {
-        $sql  = "INSERT INTO ".$this->factory->getTableName()." (`";
-        $sql .= implode("`, `", array_keys($array));
+        $sql  = "INSERT INTO ";
+        if ($this->factory->getDB()->isMySQL()){
+        	$sql .= "`".$this->factory->getTableName()."`";
+        } else {
+            $sql .= $this->factory->getTableName();
+        }
+        $sql .= " (`".implode("`, `", array_keys($array));
         $sql .= "`) VALUES (:";
         $sql .= implode(", :", array_keys($array));
         $sql .= ")";
@@ -227,7 +237,12 @@ class PHPFrame_SQLPersistentObjectAssembler
      */
     public function buildUpdateQuery(array $array)
     {
-        $sql = "UPDATE ".$this->factory->getTableName()." SET ";
+        $sql = "UPDATE ";
+        if ($this->factory->getDB()->isMySQL()){
+        	$sql .= "`".$this->factory->getTableName()."` SET ";
+        } else {
+            $sql .= $this->factory->getTableName()." SET ";
+        }
 
         $count = 0;
         foreach (array_keys($array) as $key) {

@@ -159,6 +159,15 @@ class PHPFrame_HTMLDocumentTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp($pattern, (string) $this->_document);
     }
 
+    public function test_addRSSLink()
+    {
+        $href = "http://www.e-noise.com/index.php?format=feed&type=rss";
+        $this->_document->addRSSLink($href, "E-NOISE Blog");
+
+        $pattern = '/<link href="http:\/\/www\.e-noise\.com\/index\.php\?format=feed&amp;type=rss" rel="alternate" title="E-NOISE Blog" type="application\/rss\+xml" \/>/';
+        $this->assertRegExp($pattern, (string) $this->_document);
+    }
+
     public function test_applyTheme()
     {
         $this->_document->title("My Home Page");

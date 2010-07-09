@@ -32,61 +32,61 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
      *
      * @var array
      */
-    private $_select = array();
+    protected $_select = array();
     /**
      * The name of the table this collection represents
      *
      * @var string
      */
-    private $_from = null;
+    protected $_from = null;
     /**
      * Array containing joins
      *
      * @var array
      */
-    private $_join = array();
+    protected $_join = array();
     /**
      * An array containing conditions for the SQL WHERE clause
      *
      * @var string
      */
-    private $_where = array();
+    protected $_where = array();
     /**
      * String containing the group by clause
      *
      * @var string
      */
-    private $_groupby = null;
+    protected $_groupby = null;
     /**
      * Column to use for ordering
      *
      * @var string
      */
-    private $_orderby = null;
+    protected $_orderby = null;
     /**
      * Column to use for ordering
      *
      * @var string
      */
-    private $_orderdir = "ASC";
+    protected $_orderdir = "ASC";
     /**
      * Number of rows per page
      *
      * @var int
      */
-    private $_limit = -1;
+    protected $_limit = -1;
     /**
      * Row number from where the current page start
      *
      * @var int
      */
-    private $_limitstart = 0;
+    protected $_limitstart = 0;
     /**
      * Input parameters used in prepared statements.
      *
      * @var array
      */
-    private $_params = array();
+    protected $_params = array();
 
     /**
      * Constructor
@@ -287,8 +287,8 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function where($left, $operator, $right)
     {
         // Validate input types and set internal property
-        $pattern1 = "/^[a-zA-Z0-9_= \-\#\.\(\)\'\%\:,]+$/";
-        $pattern2 = "/^(=|<|>|<=|>=|AND|OR|LIKE|BETWEEN|IN|IS|IS NOT)$/";
+        $pattern1 = "/^[a-zA-Z0-9_=<> \/\-\#\.\(\)\'\%\:,]+$/";
+        $pattern2 = "/^(=|<>|<|>|<=|>=|AND|OR|LIKE|BETWEEN|IN|IS|IS NOT)$/";
         if (!preg_match($pattern1, $left)
             || !preg_match($pattern1, $right)
             || !preg_match($pattern2, $operator)

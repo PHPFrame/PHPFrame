@@ -225,7 +225,7 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($str)) {
             // Filter value before assigning to variable
             $filter = new PHPFrame_RegexpFilter(array(
-                "regexp"     => '/^(GET|POST|CLI)$/',
+                "regexp"     => '/^(GET|POST|PUT|DELETE|HEAD|CLI)$/',
                 "min_length" => 3,
                 "max_length" => 4
             ));

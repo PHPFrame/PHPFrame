@@ -78,10 +78,6 @@ class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
      */
     public function render($value)
     {
-        if (is_null($value)) {
-            return;
-        }
-
         if ($value instanceof Exception) {
             $e = new StdClass();
             $e->msg  = $value->getMessage();
@@ -119,23 +115,25 @@ class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
 
         } elseif (is_bool($value)) {
             if ($value) {
-                $value = 1;
+                return "true";
             } else {
-                return;
+                return "false";
             }
-        }
-
-        $int = filter_var($value, FILTER_VALIDATE_INT);
-        if (is_int($int)) {
-            return (string) $int;
+        } elseif (is_null($value)) {
+            return "null";
         }
 
         $float = filter_var($value, FILTER_VALIDATE_FLOAT);
         if (is_float($float)) {
-            return (string) $float;
+            return "\"".$float."\"";
         }
 
-        return "\"".strip_tags(trim((string) $value))."\"";
+        $int = filter_var($value, FILTER_VALIDATE_INT);
+        if (is_int($int)) {
+            return "\"".$int."\"";
+        }
+
+        return "\"".$this->_escape(trim((string) $value))."\"";
     }
 
     /**
@@ -218,7 +216,24 @@ class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
         $key   = get_class($obj);
         $value = get_object_vars($obj);
 
+        if ($key === "stdClass") {
+            return $this->_renderAssoc(new PHPFrame_Array($value));
+        }
+
         return $this->_renderArray(array($key=>$value));
+    }
+
+    /**
+     * Escape string values.
+     *
+     * @param string $str The string to escape.
+     *
+     * @return string
+     * @since  1.1
+     */
+    private function _escape($str)
+    {
+        return addcslashes($str, "\"\\/\n\r\t");
     }
 
     /**

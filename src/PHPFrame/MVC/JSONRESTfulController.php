@@ -41,7 +41,7 @@ abstract class PHPFrame_JSONRESTfulController extends PHPFrame_RESTfulController
 
         $this->request()->ajax(true);
         $this->response()->document(new PHPFrame_PlainDocument());
-        $this->response()->renderer(new PHPFrame_JSONRenderer());
+        $this->response()->renderer(new PHPFrame_JSONRenderer(false));
         $this->response()->header("Content-Type", "application/json");
     }
 

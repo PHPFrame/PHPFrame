@@ -19,14 +19,14 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
     public function test_render()
     {
         $array = array(
-            array(null, null),
-            array(true, "1"),
-            array(false, ""),
-            array(1, "1"),
-            array(345, "345"),
-            array(-345, "-345"),
-            array(3.14, "3.14"),
-            array(-3.14, "-3.14"),
+            array(null, "null"),
+            array(true, "true"),
+            array(false, "false"),
+            array(1, "\"1\""),
+            array(345, "\"345\""),
+            array(-345, "\"-345\""),
+            array(3.14, "\"3.14\""),
+            array(-3.14, "\"-3.14\""),
             array("some string", "\"some string\"")
         );
 
@@ -39,8 +39,8 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
     {
         $array = array(
             array(array(), "[]"),
-            array(array(1), "[\n    1\n]"),
-            array(array(1,2,3), "[\n    1,\n    2,\n    3\n]")
+            array(array(1), "[\n    \"1\"\n]"),
+            array(array(1,2,3), "[\n    \"1\",\n    \"2\",\n    \"3\"\n]")
         );
 
         foreach ($array as $test_pair) {
@@ -52,7 +52,7 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
     {
         $array = array(
             array(array("k"=>"v"), "{\n    \"k\": \"v\"\n}"),
-            array(array("k"=>"v", "a"=>new stdClass()), "{\n    \"k\": \"v\",\n    \"a\": {\n        \"stdClass\": []\n    }\n}"),
+            array(array("k"=>"v", "a"=>new stdClass()), "{\n    \"k\": \"v\",\n    \"a\": {\n\n    }\n}"),
             array(
                 array(
                     "key1" => array(1,2, "sfsfaf", array(222, 333, array("k"=>"v"))),
@@ -61,19 +61,19 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
                 ),
                 "{
     \"key1\": [
-        1,
-        2,
+        \"1\",
+        \"2\",
         \"sfsfaf\",
         [
-            222,
-            333,
+            \"222\",
+            \"333\",
             {
                 \"k\": \"v\"
             }
         ]
     ],
     \"0\": \"value without a key\",
-    \"another key\": 3.14
+    \"another key\": \"3.14\"
 }"
             )
 
@@ -89,16 +89,16 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
         $user = new PHPFrame_User();
         $this->assertEquals(
             "{
-    \"group_id\": 0,
-    \"email\": ,
-    \"password\": ,
+    \"group_id\": \"0\",
+    \"email\": null,
+    \"password\": null,
     \"params\": \"\",
-    \"id\": ,
-    \"ctime\": ,
-    \"mtime\": ,
-    \"owner\": 0,
-    \"group\": 0,
-    \"perms\": 664
+    \"id\": null,
+    \"ctime\": null,
+    \"mtime\": null,
+    \"owner\": \"0\",
+    \"group\": \"0\",
+    \"perms\": \"664\"
 }",
             $this->_renderer->render($user)
         );

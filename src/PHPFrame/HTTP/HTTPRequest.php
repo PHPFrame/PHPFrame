@@ -70,6 +70,23 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
         parent::__construct($url, $method, $config);
     }
 
+    public function __toString()
+    {
+        $config = $this->getConfig();
+
+        $str  = $this->getMethod()." ".$this->getUrl()->getPath()." ";
+        $str .= "HTTP/".$config["protocol_version"]."\n";
+        $str .= "Host: ".$this->getUrl()->getHost()."\n";
+
+        foreach ($this->getHeaders() as $key=>$value) {
+            $str .= $key.": ".$value."\n";
+        }
+
+        $str .= "\n".$this->getBody()."\n";
+
+        return $str;
+    }
+
     /**
      * Get/set handle_redirects flag. This flag indicates whether 30x redirects
      * should be automatically followed or not. Default value is TRUE.
@@ -166,6 +183,7 @@ class PHPFrame_HTTPRequest extends HTTP_Request2
         if (!$this->_response instanceof HTTP_Request2_Response) {
             try {
                 $this->_response = parent::send();
+
             } catch (HTTP_Request2_Exception $e) {
                 $msg = $e->getMessage();
                 if (!$msg) {

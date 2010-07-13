@@ -101,6 +101,7 @@
    <file baseinstalldir="/" name="PHPFrame/HTTP/HTTPRequest.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/IMAP.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mail/Mailer.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/CompositeMapper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/IdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/Mapper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/ObjectRelationalToolbox.php" role="php" />
@@ -117,7 +118,9 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistentObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/MVC/JSONRESTfulController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/MVCFactory.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/MVC/RESTfulController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/View.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ViewHelper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Plugins/URLRewriter.php" role="php" />

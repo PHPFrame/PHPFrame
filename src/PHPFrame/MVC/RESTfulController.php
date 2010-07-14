@@ -139,10 +139,11 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
         foreach ($reflection_obj->getActions() as $method) {
             if ($method->getName() != "index") {
                 $args = array();
-                foreach ($method->getParameters() as $arg) {
-                    $arg = get_object_vars($arg);
+                foreach ($method->getParameters() as $param) {
+                    $arg = get_object_vars($param);
                     $array = array();
                     $array[$arg["name"]] = array();
+                    $array[$arg["name"]]["required"] = !$param->isOptional();
 
                     if (array_key_exists("type", $arg)) {
                         $array[$arg["name"]]["type"] = $arg["type"];
@@ -155,13 +156,24 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
                     $args[] = $array;
                 }
 
-                $ret_obj->methods[] = array(
-                    strtolower(str_replace("Api", "", $api_name))."/".$method->getName() => array(
-                        "description" => $method->getDescription(),
-                        "signature" => $method->getSignature(),
-                        "args" => $args,
-                    )
+                $printable_method_name  = str_replace("Api", "", $api_name);
+                $printable_method_name  = strtolower($printable_method_name);
+                $printable_method_name .= "/".$method->getName();
+                $method_array = array(
+                    "signature" => $method->getSignature(),
+                    "description" => $method->getDescription()
                 );
+
+                if (count($args) > 0) {
+                    $method_array["args"] = $args;
+                }
+
+                $method_array["return"] = array(
+                    "type" => $method->getReturnType(),
+                    "description" => $method->getReturnDescription()
+                );
+
+                $ret_obj->methods[] = array($printable_method_name => $method_array);
             }
         }
 

@@ -28,7 +28,8 @@ class PHPFrame_MethodDoc extends ReflectionMethod
 {
     private $_description = "";
     private $_params = array();
-    private $_return;
+    private $_return_type;
+    private $_return_description;
     private $_since;
 
     /**
@@ -53,19 +54,27 @@ class PHPFrame_MethodDoc extends ReflectionMethod
             if ($line) {
                 if (preg_match("/^@since\s+([\d.]+)/", $line, $since_matches)) {
                     $this->_since = $since_matches[1];
-                } elseif (preg_match("/^@return\s+([a-zA-Z0-9]+)\s*([\w]*)/", $line, $return_matches)) {
-                    $this->_return = $return_matches[1];
+
+                } elseif (preg_match("/^@return\s+([a-zA-Z0-9]+)\s*(.*)/", $line, $return_matches)) {
+                    $this->_return_type = $return_matches[1];
+                    $this->_return_description = $return_matches[2];
+
                 } elseif (preg_match("/^@param\s+(\w+)\s+[$](\w+)\s+(.+)/", $line, $param_matches)) {
                     $this->_params[$param_matches[2]] = array(
                         "type" => $param_matches[1],
                         "description" => $param_matches[3]
                     );
+
                 } else {
-                    if (count($this->_params) === 0) {
+                    if ($this->_return_description) {
+                        $this->_return_description .= $line;
+
+                    } elseif (count($this->_params) === 0) {
                         if (!empty($line)) {
                             $this->_description .= " ";
                         }
                         $this->_description .= $line;
+
                     } else {
                         $last_param_key = end(array_keys($this->_params));
                         $this->_params[$last_param_key]["description"] .= " ".$line;
@@ -119,7 +128,18 @@ class PHPFrame_MethodDoc extends ReflectionMethod
      */
     public function getReturnType()
     {
-        return $this->_return;
+        return $this->_return_type;
+    }
+
+    /**
+     * Get method return description.
+     *
+     * @return string
+     * @since  1.1
+     */
+    public function getReturnDescription()
+    {
+        return $this->_return_description;
     }
 
     /**

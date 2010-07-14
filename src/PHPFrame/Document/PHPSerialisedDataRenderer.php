@@ -25,6 +25,31 @@
  */
 class PHPFrame_PHPSerialisedDataRenderer extends PHPFrame_Renderer
 {
+    private $_base64 = false;
+
+    public function __construct($base64=true)
+    {
+        $this->base64($base64);
+    }
+
+    /**
+     * Get/set flag indicating whether renderer should encode serialised string
+     * in base64.
+     *
+     * @param bool $bool [Optional]
+     *
+     * @return bool
+     * @since  1.0
+     */
+    public function base64($bool=null)
+    {
+        if (!is_null($bool)) {
+            $this->_base64 = (bool) $bool;
+        }
+
+        return $this->_base64;
+    }
+
     /**
      * Render a given value.
      *
@@ -39,6 +64,12 @@ class PHPFrame_PHPSerialisedDataRenderer extends PHPFrame_Renderer
             $value = $this->exceptionToArray($value);
         }
 
-        return serialize($value);
+        $value = serialize($value);
+
+        if ($this->base64()) {
+            $value = base64_encode($value);
+        }
+
+        return $value;
     }
 }

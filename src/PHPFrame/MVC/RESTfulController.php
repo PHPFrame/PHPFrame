@@ -49,11 +49,14 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
             $method = $request->method();
             switch ($method) {
             case "GET" :
-                $request->action("get"); break;
+                $request->action("get");
+                break;
             case "POST" :
-                $request->action("post"); break;
+                $request->action("post");
+                break;
             case "DELETE" :
-                $request->action("delete"); break;
+                $request->action("delete");
+                break;
             default :
                 $request->action("usage");
             }
@@ -72,9 +75,16 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
             $this->response()->renderer()->rootNodeName("api-response");
             break;
 
+        case "xmlrpc" :
+            $this->response()->document(new PHPFrame_XMLDocument());
+            $this->response()->document()->useBeautifier(false);
+            $this->response()->renderer(new PHPFrame_RPCRenderer($this->response()->document()));
+            break;
+
         case "php" :
             $this->response()->document(new PHPFrame_PlainDocument());
-            $this->response()->renderer(new PHPFrame_PHPSerialisedDataRenderer());
+            $this->response()->renderer(new PHPFrame_PHPSerialisedDataRenderer(true));
+            $this->response()->header("Content-Type", "application/php");
             break;
 
         default :

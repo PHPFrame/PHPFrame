@@ -328,30 +328,22 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
 
         $id = filter_var($id, FILTER_VALIDATE_INT);
         if ($id === false) {
-            $this->response()->statusCode(400);
-            $this->raiseError("Invalid ".$target_class." id.");
-            return false;
+            throw new Exception("Invalid ".$target_class." id.", 400);
         }
 
         $obj = $mapper->findOne($id);
 
         if (!$obj instanceof $target_class) {
-            $this->response()->statusCode(400);
-            $this->raiseError($target_class." not found.");
-            return false;
+            throw new Exception($target_class." not found.", 404);
         }
 
         if ($w && !$obj->canWrite($this->user())) {
             $msg = "Permission denied.";
-            $this->raiseError($msg);
-            $this->response()->statusCode(401);
-            return;
+            throw new Exception($msg, 401);
         }
 
         if (!$obj->canRead($this->user())) {
-            $this->response()->statusCode(401);
-            $this->raiseError("Unauthorised.");
-            return false;
+            throw new Exception("Unauthorised.", 401);
         }
 
         return $obj;
@@ -366,12 +358,8 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     protected function ensureIsStaff()
     {
         if (!$this->session()->isAuth() || $this->user()->groupId() > 2) {
-            $this->response()->statusCode(401);
-            $this->raiseError("Unauthorised.");
-            return false;
+            throw new Exception("Unauthorised.", 401);
         }
-
-        return true;
     }
 
     /**

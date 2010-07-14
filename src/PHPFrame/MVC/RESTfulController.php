@@ -27,6 +27,8 @@
  */
 abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
 {
+    private $_format;
+
     /**
      * Constructor.
      *
@@ -37,83 +39,68 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
      */
     public function __construct(PHPFrame_Application $app)
     {
-        parent::__construct($app, "index");
+        parent::__construct($app, "usage");
+
+        $request = $this->request();
+        $this->request()->ajax(true);
+
+        $action = $request->action();
+        if (!$action) {
+            $method = $request->method();
+            switch ($method) {
+            case "GET" :
+                $request->action("get"); break;
+            case "POST" :
+                $request->action("post"); break;
+            case "DELETE" :
+                $request->action("delete"); break;
+            default :
+                $request->action("usage");
+            }
+        }
+
+        $this->_format = $request->param("format");
+        if (!$this->_format) {
+            $this->_format = "json";
+        }
+
+        switch ($this->_format) {
+        case "xml" :
+            $this->response()->document(new PHPFrame_XMLDocument());
+            $this->response()->document()->useBeautifier(false);
+            $this->response()->renderer(new PHPFrame_XMLRenderer());
+            $this->response()->renderer()->rootNodeName("api-response");
+            break;
+
+        case "php" :
+            $this->response()->document(new PHPFrame_PlainDocument());
+            $this->response()->renderer(new PHPFrame_PHPSerialisedDataRenderer());
+            break;
+
+        default :
+            $this->response()->document(new PHPFrame_PlainDocument());
+            $this->response()->renderer(new PHPFrame_JSONRenderer(false));
+            $this->response()->header("Content-Type", "application/json");
+
+            if ($this->_format !== "json") {
+                throw new Exception("Unknown value for parameter 'format'!", 400);
+            }
+
+            break;
+        }
     }
 
     /**
-     * If no method is specified as a controller name we try to map using HTTP
-     * methods.
+     * Throw exceptions instead of raising errors.
+     *
+     * @param string $msg The error message.
      *
      * @return void
      * @since  1.0
      */
-    public function index()
+    public function raiseError($msg)
     {
-        $params = $this->request()->params();
-        $method = $this->request()->method();
-
-        switch ($method) {
-        case "GET" :
-            $id    = null;
-            $limit = 0;
-            $page  = 1;
-
-            if (array_key_exists("id", $params)) {
-                $id = $params["id"];
-            } else {
-                if (array_key_exists("limit", $params)) {
-                    $limit = $params["limit"];
-                }
-                if (array_key_exists("page", $params)) {
-                    $page = $params["page"];
-                }
-            }
-
-            return $this->get($id, $limit, $page);
-
-        case "POST" :
-            if (!array_key_exists("title", $params)) {
-                $msg = "Parameter 'title' is required!";
-                $this->raiseError($title);
-                return;
-            }
-
-            $title  = $params["title"];
-            $body   = null;
-            $type   = "info";
-            $sticky = false;
-            $id     = null;
-
-            if (array_key_exists("body", $params)) {
-                $body = $params["body"];
-            }
-
-            if (array_key_exists("type", $params)) {
-                $type = $params["type"];
-            }
-
-            if (array_key_exists("sticky", $params)) {
-                $sticky = $params["sticky"];
-            }
-
-            if (array_key_exists("id", $params)) {
-                $id = $params["id"];
-            }
-
-            return $this->post($title, $body, $type, $sticky, $id);
-
-        case "DELETE" :
-            if (!array_key_exists("id", $params)) {
-                $msg = "Parameter 'id' is required!";
-                $this->raiseError($msg);
-                return;
-            }
-
-            return $this->delete($params["id"]);
-
-        default:
-            return $this->usage();
-        }
+        throw new Exception($msg, $this->response()->statusCode());
     }
 
     /**
@@ -128,8 +115,8 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
         $api_name = str_replace("Controller", "", get_class($this));
 
         $ret_obj = new StdClass();
-        $ret_obj->api  = $config->get("app_name")." ".$api_name." ";
-        $ret_obj->api .= "JSON API";
+        $ret_obj->api  = $config->get("app_name")." ".str_replace("Api", "", $api_name)." ";
+        $ret_obj->api .= "RESTful API";
         $ret_obj->version = $config->get("version");
         $ret_obj->url = $config->get("base_url");
 
@@ -159,7 +146,7 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
                 }
 
                 $ret_obj->methods[] = array(
-                    strtolower($api_name)."/".$method->getName() => array(
+                    strtolower(str_replace("Api", "", $api_name))."/".$method->getName() => array(
                         "description" => $method->getDescription(),
                         "signature" => $method->getSignature(),
                         "args" => $args,

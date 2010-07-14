@@ -330,7 +330,10 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $code = 500;
             }
 
-            $response->statusCode($code);
+            if (!$this->request()->param("suppress_response_codes")) {
+                $response->statusCode($code);
+            }
+
             if (!$this->request()->ajax()) {
                 $response->title("Oooops... an error occurred");
             }
@@ -357,11 +360,7 @@ class PHPFrame_Application extends PHPFrame_Observer
                     break;
                 }
 
-                if ($response->renderer() instanceof PHPFrame_RPCRenderer) {
-                    $msg = new Exception($msg, $code);
-                }
-
-                $response->body($msg);
+                $response->body(new Exception($msg, $code));
             }
 
             $this->output();
@@ -956,7 +955,7 @@ class PHPFrame_Application extends PHPFrame_Observer
             }
         }
 
-        // Invoke dispatchLoopShutdown hook
+        // Invoke postApplyTheme hook
         $this->_plugin_handler->handle("postApplyTheme");
 
         // If not in quiet mode, send response back to the client

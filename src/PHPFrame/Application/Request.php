@@ -127,7 +127,7 @@ class PHPFrame_Request implements IteratorAggregate
         if (!is_null($str)) {
             // Filter value before assigning to variable
             $filter = new PHPFrame_RegexpFilter(array(
-                "regexp"     => '/^[a-z_]+$/',
+                "regexp"     => '/^[a-zA-Z_]+$/',
                 "min_length" => 1,
                 "max_length" => 50
             ));

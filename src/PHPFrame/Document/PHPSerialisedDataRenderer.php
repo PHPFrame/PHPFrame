@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Document/XMLRenderer.php
+ * PHPFrame/Document/PHPSerialisedDataRenderer.php
  *
  * PHP version 5
  *
@@ -13,35 +13,24 @@
  */
 
 /**
- * XML renderer class
+ * PHP Serialised Data renderer class
  *
  * @category PHPFrame
  * @package  Document
  * @author   Lupo Montero <lupo@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
- * @see      PHPFrame_IRenderer
+ * @see      PHPFrame_Renderer
  * @since    1.0
  */
-class PHPFrame_XMLRenderer extends PHPFrame_Renderer
+class PHPFrame_PHPSerialisedDataRenderer extends PHPFrame_Renderer
 {
-    private $_root_node_name = "root";
-
-    public function rootNodeName($str=null)
-    {
-        if (!is_null($str)) {
-            $this->_root_node_name = $str;
-        }
-
-        return $this->_root_node_name;
-    }
-
     /**
      * Render a given value.
      *
      * @param mixed $value The value we want to render.
      *
-     * @return void
+     * @return string|null
      * @since  1.0
      */
     public function render($value)
@@ -50,10 +39,6 @@ class PHPFrame_XMLRenderer extends PHPFrame_Renderer
             $value = $this->exceptionToArray($value);
         }
 
-        if (!is_array($value) && !is_object($value)) {
-            return (string) $value;
-        }
-
-        return PHPFrame_XMLSerialiser::serialise($value, $this->rootNodeName());
+        return serialize($value);
     }
 }

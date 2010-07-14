@@ -20,11 +20,10 @@
  * @author   Lupo Montero <lupo@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
- * @see      PHPFrame_IRenderer
+ * @see      PHPFrame_Renderer
  * @since    1.0
- * @todo     This renderer should make use of PHP's json extension.
  */
-class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
+class PHPFrame_JSONRenderer extends PHPFrame_Renderer
 {
     private $_indent = "";
     private $_nl = "\n";
@@ -79,11 +78,7 @@ class PHPFrame_JSONRenderer implements PHPFrame_IRenderer
     public function render($value)
     {
         if ($value instanceof Exception) {
-            $e = new StdClass();
-            $e->msg  = $value->getMessage();
-            $e->code = $value->getCode();
-
-            $value = $e;
+            $value = $this->exceptionToArray($value);
         }
 
         if (function_exists("json_encode") && $this->usePhpJson()) {

@@ -44,7 +44,9 @@ class PHPFrame_MethodDoc extends ReflectionMethod
     {
         parent::__construct($class_name, $method_name);
 
-        preg_match("/\/\*\*(.+)\*\//s", $this->getDocComment(), $matches);
+        if (!preg_match("/\/\*\*(.+)\*\//s", $this->getDocComment(), $matches)) {
+            return;
+        }
 
         foreach (explode("\n", $matches[1]) as $line) {
             $line = trim($line, " *");

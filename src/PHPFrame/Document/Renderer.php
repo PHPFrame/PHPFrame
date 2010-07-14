@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPFrame/Document/IRenderer.php
+ * PHPFrame/Document/Renderer.php
  *
  * PHP version 5
  *
@@ -22,7 +22,7 @@
  * @link     http://github.com/PHPFrame/PHPFrame
  * @since    1.0
  */
-interface PHPFrame_IRenderer
+abstract class PHPFrame_Renderer
 {
     /**
      * Render a given value.
@@ -32,5 +32,22 @@ interface PHPFrame_IRenderer
      * @return void
      * @since  1.0
      */
-    public function render($value);
+    abstract public function render($value);
+
+    public function exceptionToArray(Exception $e)
+    {
+        $array = array();
+        $array["request"] = $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+        $array["message"]  = $e->getMessage();
+        $array["code"] = $e->getCode();
+        $array["timestamp"] = date("D M d H:i:s O Y");
+
+        if (array_key_exists("HTTPS", $_SERVER)) {
+            $array["request"] = "https://".$array["request"];
+        } else {
+            $array["request"] = "http://".$array["request"];
+        }
+
+        return array("error"=>$array);
+    }
 }

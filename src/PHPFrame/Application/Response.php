@@ -19,7 +19,7 @@
  * {@link PHPFrame_Document} class in order to store data that will be sent as
  * a response. This document can be of different types: HTML, Plain, XML, ...
  *
- * A "renderer" object of type {@link PHPFrame_IRenderer} is used to render
+ * A "renderer" object of type {@link PHPFrame_Renderer} is used to render
  * the response body.
  *
  * @category PHPFrame
@@ -27,7 +27,7 @@
  * @author   Lupo Montero <lupo@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
- * @uses     PHPFrame_Document, PHPFrame_IRenderer
+ * @uses     PHPFrame_Document, PHPFrame_Renderer
  * @since    1.0
  */
 class PHPFrame_Response
@@ -73,9 +73,9 @@ class PHPFrame_Response
      */
     private $_document = null;
     /**
-     * Instance of PHPFrame_IRenderer used to render.
+     * Instance of PHPFrame_Renderer used to render.
      *
-     * @var PHPFrame_IRenderer
+     * @var PHPFrame_Renderer
      */
     private $_renderer = null;
 
@@ -90,7 +90,7 @@ class PHPFrame_Response
      *
      * @param PHPFrame_Document  $document [Optional] Document object used to
      *                                     display the response.
-     * @param PHPFrame_IRenderer $renderer [Optional] Renderer object used to
+     * @param PHPFrame_Renderer $renderer [Optional] Renderer object used to
      *                                     render the response.
      *
      * @return void
@@ -98,7 +98,7 @@ class PHPFrame_Response
      */
     public function __construct(
         PHPFrame_Document $document=null,
-        PHPFrame_IRenderer $renderer=null
+        PHPFrame_Renderer $renderer=null
     ) {
         // Set document object
         if (is_null($document)) {
@@ -234,13 +234,13 @@ class PHPFrame_Response
     /**
      * Get/set the renderer object.
      *
-     * @param PHPFrame_IRenderer $renderer [Optional] Renderer object used to
+     * @param PHPFrame_Renderer $renderer [Optional] Renderer object used to
      *                                     display the response.
      *
-     * @return PHPFrame_IRenderer
+     * @return PHPFrame_Renderer
      * @since  1.0
      */
-    public function renderer(PHPFrame_IRenderer $renderer=null)
+    public function renderer(PHPFrame_Renderer $renderer=null)
     {
         if (!is_null($renderer)) {
             $this->_renderer = $renderer;

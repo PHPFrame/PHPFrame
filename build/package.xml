@@ -64,8 +64,9 @@
    <file baseinstalldir="/" name="PHPFrame/Document/Document.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/HTMLDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/HTMLRenderer.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/Document/IRenderer.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document/Renderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/JSONRenderer.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Document/PHPSerialisedDataRenderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/PlainDocument.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/PlainRenderer.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Document/RPCRenderer.php" role="php" />
@@ -118,7 +119,6 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/XMLPersistentObjectAssembler.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/ActionController.php" role="php" />
-   <file baseinstalldir="/" name="PHPFrame/MVC/JSONRESTfulController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/MVCFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/RESTfulController.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/MVC/View.php" role="php" />

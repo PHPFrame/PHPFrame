@@ -20,10 +20,10 @@
  * @author   Lupo Montero <lupo@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
- * @see      PHPFrame_IRenderer
+ * @see      PHPFrame_Renderer
  * @since    1.0
  */
-class PHPFrame_PlainRenderer implements PHPFrame_IRenderer
+class PHPFrame_PlainRenderer extends PHPFrame_Renderer
 {
     private $_indent = "";
     private $_nl = "\n";

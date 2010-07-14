@@ -20,10 +20,10 @@
  * @author   Lupo Montero <lupo@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
- * @see      PHPFrame_IRenderer
+ * @see      PHPFrame_Renderer
  * @since    1.0
  */
-class PHPFrame_RPCRenderer implements PHPFrame_IRenderer
+class PHPFrame_RPCRenderer extends PHPFrame_Renderer
 {
     /**
      * Reference to the document object his renderer will work with.

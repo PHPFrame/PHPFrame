@@ -20,10 +20,10 @@
  * @author   Lupo Montero <lupo@e-noise.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link     http://github.com/PHPFrame/PHPFrame
- * @see      PHPFrame_IRenderer
+ * @see      PHPFrame_Renderer
  * @since    1.0
  */
-class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
+class PHPFrame_HTMLRenderer extends PHPFrame_Renderer
 {
     /**
      * Full path to directory with HTML view files.
@@ -52,7 +52,7 @@ class PHPFrame_HTMLRenderer implements PHPFrame_IRenderer
      *
      * @return void
      * @since  1.0
-     * @see    PHPFrame/Document/PHPFrame_IRenderer#render($value)
+     * @see    PHPFrame/Document/PHPFrame_Renderer#render($value)
      */
     public function render($value)
     {

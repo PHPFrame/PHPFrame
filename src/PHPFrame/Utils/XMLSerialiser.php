@@ -33,11 +33,14 @@ class PHPFrame_XMLSerialiser
      * @return string
      * @since  1.0
      */
-    public static function serialise(array $value, $root_node_name="root")
+    public static function serialise($value, $root_node_name="root")
     {
         // Build serialised string
         $str = self::_doSerialise($value);
-        $str = "<".$root_node_name.">".$str."</".$root_node_name.">";
+
+        if ($root_node_name) {
+            $str = "<".$root_node_name.">".$str."</".$root_node_name.">";
+        }
 
         // Get instance of beautifier to make string look pretty ;-)
         $xml_beautifier = new XML_Beautifier();
@@ -83,7 +86,7 @@ class PHPFrame_XMLSerialiser
             return "NULL";
         }
 
-        return (string) $value;
+        return htmlentities((string) $value);
     }
 
     /**
@@ -118,15 +121,18 @@ class PHPFrame_XMLSerialiser
                     $str .= self::_doSerialise($child);
                     $str .= "</".$key.">\n";
                 }
+
             } else {
                 $str .= self::_doSerialise($array);
             }
+
         } elseif ($array_obj->isAssoc()) {
             foreach ($array_obj as $key=>$value) {
                 $str .= "<".$key.">";
                 $str .= self::_doSerialise($value);
                 $str .= "</".$key.">\n";
             }
+
         } else {
             foreach ($array_obj as $value) {
                 $str .= "<array>";

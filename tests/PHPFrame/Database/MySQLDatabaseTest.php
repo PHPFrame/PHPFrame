@@ -80,4 +80,15 @@ class PHPFrame_MySQLDatabaseTest extends PHPUnit_Framework_TestCase
             $this->assertEquals(null, $cols[1]->getDefault());
         }
     }
+
+    public function test_serialise()
+    {
+        $serialised = serialize($this->_db);
+        $unserialised = unserialize($serialised);
+
+        // Reconnect original instance because serialisation will disconnect it
+        $this->_db->connect();
+
+        $this->assertEquals($this->_db, $unserialised);
+    }
 }

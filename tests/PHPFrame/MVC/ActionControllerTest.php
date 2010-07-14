@@ -83,7 +83,7 @@ class PHPFrame_ActionControllerTest extends PHPUnit_Framework_TestCase
         $output = ob_get_contents();
         ob_end_clean();
 
-        $pattern = "/The page title\n==============\n\nLorem ipsum.../";
+        $pattern = "/PHPFrame Command Line Tool/";
         $this->assertRegExp($pattern, $output);
     }
 
@@ -273,7 +273,7 @@ class TestableActionController extends PHPFrame_ActionController
 
     public function doRedirect()
     {
-        $this->request()->controllerName("user");
+        $this->request()->controllerName("man");
         $this->request()->action("index");
         $this->request()->dispatched(false);
     }

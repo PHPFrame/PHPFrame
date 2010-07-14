@@ -49,11 +49,11 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
             $method = $request->method();
             switch ($method) {
             case "GET" :
-                $request->action("get");
+                $request->action("get"); break;
             case "POST" :
-                $request->action("post");
+                $request->action("post"); break;
             case "DELETE" :
-                $request->action("delete");
+                $request->action("delete"); break;
             default :
                 $request->action("usage");
             }

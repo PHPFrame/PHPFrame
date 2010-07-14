@@ -62,6 +62,9 @@ class PHPFrame_MethodDoc extends ReflectionMethod
                     );
                 } else {
                     if (count($this->_params) === 0) {
+                        if (!empty($line)) {
+                            $this->_description .= " ";
+                        }
                         $this->_description .= $line;
                     } else {
                         $last_param_key = end(array_keys($this->_params));

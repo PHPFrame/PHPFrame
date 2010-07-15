@@ -49,11 +49,14 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
             $method = $request->method();
             switch ($method) {
             case "GET" :
-                $request->action("get"); break;
+                $request->action("get");
+                break;
             case "POST" :
-                $request->action("post"); break;
+                $request->action("post");
+                break;
             case "DELETE" :
-                $request->action("delete"); break;
+                $request->action("delete");
+                break;
             default :
                 $request->action("usage");
             }
@@ -72,15 +75,27 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
             $this->response()->renderer()->rootNodeName("api-response");
             break;
 
+        case "xmlrpc" :
+            $this->response()->document(new PHPFrame_XMLDocument());
+            $this->response()->document()->useBeautifier(false);
+            $this->response()->renderer(new PHPFrame_RPCRenderer($this->response()->document()));
+            break;
+
         case "php" :
             $this->response()->document(new PHPFrame_PlainDocument());
-            $this->response()->renderer(new PHPFrame_PHPSerialisedDataRenderer());
+            $this->response()->renderer(new PHPFrame_PHPSerialisedDataRenderer(true));
+            $this->response()->header("Content-Type", "application/php");
             break;
 
         default :
             $this->response()->document(new PHPFrame_PlainDocument());
-            $this->response()->renderer(new PHPFrame_JSONRenderer(false));
+            $this->response()->renderer(new PHPFrame_JSONRenderer(true));
             $this->response()->header("Content-Type", "application/json");
+
+            $jsonp_callback = $this->request()->param("jsonp_callback");
+            if ($jsonp_callback) {
+                $this->response()->renderer()->jsonpCallback($jsonp_callback);
+            }
 
             if ($this->_format !== "json") {
                 throw new Exception("Unknown value for parameter 'format'!", 400);
@@ -129,10 +144,11 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
         foreach ($reflection_obj->getActions() as $method) {
             if ($method->getName() != "index") {
                 $args = array();
-                foreach ($method->getParameters() as $arg) {
-                    $arg = get_object_vars($arg);
+                foreach ($method->getParameters() as $param) {
+                    $arg = get_object_vars($param);
                     $array = array();
                     $array[$arg["name"]] = array();
+                    $array[$arg["name"]]["required"] = !$param->isOptional();
 
                     if (array_key_exists("type", $arg)) {
                         $array[$arg["name"]]["type"] = $arg["type"];
@@ -145,13 +161,24 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
                     $args[] = $array;
                 }
 
-                $ret_obj->methods[] = array(
-                    strtolower(str_replace("Api", "", $api_name))."/".$method->getName() => array(
-                        "description" => $method->getDescription(),
-                        "signature" => $method->getSignature(),
-                        "args" => $args,
-                    )
+                $printable_method_name  = str_replace("Api", "", $api_name);
+                $printable_method_name  = strtolower($printable_method_name);
+                $printable_method_name .= "/".$method->getName();
+                $method_array = array(
+                    "signature" => $method->getSignature(),
+                    "description" => $method->getDescription()
                 );
+
+                if (count($args) > 0) {
+                    $method_array["args"] = $args;
+                }
+
+                $method_array["return"] = array(
+                    "type" => $method->getReturnType(),
+                    "description" => $method->getReturnDescription()
+                );
+
+                $ret_obj->methods[] = array($printable_method_name => $method_array);
             }
         }
 

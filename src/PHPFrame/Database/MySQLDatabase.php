@@ -33,7 +33,7 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
      * @return void
      * @since  1.0
      */
-    protected function connect()
+    public function connect()
     {
         parent::connect();
 

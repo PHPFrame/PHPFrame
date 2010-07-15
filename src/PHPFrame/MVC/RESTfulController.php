@@ -89,8 +89,13 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
 
         default :
             $this->response()->document(new PHPFrame_PlainDocument());
-            $this->response()->renderer(new PHPFrame_JSONRenderer(false));
+            $this->response()->renderer(new PHPFrame_JSONRenderer(true));
             $this->response()->header("Content-Type", "application/json");
+
+            $jsonp_callback = $this->request()->param("jsonp_callback");
+            if ($jsonp_callback) {
+                $this->response()->renderer()->jsonpCallback($jsonp_callback);
+            }
 
             if ($this->_format !== "json") {
                 throw new Exception("Unknown value for parameter 'format'!", 400);

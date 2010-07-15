@@ -28,6 +28,7 @@ class PHPFrame_JSONRenderer extends PHPFrame_Renderer
     private $_indent = "";
     private $_nl = "\n";
     private $_use_php_json = true;
+    private $_jsonp_callback;
 
     /**
      * Constructor.
@@ -44,9 +45,10 @@ class PHPFrame_JSONRenderer extends PHPFrame_Renderer
      * @return void
      * @since  1.0
      */
-    public function __construct($use_php_json=true)
+    public function __construct($use_php_json=true, $jsonp_callback=null)
     {
         $this->usePhpJson($use_php_json);
+        $this->jsonpCallback($jsonp_callback);
     }
 
     /**
@@ -68,6 +70,24 @@ class PHPFrame_JSONRenderer extends PHPFrame_Renderer
     }
 
     /**
+     * Get/set flag indicating whether renderer should try to use PHP's JSON
+     * extension if available.
+     *
+     * @param bool $bool [Optional]
+     *
+     * @return bool
+     * @since  1.0
+     */
+    public function jsonpCallback($str=null)
+    {
+        if (!is_null($str)) {
+            $this->_jsonp_callback = (string) $str;
+        }
+
+        return $this->_jsonp_callback;
+    }
+
+    /**
      * Render a given value.
      *
      * @param mixed $value The value we want to render.
@@ -82,10 +102,16 @@ class PHPFrame_JSONRenderer extends PHPFrame_Renderer
         }
 
         if (function_exists("json_encode") && $this->usePhpJson()) {
-            return json_encode($value);
+            $str = json_encode($value);
         } else {
-            return $this->_renderWithoutJsonExtension($value);
+            $str = $this->_renderWithoutJsonExtension($value);
         }
+
+        if ($this->jsonpCallback()) {
+            $str = $this->jsonpCallback()."(".$str.");";
+        }
+
+        return $str;
     }
 
     /**

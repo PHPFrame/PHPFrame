@@ -139,10 +139,15 @@ class PHPFrame_Response
         $str = "";
 
         foreach ($this->headers() as $key=>$value) {
-            $str .= ucwords($key).": ".$value."\n";
+            if ($value) {
+                $str .= ucwords($key).": ".$value."\n";
+            }
         }
 
-        $str .= "\n".$this->document();
+        $status_code = $this->statusCode();
+        if ($status_code < 300 || $status_code > 399) {
+            $str .= "\n".$this->document();
+        }
 
         return $str;
     }
@@ -307,16 +312,22 @@ class PHPFrame_Response
      */
     public function send()
     {
+        $status_code = $this->statusCode();
+
         // Send headers
         if (!headers_sent()) {
-            header("HTTP/1.1 ".$this->statusCode());
+            header("HTTP/1.1 ".$status_code);
 
             foreach ($this->_headers as $key=>$value) {
-                header($key.": ".$value);
+                if ($value) {
+                    header($key.": ".$value);
+                }
             }
         }
 
         // Print response content (the document object)
-        echo (string) $this->document();
+        if ($status_code < 300 || $status_code > 399) {
+            echo trim((string) $this->document());
+        }
     }
 }

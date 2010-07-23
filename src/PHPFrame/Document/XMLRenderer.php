@@ -48,6 +48,10 @@ class PHPFrame_XMLRenderer extends PHPFrame_Renderer
     {
         if ($value instanceof Exception) {
             $value = $this->exceptionToArray($value);
+        } elseif ($value instanceof PHPFrame_PersistentObject) {
+            $value = $this->persistentObjectToArray($value);
+        } elseif ($value instanceof PHPFrame_PersistentObjectCollection) {
+            $value = $this->persistentObjectCollectionToArray($value);
         }
 
         if (!is_array($value) && !is_object($value)) {

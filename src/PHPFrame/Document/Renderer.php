@@ -81,6 +81,7 @@ abstract class PHPFrame_Renderer
                 foreach ($prop_value as $child) {
                     $props[$prop_name][] = $this->persistentObjectToArray($child);
                 }
+
             } else {
                 $props[$prop_name] = $prop_value;
             }

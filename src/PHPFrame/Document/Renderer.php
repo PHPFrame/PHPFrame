@@ -34,6 +34,14 @@ abstract class PHPFrame_Renderer
      */
     abstract public function render($value);
 
+    /**
+     * Convert Exception object to associative array.
+     *
+     * @param Exception $e Instance of exception.
+     *
+     * @return array
+     * @since  1.2
+     */
     public function exceptionToArray(Exception $e)
     {
         $array = array();
@@ -49,5 +57,38 @@ abstract class PHPFrame_Renderer
         }
 
         return array("error"=>$array);
+    }
+
+    /**
+     * Convert PersistentObject to associative array.
+     *
+     * @param PHPFrame_PersistentObject $obj Instance of persistent object.
+     *
+     * @return array
+     * @since  1.2
+     */
+    public function persistentObjectToArray(PHPFrame_PersistentObject $obj)
+    {
+        return iterator_to_array($obj);
+    }
+
+    /**
+     * Convert PersistentObjectCollection to associative array.
+     *
+     * @param PHPFrame_PersistentObjectCollection $collection Collection object.
+     *
+     * @return array
+     * @since  1.2
+     */
+    public function persistentObjectCollectionToArray(
+        PHPFrame_PersistentObjectCollection $collection
+    ) {
+        $array = array();
+
+        foreach ($collection as $obj) {
+            $array[] = iterator_to_array($obj);
+        }
+
+        return $array;
     }
 }

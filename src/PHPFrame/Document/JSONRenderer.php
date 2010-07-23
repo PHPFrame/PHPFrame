@@ -99,6 +99,10 @@ class PHPFrame_JSONRenderer extends PHPFrame_Renderer
     {
         if ($value instanceof Exception) {
             $value = $this->exceptionToArray($value);
+        } elseif ($value instanceof PHPFrame_PersistentObject) {
+            $value = $this->persistentObjectToArray($value);
+        } elseif ($value instanceof PHPFrame_PersistentObjectCollection) {
+            $value = $this->persistentObjectCollectionToArray($value);
         }
 
         if (function_exists("json_encode") && $this->usePhpJson()) {
@@ -127,9 +131,6 @@ class PHPFrame_JSONRenderer extends PHPFrame_Renderer
     {
         if (is_array($value)) {
             return $this->_renderArray($value);
-
-        } elseif ($value instanceof Traversable) {
-            return $this->_renderArray(iterator_to_array($value));
 
         } elseif (is_object($value)) {
             return $this->_renderObject($value);

@@ -332,6 +332,8 @@ class PHPFrame_Application extends PHPFrame_Observer
 
             if (!$this->request()->param("suppress_response_codes")) {
                 $response->statusCode($code);
+            } else {
+                $response->statusCode(200);
             }
 
             if (!$this->request()->ajax()) {

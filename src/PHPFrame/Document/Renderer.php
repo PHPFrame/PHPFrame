@@ -69,7 +69,25 @@ abstract class PHPFrame_Renderer
      */
     public function persistentObjectToArray(PHPFrame_PersistentObject $obj)
     {
-        return iterator_to_array($obj);
+        $props = array();
+
+        foreach (get_object_vars($obj) as $prop_name=>$prop_value) {
+            if ($prop_value instanceof PHPFrame_PersistentObjectCollection) {
+                $props[$prop_name] = $this->persistentObjectCollectionToArray($prop_value);
+            } elseif ($prop_value instanceof PHPFrame_PersistentObject) {
+                $props[$prop_name] = $this->persistentObjectToArray($prop_value);
+            } elseif ($prop_value instanceof SplObjectStorage) {
+                $props[$prop_name] = array();
+                foreach ($prop_value as $obj) {
+                    $props[$prop_name][] = $this->persistentObjectToArray($obj);
+                }
+
+            } else {
+                $props[$prop_name] = $prop_value;
+            }
+        }
+
+        return array_merge(iterator_to_array($obj), $props);
     }
 
     /**
@@ -86,7 +104,7 @@ abstract class PHPFrame_Renderer
         $array = array();
 
         foreach ($collection as $obj) {
-            $array[] = iterator_to_array($obj);
+            $array[] = $this->persistentObjectToArray($obj);
         }
 
         return $array;

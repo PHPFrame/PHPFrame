@@ -78,16 +78,21 @@ abstract class PHPFrame_Renderer
                 $props[$prop_name] = $this->persistentObjectToArray($prop_value);
             } elseif ($prop_value instanceof SplObjectStorage) {
                 $props[$prop_name] = array();
-                foreach ($prop_value as $obj) {
-                    $props[$prop_name][] = $this->persistentObjectToArray($obj);
+                foreach ($prop_value as $child) {
+                    $props[$prop_name][] = $this->persistentObjectToArray($child);
                 }
-
             } else {
                 $props[$prop_name] = $prop_value;
             }
         }
 
-        return array_merge(iterator_to_array($obj), $props);
+        $array = iterator_to_array($obj);
+
+        if ($obj instanceof PHPFrame_User) {
+            unset($array["password"]);
+        }
+
+        return array_merge($array, $props);
     }
 
     /**

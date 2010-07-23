@@ -91,7 +91,6 @@ class PHPFrame_JSONRendererTest extends PHPUnit_Framework_TestCase
             "{
     \"group_id\": \"0\",
     \"email\": null,
-    \"password\": null,
     \"params\": \"\",
     \"id\": null,
     \"ctime\": null,

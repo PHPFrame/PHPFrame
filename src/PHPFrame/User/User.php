@@ -29,7 +29,7 @@ class PHPFrame_User extends PHPFrame_PersistentObject
      *
      * @var string
      */
-    private $_groupname;
+    protected $group_name;
 
     /**
      * Constructor
@@ -86,6 +86,17 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     }
 
     /**
+     * Magic method invoked when object is serialised.
+     *
+     * @return array
+     * @since  1.0
+     */
+    public function __sleep()
+    {
+        return array_merge(parent::__sleep(), array("group_name"));
+    }
+
+    /**
      * Return object as associative array.
      *
      * @return array
@@ -138,10 +149,10 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     public function groupName($str=null)
     {
         if (!is_null($str)) {
-            $this->_groupname = trim((string) $str);
+            $this->group_name = trim((string) $str);
         }
 
-        return $this->_groupname;
+        return $this->group_name;
     }
 
     /**

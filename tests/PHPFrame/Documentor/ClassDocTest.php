@@ -35,10 +35,10 @@ class PHPFrame_ClassDocTest extends PHPUnit_Framework_TestCase
     public function test_getPropertiesWithFilter()
     {
         $this->assertTrue(count($this->_class_doc->getProperties(ReflectionProperty::IS_PUBLIC)) == 0);
-        $this->assertTrue(count($this->_class_doc->getProperties(ReflectionProperty::IS_PROTECTED)) == 1);
-        $this->assertTrue(count($this->_class_doc->getProperties(ReflectionProperty::IS_PRIVATE)) == 1);
+        $this->assertTrue(count($this->_class_doc->getProperties(ReflectionProperty::IS_PROTECTED)) == 2);
+        $this->assertTrue(count($this->_class_doc->getProperties(ReflectionProperty::IS_PRIVATE)) == 0);
         $this->assertTrue(count($this->_class_doc->getProperties(ReflectionProperty::IS_PUBLIC + ReflectionProperty::IS_PROTECTED + ReflectionProperty::IS_PRIVATE)) == 2);
-        $this->assertTrue(count($this->_class_doc->getProperties(ReflectionProperty::IS_PUBLIC + ReflectionProperty::IS_PROTECTED)) == 1);
+        $this->assertTrue(count($this->_class_doc->getProperties(ReflectionProperty::IS_PUBLIC + ReflectionProperty::IS_PROTECTED)) == 2);
         $this->assertTrue(count($this->_class_doc->getProperties(ReflectionProperty::IS_PROTECTED + ReflectionProperty::IS_PRIVATE)) == 2);
     }
 

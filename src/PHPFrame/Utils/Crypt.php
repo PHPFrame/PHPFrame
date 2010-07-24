@@ -30,13 +30,17 @@ class PHPFrame_Crypt
     /**
      * Constructor.
      *
-     * @param string $secret A string to be used to create secure hashes.
+     * @param string $secret [Optional] A string to be used to create secure hashes.
      *
      * @return void
      * @since  1.0
      */
-    public function __construct($secret)
+    public function __construct($secret=null)
     {
+        if (is_null($secret)) {
+            $secret = $this->genRandomPassword(32);
+        }
+
         $this->_secret = trim((string) $secret);
     }
 
@@ -78,22 +82,34 @@ class PHPFrame_Crypt
      */
     public function genRandomPassword($length=8)
     {
-        $salt     = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $salt    .= "0123456789";
-        $len      = strlen($salt);
-        $makepass = '';
-        $stat     = @stat(__FILE__);
+        if (function_exists("openssl_random_pseudo_bytes")) {
+            do {
+                $entropy = openssl_random_pseudo_bytes($length, $strong);
+            } while ($strong === false);
 
-        if (empty($stat) || !is_array($stat)) {
-            $stat = array(php_uname());
+        } elseif ($fp = fopen("/dev/urandom", "rb")) {
+            $entropy = fread($fp, $length);
+            fclose($fp);
+            $entropy .= uniqid(mt_rand(), true);
+
+        } else {
+            $salt    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            $salt   .= "0123456789";
+            $len     = strlen($salt);
+            $entropy = "";
+            $stat    = @stat(__FILE__);
+
+            if (empty($stat) || !is_array($stat)) {
+                $stat = array(php_uname());
+            }
+
+            mt_srand(crc32(microtime() . implode("|", $stat)));
+
+            for ($i=0; $i<$length; $i++) {
+                $entropy .= $salt[mt_rand(0, $len-1)];
+            }
         }
 
-        mt_srand(crc32(microtime() . implode('|', $stat)));
-
-        for ($i=0; $i<$length; $i++) {
-            $makepass .= $salt[mt_rand(0, $len-1)];
-        }
-
-        return $makepass;
+        return substr(sha1($entropy), 0, $length);
     }
 }

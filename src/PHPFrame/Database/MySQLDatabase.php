@@ -92,18 +92,19 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
 
             // Add display width
             switch ($col->getType()) {
-            case "boolean" :
+            case PHPFrame_DatabaseColumn::TYPE_BOOL :
                 $def_value = (int) (bool) $col->getDefault();
                 break;
-            case "int" :
+            case PHPFrame_DatabaseColumn::TYPE_INT :
                 $sql      .= "(11)";
                 $def_value = (int) $col->getDefault();
                 break;
-            case "varchar" :
-                $sql      .= "(100)";
+            case PHPFrame_DatabaseColumn::TYPE_VARCHAR :
+            case PHPFrame_DatabaseColumn::TYPE_CHAR :
+                $sql      .= "(".$col->getLength().")";
                 $def_value = (string) $col->getDefault();
                 break;
-            case "enum" :
+            case PHPFrame_DatabaseColumn::TYPE_ENUM :
                 $sql      .= "('".implode("', '", $col->getEnums())."')";
                 $def_value = (string) $col->getDefault();
                 break;
@@ -199,6 +200,13 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
 
             $type = preg_replace("/(.*)\(\d+\)/i", "$1", $col["Type"]);
             $col_obj->setType($type);
+            if (
+                $type == PHPFrame_DatabaseColumn::TYPE_VARCHAR
+                || $type == PHPFrame_DatabaseColumn::TYPE_CHAR
+            ) {
+            	$length = preg_replace("/(.*)\((\d+)\)/i", "$2", $col["Type"]);
+            	$col_obj->setLength($length);
+            }
             $col_obj->setNull(($col["Null"] == "NO") ? false : true);
             $col_obj->setDefault($col["Default"]);
             $col_obj->setKey($col["Key"]);

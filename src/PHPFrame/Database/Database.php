@@ -117,19 +117,19 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      *
      * @var string
      */
-    private $_dsn = null;
+    protected $dsn = null;
     /**
      * Database user if any
      *
      * @var string
      */
-    private $_db_user = null;
+    protected $db_user = null;
     /**
      * Database password if any
      *
      * @var string
      */
-    private $_db_pass = null;
+    protected $db_pass = null;
     /**
      * A PDO object that represents the connection to the database server.
      *
@@ -169,9 +169,9 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
         $tbl_prefix=null
     ) {
         // Set internal properties
-        $this->_dsn     = $dsn;
-        $this->_db_user = $db_user;
-        $this->_db_pass = $db_pass;
+        $this->dsn     = $dsn;
+        $this->db_user = $db_user;
+        $this->db_pass = $db_pass;
 
         if (!is_null($tbl_prefix)) {
             $this->_tbl_prefix = trim((string) $tbl_prefix);
@@ -195,7 +195,7 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
         // Remove reference to PDOStatement object
         $this->_stmt = null;
 
-        return array_keys(get_object_vars($this));
+        return array("dsn", "db_user", "db_pass");
     }
 
     /**
@@ -266,14 +266,14 @@ abstract class PHPFrame_Database extends PHPFrame_Subject
      * @return void
      * @since  1.0
      */
-    protected function connect()
+    public function connect()
     {
         try {
             // Acquire PDO object
             $this->_pdo = new PDO(
-                $this->_dsn,
-                $this->_db_user,
-                $this->_db_pass
+                $this->dsn,
+                $this->db_user,
+                $this->db_pass
             );
         } catch (PDOException $e) {
             throw new PHPFrame_DatabaseException($e->getMessage());

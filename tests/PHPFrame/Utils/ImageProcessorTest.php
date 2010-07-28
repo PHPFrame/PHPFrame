@@ -65,12 +65,14 @@ class PHPFrame_ImageProcessorTest extends PHPUnit_Framework_TestCase
             $dest[] = $thumb;
         }
 
-        $memory_limit = ini_get("memory_limit");
-        ini_set("memory_limit", "16M");
+        preg_match("/^(\d+)M$/", ini_get("memory_limit"), $matches);
+        $memory_limit = ((int) $matches[1]) * 1024 * 1024;
+        $needed_memory = $this->_fixture->estimateMemoryAllocation($this->_images);
+        ini_set("memory_limit", round((memory_get_usage() + $needed_memory)/(1024*1024)-1)."M");
 
         $this->assertFalse($this->_fixture->resize($this->_images, $dest));
 
-        ini_set("memory_limit", $memory_limit);
+        ini_set("memory_limit", round($memory_limit/(1024*1024))."M");
 
         $this->assertRegExp(
             "/Image resizing halted to avoid running out of memory\./",

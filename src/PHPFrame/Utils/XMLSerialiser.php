@@ -117,6 +117,7 @@ class PHPFrame_XMLSerialiser
                         $str .= self::_doSerialise(array($key=>$grand_child));
                     }
                 } else {
+                    $key = preg_replace("/\//", "-", $key);
                     $str = "<".$key.">";
                     $str .= self::_doSerialise($child);
                     $str .= "</".$key.">\n";
@@ -128,6 +129,7 @@ class PHPFrame_XMLSerialiser
 
         } elseif ($array_obj->isAssoc()) {
             foreach ($array_obj as $key=>$value) {
+                $key = preg_replace("/\//", "-", $key);
                 $str .= "<".$key.">";
                 $str .= self::_doSerialise($value);
                 $str .= "</".$key.">\n";

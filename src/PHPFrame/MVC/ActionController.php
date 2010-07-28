@@ -313,6 +313,24 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
     }
 
     /**
+     * Check session token passed in request.
+     *
+     * @return void
+     * @since  1.2
+     * @throws Exception
+     */
+    protected function checkToken()
+    {
+        $session_token = $this->session()->getToken();
+        $request_token = base64_decode($this->request()->param("token", null));
+
+        if ($session_token !== $request_token) {
+            $msg = "Permission denied.";
+            throw new Exception($msg, 401);
+        }
+    }
+
+    /**
      * Fetch persistent object by ID and check read access.
      *
      * @param PHPFrame_Mapper $mapper The persistent object mapper.

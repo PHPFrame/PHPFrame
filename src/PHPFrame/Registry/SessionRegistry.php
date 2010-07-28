@@ -386,7 +386,8 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
     {
         //create a token
         if (!isset($this->data["token"]) || $force_new) {
-            $this->data["token"] = $this->_createToken(12);
+            $crypt = new PHPFrame_Crypt();
+            $this->data["token"] = $crypt->genRandomPassword(32);
         }
 
         return $this->data["token"];
@@ -454,28 +455,5 @@ class PHPFrame_SessionRegistry extends PHPFrame_Registry
                 }
             }
         }
-    }
-
-    /**
-     * Create a token-string
-     *
-     * @param int $length Lenght of string.
-     *
-     * @return string Generated token.
-     * @since  1.0
-     */
-    private function _createToken($length = 32)
-    {
-        static $chars = '0123456789abcdef';
-
-        $max   = strlen($chars) - 1;
-        $token = '';
-        $name  = session_name();
-
-        for ($i=0; $i<$length; ++$i) {
-            $token .= $chars[ (rand(0, $max)) ];
-        }
-
-        return md5($token.$name);
     }
 }

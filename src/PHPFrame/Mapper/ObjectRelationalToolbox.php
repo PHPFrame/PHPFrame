@@ -116,6 +116,7 @@ class PHPFrame_ObjectRelationalToolbox
             } elseif ($filter instanceof PHPFrame_StringFilter) {
                 if ($options["max_length"] > 0) {
                     $column->setType(PHPFrame_DatabaseColumn::TYPE_VARCHAR);
+                    $column->setLength($options["max_length"]);
                 } else {
                     $column->setType(PHPFrame_DatabaseColumn::TYPE_TEXT);
                 }
@@ -124,9 +125,7 @@ class PHPFrame_ObjectRelationalToolbox
             $column->setNull($obj->allowsNull($key));
 
             $def_values = iterator_to_array($obj);
-            if (!is_null($def_values[$key])
-                && !$filter instanceof PHPFrame_StringFilter
-            ) {
+            if (!is_null($def_values[$key])) {
                 $column->setDefault($def_values[$key]);
             }
 

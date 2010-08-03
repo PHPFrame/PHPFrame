@@ -189,9 +189,9 @@ class PHPFrame_SQLPersistentObjectAssembler
 
         $sql = "DELETE FROM ";
         if ($this->factory->getDB()->isMySQL()){
-            $sql .= "`".$this->factory->getTableName()."`";	
+            $sql .= "`".$this->factory->getTableName()."`";
         } else {
-        	$sql .= $this->factory->getTableName();
+            $sql .= $this->factory->getTableName();
         }
         $sql .= " WHERE id = :id";
         $params = array(":id"=>$id);
@@ -211,7 +211,7 @@ class PHPFrame_SQLPersistentObjectAssembler
     {
         $sql  = "INSERT INTO ";
         if ($this->factory->getDB()->isMySQL()){
-        	$sql .= "`".$this->factory->getTableName()."`";
+            $sql .= "`".$this->factory->getTableName()."`";
         } else {
             $sql .= $this->factory->getTableName();
         }
@@ -239,7 +239,7 @@ class PHPFrame_SQLPersistentObjectAssembler
     {
         $sql = "UPDATE ";
         if ($this->factory->getDB()->isMySQL()){
-        	$sql .= "`".$this->factory->getTableName()."` SET ";
+            $sql .= "`".$this->factory->getTableName()."` SET ";
         } else {
             $sql .= $this->factory->getTableName()." SET ";
         }

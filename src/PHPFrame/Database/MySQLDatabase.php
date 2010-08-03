@@ -204,8 +204,8 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
                 $type == PHPFrame_DatabaseColumn::TYPE_VARCHAR
                 || $type == PHPFrame_DatabaseColumn::TYPE_CHAR
             ) {
-            	$length = preg_replace("/(.*)\((\d+)\)/i", "$2", $col["Type"]);
-            	$col_obj->setLength($length);
+                $length = preg_replace("/(.*)\((\d+)\)/i", "$2", $col["Type"]);
+                $col_obj->setLength($length);
             }
             $col_obj->setNull(($col["Null"] == "NO") ? false : true);
             $col_obj->setDefault($col["Default"]);

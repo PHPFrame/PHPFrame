@@ -55,7 +55,7 @@ class PHPFrame_MethodDoc extends ReflectionMethod
                 if (preg_match("/^@since\s+([\d.]+)/", $line, $since_matches)) {
                     $this->_since = $since_matches[1];
 
-                } elseif (preg_match("/^@return\s+([a-zA-Z0-9]+)\s*(.*)/", $line, $return_matches)) {
+                } elseif (preg_match("/^@return\s+([a-zA-Z0-9_]+)\s*(.*)/", $line, $return_matches)) {
                     $this->_return_type = $return_matches[1];
                     $this->_return_description = $return_matches[2];
 

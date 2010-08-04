@@ -105,6 +105,7 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/CompositeMapper.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/IdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/Mapper.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/MySQLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/ObjectRelationalToolbox.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistenceFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObject.php" role="php" />
@@ -112,6 +113,7 @@
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectCollection.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PersistentObjectFactory.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/PolymorphicPersistentObject.php" role="php" />
+   <file baseinstalldir="/" name="PHPFrame/Mapper/RESTfulObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/RPCObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLIdObject.php" role="php" />
    <file baseinstalldir="/" name="PHPFrame/Mapper/SQLPersistenceFactory.php" role="php" />

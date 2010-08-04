@@ -99,6 +99,8 @@ class PHPFrame_JSONRenderer extends PHPFrame_Renderer
     {
         if ($value instanceof Exception) {
             $value = $this->exceptionToArray($value);
+        } elseif ($value instanceof PHPFrame_RESTfulObject) {
+        	$value = $value->getRESTfulRepresentation();
         } elseif ($value instanceof PHPFrame_PersistentObject) {
             $value = $this->persistentObjectToArray($value);
         } elseif ($value instanceof PHPFrame_PersistentObjectCollection) {

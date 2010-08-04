@@ -99,6 +99,8 @@ class PHPFrame_MySQLDatabase extends PHPFrame_Database
                 $sql      .= "(11)";
                 $def_value = (int) $col->getDefault();
                 break;
+            case PHPFrame_DatabaseColumn::TYPE_TEXT :
+            	$col->setDefault(null);
             case PHPFrame_DatabaseColumn::TYPE_VARCHAR :
             case PHPFrame_DatabaseColumn::TYPE_CHAR :
                 $sql      .= "(".$col->getLength().")";

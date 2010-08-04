@@ -22,7 +22,7 @@ class PHPFrame_MethodDocTest extends PHPUnit_Framework_TestCase
     public function test_toString()
     {
         $this->assertRegExp(
-            "/".preg_quote("__construct([\$options])")."/",
+            "/".preg_quote("__construct([ array options=null ])")."/",
             (string) $this->_method_doc
         );
     }

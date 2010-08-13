@@ -55,45 +55,45 @@ class PHPFrame_DatabaseColumnTest extends PHPUnit_Framework_TestCase
         $this->assertType("array", $this->_column->getEnums());
         $this->assertEquals(array(1,2,3), $this->_column->getEnums());
     }
-    
+
     public function test_setVarChar()
     {
         $varchar_type = PHPFrame_DatabaseColumn::TYPE_VARCHAR;
-        
-    	$this->_column = new PHPFrame_DatabaseColumn(array(
+
+        $this->_column = new PHPFrame_DatabaseColumn(array(
             "name"    => "varchar_field",
             "type"    => $varchar_type,
-    	    "length"  => 300,
+            "length"  => 300,
             "null"    => true,
             "default" => null
         ));
-        
+
         $this->assertEquals($this->_column->getType(), $varchar_type);
         $this->assertEquals($this->_column->getLength(), 300);
     }
-    
+
     public function test_setChar()
     {
-    	$char_type = PHPFrame_DatabaseColumn::TYPE_CHAR;
-    	
-    	$this->_column = new PHPFrame_DatabaseColumn(array(
-    	    "name"    => "char_field",
-    	    "type"    => $char_type,
-    	    "null"    => true,
-    	    "default" => null
-    	));
-    	
-    	$this->assertEquals($this->_column->getType(), $char_type);
-    	$this->assertEquals($this->_column->getLength(), 100);
-    	
-    	$this->_column->setLength(10);
-    	$this->assertEquals($this->_column->getLength(), 10);
+        $char_type = PHPFrame_DatabaseColumn::TYPE_CHAR;
+
+        $this->_column = new PHPFrame_DatabaseColumn(array(
+            "name"    => "char_field",
+            "type"    => $char_type,
+            "null"    => true,
+            "default" => null
+        ));
+
+        $this->assertEquals($this->_column->getType(), $char_type);
+        $this->assertEquals($this->_column->getLength(), 100);
+
+        $this->_column->setLength(10);
+        $this->assertEquals($this->_column->getLength(), 10);
     }
-    
+
     public function test_setVarCharInvalidException()
     {
-    	$this->setExpectedException("InvalidArgumentException");
-    	
-    	$this->_column->setLength(0);
+        $this->setExpectedException("InvalidArgumentException");
+
+        $this->_column->setLength(0);
     }
 }

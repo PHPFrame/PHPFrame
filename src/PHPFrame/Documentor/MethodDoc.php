@@ -55,7 +55,7 @@ class PHPFrame_MethodDoc extends ReflectionMethod
                 if (preg_match("/^@since\s+([\d.]+)/", $line, $since_matches)) {
                     $this->_since = $since_matches[1];
 
-                } elseif (preg_match("/^@return\s+([a-zA-Z0-9]+)\s*(.*)/", $line, $return_matches)) {
+                } elseif (preg_match("/^@return\s+([a-zA-Z0-9_|]+)\s*(.*)/", $line, $return_matches)) {
                     $this->_return_type = $return_matches[1];
                     $this->_return_description = $return_matches[2];
 
@@ -92,21 +92,7 @@ class PHPFrame_MethodDoc extends ReflectionMethod
      */
     public function __toString()
     {
-        $str = $this->getName()."(";
-
-        foreach ($this->getParameters() as $param) {
-            $param_str = "\$".$param->getName();
-
-            if ($param->isOptional()) {
-                $param_str = "[".$param_str."]";
-            }
-
-            $str .= $param_str;
-        }
-
-        $str .= ")";
-
-        return $str;
+        return $this->getSignature();
     }
 
     /**
@@ -179,7 +165,12 @@ class PHPFrame_MethodDoc extends ReflectionMethod
             $param_str .= $param_array["name"]."";
 
             if ($param->isOptional()) {
-                $param_str = "[ ".$param_str." ]";
+                $def_value = $param->getDefaultValue();
+                if (is_null($def_value)) {
+                    $def_value = "null";
+                }
+
+                $param_str = "[ ".$param_str."=".$def_value." ]";
             }
 
             $str .= $param_str;

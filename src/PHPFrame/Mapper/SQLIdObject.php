@@ -167,12 +167,32 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     {
         // Validate input type and set internal property
         if (!is_array($fields)) {
-            $fields = array($fields);
+            $fields = explode(",", $fields);
         }
 
         $processed_fields = array();
 
         foreach ($fields as $field) {
+            $field = trim($field);
+
+            // If select field is a SQL function we parse differently
+            $pattern = "/([a-zA-Z0-9_]+\(.*\))( AS ([a-zA-Z_]+))?/";
+            if (preg_match($pattern, $field, $matches)) {
+                $array = array(
+                    "table_name"=>null,
+                    "field_name"=>$matches[1],
+                    "field_alias"=>null
+                );
+
+                if (isset($matches[3])) {
+                    $array["field_alias"] = $matches[3];
+                }
+
+                $processed_fields[] = $array;
+
+                continue;
+            }
+
             // Parse table.field format if needed
             $pattern = "/^([a-zA-Z0-9_\#]+)\.([a-zA-Z_\*]+)( AS ([a-zA-Z_]+))?$/";
             preg_match($pattern, $field, $matches);
@@ -287,7 +307,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
     public function where($left, $operator, $right)
     {
         // Validate input types and set internal property
-        $pattern1 = "/^[a-zA-Z0-9_=<> \/\-\#\.\(\)\'\%\:,]+$/";
+        $pattern1 = "/^[a-zA-Z0-9_=<> \/\-\#\.\(\)\'\%\:,`]+$/";
         $pattern2 = "/^(=|<>|<|>|<=|>=|AND|OR|LIKE|BETWEEN|IN|IS|IS NOT)$/";
         if (!preg_match($pattern1, $left)
             || !preg_match($pattern1, $right)
@@ -484,12 +504,18 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
                     $table_name = $field["table_name"];
                 }
 
-                $array[] = $table_name.".".$field["field_name"];
+                $field_name = $table_name.".".$field["field_name"];
 
             } else {
                 // If no table name is specified we assume main "from" table
-                $array[] = $field["field_name"];
+                $field_name = $field["field_name"];
             }
+
+            if (!empty($field["field_alias"])) {
+                $field_name .= " AS ".$field["field_alias"];
+            }
+
+            $array[] = $field_name;
         }
 
         return $array;
@@ -728,7 +754,7 @@ class PHPFrame_SQLIdObject extends PHPFrame_IdObject
         }
 
         foreach ($this->_join as $join) {
-            if ($join["table_alias"] == $alias) {
+            if (isset($join["table_alias"]) && $join["table_alias"] == $alias) {
                 return $join["table_name"];
             }
         }

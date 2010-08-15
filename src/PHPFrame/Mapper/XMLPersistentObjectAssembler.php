@@ -154,7 +154,8 @@ class PHPFrame_XMLPersistentObjectAssembler
             // Prepare existing elements (update)
             foreach ($collection as $item) {
                 if ($item->id() == $obj->id()) {
-                    $item = iterator_to_array($obj);
+                    $collection->removeElement($item);
+                    $collection->addElement($obj);
                 }
             }
         }

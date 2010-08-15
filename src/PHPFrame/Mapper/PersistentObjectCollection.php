@@ -194,8 +194,8 @@ class PHPFrame_PersistentObjectCollection extends PHPFrame_Collection
     public function removeElement(PHPFrame_PersistentObject $obj)
     {
         if (in_array($obj, $this->_objects)) {
-            $key = array_keys($this->_objects, $obj);
-            unset($this->_objects[$key]);
+            $keys = array_keys($this->_objects, $obj);
+            unset($this->_objects[$keys[0]]);
         }
 
         $updated_raw = array();

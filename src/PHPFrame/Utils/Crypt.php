@@ -87,7 +87,7 @@ class PHPFrame_Crypt
                 $entropy = openssl_random_pseudo_bytes($length, $strong);
             } while ($strong === false);
 
-        } elseif ($fp = fopen("/dev/urandom", "rb")) {
+        } elseif ($fp = @fopen("/dev/urandom", "rb")) {
             $entropy = fread($fp, $length);
             fclose($fp);
             $entropy .= uniqid(mt_rand(), true);

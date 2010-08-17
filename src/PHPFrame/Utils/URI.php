@@ -262,7 +262,7 @@ class PHPFrame_URI
         }
 
         // Add dir name to base
-        $base .= $this->_dirname;
+        $base .= trim($this->_dirname, "\\");
 
         // Add trailing slash if needed
         if (!preg_match('/\/$/', $base)) {

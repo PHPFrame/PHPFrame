@@ -201,11 +201,10 @@ class PHPFrame_User extends PHPFrame_PersistentObject
     public function params($params=null)
     {
         if (!is_null($params)) {
-            if (is_string($params) && !empty($params)) {
-                $params = unserialize($params);
-            }
-
-            if (!is_array($params)) {
+            if (is_string($params)) {
+            	if (!empty($params))
+                    $params = unserialize($params);
+                else
                     $params = array();
             }
 

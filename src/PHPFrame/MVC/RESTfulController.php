@@ -27,7 +27,7 @@
  */
 abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
 {
-    private $_format;
+    private $_format, $_return;
 
     /**
      * Constructor.
@@ -37,14 +37,12 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
      * @return void
      * @since  1.0
      */
-    public function __construct(PHPFrame_Application $app)
+    public function __construct(PHPFrame_Application $app, $return=false)
     {
         parent::__construct($app, "usage");
 
         $request = $this->request();
-        $this->request()->ajax(true);
-
-        $action = $request->action();
+        $action  = $request->action();
         if (!$action) {
             $method = $request->method();
             switch ($method) {
@@ -62,47 +60,13 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
             }
         }
 
-        $this->_format = $request->param("format");
-        if (!$this->_format) {
-            $this->_format = "json";
+        $format = $request->param("format");
+        if (!$format) {
+            $format = "json";
         }
 
-        switch ($this->_format) {
-        case "xml" :
-            $this->response()->document(new PHPFrame_XMLDocument());
-            $this->response()->document()->useBeautifier(false);
-            $this->response()->renderer(new PHPFrame_XMLRenderer());
-            $this->response()->renderer()->rootNodeName("api-response");
-            break;
-
-        case "xmlrpc" :
-            $this->response()->document(new PHPFrame_XMLDocument());
-            $this->response()->document()->useBeautifier(false);
-            $this->response()->renderer(new PHPFrame_RPCRenderer($this->response()->document()));
-            break;
-
-        case "php" :
-            $this->response()->document(new PHPFrame_PlainDocument());
-            $this->response()->renderer(new PHPFrame_PHPSerialisedDataRenderer(true));
-            $this->response()->header("Content-Type", "application/php");
-            break;
-
-        default :
-            $this->response()->document(new PHPFrame_PlainDocument());
-            $this->response()->renderer(new PHPFrame_JSONRenderer(true));
-            $this->response()->header("Content-Type", "application/json");
-
-            $jsonp_callback = $this->request()->param("jsonp_callback");
-            if ($jsonp_callback) {
-                $this->response()->renderer()->jsonpCallback($jsonp_callback);
-            }
-
-            if ($this->_format !== "json") {
-                throw new Exception("Unknown value for parameter 'format'!", 400);
-            }
-
-            break;
-        }
+        $this->returnInternalPHP($return);
+        $this->format($format);
     }
 
     /**
@@ -185,7 +149,113 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
         $this->response()->body($ret_obj);
     }
 
-    // abstract public function get($id=null, $limit=0, $page=1);
-    // abstract public function post();
-    // abstract public function delete($id);
+    /**
+     * Get/set response format.
+     *
+     * @param string $str [Optional] Supported formats are 'xml', 'php' or
+     *                    'json'.
+     *
+     * @return string
+     * @since  1.2.5
+     */
+    public function format($str=null)
+    {
+        if (!is_null($str)) {
+            if (!$this->returnInternalPHP()) {
+                $this->_setResponse($str);
+            }
+
+            $this->_format = $str;
+        }
+
+        return $this->_format;
+    }
+
+    /**
+     * Get/set whether API method should return to the calling PHP code instead
+     * of writing the output in the response object.
+     *
+     * @param bool $bool [Optional]
+     *
+     * @return bool
+     * @since  1.2.5
+     */
+    public function returnInternalPHP($bool=null)
+    {
+        if (!is_null($bool)) {
+            $this->_return = (bool) $bool;
+        }
+
+        return $this->_return;
+    }
+
+    /**
+     * Handle return value based on whether controller is set to return to
+     * calling PHP code or not.
+     *
+     * @param mixed $mixed The return value.
+     *
+     * @return mixed
+     * @since  1.2.5
+     */
+    public function handleReturnValue($mixed)
+    {
+        if ($this->returnInternalPHP()) {
+            return $mixed;
+        } else {
+            $this->response()->body($mixed);
+        }
+    }
+
+    /**
+     * Set response object according to format.
+     *
+     * @param string $str [Optional] Supported formats are 'xml', 'php' or
+     *                    'json'.
+     *
+     * @return mixed
+     * @since  1.2.5
+     */
+    private function _setResponse($format)
+    {
+        $response = $this->response();
+
+        switch ($format) {
+        case "xml" :
+            $response->document(new PHPFrame_XMLDocument());
+            $response->document()->useBeautifier(false);
+            $response->renderer(new PHPFrame_XMLRenderer());
+            $response->renderer()->rootNodeName("api-response");
+            break;
+
+        case "xmlrpc" :
+            $response->document(new PHPFrame_XMLDocument());
+            $response->document()->useBeautifier(false);
+            $response->renderer(new PHPFrame_RPCRenderer($response->document()));
+            break;
+
+        case "php" :
+            $response->document(new PHPFrame_PlainDocument());
+            $response->renderer(new PHPFrame_PHPSerialisedDataRenderer(true));
+            $response->header("Content-Type", "application/php");
+            break;
+
+        default :
+            $response->document(new PHPFrame_PlainDocument());
+            $response->renderer(new PHPFrame_JSONRenderer(true));
+            $response->header("Content-Type", "application/json");
+
+            $jsonp_callback = $this->request()->param("jsonp_callback");
+            if ($jsonp_callback) {
+                $response->renderer()->jsonpCallback($jsonp_callback);
+            }
+
+            if ($format !== "json") {
+                $msg = "Unknown value for parameter 'format'!";
+                throw new Exception($msg, 400);
+            }
+
+            break;
+        }
+    }
 }

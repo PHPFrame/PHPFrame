@@ -32,7 +32,11 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
     /**
      * Constructor.
      *
-     * @param PHPFrame_Application $app Reference to application object.
+     * @param PHPFrame_Application $app    Reference to application object.
+     * @param bool                 $return [Optional] Get/set whether API method
+     *                                     should return to the calling PHP code
+     *                                     instead of writing the output in the
+     *                                     response object.
      *
      * @return void
      * @since  1.0

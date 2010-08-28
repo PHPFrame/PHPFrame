@@ -320,12 +320,12 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Can user read this object?
      *
-     * @param PHPFrame_user $user Instance of {@link PHPFrame_User}.
+     * @param PHPFrame_User $user Instance of {@link PHPFrame_User}.
      *
      * @return bool
      * @since  1.0
      */
-    public function canRead(PHPFrame_user $user)
+    public function canRead(PHPFrame_User $user)
     {
         return $this->_checkPerms($user, 4);
     }
@@ -333,12 +333,12 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Can user write this object?
      *
-     * @param PHPFrame_user $user Instance of {@link PHPFrame_User}.
+     * @param PHPFrame_User $user Instance of {@link PHPFrame_User}.
      *
      * @return bool
      * @since  1.0
      */
-    public function canWrite(PHPFrame_user $user)
+    public function canWrite(PHPFrame_User $user)
     {
         return $this->_checkPerms($user, 6);
     }
@@ -524,14 +524,14 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Check permissions
      *
-     * @param PHPFrame_user $user         Reference to the user object we want
+     * @param PHPFrame_User $user         Reference to the user object we want
      *                                    to check permissions for.
      * @param int           $access_level The access level we want to check.
      *
      * @return bool
      * @since  1.0
      */
-    private function _checkPerms(PHPFrame_user $user, $access_level)
+    private function _checkPerms(PHPFrame_User $user, $access_level)
     {
         preg_match('/^(\d)(\d)(\d)$/', $this->perms(), $matches);
         $owner_access = $matches[1];

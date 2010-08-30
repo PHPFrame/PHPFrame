@@ -321,6 +321,7 @@ class PHPFrame_Application extends PHPFrame_Observer
     protected function doUpdate(PHPFrame_Subject $subject)
     {
         $response = $this->response();
+        $request  = $this->request();
 
         if ($subject instanceof PHPFrame_ExceptionHandler) {
             $exception = $subject->lastException();
@@ -330,13 +331,14 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $code = 500;
             }
 
-            if (!$this->request()->param("suppress_response_codes")) {
+            if (!$request->param("suppress_response_codes")) {
                 $response->statusCode($code);
             } else {
                 $response->statusCode(200);
             }
 
-            if (!$this->request()->ajax()) {
+            $format = $request->param("format");
+            if (!$request->ajax() && $format != "json" && $format != "php") {
                 $response->title("Oooops... an error occurred");
             }
 

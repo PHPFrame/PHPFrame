@@ -27,7 +27,7 @@
  *
  * <code>
  * // Create a new user object (this object extends Persistent Object)
- * $user = new PHPFrame_User(array("username"=>"lupo"));
+ * $user = new PHPFrame_User(array("email"=>"lupo@e-noise.com"));
  * // Print the user oject as an array
  * print_r(iterator_to_array($user));
  * </code>
@@ -37,10 +37,9 @@
  * <pre>
  * Array
  * (
- *  [groupid] => 0
- *  [username] => lupo
+ *  [group_id] => 0
+ *  [email] => lupo@e-noise.com
  *  [password] =>
- *  [email] =>
  *  [block] =>
  *  [last_visit] =>
  *  [params] => a:0:{}
@@ -86,11 +85,22 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     private $_clean_state;
 
     /**
-     * Constructor
+     * Constructor. All options are optional when creating new objects. IDs are
+     * automatically generated when saving the objects using a mapper object
+     * (see {@link PHPFrame_Mapper}).
      *
      * @param array $options An associative array containing keys with the
      *                       field names and values used for this fields when
      *                       constructing the object.
+     *                       Option keys:
+     *                       - id (int) The object ID. Omit this option when
+     *                         creating new objects. A new ID will be generated
+     *                         after saving the object using a mapper object.
+     *                       - ctime (int) The created time (UNIX timestamp).
+     *                       - mtime (int) The modified time (UNIX timestamp).
+     *                       - owner (int) The user ID of the object's owner
+     *                       - group (int) The group ID associated with the object.
+     *                       - perms (int) The permissions settings (UNIX style)
      *
      * @return void
      * @since  1.0
@@ -320,12 +330,12 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Can user read this object?
      *
-     * @param PHPFrame_user $user Instance of {@link PHPFrame_User}.
+     * @param PHPFrame_User $user Instance of {@link PHPFrame_User}.
      *
      * @return bool
      * @since  1.0
      */
-    public function canRead(PHPFrame_user $user)
+    public function canRead(PHPFrame_User $user)
     {
         return $this->_checkPerms($user, 4);
     }
@@ -333,12 +343,12 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Can user write this object?
      *
-     * @param PHPFrame_user $user Instance of {@link PHPFrame_User}.
+     * @param PHPFrame_User $user Instance of {@link PHPFrame_User}.
      *
      * @return bool
      * @since  1.0
      */
-    public function canWrite(PHPFrame_user $user)
+    public function canWrite(PHPFrame_User $user)
     {
         return $this->_checkPerms($user, 6);
     }
@@ -524,14 +534,14 @@ abstract class PHPFrame_PersistentObject extends PHPFrame_Object
     /**
      * Check permissions
      *
-     * @param PHPFrame_user $user         Reference to the user object we want
+     * @param PHPFrame_User $user         Reference to the user object we want
      *                                    to check permissions for.
      * @param int           $access_level The access level we want to check.
      *
      * @return bool
      * @since  1.0
      */
-    private function _checkPerms(PHPFrame_user $user, $access_level)
+    private function _checkPerms(PHPFrame_User $user, $access_level)
     {
         preg_match('/^(\d)(\d)(\d)$/', $this->perms(), $matches);
         $owner_access = $matches[1];

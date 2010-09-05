@@ -118,19 +118,28 @@ class PHPFrame_Mapper
     /**
      * Persist persistent object
      *
-     * @param PHPFrame_PersistentObject $obj The persistent object we want to
-     *                                       store with the mapper.
+     * @param PHPFrame_PersistentObject $obj        The persistent object we
+     *                                              want to store with the
+     *                                              mapper.
+     * @param bool                      $mark_clean [Optional] Default value is
+     *                                              TRUE.
      *
      * @return void
      * @since  1.0
      */
-    public function insert(PHPFrame_PersistentObject $obj)
+    public function insert(PHPFrame_PersistentObject $obj, $mark_clean=true)
     {
         if (!$obj->isDirty()) {
             return;
         }
 
-        return $this->_factory->getAssembler()->insert($obj);
+        $obj->validateAll();
+
+        $this->_factory->getAssembler()->insert($obj);
+
+        if ($mark_clean) {
+            $obj->markClean();
+        }
     }
 
     /**

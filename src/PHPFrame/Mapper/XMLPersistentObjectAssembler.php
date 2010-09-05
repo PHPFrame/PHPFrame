@@ -134,8 +134,6 @@ class PHPFrame_XMLPersistentObjectAssembler
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
-        $obj->validateAll();
-
         // Get current collection
         $collection = $this->find();
 
@@ -163,8 +161,6 @@ class PHPFrame_XMLPersistentObjectAssembler
         // Open the file in "write" mode
         $file_obj = $this->_getFileInfo()->openFile("w");
         $file_obj->fwrite($this->_serializeCollection($collection));
-
-        $obj->markClean();
     }
 
     /**

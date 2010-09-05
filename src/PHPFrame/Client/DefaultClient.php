@@ -68,12 +68,13 @@ class PHPFrame_DefaultClient extends PHPFrame_Client
             }
         }
 
-        if (function_exists('apache_request_headers')){
-        	$apache_headers = apache_request_headers();
-        	foreach ($apache_headers as $key=>$value){
-        		$request->header($key, $value);
-        	}
+        if (function_exists('apache_request_headers')) {
+            $apache_headers = apache_request_headers();
+            foreach ($apache_headers as $key=>$value) {
+                $request->header($key, $value);
+            }
         }
+
         foreach ($_SERVER as $key=>$value) {
             if (substr($key, 0, 5) == "HTTP_") {
                 $key = str_replace('_', ' ', substr($key, 5));

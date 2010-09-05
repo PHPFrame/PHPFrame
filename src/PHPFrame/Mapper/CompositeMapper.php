@@ -269,17 +269,17 @@ class PHPFrame_CompositeMapper extends PHPFrame_Mapper
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
-        parent::insert($obj);
+        parent::insert($obj, false);
 
         foreach ($this->_nested_mappers as $array) {
             $getter = $array[0];
-            foreach ($obj->$getter() as $child) {
-                $prop_name_parts  = explode("_", $array[2]);
-                $parent_id_method = strtolower($prop_name_parts[0]);
-                for ($i=1; $i<count($prop_name_parts); $i++) {
-                    $parent_id_method .= ucfirst(strtolower($prop_name_parts[$i]));
-                }
+            $prop_name_parts  = explode("_", $array[2]);
+            $parent_id_method = strtolower($prop_name_parts[0]);
+            for ($i=1; $i<count($prop_name_parts); $i++) {
+                $parent_id_method .= ucfirst(strtolower($prop_name_parts[$i]));
+            }
 
+            foreach ($obj->$getter() as $child) {
                 $child->$parent_id_method($obj->id());
 
                 $child->owner($obj->owner());
@@ -289,6 +289,8 @@ class PHPFrame_CompositeMapper extends PHPFrame_Mapper
                 $array[1]->insert($child);
             }
         }
+
+        $obj->markClean();
     }
 
     /**

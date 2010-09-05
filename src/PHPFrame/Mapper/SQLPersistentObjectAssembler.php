@@ -135,12 +135,6 @@ class PHPFrame_SQLPersistentObjectAssembler
      */
     public function insert(PHPFrame_PersistentObject $obj)
     {
-        if (!$obj->isDirty()) {
-            return;
-        }
-
-        $obj->validateAll();
-
         if ($obj->id() <= 0) {
             $obj->ctime(time());
             $build_query_method = "buildInsertQuery";
@@ -165,8 +159,6 @@ class PHPFrame_SQLPersistentObjectAssembler
         if ($obj->id() <= 0) {
             $obj->id($db->lastInsertId());
         }
-
-        $obj->markClean();
     }
 
     /**

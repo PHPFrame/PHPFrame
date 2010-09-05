@@ -337,8 +337,8 @@ class PHPFrame_Application extends PHPFrame_Observer
                 $response->statusCode(200);
             }
 
-            $format = $request->param("format");
-            if (!$request->ajax() && $format != "json" && $format != "php") {
+            $content_type = $response->header("Content-Type");
+            if (!$request->ajax() && $content_type != "application/json") {
                 $response->title("Oooops... an error occurred");
             }
 

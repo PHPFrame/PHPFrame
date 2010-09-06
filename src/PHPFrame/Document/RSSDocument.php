@@ -336,13 +336,26 @@ class PHPFrame_RSSDocument extends PHPFrame_Document
         $this->link($xml->channel->link);
         $this->description($xml->channel->description);
 
+        if (array_key_exists("a10", $xml->getDocNamespaces())) {
+            $atom_ns = true;
+        } else {
+            $atom_ns = false;
+        }
+
         if (count($xml->channel->item)) {
             foreach ($xml->channel->item as $item) {
+                if ($atom_ns) {
+                    $a10_updated = @$item->xpath("a10:updated");
+                    $pub_date = $a10_updated[0];
+                } else {
+                    $pub_date = $item->pubDate;
+                }
+
                 $this->addItem(
                     $item->title,
                     $item->link,
                     $item->description,
-                    $item->pubDate,
+                    $pub_date,
                     $item->author
                 );
             }

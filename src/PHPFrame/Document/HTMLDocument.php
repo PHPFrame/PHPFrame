@@ -155,7 +155,14 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
                 unset($script_attr["type"]);
             }
 
-            $this->addNode("script", $head_node, $script_attr, "//");
+            $in_head = $script_attr["in_head"];
+            unset($script_attr["in_head"]);
+            if ($in_head) {
+                $this->addNode("script", $head_node, $script_attr, "//");
+            } else {
+                $body_node = $this->dom()->getElementsByTagName("body")->item(0);
+                $this->addNode("script", $body_node, $script_attr, "//");
+            }
         }
 
         // Render dom using parent's __toString() method
@@ -292,19 +299,23 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      *
      * It takes both relative and absolute values.
      *
-     * @param string $src  The relative or absolute URL to the script source.
-     * @param string $type The script type. Default is text/javascript.
+     * @param string $src     The relative or absolute URL to the script source.
+     * @param string $type    The script type. Default is text/javascript.
+     * @param bool   $in_head [Optional] Bool indicating whether script should
+     *                        be added in the head node or at the end of the
+     *                        body. Default value is TRUE.
      *
      * @return void
      * @since  1.0
      * @todo   This method should check whether the script has already been
      *         added to avoid loading the same script twice.
      */
-    public function addScript($src, $type="text/javascript")
+    public function addScript($src, $type="text/javascript", $in_head=true)
     {
         $this->_scripts[] = array(
-            "src"  => (string) $src,
-            "type" => (string) $type
+            "src"     => (string) $src,
+            "type"    => (string) $type,
+            "in_head" => (bool) $in_head
         );
     }
 

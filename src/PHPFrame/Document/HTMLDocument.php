@@ -385,9 +385,6 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // clean output buffer
         ob_end_clean();
 
-        // Add theme stylesheets last
-        $this->addStyleSheet($theme_url."/css/styles.css");
-
         $this->body($str);
     }
 

@@ -153,9 +153,7 @@ class PHPFrame_Request implements IteratorAggregate
      * Get/set a request variable
      *
      * @param string $key   The param key.
-     * @param mixed  $value [Optional] If provided and no value has been set
-     *                      for the given key yet it wil be set to this
-     *                      value.
+     * @param mixed  $value [Optional]
      *
      * @return mixed
      * @since  1.0
@@ -164,7 +162,7 @@ class PHPFrame_Request implements IteratorAggregate
     {
         $key = trim((string) $key);
 
-        if (!isset($this->_array['params'][$key]) && !is_null($value)) {
+        if (!is_null($value)) {
             $this->_array['params'][$key] = $value;
         }
 

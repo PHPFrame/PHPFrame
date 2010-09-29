@@ -29,12 +29,14 @@ class PHPFrame_SQLMapperTest extends PHPUnit_Framework_TestCase
         ));
 
         // Get db object
-        $db  = PHPFrame_Database::getInstance("sqlite:".$this->_db_file);
+        $db = PHPFrame_Database::getInstance("sqlite:".$this->_db_file);
 
         // Drop the table if it exists
         if ($db->hasTable($this->_target_class)) {
             $db->dropTable($this->_target_class);
         }
+
+        $db->connect();
 
         // Create db table
         $or_toolbox = new PHPFrame_ObjectRelationalToolbox();

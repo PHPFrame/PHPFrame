@@ -435,10 +435,13 @@ abstract class PHPFrame_ActionController extends PHPFrame_Subject
                 $default_value = null;
             }
 
-            $request_param = $this->app()->request()->param(
-                $param->getName(),
-                $default_value
-            );
+            $request_param = $this->app()->request()->param($param->getName());
+            if (is_null($request_param)){
+	            $request_param = $this->app()->request()->param(
+	                $param->getName(),
+	                $default_value
+	            );
+            }
 
             // Check that required parameters are included in request
             if (!$param->isDefaultValueAvailable()) {

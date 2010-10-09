@@ -96,7 +96,7 @@ class PHPFrame_ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 
     public function test_observer()
     {
-        $tmp_log_file = PHPFrame_Filesystem::getSystemTempDir()."PHPFrame_ExceptionHandlerTest.log";
+        $tmp_log_file = PHPFrame_Filesystem::getSystemTempDir().DS."PHPFrame_ExceptionHandlerTest.log";
         $this->_handler->attach(new PHPFrame_TextLogger($tmp_log_file));
 
         ob_start();

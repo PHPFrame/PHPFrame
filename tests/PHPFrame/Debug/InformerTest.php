@@ -48,7 +48,7 @@ class PHPFrame_InformerTest extends PHPUnit_Framework_TestCase
             "tmp_dir"     => $tmp_dir
         ));
 
-        $subject = $this->getMock("PHPFrame_ActionController", null, array($app, "index"));
+        $subject = new ManController($app);
         $subject->attach($informer);
         $subject->notifyEvent("Some event just happened...", 1);
 

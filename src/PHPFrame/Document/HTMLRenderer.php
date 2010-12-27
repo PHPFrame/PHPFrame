@@ -159,9 +159,10 @@ class PHPFrame_HTMLRenderer extends PHPFrame_Renderer
         $tmpl_path = $this->_views_path.DS."error.php";
 
         if (is_file($tmpl_path)) {
+            $error = $this->exceptionToArray($e);
             $view = new PHPFrame_View(
                 "error",
-                array("error" => $this->exceptionToArray($e))
+                array("error" => $error["error"])
             );
 
             return $this->renderView($view);

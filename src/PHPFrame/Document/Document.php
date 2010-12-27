@@ -43,7 +43,7 @@ abstract class PHPFrame_Document implements IteratorAggregate
      *
      * @var string
      */
-    private $_charset = "UTF-8";
+    private $_charset = "utf-8";
     /**
      * The document title
      *

@@ -20,7 +20,7 @@ class PHPFrame_XMLDocumentTest extends PHPUnit_Framework_TestCase
 
     public function test_charset()
     {
-        $this->assertEquals("UTF-8", $this->_document->charset());
+        $this->assertEquals("utf-8", $this->_document->charset());
     }
 
     public function test_mime()

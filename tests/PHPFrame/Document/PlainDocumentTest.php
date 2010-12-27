@@ -27,7 +27,7 @@ class PHPFrame_PlainDocumentTest extends PHPUnit_Framework_TestCase
 
     public function test_charset()
     {
-        $this->assertEquals("UTF-8", $this->_document->charset());
+        $this->assertEquals("utf-8", $this->_document->charset());
     }
 
     public function test_mime()
@@ -118,7 +118,7 @@ class PHPFrame_PlainDocumentTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("title", $array);
         $this->assertArrayHasKey("body", $array);
         $this->assertEquals("text/plain", $array["mime_type"]);
-        $this->assertEquals("UTF-8", $array["charset"]);
+        $this->assertEquals("utf-8", $array["charset"]);
         $this->assertEquals($title, $array["title"]);
         $this->assertEquals($body, $array["body"]);
     }

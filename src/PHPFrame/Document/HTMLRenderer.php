@@ -156,6 +156,17 @@ class PHPFrame_HTMLRenderer extends PHPFrame_Renderer
      */
     public function renderException(Exception $e)
     {
+        $tmpl_path = $this->_views_path.DS."error.php";
+
+        if (is_file($tmpl_path)) {
+            $view = new PHPFrame_View(
+                "error",
+                array("error" => $this->exceptionToArray($e))
+            );
+
+            return $this->renderView($view);
+        }
+
         $str  = "<pre>\n";
         $str .= "Uncaught ".get_class($e).": ";
         $str .= $e->getMessage()."\n";

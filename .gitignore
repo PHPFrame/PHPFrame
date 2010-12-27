@@ -3,4 +3,5 @@
 .gitignore
 var/
 tmp/
-
+tests/PHPFrame/Mapper/test.sqlite
+data/CLI_Tool/etc/plugins.xml

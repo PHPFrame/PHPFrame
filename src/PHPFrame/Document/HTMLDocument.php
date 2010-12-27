@@ -178,13 +178,27 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
             // and print the doctype separately
             $doctype = substr($str, 0, strpos($str, "\n"));
             $html    = substr($str, strpos($str, "\n")+1);
-
-            $beautifier = new XML_Beautifier();
+            $options = array(
+               "removeLineBreaks"   => true,
+               "removeLeadingSpace" => true,       // not implemented, yet
+               "indent"             => "  ",
+               "linebreak"          => "\n",
+               "caseFolding"        => false,
+               "caseFoldingTo"      => "lowercase",
+               "normalizeComments"  => false,
+               "maxCommentLine"     => -1,
+               "multilineTags"      => false
+            );
+            $beautifier = new XML_Beautifier($options);
             $html       = $beautifier->formatString($html);
             $html       = $doctype."\n".$html;
         } else {
             $this->dom()->formatOutput = true;
             $html = $this->dom()->saveHTML();
+        }
+
+        if ($this->isHTML5()) {
+            $html = $this->_ieConditionalStyles($html);
         }
 
         // Add body and return
@@ -468,5 +482,24 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
         // Add base url
         $uri = new PHPFrame_URI();
         $this->addNode("base", $head_node, array("href"=>$uri->getBase()));
+    }
+
+    /**
+     * Replace <html> tag with Paul Irish's IE conditional hack:
+     * paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+     *
+     * @param string $html The HTML document as a string.
+     *
+     * @return string
+     */
+    private function _ieConditionalStyles($html)
+    {
+        $replace = "<!--[if lt IE 7 ]> <html lang=\"en\" class=\"no-js ie6\"$1> <![endif]-->
+<!--[if IE 7 ]>    <html lang=\"en\" class=\"no-js ie7\"$1> <![endif]-->
+<!--[if IE 8 ]>    <html lang=\"en\" class=\"no-js ie8\"$1> <![endif]-->
+<!--[if IE 9 ]>    <html lang=\"en\" class=\"no-js ie9\"$1> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang=\"en\" class=\"no-js\"$1> <!--<![endif]-->";
+
+        return preg_replace("/<html(.*)>/", $replace, $html);
     }
 }

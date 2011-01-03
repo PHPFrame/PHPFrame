@@ -3,8 +3,5 @@
 .gitignore
 var/
 tmp/
-.buildpath
-.project
-.settings/
-PHPFrame.tmproj
-
+tests/PHPFrame/Mapper/test.sqlite
+data/CLI_Tool/etc/plugins.xml

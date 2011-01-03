@@ -20,7 +20,7 @@ Project resources
 
 * [Developers discussion group](http://groups.google.com/group/phpframe-dev)
 
-* [Continuous Integration Server](http://ci.phpframe.org:8080/cruisecontrol)
+* [Continuous Integration Server](http://ci.phpframe.org:8081/cruisecontrol)
 
 
 Dependencies

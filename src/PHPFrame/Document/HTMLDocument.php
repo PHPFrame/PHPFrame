@@ -494,12 +494,28 @@ class PHPFrame_HTMLDocument extends PHPFrame_XMLDocument
      */
     private function _ieConditionalStyles($html)
     {
-        $replace = "<!--[if lt IE 7 ]> <html lang=\"en\" class=\"no-js ie6\"$1> <![endif]-->
-<!--[if IE 7 ]>    <html lang=\"en\" class=\"no-js ie7\"$1> <![endif]-->
-<!--[if IE 8 ]>    <html lang=\"en\" class=\"no-js ie8\"$1> <![endif]-->
-<!--[if IE 9 ]>    <html lang=\"en\" class=\"no-js ie9\"$1> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang=\"en\" class=\"no-js\"$1> <!--<![endif]-->";
+        preg_match("/<html(\b[^>]*)>/", $html, $matches);
+        $html_node = $matches[1];
+        preg_match_all("/([a-zA-Z]+)=\"([^\"]+)\"/", $html_node, $matches);
 
-        return preg_replace("/<html(.*)>/", $replace, $html);
+        $original_class_attr = "";
+        $class = "";
+        $other_attr = "";
+        for ($i=0; $i<count($matches[1]); $i++) {
+            if ($matches[1][$i] == "class") {
+                $class = $matches[2][$i]." ";
+                $original_class_attr = "class=\"".$matches[2][$i]."\"";
+            } else {
+                $other_attr .= " ".$matches[1][$i]."=\"".$matches[2][$i]."\"";
+            }
+        }
+
+        $replace = "<!--[if lt IE 7 ]> <html class=\"".$class."ie6\"".$other_attr."> <![endif]-->
+<!--[if IE 7 ]>    <html class=\"".$class."ie7\"".$other_attr."> <![endif]-->
+<!--[if IE 8 ]>    <html class=\"".$class."ie8\"".$other_attr."> <![endif]-->
+<!--[if IE 9 ]>    <html class=\"".$class."ie9\"".$other_attr."> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html ".$original_class_attr.$other_attr."> <!--<![endif]-->";
+
+        return preg_replace("/<html\b[^>]*>/", $replace, $html);
     }
 }

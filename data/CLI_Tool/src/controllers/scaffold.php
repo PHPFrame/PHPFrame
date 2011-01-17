@@ -65,6 +65,7 @@ class ScaffoldController extends PHPFrame_ActionController
             $this->raiseError($msg);
             return;
         }
+        set_include_path(substr($path, strrpos($path, DIRECTORY_SEPARATOR)).PATH_SEPARATOR.get_include_path());
 
         if (is_null($install_dir)) {
             $install_dir = getcwd();

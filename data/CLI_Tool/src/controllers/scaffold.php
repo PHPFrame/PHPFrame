@@ -47,11 +47,14 @@ class ScaffoldController extends PHPFrame_ActionController
      *                            to true existing table will be dropped.
      * @param string $install_dir [Optional] Absolute path to the installation
      *                            directory of the app we are working with.
-     *
+     * @param bool	 $lcase		  [Optional] Default value is TRUE. Whether 
+     * 							  table name should be converted to lower case. 
+     * 							  If FALSE model class name upper case letters 
+     * 							  will be preserved.
      * @return void
      * @since  1.0
      */
-    public function table($path, $drop=false, $install_dir=null)
+    public function table($path, $drop=false, $install_dir=null, $lcase=true)
     {
         $path = trim((string) $path);
 
@@ -65,6 +68,16 @@ class ScaffoldController extends PHPFrame_ActionController
             $this->raiseError($msg);
             return;
         }
+        
+        //initialise possible paths from models directory
+        $model_paths = array();
+        $init_p = substr($path, 0, 
+            strpos($path, DS.'models')+7);
+        $this->_initModelPaths($init_p, $model_paths);
+        //store model paths in tmpl_path to be used by autoloader
+        $this->_tmpl_path = $model_paths;
+        //register custom autoload function to load external model classes
+        spl_autoload_register(array($this, 'autoload'));
 
         if (is_null($install_dir)) {
             $install_dir = getcwd();
@@ -72,7 +85,8 @@ class ScaffoldController extends PHPFrame_ActionController
 
         $class_file = file_get_contents($path);
 
-        preg_match("/class\s+(\w+)\s+extends\s+\w+\s+{/", $class_file, $matches);
+        $ptrn = "/class\s+(\w+)\s+extends\s+\w+(?:\s+implements\s+\w+?)?\s*{/";
+        preg_match($ptrn, $class_file, $matches);
 
         if (!isset($matches[1])) {
             $msg  = "Could not find any classes that could extend ";
@@ -112,6 +126,9 @@ class ScaffoldController extends PHPFrame_ActionController
         $or_toolbox = new PHPFrame_ObjectRelationalToolbox();
 
         $table_name = get_class($obj);
+        if ($lcase) {
+            $table_name = strtolower($table_name); 
+        }
 
         if (isset($options["prefix"]) && !empty($options["prefix"])) {
             $table_name = $options["prefix"].$table_name;
@@ -283,5 +300,36 @@ class ScaffoldController extends PHPFrame_ActionController
         file_put_contents($file, $class);
 
         $this->notifySuccess("Class file created: ".$file);
+    }
+    
+    function autoload($class_name)
+    {
+        if (is_array($this->_tmpl_path)){
+            foreach ($this->_tmpl_path as $path){
+                $class_file = $path.DS.$class_name.'.php';
+                if (is_file($class_file)){
+                    include $class_file;
+                    break;
+                }
+            }
+        }
+    }
+    
+    private function _initModelPaths($path, array &$model_paths)
+    {
+        if (is_dir($path)){
+            $model_paths[] = $path;
+            if ($dh = opendir($path)){
+                while (($file = readdir($dh)) !== false){
+                    if ($file == '.' || $file == '..')
+                        continue;
+                    $sub = $DS.$file;
+                    if (is_dir($sub)){
+                        $this->_initModelPaths($sub, $model_paths);
+                    }
+                }
+                closedir($dh);
+            }
+        }
     }
 }

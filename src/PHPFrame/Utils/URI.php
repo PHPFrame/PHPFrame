@@ -286,7 +286,12 @@ class PHPFrame_URI
             return "";
         }
 
-        $str .= $this->_filename.".".$this->_extension;
+        $str .= $this->_filename;
+
+        if ($this->_extension) {
+            $str .= ".".$this->_extension;
+        }
+
         if (is_array($this->_query) && count($this->_query) > 0) {
             $str .= "?";
             $i=0;

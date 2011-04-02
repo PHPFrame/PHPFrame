@@ -20,17 +20,17 @@ class PHPFrame_RequestTest extends PHPUnit_Framework_TestCase
 
     public function test_toString()
     {
-        $this->assertType("string", (string) $this->_request);
+        $this->assertInternalType("string", (string) $this->_request);
     }
 
     public function test_getIterator()
     {
-        $this->assertType("array", iterator_to_array($this->_request));
+        $this->assertInternalType("array", iterator_to_array($this->_request));
     }
 
     public function test_controllerName()
     {
-        $this->assertType("string", $this->_request->controllerName("index"));
+        $this->assertInternalType("string", $this->_request->controllerName("index"));
         $this->assertEquals("index", $this->_request->controllerName());
     }
 
@@ -38,43 +38,43 @@ class PHPFrame_RequestTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException("InvalidArgumentException");
 
-        $this->assertType("string", $this->_request->controllerName("indexJJ"));
+        $this->assertInternalType("string", $this->_request->controllerName("indexJJ"));
     }
 
     public function test_action()
     {
-        $this->assertType("string", $this->_request->action("index"));
+        $this->assertInternalType("string", $this->_request->action("index"));
         $this->assertEquals("index", $this->_request->action());
     }
 
     public function test_params()
     {
-        $this->assertType("array", $this->_request->params());
+        $this->assertInternalType("array", $this->_request->params());
     }
 
     public function test_param()
     {
         $this->assertNull($this->_request->param("aaaaaa"));
-        $this->assertType("string", $this->_request->param("myvar", "some value"));
+        $this->assertInternalType("string", $this->_request->param("myvar", "some value"));
         $this->assertEquals("some value", $this->_request->param("myvar"));
     }
 
     public function test_headers()
     {
-        $this->assertType("array", $this->_request->headers());
+        $this->assertInternalType("array", $this->_request->headers());
     }
 
     public function test_header()
     {
         $this->assertNull($this->_request->header("aaaaaa"));
-        $this->assertType("string", $this->_request->header("Status", 200));
+        $this->assertInternalType("string", $this->_request->header("Status", 200));
         $this->assertEquals("200", $this->_request->header("Status"));
         $this->assertArrayHasKey("Status", $this->_request->headers());
     }
 
     public function test_method()
     {
-        $this->assertType("string", $this->_request->method("CLI"));
+        $this->assertInternalType("string", $this->_request->method("CLI"));
         $this->assertEquals("CLI", $this->_request->method());
     }
 
@@ -103,10 +103,10 @@ class PHPFrame_RequestTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertType("array", $this->_request->file("myfile"));
+        $this->assertInternalType("array", $this->_request->file("myfile"));
         $this->assertTrue(count($this->_request->file("myfile")) == 5);
 
-        $this->assertType("array", $this->_request->files());
+        $this->assertInternalType("array", $this->_request->files());
         $this->assertTrue(count($this->_request->files()) == 1);
     }
 

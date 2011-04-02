@@ -63,12 +63,12 @@ class PHPFrame_SyseventsTest extends PHPUnit_Framework_TestCase
 
         $array = iterator_to_array($this->_sysevents);
 
-        $this->assertType("array", $array);
+        $this->assertInternalType("array", $array);
         $this->assertTrue(count($array) == 2);
-        $this->assertType("array", $array[0]);
+        $this->assertInternalType("array", $array[0]);
         $this->assertEquals("Another message...", $array[0][0]);
         $this->assertEquals(PHPFrame_Subject::EVENT_TYPE_INFO, $array[0][1]);
-        $this->assertType("array", $array[1]);
+        $this->assertInternalType("array", $array[1]);
         $this->assertEquals("Some message...", $array[1][0]);
         $this->assertEquals(PHPFrame_Subject::EVENT_TYPE_ERROR, $array[1][1]);
     }

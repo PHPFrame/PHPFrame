@@ -34,7 +34,7 @@ class PHPFrame_ObjectTest extends PHPUnit_Framework_TestCase
 
     public function test_getReflector()
     {
-        $this->assertType("ReflectionClass", $this->_obj->getReflector());
+        $this->assertInstanceOf("ReflectionClass", $this->_obj->getReflector());
     }
 
     public function test_enforceArguments()

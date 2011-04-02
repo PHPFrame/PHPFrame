@@ -25,13 +25,13 @@ class PHPFrame_ResponseTest extends PHPUnit_Framework_TestCase
             new PHPFrame_XMLRenderer()
         );
 
-        $this->assertType("PHPFrame_XMLDocument", $response->document());
-        $this->assertType("PHPFrame_XMLRenderer", $response->renderer());
+        $this->assertInstanceOf("PHPFrame_XMLDocument", $response->document());
+        $this->assertInstanceOf("PHPFrame_XMLRenderer", $response->renderer());
     }
 
     public function test_toString()
     {
-        $this->assertType("string", $this->_response->__toString());
+        $this->assertInternalType("string", $this->_response->__toString());
     }
 
     public function test_statusCode()
@@ -59,7 +59,7 @@ class PHPFrame_ResponseTest extends PHPUnit_Framework_TestCase
         // Check the response headers
         $headers = $this->_response->headers();
 
-        $this->assertType("array", $headers);
+        $this->assertInternalType("array", $headers);
         $this->assertArrayHasKey("X-Powered-By", $headers);
         $this->assertArrayHasKey("Expires", $headers);
         $this->assertArrayHasKey("Cache-Control", $headers);
@@ -90,36 +90,36 @@ class PHPFrame_ResponseTest extends PHPUnit_Framework_TestCase
 
     public function test_documentGet()
     {
-        $this->assertType("PHPFrame_Document", $this->_response->document());
+        $this->assertInstanceOf("PHPFrame_Document", $this->_response->document());
     }
 
     public function test_documentSet()
     {
         $this->_response->document(new PHPFrame_PlainDocument());
-        $this->assertType("PHPFrame_PlainDocument", $this->_response->document());
+        $this->assertInstanceOf("PHPFrame_PlainDocument", $this->_response->document());
 
         $this->_response->document(new PHPFrame_HTMLDocument());
-        $this->assertType("PHPFrame_HTMLDocument", $this->_response->document());
+        $this->assertInstanceOf("PHPFrame_HTMLDocument", $this->_response->document());
 
         $this->_response->document(new PHPFrame_PlainDocument());
-        $this->assertType("PHPFrame_PlainDocument", $this->_response->document());
+        $this->assertInstanceOf("PHPFrame_PlainDocument", $this->_response->document());
     }
 
     public function test_rendererGet()
     {
-        $this->assertType("PHPFrame_Renderer", $this->_response->renderer());
+        $this->assertInstanceOf("PHPFrame_Renderer", $this->_response->renderer());
     }
 
     public function test_rendererSet()
     {
         $this->_response->renderer(new PHPFrame_PlainRenderer());
-        $this->assertType("PHPFrame_PlainRenderer", $this->_response->renderer());
+        $this->assertInstanceOf("PHPFrame_PlainRenderer", $this->_response->renderer());
 
         $this->_response->renderer(new PHPFrame_HTMLRenderer("somepath"));
-        $this->assertType("PHPFrame_HTMLRenderer", $this->_response->renderer());
+        $this->assertInstanceOf("PHPFrame_HTMLRenderer", $this->_response->renderer());
 
         $this->_response->renderer(new PHPFrame_PlainRenderer());
-        $this->assertType("PHPFrame_PlainRenderer", $this->_response->renderer());
+        $this->assertInstanceOf("PHPFrame_PlainRenderer", $this->_response->renderer());
     }
 
     public function test_body()

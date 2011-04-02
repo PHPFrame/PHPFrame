@@ -20,7 +20,7 @@ class PHPFrame_DefaultClientTest extends PHPUnit_Framework_TestCase
 
     public function test_detect()
     {
-        $this->assertType("PHPFrame_DefaultClient", PHPFrame_DefaultClient::detect());
+        $this->assertInstanceOf("PHPFrame_DefaultClient", PHPFrame_DefaultClient::detect());
     }
 
     public function test_detectFailure()
@@ -32,7 +32,7 @@ class PHPFrame_DefaultClientTest extends PHPUnit_Framework_TestCase
     {
         $request = new PHPFrame_Request();
 
-        $this->assertType("array", $request->params());
+        $this->assertInternalType("array", $request->params());
         $this->assertEquals(0, count($request->params()));
 
         $script_name = $request->scriptName();
@@ -56,12 +56,12 @@ class PHPFrame_DefaultClientTest extends PHPUnit_Framework_TestCase
         $this->_client->populateRequest($request);
 
        // Now check that we got some values
-       $this->assertType("array", $request->params());
+       $this->assertInternalType("array", $request->params());
        $this->assertEquals(1, count($request->params()));
 
        $script_name = $request->scriptName();
        $this->assertTrue(!empty($script_name));
-       $this->assertType("int", $request->requestTime());
+       $this->assertInternalType("int", $request->requestTime());
 
        // Reset php superglobals used for test
        $_REQUEST = array();
@@ -79,13 +79,13 @@ class PHPFrame_DefaultClientTest extends PHPUnit_Framework_TestCase
         $response->document(new PHPFrame_XMLDocument());
         $response->renderer(new PHPFrame_XMLRenderer());
 
-        $this->assertType("PHPFrame_XMLDocument", $response->document());
-        $this->assertType("PHPFrame_XMLRenderer", $response->renderer());
+        $this->assertInstanceOf("PHPFrame_XMLDocument", $response->document());
+        $this->assertInstanceOf("PHPFrame_XMLRenderer", $response->renderer());
 
         $this->_client->prepareResponse($response, "");
 
-        $this->assertType("PHPFrame_HTMLDocument", $response->document());
-        $this->assertType("PHPFrame_HTMLRenderer", $response->renderer());
+        $this->assertInstanceOf("PHPFrame_HTMLDocument", $response->document());
+        $this->assertInstanceOf("PHPFrame_HTMLRenderer", $response->renderer());
     }
 
     public function test_redirect()

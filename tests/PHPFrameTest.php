@@ -47,12 +47,12 @@ class PHPFrameTest extends PHPUnit_Framework_TestCase
         //         $this->assertType("PHPFrame_SessionRegistry", PHPFrame::getSession());
 
         $this->assertTrue(PHPFrame::testMode(true));
-        $this->assertType("PHPFrame_MockSessionRegistry", PHPFrame::getSession());
+        $this->assertInstanceOf("PHPFrame_MockSessionRegistry", PHPFrame::getSession());
     }
 
     public function test_version()
     {
-        $this->assertType("string", PHPFrame::version());
+        $this->assertInternalType("string", PHPFrame::version());
     }
 
     public function test_setDataDirFailure()

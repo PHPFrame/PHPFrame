@@ -22,14 +22,14 @@ class PHPFrame_XMLRPCClientTest extends PHPUnit_Framework_TestCase
     {
         $serialised = serialize($this->_client);
         $unserialised = unserialize($serialised);
-        $this->assertType("PHPFrame_XMLRPCClient", $unserialised);
+        $this->assertInstanceOf("PHPFrame_XMLRPCClient", $unserialised);
     }
 
     public function test_populateRequest()
     {
         $request = new PHPFrame_Request();
 
-        $this->assertType("array", $request->params());
+        $this->assertInternalType("array", $request->params());
         $this->assertEquals(0, count($request->params()));
 
         $script_name = $request->scriptName();
@@ -75,7 +75,7 @@ class PHPFrame_XMLRPCClientTest extends PHPUnit_Framework_TestCase
         // Now check that we got some values
         $this->assertEquals("app", $request->controllerName());
         $this->assertEquals("create", $request->action());
-        $this->assertType("int", $request->requestTime());
+        $this->assertInternalType("int", $request->requestTime());
 
         unset($_SERVER["REQUEST_METHOD"]);
         unset($_SERVER["REMOTE_ADDR"]);
@@ -91,13 +91,13 @@ class PHPFrame_XMLRPCClientTest extends PHPUnit_Framework_TestCase
         $response->document(new PHPFrame_PlainDocument());
         $response->renderer(new PHPFrame_PlainRenderer());
 
-        $this->assertType("PHPFrame_PlainDocument", $response->document());
-        $this->assertType("PHPFrame_PlainRenderer", $response->renderer());
+        $this->assertInstanceOf("PHPFrame_PlainDocument", $response->document());
+        $this->assertInstanceOf("PHPFrame_PlainRenderer", $response->renderer());
 
         $this->_client->prepareResponse($response, "");
 
-        $this->assertType("PHPFrame_XMLDocument", $response->document());
-        $this->assertType("PHPFrame_RPCRenderer", $response->renderer());
+        $this->assertInstanceOf("PHPFrame_XMLDocument", $response->document());
+        $this->assertInstanceOf("PHPFrame_RPCRenderer", $response->renderer());
     }
 
     public function test_redirect()

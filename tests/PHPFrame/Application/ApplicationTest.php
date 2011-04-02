@@ -138,12 +138,12 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
 
     public function test_config()
     {
-        $this->assertType("PHPFrame_Config", $this->_app->config());
+        $this->assertInstanceOf("PHPFrame_Config", $this->_app->config());
     }
 
     public function test_registry()
     {
-        $this->assertType("PHPFrame_FileRegistry", $this->_app->registry());
+        $this->assertInstanceOf("PHPFrame_FileRegistry", $this->_app->registry());
     }
 
     public function test_mailer()
@@ -154,7 +154,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $mailer      = $this->_app->mailer();
         $smtp_config = $this->_app->config()->getSection("smtp");
 
-        $this->assertType("PHPFrame_Mailer", $mailer);
+        $this->assertInstanceOf("PHPFrame_Mailer", $mailer);
         $this->assertEquals($smtp_config["mailer"], $mailer->Mailer);
         $this->assertEquals($smtp_config["host"], $mailer->Host);
         $this->assertEquals($smtp_config["user"], $mailer->Username);
@@ -168,12 +168,12 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         // Make sure mailer is disabled in config
         $this->_app->config()->set("smtp.enable", false);
 
-        $this->assertType("null", $this->_app->mailer());
+        $this->assertInternalType("null", $this->_app->mailer());
     }
 
     public function test_logger()
     {
-        $this->assertType("PHPFrame_Logger", $this->_app->logger());
+        $this->assertInstanceOf("PHPFrame_Logger", $this->_app->logger());
     }
 
     public function test_informer()
@@ -182,7 +182,7 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->_app->config()->set("smtp.enable", true);
 
         $this->_app->config()->set("debug.informer_level", 1);
-        $this->assertType("PHPFrame_Informer", $this->_app->informer());
+        $this->assertInstanceOf("PHPFrame_Informer", $this->_app->informer());
     }
 
     public function test_getInformerMailerDisabled()
@@ -190,12 +190,12 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException("LogicException");
 
         $this->_app->config()->set("debug.informer_level", 1);
-        $this->assertType("PHPFrame_Informer", $this->_app->informer());
+        $this->assertInstanceOf("PHPFrame_Informer", $this->_app->informer());
     }
 
     public function test_crypt()
     {
-        $this->assertType("PHPFrame_Crypt", $this->_app->crypt());
+        $this->assertInstanceOf("PHPFrame_Crypt", $this->_app->crypt());
     }
 
     public function test_db()
@@ -204,35 +204,35 @@ class PHPFrame_ApplicationTest extends PHPUnit_Framework_TestCase
 
         $this->_app->config()->set("db.enable", true);
 
-        $this->assertType("PHPFrame_Database", $this->_app->db());
+        $this->assertInstanceOf("PHPFrame_Database", $this->_app->db());
 
         $this->_app->config()->set("db.enable", $db_enable);
     }
 
     public function test_libraries()
     {
-        $this->assertType("PHPFrame_Libraries", $this->_app->libraries());
+        $this->assertInstanceOf("PHPFrame_Libraries", $this->_app->libraries());
     }
 
     public function test_plugins()
     {
-        $this->assertType("PHPFrame_Plugins", $this->_app->plugins());
+        $this->assertInstanceOf("PHPFrame_Plugins", $this->_app->plugins());
     }
 
     public function test_request()
     {
-        //$this->assertType("PHPFrame_Request", $this->_app->request());
+        //$this->assertInstanceOf("PHPFrame_Request", $this->_app->request());
         //$this->assertEquals("CLI", $this->_app->request()->getMethod());
     }
 
     public function test_response()
     {
-        $this->assertType("PHPFrame_Response", $this->_app->response());
+        $this->assertInstanceOf("PHPFrame_Response", $this->_app->response());
 
         // Check the response headers for the sake of testing
         $headers = $this->_app->response()->headers();
 
-        $this->assertType("array", $headers);
+        $this->assertInternalType("array", $headers);
         $this->assertArrayHasKey("X-Powered-By", $headers);
         $this->assertArrayHasKey("Expires", $headers);
         $this->assertArrayHasKey("Cache-Control", $headers);

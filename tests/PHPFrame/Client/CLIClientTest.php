@@ -20,7 +20,7 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
 
     public function test_detect()
     {
-        $this->assertType("PHPFrame_CLIClient", PHPFrame_CLIClient::detect());
+        $this->assertInstanceOf("PHPFrame_CLIClient", PHPFrame_CLIClient::detect());
     }
 
     public function test_detectFailure()
@@ -42,7 +42,7 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
     {
         $request = new PHPFrame_Request();
 
-        $this->assertType("array", $request->params());
+        $this->assertInternalType("array", $request->params());
         $this->assertEquals(0, count($request->params()));
 
         $script_name = $request->scriptName();
@@ -67,13 +67,13 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
         $this->_client->populateRequest($request);
 
        // Now check that we got some values
-       $this->assertType("array", $request->params());
+       $this->assertInternalType("array", $request->params());
        $this->assertEquals(2, count($request->params()));
 
        $script_name = $request->scriptName();
        $this->assertTrue(!empty($script_name));
 
-       $this->assertType("int", $request->requestTime());
+       $this->assertInternalType("int", $request->requestTime());
 
        // restore the original value of $argv and $argc
        $argv = $argv_bk;
@@ -86,13 +86,13 @@ class PHPFrame_CLIClientTest extends PHPUnit_Framework_TestCase
         $response->document(new PHPFrame_XMLDocument());
         $response->renderer(new PHPFrame_XMLRenderer());
 
-        $this->assertType("PHPFrame_XMLDocument", $response->document());
-        $this->assertType("PHPFrame_XMLRenderer", $response->renderer());
+        $this->assertInstanceOf("PHPFrame_XMLDocument", $response->document());
+        $this->assertInstanceOf("PHPFrame_XMLRenderer", $response->renderer());
 
         $this->_client->prepareResponse($response, "");
 
-        $this->assertType("PHPFrame_PlainDocument", $response->document());
-        $this->assertType("PHPFrame_PlainRenderer", $response->renderer());
+        $this->assertInstanceOf("PHPFrame_PlainDocument", $response->document());
+        $this->assertInstanceOf("PHPFrame_PlainRenderer", $response->renderer());
 
     }
 

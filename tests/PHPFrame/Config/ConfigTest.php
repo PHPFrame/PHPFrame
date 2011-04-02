@@ -109,7 +109,7 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
     public function test_getSections()
     {
         $sections = $this->_config->getSections();
-        $this->assertType("array", $sections);
+        $this->assertInternalType("array", $sections);
 
         $this->assertContains("general", $sections);
         $this->assertContains("filesystem", $sections);
@@ -123,7 +123,7 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
     public function test_getSection()
     {
         $section = $this->_config->getSection("smtp");
-        $this->assertType("array", $section);
+        $this->assertInternalType("array", $section);
 
         $this->assertArrayHasKey("mailer", $section);
         $this->assertArrayHasKey("host", $section);
@@ -145,7 +145,7 @@ class PHPFrame_ConfigTest extends PHPUnit_Framework_TestCase
     public function test_getKeys()
     {
         $keys = $this->_config->getKeys();
-        $this->assertType("array", $keys);
+        $this->assertInternalType("array", $keys);
 
         $this->assertContains("app_name", $keys);
         $this->assertContains("version", $keys);

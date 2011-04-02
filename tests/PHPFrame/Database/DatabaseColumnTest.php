@@ -25,7 +25,7 @@ class PHPFrame_DatabaseColumnTest extends PHPUnit_Framework_TestCase
 
     public function test_()
     {
-        $this->assertType("PHPFrame_DatabaseColumn", $this->_column);
+        $this->assertInstanceOf("PHPFrame_DatabaseColumn", $this->_column);
         $this->assertEquals("id", $this->_column->getName());
         $this->assertEquals("int", $this->_column->getType());
         $this->assertEquals("PRI", $this->_column->getKey());
@@ -52,7 +52,7 @@ class PHPFrame_DatabaseColumnTest extends PHPUnit_Framework_TestCase
 
         $this->_column->setEnums(array(1,2,3));
 
-        $this->assertType("array", $this->_column->getEnums());
+        $this->assertInternalType("array", $this->_column->getEnums());
         $this->assertEquals(array(1,2,3), $this->_column->getEnums());
     }
 

@@ -62,8 +62,8 @@ class PHPFrame_MySQLDatabaseTest extends PHPUnit_Framework_TestCase
             $cols = $table->getColumns();
             $this->assertEquals(2, count($cols));
 
-            $this->assertType("PHPFrame_DatabaseColumn", $cols[0]);
-            $this->assertType("PHPFrame_DatabaseColumn", $cols[1]);
+            $this->assertInstanceOf("PHPFrame_DatabaseColumn", $cols[0]);
+            $this->assertInstanceOf("PHPFrame_DatabaseColumn", $cols[1]);
 
             $this->assertEquals("id", $cols[0]->getName());
             $this->assertEquals(PHPFrame_DatabaseColumn::TYPE_INT, $cols[0]->getType());

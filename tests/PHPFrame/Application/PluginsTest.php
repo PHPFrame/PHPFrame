@@ -53,14 +53,14 @@ class PHPFrame_PluginsTest extends PHPUnit_Framework_TestCase
     {
         $array = iterator_to_array($this->_plugins);
 
-        $this->assertType("array", $array);
+        $this->assertInternalType("array", $array);
         $this->assertTrue(count($array) == 1);
-        $this->assertType("PHPFrame_PluginInfo", $array[0]);
+        $this->assertInstanceOf("PHPFrame_PluginInfo", $array[0]);
     }
 
     public function test_getInfo()
     {
-        $this->assertType(
+        $this->assertInstanceOf(
             "PHPFrame_PluginInfo",
             $this->_plugins->getInfo("PHPFrame_URLRewriter")
         );

@@ -40,7 +40,7 @@ abstract class PHPFrame_PolymorphicPersistentObject
             "type",
             get_class($this),
             false,
-            new PHPFrame_StringFilter(array("min_length"=>6, "max_length"=>100))
+            new PHPFrame_StringFilter(array("min_length"=>4, "max_length"=>100))
         );
         $this->addField(
             "params",

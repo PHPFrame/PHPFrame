@@ -54,7 +54,6 @@ class PHPFrame_CompositeMapper extends PHPFrame_Mapper
         parent::__construct($target_class, $db, $table_name);
 
         $this->_nested_mappers = array();
-
         foreach ($nested_objs as $nested_obj) {
             if (count($nested_obj) == 4){
                 $this->_nested_mappers[] = array(
@@ -75,6 +74,7 @@ class PHPFrame_CompositeMapper extends PHPFrame_Mapper
 
     /**
      * Find a collection of persistent objects using an IdObject
+     * This will return 10 rows only if no $id_obj is passed in
      *
      * @param PHPFrame_IdObject $id_obj [Optional] Instance of
      *                                  {@link PHPFrame_IdObject}.
@@ -106,7 +106,6 @@ class PHPFrame_CompositeMapper extends PHPFrame_Mapper
 
         $id_obj = new PHPFrame_SQLIdObject();
         $id_obj->select("*");
-
         foreach ($this->_nested_mappers as $nested_mapper) {
             if (count($nested_mapper) == 3) {
                 $nested_tbl_name = $nested_mapper[1]->getFactory()->getTableName();
@@ -126,8 +125,8 @@ class PHPFrame_CompositeMapper extends PHPFrame_Mapper
                     $index[$nested_raw_item[$foreign_key]][$nested_mapper[0]][] = $nested_raw_item;
                 }
             } else {
-                $mapper = $nested_mapper[2];
-                $foreign_key = $nested_mapper[1];
+                $mapper = $nested_mapper[1];
+                $foreign_key = $nested_mapper[2];
                 $id_obj->from($mapper->getFactory()->getTableName());
                 $id_obj->where($foreign_key, "IN", "(".implode(",", array_keys($index)).")");
                 $id_obj->orderby($foreign_key, "DESC");
@@ -138,7 +137,6 @@ class PHPFrame_CompositeMapper extends PHPFrame_Mapper
                 }
             }
         }
-
         return $factory->getCollection(array_values($index));
     }
 
@@ -164,11 +162,9 @@ class PHPFrame_CompositeMapper extends PHPFrame_Mapper
 
         foreach ($this->_nested_mappers as $array) {
             $mapper_index = 1;
-            if (count($array) == 4)
-                $mapper_index = 2;
             $nested_tbl_name     = $array[$mapper_index]->getFactory()->getTableName();
             $nested_target_class = $array[$mapper_index]->getFactory()->getTargetClass();
-            $foreign_key = ($mapper_index == 1 ? $array[2] : $array[1]);
+            $foreign_key = $array[2];
             $nested_obj          = new $nested_target_class;
 
             foreach (array_keys(iterator_to_array($nested_obj)) as $col) {
@@ -195,8 +191,6 @@ class PHPFrame_CompositeMapper extends PHPFrame_Mapper
                 $found = false;
                 foreach ($this->_nested_mappers as $nested_mapper_array) {
                     $mapper_index = 1;
-                    if (count($array) == 4)
-                        $mapper_index = 2;
                     $mapper = $nested_mapper_array[$mapper_index];
                     $nested_target_class = $mapper->getFactory()->getTargetClass();
                     if (preg_match("/".$nested_target_class."_(.+)/", $key, $matches)) {

@@ -26,6 +26,13 @@
 class PHPFrame_XMLRenderer extends PHPFrame_Renderer
 {
     private $_root_node_name = "root";
+    /**
+     * A boolean indicating whether or not to use the XML beautifier when
+     * converting to string.
+     *
+     * @var bool
+     */
+    private $_use_beautifier=true;
 
     public function rootNodeName($str=null)
     {
@@ -48,6 +55,8 @@ class PHPFrame_XMLRenderer extends PHPFrame_Renderer
     {
         if ($value instanceof Exception) {
             $value = $this->exceptionToArray($value);
+        } elseif ($value instanceof PHPFrame_RESTfulObject) {
+            $value = $value->getRESTfulRepresentation();
         } elseif ($value instanceof PHPFrame_PersistentObject) {
             $value = $this->persistentObjectToArray($value);
         } elseif ($value instanceof PHPFrame_PersistentObjectCollection) {
@@ -58,6 +67,25 @@ class PHPFrame_XMLRenderer extends PHPFrame_Renderer
             return (string) $value;
         }
 
-        return PHPFrame_XMLSerialiser::serialise($value, $this->rootNodeName());
+        return PHPFrame_XMLSerialiser::serialise($value, $this->rootNodeName(), $this->_use_beautifier);
+    }
+    
+    /**
+     * Set whether or not to use the XML beautifier when converting to string.
+     *
+     * @param bool $bool [Optional] Boolean indicating whether or not to use
+     *                   the beautifier. If not passed this method simply
+     *                   returns the current value.
+     *
+     * @return bool
+     * @since  1.0
+     */
+    public function useBeautifier($bool=null)
+    {
+        if (!is_null($bool)) {
+            $this->_use_beautifier = (bool) $bool;
+        }
+
+        return $this->_use_beautifier;
     }
 }

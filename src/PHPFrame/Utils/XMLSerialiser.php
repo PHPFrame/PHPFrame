@@ -29,11 +29,12 @@ class PHPFrame_XMLSerialiser
      *
      * @param mixed  $value          The value we want to serialise to XML.
      * @param string $root_node_name [Optional]
+     * @param bool $beautify [Optional] Get pretty XML
      *
      * @return string
      * @since  1.0
      */
-    public static function serialise($value, $root_node_name="root")
+    public static function serialise($value, $root_node_name="root", $beautify=false)
     {
         // Build serialised string
         $str = self::_doSerialise($value);
@@ -42,11 +43,16 @@ class PHPFrame_XMLSerialiser
             $str = "<".$root_node_name.">".$str."</".$root_node_name.">";
         }
 
-        // Get instance of beautifier to make string look pretty ;-)
-        $xml_beautifier = new XML_Beautifier();
-
-        // Return beautified string
-        return $xml_beautifier->formatString($str);
+        if ($beautify) {
+        	
+	        // Get instance of beautifier to make string look pretty ;-)
+	        $xml_beautifier = new XML_Beautifier();
+	
+	        // Get beautified string
+	        $str = $xml_beautifier->formatString($str);
+        }
+         
+	    return $str;
     }
 
     /**

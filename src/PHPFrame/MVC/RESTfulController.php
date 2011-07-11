@@ -229,6 +229,7 @@ abstract class PHPFrame_RESTfulController extends PHPFrame_ActionController
             $response->document(new PHPFrame_XMLDocument());
             $response->document()->useBeautifier(false);
             $response->renderer(new PHPFrame_XMLRenderer());
+            $response->renderer()->useBeautifier(false);
             $response->renderer()->rootNodeName("api-response");
             break;
 

@@ -15,7 +15,7 @@
     <!-- Release info -->
     <property name="api.version" value="1.0" />
     <property name="api.stability" value="beta" />
-    <property name="release.version" value="1.2.9" />
+    <property name="release.version" value="1.2.10" />
     <property name="release.stability" value="beta" />
     <property name="notes" value="This is a beta release aimed at developers." />
 
